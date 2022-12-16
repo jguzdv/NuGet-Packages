@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A0E3FF49-5C3C-416E-8445-1707E383DC69}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE = LICENSE
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "libraries", "libraries", "{DA4DE709-E5BC-4B93-88D2-838656C217CE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.AspNetCore.Logging", "libraries\JGUZDV.AspNetCore.Logging\src\JGUZDV.AspNetCore.Logging.csproj", "{311DE251-20A2-42C0-BD6C-2A327221D3C3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{5F18EE62-3FBC-42F5-96DC-8C61C3D9EF27}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{50252EFB-8629-4B1D-AC2F-5F29CB6F684D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.AspNetCore.DataProtection", "libraries\JGUZDV.AspNetCore.DataProtection\src\JGUZDV.AspNetCore.DataProtection.csproj", "{F840F15F-592B-4E82-BFEB-CA2F3DBA3C2F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{311DE251-20A2-42C0-BD6C-2A327221D3C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{311DE251-20A2-42C0-BD6C-2A327221D3C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{311DE251-20A2-42C0-BD6C-2A327221D3C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{311DE251-20A2-42C0-BD6C-2A327221D3C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F840F15F-592B-4E82-BFEB-CA2F3DBA3C2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F840F15F-592B-4E82-BFEB-CA2F3DBA3C2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F840F15F-592B-4E82-BFEB-CA2F3DBA3C2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F840F15F-592B-4E82-BFEB-CA2F3DBA3C2F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{311DE251-20A2-42C0-BD6C-2A327221D3C3} = {5F18EE62-3FBC-42F5-96DC-8C61C3D9EF27}
+		{5F18EE62-3FBC-42F5-96DC-8C61C3D9EF27} = {DA4DE709-E5BC-4B93-88D2-838656C217CE}
+		{50252EFB-8629-4B1D-AC2F-5F29CB6F684D} = {DA4DE709-E5BC-4B93-88D2-838656C217CE}
+		{F840F15F-592B-4E82-BFEB-CA2F3DBA3C2F} = {5F18EE62-3FBC-42F5-96DC-8C61C3D9EF27}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {46ECC226-1874-4539-8589-8B2029909C4A}
+	EndGlobalSection
+EndGlobal
