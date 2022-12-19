@@ -10,7 +10,7 @@
     <Version>1.0.0</Version>
     <Authors>Aaron Puhl</Authors>
     <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
-    <PackageDescription>AspNetCore DataProtection settings from Configuration</PackageDescription>
+    <PackageDescription>Use DataProtection settings from IConfiguration</PackageDescription>
 
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>

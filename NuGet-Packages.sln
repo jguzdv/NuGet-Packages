@@ -18,6 +18,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{50252EFB-8
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.AspNetCore.DataProtection", "libraries\JGUZDV.AspNetCore.DataProtection\src\JGUZDV.AspNetCore.DataProtection.csproj", "{F840F15F-592B-4E82-BFEB-CA2F3DBA3C2F}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.AspNetCore.DataProtection.Tests", "libraries\JGUZDV.AspNetCore.DataProtection\test\JGUZDV.AspNetCore.DataProtection.Tests.csproj", "{97B58430-AAA3-4283-85FC-2BA1ED37514E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +34,10 @@ Global
 		{F840F15F-592B-4E82-BFEB-CA2F3DBA3C2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F840F15F-592B-4E82-BFEB-CA2F3DBA3C2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F840F15F-592B-4E82-BFEB-CA2F3DBA3C2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97B58430-AAA3-4283-85FC-2BA1ED37514E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97B58430-AAA3-4283-85FC-2BA1ED37514E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97B58430-AAA3-4283-85FC-2BA1ED37514E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97B58430-AAA3-4283-85FC-2BA1ED37514E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -41,6 +47,7 @@ Global
 		{5F18EE62-3FBC-42F5-96DC-8C61C3D9EF27} = {DA4DE709-E5BC-4B93-88D2-838656C217CE}
 		{50252EFB-8629-4B1D-AC2F-5F29CB6F684D} = {DA4DE709-E5BC-4B93-88D2-838656C217CE}
 		{F840F15F-592B-4E82-BFEB-CA2F3DBA3C2F} = {5F18EE62-3FBC-42F5-96DC-8C61C3D9EF27}
+		{97B58430-AAA3-4283-85FC-2BA1ED37514E} = {50252EFB-8629-4B1D-AC2F-5F29CB6F684D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {46ECC226-1874-4539-8589-8B2029909C4A}
