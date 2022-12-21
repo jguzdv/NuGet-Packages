@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace JGUZDV.AspNetCore.DataProtection.Test;
 
@@ -12,14 +13,11 @@ public class Tests
     {
         
         var builder = WebApplication.CreateBuilder();
-
-        var config = new ConfigurationBuilder()
+        builder.Configuration
             .AddJsonFile("appsettings.test.json")
             .AddEnvironmentVariables()
             .Build();
 
-        builder.Services
-            .AddDataProtection()
-            .UseDataProtectionConfig(config.GetSection("DataProtection"), builder.Environment);
+        builder.AddZDVDataProtection();
     }
 }
