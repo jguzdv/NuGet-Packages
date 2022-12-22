@@ -26,7 +26,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{9165
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{D107A050-9773-42B5-BE3B-ED8ABCE3A865}"
 	ProjectSection(SolutionItems) = preProject
-		AspNetCore.Logging.yml = AspNetCore.Logging.yml
+		.github\workflows\AspNetCore.Logging.yml = .github\workflows\AspNetCore.Logging.yml
 	EndProjectSection
 EndProject
 Global
