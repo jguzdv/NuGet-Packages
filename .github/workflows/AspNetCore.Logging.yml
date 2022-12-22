@@ -18,8 +18,8 @@ jobs:
       - name: Restore
         run: dotnet restore ./libraries/JGUZDV.AspNetCore.Logging/src/JGUZDV.AspNetCore.Logging.csproj
       - name: Restore
-        run: dotnet restore ./libraries/JGUZDV.AspNetCore.Logging/test/JGUZDV.AspNetCore.Logging.Test.csproj
+        run: dotnet restore ./libraries/JGUZDV.AspNetCore.Logging/test/JGUZDV.AspNetCore.Logging.Tests.csproj
       - name: Build
         run: dotnet build ./libraries/JGUZDV.AspNetCore.Logging/src/JGUZDV.AspNetCore.Logging.csproj --configuration Release --no-restore
       - name: Test
-        run: dotnet test ./libraries/JGUZDV.AspNetCore.Logging/test/JGUZDV.AspNetCore.Logging.Test.csproj --no-restore --verbosity normal
+        run: dotnet test ./libraries/JGUZDV.AspNetCore.Logging/test/JGUZDV.AspNetCore.Logging.Tests.csproj --no-restore --verbosity normal
