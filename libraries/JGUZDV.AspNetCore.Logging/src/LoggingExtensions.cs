@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
 using Serilog.Formatting.Compact;
+using System.Runtime.InteropServices;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -46,14 +47,17 @@ public static class LoggingExtensions
                 .WriteTo.Console()
         );
 
-        logger.WriteTo.Logger(l =>
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            var eventLogConfig = config.GetSection("EventLog");
-            var source = eventLogConfig.GetValue<string?>("Source") ?? Constants.DefaultEventLogSource;
+            logger.WriteTo.Logger(l =>
+            {
+                var eventLogConfig = config.GetSection("EventLog");
+                var source = eventLogConfig.GetValue<string?>("Source") ?? Constants.DefaultEventLogSource;
 
-            l.ApplyLogLevels(eventLogConfig)
-                .WriteTo.EventLog(source);
-        });
+                l.ApplyLogLevels(eventLogConfig)
+                    .WriteTo.EventLog(source);
+            });
+        }
 
         logger.WriteTo.Logger(l =>
         {
