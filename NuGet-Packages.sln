@@ -22,6 +22,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.AspNetCore.DataProte
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.AspNetCore.Logging.Tests", "libraries\JGUZDV.AspNetCore.Logging\test\JGUZDV.AspNetCore.Logging.Tests.csproj", "{6D6BD6AF-06E3-4FB2-ADEF-E373D2E94B3E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{9165C296-9CD1-4374-907C-31D3D8FFBF48}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{D107A050-9773-42B5-BE3B-ED8ABCE3A865}"
+	ProjectSection(SolutionItems) = preProject
+		AspNetCore.Logging.yml = AspNetCore.Logging.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +62,7 @@ Global
 		{F840F15F-592B-4E82-BFEB-CA2F3DBA3C2F} = {5F18EE62-3FBC-42F5-96DC-8C61C3D9EF27}
 		{97B58430-AAA3-4283-85FC-2BA1ED37514E} = {50252EFB-8629-4B1D-AC2F-5F29CB6F684D}
 		{6D6BD6AF-06E3-4FB2-ADEF-E373D2E94B3E} = {50252EFB-8629-4B1D-AC2F-5F29CB6F684D}
+		{D107A050-9773-42B5-BE3B-ED8ABCE3A865} = {9165C296-9CD1-4374-907C-31D3D8FFBF48}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {46ECC226-1874-4539-8589-8B2029909C4A}
