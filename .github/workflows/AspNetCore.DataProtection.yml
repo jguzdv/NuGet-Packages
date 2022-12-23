@@ -1,14 +1,14 @@
-name: JGUZDV.AspNetCore.Logging
+name: JGUZDV.AspNetCore.DataProtection
 
 on:
   pull_request:
     branches:
       - main
     paths:
-      - libraries/JGUZDV.AspNetCore.Logging
+      - libraries/JGUZDV.AspNetCore.DataProtection
 
 jobs:
   call-build-and-test:
     uses: ./.github/workflows/Build-and-Test.yml@main
     with:
-      library-name: JGUZDV.AspNetCore.Logging
+      library-name: JGUZDV.AspNetCore.DataProtection
