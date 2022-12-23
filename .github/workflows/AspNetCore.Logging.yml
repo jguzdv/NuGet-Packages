@@ -6,10 +6,10 @@ on:
       - opened
       - reopened
       - edited
-    branches:
-      - main
-    paths:
-      - '!**.md'
+    #branches:
+    #  - main
+    #paths:
+    #  - '!**.md'
 
 jobs:
   call-build-and-test:
