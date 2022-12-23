@@ -10,6 +10,6 @@ on:
 
 jobs:
   call-build-and-test:
-    uses: jguzdv/Nuget-Packages/.github/workflows/Build-and-Test.yml@main
+    uses: ./.github/workflows/pr_build.yml
     with:
       library-name: JGUZDV.AspNetCore.Logging
