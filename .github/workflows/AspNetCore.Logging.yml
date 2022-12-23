@@ -16,3 +16,4 @@ jobs:
     uses: ./.github/workflows/Build-and-Test.yml
     with:
       library-name: JGUZDV.AspNetCore.Logging
+
