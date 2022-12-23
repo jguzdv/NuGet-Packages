@@ -27,9 +27,9 @@ jobs:
         run: dotnet restore ${{ env.base-dir }}/test/${{ inputs.library-name }}.Tests.csproj
 
       - name: Build library project
-        run: dotnet build ${{ env.base-dir }}/src/${{ inputs.library-name }}.csproj --no-restore -configuration Release
+        run: dotnet build ${{ env.base-dir }}/src/${{ inputs.library-name }}.csproj --no-restore -c Release
       - name: Build test project
-        run: dotnet build ${{ env.base-dir }}/test/${{ inputs.library-name }}.Tests.csproj --no-restore -configuration Release
+        run: dotnet build ${{ env.base-dir }}/test/${{ inputs.library-name }}.Tests.csproj --no-restore -c Release
       
       - name: Run tests
         run: dotnet test ${{ env.base-dir }}/test/${{ inputs.library-name }}.Tests.csproj --no-restore --no-build --verbosity normal
