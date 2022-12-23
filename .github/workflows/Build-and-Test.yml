@@ -7,12 +7,12 @@ on:
     
 jobs:
   build-and-test-library:
-    name: Build and Test ${{ library-name }}
+    name: Build and Test ${{ inputs.library-name }}
     runs-on: ubuntu-latest
 
     env:
       dotnet-version: 7.0.x
-      base-dir: ./libraries/${{ library-name }}
+      base-dir: ./libraries/${{ inputs.library-name }}
 
     steps:
       - uses: actions/checkout@v3
@@ -22,14 +22,14 @@ jobs:
           dotnet-version: ${{ env.dotnet-version }}
 
       - name: Restore library project
-        run: dotnet restore ${{ base-dir }}/src/${{ library-name }}.csproj
+        run: dotnet restore ${{ env.base-dir }}/src/${{ inputs.library-name }}.csproj
       - name: Restore test project
-        run: dotnet restore ${{ base-dir }}/test/${{ library-name }}.Tests.csproj
+        run: dotnet restore ${{ env.base-dir }}/test/${{ inputs.library-name }}.Tests.csproj
 
       - name: Build library project
-        run: dotnet build ${{ base-dir }}/src/${{ library-name }}.csproj --no-restore -configuration Release
+        run: dotnet build ${{ env.base-dir }}/src/${{ inputs.library-name }}.csproj --no-restore -configuration Release
       - name: Build test project
-        run: dotnet build ${{ base-dir }}/test/${{ library-name }}.Tests.csproj --no-restore -configuration Release
+        run: dotnet build ${{ env.base-dir }}/test/${{ inputs.library-name }}.Tests.csproj --no-restore -configuration Release
       
       - name: Run tests
-        run: dotnet test ${{ base-dir }}/test/${{ library-name }}.Tests.csproj --no-restore --no-build --verbosity normal
+        run: dotnet test ${{ env.base-dir }}/test/${{ inputs.library-name }}.Tests.csproj --no-restore --no-build --verbosity normal
