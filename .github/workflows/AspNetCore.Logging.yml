@@ -1,15 +1,15 @@
 name: JGUZDV.AspNetCore.Logging
 
-on: 
-  pull_request:
-    types:
-      - opened
-      - reopened
-      - edited
-    #branches:
-    #  - main
-    #paths:
-    #  - '!**.md'
+on: [pull_request]
+#  pull_request:
+#    types:
+#      - opened
+#      - reopened
+#      - edited
+#    branches:
+#      - main
+#    paths:
+#      - '!**.md'
 
 jobs:
   call-build-and-test:
