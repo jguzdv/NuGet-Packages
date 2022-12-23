@@ -63,7 +63,7 @@ public static class LoggingExtensions
         {
             var fileConfig = config.GetSection("File");
 
-            var path = fileConfig.GetValue<string?>("Path");
+            var path = fileConfig.GetValue<string?>("Path") ?? string.Empty;
             var isolatePath = fileConfig.GetValue<bool?>("UseIsolatedPath") ?? true;
             var applicationName = fileConfig.GetValue<string?>("ApplicationName") ?? ctx.HostingEnvironment.ApplicationName;
             var fileName = fileConfig.GetValue<string?>("FileName") ?? $"{Environment.MachineName}.log";
