@@ -1,0 +1,35 @@
+on:
+  workflow_call:
+    inputs:
+      library-name:
+        required: true
+        type: string
+    
+jobs:
+  build-and-test-library:
+    name: Build and Test ${{ library-name }}
+    runs-on: ubuntu-latest
+
+    env:
+      dotnet-version: 7.0.x
+      base-dir: ./libraries/${{ library-name }}
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET Core SDK ${{ env.dotnet-version }}
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ env.dotnet-version }}
+
+      - name: Restore library project
+        run: dotnet restore ${{ base-dir }}/src/${{ library-name }}.csproj
+      - name: Restore test project
+        run: dotnet restore ${{ base-dir }}/test/${{ library-name }}.Tests.csproj
+
+      - name: Build library project
+        run: dotnet build ${{ base-dir }}/src/${{ library-name }}.csproj --no-restore -configuration Release
+      - name: Build test project
+        run: dotnet build ${{ base-dir }}/test/${{ library-name }}.Tests.csproj --no-restore -configuration Release
+      
+      - name: Run tests
+        run: dotnet test ${{ base-dir }}/test/${{ library-name }}.Tests.csproj --no-restore --no-build --verbosity normal
