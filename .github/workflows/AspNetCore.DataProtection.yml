@@ -1,4 +1,4 @@
-name: JGUZDV.AspNetCore.Logging
+name: JGUZDV.AspNetCore.DataProtection
 
 on:
   workflow_dispatch:
@@ -6,10 +6,10 @@ on:
     branches:
       - main
     paths:
-      - libraries/JGUZDV.AspNetCore.Logging
+      - libraries/JGUZDV.AspNetCore.DataProtection
 
 jobs:
   call-build-and-test:
     uses: jguzdv/Nuget-Packages/.github/workflows/Build-and-Test.yml@main
     with:
-      library-name: JGUZDV.AspNetCore.Logging
+      library-name: JGUZDV.AspNetCore.DataProtection

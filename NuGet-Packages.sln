@@ -26,6 +26,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{9165
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{D107A050-9773-42B5-BE3B-ED8ABCE3A865}"
 	ProjectSection(SolutionItems) = preProject
+		.github\workflows\AspNetCore.DataProtection.yml = .github\workflows\AspNetCore.DataProtection.yml
 		.github\workflows\AspNetCore.Logging.yml = .github\workflows\AspNetCore.Logging.yml
 		.github\workflows\Build-and-Test.yml = .github\workflows\Build-and-Test.yml
 	EndProjectSection
