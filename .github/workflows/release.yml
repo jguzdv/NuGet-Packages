@@ -43,4 +43,4 @@ jobs:
         run: dotnet pack ${{ env.base-dir }}/src/${{ inputs.library-name }}.csproj --no-build -c Release --output ./publish/${{ inputs.library-name }}/
 
       - name: Push library
-        run: dotnet nuget push ./publish/${{ inputs.library-name }}/*.nupkg --source https://api.nuget.org/v3/index.json --api_key ${{}}
+        run: dotnet nuget push ./publish/${{ inputs.library-name }}/*.nupkg --source https://api.nuget.org/v3/index.json --api_key ${{ secrets.NUGET_API_KEY }}
