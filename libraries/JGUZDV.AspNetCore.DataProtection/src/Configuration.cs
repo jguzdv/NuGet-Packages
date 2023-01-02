@@ -8,10 +8,10 @@ internal class Configuration : IValidatableObject
     public bool SetApplicationName { get; set; }
     public bool DisableAutomaticKeyGeneration { get; set; }
 
-    public bool UsePersistence { get; set; }
+    public bool UsePersistence { get; set; } = true;
     public Persistence? Persistence { get; set; }
 
-    public bool UseProtection { get; set; }
+    public bool UseProtection { get; set; } = true;
     public Protection? Protection { get; set; }
 
     public IEnumerable<ValidationResult> Validate(ValidationContext? validationContext)
@@ -68,6 +68,6 @@ internal class Certificate
 
 internal class FileSystemPersistence
 {
-    public bool UseIsolatedPath { get; set; }
+    public bool UseIsolatedPath { get; set; } = true;
     public string? Path { get; set; }
 }
