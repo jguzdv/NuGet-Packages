@@ -6,7 +6,7 @@ on:
     branches:
       - main
     paths:
-      - libraries/JGUZDV.AspNetCore.DataProtection
+      - libraries/JGUZDV.AspNetCore.DataProtection/**
 
 jobs:
   call-build-and-test:

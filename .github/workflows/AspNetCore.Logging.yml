@@ -6,7 +6,7 @@ on:
     branches:
       - main
     paths:
-      - libraries/JGUZDV.AspNetCore.Logging
+      - libraries/JGUZDV.AspNetCore.Logging/**
 
 jobs:
   call-build-and-test:
