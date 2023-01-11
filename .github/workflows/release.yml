@@ -9,6 +9,7 @@ on:
         options: 
         - JGUZDV.AspNetCore.DataProtection
         - JGUZDV.AspNetCore.Logging
+        - JGUZDV.Linq
     
 jobs:
   publish-library:
