@@ -2,6 +2,10 @@
 {
     public class CanceledResult : ErrorBase
     {
-        internal CanceledResult() : base("Canceled") { }
+        public CancellationToken CancellationToken { get; }
+
+        internal CanceledResult(CancellationToken cancellationToken) : base("Canceled") {
+            CancellationToken = cancellationToken;
+        }
     }
 }
