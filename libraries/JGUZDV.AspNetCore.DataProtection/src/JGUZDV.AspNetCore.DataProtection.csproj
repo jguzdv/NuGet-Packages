@@ -11,11 +11,16 @@
     <Authors>Aaron Puhl</Authors>
     <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
     <PackageDescription>Use DataProtection settings from IConfiguration</PackageDescription>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
 
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <None Include="src\README.md" Pack="true" PackagePath="\"/>
   </ItemGroup>
 </Project>

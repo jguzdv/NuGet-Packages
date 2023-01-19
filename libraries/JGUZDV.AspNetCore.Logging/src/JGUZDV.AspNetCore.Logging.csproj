@@ -11,6 +11,7 @@
     <Authors>Thomas Ottenhus</Authors>
     <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
     <PackageDescription>Opinionated file logging based on SeriLog</PackageDescription>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
 
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
@@ -22,5 +23,9 @@
   <ItemGroup>
     <PackageReference Include="Serilog.AspNetCore" Version="6.1.0" />
     <PackageReference Include="Serilog.Sinks.EventLog" Version="3.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="src\README.md" Pack="true" PackagePath="\"/>
   </ItemGroup>
 </Project>
