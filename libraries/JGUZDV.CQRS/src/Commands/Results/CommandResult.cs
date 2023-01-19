@@ -75,8 +75,8 @@ namespace JGUZDV.CQRS.Commands
         public static NotFoundResult NotFound()
             => new NotFoundResult();
 
-        public static CanceledResult Canceled()
-            => new CanceledResult();
+        public static CanceledResult Canceled(CancellationToken ct = default)
+            => new CanceledResult(ct);
 
         public static implicit operator bool(CommandResult result) => result.IsSuccess;
     }
