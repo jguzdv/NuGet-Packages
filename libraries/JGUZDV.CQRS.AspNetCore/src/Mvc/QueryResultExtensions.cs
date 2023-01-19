@@ -1,22 +1,22 @@
 ﻿using JGUZDV.CQRS.Queries;
 using JGUZDV.CQRS.Queries.Results;
 using Microsoft.Extensions.Localization;
-using Mvc = Microsoft.AspNetCore.Mvc;
+using AspNetCoreMvc = Microsoft.AspNetCore.Mvc;
 
-namespace JGUZDV.CQRS.AspNetCore;
+namespace JGUZDV.CQRS.AspNetCore.Mvc;
 
 public static class QueryResultExtensions
 {
-    public static Mvc.ActionResult<T> ToActionResult<T>(this QueryResult<T> result, IStringLocalizer? sl = null)
+    public static AspNetCoreMvc.ActionResult<T> ToActionResult<T>(this QueryResult<T> result, IStringLocalizer? sl = null)
     {
         var response = result switch
         {
             GenericErrorResult<T> r => Error(r, sl),
-            NotFoundResult<T> => new Mvc.NotFoundResult(),
-            UnauthorizedResult<T> => new Mvc.ForbidResult(),
+            NotFoundResult<T> => new AspNetCoreMvc.NotFoundResult(),
+            UnauthorizedResult<T> => new AspNetCoreMvc.ForbidResult(),
             ValidationErrorResult<T> r => Invalid(r, sl),
 
-            CanceledResult<T> => new Mvc.StatusCodeResult(499), //Nginx: "Client Closed Request",
+            CanceledResult<T> => new AspNetCoreMvc.StatusCodeResult(499), //Nginx: "Client Closed Request",
 
             ErrorBase<T> r => Error(r, sl),
             QueryResult<T> r => Generic(r)
@@ -27,18 +27,18 @@ public static class QueryResultExtensions
 
 
 
-    private static Mvc.ActionResult<T> Generic<T>(QueryResult<T> result)
+    private static AspNetCoreMvc.ActionResult<T> Generic<T>(QueryResult<T> result)
     {
-        if(result.HasResult)
-            return new Mvc.OkObjectResult(result.Result);
+        if (result.HasResult)
+            return new AspNetCoreMvc.OkObjectResult(result.Result);
         else
-            return new Mvc.StatusCodeResult(500);
+            return new AspNetCoreMvc.StatusCodeResult(500);
     }
 
 
-    private static Mvc.ActionResult<T> Error<T>(ErrorBase<T> r, IStringLocalizer? sl)
+    private static AspNetCoreMvc.ActionResult<T> Error<T>(ErrorBase<T> r, IStringLocalizer? sl)
     {
-        return new Mvc.ObjectResult(FromFailureCode(r.FailureCode, sl))
+        return new AspNetCoreMvc.ObjectResult(FromFailureCode(r.FailureCode, sl))
         {
             StatusCode = 500
         };
@@ -46,7 +46,7 @@ public static class QueryResultExtensions
 
 
     private static string[] NoMemberNames = new[] { "" };
-    private static Mvc.ActionResult<T> Invalid<T>(ValidationErrorResult<T> r, IStringLocalizer? sl)
+    private static AspNetCoreMvc.ActionResult<T> Invalid<T>(ValidationErrorResult<T> r, IStringLocalizer? sl)
     {
         List<string> GetOrCreate(Dictionary<string, List<string>> dictionary, string key)
         {
@@ -77,14 +77,14 @@ public static class QueryResultExtensions
             }
         }
 
-        var validationProblems = new Mvc.ValidationProblemDetails(errors.ToDictionary(x => x.Key, x => x.Value.ToArray()));
-        return new Mvc.BadRequestObjectResult(validationProblems);
+        var validationProblems = new AspNetCoreMvc.ValidationProblemDetails(errors.ToDictionary(x => x.Key, x => x.Value.ToArray()));
+        return new AspNetCoreMvc.BadRequestObjectResult(validationProblems);
     }
 
 
-    private static Mvc.ProblemDetails FromFailureCode(string failureCode, IStringLocalizer? sl)
+    private static AspNetCoreMvc.ProblemDetails FromFailureCode(string failureCode, IStringLocalizer? sl)
     {
-        return new Mvc.ProblemDetails
+        return new AspNetCoreMvc.ProblemDetails
         {
             Instance = failureCode,
             Detail = sl?[failureCode] ?? failureCode
