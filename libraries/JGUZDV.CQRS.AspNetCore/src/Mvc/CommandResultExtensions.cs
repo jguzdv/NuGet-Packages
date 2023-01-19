@@ -1,25 +1,25 @@
 ﻿using JGUZDV.CQRS.Commands;
 using Microsoft.Extensions.Localization;
-using Mvc = Microsoft.AspNetCore.Mvc;
+using AspNetCoreMvc = Microsoft.AspNetCore.Mvc;
 
-namespace JGUZDV.CQRS.AspNetCore;
+namespace JGUZDV.CQRS.AspNetCore.Mvc;
 
 public static class CommandResultExtensions
 {
-    public static Mvc.ActionResult ToActionResult(this CommandResult result, IStringLocalizer? sl = null)
+    public static AspNetCoreMvc.ActionResult ToActionResult(this CommandResult result, IStringLocalizer? sl = null)
     {
         var response = result switch
         {
-            SuccessResult => new Mvc.OkResult(),
+            SuccessResult => new AspNetCoreMvc.OkResult(),
             CreatedResult r => Created(r),
 
             GenericErrorResult r => Error(r, sl),
-            NotFoundResult => new Mvc.NotFoundResult(),
-            UnauthorizedResult => new Mvc.ForbidResult(),
+            NotFoundResult => new AspNetCoreMvc.NotFoundResult(),
+            UnauthorizedResult => new AspNetCoreMvc.ForbidResult(),
             ValidationErrorResult r => Invalid(r, sl),
             ConflictResult r => Conflict(r, sl),
 
-            CanceledResult => new Mvc.StatusCodeResult(499), //Nginx: "Client Closed Request",
+            CanceledResult => new AspNetCoreMvc.StatusCodeResult(499), //Nginx: "Client Closed Request",
 
             ErrorBase r => Error(r, sl),
             CommandResult r => Generic(r)
@@ -30,27 +30,27 @@ public static class CommandResultExtensions
 
 
 
-    private static Mvc.ActionResult Generic(CommandResult r)
+    private static AspNetCoreMvc.ActionResult Generic(CommandResult r)
     {
         if (r.IsSuccess)
-            return new Mvc.OkResult();
+            return new AspNetCoreMvc.OkResult();
         else
-            return new Mvc.StatusCodeResult(500);
+            return new AspNetCoreMvc.StatusCodeResult(500);
     }
 
 
-    private static Mvc.ActionResult Created(CreatedResult result)
+    private static AspNetCoreMvc.ActionResult Created(CreatedResult result)
     {
         if (!string.IsNullOrWhiteSpace(result.CreatedAtUrl))
-            return new Mvc.CreatedResult(result.CreatedAtUrl, result);
+            return new AspNetCoreMvc.CreatedResult(result.CreatedAtUrl, result);
 
-        return new Mvc.OkObjectResult(result);
+        return new AspNetCoreMvc.OkObjectResult(result);
     }
 
 
-    private static Mvc.ActionResult Error(ErrorBase r, IStringLocalizer? sl)
+    private static AspNetCoreMvc.ActionResult Error(ErrorBase r, IStringLocalizer? sl)
     {
-        return new Mvc.ObjectResult(FromFailureCode(r.FailureCode, sl))
+        return new AspNetCoreMvc.ObjectResult(FromFailureCode(r.FailureCode, sl))
         {
             StatusCode = 500
         };
@@ -58,7 +58,7 @@ public static class CommandResultExtensions
 
 
     private static string[] NoMemberNames = new[] { "" };
-    private static Mvc.ActionResult Invalid(ValidationErrorResult r, IStringLocalizer? sl)
+    private static AspNetCoreMvc.ActionResult Invalid(ValidationErrorResult r, IStringLocalizer? sl)
     {
         List<string> GetOrCreate(Dictionary<string, List<string>> dictionary, string key)
         {
@@ -89,20 +89,20 @@ public static class CommandResultExtensions
             }
         }
 
-        var validationProblems = new Mvc.ValidationProblemDetails(errors.ToDictionary(x => x.Key, x => x.Value.ToArray()));
-        return new Mvc.BadRequestObjectResult(validationProblems);
+        var validationProblems = new AspNetCoreMvc.ValidationProblemDetails(errors.ToDictionary(x => x.Key, x => x.Value.ToArray()));
+        return new AspNetCoreMvc.BadRequestObjectResult(validationProblems);
     }
 
 
-    private static Mvc.ActionResult Conflict(ConflictResult r, IStringLocalizer? sl)
+    private static AspNetCoreMvc.ActionResult Conflict(ConflictResult r, IStringLocalizer? sl)
     {
-        return new Mvc.ConflictObjectResult(FromFailureCode(r.FailureCode, sl));
+        return new AspNetCoreMvc.ConflictObjectResult(FromFailureCode(r.FailureCode, sl));
     }
 
 
-    private static Mvc.ProblemDetails FromFailureCode(string failureCode, IStringLocalizer? sl)
+    private static AspNetCoreMvc.ProblemDetails FromFailureCode(string failureCode, IStringLocalizer? sl)
     {
-        return new Mvc.ProblemDetails
+        return new AspNetCoreMvc.ProblemDetails
         {
             Instance = failureCode,
             Detail = sl?[failureCode] ?? failureCode
