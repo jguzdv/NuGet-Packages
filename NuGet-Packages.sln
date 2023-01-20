@@ -8,30 +8,32 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		LICENSE = LICENSE
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "libraries", "libraries", "{DA4DE709-E5BC-4B93-88D2-838656C217CE}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.AspNetCore.Logging", "libraries\JGUZDV.AspNetCore.Logging\src\JGUZDV.AspNetCore.Logging.csproj", "{311DE251-20A2-42C0-BD6C-2A327221D3C3}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{5F18EE62-3FBC-42F5-96DC-8C61C3D9EF27}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{50252EFB-8629-4B1D-AC2F-5F29CB6F684D}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.AspNetCore.DataProtection", "libraries\JGUZDV.AspNetCore.DataProtection\src\JGUZDV.AspNetCore.DataProtection.csproj", "{F840F15F-592B-4E82-BFEB-CA2F3DBA3C2F}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.AspNetCore.DataProtection.Tests", "libraries\JGUZDV.AspNetCore.DataProtection\test\JGUZDV.AspNetCore.DataProtection.Tests.csproj", "{97B58430-AAA3-4283-85FC-2BA1ED37514E}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.AspNetCore.Logging.Tests", "libraries\JGUZDV.AspNetCore.Logging\test\JGUZDV.AspNetCore.Logging.Tests.csproj", "{6D6BD6AF-06E3-4FB2-ADEF-E373D2E94B3E}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{9165C296-9CD1-4374-907C-31D3D8FFBF48}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{D107A050-9773-42B5-BE3B-ED8ABCE3A865}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\AspNetCore.DataProtection.yml = .github\workflows\AspNetCore.DataProtection.yml
 		.github\workflows\AspNetCore.Logging.yml = .github\workflows\AspNetCore.Logging.yml
+		CQRS.AspNetCore.yml = CQRS.AspNetCore.yml
+		CQRS.yml = CQRS.yml
 		.github\workflows\Linq.yml = .github\workflows\Linq.yml
 		.github\workflows\pr_build.yml = .github\workflows\pr_build.yml
 		.github\workflows\release.yml = .github\workflows\release.yml
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "libraries", "libraries", "{DA4DE709-E5BC-4B93-88D2-838656C217CE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{5F18EE62-3FBC-42F5-96DC-8C61C3D9EF27}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{50252EFB-8629-4B1D-AC2F-5F29CB6F684D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.AspNetCore.Logging", "libraries\JGUZDV.AspNetCore.Logging\src\JGUZDV.AspNetCore.Logging.csproj", "{311DE251-20A2-42C0-BD6C-2A327221D3C3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.AspNetCore.Logging.Tests", "libraries\JGUZDV.AspNetCore.Logging\test\JGUZDV.AspNetCore.Logging.Tests.csproj", "{6D6BD6AF-06E3-4FB2-ADEF-E373D2E94B3E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.AspNetCore.DataProtection", "libraries\JGUZDV.AspNetCore.DataProtection\src\JGUZDV.AspNetCore.DataProtection.csproj", "{F840F15F-592B-4E82-BFEB-CA2F3DBA3C2F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.AspNetCore.DataProtection.Tests", "libraries\JGUZDV.AspNetCore.DataProtection\test\JGUZDV.AspNetCore.DataProtection.Tests.csproj", "{97B58430-AAA3-4283-85FC-2BA1ED37514E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.Linq", "libraries\JGUZDV.Linq\src\JGUZDV.Linq.csproj", "{C551EE51-B06E-4554-9114-763150B8908E}"
 EndProject
@@ -55,6 +57,10 @@ Global
 		{311DE251-20A2-42C0-BD6C-2A327221D3C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{311DE251-20A2-42C0-BD6C-2A327221D3C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{311DE251-20A2-42C0-BD6C-2A327221D3C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D6BD6AF-06E3-4FB2-ADEF-E373D2E94B3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D6BD6AF-06E3-4FB2-ADEF-E373D2E94B3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D6BD6AF-06E3-4FB2-ADEF-E373D2E94B3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D6BD6AF-06E3-4FB2-ADEF-E373D2E94B3E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F840F15F-592B-4E82-BFEB-CA2F3DBA3C2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F840F15F-592B-4E82-BFEB-CA2F3DBA3C2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F840F15F-592B-4E82-BFEB-CA2F3DBA3C2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -63,10 +69,6 @@ Global
 		{97B58430-AAA3-4283-85FC-2BA1ED37514E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{97B58430-AAA3-4283-85FC-2BA1ED37514E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{97B58430-AAA3-4283-85FC-2BA1ED37514E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6D6BD6AF-06E3-4FB2-ADEF-E373D2E94B3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6D6BD6AF-06E3-4FB2-ADEF-E373D2E94B3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6D6BD6AF-06E3-4FB2-ADEF-E373D2E94B3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6D6BD6AF-06E3-4FB2-ADEF-E373D2E94B3E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C551EE51-B06E-4554-9114-763150B8908E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C551EE51-B06E-4554-9114-763150B8908E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C551EE51-B06E-4554-9114-763150B8908E}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -96,13 +98,13 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{311DE251-20A2-42C0-BD6C-2A327221D3C3} = {5F18EE62-3FBC-42F5-96DC-8C61C3D9EF27}
+		{D107A050-9773-42B5-BE3B-ED8ABCE3A865} = {9165C296-9CD1-4374-907C-31D3D8FFBF48}
 		{5F18EE62-3FBC-42F5-96DC-8C61C3D9EF27} = {DA4DE709-E5BC-4B93-88D2-838656C217CE}
 		{50252EFB-8629-4B1D-AC2F-5F29CB6F684D} = {DA4DE709-E5BC-4B93-88D2-838656C217CE}
+		{311DE251-20A2-42C0-BD6C-2A327221D3C3} = {5F18EE62-3FBC-42F5-96DC-8C61C3D9EF27}
+		{6D6BD6AF-06E3-4FB2-ADEF-E373D2E94B3E} = {50252EFB-8629-4B1D-AC2F-5F29CB6F684D}
 		{F840F15F-592B-4E82-BFEB-CA2F3DBA3C2F} = {5F18EE62-3FBC-42F5-96DC-8C61C3D9EF27}
 		{97B58430-AAA3-4283-85FC-2BA1ED37514E} = {50252EFB-8629-4B1D-AC2F-5F29CB6F684D}
-		{6D6BD6AF-06E3-4FB2-ADEF-E373D2E94B3E} = {50252EFB-8629-4B1D-AC2F-5F29CB6F684D}
-		{D107A050-9773-42B5-BE3B-ED8ABCE3A865} = {9165C296-9CD1-4374-907C-31D3D8FFBF48}
 		{C551EE51-B06E-4554-9114-763150B8908E} = {5F18EE62-3FBC-42F5-96DC-8C61C3D9EF27}
 		{07AAE83F-56C7-4A9A-9972-7F9BE53D031A} = {50252EFB-8629-4B1D-AC2F-5F29CB6F684D}
 		{A7A0EDB7-BFE4-4645-A8A3-0D42A5E1002F} = {5F18EE62-3FBC-42F5-96DC-8C61C3D9EF27}
