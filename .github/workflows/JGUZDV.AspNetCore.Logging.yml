@@ -18,4 +18,4 @@ jobs:
     uses: ./.github/workflows/default_build.yml
     with:
       library-name: JGUZDV.AspNetCore.Logging
-      push-to-nuget: ${{ inputs.push-to-nuget }}
+      push-to-nuget: ${{ inputs.push-to-nuget != '' && inputs.push-to-nuget }}
