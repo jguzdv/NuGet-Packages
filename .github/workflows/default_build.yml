@@ -6,7 +6,7 @@ on:
         type: string
       push-to-nuget:
         required: false
-        type: bool
+        type: boolean
         default: false
 
 env:
