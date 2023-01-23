@@ -1,0 +1,67 @@
+on:
+  workflow_call:
+    inputs:
+      library-name:
+        required: true
+        type: string
+      push-to-nuget:
+        required: false
+        type: bool
+        default: false
+
+env:
+    dotnet-version: 7.0.x
+    base-dir: ./libraries/${{ inputs.library-name }}
+
+jobs:
+  build_test_pack:
+    name: Build and Test ${{ inputs.library-name }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET Core SDK ${{ env.dotnet-version }}
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ env.dotnet-version }}
+
+      - name: Restore library project
+        run: dotnet restore ${{ env.base-dir }}/src/${{ inputs.library-name }}.csproj
+      - name: Restore test project
+        run: dotnet restore ${{ env.base-dir }}/test/${{ inputs.library-name }}.Tests.csproj
+
+      - name: Build library project
+        run: dotnet build ${{ env.base-dir }}/src/${{ inputs.library-name }}.csproj --no-restore -c Release
+      - name: Build test project
+        run: dotnet build ${{ env.base-dir }}/test/${{ inputs.library-name }}.Tests.csproj --no-restore -c Release
+      
+      - name: Run tests
+        run: dotnet test ${{ env.base-dir }}/test/${{ inputs.library-name }}.Tests.csproj --no-build -c Release --verbosity normal
+
+      - name: Pack library project
+        run: dotnet pack ${{ env.base-dir }}/src/${{ inputs.library-name }}.csproj --no-build -c Release --output ./publish/${{ inputs.library-name }}/
+
+      - name: Upload nupkg
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ inputs.library-name }}
+          path: ./publish/${{ inputs.library-name }}/*.nupkg
+
+  push_to_nuget:
+    needs: build_test_pack
+    if: github.repository == 'jguzdv/NuGet-Packages' && github.ref == 'refs/heads/main' && inputs.push-to-nuget
+    name: Push ${{ inputs.library-name }}
+    runs-on: ubuntu-latest
+
+    env:
+      dotnet-version: 7.0.x
+
+    steps:
+      - name: Download nupkg
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ inputs.library-name }}
+
+      - name: Push library
+        run: dotnet nuget push ./publish/${{ inputs.library-name }}/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }}
+      

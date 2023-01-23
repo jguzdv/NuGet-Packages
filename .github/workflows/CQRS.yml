@@ -2,6 +2,11 @@ name: JGUZDV.CQRS
 
 on:
   workflow_dispatch:
+    inputs:
+      - push-to-nuget:
+        name: Push package to NuGet
+        type: bool
+
   pull_request:
     branches:
       - main
@@ -9,7 +14,8 @@ on:
       - libraries/JGUZDV.CQRS/**
 
 jobs:
-  call-build-and-test:
-    uses: ./.github/workflows/pr_build.yml
+  build_and_test:
+    uses: ./.github/workflows/default_build.yml
     with:
       library-name: JGUZDV.CQRS
+      push-to-nuget: ${{ inputs.push-to-nuget }}
