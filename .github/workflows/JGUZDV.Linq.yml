@@ -1,4 +1,7 @@
-name: JGUZDV.CQRS
+env:
+  library-name: JGUZDV.Linq
+  
+name: ${{ env.library-name }}
 
 on:
   workflow_dispatch:
@@ -11,11 +14,11 @@ on:
     branches:
       - main
     paths:
-      - libraries/JGUZDV.CQRS/**
+      - libraries/${{ env.library-name }}/**
 
 jobs:
-  build_and_test:
+  call_default_build:
     uses: ./.github/workflows/default_build.yml
     with:
-      library-name: JGUZDV.CQRS
+      library-name: ${{ env.library-name }}
       push-to-nuget: ${{ inputs.push-to-nuget }}
