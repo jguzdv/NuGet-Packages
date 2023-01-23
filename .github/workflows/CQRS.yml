@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       push-to-nuget:
-        name: Push package to NuGet
+        description: Push package to NuGet
         type: boolean
 
   pull_request:
