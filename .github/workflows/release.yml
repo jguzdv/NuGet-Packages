@@ -9,6 +9,8 @@ on:
         options: 
         - JGUZDV.AspNetCore.DataProtection
         - JGUZDV.AspNetCore.Logging
+        - JGUZDV.CQRS
+        - JGUZDV.CQRS.AspNetCore
         - JGUZDV.Linq
     
 jobs:
