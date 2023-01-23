@@ -67,5 +67,5 @@ jobs:
           name: ${{ inputs.library-name }}
 
       - name: Push library
-        run: dotnet nuget push ./publish/${{ inputs.library-name }}/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }}
+        run: dotnet nuget push ./${{ inputs.library-name }}/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }}
       
