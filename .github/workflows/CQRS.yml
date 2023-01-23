@@ -3,7 +3,7 @@ name: JGUZDV.CQRS
 on:
   workflow_dispatch:
     inputs:
-      - push-to-nuget:
+      push-to-nuget:
         name: Push package to NuGet
         type: bool
 
