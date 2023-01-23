@@ -1,4 +1,7 @@
-name: JGUZDV.AspNetCore.Logging
+env:
+  library-name: JGUZDV.AspNetCore.Logging
+
+name: ${{ env.library-name }}
 
 on:
   workflow_dispatch:
@@ -11,11 +14,11 @@ on:
     branches:
       - main
     paths:
-      - libraries/JGUZDV.AspNetCore.Logging/**
+      - libraries/${{ env.library-name }}/**
 
 jobs:
   call_default_build:
     uses: ./.github/workflows/default_build.yml
     with:
-      library-name: JGUZDV.AspNetCore.Logging
+      library-name: ${{ env.library-name }}
       push-to-nuget: ${{ inputs.push-to-nuget }}
