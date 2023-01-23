@@ -5,7 +5,7 @@ using System.Diagnostics;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-    public static class ServiceCollectionExtensions
+    public static class CQRSServiceCollectionExtensions
     {
         public static IServiceCollection AddCQRSHandlers(
             this IServiceCollection services, params Type[] assemblyOfTypes)
