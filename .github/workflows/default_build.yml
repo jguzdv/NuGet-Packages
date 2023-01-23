@@ -8,6 +8,9 @@ on:
         required: false
         type: boolean
         default: false
+    secrets:
+      NUGET_API_KEY:
+        required: true    
 
 env:
     dotnet-version: 7.0.x

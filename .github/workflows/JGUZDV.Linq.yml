@@ -19,3 +19,5 @@ jobs:
     with:
       library-name: JGUZDV.Linq
       push-to-nuget: ${{ inputs.push-to-nuget != '' && inputs.push-to-nuget }}
+    secrets:
+      NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
