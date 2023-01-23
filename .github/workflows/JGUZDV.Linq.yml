@@ -1,0 +1,24 @@
+env:
+  library-name: JGUZDV.Linq
+  
+name: ${{ env.library-name }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      push-to-nuget:
+        description: Push package to NuGet
+        type: boolean
+
+  pull_request:
+    branches:
+      - main
+    paths:
+      - libraries/${{ env.library-name }}/**
+
+jobs:
+  call_default_build:
+    uses: ./.github/workflows/default_build.yml
+    with:
+      library-name: ${{ env.library-name }}
+      push-to-nuget: ${{ inputs.push-to-nuget }}

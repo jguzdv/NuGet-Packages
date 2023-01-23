@@ -5,3 +5,4 @@ public enum ChildEnumerationStrategy
     BreadthFirst,
     DepthFirst
 }
+

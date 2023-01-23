@@ -1,0 +1,21 @@
+name: JGUZDV.CQRS.AspNetCore
+
+on:
+  workflow_dispatch:
+    inputs:
+      push-to-nuget:
+        description: Push package to NuGet
+        type: boolean
+
+  pull_request:
+    branches:
+      - main
+    paths:
+      - libraries/JGUZDV.CQRS.AspNetCore/**
+
+jobs:
+  call_default_build:
+    uses: ./.github/workflows/default_build.yml
+    with:
+      library-name: JGUZDV.CQRS.AspNetCore
+      push-to-nuget: ${{ inputs.push-to-nuget }}
