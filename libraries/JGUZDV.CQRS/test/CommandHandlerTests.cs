@@ -1,9 +1,4 @@
 ﻿using JGUZDV.CQRS.Commands;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
-using System.ComponentModel.DataAnnotations;
-using System.Runtime.CompilerServices;
-using System.Security.Claims;
 using Xunit;
 
 namespace JGUZDV.CQRS.Tests
@@ -27,86 +22,58 @@ namespace JGUZDV.CQRS.Tests
             Assert.Equal(TestCommandHandler.ValidateAsyncMethod, command.Methods[3]);
             Assert.Equal(TestCommandHandler.ExecuteInternalAsyncMethod, command.Methods[4]);
         }
-    }
 
-    internal class TestCommand : ICommand
-    {
-        private readonly List<string> _methods;
-
-        public TestCommand(bool isAuthorized, bool isValid, bool canBeExecuted, CommandResult result)
+        [Fact]
+        public async Task Returns_Unauthorized_If_NotAuthorized()
         {
-            _methods = new();
+            var sut = new TestCommandHandler(false);
+            var command = new TestCommand(false, true, true, CommandResult.Success());
 
-            IsAuthorized = isAuthorized;
-            IsValid = isValid;
-            CanBeExecuted = canBeExecuted;
-            Result = result;
+            var result = await sut.ExecuteAsync(command, null, default);
+
+            Assert.False(result.IsSuccess);
+            Assert.IsType<UnauthorizedResult>(result);
         }
 
-        public bool IsAuthorized { get; }
-        public bool IsValid { get; }
-        public bool CanBeExecuted { get; }
-        public CommandResult Result { get; }
-
-        public IReadOnlyList<string> Methods => _methods;
-        public void TraceMethod([CallerMemberName] string method = null!)
+        [Fact]
+        public async Task Authorize_Will_Be_Skipped()
         {
-            _methods.Add(method);
-        }
-    }
+            var sut = new TestCommandHandler(true);
+            var command = new TestCommand(false, true, true, CommandResult.Success());
 
-    internal class TestCommandHandler : CommandHandler<TestCommand, object>
-    {
-        public const string InitializeAsyncMethod = nameof(InitializeAsync);
-        public const string NormalizeCommandMethod = nameof(NormalizeCommand);
-        public const string AuthorizeAsyncMethod = nameof(AuthorizeAsync);
-        public const string ValidateAsyncMethod = nameof(ValidateAsync);
-        public const string ExecuteInternalAsyncMethod = nameof(ExecuteInternalAsync);
+            var result = await sut.ExecuteAsync(command, null, default);
 
+            Assert.True(result.IsSuccess);
 
-        public override ILogger Logger { get; } = NullLogger<TestCommandHandler>.Instance;
-
-        public TestCommandHandler(bool skipAuthorization)
-        {
-            SkipAuthorization = skipAuthorization;
+            Assert.Equal(4, command.Methods.Count);
+            Assert.Equal(TestCommandHandler.InitializeAsyncMethod, command.Methods[0]);
+            Assert.Equal(TestCommandHandler.NormalizeCommandMethod, command.Methods[1]);
+            Assert.Equal(TestCommandHandler.ValidateAsyncMethod, command.Methods[2]);
+            Assert.Equal(TestCommandHandler.ExecuteInternalAsyncMethod, command.Methods[3]);
         }
 
-        protected override Task<object> InitializeAsync(TestCommand command, ClaimsPrincipal? principal, CancellationToken ct)
+        [Fact]
+        public async Task Returns_ValidationError_If_NotValid()
         {
-            command.TraceMethod();
-            return Task.FromResult(new object());
+            var sut = new TestCommandHandler(false);
+            var command = new TestCommand(true, false, true, CommandResult.Success());
+
+            var result = await sut.ExecuteAsync(command, null, default);
+
+            Assert.False(result.IsSuccess);
+            Assert.IsType<ValidationErrorResult>(result);
         }
 
-        protected override TestCommand NormalizeCommand(TestCommand command, object context, ClaimsPrincipal? principal)
+        [Fact]
+        public async Task Returns_GenericError_On_Error()
         {
-            command.TraceMethod();
-            return command;
-        }
+            var sut = new TestCommandHandler(false);
+            var command = new TestCommand(true, true, false, CommandResult.Success());
 
-        protected override Task<bool> AuthorizeAsync(TestCommand command, object context, ClaimsPrincipal? principal, CancellationToken ct)
-        {
-            command.TraceMethod();
+            var result = await sut.ExecuteAsync(command, null, default);
 
-            return Task.FromResult(command.IsAuthorized);
-        }
-
-        protected override Task<List<ValidationResult>> ValidateAsync(TestCommand command, object context, ClaimsPrincipal? principal, CancellationToken ct)
-        {
-            command.TraceMethod();
-
-            return Task.FromResult(command.IsValid
-                ? new List<ValidationResult>()
-                : new List<ValidationResult>() { new ValidationResult("invalid") });
-        }
-
-        protected override Task<CommandResult> ExecuteInternalAsync(TestCommand command, object context, ClaimsPrincipal? principal, CancellationToken ct)
-        {
-            command.TraceMethod();
-
-            if(command.CanBeExecuted)
-                return Task.FromResult(command.Result);
-
-            throw new InvalidOperationException("Can't execute");
+            Assert.False(result.IsSuccess);
+            Assert.IsType<GenericErrorResult>(result);
         }
     }
 }
