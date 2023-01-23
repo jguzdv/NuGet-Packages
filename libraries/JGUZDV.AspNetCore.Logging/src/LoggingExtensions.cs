@@ -69,8 +69,6 @@ public static class LoggingExtensions
             var fileName = fileConfig.GetValue<string?>("FileName") ?? $"{Environment.MachineName}.log";
 
             var useJson = fileName.EndsWith(".json", StringComparison.OrdinalIgnoreCase) || fileConfig.GetValue<bool?>("UseJson") != false;
-            if (useJson && !fileName.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
-                fileName = Path.ChangeExtension(fileName, ".json");
 
             var logFileName = isolatePath
                 ? Path.Combine(path, applicationName, fileName)
