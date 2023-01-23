@@ -16,11 +16,11 @@ namespace JGUZDV.CQRS.Tests
             Assert.True(result.IsSuccess);
 
             Assert.Equal(5, command.Methods.Count);
-            Assert.Equal(TestCommandHandler.InitializeAsyncMethod, command.Methods[0]);
-            Assert.Equal(TestCommandHandler.NormalizeCommandMethod, command.Methods[1]);
-            Assert.Equal(TestCommandHandler.AuthorizeAsyncMethod, command.Methods[2]);
-            Assert.Equal(TestCommandHandler.ValidateAsyncMethod, command.Methods[3]);
-            Assert.Equal(TestCommandHandler.ExecuteInternalAsyncMethod, command.Methods[4]);
+            Assert.Equal(TestCommandHandler.InitializeAsyncMethod, command.Methods.Dequeue());
+            Assert.Equal(TestCommandHandler.NormalizeCommandMethod, command.Methods.Dequeue());
+            Assert.Equal(TestCommandHandler.AuthorizeAsyncMethod, command.Methods.Dequeue());
+            Assert.Equal(TestCommandHandler.ValidateAsyncMethod, command.Methods.Dequeue());
+            Assert.Equal(TestCommandHandler.ExecuteInternalAsyncMethod, command.Methods.Dequeue());
         }
 
         [Fact]
@@ -46,10 +46,10 @@ namespace JGUZDV.CQRS.Tests
             Assert.True(result.IsSuccess);
 
             Assert.Equal(4, command.Methods.Count);
-            Assert.Equal(TestCommandHandler.InitializeAsyncMethod, command.Methods[0]);
-            Assert.Equal(TestCommandHandler.NormalizeCommandMethod, command.Methods[1]);
-            Assert.Equal(TestCommandHandler.ValidateAsyncMethod, command.Methods[2]);
-            Assert.Equal(TestCommandHandler.ExecuteInternalAsyncMethod, command.Methods[3]);
+            Assert.Equal(TestCommandHandler.InitializeAsyncMethod, command.Methods.Dequeue());
+            Assert.Equal(TestCommandHandler.NormalizeCommandMethod, command.Methods.Dequeue());
+            Assert.Equal(TestCommandHandler.ValidateAsyncMethod, command.Methods.Dequeue());
+            Assert.Equal(TestCommandHandler.ExecuteInternalAsyncMethod, command.Methods.Dequeue());
         }
 
         [Fact]

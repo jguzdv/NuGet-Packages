@@ -9,11 +9,9 @@ namespace JGUZDV.CQRS.Tests
 {
     internal class TestCommand : ICommand
     {
-        private readonly List<string> _methods;
-
         public TestCommand(bool isAuthorized, bool isValid, bool canBeExecuted, CommandResult result)
         {
-            _methods = new();
+            Methods = new();
 
             IsAuthorized = isAuthorized;
             IsValid = isValid;
@@ -26,10 +24,10 @@ namespace JGUZDV.CQRS.Tests
         public bool CanBeExecuted { get; }
         public CommandResult Result { get; }
 
-        public IReadOnlyList<string> Methods => _methods;
+        public Queue<string> Methods { get; }
         public void TraceMethod([CallerMemberName] string method = null!)
         {
-            _methods.Add(method);
+            Methods.Enqueue(method);
         }
     }
 
