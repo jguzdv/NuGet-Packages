@@ -7,15 +7,20 @@
 
     <PackageId>JGUZDV.AspNetCore.DataProtection</PackageId>
     <IsPackable>true</IsPackable>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
     <Authors>Aaron Puhl</Authors>
     <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
     <PackageDescription>Use DataProtection settings from IConfiguration</PackageDescription>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
 
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\"/>
   </ItemGroup>
 </Project>
