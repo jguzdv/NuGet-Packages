@@ -1,0 +1,22 @@
+name: JGUZDV.AspNetCore.Logging
+
+on:
+  workflow_dispatch:
+    inputs:
+      push-to-nuget:
+        description: Push package to NuGet
+        type: boolean
+
+  pull_request:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - libraries/JGUZDV.AspNetCore.Logging/**
+
+jobs:
+  call_default_build:
+    uses: ./.github/workflows/default_build.yml
+    with:
+      library-name: JGUZDV.AspNetCore.Logging
+      push-to-nuget: ${{ inputs.push-to-nuget }}

@@ -1,0 +1,21 @@
+name: JGUZDV.CQRS
+
+on:
+  workflow_dispatch:
+    inputs:
+      push-to-nuget:
+        description: Push package to NuGet
+        type: boolean
+
+  pull_request:
+    branches:
+      - main
+    paths:
+      - libraries/JGUZDV.CQRS/**
+
+jobs:
+  call_default_build:
+    uses: ./.github/workflows/default_build.yml
+    with:
+      library-name: JGUZDV.CQRS
+      push-to-nuget: ${{ inputs.push-to-nuget }}
