@@ -5,7 +5,7 @@ on:
     inputs:
       push-to-nuget:
         name: Push package to NuGet
-        type: bool
+        type: boolean
 
   pull_request:
     branches:
