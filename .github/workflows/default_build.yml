@@ -46,6 +46,7 @@ jobs:
         with:
           name: ${{ inputs.library-name }}
           path: ./publish/${{ inputs.library-name }}/*.nupkg
+          retention-days: 7
 
   push_to_nuget:
     needs: build_test_pack
