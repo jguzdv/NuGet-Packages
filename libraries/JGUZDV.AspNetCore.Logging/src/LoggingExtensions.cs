@@ -59,29 +59,31 @@ public static class LoggingExtensions
             });
         }
 
-        logger.WriteTo.Logger(l =>
-        {
-            var fileConfig = config.GetSection("File");
+        if(config.GetSection("File").Exists()) {
+            logger.WriteTo.Logger(l =>
+            {
+                var fileConfig = config.GetSection("File");
 
-            var path = fileConfig.GetValue<string?>("Path") ?? string.Empty;
-            var isolatePath = fileConfig.GetValue<bool?>("UseIsolatedPath") ?? true;
-            var applicationName = fileConfig.GetValue<string?>("ApplicationName") ?? ctx.HostingEnvironment.ApplicationName;
-            var fileName = fileConfig.GetValue<string?>("FileName") ?? $"{Environment.MachineName}.log";
+                var path = fileConfig.GetValue<string?>("Path") ?? string.Empty;
+                var isolatePath = fileConfig.GetValue<bool?>("UseIsolatedPath") ?? true;
+                var applicationName = fileConfig.GetValue<string?>("ApplicationName") ?? ctx.HostingEnvironment.ApplicationName;
+                var fileName = fileConfig.GetValue<string?>("FileName") ?? $"{Environment.MachineName}.log";
 
-            var useJson = fileName.EndsWith(".json", StringComparison.OrdinalIgnoreCase) || fileConfig.GetValue<bool?>("UseJson") != false;
+                var useJson = fileName.EndsWith(".json", StringComparison.OrdinalIgnoreCase) || fileConfig.GetValue<bool?>("UseJson") != false;
 
-            var logFileName = isolatePath
-                ? Path.Combine(path, applicationName, fileName)
-                : Path.Combine(path, fileName);
+                var logFileName = isolatePath
+                    ? Path.Combine(path, applicationName, fileName)
+                    : Path.Combine(path, fileName);
 
-            l.ApplyLogLevels(fileConfig);
+                l.ApplyLogLevels(fileConfig);
 
-            if (useJson)
-                l.WriteTo.File(new CompactJsonFormatter(), logFileName, rollingInterval: RollingInterval.Day);
-            else
-                l.WriteTo.File(logFileName, rollingInterval: RollingInterval.Day);
+                if (useJson)
+                    l.WriteTo.File(new CompactJsonFormatter(), logFileName, rollingInterval: RollingInterval.Day);
+                else
+                    l.WriteTo.File(logFileName, rollingInterval: RollingInterval.Day);
 
-        });
+            });
+        }
     }
 
     private static LoggerConfiguration ApplyLogLevels(this LoggerConfiguration logger, IConfiguration config, LogEventLevel? fallbackDefaultLevel = null)
