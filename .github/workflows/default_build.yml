@@ -55,7 +55,7 @@ jobs:
 
   push_to_nuget:
     needs: build_test_pack
-    if: github.repository == 'jguzdv/NuGet-Packages'  && inputs.push-to-nuget
+    if: github.repository == 'jguzdv/NuGet-Packages' && github.ref == 'refs/heads/main' && inputs.push-to-nuget
     name: Push ${{ inputs.library-name }}
     runs-on: ubuntu-latest
 
@@ -68,9 +68,6 @@ jobs:
         with:
           name: NuGetPackage
           path: package
-
-      - name: Display structure of downloaded files
-        run: ls -R package
 
       - name: Push library
         run: dotnet nuget push package/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }}
