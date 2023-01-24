@@ -16,7 +16,7 @@ env:
     dotnet-version: 7.0.x
     src-proj: ./libraries/${{ inputs.library-name }}/src/${{ inputs.library-name }}.csproj
     test-proj: ./libraries/${{ inputs.library-name }}/test/${{ inputs.library-name }}.Tests.csproj
-    publish-file: ./publish/${{ inputs.library-name }}.nupkg
+    publish-path: ./publish/${{ inputs.library-name }}
 
 jobs:
   build_test_pack:
@@ -44,13 +44,13 @@ jobs:
         run: dotnet test ${{ env.test-proj }} --no-build -c Release --verbosity normal
 
       - name: Pack library project
-        run: dotnet pack ${{ env.src-proj }} --no-build -c Release --output ${{ env.publish-file }}
+        run: dotnet pack ${{ env.src-proj }} --no-build -c Release --output ${{ env.publish-path }}
 
       - name: Upload nupkg
         uses: actions/upload-artifact@v3
         with:
           name: NuGetPackage
-          path: ${{ env.publish-file }}
+          path: ${{ env.publish-path }}
           retention-days: 7
 
   push_to_nuget:
@@ -67,10 +67,11 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: NuGetPackage
+          path: package
 
       - name: Display structure of downloaded files
-        run: ls -R
+        run: ls -R package
 
       - name: Push library
-        run: dotnet nuget push ${{ env.publish-file }} --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }}
+        run: dotnet nuget push package/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }}
       
