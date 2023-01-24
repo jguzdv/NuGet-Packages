@@ -69,6 +69,9 @@ jobs:
           name: ${{ inputs.library-name }}
           path: ${{ env.publish-file }}
 
+      - name: List folder content
+        uses: the-coding-turtle/ga-file-list@v0.2
+
       - name: Push library
         run: dotnet nuget push ${{ env.publish-file }} --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }}
       
