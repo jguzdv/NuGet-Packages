@@ -49,7 +49,7 @@ jobs:
       - name: Upload nupkg
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ inputs.library-name }}
+          name: NuGetPackage
           path: ${{ env.publish-file }}
           retention-days: 7
 
@@ -66,15 +66,10 @@ jobs:
       - name: Download nupkg
         uses: actions/download-artifact@v3
         with:
-          name: ${{ inputs.library-name }}
-          path: ${{ env.publish-file }}
+          name: NuGetPackage
 
-      - name: List folder content
-        id: lf
-        uses: the-coding-turtle/ga-file-list@v0.2
-
-      - name: Echo contents
-        run: echo "${{ toJSON(steps.lf.outputs) }}"
+      - name: Display structure of downloaded files
+        run: ls -R
 
       - name: Push library
         run: dotnet nuget push ${{ env.publish-file }} --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }}
