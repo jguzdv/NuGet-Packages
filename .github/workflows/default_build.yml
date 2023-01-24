@@ -55,7 +55,7 @@ jobs:
 
   push_to_nuget:
     needs: build_test_pack
-    if: github.repository == 'jguzdv/NuGet-Packages' && github.ref == 'refs/heads/main' && inputs.push-to-nuget
+    if: github.repository == 'jguzdv/NuGet-Packages'  && inputs.push-to-nuget
     name: Push ${{ inputs.library-name }}
     runs-on: ubuntu-latest
 
