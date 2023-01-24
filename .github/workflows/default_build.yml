@@ -14,7 +14,9 @@ on:
 
 env:
     dotnet-version: 7.0.x
-    base-dir: ./libraries/${{ inputs.library-name }}
+    src-proj: ./libraries/${{ inputs.library-name }}/src/${{ inputs.library-name }}.csproj
+    test-proj: ./libraries/${{ inputs.library-name }}/test/${{ inputs.library-name }}.csproj
+    publish-dir: ./publish/${{ inputs.library-name }}/
 
 jobs:
   build_test_pack:
@@ -29,26 +31,26 @@ jobs:
           dotnet-version: ${{ env.dotnet-version }}
 
       - name: Restore library project
-        run: dotnet restore ${{ env.base-dir }}/src/${{ inputs.library-name }}.csproj
+        run: dotnet restore ${{ env.src-proj }}
       - name: Restore test project
-        run: dotnet restore ${{ env.base-dir }}/test/${{ inputs.library-name }}.Tests.csproj
+        run: dotnet restore ${{ env.test-proj }}
 
       - name: Build library project
-        run: dotnet build ${{ env.base-dir }}/src/${{ inputs.library-name }}.csproj --no-restore -c Release
+        run: dotnet build ${{ env.src-proj }} --no-restore -c Release
       - name: Build test project
-        run: dotnet build ${{ env.base-dir }}/test/${{ inputs.library-name }}.Tests.csproj --no-restore -c Release
+        run: dotnet build ${{ env.test-proj }} --no-restore -c Release
       
       - name: Run tests
-        run: dotnet test ${{ env.base-dir }}/test/${{ inputs.library-name }}.Tests.csproj --no-build -c Release --verbosity normal
+        run: dotnet test ${{ env.test-proj }} --no-build -c Release --verbosity normal
 
       - name: Pack library project
-        run: dotnet pack ${{ env.base-dir }}/src/${{ inputs.library-name }}.csproj --no-build -c Release --output ./publish/${{ inputs.library-name }}/
+        run: dotnet pack ${{ env.src-proj }} --no-build -c Release --output ${{ env.publish-dir }}
 
       - name: Upload nupkg
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ inputs.library-name }}
-          path: ./publish/${{ inputs.library-name }}/*.nupkg
+          name: ${{ inputs.library-name }}.nupkg
+          path: ${{ env.publish-dir }}/*.nupkg
           retention-days: 7
 
   push_to_nuget:
@@ -64,8 +66,8 @@ jobs:
       - name: Download nupkg
         uses: actions/download-artifact@v3
         with:
-          name: ${{ inputs.library-name }}
+          name: ${{ inputs.library-name }}.nupkg
 
       - name: Push library
-        run: dotnet nuget push ./${{ inputs.library-name }}/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }}
+        run: dotnet nuget push ./${{ inputs.library-name }}.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }}
       
