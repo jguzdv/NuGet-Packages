@@ -12,7 +12,7 @@ public class Tests
     public void TestLoggingConfig()
     {
         
-        var builder = Host.CreateApplicationBuilder();
+        var builder = Host.CreateDefaultBuilder();
         builder.ConfigureAppConfiguration(c => c
             .AddJsonFile("appsettings.test.json", optional: false)
             .AddEnvironmentVariables()
