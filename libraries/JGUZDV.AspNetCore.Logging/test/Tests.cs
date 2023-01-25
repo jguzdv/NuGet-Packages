@@ -18,7 +18,7 @@ public class Tests
             .AddEnvironmentVariables()
             .Build();
 
-        builder.UseZDVLogging();
+        builder.UseJGUZDVLogging();
 
 
         var app = builder.Build();
