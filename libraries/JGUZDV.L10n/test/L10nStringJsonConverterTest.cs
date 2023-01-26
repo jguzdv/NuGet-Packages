@@ -1,23 +1,22 @@
 ﻿using System.Text.Json;
 
-namespace ZDV.L10n.Tests
+namespace JGUZDV.L10n.Tests;
+
+public class L10nStringJsonConverterTest
 {
-    public class L10nStringJsonConverterTest
+    [Fact]
+    public void Serialization_roundtrip()
     {
-        [Fact]
-        public void Serialization_roundtrip()
-        {
-            var sut = new L10nString();
-            sut["en"] = "English text";
-            sut["de"] = "Deutscher Text";
+        var sut = new L10nString();
+        sut["en"] = "English text";
+        sut["de"] = "Deutscher Text";
 
-            var jsonString = JsonSerializer.Serialize(sut);
+        var jsonString = JsonSerializer.Serialize(sut);
 
-            var asDic = JsonSerializer.Deserialize<Dictionary<string, string>>(jsonString)!;
-            var asL10n = JsonSerializer.Deserialize<L10nString>(jsonString)!;
+        var asDic = JsonSerializer.Deserialize<Dictionary<string, string>>(jsonString)!;
+        var asL10n = JsonSerializer.Deserialize<L10nString>(jsonString)!;
 
-            Assert.Equal("English text", asDic["en"]);
-            Assert.Equal("English text", asL10n["en"]);
-        }
+        Assert.Equal("English text", asDic["en"]);
+        Assert.Equal("English text", asL10n["en"]);
     }
 }
