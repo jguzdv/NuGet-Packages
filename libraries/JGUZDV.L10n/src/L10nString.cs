@@ -36,9 +36,16 @@ public class L10nString
     }
 
     /// <summary>
+    /// Initializes a copy of the original
+    /// </summary>
+    public L10nString(L10nString original)
+        : this(original.Values)
+    { }
+
+    /// <summary>
     /// Initializes the instance from a dictionary.
     /// </summary>
-    public L10nString(IDictionary<string, string> values)
+    public L10nString(IEnumerable<KeyValuePair<string, string>> values)
         :this()
     {
         foreach (var (k, v) in values)
