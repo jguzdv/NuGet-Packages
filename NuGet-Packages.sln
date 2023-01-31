@@ -17,6 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 		.github\workflows\JGUZDV.AspNetCore.Logging.yml = .github\workflows\JGUZDV.AspNetCore.Logging.yml
 		.github\workflows\JGUZDV.CQRS.AspNetCore.yml = .github\workflows\JGUZDV.CQRS.AspNetCore.yml
 		.github\workflows\JGUZDV.CQRS.yml = .github\workflows\JGUZDV.CQRS.yml
+		.github\workflows\JGUZDV.Extensions.Json.yml = .github\workflows\JGUZDV.Extensions.Json.yml
 		.github\workflows\JGUZDV.Extensions.Logging.yml = .github\workflows\JGUZDV.Extensions.Logging.yml
 		.github\workflows\JGUZDV.L10n.yml = .github\workflows\JGUZDV.L10n.yml
 		.github\workflows\JGUZDV.Linq.yml = .github\workflows\JGUZDV.Linq.yml
@@ -55,6 +56,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.L10n", "libraries\JGUZDV.L10n\src\JGUZDV.L10n.csproj", "{175E14F2-E526-4DEA-9E05-AA87E48DBD7D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.L10n.Tests", "libraries\JGUZDV.L10n\test\JGUZDV.L10n.Tests.csproj", "{D95B0932-CC64-440A-A956-D9D9EF9E1A99}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.Extensions.Json", "libraries\JGUZDV.Extensions.Json\src\JGUZDV.Extensions.Json.csproj", "{17C0DC51-C48D-4CAD-BF20-2C1BF7785A08}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.Extensions.Json.Tests", "libraries\JGUZDV.Extensions.Json\test\JGUZDV.Extensions.Json.Tests.csproj", "{E3623DC7-BE65-4EBD-9E1D-D66BE0502F72}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -118,6 +123,14 @@ Global
 		{D95B0932-CC64-440A-A956-D9D9EF9E1A99}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D95B0932-CC64-440A-A956-D9D9EF9E1A99}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D95B0932-CC64-440A-A956-D9D9EF9E1A99}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17C0DC51-C48D-4CAD-BF20-2C1BF7785A08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17C0DC51-C48D-4CAD-BF20-2C1BF7785A08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17C0DC51-C48D-4CAD-BF20-2C1BF7785A08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17C0DC51-C48D-4CAD-BF20-2C1BF7785A08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3623DC7-BE65-4EBD-9E1D-D66BE0502F72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3623DC7-BE65-4EBD-9E1D-D66BE0502F72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3623DC7-BE65-4EBD-9E1D-D66BE0502F72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3623DC7-BE65-4EBD-9E1D-D66BE0502F72}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -140,6 +153,8 @@ Global
 		{EC5DD74A-C0FB-4310-95FF-F8C9E2817F5C} = {50252EFB-8629-4B1D-AC2F-5F29CB6F684D}
 		{175E14F2-E526-4DEA-9E05-AA87E48DBD7D} = {5F18EE62-3FBC-42F5-96DC-8C61C3D9EF27}
 		{D95B0932-CC64-440A-A956-D9D9EF9E1A99} = {50252EFB-8629-4B1D-AC2F-5F29CB6F684D}
+		{17C0DC51-C48D-4CAD-BF20-2C1BF7785A08} = {5F18EE62-3FBC-42F5-96DC-8C61C3D9EF27}
+		{E3623DC7-BE65-4EBD-9E1D-D66BE0502F72} = {50252EFB-8629-4B1D-AC2F-5F29CB6F684D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {46ECC226-1874-4539-8589-8B2029909C4A}
