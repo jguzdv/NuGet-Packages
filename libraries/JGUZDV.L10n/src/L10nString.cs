@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Reflection;
 using System.Resources;
 using System.Text.Json.Serialization;
@@ -6,7 +7,7 @@ using System.Text.Json.Serialization;
 namespace JGUZDV.L10n;
 
 [JsonConverter(typeof(L10nStringJsonConverter))]
-public class L10nString
+public class L10nString : IEquatable<L10nString>, IEqualityComparer<L10nString>
 {
     /// <summary>
     /// The default culture name.
@@ -126,7 +127,7 @@ public class L10nString
         return _values.First().Value;
 
 
-        bool EqualsCI(string? s1, string? s2) => string.Equals(s1, s2, StringComparison.OrdinalIgnoreCase);
+        static bool EqualsCI(string? s1, string? s2) => string.Equals(s1, s2, StringComparison.OrdinalIgnoreCase);
     }
 
     /// <summary>
@@ -142,6 +143,60 @@ public class L10nString
     /// </summary>
     public static string? ToString(L10nString l10n)
         => l10n?.ToString();
+
+
+    public override int GetHashCode()
+    {
+        var hashCode = base.GetHashCode();
+        foreach(var entry in _values)
+            hashCode = HashCode.Combine(hashCode, entry.Key.GetHashCode(), entry.Value.GetHashCode());
+
+        return hashCode;
+    }
+
+    public int GetHashCode([DisallowNull] L10nString obj)
+    {
+        return obj.GetHashCode();
+    }
+
+
+    public override bool Equals(object? obj)
+    {
+        return Equals(obj as L10nString);
+    }
+
+
+    public bool Equals(L10nString? other)
+    {
+        if (other == null)
+            return false;
+
+        if (_values.Count != other._values.Count)
+            return false;
+
+        foreach (var entry in _values)
+        {
+            if (!other._values.TryGetValue(entry.Key, out string? value))
+                return false;
+
+            if (!entry.Value.Equals(value))
+                return false;
+        }
+
+        return true;
+    }
+
+    public bool Equals(L10nString? x, L10nString? y)
+    {
+        if (x == null && y == null)
+            return true;
+
+        if (x == null || y == null)
+            return false;
+
+        return x.Equals(y);
+    }
+
 
     /// <summary>
     /// Explicit cast to string, since we're going to loose some data in that conversion.
