@@ -1,4 +1,4 @@
-name: JGUZDV.L10n.EntityFramwork
+name: JGUZDV.L10n.EntityFramework
 
 on:
   workflow_dispatch:
@@ -11,13 +11,13 @@ on:
     branches:
       - main
     paths:
-      - libraries/JGUZDV.L10n.EntityFramwork/**
+      - libraries/JGUZDV.L10n.EntityFramework/**
 
 jobs:
   call_default_build:
     uses: ./.github/workflows/default_build.yml
     with:
-      library-name: JGUZDV.L10n.EntityFramwork
+      library-name: JGUZDV.L10n.EntityFramework
       push-to-nuget: ${{ inputs.push-to-nuget != '' && inputs.push-to-nuget }}
     secrets:
       NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
