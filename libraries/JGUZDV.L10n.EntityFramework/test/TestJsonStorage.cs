@@ -13,7 +13,7 @@ public class TestJsonStorage : IClassFixture<DbContextFixture>
         _fixture = fixture;
     }
 
-    [Fact]
+    [IgnoreOnGithubFact]
     public async Task TestConfiguration()
     {
         _fixture.TestDb.Blogs.Add(new()
