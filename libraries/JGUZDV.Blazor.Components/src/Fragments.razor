@@ -2,19 +2,21 @@
 @inject IStringLocalizer<Resources.ComponentStrings> LR
 
 @code {
+    public static Fragments Instance = new Fragments();
+
     protected override bool ShouldRender()
     {
         // This component should never render.
         return false;
     }
 
-    public Fragments()
+    private Fragments()
     {
-        NotFoundDefault = NotFound.Invoke(LR["GenericView.NotFound"]);
+        DefaultNotFound = NotFound.Invoke(LR["GenericView.NotFound"]);
     }
 
 
-    public RenderFragment NotFoundDefault { get; }
+    public RenderFragment DefaultNotFound { get; }
 
     public static RenderFragment<string> NotFound { get; } = message =>
         @<div class="d-flex h-100 flex-column align-items-center justify-content-center">
