@@ -1,0 +1,216 @@
+﻿@using JGUZDV.Blazor.Components.Util;
+@using Microsoft.AspNetCore.Components.Web;
+@using System.Threading;
+
+@typeparam TItem
+
+@code {
+    [Parameter, EditorRequired, NotNull]
+    public Func<string, CancellationToken, Task<(List<TItem>? Result, bool HasMoreResults)>>? SearchFunction { get; set; }
+
+    [Parameter]
+    public EventCallback<TItem> OnItemSelected { get; set; }
+
+
+    [Parameter, EditorRequired, NotNull]
+    public RenderFragment<TItem>? ItemTemplate { get; set; }
+
+    [Parameter]
+    public RenderFragment<ResultContext>? MoreResultsTemplate { get; set; }
+
+
+    [Parameter, EditorRequired, NotNull]
+    public RenderFragment? SearchHintTemplate { get; set; }
+
+    [Parameter, EditorRequired, NotNull] 
+    public RenderFragment<string?>? NoResultTemplate { get; set; }
+
+    [Parameter]
+    public RenderFragment<string?> ErrorTemplate { get; set; }
+
+
+    public DropdownSearch()
+    {
+        ErrorTemplate = (err) => @<text>err</text>;
+    }
+
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        ArgumentNullException.ThrowIfNull(SearchFunction);
+        ArgumentNullException.ThrowIfNull(ItemTemplate);
+        ArgumentNullException.ThrowIfNull(SearchHintTemplate);
+        ArgumentNullException.ThrowIfNull(NoResultTemplate);
+    }
+
+
+    public bool SearchIsOpen { get; set; }
+    private int _keyBoardSelectedIndex = 0;
+
+    private string? _searchQuery;
+    private Task<ResultContext>? SearchTask { get; set; }
+
+    private DelayedExecution _searchInputDebounce = new(333);
+    private DelayedExecution _blurDebounce = new(250);
+
+
+    public string? SearchQuery
+    {
+        get => _searchQuery;
+        set
+        {
+            _searchQuery = value;
+            InitializeDelayedSearch();
+        }
+    }
+
+
+    public void OnFocus()
+    {
+        _blurDebounce.Cancel();
+        SearchIsOpen = true;
+    }
+
+    public async Task OnBlur()
+    {
+        if (!SearchIsOpen)
+            return;
+
+        await _blurDebounce.ExecuteDelayed((_) => SearchIsOpen = false);
+    }
+
+
+    private void InitializeDelayedSearch()
+    {
+        _searchInputDebounce.Cancel();
+        SearchIsOpen = true;
+
+        if (string.IsNullOrWhiteSpace(_searchQuery))
+        {
+            SearchTask = null;
+            return;
+        }
+
+        SearchTask = ExecuteDelayedSearch(_searchQuery, _searchInputDebounce.Token);
+        
+        
+        async Task<ResultContext>? ExecuteDelayedSearch(string searchQuery, CancellationToken ct)
+        {
+            return await _searchInputDebounce.ExecuteDelayed(
+                async (ct) =>
+                {
+                    var (result, hasMoreResults) = await SearchFunction.Invoke(searchQuery, ct);
+
+                    return new ResultContext(result, hasMoreResults, searchQuery);
+                }, 
+                () => new ResultContext(null, false, searchQuery));
+	    }
+    }
+
+
+	public async Task OnItemSelect(TItem item)
+	{
+		await OnItemSelected.InvokeAsync(item);
+		SearchIsOpen = false;
+	}
+
+    private async Task HandleKeyPress(KeyboardEventArgs args)
+	{
+		if(SearchTask?.IsCompletedSuccessfully != true)
+			return;
+
+
+		var searchResult = await SearchTask;
+
+		if (searchResult.Items?.Any() != true)
+			return;
+
+
+		if(args.Code == "Enter")
+		{			
+			_ = OnItemSelect(searchResult.Items[_keyBoardSelectedIndex]);
+		}
+		else if(args.Code == "ArrowDown" && _keyBoardSelectedIndex < searchResult.Items.Count - 1)
+		{
+			_keyBoardSelectedIndex++;
+		}
+		else if(args.Code == "ArrowUp" && _keyBoardSelectedIndex > 0)
+		{
+			_keyBoardSelectedIndex--;
+		}
+	}
+
+
+	public class ResultContext
+	{
+		public ResultContext(List<TItem>? items, bool hasMoreResults, string? searchQuery)
+		{
+			Items = items;
+			HasMoreResults = hasMoreResults;
+			SearchQuery = searchQuery;
+		}
+
+		public List<TItem>? Items { get; }
+		public bool HasMoreResults { get; }
+		public string? SearchQuery { get; }
+
+		public bool HasResult => Items?.Any() == true;
+
+		public string? Error { get; set; }
+		public bool HasError => !string.IsNullOrWhiteSpace(Error);
+	}
+}
+
+<div class="input-group sr-wrapper">
+	<span class="input-group-text"><i class="fa fa-fw fa-search"></i></span>
+	<input type="text" class="form-control" autocomplete="off"
+		   @bind="SearchQuery" @bind:event="oninput"
+		   @onfocus="() => OnFocus()" @onblur="() => OnBlur()"
+		   @onkeyup="(e) => HandleKeyPress(e)"/>
+
+	@if (SearchTask != null && SearchIsOpen)
+	{
+		<AwaitTask Task="SearchTask">
+			<Running>
+				<div class="sr-container border bg-light p-3">
+					<ActivityIndicator Style="ActivityIndicator.IndicatorStyle.Marquee" />
+				</div>
+			</Running>
+			<Finished>
+				@if (context.HasError)
+				{
+					<div class="alert alert-warning">@ErrorTemplate(context.Error)</div>
+				}
+				else if (!context.HasResult)
+				{
+					<div class="alert alert-warning">@NoResultTemplate(context.SearchQuery)</div>
+				}
+				else
+				{
+					<ul class="fa-ul mb-0">
+					@for (int i = 0; i < context.Items!.Count; i++)
+					{
+						var item = context.Items![i];
+
+						<li class="py-2 border-bottom @(i == _keyBoardSelectedIndex? "selected":"")" @onclick="() => OnItemSelect(item)">
+							@ItemTemplate(item)
+						</li>
+					}
+					@if (context.HasMoreResults)
+					{
+						<li>@MoreResultsTemplate</li>
+					}
+					</ul>
+				}
+		</Finished>
+	</AwaitTask>
+	}
+	else if (SearchIsOpen)
+	{
+		<div class="sr-container">
+			<div class="alert alert-info">@SearchHintTemplate</div>
+		</div>
+	}
+</div>
