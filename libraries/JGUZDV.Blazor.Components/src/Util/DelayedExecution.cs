@@ -1,6 +1,6 @@
 ﻿namespace JGUZDV.Blazor.Components.Util
 {
-    internal class DelayedExecution
+    public class DelayedExecution
     {
         private readonly TimeSpan _executionDelay;
         private CancellationTokenSource _tokenSource;

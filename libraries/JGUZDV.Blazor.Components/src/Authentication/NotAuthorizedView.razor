@@ -1,0 +1,40 @@
+﻿@using Microsoft.AspNetCore.Components.Authorization;
+@using Microsoft.Extensions.Localization;
+
+@inject NavigationManager _navigation
+@inject IStringLocalizer<Resources.ComponentStrings> LR
+
+@code {
+    [CascadingParameter]
+    public Task<AuthenticationState>? AuthenticationState { get; set; }
+
+    [Parameter]
+    public string LoginUrl { get; set; } = "_app/sign-in";
+}
+
+<AwaitTask Task="AuthenticationState">
+    @if (context.User.Identity?.IsAuthenticated == true)
+    {
+        <div class="d-flex h-100 flex-column align-items-center justify-content-center">
+            <div>
+                <span style="font-size: 8em;">✋</span>
+            </div>
+            <div class="text-center">
+                <span class="text-muted">@LR["AuthView.Unauthorized"]</span>
+            </div>
+        </div>
+    }
+    else
+    {
+        var nextUrl = _navigation.ToBaseRelativePath(_navigation.Uri);
+        if (!nextUrl.StartsWith("/"))
+            nextUrl = "/" + nextUrl;
+
+        <div class="d-flex h-100 flex-column align-items-center justify-content-center">
+            <a href="@LoginUrl?nextUrl=@nextUrl" class="btn btn-secondary fa-2x btn-rounded">
+                <i class="fa fa-sign-in-alt"></i>
+                @LR["AuthView.LoginButton"]
+            </a>
+        </div>
+    }
+</AwaitTask>

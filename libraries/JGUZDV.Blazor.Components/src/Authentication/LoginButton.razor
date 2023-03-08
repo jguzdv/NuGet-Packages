@@ -1,0 +1,85 @@
+﻿@using System.Threading.Tasks;
+@using Microsoft.AspNetCore.Components.Authorization;
+@using Microsoft.AspNetCore.Components.Web;
+@using Microsoft.Extensions.Localization;
+@using Microsoft.JSInterop
+
+@inject NavigationManager _navigation
+@inject IStringLocalizer<Resources.ComponentStrings> LR
+@inject IJSRuntime JSRuntime
+
+@code {
+    private const string AutoLoginKey = "LoginButton.AutoLoginRan";
+
+    [CascadingParameter, NotNull] 
+    Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+
+    [Parameter]
+    public string LoginUrl { get; set; } = "_app/sign-in";
+    [Parameter]
+    public string LogoutUrl { get; set; } = "_app/sign-out";
+
+    [Parameter]
+    public string? RedirectUrl { get; set; }
+
+    [Parameter]
+    public bool UseAutoLogin { get; set; }
+
+    [Parameter]
+    public RenderFragment? DropdownItems { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+
+        if (RedirectUrl == null)
+        {
+            RedirectUrl = _navigation.ToBaseRelativePath(_navigation.Uri);
+        }
+
+        if (!RedirectUrl.StartsWith("/"))
+            RedirectUrl = "/" + RedirectUrl;
+
+        var authenticationState = await AuthenticationStateTask;
+
+        if (authenticationState.User.Identity?.IsAuthenticated != true)
+        {
+            if (UseAutoLogin)
+            {
+                var hasLoginBeenTried = await JSRuntime.InvokeAsync<string>("localStorage.getItem", AutoLoginKey);
+                if (hasLoginBeenTried != "true")
+                {
+                    await JSRuntime.InvokeVoidAsync("localStorage.setItem", AutoLoginKey, true);
+
+                    var uri = _navigation.ToAbsoluteUri($"{LoginUrl}?nextUrl={RedirectUrl}");
+                    _navigation.NavigateTo(uri.ToString(), true);
+                }
+            }
+        } 
+        else
+        {
+            _ = JSRuntime.InvokeVoidAsync("localStorage.setItem", AutoLoginKey, false);
+        }
+    }
+}
+
+<AwaitTask Task="AuthenticationStateTask">
+    <Running>
+        <button class="jgu_btn btn btn-none">
+            <i class="fas fa-spinner fa-pulse"></i>
+        </button>
+    </Running>
+    <Finished>
+        @if (context.User.Identity?.IsAuthenticated != true)
+        {
+            <a class="btn btn-light border login-button" href="@LoginUrl?nextUrl=@RedirectUrl">
+                <i class="fas fa-sign-in-alt"></i>
+                @LR["AuthView.LoginButton"]
+            </a>
+        } 
+        else
+        {
+            <LoginButtonDropdown DropdownItems="@DropdownItems" AlignLeft="@AlignLeft" UserName="@context.User.Identity?.Name" LogoutUrl="@LogoutUrl" />
+        }
+    </Finished>
+</AwaitTask>
