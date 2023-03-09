@@ -17,6 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 		.github\workflows\default_build.yml = .github\workflows\default_build.yml
 		.github\workflows\JGUZDV.AspNetCore.DataProtection.yml = .github\workflows\JGUZDV.AspNetCore.DataProtection.yml
 		.github\workflows\JGUZDV.AspNetCore.Logging.yml = .github\workflows\JGUZDV.AspNetCore.Logging.yml
+		.github\workflows\JGUZDV.Blazor.Components.yml = .github\workflows\JGUZDV.Blazor.Components.yml
 		.github\workflows\JGUZDV.CQRS.AspNetCore.yml = .github\workflows\JGUZDV.CQRS.AspNetCore.yml
 		.github\workflows\JGUZDV.CQRS.yml = .github\workflows\JGUZDV.CQRS.yml
 		.github\workflows\JGUZDV.Extensions.Logging.yml = .github\workflows\JGUZDV.Extensions.Logging.yml
