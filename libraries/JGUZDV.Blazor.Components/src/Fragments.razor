@@ -1,0 +1,30 @@
+﻿@using Microsoft.Extensions.Localization;
+@inject IStringLocalizer<Resources.ComponentStrings> LR
+
+@code {
+    public static Fragments Instance = new Fragments();
+
+    protected override bool ShouldRender()
+    {
+        // This component should never render.
+        return false;
+    }
+
+    private Fragments()
+    {
+        DefaultNotFound = NotFound.Invoke(LR["GenericView.NotFound"]);
+    }
+
+
+    public RenderFragment DefaultNotFound { get; }
+
+    public static RenderFragment<string> NotFound { get; } = message =>
+        @<div class="d-flex h-100 flex-column align-items-center justify-content-center">
+            <div>
+                <span style="font-size: 8em;">🤷</span>
+            </div>
+            <div class="text-center">
+                <span class="text-muted">@message</span>
+            </div>
+        </div>;
+}

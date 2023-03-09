@@ -1,0 +1,15 @@
+﻿.sr-wrapper {
+    position: relative;
+}
+
+.sr-container {
+    position: absolute;
+    top: 100%;
+    width: 100%;
+    z-index: 10;
+    max-height: 61.8vh;
+}
+
+.selected {
+    background-color: var(--bs-gray-400);
+}
