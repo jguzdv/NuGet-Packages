@@ -16,9 +16,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Authentication\**.cs" />
-    <Content Remove="Authentication\**.razor" />
-    <None Include="Authentication\**" />
+    <Compile Remove="Authentication\*.cs" />
+    <Content Remove="Authentication\*.razor" />
+    <Content Remove="Authentication\*.razor.css" />
+    <None Include="Authentication\*.*" />
   </ItemGroup>
 
     <ItemGroup>
