@@ -172,7 +172,7 @@
 
 	@if (SearchTask != null && SearchIsOpen)
 	{
-		<AwaitTask Task="SearchTask">
+        <AwaitTask Task="SearchTask">
 			<Running>
 				<div class="sr-container border bg-light p-3">
 					<ActivityIndicator Style="ActivityIndicator.IndicatorStyle.Marquee" />
@@ -189,20 +189,22 @@
 				}
 				else
 				{
-					<ul class="fa-ul mb-0">
-					@for (int i = 0; i < context.Items!.Count; i++)
-					{
-						var item = context.Items![i];
+                    <div class="sr-container border bg-light m-0 overflow-auto">
+					    <ul class="list-group ">
+					    @for (int i = 0; i < context.Items!.Count; i++)
+					    {
+						    var item = context.Items![i];
 
-						<li class="py-2 border-bottom @(i == _keyBoardSelectedIndex? "selected":"")" @onclick="() => OnItemSelect(item)">
-							@ItemTemplate(item)
-						</li>
-					}
-					@if (context.HasMoreResults)
-					{
-						<li>@MoreResultsTemplate</li>
-					}
-					</ul>
+						    <li class="list-group-item @(i == _keyBoardSelectedIndex? "selected":"")" @onclick="() => OnItemSelect(item)">
+							    @ItemTemplate(item)
+						    </li>
+					    }
+					    @if (context.HasMoreResults && MoreResultsTemplate != null)
+					    {
+						    <li class="list-group-item">@MoreResultsTemplate(context)</li>
+					    }
+					    </ul>
+                    </div>
 				}
 		</Finished>
 	</AwaitTask>
