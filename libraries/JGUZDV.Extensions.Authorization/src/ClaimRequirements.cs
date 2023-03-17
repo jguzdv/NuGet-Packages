@@ -3,10 +3,10 @@ using System.Text.Json.Serialization;
 
 namespace JGUZDV.Extensions.Authorization;
 
-public sealed class ClaimRequirements : ClaimRequirement
+public sealed class ClaimRequirementCollection : ClaimRequirement
 {
     [JsonConstructor]
-    public ClaimRequirements(List<ClaimRequirement> requirements, ClaimRequirementListMatchType matchType)
+    public ClaimRequirementCollection(List<ClaimRequirement> requirements, ClaimRequirementListMatchType matchType)
     {
         Requirements = requirements;
         MatchType = matchType;
