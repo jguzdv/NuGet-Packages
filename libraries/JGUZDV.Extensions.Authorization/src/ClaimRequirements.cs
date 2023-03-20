@@ -6,32 +6,32 @@ namespace JGUZDV.Extensions.Authorization;
 public sealed class ClaimRequirementCollection : ClaimRequirement
 {
     [JsonConstructor]
-    public ClaimRequirementCollection(List<ClaimRequirement> requirements, ClaimRequirementListMatchType matchType)
+    public ClaimRequirementCollection(List<ClaimRequirement> requirements, RequirementCollectionMatchType matchType)
     {
         Requirements = requirements;
         MatchType = matchType;
     }
 
-    public ClaimRequirementCollection(ClaimRequirementListMatchType matchType, params ClaimRequirement[] requirements)
+    public ClaimRequirementCollection(RequirementCollectionMatchType matchType, params ClaimRequirement[] requirements)
     {
         Requirements = requirements.ToList();
         MatchType = matchType;
     }
 
     public List<ClaimRequirement> Requirements { get; }
-    public ClaimRequirementListMatchType MatchType { get; }
+    public RequirementCollectionMatchType MatchType { get; }
 
 
     public sealed override bool SatisfiesRequirement(ClaimsPrincipal principal)
         => MatchType switch
         {
-            ClaimRequirementListMatchType.MatchAll => Requirements.Any() && Requirements.All(r => r.SatisfiesRequirement(principal)),
-            ClaimRequirementListMatchType.MatchAny => Requirements.Any(r => r.SatisfiesRequirement(principal)),
+            RequirementCollectionMatchType.MatchAll => Requirements.Any() && Requirements.All(r => r.SatisfiesRequirement(principal)),
+            RequirementCollectionMatchType.MatchAny => Requirements.Any(r => r.SatisfiesRequirement(principal)),
             _ => false
         };
 }
 
-public enum ClaimRequirementListMatchType
+public enum RequirementCollectionMatchType
 {
     MatchAll,
     MatchAny

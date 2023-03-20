@@ -28,7 +28,7 @@ public class ClaimRequirementCollectionTests
     public void Any_Requirement_Collection_Succeeds()
     {
         var sut = new ClaimRequirementCollection(
-            ClaimRequirementListMatchType.MatchAny,
+            RequirementCollectionMatchType.MatchAny,
             _claimRequirements[2], _claimRequirements[0]
         );
 
@@ -41,7 +41,7 @@ public class ClaimRequirementCollectionTests
     public void Any_Requirement_Collection_Fails()
     {
         var sut = new ClaimRequirementCollection(
-            ClaimRequirementListMatchType.MatchAny,
+            RequirementCollectionMatchType.MatchAny,
             _claimRequirements[2]
         );
 
@@ -54,7 +54,7 @@ public class ClaimRequirementCollectionTests
     public void All_Requirement_Collection_Succeeds()
     {
         var sut = new ClaimRequirementCollection(
-            ClaimRequirementListMatchType.MatchAll,
+            RequirementCollectionMatchType.MatchAll,
             _claimRequirements[1], _claimRequirements[0]
         );
 
@@ -67,7 +67,7 @@ public class ClaimRequirementCollectionTests
     public void All_Requirement_Collection_Fails()
     {
         var sut = new ClaimRequirementCollection(
-            ClaimRequirementListMatchType.MatchAll,
+            RequirementCollectionMatchType.MatchAll,
             _claimRequirements[2], _claimRequirements[0]
         );
 
@@ -80,7 +80,7 @@ public class ClaimRequirementCollectionTests
     public void All_Empty_Requirement_Collection_Fails()
     {
         var sut = new ClaimRequirementCollection(
-            ClaimRequirementListMatchType.MatchAll
+            RequirementCollectionMatchType.MatchAll
         );
 
         var result = sut.SatisfiesRequirement(_testUser);
