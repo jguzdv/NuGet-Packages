@@ -20,6 +20,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 		.github\workflows\JGUZDV.Blazor.Components.yml = .github\workflows\JGUZDV.Blazor.Components.yml
 		.github\workflows\JGUZDV.CQRS.AspNetCore.yml = .github\workflows\JGUZDV.CQRS.AspNetCore.yml
 		.github\workflows\JGUZDV.CQRS.yml = .github\workflows\JGUZDV.CQRS.yml
+		.github\workflows\JGUZDV.Extensions.Authorization.yml = .github\workflows\JGUZDV.Extensions.Authorization.yml
 		.github\workflows\JGUZDV.Extensions.Logging.yml = .github\workflows\JGUZDV.Extensions.Logging.yml
 		.github\workflows\JGUZDV.L10n.EntityFramwork.yml = .github\workflows\JGUZDV.L10n.EntityFramwork.yml
 		.github\workflows\JGUZDV.L10n.yml = .github\workflows\JGUZDV.L10n.yml
@@ -67,6 +68,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.L10n.EntityFramework
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.L10n.EntityFramework.Tests", "libraries\JGUZDV.L10n.EntityFramework\test\JGUZDV.L10n.EntityFramework.Tests.csproj", "{AECC9062-83E1-4B62-906D-1055E61E71DE}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.Extensions.Authorization", "libraries\JGUZDV.Extensions.Authorization\src\JGUZDV.Extensions.Authorization.csproj", "{3DFED352-5E7E-4688-8371-8B55EB800705}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.Extensions.Authorization.Tests", "libraries\JGUZDV.Extensions.Authorization\test\JGUZDV.Extensions.Authorization.Tests.csproj", "{793F6A63-30B3-44BC-A205-50031E27E31C}"
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{AA0D0715-5EAE-437A-ABF5-D596B127544B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.Blazor.Components.Samples", "libraries\JGUZDV.Blazor.Components\samples\JGUZDV.Blazor.Components.Samples.csproj", "{4AAFE071-EC5E-4F28-961C-7BB1259DC452}"
@@ -145,6 +149,14 @@ Global
 		{AECC9062-83E1-4B62-906D-1055E61E71DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AECC9062-83E1-4B62-906D-1055E61E71DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AECC9062-83E1-4B62-906D-1055E61E71DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3DFED352-5E7E-4688-8371-8B55EB800705}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3DFED352-5E7E-4688-8371-8B55EB800705}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3DFED352-5E7E-4688-8371-8B55EB800705}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3DFED352-5E7E-4688-8371-8B55EB800705}.Release|Any CPU.Build.0 = Release|Any CPU
+		{793F6A63-30B3-44BC-A205-50031E27E31C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{793F6A63-30B3-44BC-A205-50031E27E31C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{793F6A63-30B3-44BC-A205-50031E27E31C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{793F6A63-30B3-44BC-A205-50031E27E31C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4AAFE071-EC5E-4F28-961C-7BB1259DC452}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4AAFE071-EC5E-4F28-961C-7BB1259DC452}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4AAFE071-EC5E-4F28-961C-7BB1259DC452}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -181,6 +193,8 @@ Global
 		{D95B0932-CC64-440A-A956-D9D9EF9E1A99} = {50252EFB-8629-4B1D-AC2F-5F29CB6F684D}
 		{9610AFDB-AA50-4AFF-80E5-B8CA65D84A8E} = {5F18EE62-3FBC-42F5-96DC-8C61C3D9EF27}
 		{AECC9062-83E1-4B62-906D-1055E61E71DE} = {50252EFB-8629-4B1D-AC2F-5F29CB6F684D}
+		{3DFED352-5E7E-4688-8371-8B55EB800705} = {5F18EE62-3FBC-42F5-96DC-8C61C3D9EF27}
+		{793F6A63-30B3-44BC-A205-50031E27E31C} = {50252EFB-8629-4B1D-AC2F-5F29CB6F684D}
 		{AA0D0715-5EAE-437A-ABF5-D596B127544B} = {DA4DE709-E5BC-4B93-88D2-838656C217CE}
 		{4AAFE071-EC5E-4F28-961C-7BB1259DC452} = {AA0D0715-5EAE-437A-ABF5-D596B127544B}
 		{E5097EE8-6385-4C20-9DE3-8902CEA4FE8B} = {5F18EE62-3FBC-42F5-96DC-8C61C3D9EF27}

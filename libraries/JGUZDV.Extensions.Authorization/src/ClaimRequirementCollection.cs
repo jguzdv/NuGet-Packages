@@ -1,0 +1,38 @@
+﻿using System.Security.Claims;
+using System.Text.Json.Serialization;
+
+namespace JGUZDV.Extensions.Authorization;
+
+public sealed class ClaimRequirementCollection : ClaimRequirement
+{
+    [JsonConstructor]
+    public ClaimRequirementCollection(List<ClaimRequirement> requirements, RequirementCollectionMatchType matchType)
+    {
+        Requirements = requirements;
+        MatchType = matchType;
+    }
+
+    public ClaimRequirementCollection(RequirementCollectionMatchType matchType, params ClaimRequirement[] requirements)
+    {
+        Requirements = requirements.ToList();
+        MatchType = matchType;
+    }
+
+    public List<ClaimRequirement> Requirements { get; }
+    public RequirementCollectionMatchType MatchType { get; }
+
+
+    public sealed override bool SatisfiesRequirement(ClaimsPrincipal principal)
+        => MatchType switch
+        {
+            RequirementCollectionMatchType.MatchAll => Requirements.Any() && Requirements.All(r => r.SatisfiesRequirement(principal)),
+            RequirementCollectionMatchType.MatchAny => Requirements.Any(r => r.SatisfiesRequirement(principal)),
+            _ => false
+        };
+}
+
+public enum RequirementCollectionMatchType
+{
+    MatchAll,
+    MatchAny
+}
