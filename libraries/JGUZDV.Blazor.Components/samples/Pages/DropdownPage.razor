@@ -1,0 +1,22 @@
+﻿@page "/dropdown"
+@using JGUZDV.Blazor.Components.Inputs
+
+<h3>DropdownPage</h3>
+
+<label>suche</label>
+<DropdownSearch SearchFunction="Function">
+    <ItemTemplate><i class="fa fa-fw fa-user"></i> @context</ItemTemplate>
+    <SearchHintTemplate>nix</SearchHintTemplate>
+    <NoResultTemplate>@context</NoResultTemplate>
+</DropdownSearch>
+
+
+<div>lalalaa</div>
+
+@code {
+
+    private Task<(List<string>, bool)> Function(string query, CancellationToken token)
+    {
+        return Task.FromResult((new List<string> { "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c" }, false));
+    }
+}

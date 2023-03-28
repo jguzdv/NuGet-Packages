@@ -1,0 +1,88 @@
+﻿@using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+@using Microsoft.Extensions.Localization;
+
+@typeparam TResult
+
+@code {
+    [Inject, NotNull] 
+    private IStringLocalizer<ComponentStrings>? LR { get; set; }
+    
+    [Inject, NotNull] 
+    private IWebAssemblyHostEnvironment? HE { get; set; }
+
+
+    [Parameter]
+    public Task<TResult>? Task { get; set; }
+
+
+    [Parameter]
+    public RenderFragment<TResult> ChildContent { get => Finished; set => Finished = value; }
+
+    [Parameter]
+    public RenderFragment<TResult> Finished { get; set; } = (result) => @<div>@result?.ToString()</div>;
+
+
+    [Parameter]
+    public RenderFragment Running { get; set; } = @<ActivityIndicator />;
+
+    [Parameter]
+    public RenderFragment<(string Message, AggregateException? Exception)> Failed { get; set; } =
+        (data) =>
+            @<div class="alert alert-danger">
+                @data.Message
+                @if(data.Exception != null)
+                {
+                    var ex = data.Exception;
+                    <pre>
+                        @(ex.Message + "\r\n")
+                        @for (int i = 0; i < ex.InnerExceptions.Count; i++)
+                        {
+                            @("\t" + ex.InnerExceptions[i] + "\r\n")
+                        }
+                    </pre>    
+                }
+            </div>
+    ;
+
+    [Parameter]
+    public RenderFragment? Empty { get; set; }
+
+
+    [Parameter]
+    public bool AlwaysExposeException { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+
+        if (Task?.IsCompleted != true)
+        {
+            _ = Task?.ContinueWith(t =>
+            {
+                StateHasChanged();
+            });
+        }
+    }
+}
+
+@if(Task != null) {
+    if(Task.IsCompletedSuccessfully)
+    {
+        @Finished.Invoke(Task.Result)
+    }
+    else if (Task.IsCompleted && Task.IsFaulted)
+    {
+        var ex = HE.IsDevelopment() || AlwaysExposeException ? Task.Exception : null;
+        @Failed.Invoke((LR["AsyncTask.TaskFailed"], ex))
+    }
+    else if (!Task.IsCompleted)
+    {
+        @Running
+    }
+} 
+else
+{
+    if(Empty != null) {
+        @Empty
+    }
+}

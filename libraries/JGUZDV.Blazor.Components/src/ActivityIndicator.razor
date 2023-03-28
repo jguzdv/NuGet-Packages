@@ -1,0 +1,21 @@
+﻿@code {
+    [Parameter] public IndicatorStyle Style { get; set; }
+
+    public enum IndicatorStyle
+    {
+        Inline,
+        Marquee
+    }
+}
+
+@if (Style == IndicatorStyle.Inline)
+{
+    <span class="spinner-border" role="status" aria-hidden="true"></span>
+}
+else if (Style == IndicatorStyle.Marquee)
+{
+    <div class="marquee"></div>
+}
+
+<div class="visually-hidden">Loading...</div>
+

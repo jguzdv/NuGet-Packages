@@ -1,0 +1,33 @@
+﻿@inject IToastService _toastService;
+
+@if (Toasts?.Any() == true)
+{
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        @foreach (var toast in Toasts)
+        {
+            <ToastMessageView Toast="@toast" />
+        }
+    </div>
+}
+
+@code {
+    private IList<ToastMessage>? Toasts { get; set; }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        _toastService.ToastsChanged += OnToastChanged;
+    }
+
+    private void OnToastChanged(object? sender, EventArgs e)
+    {
+        Toasts = _toastService.GetToasts().ToList();
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        _toastService.ToastsChanged -= OnToastChanged;
+    }
+}

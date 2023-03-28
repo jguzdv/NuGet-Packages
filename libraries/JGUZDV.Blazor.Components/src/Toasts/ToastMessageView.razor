@@ -1,0 +1,56 @@
+﻿@using Microsoft.AspNetCore.Components.Web
+
+@code {
+    [Parameter] public ToastMessage? Toast { get; set; }
+
+    private string? ToastIcon { get; set; }
+    private string? ContextClass { get; set; }
+    private string Time { get; } = DateTime.Now.ToString("HH:mm:ss");
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        if (Toast == null)
+            return;
+
+        ToastIcon = Toast.ToastLevel switch
+        {
+            ToastLevel.Info => "fa-info-circle",
+            ToastLevel.Success => "fa-check-circle",
+            ToastLevel.Warning => "fa-exclamation-circle",
+            ToastLevel.Danger => "fa-exclamation",
+            _ => ""
+        };
+
+        ContextClass = Toast.ToastLevel switch
+        {
+            ToastLevel.Info => "info",
+            ToastLevel.Success => "success",
+            ToastLevel.Warning => "warning",
+            ToastLevel.Danger => "danger",
+            _ => "secondary"
+        };
+    }
+
+    private void HideToast()
+        => Toast?.Hide();
+}
+
+@if (Toast != null)
+{
+    <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header text-@ContextClass">
+            <i class="fs-3 fa fa-fw @ToastIcon me-2"></i>
+            <strong class="me-auto">@Toast.Title</strong>
+            <small class="text-secondary">@Time</small>
+            <button @onclick="() => HideToast()" class="btn-close"></button>
+        </div>
+        <div class="toast-body p-0">
+            <div class="alert alert-@ContextClass m-0 ws-pre-wrap">
+                @Toast.Message
+            </div>
+        </div>
+    </div>
+}
+
