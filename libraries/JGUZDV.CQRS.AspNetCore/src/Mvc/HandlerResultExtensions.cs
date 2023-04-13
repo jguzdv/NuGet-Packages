@@ -1,17 +1,16 @@
-﻿using JGUZDV.CQRS.Commands;
-using Microsoft.Extensions.Localization;
+﻿using Microsoft.Extensions.Localization;
+
 using AspNetCoreMvc = Microsoft.AspNetCore.Mvc;
 
 namespace JGUZDV.CQRS.AspNetCore.Mvc;
 
-public static class CommandResultExtensions
+public static class HandlerResultExtensions
 {
-    public static AspNetCoreMvc.ActionResult ToActionResult(this CommandResult result, IStringLocalizer? sl = null)
+    public static AspNetCoreMvc.ActionResult ToActionResult(this HandlerResult result, IStringLocalizer? sl = null)
     {
         var response = result switch
         {
             SuccessResult => new AspNetCoreMvc.OkResult(),
-            CreatedResult r => Created(r),
 
             GenericErrorResult r => Error(r, sl),
             NotFoundResult => new AspNetCoreMvc.NotFoundResult(),
@@ -22,7 +21,7 @@ public static class CommandResultExtensions
             CanceledResult => new AspNetCoreMvc.StatusCodeResult(499), //Nginx: "Client Closed Request",
 
             ErrorBase r => Error(r, sl),
-            CommandResult r => Generic(r)
+            HandlerResult r => Generic(r)
         };
 
         return response;
@@ -30,21 +29,12 @@ public static class CommandResultExtensions
 
 
 
-    private static AspNetCoreMvc.ActionResult Generic(CommandResult r)
+    private static AspNetCoreMvc.ActionResult Generic(HandlerResult r)
     {
         if (r.IsSuccess)
             return new AspNetCoreMvc.OkResult();
         else
             return new AspNetCoreMvc.StatusCodeResult(500);
-    }
-
-
-    private static AspNetCoreMvc.ActionResult Created(CreatedResult result)
-    {
-        if (!string.IsNullOrWhiteSpace(result.CreatedAtUrl))
-            return new AspNetCoreMvc.CreatedResult(result.CreatedAtUrl, result);
-
-        return new AspNetCoreMvc.OkObjectResult(result);
     }
 
 
@@ -57,10 +47,10 @@ public static class CommandResultExtensions
     }
 
 
-    private static string[] NoMemberNames = new[] { "" };
+    private static readonly string[] NoMemberNames = new[] { "" };
     private static AspNetCoreMvc.ActionResult Invalid(ValidationErrorResult r, IStringLocalizer? sl)
     {
-        List<string> GetOrCreate(Dictionary<string, List<string>> dictionary, string key)
+        static List<string> GetOrCreate(Dictionary<string, List<string>> dictionary, string key)
         {
             if (dictionary.ContainsKey(key))
                 return dictionary[key];
