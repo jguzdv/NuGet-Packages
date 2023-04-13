@@ -10,7 +10,7 @@ namespace JGUZDV.CQRS.AspNetCore.Mvc
             where TQuery : IQuery<TResult>
         {
             await queryHandler.ExecuteAsync(query, controller.User, controller.HttpContext.RequestAborted);
-            return query.Result.ToActionResult(loc);
+            return query.Result.ToActionResult<TResult>(loc);
         }
     }
 }

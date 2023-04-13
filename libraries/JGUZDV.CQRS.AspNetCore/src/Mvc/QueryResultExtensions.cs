@@ -8,7 +8,7 @@ namespace JGUZDV.CQRS.AspNetCore.Mvc;
 
 public static class QueryResultExtensions
 {
-    public static AspNetCoreMvc.ActionResult<T> ToActionResult<T>(QueryResult<T> result, IStringLocalizer? sl = null) 
+    public static AspNetCoreMvc.ActionResult<T> ToActionResult<T>(this QueryResult<T> result, IStringLocalizer? sl = null) 
         => result.HasValue 
             ? new AspNetCoreMvc.OkObjectResult(result.Value)
             : result.HandlerResult.ToActionResult(sl);
