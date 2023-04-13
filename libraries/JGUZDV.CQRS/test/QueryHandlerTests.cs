@@ -11,9 +11,9 @@ namespace JGUZDV.CQRS.Tests
             var sut = new TestQueryHandler();
             var query = new TestQuery(true, true, true, true, new());
 
-            var result = await sut.ExecuteAsync(query, null, default);
+            await sut.ExecuteAsync(query, null, default);
 
-            Assert.True(result.HasResult);
+            Assert.True(query.Result.HasValue);
 
             Assert.Equal(5, query.Methods.Count);
             Assert.Equal(TestQueryHandler.NormalizeQueryMethod, query.Methods.Dequeue());
@@ -29,10 +29,10 @@ namespace JGUZDV.CQRS.Tests
             var sut = new TestQueryHandler();
             var query = new TestQuery(false, true, true, true, new());
 
-            var result = await sut.ExecuteAsync(query, null, default);
+            await sut.ExecuteAsync(query, null, default);
 
-            Assert.False(result.HasResult);
-            Assert.IsType<UnauthorizedResult<TestResult>>(result);
+            Assert.NotNull(query.Result);
+            Assert.IsType<UnauthorizedResult>(query.Result.HandlerResult);
         }
 
         [Fact]
@@ -41,10 +41,10 @@ namespace JGUZDV.CQRS.Tests
             var sut = new TestQueryHandler();
             var query = new TestQuery(true, true, false, true, new());
 
-            var result = await sut.ExecuteAsync(query, null, default);
+            await sut.ExecuteAsync(query, null, default);
 
-            Assert.False(result.HasResult);
-            Assert.IsType<UnauthorizedResult<TestResult>>(result);
+            Assert.NotNull(query.Result);
+            Assert.IsType<UnauthorizedResult>(query.Result.HandlerResult);
         }
 
 
@@ -54,10 +54,10 @@ namespace JGUZDV.CQRS.Tests
             var sut = new TestQueryHandler();
             var query = new TestQuery(true, false, true, true, new());
 
-            var result = await sut.ExecuteAsync(query, null, default);
+            await sut.ExecuteAsync(query, null, default);
 
-            Assert.False(result.HasResult);
-            Assert.IsType<ValidationErrorResult<TestResult>>(result);
+            Assert.NotNull(query.Result);
+            Assert.IsType<ValidationErrorResult>(query.Result.HandlerResult);
         }
 
         [Fact]
@@ -66,10 +66,21 @@ namespace JGUZDV.CQRS.Tests
             var sut = new TestQueryHandler();
             var query = new TestQuery(true, true, true, false, new());
 
-            var result = await sut.ExecuteAsync(query, null, default);
+            await sut.ExecuteAsync(query, null, default);
 
-            Assert.False(result.HasResult);
-            Assert.IsType<GenericErrorResult<TestResult>>(result);
+            Assert.NotNull(query.Result);
+            Assert.IsType<GenericErrorResult>(query.Result.HandlerResult);
+        }
+
+        [Fact]
+        public async Task Unwrapping_Return_Works()
+        {
+            var sut = new TestQueryHandler();
+            var query = new TestQuery(true, true, true, true, new());
+
+            var queryResult = await sut.ExecuteQuery(query, null, default);
+            Assert.True(queryResult.HasValue);
+            Assert.NotNull(queryResult.HandlerResult);
         }
     }
 }

@@ -1,3 +1,6 @@
 ﻿namespace JGUZDV.CQRS.Queries;
 
-public interface IQuery<out TResult> { }
+public interface IQuery { }
+public interface IQuery<T> : IQuery {
+    QueryResult<T> Result { get; set; }
+}

@@ -13,7 +13,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.Scan(
                 s => s.FromAssembliesOf(assemblyOfTypes)
                       .AddClasses(c =>
-                        c.AssignableToAny(typeof(IQueryHandler<,>))
+                        c.AssignableToAny(typeof(IQueryHandler<>))
                             .WithoutAttribute<CQRSDecoratorAttribute>()
                       )
                       .AsImplementedInterfaces()
@@ -73,7 +73,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             foreach (var s in services.Where(s => s.ServiceType.IsGenericType).ToList())
             {
-                if (s.ServiceType.GetGenericTypeDefinition() != typeof(IQueryHandler<,>))
+                if (s.ServiceType.GetGenericTypeDefinition() != typeof(IQueryHandler<>))
                     continue;
 
                 if (!typeMatch(s))

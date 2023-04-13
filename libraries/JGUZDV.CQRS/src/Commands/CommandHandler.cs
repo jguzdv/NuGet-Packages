@@ -23,17 +23,17 @@ public abstract partial class CommandHandler<TCommand, TContext> : ICommandHandl
         => Task.FromResult(new List<ValidationResult>());
 
 
-    protected abstract Task<CommandResult> ExecuteInternalAsync(TCommand command, TContext context, ClaimsPrincipal? principal, CancellationToken ct);
+    protected abstract Task<HandlerResult> ExecuteInternalAsync(TCommand command, TContext context, ClaimsPrincipal? principal, CancellationToken ct);
 
 
-    public async Task<CommandResult> ExecuteAsync(TCommand command, ClaimsPrincipal? principal, CancellationToken ct)
+    public async Task<HandlerResult> ExecuteAsync(TCommand command, ClaimsPrincipal? principal, CancellationToken ct)
     {
         try
         {
             var context = await InitializeAsync(command, principal, ct);
             if (ct.IsCancellationRequested)
                 // TODO: Log Cancellation?
-                return CommandResult.Canceled(ct);
+                return HandlerResult.Canceled(ct);
 
             command = NormalizeCommand(command, context, principal);
 
@@ -42,21 +42,21 @@ public abstract partial class CommandHandler<TCommand, TContext> : ICommandHandl
                 var isAuthorized = await AuthorizeAsync(command, context, principal, ct);
                 if (!isAuthorized)
                     // TODO: Log Authorization Result as Information
-                    return CommandResult.NotAllowed();
+                    return HandlerResult.NotAllowed();
 
                 if (ct.IsCancellationRequested)
                     // TODO: Log Cancellation?
-                    return CommandResult.Canceled(ct);
+                    return HandlerResult.Canceled(ct);
             }
 
             var validationResult = await ValidateAsync(command, context, principal, ct);
             if (validationResult.Any())
                 // TODO: Log Valiation Result as Debug
-                return CommandResult.NotValid(validationResult);
+                return HandlerResult.NotValid(validationResult);
 
             if (ct.IsCancellationRequested)
                 // TODO: Log Cancellation?
-                return CommandResult.Canceled(ct);
+                return HandlerResult.Canceled(ct);
 
             return await ExecuteInternalAsync(command, context, principal, ct);
         }
@@ -67,12 +67,12 @@ public abstract partial class CommandHandler<TCommand, TContext> : ICommandHandl
         catch (TaskCanceledException)
         {
             // TODO: Log Exception?
-            return CommandResult.Canceled();
+            return HandlerResult.Canceled();
         }
         catch (Exception ex)
         {
             // TODO: Log Exception
-            return CommandResult.Fail("GenericError");
+            return HandlerResult.Fail("GenericError");
         }
     }
 
@@ -91,9 +91,9 @@ public abstract class CommandHandler<TCommand> : CommandHandler<TCommand, object
         => Task.FromResult(new object());
 
 
-    protected sealed override Task<CommandResult> ExecuteInternalAsync(TCommand command, object context, ClaimsPrincipal? principal, CancellationToken ct)
+    protected sealed override Task<HandlerResult> ExecuteInternalAsync(TCommand command, object context, ClaimsPrincipal? principal, CancellationToken ct)
         => ExecuteInternalAsync(command, principal, ct);
-    protected abstract Task<CommandResult> ExecuteInternalAsync(TCommand command, ClaimsPrincipal? principal, CancellationToken ct);
+    protected abstract Task<HandlerResult> ExecuteInternalAsync(TCommand command, ClaimsPrincipal? principal, CancellationToken ct);
 
 
     protected sealed override TCommand NormalizeCommand(TCommand command, object context, ClaimsPrincipal? principal)

@@ -1,0 +1,19 @@
+﻿using System.Security.Claims;
+
+using JGUZDV.CQRS.Commands;
+
+using Microsoft.Extensions.Logging;
+
+namespace JGUZDV.CQRS.Queries
+{
+    public static class QueryHandlerExtensions
+    {
+        public static async Task<QueryResult<TValue>> ExecuteQuery<TQuery, TValue>(
+            this IQueryHandler<TQuery> queryHandler, IQuery<TValue> query, ClaimsPrincipal principal, CancellationToken ct)
+            where TQuery : IQuery<TValue>
+        {
+            await queryHandler.ExecuteAsync(query, principal, ct);
+            return query.Result;
+        }
+    }
+}

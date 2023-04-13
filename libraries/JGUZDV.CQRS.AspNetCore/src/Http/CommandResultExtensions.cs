@@ -1,17 +1,15 @@
-﻿using JGUZDV.CQRS.Commands;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Localization;
-using Microsoft.AspNetCore.Http;
 
 namespace JGUZDV.CQRS.AspNetCore.Http;
 
-public static class CommandResultExtensions
+public static class HandlerResultExtensions
 {
-    public static IResult ToHttpResult(this CommandResult result, IStringLocalizer? sl = null)
+    public static IResult ToHttpResult(this HandlerResult result, IStringLocalizer? sl = null)
     {
         var response = result switch
         {
             SuccessResult => Results.Ok(),
-            CreatedResult r => Created(r),
 
             GenericErrorResult r => Error(r, sl),
             NotFoundResult => Results.NotFound(),
@@ -22,7 +20,7 @@ public static class CommandResultExtensions
             CanceledResult => Results.StatusCode(499), //Nginx: "Client Closed Request",
 
             ErrorBase r => Error(r, sl),
-            CommandResult r => Generic(r)
+            HandlerResult r => Generic(r)
         };
 
         return response;
@@ -30,21 +28,12 @@ public static class CommandResultExtensions
 
 
 
-    private static IResult Generic(CommandResult r)
+    private static IResult Generic(HandlerResult r)
     {
         if (r.IsSuccess)
             return Results.Ok();
         else
             return Results.StatusCode(500);
-    }
-
-
-    private static IResult Created(CreatedResult result)
-    {
-        if (!string.IsNullOrWhiteSpace(result.CreatedAtUrl))
-            return Results.Created(result.CreatedAtUrl, result);
-
-        return Results.Ok(result);
     }
 
 
@@ -54,10 +43,10 @@ public static class CommandResultExtensions
     }
 
 
-    private static string[] NoMemberNames = new[] { "" };
+    private static readonly string[] NoMemberNames = new[] { "" };
     private static IResult Invalid(ValidationErrorResult r, IStringLocalizer? sl)
     {
-        List<string> GetOrCreate(Dictionary<string, List<string>> dictionary, string key)
+        static List<string> GetOrCreate(Dictionary<string, List<string>> dictionary, string key)
         {
             if (dictionary.ContainsKey(key))
                 return dictionary[key];
