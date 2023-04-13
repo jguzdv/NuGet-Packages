@@ -5,7 +5,7 @@
 /// This class enables that.
 /// </summary>
 public class CommandException : Exception {
-    public CommandException(CommandResult commandResult)
+    public CommandException(HandlerResult commandResult)
     {
         ArgumentNullException.ThrowIfNull(commandResult);
 
@@ -14,5 +14,5 @@ public class CommandException : Exception {
         CommandResult = commandResult;
     }
 
-    public CommandResult CommandResult { get; }
+    public HandlerResult CommandResult { get; }
 }

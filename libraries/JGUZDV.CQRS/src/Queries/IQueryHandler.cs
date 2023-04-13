@@ -1,10 +1,11 @@
-﻿using JGUZDV.CQRS.Queries.Results;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 
 namespace JGUZDV.CQRS.Queries;
 
-public interface IQueryHandler<in TQuery, TResult>
-        where TQuery : IQuery<TResult>
+public interface IQueryHandler<in TQuery>
+        where TQuery : IQuery
 {
-    Task<QueryResult<TResult>> ExecuteAsync(TQuery query, ClaimsPrincipal? principal, CancellationToken ct);
+    Task ExecuteAsync(TQuery query, ClaimsPrincipal? principal, CancellationToken ct);
+    internal Task ExecuteAsync(object query, ClaimsPrincipal? principal, CancellationToken ct)
+        => ExecuteAsync((TQuery)query, principal, ct);
 }

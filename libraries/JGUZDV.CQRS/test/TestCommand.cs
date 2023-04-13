@@ -9,7 +9,7 @@ namespace JGUZDV.CQRS.Tests
 {
     internal class TestCommand : ICommand
     {
-        public TestCommand(bool isAuthorized, bool isValid, bool canBeExecuted, CommandResult result)
+        public TestCommand(bool isAuthorized, bool isValid, bool canBeExecuted, HandlerResult result)
         {
             Methods = new();
 
@@ -22,7 +22,7 @@ namespace JGUZDV.CQRS.Tests
         public bool IsAuthorized { get; }
         public bool IsValid { get; }
         public bool CanBeExecuted { get; }
-        public CommandResult Result { get; }
+        public HandlerResult Result { get; }
 
         public Queue<string> Methods { get; }
         public void TraceMethod([CallerMemberName] string method = null!)
@@ -75,7 +75,7 @@ namespace JGUZDV.CQRS.Tests
                 : new List<ValidationResult>() { new ValidationResult("invalid") });
         }
 
-        protected override Task<CommandResult> ExecuteInternalAsync(TestCommand command, object context, ClaimsPrincipal? principal, CancellationToken ct)
+        protected override Task<HandlerResult> ExecuteInternalAsync(TestCommand command, object context, ClaimsPrincipal? principal, CancellationToken ct)
         {
             command.TraceMethod();
 

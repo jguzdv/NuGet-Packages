@@ -1,7 +1,8 @@
 ﻿using JGUZDV.CQRS.Queries;
-using JGUZDV.CQRS.Queries.Results;
+
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.CompilerServices;
 using System.Security.Claims;
@@ -10,7 +11,7 @@ namespace JGUZDV.CQRS.Tests
 {
     internal class TestQuery : IQuery<TestResult>
     {
-        public TestQuery(bool isQueryAuthorized, bool isValid, bool isResultAuthorized, bool canExecute, TestResult result)
+        public TestQuery(bool isQueryAuthorized, bool isValid, bool isResultAuthorized, bool canExecute, TestResult resultToBeSet)
         {
             Methods = new();
 
@@ -18,15 +19,15 @@ namespace JGUZDV.CQRS.Tests
             IsValid = isValid;
             IsResultAuthorized = isResultAuthorized;
             CanExecute = canExecute;
-            Result = result;
+            ResultToBeSet = resultToBeSet;
         }
 
         public bool IsQueryAuthorized { get; }
         public bool IsValid { get; }
         public bool IsResultAuthorized { get; }
         public bool CanExecute { get; }
-
-        public TestResult Result { get; }
+        public TestResult ResultToBeSet { get; }
+        public QueryResult<TestResult> Result { get; set; }
 
         public Queue<string> Methods { get; }
         public void TraceMethod([CallerMemberName] string method = null!)
@@ -42,10 +43,10 @@ namespace JGUZDV.CQRS.Tests
     internal class TestQueryHandler : QueryHandler<TestQuery, TestResult>
     {
         public const string NormalizeQueryMethod = nameof(NormalizeQuery);
-        public const string AuthorizeQueryAsyncMethod = nameof(AuthorizeQueryAsync);
+        public const string AuthorizeQueryAsyncMethod = nameof(AuthorizeExecuteAsync);
         public const string ValidateAsyncMethod = nameof(ValidateAsync);
         public const string ExecuteInternalAsyncMethod = nameof(ExecuteInternalAsync);
-        public const string AuthorizeResultAsyncMethod = nameof(AuthorizeResultAsync);
+        public const string AuthorizeResultAsyncMethod = nameof(AuthorizeValueAsync);
 
         public override ILogger Logger { get; } = NullLogger<TestCommandHandler>.Instance;
 
@@ -55,7 +56,7 @@ namespace JGUZDV.CQRS.Tests
             return query;
         }
 
-        protected override Task<bool> AuthorizeQueryAsync(TestQuery query, ClaimsPrincipal? principal, CancellationToken ct)
+        protected override Task<bool> AuthorizeExecuteAsync(TestQuery query, ClaimsPrincipal? principal, CancellationToken ct)
         {
             query.TraceMethod();
             return Task.FromResult(query.IsQueryAuthorized);
@@ -70,7 +71,7 @@ namespace JGUZDV.CQRS.Tests
             );
         }
 
-        protected override Task<bool> AuthorizeResultAsync(TestQuery query, TestResult result, ClaimsPrincipal? principal, CancellationToken ct)
+        protected override Task<bool> AuthorizeValueAsync(TestQuery query, TestResult result, ClaimsPrincipal? principal, CancellationToken ct)
         {
             query.TraceMethod();
             return Task.FromResult(query.IsResultAuthorized);
@@ -80,8 +81,10 @@ namespace JGUZDV.CQRS.Tests
         {
             query.TraceMethod();
 
-            if(query.CanExecute)
-                return Task.FromResult(new QueryResult<TestResult>(query.Result));
+            if (query.CanExecute)
+            {
+                return Task.FromResult((QueryResult<TestResult>)query.ResultToBeSet);
+            }
 
             throw new InvalidOperationException("Cannot execute.");
         }

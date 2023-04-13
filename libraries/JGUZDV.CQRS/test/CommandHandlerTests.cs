@@ -9,7 +9,7 @@ namespace JGUZDV.CQRS.Tests
         public async Task Execution_Order_Is_Correct()
         {
             var sut = new TestCommandHandler(false);
-            var command = new TestCommand(true, true, true, CommandResult.Success());
+            var command = new TestCommand(true, true, true, HandlerResult.Success());
 
             var result = await sut.ExecuteAsync(command, null, default);
 
@@ -27,7 +27,7 @@ namespace JGUZDV.CQRS.Tests
         public async Task Returns_Unauthorized_If_NotAuthorized()
         {
             var sut = new TestCommandHandler(false);
-            var command = new TestCommand(false, true, true, CommandResult.Success());
+            var command = new TestCommand(false, true, true, HandlerResult.Success());
 
             var result = await sut.ExecuteAsync(command, null, default);
 
@@ -39,7 +39,7 @@ namespace JGUZDV.CQRS.Tests
         public async Task Authorize_Will_Be_Skipped()
         {
             var sut = new TestCommandHandler(true);
-            var command = new TestCommand(false, true, true, CommandResult.Success());
+            var command = new TestCommand(false, true, true, HandlerResult.Success());
 
             var result = await sut.ExecuteAsync(command, null, default);
 
@@ -56,7 +56,7 @@ namespace JGUZDV.CQRS.Tests
         public async Task Returns_ValidationError_If_NotValid()
         {
             var sut = new TestCommandHandler(false);
-            var command = new TestCommand(true, false, true, CommandResult.Success());
+            var command = new TestCommand(true, false, true, HandlerResult.Success());
 
             var result = await sut.ExecuteAsync(command, null, default);
 
@@ -68,7 +68,7 @@ namespace JGUZDV.CQRS.Tests
         public async Task Returns_GenericError_On_Error()
         {
             var sut = new TestCommandHandler(false);
-            var command = new TestCommand(true, true, false, CommandResult.Success());
+            var command = new TestCommand(true, true, false, HandlerResult.Success());
 
             var result = await sut.ExecuteAsync(command, null, default);
 

@@ -1,6 +1,9 @@
-﻿using JGUZDV.CQRS.Queries.Results;
+﻿using JGUZDV.CQRS.Commands;
+
 using Microsoft.Extensions.Logging;
+
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using System.Security.Claims;
 
 namespace JGUZDV.CQRS.Queries
@@ -15,73 +18,98 @@ namespace JGUZDV.CQRS.Queries
     /// <typeparam name="TQuery">Query-Beschreibungstyp</typeparam>
     /// <typeparam name="TResult">Rückgabetyp</typeparam>
     /// <exception cref="UnauthorizedQueryException">Wird geworfen wenn ein Authorisierungsschritt fehlschlägt.</exception>
-    public abstract partial class QueryHandler<TQuery, TResult> : IQueryHandler<TQuery, TResult>
-        where TQuery : IQuery<TResult>
+    public abstract partial class QueryHandler<TQuery, TValue> : IQueryHandler<TQuery>
+        where TQuery : IQuery<TValue>
     {
         public abstract ILogger Logger { get; }
 
         protected virtual TQuery NormalizeQuery(TQuery query, ClaimsPrincipal? principal)
             => query;
 
-        protected virtual Task<bool> AuthorizeQueryAsync(TQuery query, ClaimsPrincipal? principal, CancellationToken ct)
+        protected virtual Task<bool> AuthorizeExecuteAsync(TQuery query, ClaimsPrincipal? principal, CancellationToken ct)
             => Task.FromResult(true);
-        protected virtual Task<bool> AuthorizeResultAsync(TQuery query, TResult result, ClaimsPrincipal? principal, CancellationToken ct)
+        protected virtual Task<bool> AuthorizeValueAsync(TQuery query, TValue value, ClaimsPrincipal? principal, CancellationToken ct)
             => Task.FromResult(true);
 
         protected virtual Task<List<ValidationResult>> ValidateAsync(TQuery query, ClaimsPrincipal? principal, CancellationToken ct)
             => Task.FromResult(new List<ValidationResult>());
 
 
-        protected abstract Task<QueryResult<TResult>> ExecuteInternalAsync(TQuery query, ClaimsPrincipal? principal, CancellationToken ct);
+        protected abstract Task<QueryResult<TValue>> ExecuteInternalAsync(TQuery query, ClaimsPrincipal? principal, CancellationToken ct);
 
 
-        public async Task<QueryResult<TResult>> ExecuteAsync(TQuery query, ClaimsPrincipal? principal, CancellationToken ct)
+        public async Task ExecuteAsync(TQuery query, ClaimsPrincipal? principal, CancellationToken ct)
         {
             try
             {
                 if (ct.IsCancellationRequested)
+                {
+                    query.Result = HandlerResult.Canceled(ct);
                     // TODO: Log Cancellation?
-                    return QueryResult<TResult>.Canceled(ct);
+                    return;
+                }
 
                 query = NormalizeQuery(query, principal);
 
                 
-                var isAuthorized = await AuthorizeQueryAsync(query, principal, ct);
+                var isAuthorized = await AuthorizeExecuteAsync(query, principal, ct);
                 if (!isAuthorized)
+                {
                     // TODO: Log Authorization Result as Information
-                    return QueryResult<TResult>.NotAllowed();
+                    query.Result = HandlerResult.NotAllowed();
+                    return;
+                }
 
-                if (ct.IsCancellationRequested)
+                if (ct.IsCancellationRequested) {
                     // TODO: Log Cancellation?
-                    return QueryResult<TResult>.Canceled(ct);
+                    query.Result = HandlerResult.Canceled(ct);
+                    return;
+                }
 
                 var validationResult = await ValidateAsync(query, principal, ct);
                 if (validationResult.Any())
+                {
                     // TODO: Log Valiation Result as Debug
-                    return QueryResult<TResult>.NotValid(validationResult);
+                    query.Result = HandlerResult.NotValid(validationResult);
+                    return;
+
+                }
 
                 if (ct.IsCancellationRequested)
+                {
                     // TODO: Log Cancellation?
-                    return QueryResult<TResult>.Canceled(ct);
+                    query.Result = HandlerResult.Canceled(ct);
+                    return;
+                }
 
-                var result = await ExecuteInternalAsync(query, principal, ct);
+                var executionResult = await ExecuteInternalAsync(query, principal, ct);
+                Debug.Assert(executionResult != null);
 
-                var isResultAuthorized = await AuthorizeResultAsync(query, result, principal, ct);
-                if(!isResultAuthorized)
-                    // TODO: Log Authorization Result as Information
-                    return QueryResult<TResult>.NotAllowed();
+                if (executionResult.HasValue)
+                {
+                    var isResultAuthorized = await AuthorizeValueAsync(query, executionResult.Value, principal, ct);
+                    if (!isResultAuthorized)
+                    {
+                        // TODO: Log Authorization Result as Information
+                        query.Result = HandlerResult.NotAllowed();
+                        return;
+                    }
+                }
 
-                return result;
+                query.Result = executionResult;
+                return;
             }
             catch (TaskCanceledException)
             {
                 // TODO: Log Exception?
-                return QueryResult<TResult>.Canceled();
+                query.Result = HandlerResult.Canceled();
+                return;
             }
             catch (Exception ex)
             {
                 // TODO: Log Exception
-                return QueryResult<TResult>.Fail("GenericError");
+                query.Result = HandlerResult.Fail("GenericError");
+                return;
             }
         }
 
