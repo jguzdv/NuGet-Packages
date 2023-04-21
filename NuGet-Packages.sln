@@ -10,23 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		LICENSE = LICENSE
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{9165C296-9CD1-4374-907C-31D3D8FFBF48}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{D107A050-9773-42B5-BE3B-ED8ABCE3A865}"
-	ProjectSection(SolutionItems) = preProject
-		.github\workflows\default_build.yml = .github\workflows\default_build.yml
-		.github\workflows\JGUZDV.AspNetCore.DataProtection.yml = .github\workflows\JGUZDV.AspNetCore.DataProtection.yml
-		.github\workflows\JGUZDV.AspNetCore.Logging.yml = .github\workflows\JGUZDV.AspNetCore.Logging.yml
-		.github\workflows\JGUZDV.Blazor.Components.yml = .github\workflows\JGUZDV.Blazor.Components.yml
-		.github\workflows\JGUZDV.CQRS.AspNetCore.yml = .github\workflows\JGUZDV.CQRS.AspNetCore.yml
-		.github\workflows\JGUZDV.CQRS.yml = .github\workflows\JGUZDV.CQRS.yml
-		.github\workflows\JGUZDV.Extensions.Authorization.yml = .github\workflows\JGUZDV.Extensions.Authorization.yml
-		.github\workflows\JGUZDV.Extensions.Logging.yml = .github\workflows\JGUZDV.Extensions.Logging.yml
-		.github\workflows\JGUZDV.L10n.EntityFramwork.yml = .github\workflows\JGUZDV.L10n.EntityFramwork.yml
-		.github\workflows\JGUZDV.L10n.yml = .github\workflows\JGUZDV.L10n.yml
-		.github\workflows\JGUZDV.Linq.yml = .github\workflows\JGUZDV.Linq.yml
-	EndProjectSection
-EndProject
+
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "libraries", "libraries", "{DA4DE709-E5BC-4B93-88D2-838656C217CE}"
 	ProjectSection(SolutionItems) = preProject
 		libraries\Directory.Build.props = libraries\Directory.Build.props
