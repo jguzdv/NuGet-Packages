@@ -22,11 +22,11 @@ public sealed class ClaimRequirementCollection : ClaimRequirement
     public RequirementCollectionMatchType MatchType { get; }
 
 
-    public sealed override bool SatisfiesRequirement(ClaimsPrincipal principal)
+    public sealed override bool IsSatisfiedBy(ClaimsPrincipal principal)
         => MatchType switch
         {
-            RequirementCollectionMatchType.MatchAll => Requirements.Any() && Requirements.All(r => r.SatisfiesRequirement(principal)),
-            RequirementCollectionMatchType.MatchAny => Requirements.Any(r => r.SatisfiesRequirement(principal)),
+            RequirementCollectionMatchType.MatchAll => Requirements.Any() && Requirements.All(r => r.IsSatisfiedBy(principal)),
+            RequirementCollectionMatchType.MatchAny => Requirements.Any(r => r.IsSatisfiedBy(principal)),
             _ => false
         };
 }

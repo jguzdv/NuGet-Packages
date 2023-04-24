@@ -7,9 +7,9 @@ public sealed class ClaimValueRequirement : ClaimRequirement
 {
     [JsonConstructor]
     public ClaimValueRequirement(string claimType, string claimValue, 
-        bool disableWildcardMatch = false,
-        StringComparison claimTypeComparison = StringComparison.OrdinalIgnoreCase,
-        StringComparison claimValueComparison = StringComparison.Ordinal)
+        bool disableWildcardMatch,
+        StringComparison claimTypeComparison,
+        StringComparison claimValueComparison)
     {
         ArgumentException.ThrowIfNullOrEmpty(claimType);
         ArgumentException.ThrowIfNullOrEmpty(claimValue);
@@ -21,6 +21,10 @@ public sealed class ClaimValueRequirement : ClaimRequirement
         ClaimValueComparison = claimValueComparison;
     }
 
+    public ClaimValueRequirement(string claimType, string claimValue) : this(claimType, claimValue, false) { }
+    
+    public ClaimValueRequirement(string claimType, string claimValue, bool disableWildcardMatch) 
+        : this(claimType, claimValue, disableWildcardMatch, StringComparison.OrdinalIgnoreCase, StringComparison.Ordinal) { }
 
     public string ClaimType { get; }
     public string ClaimValue { get; }
@@ -29,7 +33,7 @@ public sealed class ClaimValueRequirement : ClaimRequirement
     public StringComparison ClaimTypeComparison { get; }
     public StringComparison ClaimValueComparison { get; }
 
-    public sealed override bool SatisfiesRequirement(ClaimsPrincipal principal)
+    public sealed override bool IsSatisfiedBy(ClaimsPrincipal principal)
         =>  principal.HasClaim(c =>
             (c.Type.Equals(ClaimType, ClaimTypeComparison) || (!DisableWildcardMatch && ClaimType.Equals("*"))) &&
             (c.Value.Equals(ClaimValue, ClaimValueComparison) || (!DisableWildcardMatch && ClaimValue.Equals("*")))
