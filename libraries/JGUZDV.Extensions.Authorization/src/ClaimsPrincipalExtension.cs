@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Security.Claims;
 
 namespace JGUZDV.Extensions.Authorization
 {
     public static class ClaimsPrincipalExtension
     {
-        public static bool SatisfiesRequirement(this ClaimsPrincipal currentUser, ClaimRequirement requirement)
-        {
-            return requirement.IsSatisfiedBy(currentUser);
-        }
+        public static bool SatisfiesRequirement(this ClaimsPrincipal currentUser, ClaimRequirement requirement) 
+            => requirement.IsSatisfiedBy(currentUser);
     }
 }
