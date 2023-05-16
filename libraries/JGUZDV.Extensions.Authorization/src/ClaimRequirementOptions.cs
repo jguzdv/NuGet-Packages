@@ -45,7 +45,7 @@ public class ClaimRequirementOptions : IValidatableObject
         }
     }
 
-    public bool SatisfiesRequirement(ClaimsPrincipal principal) => ClaimRequirement.SatisfiesRequirement(principal);
+    public bool SatisfiesRequirement(ClaimsPrincipal principal) => ClaimRequirement.IsSatisfiedBy(principal);
 
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

@@ -32,7 +32,7 @@ public class ClaimRequirementCollectionTests
             _claimRequirements[2], _claimRequirements[0]
         );
 
-        var result = sut.SatisfiesRequirement(_testUser);
+        var result = sut.IsSatisfiedBy(_testUser);
 
         Assert.True(result);
     }
@@ -45,7 +45,7 @@ public class ClaimRequirementCollectionTests
             _claimRequirements[2]
         );
 
-        var result = sut.SatisfiesRequirement(_testUser);
+        var result = sut.IsSatisfiedBy(_testUser);
 
         Assert.False(result);
     }
@@ -58,7 +58,7 @@ public class ClaimRequirementCollectionTests
             _claimRequirements[1], _claimRequirements[0]
         );
 
-        var result = sut.SatisfiesRequirement(_testUser);
+        var result = sut.IsSatisfiedBy(_testUser);
 
         Assert.True(result);
     }
@@ -71,7 +71,7 @@ public class ClaimRequirementCollectionTests
             _claimRequirements[2], _claimRequirements[0]
         );
 
-        var result = sut.SatisfiesRequirement(_testUser);
+        var result = sut.IsSatisfiedBy(_testUser);
 
         Assert.False(result);
     }
@@ -83,7 +83,7 @@ public class ClaimRequirementCollectionTests
             RequirementCollectionMatchType.MatchAll
         );
 
-        var result = sut.SatisfiesRequirement(_testUser);
+        var result = sut.IsSatisfiedBy(_testUser);
 
         Assert.False(result);
     }

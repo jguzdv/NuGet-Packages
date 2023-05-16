@@ -7,8 +7,8 @@
 
         <PackageId>JGUZDV.Extensions.Authorization</PackageId>
         <IsPackable>true</IsPackable>
-        <Version>1.0.0</Version>
-        <Authors>Thomas Ottenhus</Authors>
+        <Version>2.0.0</Version>
+        <Authors>Thomas Ottenhus, Marcus Lunau</Authors>
         <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
         <PackageDescription>Provides classes to normalize authorization configuration</PackageDescription>
         <PackageReadmeFile>README.md</PackageReadmeFile>
