@@ -3,6 +3,8 @@
 This package allows to configure data protection via the `appsettings.json` file (or the AspNetCore configuration system to be more precise).
 If you want to configure multiple applications running on a shared host, set those keys via the environment variables. E.g. `JGUZDV__DataProtection__UsePersistance`.
 
+It can be addded via the extension method `AddJGUZDVDataProtection` on either `IServiceCollection` or `WebApplicationBuilder`.
+
 ```jsonc
 { 
   "JGUZDV" : {
@@ -12,7 +14,7 @@ If you want to configure multiple applications running on a shared host, set tho
       "DisableAutomaticKeyGeneration" : false    // if true automatic key generation is disabled, default: false
 
       "UsePersistence" : true    // enables persistence configuration, default: true
-      "Persistance" : {    // must be defined if UsePersistance is true
+      "Persistence" : {    // must be defined if UsePersistence is true
         "UseFileSystem" : false,    // if true, persists to file system, default: false
         "FileSystem" : {    // must be defined if UseFileSystem is true
           "Path" : "/my-dataprot-path/",    // path for file system persistence
