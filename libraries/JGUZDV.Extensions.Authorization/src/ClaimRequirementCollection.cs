@@ -22,8 +22,9 @@ public sealed class ClaimRequirementCollection : ClaimRequirement
     public RequirementCollectionMatchType MatchType { get; }
 
 
-    public sealed override bool IsSatisfiedBy(ClaimsPrincipal principal)
-        => MatchType switch
+    public sealed override bool IsSatisfiedBy(ClaimsPrincipal? principal)
+        => principal != null && 
+        MatchType switch
         {
             RequirementCollectionMatchType.MatchAll => Requirements.Any() && Requirements.All(r => r.IsSatisfiedBy(principal)),
             RequirementCollectionMatchType.MatchAny => Requirements.Any(r => r.IsSatisfiedBy(principal)),
