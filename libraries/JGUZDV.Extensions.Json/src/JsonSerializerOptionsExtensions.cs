@@ -12,11 +12,12 @@ public static class JsonSerializerOptionsExtensions
     /// - Add DateOnlyConverter
     /// - Add TimeOnlyConverter
 #endif
+    /// - Add StringTrimmingJsonConverter
     /// - Set DefaultIgnoreCondition to "WhenWritingNull"
     /// - PropertyNamingPolicy to 'null'
     /// - DictonaryKeyPolicy to 'null'
     /// </summary>
-    public static void AddZDVDefaults(this JsonSerializerOptions opt)
+    public static void SetJGUZDVDefaults(this JsonSerializerOptions opt)
     {
 #if NET6_0
         opt.Converters.Add(new DateOnlyConverter());

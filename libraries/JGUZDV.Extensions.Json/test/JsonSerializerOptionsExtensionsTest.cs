@@ -8,7 +8,7 @@ namespace JGUZDV.Extensions.Json.Tests
         public void Registeres_all_Converters()
         {
             var sut = new JsonSerializerOptions();
-            sut.AddZDVDefaults();
+            sut.SetJGUZDVDefaults();
 
             Assert.Null(sut.PropertyNamingPolicy);
             Assert.Null(sut.DictionaryKeyPolicy);
