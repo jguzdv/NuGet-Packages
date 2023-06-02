@@ -37,3 +37,5 @@ public class OptionsDTO
     public ClaimRequirementOptions ClaimValueRequirement { get; set; }
 }
 ```
+
+If you want them to be saved to a database, you'll need to provide a simple EF Value Converter, to map to and from JSON.
