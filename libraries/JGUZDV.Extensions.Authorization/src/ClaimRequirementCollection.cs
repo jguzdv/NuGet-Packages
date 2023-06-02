@@ -21,6 +21,16 @@ public sealed class ClaimRequirementCollection : ClaimRequirement
     public List<ClaimRequirement> Requirements { get; }
     public RequirementCollectionMatchType MatchType { get; }
 
+    public override ClaimRequirementCollection Clone()
+    {
+        var requirements = new List<ClaimRequirement>();
+        foreach (var requirement in Requirements)
+        {
+            requirements.Add(requirement.Clone());
+        }
+        var result = new ClaimRequirementCollection(requirements, MatchType);
+        return result;
+    }
 
     public sealed override bool IsSatisfiedBy(ClaimsPrincipal principal)
         => MatchType switch

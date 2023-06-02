@@ -38,4 +38,9 @@ public sealed class ClaimValueRequirement : ClaimRequirement
             (c.Type.Equals(ClaimType, ClaimTypeComparison) || (!DisableWildcardMatch && ClaimType.Equals("*"))) &&
             (c.Value.Equals(ClaimValue, ClaimValueComparison) || (!DisableWildcardMatch && ClaimValue.Equals("*")))
         );
+
+    public override ClaimValueRequirement Clone()
+    {
+        return new ClaimValueRequirement(ClaimType,ClaimValue,DisableWildcardMatch,ClaimTypeComparison,ClaimValueComparison);
+    }
 }
