@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 
 namespace JGUZDV.AspNetCore.DataProtection.Test;
 
@@ -18,6 +17,6 @@ public class Tests
             .AddEnvironmentVariables()
             .Build();
 
-        builder.AddZDVDataProtection();
+        builder.AddJGUZDVDataProtection();
     }
 }

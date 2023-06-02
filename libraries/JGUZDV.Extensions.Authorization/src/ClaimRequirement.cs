@@ -8,7 +8,7 @@ namespace JGUZDV.Extensions.Authorization;
 [JsonDerivedType(typeof(NullRequirement), typeDiscriminator: "Null")]
 public abstract class ClaimRequirement
 {
-    public abstract bool IsSatisfiedBy(ClaimsPrincipal principal);
+    public abstract bool IsSatisfiedBy(ClaimsPrincipal? principal);
 
     public abstract ClaimRequirement Clone();
 }

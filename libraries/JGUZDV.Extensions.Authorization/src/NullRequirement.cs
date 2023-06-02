@@ -9,7 +9,7 @@ namespace JGUZDV.Extensions.Authorization
             return new NullRequirement();
         }
 
-        public override bool IsSatisfiedBy(ClaimsPrincipal principal) 
+        public override bool IsSatisfiedBy(ClaimsPrincipal? principal) 
             => false;
     }
 }

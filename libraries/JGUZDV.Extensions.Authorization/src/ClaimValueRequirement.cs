@@ -33,8 +33,8 @@ public sealed class ClaimValueRequirement : ClaimRequirement
     public StringComparison ClaimTypeComparison { get; }
     public StringComparison ClaimValueComparison { get; }
 
-    public sealed override bool IsSatisfiedBy(ClaimsPrincipal principal)
-        =>  principal.HasClaim(c =>
+    public sealed override bool IsSatisfiedBy(ClaimsPrincipal? principal)
+        =>  principal != null && principal.HasClaim(c =>
             (c.Type.Equals(ClaimType, ClaimTypeComparison) || (!DisableWildcardMatch && ClaimType.Equals("*"))) &&
             (c.Value.Equals(ClaimValue, ClaimValueComparison) || (!DisableWildcardMatch && ClaimValue.Equals("*")))
         );
