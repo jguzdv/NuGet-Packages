@@ -1,8 +1,15 @@
 # JGUZDV.Extensions.Logging
 
-It also adds the ability to log to files.
-Currently the rollover is once a day.
+This package will configure Serilog from the default Logging section provided with .net templates.
+It will also add the ability to log to files.
+Files will append the MachineName and automatically roll over once a day.
 
+**Program.cs**
+```csharp
+builder.UseJGUZDVLogging();
+```
+
+**appsettings.json**
 ```jsonc
 {
   "Logging": {

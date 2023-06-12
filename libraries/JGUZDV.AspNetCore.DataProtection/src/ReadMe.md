@@ -1,10 +1,21 @@
 # JGUZDV.AspNetCore.DataProtection
 
 This package allows to configure data protection via the `appsettings.json` file (or the AspNetCore configuration system to be more precise).
-If you want to configure multiple applications running on a shared host, set those keys via the environment variables. E.g. `JGUZDV__DataProtection__UsePersistance`.
+If you want to configure multiple applications running on a shared host, you might want to set those keys via the environment variables.
+E.g. `JGUZDV__DataProtection__UsePersistance`.
 
 It can be addded via the extension method `AddJGUZDVDataProtection` on either `IServiceCollection` or `WebApplicationBuilder`.
 
+**Program.cs**
+```
+// Registeres the DataProtection settings in production
+if (builder.Environment.IsProduction())
+{
+    builder.AddJGUZDVDataProtection();
+}
+```
+
+**appsettings.json**
 ```jsonc
 { 
   "JGUZDV" : {

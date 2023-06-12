@@ -1,10 +1,8 @@
-﻿using JGUZDV.CQRS.Commands;
-
-using Microsoft.Extensions.Logging;
-
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Security.Claims;
+
+using Microsoft.Extensions.Logging;
 
 namespace JGUZDV.CQRS.Queries
 {
