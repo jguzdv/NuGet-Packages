@@ -7,7 +7,7 @@
 
 		<PackageId>JGUZDV.L10n</PackageId>
 		<IsPackable>true</IsPackable>
-		<Version>1.0.3</Version>
+		<Version>1.0.4</Version>
 		<Authors>Thomas Ottenhus</Authors>
 		<Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
 		<PackageDescription>Generalized Localization Model for .NET Application using web</PackageDescription>
