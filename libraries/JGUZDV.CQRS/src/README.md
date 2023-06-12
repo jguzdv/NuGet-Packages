@@ -78,5 +78,119 @@ public class WeatherQueryHandler : QueryHandler<WeatherQuery, MyResult> {
 
 **CommandSample**
 ```csharp
+using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
+
+using Microsoft.Extensions.Logging;
+
+namespace JGUZDV.CQRS.Commands;
+
+// Sample class - DBSet<Counter> Counters
+public class Counter
+{
+    public int Id { get; set; }
+
+    public int Value { get; set; }
+    public string Reasons { get; set; }
+}
+
+
+// Command object
+public class IncrementCounter : ICommand
+{
+    public IncrementCounter(int counterId, int incValue, string reason)
+    {
+        CounterId = counterId;
+        IncValue = incValue;
+        Reason = reason;
+    }
+
+    public int CounterId { get; }
+    public int IncValue { get; }
+    public string Reason { get; }
+}
+
+
+internal class IncrementCounterHandler : CommandHandler<IncrementCounter, IncrementCounterHandler.CounterContext>
+{
+    private readonly CounterDb _dbContext;
+    private readonly ILogger<IncrementCounterHandler> _logger;
+
+    public override ILogger Logger => _logger;
+
+    public IncrementCounterHandler(CounterDb dbContext, ILogger<IncrementCounterHandler> logger)
+    {
+        _dbContext = dbContext;
+        _logger = logger;
+    }
+
+
+    protected override async Task<CounterContext> InitializeAsync(IncrementCounter command, ClaimsPrincipal? principal, CancellationToken ct)
+    {
+        var counter = await _dbContext.Counters.FirstOrDefaultAsync(command.CounterId, ct);
+        if (counter == null)
+            throw new CommandException(HandlerResult.NotFound());
+
+        return new CounterContext(counter);
+    }
+
+    protected override IncrementCounter NormalizeCommand(IncrementCounter command, CounterContext context, ClaimsPrincipal? principal)
+        => new IncrementCounter(
+            command.CounterId,
+            command.IncValue,
+            command.Reason.Trim()
+        );
+
+    protected override Task<bool> AuthorizeAsync(IncrementCounter command, CounterContext context, ClaimsPrincipal? principal, CancellationToken ct)
+        // If you do not override authorize async, authorization of the command will fail. You can skip authZ by setting `SkipAuthorization` to `true`
+        => Task.FromResult(principal?.HasClaim(c => c.Type == "CounterAccess" && c.Value == $"{command.CounterId}") ?? false);
+
+
+    protected override Task<List<ValidationResult>> ValidateAsync(IncrementCounter command, CounterContext context, ClaimsPrincipal? principal, CancellationToken ct)
+    {
+        // If you do not override validation, the command will be considered valid.
+        var result = new List<ValidationResult>();
+
+        
+        if (command.IncValue <= 0)
+            result.Add(new("Value may not be negative"));
+
+        if(command.IncValue > 10)
+            result.Add(new("Value needs to be <= 10"));
+
+        
+        return Task.FromResult(result);
+    }
+
+
+    protected override async Task<HandlerResult> ExecuteInternalAsync(IncrementCounter command, CounterContext context, ClaimsPrincipal? principal, CancellationToken ct)
+    {
+        if (context.Counter.Value >= 100)
+            return HandlerResult.Conflict("Counter already at maximum");
+
+        context.Counter.Value += command.IncValue;
+        if (!string.IsNullOrEmpty(command.Reason))
+            context.Counter.Reasons += $"\r\n{command.Reason}";
+
+        await _dbContext.SaveChangesAsync(ct);
+
+        return HandlerResult.Success();
+
+        //If you would want to communication successfull creation, there is:
+        return HandlerResult.Created<int>(context.Counter.Id);
+    }
+
+
+    // Command Context object (not neccessarily nested)
+    public class CounterContext
+    {
+        public Counter Counter { get; set; }
+
+        public CounterContext(Counter c)
+        {
+            Counter = c;
+        }
+    }
+}
 ```
 
