@@ -7,7 +7,7 @@
 
 		<PackageId>JGUZDV.CQRS.AspNetCore</PackageId>
 		<IsPackable>true</IsPackable>
-		<Version>2.1.0</Version>
+		<Version>2.1.1</Version>
 		<Authors>Thomas Ottenhus</Authors>
 		<Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
 		<PackageDescription>Extension methods to handle CQRS with AspNetCore</PackageDescription>

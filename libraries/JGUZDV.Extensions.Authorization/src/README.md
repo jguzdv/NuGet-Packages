@@ -1,7 +1,7 @@
 # JGUZDV.Extensions.Authorization
 
 ClaimRequirements are meant to be a simple, serializable way to configure one or multiple required claims to be authorized.
-There's also a package containing a (https://www.nuget.org/packages/JGUZDV.Blazor.Components.ClaimRequirementEditor/)[blazor component for configuring the requirements via UI]
+There's also a package containing a [blazor component for configuring the requirements via UI](https://www.nuget.org/packages/JGUZDV.Blazor.Components.ClaimRequirementEditor/)
 
 Essentially the package provides two classes, which both are inheritors of `ClaimRequirement` and implement `IsSatisfiedBy(ClaimsPrincipal principal)`.
 The Method will check, if the given principal satisfies the requirement and return true or false respectively.

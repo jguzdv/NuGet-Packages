@@ -1,6 +1,6 @@
 # JGUZDV.CQRS.AspNetCore
 
-This provides extensions to easily call and return (https://www.nuget.org/packages/JGUZDV.CQRS.AspNetCore)[JGUZDV.CQRS] handler results via AspNetCore MVC or minimal API.
+This provides extensions to easily call and return [JGUZDV.CQRS](https://www.nuget.org/packages/JGUZDV.CQRS) handler results via AspNetCore MVC or minimal API.
 
 **MVC**
 ```csharp

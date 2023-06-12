@@ -7,11 +7,10 @@
 
         <PackageId>JGUZDV.Extensions.Authorization</PackageId>
         <IsPackable>true</IsPackable>
-        <Version>2.0.3</Version>
+        <Version>2.0.4</Version>
         <Authors>Thomas Ottenhus, Marcus Lunau</Authors>
         <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
         <PackageDescription>Provides classes to normalize authorization configuration</PackageDescription>
-        <PackageReadmeFile>README.md</PackageReadmeFile>
 
         <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     </PropertyGroup>
