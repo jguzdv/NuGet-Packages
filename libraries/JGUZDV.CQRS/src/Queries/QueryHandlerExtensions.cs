@@ -1,9 +1,5 @@
 ﻿using System.Security.Claims;
 
-using JGUZDV.CQRS.Commands;
-
-using Microsoft.Extensions.Logging;
-
 namespace JGUZDV.CQRS.Queries
 {
     public static class QueryHandlerExtensions

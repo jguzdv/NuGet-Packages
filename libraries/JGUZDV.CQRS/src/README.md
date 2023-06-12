@@ -29,6 +29,7 @@ public class WeatherQueryHandler : QueryHandler<WeatherQuery, MyResult> {
     private IWeatherApi _weatherApi;
     private ILogger<WeatherQueryHandler> _logger;
 
+    // You need to override the logger
     public override ILogger Logger => _logger;
     
     public WeatherQueryHandler(IWeatherApi weatherApi, ILogger<WeatherQueryHandler> logger)
@@ -45,11 +46,13 @@ public class WeatherQueryHandler : QueryHandler<WeatherQuery, MyResult> {
 
     protected override Task<bool> AuthorizeExecuteAsync(WeatherQuery query, ClaimsPrincipal? principal, CancellationToken ct) 
     {
+        // If you choose to not override this, it will automatically return `true`
         return Task.FromResult(principal != null && principal.Name == "Johannes");
     }
 
     protected override Task<List<ValidationResult>> ValidateAsync(WeatherQuery query, ClaimsPrincipal? principal, CancellationToken ct)
     {
+        // If you choose to not override this, it will automatically be valid.
         var result = new List<ValidationResult>();
         if(query.Location == string.Empty) {
             result.Add(new ("Location may not be empty"));
@@ -58,6 +61,7 @@ public class WeatherQueryHandler : QueryHandler<WeatherQuery, MyResult> {
         return result;
     }
 
+    // You need to override at least this method
     protected override async Task<QueryResult<TValue>> ExecuteInternalAsync(WeatherQuery query, ClaimsPrincipal? principal, CancellationToken ct) {
         var result = await _weatherApi.GetWeatherOfLocation(query.Location, ct);
 
@@ -66,6 +70,7 @@ public class WeatherQueryHandler : QueryHandler<WeatherQuery, MyResult> {
 
     protected override Task<bool> AuthorizeValueAsync(WeatherQuery query, MyResult value, ClaimsPrincipal? principal, CancellationToken ct) 
     {
+        // If you choose to not override this, it will automatically return `true`
         return Task.FromResult(principal != null && value.DoesNotContainSecrets);
     }
 }
