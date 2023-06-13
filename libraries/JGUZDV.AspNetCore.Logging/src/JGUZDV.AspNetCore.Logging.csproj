@@ -7,11 +7,10 @@
 
 		<PackageId>JGUZDV.AspNetCore.Logging</PackageId>
 		<IsPackable>true</IsPackable>
-		<Version>1.0.5</Version>
+		<Version>1.0.6</Version>
 		<Authors>Thomas Ottenhus</Authors>
 		<Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
 		<PackageDescription>Opinionated file logging based on SeriLog</PackageDescription>
-		<PackageReadmeFile>README.md</PackageReadmeFile>
 
 		<AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
 	</PropertyGroup>
@@ -23,9 +22,5 @@
 	<ItemGroup>
 		<PackageReference Include="JGUZDV.Extensions.Logging" Version="[1.0.0,)" />
 		<PackageReference Include="Serilog.AspNetCore" Version="[6.1.0,)" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<None Include="README.md" Pack="true" PackagePath="\"/>
 	</ItemGroup>
 </Project>

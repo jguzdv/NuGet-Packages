@@ -1,7 +1,7 @@
 # JGUZDV.CQRS
 
 This implements a simple CQRS style command and query structure.
-Combine it with (https://www.nuget.org/packages/JGUZDV.CQRS.AspNetCore)[JGUZDV.CQRS.AspNetCore] for simple usage in AspNetCore scenarios.
+Combine it with [JGUZDV.CQRS.AspNetCore](https://www.nuget.org/packages/JGUZDV.CQRS.AspNetCore) for simple usage in AspNetCore scenarios.
 
 The package contains classes describing a `HandlerResult`, a basic `QueryHandler` and a `CommandHandler` as well as interfaces
 for queries, commands, and the aforementioned handlers.

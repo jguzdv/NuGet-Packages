@@ -3,4 +3,6 @@
 This package uses Serilog to replace the build-in logging mechanisms.
 Configuration will be read from the default `Logging` section.
 
-For usage instructions refer to (https://www.nuget.org/packages/JGUZDV.Extensions.Logging#readme-body-tab)[JGUZDV.Extensions.Logging] and (https://www.nuget.org/packages/Serilog.AspNetCore/)[Serilog.AspNetCore]
+For usage instructions refer to 
+[JGUZDV.Extensions.Logging](https://www.nuget.org/packages/JGUZDV.Extensions.Logging/) 
+and [Serilog.AspNetCore](https://www.nuget.org/packages/Serilog.AspNetCore/)
