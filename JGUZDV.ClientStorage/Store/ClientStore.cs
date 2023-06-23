@@ -125,6 +125,11 @@ public class ClientStore : IDisposable
         await Task.WhenAll(tasks);
     }
 
+    /// <summary>
+    /// refreshs the entry for the given key
+    /// </summary>
+    /// <param name="key">the key</param>
+    /// <returns></returns>
     public async Task<IStoreEntry> RefreshEntry(string key)
     {
         var (expiresIn, loadFunc, _, _) = _jobInformation[key];
@@ -145,7 +150,6 @@ public class ClientStore : IDisposable
     /// </summary>
     /// <param name="key">the key</param>
     /// <param name="forceLoad">enforce using the load function</param>
-    /// <returns>the store entry <see cref="StoreEntryResult"/></returns>
     /// <exception cref="InvalidOperationException"></exception>
     public async Task<StoreEntryResult<T>> GetEntry<T>(string key, bool forceLoad = false)
     {
@@ -197,7 +201,7 @@ public class ClientStore : IDisposable
     /// <typeparam name="T">type of the value</typeparam>
     /// <param name="key">the key</param>
     /// <param name="storeOptions">options to configure loading and caching</param>
-    /// <returns>the store entry result <see cref="StoreEntryResult"/></returns>
+    /// <returns>the store entry result <see cref="StoreEntryResult{T}"/></returns>
     public Task<StoreEntryResult<T>> GetOrLoadEntry<T>(string key, StoreOptions<T> storeOptions) where T : class
     {
         if (!_jobInformation.ContainsKey(key))
@@ -224,7 +228,7 @@ public class ClientStore : IDisposable
     /// </summary>
     /// <typeparam name="T">type of the value</typeparam>
     /// <param name="key">the key</param>
-    /// <param name="storeOptions">options to configure loading and caching</param>
+    /// <param name="forceLoad">enforce using the load function</param>
     /// <returns>the value</returns>
     public async Task<T> Get<T>(string key, bool forceLoad = false) where T : class
     {

@@ -1,7 +1,9 @@
-﻿namespace JGUZDV.ClientStorage.Entries;
+﻿using JGUZDV.ClientStorage.Store;
+
+namespace JGUZDV.ClientStorage.Entries;
 
 /// <summary>
-/// Result object containing the <see cref="IStoreEntry"/> and <see cref="LoadingContext"/>
+/// Result object containing the <see cref="StoreEntry{T}"/> and <see cref="LoadingContext"/>
 /// </summary>
 public class StoreEntryResult<T>
 {
