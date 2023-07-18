@@ -32,31 +32,47 @@ public abstract partial class CommandHandler<TCommand, TContext> : ICommandHandl
         {
             var context = await InitializeAsync(command, principal, ct);
             if (ct.IsCancellationRequested)
-                // TODO: Log Cancellation?
+            {
+                Log.Cancelled(Logger, nameof(InitializeAsync));
                 return HandlerResult.Canceled(ct);
+            }
 
             command = NormalizeCommand(command, context, principal);
 
             if (!SkipAuthorization)
             {
                 var isAuthorized = await AuthorizeAsync(command, context, principal, ct);
+                Log.AuthorizationResult(Logger, isAuthorized);
+
                 if (!isAuthorized)
-                    // TODO: Log Authorization Result as Information
                     return HandlerResult.NotAllowed();
 
                 if (ct.IsCancellationRequested)
-                    // TODO: Log Cancellation?
+                {
+                    Log.Cancelled(Logger, nameof(AuthorizeAsync));
                     return HandlerResult.Canceled(ct);
+                }
             }
 
             var validationResult = await ValidateAsync(command, context, principal, ct);
+            Log.ValidationResult(Logger, !validationResult.Any());
+
             if (validationResult.Any())
-                // TODO: Log Valiation Result as Debug
+            {
+                if(Logger.IsEnabled(LogLevel.Debug))
+                {
+                    foreach (var v in validationResult)
+                        Log.ValidationResult(Logger, string.Join(", ", v.MemberNames), v.ErrorMessage ?? "n/a");
+                }
+
                 return HandlerResult.NotValid(validationResult);
+            }
 
             if (ct.IsCancellationRequested)
-                // TODO: Log Cancellation?
+            {
+                Log.Cancelled(Logger, nameof(ValidateAsync));
                 return HandlerResult.Canceled(ct);
+            }
 
             return await ExecuteInternalAsync(command, context, principal, ct);
         }
@@ -64,22 +80,40 @@ public abstract partial class CommandHandler<TCommand, TContext> : ICommandHandl
         {
             return ex.CommandResult;
         }
-        catch (TaskCanceledException)
+        catch (TaskCanceledException tcex)
         {
-            // TODO: Log Exception?
-            return HandlerResult.Canceled();
+            Log.Cancelled(Logger);
+            return HandlerResult.Canceled(tcex.CancellationToken);
         }
         catch (Exception ex)
         {
-            // TODO: Log Exception
+            Log.ExecutionError(Logger, ex);
             return HandlerResult.Fail("GenericError");
         }
     }
 
     protected static partial class Log
     {
-        [LoggerMessage(1, LogLevel.Debug, "Command {param1} has not been valid.")]
-        internal static partial void Invalid(ILogger logger, object param1);
+        [LoggerMessage(1, LogLevel.Debug, "Command has been cancelled after {step}.")]
+        internal static partial void Cancelled(ILogger logger, string step);
+        
+        [LoggerMessage(2, LogLevel.Debug, "Command has been cancelled.")]
+        internal static partial void Cancelled(ILogger logger);
+
+
+        [LoggerMessage(3, LogLevel.Information, "Command authorization result was: {authorized}", EventName = "CommandAuthorization")]
+        internal static partial void AuthorizationResult(ILogger logger, bool authorized);
+
+
+        [LoggerMessage(4, LogLevel.Information, "Command validation result was: {valid}", EventName = "CommandValidation")]
+        internal static partial void ValidationResult(ILogger logger, bool valid);
+
+        [LoggerMessage(5, LogLevel.Debug, "Command validation result for {memberNames}: {message}", EventName = "CommandValidation", SkipEnabledCheck = true)]
+        internal static partial void ValidationResult(ILogger logger, string memberNames, string message);
+
+
+        [LoggerMessage(6, LogLevel.Error, "Command execution threw an exception.")]
+        internal static partial void ExecutionError(ILogger logger, Exception ex);
     }
 }
 

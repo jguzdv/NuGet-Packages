@@ -43,7 +43,7 @@ namespace JGUZDV.CQRS.Queries
                 if (ct.IsCancellationRequested)
                 {
                     query.Result = HandlerResult.Canceled(ct);
-                    // TODO: Log Cancellation?
+                    Log.Cancelled(Logger);
                     return;
                 }
 
@@ -51,23 +51,31 @@ namespace JGUZDV.CQRS.Queries
 
                 
                 var isAuthorized = await AuthorizeExecuteAsync(query, principal, ct);
+                Log.QueryExecutionAuthorizationResult(Logger, isAuthorized);
+
                 if (!isAuthorized)
                 {
-                    // TODO: Log Authorization Result as Information
                     query.Result = HandlerResult.NotAllowed();
                     return;
                 }
 
                 if (ct.IsCancellationRequested) {
-                    // TODO: Log Cancellation?
+                    Log.Cancelled(Logger, nameof(AuthorizeExecuteAsync));
                     query.Result = HandlerResult.Canceled(ct);
                     return;
                 }
 
                 var validationResult = await ValidateAsync(query, principal, ct);
+                Log.ValidationResult(Logger, !validationResult.Any());
+
                 if (validationResult.Any())
                 {
-                    // TODO: Log Valiation Result as Debug
+                    if (Logger.IsEnabled(LogLevel.Debug))
+                    {
+                        foreach (var v in validationResult)
+                            Log.ValidationResult(Logger, string.Join(", ", v.MemberNames), v.ErrorMessage ?? "n/a");
+                    }
+
                     query.Result = HandlerResult.NotValid(validationResult);
                     return;
 
@@ -75,7 +83,7 @@ namespace JGUZDV.CQRS.Queries
 
                 if (ct.IsCancellationRequested)
                 {
-                    // TODO: Log Cancellation?
+                    Log.Cancelled(Logger, nameof(ValidateAsync));
                     query.Result = HandlerResult.Canceled(ct);
                     return;
                 }
@@ -86,9 +94,10 @@ namespace JGUZDV.CQRS.Queries
                 if (executionResult.HasValue)
                 {
                     var isResultAuthorized = await AuthorizeValueAsync(query, executionResult.Value, principal, ct);
+                    Log.QueryValueAuthorizationResult(Logger, isResultAuthorized);
+                    
                     if (!isResultAuthorized)
                     {
-                        // TODO: Log Authorization Result as Information
                         query.Result = HandlerResult.NotAllowed();
                         return;
                     }
@@ -97,15 +106,15 @@ namespace JGUZDV.CQRS.Queries
                 query.Result = executionResult;
                 return;
             }
-            catch (TaskCanceledException)
+            catch (TaskCanceledException tcex)
             {
-                // TODO: Log Exception?
-                query.Result = HandlerResult.Canceled();
+                query.Result = HandlerResult.Canceled(tcex.CancellationToken);
+                Log.Cancelled(Logger);
                 return;
             }
             catch (Exception ex)
             {
-                // TODO: Log Exception
+                Log.ExecutionError(Logger, ex);
                 query.Result = HandlerResult.Fail("GenericError");
                 return;
             }
@@ -113,8 +122,29 @@ namespace JGUZDV.CQRS.Queries
 
         protected static partial class Log
         {
-            [LoggerMessage(1, LogLevel.Debug, "Query {param1} has not been valid.")]
-            internal static partial void Invalid(ILogger logger, object param1);
+            [LoggerMessage(1, LogLevel.Debug, "Query has been cancelled after {step}.")]
+            internal static partial void Cancelled(ILogger logger, string step);
+
+            [LoggerMessage(2, LogLevel.Debug, "Query has been cancelled.")]
+            internal static partial void Cancelled(ILogger logger);
+
+
+            [LoggerMessage(3, LogLevel.Information, "Query execution authorization result was: {authorized}", EventName = "QueryAuthorization")]
+            internal static partial void QueryExecutionAuthorizationResult(ILogger logger, bool authorized);
+
+            [LoggerMessage(4, LogLevel.Information, "Query value authorization result was: {authorized}", EventName = "QueryAuthorization")]
+            internal static partial void QueryValueAuthorizationResult(ILogger logger, bool authorized);
+
+
+            [LoggerMessage(5, LogLevel.Information, "Query validation result was: {valid}", EventName = "QueryValidation")]
+            internal static partial void ValidationResult(ILogger logger, bool valid);
+
+            [LoggerMessage(6, LogLevel.Debug, "Query validation result for {memberNames}: {message}", EventName = "QueryValidation", SkipEnabledCheck = true)]
+            internal static partial void ValidationResult(ILogger logger, string memberNames, string message);
+
+
+            [LoggerMessage(7, LogLevel.Error, "Query execution threw an exception.")]
+            internal static partial void ExecutionError(ILogger logger, Exception ex);
         }
     }
 }
