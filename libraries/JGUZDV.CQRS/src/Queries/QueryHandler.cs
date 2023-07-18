@@ -60,7 +60,7 @@ namespace JGUZDV.CQRS.Queries
                 }
 
                 if (ct.IsCancellationRequested) {
-                    Log.Cancelled(Logger, nameof(AuthorizeExecuteAsync));
+                    Log.StepCancelled(Logger, nameof(AuthorizeExecuteAsync));
                     query.Result = HandlerResult.Canceled(ct);
                     return;
                 }
@@ -73,7 +73,7 @@ namespace JGUZDV.CQRS.Queries
                     if (Logger.IsEnabled(LogLevel.Debug))
                     {
                         foreach (var v in validationResult)
-                            Log.ValidationResult(Logger, string.Join(", ", v.MemberNames), v.ErrorMessage ?? "n/a");
+                            Log.ValidationResultDetail(Logger, string.Join(", ", v.MemberNames), v.ErrorMessage ?? "n/a");
                     }
 
                     query.Result = HandlerResult.NotValid(validationResult);
@@ -83,7 +83,7 @@ namespace JGUZDV.CQRS.Queries
 
                 if (ct.IsCancellationRequested)
                 {
-                    Log.Cancelled(Logger, nameof(ValidateAsync));
+                    Log.StepCancelled(Logger, nameof(ValidateAsync));
                     query.Result = HandlerResult.Canceled(ct);
                     return;
                 }
@@ -123,7 +123,7 @@ namespace JGUZDV.CQRS.Queries
         protected static partial class Log
         {
             [LoggerMessage(1, LogLevel.Debug, "Query has been cancelled after {step}.")]
-            internal static partial void Cancelled(ILogger logger, string step);
+            internal static partial void StepCancelled(ILogger logger, string step);
 
             [LoggerMessage(2, LogLevel.Debug, "Query has been cancelled.")]
             internal static partial void Cancelled(ILogger logger);
@@ -140,7 +140,7 @@ namespace JGUZDV.CQRS.Queries
             internal static partial void ValidationResult(ILogger logger, bool valid);
 
             [LoggerMessage(6, LogLevel.Debug, "Query validation result for {memberNames}: {message}", EventName = "QueryValidation", SkipEnabledCheck = true)]
-            internal static partial void ValidationResult(ILogger logger, string memberNames, string message);
+            internal static partial void ValidationResultDetail(ILogger logger, string memberNames, string message);
 
 
             [LoggerMessage(7, LogLevel.Error, "Query execution threw an exception.")]

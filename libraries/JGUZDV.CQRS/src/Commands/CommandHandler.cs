@@ -33,7 +33,7 @@ public abstract partial class CommandHandler<TCommand, TContext> : ICommandHandl
             var context = await InitializeAsync(command, principal, ct);
             if (ct.IsCancellationRequested)
             {
-                Log.Cancelled(Logger, nameof(InitializeAsync));
+                Log.StepCancelled(Logger, nameof(InitializeAsync));
                 return HandlerResult.Canceled(ct);
             }
 
@@ -49,7 +49,7 @@ public abstract partial class CommandHandler<TCommand, TContext> : ICommandHandl
 
                 if (ct.IsCancellationRequested)
                 {
-                    Log.Cancelled(Logger, nameof(AuthorizeAsync));
+                    Log.StepCancelled(Logger, nameof(AuthorizeAsync));
                     return HandlerResult.Canceled(ct);
                 }
             }
@@ -62,7 +62,7 @@ public abstract partial class CommandHandler<TCommand, TContext> : ICommandHandl
                 if(Logger.IsEnabled(LogLevel.Debug))
                 {
                     foreach (var v in validationResult)
-                        Log.ValidationResult(Logger, string.Join(", ", v.MemberNames), v.ErrorMessage ?? "n/a");
+                        Log.ValidationResultDetail(Logger, string.Join(", ", v.MemberNames), v.ErrorMessage ?? "n/a");
                 }
 
                 return HandlerResult.NotValid(validationResult);
@@ -70,7 +70,7 @@ public abstract partial class CommandHandler<TCommand, TContext> : ICommandHandl
 
             if (ct.IsCancellationRequested)
             {
-                Log.Cancelled(Logger, nameof(ValidateAsync));
+                Log.StepCancelled(Logger, nameof(ValidateAsync));
                 return HandlerResult.Canceled(ct);
             }
 
@@ -95,7 +95,7 @@ public abstract partial class CommandHandler<TCommand, TContext> : ICommandHandl
     protected static partial class Log
     {
         [LoggerMessage(1, LogLevel.Debug, "Command has been cancelled after {step}.")]
-        internal static partial void Cancelled(ILogger logger, string step);
+        internal static partial void StepCancelled(ILogger logger, string step);
         
         [LoggerMessage(2, LogLevel.Debug, "Command has been cancelled.")]
         internal static partial void Cancelled(ILogger logger);
@@ -109,7 +109,7 @@ public abstract partial class CommandHandler<TCommand, TContext> : ICommandHandl
         internal static partial void ValidationResult(ILogger logger, bool valid);
 
         [LoggerMessage(5, LogLevel.Debug, "Command validation result for {memberNames}: {message}", EventName = "CommandValidation", SkipEnabledCheck = true)]
-        internal static partial void ValidationResult(ILogger logger, string memberNames, string message);
+        internal static partial void ValidationResultDetail(ILogger logger, string memberNames, string message);
 
 
         [LoggerMessage(6, LogLevel.Error, "Command execution threw an exception.")]
