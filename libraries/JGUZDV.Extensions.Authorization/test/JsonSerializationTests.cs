@@ -24,4 +24,15 @@ public class JsonSerializationTests
             Assert.IsType<ClaimValueRequirement>(crc.Requirements[1]);
         }
     }
+
+    [Fact]
+    public void NullClaimRequirement_Will_Roundtrip()
+    {
+        ClaimRequirement claimRequirement = new NullRequirement();
+
+        var jsonString = JsonSerializer.Serialize(claimRequirement);
+        var result = JsonSerializer.Deserialize<ClaimRequirement>(jsonString);
+
+        Assert.IsType<NullRequirement>(result);
+    }
 }
