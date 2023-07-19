@@ -32,54 +32,123 @@ public abstract partial class CommandHandler<TCommand, TContext> : ICommandHandl
         {
             var context = await InitializeAsync(command, principal, ct);
             if (ct.IsCancellationRequested)
-                // TODO: Log Cancellation?
+            {
+                Log.StepCancelled(Logger, nameof(InitializeAsync));
                 return HandlerResult.Canceled(ct);
+            }
 
             command = NormalizeCommand(command, context, principal);
 
             if (!SkipAuthorization)
             {
                 var isAuthorized = await AuthorizeAsync(command, context, principal, ct);
+                Log.AuthorizationResult(Logger, isAuthorized);
+
                 if (!isAuthorized)
-                    // TODO: Log Authorization Result as Information
                     return HandlerResult.NotAllowed();
 
                 if (ct.IsCancellationRequested)
-                    // TODO: Log Cancellation?
+                {
+                    Log.StepCancelled(Logger, nameof(AuthorizeAsync));
                     return HandlerResult.Canceled(ct);
+                }
             }
 
             var validationResult = await ValidateAsync(command, context, principal, ct);
             if (validationResult.Any())
-                // TODO: Log Valiation Result as Debug
-                return HandlerResult.NotValid(validationResult);
+            {
+                var result = HandlerResult.NotValid(validationResult);
+                Log.HandlerResult(Logger, result);
+
+                return result;
+            }
+
+            Log.ValidationResult(Logger, true);
 
             if (ct.IsCancellationRequested)
-                // TODO: Log Cancellation?
+            {
+                Log.StepCancelled(Logger, nameof(ValidateAsync));
                 return HandlerResult.Canceled(ct);
+            }
 
             return await ExecuteInternalAsync(command, context, principal, ct);
         }
         catch (CommandException ex)
         {
+            Log.HandlerResult(Logger, ex.CommandResult);
             return ex.CommandResult;
         }
-        catch (TaskCanceledException)
+        catch (TaskCanceledException tcex)
         {
-            // TODO: Log Exception?
-            return HandlerResult.Canceled();
+            Log.Cancelled(Logger);
+            return HandlerResult.Canceled(tcex.CancellationToken);
         }
         catch (Exception ex)
         {
-            // TODO: Log Exception
+            Log.ExecutionError(Logger, ex);
             return HandlerResult.Fail("GenericError");
         }
     }
 
     protected static partial class Log
     {
-        [LoggerMessage(1, LogLevel.Debug, "Command {param1} has not been valid.")]
-        internal static partial void Invalid(ILogger logger, object param1);
+        [LoggerMessage(4990, LogLevel.Debug, "Command has been cancelled.")]
+        internal static partial void Cancelled(ILogger logger);
+        
+        [LoggerMessage(4991, LogLevel.Debug, "Command has been cancelled after {step}.")]
+        internal static partial void StepCancelled(ILogger logger, string step);
+
+
+        [LoggerMessage(4000, LogLevel.Information, "Command validation result was: {valid}", EventName = "CommandValidation")]
+        internal static partial void ValidationResult(ILogger logger, bool valid);
+
+        [LoggerMessage(4001, LogLevel.Debug, "Command validation result for {memberNames}: {message}", EventName = "CommandValidation", SkipEnabledCheck = true)]
+        internal static partial void ValidationResultDetail(ILogger logger, string memberNames, string message);
+
+        [LoggerMessage(4002, LogLevel.Information, "Command execution detected a conflict: {conflict}", EventName = "CommandExecution")]
+        internal static partial void Conflict(ILogger logger, string conflict);
+
+
+        [LoggerMessage(4030, LogLevel.Information, "Command authorization result was: {authorized}", EventName = "CommandAuthorization")]
+        internal static partial void AuthorizationResult(ILogger logger, bool authorized);
+        
+        [LoggerMessage(4040, LogLevel.Information, "Command did not find an object to act on (NotFound).", EventName = "CommandExecution")]
+        internal static partial void NotFound(ILogger logger);
+
+
+        [LoggerMessage(5000, LogLevel.Error, "Command execution threw an exception.")]
+        internal static partial void ExecutionError(ILogger logger, Exception ex);
+
+        [LoggerMessage(5001, LogLevel.Error, "Command execution reported a generic error: {message}")]
+        internal static partial void GenericExecutionError(ILogger logger, string message);
+
+
+        internal static void HandlerResult(ILogger logger, HandlerResult result) {
+            if (result is GenericErrorResult ger)
+                GenericExecutionError(logger, ger.FailureCode);
+            else if (result is ValidationErrorResult ver)
+                ValidationErrorResult(logger, ver);
+            else if (result is ConflictResult cfr)
+                Conflict(logger, cfr.FailureCode);
+            else if (result is UnauthorizedResult)
+                AuthorizationResult(logger, false);
+            else if (result is NotFoundResult)
+                NotFound(logger);
+            else if (result is CanceledResult)
+                Cancelled(logger);
+        }
+
+
+        internal static void ValidationErrorResult(ILogger logger, ValidationErrorResult result)
+        {
+            ValidationResult(logger, false);
+
+            if (logger.IsEnabled(LogLevel.Debug))
+            {
+                foreach (var v in result.ValidationErrors)
+                    ValidationResultDetail(logger, string.Join(", ", v.MemberNames), v.ErrorMessage ?? "n/a");
+            }
+        }
     }
 }
 
