@@ -5,5 +5,8 @@
 /// </summary>
 public class StoreChangedEvent
 {
+    /// <summary>
+    /// The key of the changed entry
+    /// </summary>
     public required string Key { get; set; }
 }

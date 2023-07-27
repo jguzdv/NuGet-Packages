@@ -13,10 +13,15 @@ public class ClientStore : IDisposable
     private readonly IKeyValueStorage _storage;
     private readonly ILifeCycleEvents _lifeCycleEvents;
 
-    private Dictionary<string, CancellationTokenSource> _cancellationTokenSources = new();
-    private Dictionary<string, (TimeSpan ExiresIn, Func<CancellationToken, Task<object>> LoadFunc, bool UseBackgroundRefresh, Func<(object Value, DateTimeOffset CreatedAt, DateTimeOffset ExpiresIn), IStoreEntry> CreateEntry)> _jobInformation = new();
+    private readonly Dictionary<string, CancellationTokenSource> _cancellationTokenSources = new();
+    private readonly Dictionary<string, (TimeSpan ExiresIn, Func<CancellationToken, Task<object>> LoadFunc, bool UseBackgroundRefresh, Func<(object Value, DateTimeOffset CreatedAt, DateTimeOffset ExpiresIn), IStoreEntry> CreateEntry)> _jobInformation = new();
 
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="cache">The in memory cache to be used</param>
+    /// <param name="storage">The persistent storage</param>
+    /// <param name="lifeCycleEvents">Events used to stop and resume background refreshs</param>
     public ClientStore(IMemoryCache cache, IKeyValueStorage storage, ILifeCycleEvents lifeCycleEvents)
     {
         _cache = cache;
