@@ -15,8 +15,4 @@ public interface IStoreEntry
     /// </summary>
     public DateTimeOffset ExpiresAt { get; set; }
 
-    /// <summary>
-    /// the value
-    /// </summary>
-    public object Value { get; set; }
 }

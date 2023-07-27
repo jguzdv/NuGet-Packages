@@ -21,9 +21,4 @@ public class StoreEntry<T> : IStoreEntry
     /// </summary>
     public required T Value { get; set; }
 
-    object IStoreEntry.Value
-    {
-        get => Value!;
-        set => Value = (T)value;
-    }
 }

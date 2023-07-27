@@ -9,7 +9,7 @@ namespace JGUZDV.ClientStorage.Tests
     {
         private class KeyValueStorage : IKeyValueStorage
         {
-            private Dictionary<string, object> _dict = new();
+            private readonly Dictionary<string, object?> _dict = new();
 
             public Task Clear()
             {

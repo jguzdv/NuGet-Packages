@@ -135,7 +135,7 @@ public class ClientStore : IDisposable
     /// </summary>
     /// <param name="key">the key</param>
     /// <returns></returns>
-    public async Task<IStoreEntry> RefreshEntry(string key)
+    public async Task RefreshEntry(string key)
     {
         var (expiresIn, loadFunc, _, _) = _jobInformation[key];
 
@@ -147,7 +147,6 @@ public class ClientStore : IDisposable
         _ = _storage.SetItem(key, item);
         ValueChanged?.Invoke(new StoreChangedEvent { Key = key });
 
-        return item;
     }
 
     /// <summary>
@@ -175,7 +174,8 @@ public class ClientStore : IDisposable
         try
         {
             //try refreshing cache
-            item = (StoreEntry<T>)(await RefreshEntry(key));
+            await RefreshEntry(key);
+            item = _cache.Get<StoreEntry<T>>(key);
 
             var context = new LoadingContext { Key = key, LoadedHot = true };
             StoreEntryLoaded?.Invoke(context);
