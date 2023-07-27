@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\JGUZDV.ClientStorage.csproj" />
+    <ProjectReference Include="..\src\JGUZDV.ClientStorage.csproj" />
   </ItemGroup>
 
 </Project>
