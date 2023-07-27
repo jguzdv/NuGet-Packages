@@ -7,6 +7,13 @@ namespace JGUZDV.ClientStorage.Entries;
 /// </summary>
 public class StoreEntryResult<T>
 {
+    /// <summary>
+    /// the entry
+    /// </summary>
     public required StoreEntry<T> Entry { get; set; }
+
+    /// <summary>
+    /// the loading context
+    /// </summary>
     public required LoadingContext Context { get; set; }
 }
