@@ -6,7 +6,7 @@ namespace JGUZDV.AspNetCore.Authentication.Cookies;
 
 public class DistributedCacheTicketStore : ITicketStore
 {
-    private readonly string _keyPrefix = $"{nameof(DistributedCacheTicketStore)}.";
+    private readonly string _keyPrefix = nameof(DistributedCacheTicketStore);
 
     private readonly IDistributedCache _distributedCache;
     private readonly ISecureDataFormat<AuthenticationTicket> _ticketDataFormat;
