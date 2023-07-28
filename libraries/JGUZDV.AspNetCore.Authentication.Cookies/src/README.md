@@ -1,0 +1,3 @@
+# JGUZDV.AspNetCore.Authentication.Cookies
+
+
