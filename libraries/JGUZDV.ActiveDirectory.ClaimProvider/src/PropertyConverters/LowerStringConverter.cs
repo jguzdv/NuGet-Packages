@@ -1,10 +1,11 @@
 ﻿namespace JGUZDV.ActiveDirectory.ClaimProvider.PropertyConverters;
 
-public class StringConverter : IPropertyConverter
+public class LowerStringConverter : StringConverter, IPropertyConverter
 {
-    public virtual IEnumerable<string> ConvertProperty(IEnumerable<object> values)
+    public override IEnumerable<string> ConvertProperty(IEnumerable<object> values)
     {
-        return values.OfType<string>();
+        return base.ConvertProperty(values)
+            .Select(x => x.ToLowerInvariant());
     }
 }
 

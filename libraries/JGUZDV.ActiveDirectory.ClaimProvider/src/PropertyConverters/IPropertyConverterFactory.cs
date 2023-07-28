@@ -1,7 +1,6 @@
-﻿namespace JGUZDV.ActiveDirectory.ClaimProvider.PropertyReader
+﻿namespace JGUZDV.ActiveDirectory.ClaimProvider.PropertyConverters;
+
+public interface IPropertyConverterFactory
 {
-    public interface IPropertyConverterFactory
-    {
-        IPropertyConverter GetConverter(string propertyName);
-    }
+    IPropertyConverter GetConverter(string propertyName);
 }

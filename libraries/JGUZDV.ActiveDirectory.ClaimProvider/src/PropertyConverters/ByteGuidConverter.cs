@@ -1,22 +1,12 @@
-﻿using System.DirectoryServices;
+﻿using System.Runtime.Versioning;
 
-namespace JGUZDV.ActiveDirectory.ClaimProvider.PropertyReader
+namespace JGUZDV.ActiveDirectory.ClaimProvider.PropertyConverters;
+
+internal class ByteGuidConverter : IPropertyConverter
 {
-    internal class ByteGuidConverter : IPropertyConverter
+    public IEnumerable<string> ConvertProperty(IEnumerable<object> values)
     {
-        public IEnumerable<string> ConvertProperty(PropertyValueCollection propertyValues)
-        {
-            if (propertyValues.Value is not object[] values)
-            {
-                if(propertyValues.Value is null)
-                    return Array.Empty<string>();
-
-                values = new[] { propertyValues.Value };
-            }
-
-            return values.OfType<byte[]>()
-                .Select(x => new Guid(x).ToString())
-                .ToList();
-        }
+        return values.OfType<byte[]>()
+            .Select(x => new Guid(x).ToString());
     }
 }

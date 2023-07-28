@@ -1,9 +1,10 @@
 ﻿using System.DirectoryServices;
-using System.Security.Principal;
+using System.Runtime.Versioning;
 using System.Text.RegularExpressions;
 
 namespace JGUZDV.ActiveDirectory.ClaimProvider
 {
+    [SupportedOSPlatform("Windows")]
     internal partial class ADHelper
     {
         [GeneratedRegex("^S(-\\d+)+$", RegexOptions.IgnoreCase | RegexOptions.Compiled, 200, "de-DE")]

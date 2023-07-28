@@ -1,10 +1,10 @@
-﻿using JGUZDV.ActiveDirectory.ClaimProvider.PropertyReader;
+﻿using JGUZDV.ActiveDirectory.ClaimProvider.PropertyConverters;
 
 namespace JGUZDV.ActiveDirectory.ClaimProvider.Configuration
 {
     public static class Defaults
     {
-        public static Dictionary<string, string> KnownConverters = new()
+        public static IReadOnlyDictionary<string, string> KnownConverters = new Dictionary<string, string>()
         {
             { "objectGuid", nameof(ByteGuidConverter) },
             { "objectSid", nameof(ByteSIDConverter) },

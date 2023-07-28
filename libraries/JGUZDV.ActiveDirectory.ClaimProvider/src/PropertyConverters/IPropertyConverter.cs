@@ -1,9 +1,8 @@
 ﻿using System.DirectoryServices;
 
-namespace JGUZDV.ActiveDirectory.ClaimProvider.PropertyReader
+namespace JGUZDV.ActiveDirectory.ClaimProvider.PropertyConverters;
+
+public interface IPropertyConverter
 {
-    public interface IPropertyConverter
-    {
-        IEnumerable<string> ConvertProperty(PropertyValueCollection propertyValues);
-    }
+    IEnumerable<string> ConvertProperty(IEnumerable<object> values);
 }

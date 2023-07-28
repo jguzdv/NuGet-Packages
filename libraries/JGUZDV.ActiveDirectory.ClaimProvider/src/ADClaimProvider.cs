@@ -1,17 +1,18 @@
 ﻿using System.DirectoryServices;
+using System.Runtime.Versioning;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
 
 using JGUZDV.ActiveDirectory.ClaimProvider.Configuration;
-
-using JGUZDV.ActiveDirectory.ClaimProvider.PropertyReader;
+using JGUZDV.ActiveDirectory.ClaimProvider.PropertyConverters;
 
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace JGUZDV.ActiveDirectory.ClaimProvider
 {
-    internal class ADClaimProvider
+    [SupportedOSPlatform("Windows")]
+    public class ADClaimProvider
     {
         const string accountControlProperty = "userAccountControl";
 
@@ -31,15 +32,15 @@ namespace JGUZDV.ActiveDirectory.ClaimProvider
         }
 
 
-        public List<(string Type, string Value)> GetClaims(ClaimsPrincipal subject, IEnumerable<string> requestedClaims)
+        public List<(string Type, string Value)> GetClaims(ClaimsPrincipal subject)
         {
             var result = new List<(string Type, string Value)>();
 
-            var propertyMaps = _adOptions.Value.ClaimMaps
-                .Where(x => requestedClaims.Contains(x.ClaimType))
-                .ToList();
-
+            var propertyMaps = _adOptions.Value.ClaimMaps.ToList();
             var userDirectoryEntry = GetUserDirectoryEntry(subject, propertyMaps.Select(x => x.PropertyName));
+            if (userDirectoryEntry == null)
+                return result;
+            
             foreach (var map in propertyMaps)
             {
                 var claimValues = ConvertProperty(userDirectoryEntry, map.PropertyName);
@@ -58,7 +59,7 @@ namespace JGUZDV.ActiveDirectory.ClaimProvider
             try
             {
                 var userDirectoryEntry = GetUserDirectoryEntry(subject, new[] { accountControlProperty });
-                if (userDirectoryEntry.Properties[accountControlProperty][0] is int adsUserFlags)
+                if (userDirectoryEntry?.Properties[accountControlProperty][0] is int adsUserFlags)
                 {
                     //See https://docs.microsoft.com/en-us/windows/win32/api/iads/ne-iads-ads_user_flag_enum ADS_UF_ACCOUNTDISABLE 
                     return (adsUserFlags & 0x2) != 2;
@@ -74,12 +75,27 @@ namespace JGUZDV.ActiveDirectory.ClaimProvider
         }
 
 
+
+        private static IEnumerable<object> GetPropertyValues(PropertyValueCollection propertyValues)
+        {
+            if (propertyValues.Value is not object[] values)
+            {
+                if (propertyValues.Value is null)
+                    return Array.Empty<object>();
+
+                values = new[] { propertyValues.Value };
+            }
+
+            return values;
+        }
+
+
         private IEnumerable<string> ConvertProperty(DirectoryEntry userEntry, string propertyName)
         {
             var converter = _converterFactory.GetConverter(propertyName);
             var property = userEntry.Properties[propertyName];
 
-            var result = converter.ConvertProperty(property);
+            var result = converter.ConvertProperty(GetPropertyValues(property));
             return result;
         }
 

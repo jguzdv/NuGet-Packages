@@ -20,6 +20,7 @@ public class ActiveDirectoryOptions : IValidatableObject
     public ActiveDirectoryConnectionOptions Connection { get; set; } = null!;
 
     public List<ClaimSource> ClaimMaps { get; set; } = new();
+    public Dictionary<string, string> PropertyConverters { get; set; } = new(Defaults.KnownConverters);
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
