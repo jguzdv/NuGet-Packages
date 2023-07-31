@@ -2,6 +2,9 @@
 
 public class StringConverter : IPropertyConverter
 {
+    public virtual string ConverterName => nameof(StringConverter);
+
+
     public virtual IEnumerable<string> ConvertProperty(IEnumerable<object> values)
     {
         return values.OfType<string>();

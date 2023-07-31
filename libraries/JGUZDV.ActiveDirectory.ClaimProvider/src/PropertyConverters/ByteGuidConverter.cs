@@ -4,6 +4,8 @@ namespace JGUZDV.ActiveDirectory.ClaimProvider.PropertyConverters;
 
 internal class ByteGuidConverter : IPropertyConverter
 {
+    public string ConverterName => nameof(ByteGuidConverter);
+
     public IEnumerable<string> ConvertProperty(IEnumerable<object> values)
     {
         return values.OfType<byte[]>()

@@ -2,6 +2,9 @@
 
 public class LowerStringConverter : StringConverter, IPropertyConverter
 {
+    public override string ConverterName => nameof(LowerStringConverter);
+
+
     public override IEnumerable<string> ConvertProperty(IEnumerable<object> values)
     {
         return base.ConvertProperty(values)

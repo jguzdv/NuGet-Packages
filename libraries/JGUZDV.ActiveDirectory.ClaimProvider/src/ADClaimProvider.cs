@@ -32,11 +32,14 @@ namespace JGUZDV.ActiveDirectory.ClaimProvider
         }
 
 
-        public List<(string Type, string Value)> GetClaims(ClaimsPrincipal subject)
+        public List<(string Type, string Value)> GetClaims(ClaimsPrincipal subject, IEnumerable<string> claimTypes)
         {
             var result = new List<(string Type, string Value)>();
 
-            var propertyMaps = _adOptions.Value.ClaimMaps.ToList();
+            var propertyMaps = _adOptions.Value.ClaimSources
+                .Where(x => claimTypes.Contains(x.ClaimType, StringComparer.OrdinalIgnoreCase))
+                .ToList();
+
             var userDirectoryEntry = GetUserDirectoryEntry(subject, propertyMaps.Select(x => x.PropertyName));
             if (userDirectoryEntry == null)
                 return result;

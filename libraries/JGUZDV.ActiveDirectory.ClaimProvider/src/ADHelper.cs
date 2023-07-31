@@ -33,7 +33,7 @@ namespace JGUZDV.ActiveDirectory.ClaimProvider
         {
             using var searcher = new DirectorySearcher(
                 new DirectoryEntry($"LDAP://{ldapServer}/{ldapBasePath}"),
-                $"&({ldapFilter}(objectCategory=user))", new[] { "objectGuid" });
+                $"(&{ldapFilter}(objectCategory=user))", new[] { "objectGuid" });
 
             var searchResult = searcher.FindOne();
             if (searchResult == null)
