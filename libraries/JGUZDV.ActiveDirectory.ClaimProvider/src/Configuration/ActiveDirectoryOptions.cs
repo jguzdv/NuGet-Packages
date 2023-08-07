@@ -16,15 +16,13 @@ public class ActiveDirectoryOptions : IValidatableObject
 
 
     public List<ClaimSource> ClaimSources { get; set; } = new(Defaults.KnownClaimSources);
-    public Dictionary<string, string> PropertyConverters { get; set; } = new(Defaults.KnownConverters);
+    public List<ADPropertyInfo> Properties { get; set; } = new(Defaults.KnownProperties);
 
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
         if (Connection == null)
             yield return new ValidationResult("Connection MUST be configured.");
-        if (string.IsNullOrWhiteSpace(Connection?.Server))
-            yield return new ValidationResult("Connection:Server MUST be configured.");
 
         if (string.IsNullOrWhiteSpace(UserClaimType))
             yield return new ValidationResult("UserClaimType MUST be configured.");

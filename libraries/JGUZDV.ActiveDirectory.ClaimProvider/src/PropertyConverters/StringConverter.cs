@@ -2,26 +2,19 @@
 
 public class StringConverter : IPropertyConverter
 {
-    public virtual string ConverterName => nameof(StringConverter);
+    public Type PropertyType => typeof(string);
 
+    public IEnumerable<string> OutputFormats => new[] { "lower", "upper" };
 
-    public virtual IEnumerable<string> ConvertProperty(IEnumerable<object> values)
+    public IEnumerable<string> ConvertProperty(IEnumerable<object> values, string outFormat)
     {
-        return values.OfType<string>();
+        var result = values.OfType<string>();
+
+        return outFormat switch
+        {
+            "lower" => result.Select(x => x.ToLowerInvariant()),
+            "upper" => result.Select(x => x.ToUpperInvariant()),
+            _ => result
+        };
     }
 }
-
-//internal class SIDToNameConverter : IPropertyReader
-//{
-//    public string[] ConvertProperty(PropertyValueCollection propertyValues)
-//    {
-//        throw new System.NotImplementedException();
-//    }
-//}
-//internal class DNToNameConverter : IPropertyReader
-//{
-//    public string[] ConvertProperty(PropertyValueCollection propertyValues)
-//    {
-//        throw new System.NotImplementedException();
-//    }
-//}

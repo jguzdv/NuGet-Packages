@@ -18,6 +18,14 @@ namespace Microsoft.Extensions.DependencyInjection
                 services.Configure(configure);
 
             services.AddScoped<ADClaimProvider>();
+            services.AddConverters();
+
+            return services;
+        }
+
+        [SupportedOSPlatform("windows")]
+        public static IServiceCollection AddConverters(this IServiceCollection services)
+        {
             services.AddScoped<IPropertyConverterFactory, PropertyConverterFactory>();
 
             services.TryAddEnumerable(ServiceDescriptor.Singleton<IPropertyConverter, ByteBase64Converter>());
@@ -26,6 +34,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddEnumerable(ServiceDescriptor.Singleton<IPropertyConverter, LowerStringConverter>());
             services.TryAddEnumerable(ServiceDescriptor.Singleton<IPropertyConverter, StringConverter>());
             services.TryAddEnumerable(ServiceDescriptor.Singleton<IPropertyConverter, UpperStringConverter>());
+            services.TryAddEnumerable(ServiceDescriptor.Singleton<IPropertyConverter, IntConverter>());
 
             return services;
         }

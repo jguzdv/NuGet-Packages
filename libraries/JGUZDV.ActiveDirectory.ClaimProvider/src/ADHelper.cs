@@ -32,7 +32,7 @@ namespace JGUZDV.ActiveDirectory.ClaimProvider
         public static DirectoryEntry? FindUserDirectoryEntry(string ldapServer, string? ldapBasePath, string ldapFilter, IEnumerable<string> propertiesToLoad)
         {
             using var searcher = new DirectorySearcher(
-                new DirectoryEntry($"LDAP://{ldapServer}/{ldapBasePath}"),
+                new DirectoryEntry($"LDAP://{ldapServer}{ldapBasePath}"),
                 $"(&{ldapFilter}(objectCategory=user))", new[] { "objectGuid" });
 
             var searchResult = searcher.FindOne();
@@ -43,7 +43,7 @@ namespace JGUZDV.ActiveDirectory.ClaimProvider
             var ldapBindPath = 
 
             searchResult.Properties["objectGuid"];
-            var directoryEntry = new DirectoryEntry($"LDAP://{ldapServer}/<GUID={new Guid(byteGuid)}>");
+            var directoryEntry = new DirectoryEntry($"LDAP://{ldapServer}<GUID={new Guid(byteGuid)}>");
             directoryEntry.RefreshCache(propertiesToLoad.ToArray());
 
             return directoryEntry;
