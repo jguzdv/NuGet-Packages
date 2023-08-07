@@ -76,7 +76,7 @@ public class ClaimProviderTest : IClassFixture<ClaimProviderFixture>
         _fixture = fixture;
     }
 
-    [Theory, MemberData(nameof(TestData))]
+    [Theory(Skip = "This theory might not work on any remote machine."), MemberData(nameof(TestData))]
     public void PropertyWillBeLoadedAndConverted(ADPropertyInfo data)
     {
         var adClaimProvider = new ADClaimProvider(_fixture.ConverterFactory, _fixture.Options, NullLogger<ADClaimProvider>.Instance);
