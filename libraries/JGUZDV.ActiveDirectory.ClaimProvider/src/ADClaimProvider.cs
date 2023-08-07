@@ -32,7 +32,7 @@ namespace JGUZDV.ActiveDirectory.ClaimProvider
         }
 
 
-        public List<(string Type, string Value)> GetClaims(ClaimsPrincipal subject, IEnumerable<string> claimTypes)
+        public List<(string Type, string Value)> GetClaims(ClaimsPrincipal subject, params string[] claimTypes)
         {
             var result = new List<(string Type, string Value)>();
 
@@ -46,7 +46,7 @@ namespace JGUZDV.ActiveDirectory.ClaimProvider
             
             foreach (var map in propertyMaps)
             {
-                var claimValues = ConvertProperty(userDirectoryEntry, map.PropertyName);
+                var claimValues = ConvertProperty(userDirectoryEntry, map);
                 if (map.ClaimValueDenyList?.Any() == true)
                     claimValues = FilterValues(claimValues, denyList: map.ClaimValueDenyList);
 
@@ -93,12 +93,12 @@ namespace JGUZDV.ActiveDirectory.ClaimProvider
         }
 
 
-        private IEnumerable<string> ConvertProperty(DirectoryEntry userEntry, string propertyName)
+        private IEnumerable<string> ConvertProperty(DirectoryEntry userEntry, ClaimSource claimSource)
         {
-            var converter = _converterFactory.GetConverter(propertyName);
-            var property = userEntry.Properties[propertyName];
+            var converter = _converterFactory.GetConverter(claimSource.PropertyName, claimSource.OutputFormat);
+            var property = userEntry.Properties[claimSource.PropertyName];
 
-            var result = converter.ConvertProperty(GetPropertyValues(property));
+            var result = converter.ConvertProperty(GetPropertyValues(property), claimSource.OutputFormat);
             return result;
         }
 

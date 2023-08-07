@@ -2,5 +2,5 @@
 
 public interface IPropertyConverterFactory
 {
-    IPropertyConverter GetConverter(string propertyName);
+    IPropertyConverter GetConverter(string propertyName, string? outputFormat);
 }

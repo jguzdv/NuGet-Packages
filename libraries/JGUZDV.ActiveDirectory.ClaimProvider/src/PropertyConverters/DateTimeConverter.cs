@@ -1,14 +1,14 @@
 ﻿namespace JGUZDV.ActiveDirectory.ClaimProvider.PropertyConverters;
 
-internal class IntConverter : IPropertyConverter
+internal class DateTimeConverter : IPropertyConverter
 {
-    public Type PropertyType => typeof(int);
+    public Type PropertyType => typeof(DateTime);
 
     public IEnumerable<string> OutputFormats => Array.Empty<string>();
 
     public IEnumerable<string> ConvertProperty(IEnumerable<object> values, string? outFormat)
     {
-        return values.OfType<int>()
-            .Select(x => x.ToString("0"));
+        return values.OfType<DateTime>()
+            .Select(x => x.ToString("O"));
     }
 }

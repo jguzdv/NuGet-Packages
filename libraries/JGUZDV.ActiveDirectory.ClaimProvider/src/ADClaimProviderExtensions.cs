@@ -28,13 +28,11 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.AddScoped<IPropertyConverterFactory, PropertyConverterFactory>();
 
-            services.TryAddEnumerable(ServiceDescriptor.Singleton<IPropertyConverter, ByteBase64Converter>());
-            services.TryAddEnumerable(ServiceDescriptor.Singleton<IPropertyConverter, ByteGuidConverter>());
-            services.TryAddEnumerable(ServiceDescriptor.Singleton<IPropertyConverter, ByteSIDConverter>());
-            services.TryAddEnumerable(ServiceDescriptor.Singleton<IPropertyConverter, LowerStringConverter>());
+            services.TryAddEnumerable(ServiceDescriptor.Singleton<IPropertyConverter, ByteConverter>());
             services.TryAddEnumerable(ServiceDescriptor.Singleton<IPropertyConverter, StringConverter>());
-            services.TryAddEnumerable(ServiceDescriptor.Singleton<IPropertyConverter, UpperStringConverter>());
             services.TryAddEnumerable(ServiceDescriptor.Singleton<IPropertyConverter, IntConverter>());
+            services.TryAddEnumerable(ServiceDescriptor.Singleton<IPropertyConverter, LongConverter>());
+            services.TryAddEnumerable(ServiceDescriptor.Singleton<IPropertyConverter, DateTimeConverter>());
 
             return services;
         }

@@ -34,14 +34,14 @@ internal class PropertyConverterFactory : IPropertyConverterFactory
     }
 
 
-    public IPropertyConverter GetConverter(string propertyName)
+    public IPropertyConverter GetConverter(string propertyName, string? outputFormat)
     {
         if (!_propertyInfos.TryGetValue(propertyName, out var propertyInfo)) {
             _logger.LogInformation("Property {propertyName} has no registered mapper. Fallback to String", propertyName);
             propertyInfo = new(propertyName, typeof(string));
         }
 
-        var converterInfo = new ConverterInfo(propertyInfo.PropertyType, propertyInfo.OutputFormat);
+        var converterInfo = new ConverterInfo(propertyInfo.PropertyType, outputFormat);
         if(!_converters.TryGetValue(converterInfo, out var converter)) {
             _logger.LogError("Converter for {property}, with source type {type} and format {format} has not been found.",
                 propertyName, converterInfo.Type, converterInfo.OutputFormat);

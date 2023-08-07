@@ -6,7 +6,7 @@ public class StringConverter : IPropertyConverter
 
     public IEnumerable<string> OutputFormats => new[] { "lower", "upper" };
 
-    public IEnumerable<string> ConvertProperty(IEnumerable<object> values, string outFormat)
+    public IEnumerable<string> ConvertProperty(IEnumerable<object> values, string? outFormat)
     {
         var result = values.OfType<string>();
 
