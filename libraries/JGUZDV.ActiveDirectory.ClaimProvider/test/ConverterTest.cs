@@ -10,10 +10,10 @@ namespace JGUZDV.ActiveDirectory.ClaimProvider.Tests
         public void ByteGuidConverter_Converts_Byte_To_Guid()
         {
             var guid = Guid.NewGuid();
-            var sut = new ByteGuidConverter();
+            var sut = new ByteConverter();
 
             var values = new object[] { guid.ToByteArray() };
-            var result = sut.ConvertProperty(values);
+            var result = sut.ConvertProperty(values, "Base64");
 
             Assert.NotNull(result);
             Assert.True(result.Count() == 1);
