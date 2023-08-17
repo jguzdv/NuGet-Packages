@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+@using Microsoft.Extensions.DependencyInjection;
 @using Microsoft.Extensions.Localization;
 
 @typeparam TResult
@@ -6,10 +7,6 @@
 @code {
     [Inject, NotNull] 
     private IStringLocalizer<ComponentStrings>? LR { get; set; }
-    
-    [Inject, NotNull] 
-    private IWebAssemblyHostEnvironment? HE { get; set; }
-
 
     [Parameter]
     public Task<TResult>? Task { get; set; }
@@ -49,7 +46,7 @@
 
 
     [Parameter]
-    public bool AlwaysExposeException { get; set; }
+    public bool ExposeException { get; set; }
 
     protected override async Task OnParametersSetAsync()
     {
@@ -72,7 +69,7 @@
     }
     else if (Task.IsCompleted && Task.IsFaulted)
     {
-        var ex = HE.IsDevelopment() || AlwaysExposeException ? Task.Exception : null;
+        AggregateException? ex = ExposeException ? Task.Exception : null;
         @Failed.Invoke((LR["AsyncTask.TaskFailed"], ex))
     }
     else if (!Task.IsCompleted)
