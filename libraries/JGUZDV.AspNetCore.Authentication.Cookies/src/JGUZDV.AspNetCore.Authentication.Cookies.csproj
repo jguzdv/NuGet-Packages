@@ -10,7 +10,7 @@
         <Version>1.0.0</Version>
         <Authors>Thomas Ottenhus</Authors>
         <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
-        <PackageDescription></PackageDescription>
+        <PackageDescription>Provides a TicketStore based on IDistributedCache</PackageDescription>
 
         <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     </PropertyGroup>
