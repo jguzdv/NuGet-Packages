@@ -67,7 +67,7 @@ namespace JGUZDV.ActiveDirectory.ClaimProvider.Configuration
 
         public static IReadOnlyList<ClaimSource> KnownClaimSources = new List<ClaimSource>()
         {
-            new ("sub", "objectGuid"),
+            new ("sub", "objectGuid", "Guid"),
             new ("upn", "userPrincipalName"),
             new ("security_identifier", "objectSid", "SDDL"),
             new ("role", "msds-tokenGroupNamesGlobalAndUniversal"),
