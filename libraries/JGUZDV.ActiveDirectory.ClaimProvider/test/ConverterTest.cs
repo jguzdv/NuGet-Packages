@@ -13,7 +13,7 @@ namespace JGUZDV.ActiveDirectory.ClaimProvider.Tests
             var sut = new ByteConverter();
 
             var values = new object[] { guid.ToByteArray() };
-            var result = sut.ConvertProperty(values, "Base64");
+            var result = sut.ConvertProperty(values, "Guid");
 
             Assert.NotNull(result);
             Assert.True(result.Count() == 1);
