@@ -7,6 +7,14 @@ To use the ClientStorage you need an implementation of IMemoryCache, IKeyValueSt
 
 ## Using the Storage
 
+```
+//use DI
+services.AddScoped<ClientStorage>();
+
+//or new one up
+var store = new ClientStorage(...);
+```
+
 ### Registration
 You can register an entry like so
 ```csharp
