@@ -9,4 +9,5 @@ public class KeyManagerOptions
     public TimeSpan RetryDelay { get; set; } = TimeSpan.FromSeconds(15);
 
     public TimeSpan MaxKeyAge { get; set; } = TimeSpan.FromDays(60);
+    public TimeSpan KeyRetention { get; set; } = TimeSpan.FromDays(30);
 }

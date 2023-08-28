@@ -14,6 +14,8 @@ public class X509KeyStore
 
     private readonly Dictionary<KeyUsage, List<X509SecurityKey>> _securityKeys;
 
+    internal event EventHandler? KeyStoreUpdated;
+
     public X509KeyStore(
         TimeProvider timeProvider,
         IOptions<KeyManagerOptions> options,
@@ -30,6 +32,8 @@ public class X509KeyStore
         };
     }
 
+
+    private void OnKeyStoreUpdated() => KeyStoreUpdated?.Invoke(this, EventArgs.Empty);
 
 
     internal async Task<List<X509SecurityKey>> GetKeysAsync(KeyUsage keyUsage, bool forceCacheReload,
@@ -49,6 +53,8 @@ public class X509KeyStore
 
         return _securityKeys[keyUsage];
     }
+
+    internal List<X509SecurityKey> GetKeys(KeyUsage keyUsage) => _securityKeys[keyUsage];
 
 
 
@@ -88,18 +94,14 @@ public class X509KeyStore
 
         var certificateBytes = securityKey.Certificate.Export(X509ContentType.Pkcs12, string.Empty);
         await File.WriteAllBytesAsync(fileName, certificateBytes, ct);
+
+        _securityKeys[keyUsage].Add(securityKey);
+        OnKeyStoreUpdated();
     }
 
 
 
-    internal async Task PurgeExpiredKeysAsync(TimeSpan threshold, CancellationToken ct)
-    {
-        var keyUsages = new[] { KeyUsage.Signature, KeyUsage.Encryption };
-        foreach (var keyUsage in keyUsages)
-            await PurgeExpiredKeysAsync(keyUsage, threshold, ct);
-    }
-
-    private async Task PurgeExpiredKeysAsync(KeyUsage keyUsage, TimeSpan threshold, CancellationToken ct)
+    internal async Task PurgeExpiredKeysAsync(KeyUsage keyUsage, DateTimeOffset refDate, CancellationToken ct)
     {
         var keyStorePath = _options.Value.KeyStorePath;
         var pattern = $"*.{GetFileExtension(keyUsage)}";
@@ -108,7 +110,7 @@ public class X509KeyStore
         foreach (var fileName in Directory.EnumerateFiles(keyStorePath, pattern).ToList())
         {
             var key = await LoadKeyAsync(fileName, ct);
-            if (key.Certificate.NotAfter + threshold >= utcNow)
+            if (key.Certificate.NotAfter > refDate)
                 continue;
 
             File.Delete(fileName);
