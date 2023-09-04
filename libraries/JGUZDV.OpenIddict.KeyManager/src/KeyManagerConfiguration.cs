@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
 
 using OpenIddict.Server;
@@ -21,10 +23,10 @@ public class KeyManagerConfiguration : IConfigureOptions<OpenIddictServerOptions
 
     public void Configure(OpenIddictServerOptions options)
     {
-        foreach(var signingKey in _keyStore.GetKeys(KeyUsage.Signature))
+        foreach(var signingKey in _keyStore.GetCachedKeys(KeyUsage.Signature))
             AddSignatureKey(signingKey);
 
-        foreach(var encryptionKey in _keyStore.GetKeys(KeyUsage.Encryption))
+        foreach(var encryptionKey in _keyStore.GetCachedKeys(KeyUsage.Encryption))
             AddEncryptionKey(encryptionKey);
 
 
@@ -90,5 +92,32 @@ public class KeyManagerConfiguration : IConfigureOptions<OpenIddictServerOptions
             throw new InvalidOperationException("Neither RsaSha256 nor HmacSha256 ar supported by the encryption key");
         }
     }
+}
+
+public class KeyConfigurationProvider : IConfigurationProvider
+{
+    public IEnumerable<string> GetChildKeys(IEnumerable<string> earlierKeys, string parentPath)
+    {
+        throw new NotImplementedException();
+    }
+
+    public IChangeToken GetReloadToken()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void Load()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void Set(string key, string value)
+    {
+        throw new NotImplementedException();
+    }
+
+    public bool TryGet(string key, out string value)
+    {
+        throw new NotImplementedException();
     }
 }

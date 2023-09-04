@@ -18,7 +18,6 @@ public class KeyManagerService : IHostedService
     private readonly CancellationTokenSource _cts = new();
 
     private Timer? _timer;
-    private bool _reloadRequested;
 
     public KeyManagerService(
         X509KeyStore keyStore,
@@ -44,12 +43,9 @@ public class KeyManagerService : IHostedService
         {
             _timer = new Timer(ExecuteTimer, null,
                 _options.Value.KeyReloadInterval, _options.Value.KeyReloadInterval);
-
-            _reloadRequested = true;
-            ReloadIfRequested();
-
-            _keyStore.KeyStoreUpdated += OnKeyStoreUpdated;
         }
+
+        _config.Reload();
     }
 
     public async Task StopAsync(CancellationToken ct)
@@ -60,36 +56,31 @@ public class KeyManagerService : IHostedService
         {
             _timer.Change(Timeout.Infinite, 0);
             await _timer.DisposeAsync();
-
-            _keyStore.KeyStoreUpdated -= OnKeyStoreUpdated;
         }
     }
 
 
-    private async void ExecuteTimer(object? state)
-        => await ExecuteKeyManagement(_cts.Token);
-
-    private void OnKeyStoreUpdated(object? sender, EventArgs args)
-        => _reloadRequested = true;
-
-
-    private void ReloadIfRequested()
-    {
-        _reloadRequested = false;
-        _config.Reload();
-    }
+    private void ExecuteTimer(object? state)
+        => _ = ExecuteKeyManagement(_cts.Token);
 
 
     private async Task ExecuteKeyManagement(CancellationToken ct)
     {
+        await _keyStore.ReloadKeysAsync(ct);
+        
+        if(_options.Value.DisableKeyGeneration)
+        {
+            _config.Reload();
+            return;
+        }
+
         _logger.LogInformation("Starting automatic key generation.");
         await Task.WhenAll(
             ExecuteKeyManagement(KeyUsage.Signature, ct),
             ExecuteKeyManagement(KeyUsage.Encryption, ct)
         );
 
-        _reloadRequested = true;
-        ReloadIfRequested();
+        _config.Reload();
     }
 
     private async Task ExecuteKeyManagement(KeyUsage keyUsage, CancellationToken ct)
@@ -141,9 +132,11 @@ public class KeyManagerService : IHostedService
     
 
 
-    private Task EnsureUsableKeysAsync(CancellationToken ct)
+    private async Task EnsureUsableKeysAsync(CancellationToken ct)
     {
-        return Task.WhenAll(
+        await _keyStore.ReloadKeysAsync(ct);
+
+        await Task.WhenAll(
             EnsureUsableKeysAsync(KeyUsage.Signature, ct),
             EnsureUsableKeysAsync(KeyUsage.Encryption, ct)
         );
@@ -159,8 +152,6 @@ public class KeyManagerService : IHostedService
             {
                 await Task.Delay(_options.Value.RetryDelay, ct);
             }
-
-            _reloadRequested = true;
         } 
 
         async Task<bool> CheckIfKeyExists()

@@ -14,8 +14,6 @@ public class X509KeyStore
 
     private readonly Dictionary<KeyUsage, List<X509SecurityKey>> _securityKeys;
 
-    internal event EventHandler? KeyStoreUpdated;
-
     public X509KeyStore(
         TimeProvider timeProvider,
         IOptions<KeyManagerOptions> options,
@@ -33,41 +31,23 @@ public class X509KeyStore
     }
 
 
-    private void OnKeyStoreUpdated() => KeyStoreUpdated?.Invoke(this, EventArgs.Empty);
+    internal List<X509SecurityKey> GetKeys(KeyUsage keyUsage)
+        => LoadKeys(keyUsage);
 
-
-    internal async Task<List<X509SecurityKey>> GetKeysAsync(KeyUsage keyUsage, bool forceCacheReload,
-        CancellationToken ct)
-    {
-        if(forceCacheReload || !_securityKeys[keyUsage].Any())
-        {
-            try
-            {
-                _securityKeys[keyUsage] = await LoadKeysAsync(keyUsage, ct);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Loading keys was not possible.");
-            }
-        }
-
-        return _securityKeys[keyUsage];
-    }
-
-    internal List<X509SecurityKey> GetKeys(KeyUsage keyUsage) => _securityKeys[keyUsage];
+    internal List<X509SecurityKey> GetCachedKeys(KeyUsage keyUsage) => _securityKeys[keyUsage];
 
 
 
-    private async Task<List<X509SecurityKey>> LoadKeysAsync(KeyUsage keyUsage, CancellationToken ct)
+    private List<X509SecurityKey> LoadKeys(KeyUsage keyUsage)
     {
         var keyStorePath = _options.Value.KeyStorePath;
         var pattern = $"*.{GetFileExtension(keyUsage)}";
 
         var utcNow = _timeProvider.GetUtcNow();
         var securityKeys = new List<X509SecurityKey>();
-        foreach(var fileName in Directory.EnumerateFiles(keyStorePath, pattern))
+        foreach (var fileName in Directory.EnumerateFiles(keyStorePath, pattern))
         {
-            var key = await LoadKeyAsync(fileName, ct);
+            var key = LoadKey(fileName);
             if (key.Certificate.NotAfter > utcNow)
                 securityKeys.Add(key);
         }
@@ -76,9 +56,9 @@ public class X509KeyStore
     }
 
 
-    private static async Task<X509SecurityKey> LoadKeyAsync(string fileName, CancellationToken ct)
+    private static X509SecurityKey LoadKey(string fileName)
     {
-        var certificateBytes = await File.ReadAllBytesAsync(fileName, ct);
+        var certificateBytes = File.ReadAllBytes(fileName);
         var certificate = new X509Certificate2(certificateBytes);
         return new X509SecurityKey(certificate);
     }
@@ -96,20 +76,18 @@ public class X509KeyStore
         await File.WriteAllBytesAsync(fileName, certificateBytes, ct);
 
         _securityKeys[keyUsage].Add(securityKey);
-        OnKeyStoreUpdated();
     }
 
 
 
-    internal async Task PurgeExpiredKeysAsync(KeyUsage keyUsage, DateTimeOffset refDate, CancellationToken ct)
+    internal void PurgeExpiredKeys(KeyUsage keyUsage, DateTimeOffset refDate)
     {
         var keyStorePath = _options.Value.KeyStorePath;
         var pattern = $"*.{GetFileExtension(keyUsage)}";
 
-        var utcNow = _timeProvider.GetUtcNow();
         foreach (var fileName in Directory.EnumerateFiles(keyStorePath, pattern).ToList())
         {
-            var key = await LoadKeyAsync(fileName, ct);
+            var key = LoadKey(fileName);
             if (key.Certificate.NotAfter > refDate)
                 continue;
 
