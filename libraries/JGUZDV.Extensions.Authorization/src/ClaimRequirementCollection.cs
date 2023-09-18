@@ -21,7 +21,20 @@ public sealed class ClaimRequirementCollection : ClaimRequirement
     public List<ClaimRequirement> Requirements { get; }
     public RequirementCollectionMatchType MatchType { get; }
 
-    public override ClaimRequirementCollection Clone()
+
+
+    public sealed override bool IsSatisfiedBy(ClaimsPrincipal? principal)
+        => principal != null && 
+        MatchType switch
+        {
+            RequirementCollectionMatchType.MatchAll => Requirements.Any() && Requirements.All(r => r.IsSatisfiedBy(principal)),
+            RequirementCollectionMatchType.MatchAny => Requirements.Any(r => r.IsSatisfiedBy(principal)),
+            _ => false
+        };
+
+
+
+    public sealed override ClaimRequirementCollection Clone()
     {
         var requirements = new List<ClaimRequirement>();
         foreach (var requirement in Requirements)
@@ -32,14 +45,15 @@ public sealed class ClaimRequirementCollection : ClaimRequirement
         return result;
     }
 
-    public sealed override bool IsSatisfiedBy(ClaimsPrincipal? principal)
-        => principal != null && 
-        MatchType switch
-        {
-            RequirementCollectionMatchType.MatchAll => Requirements.Any() && Requirements.All(r => r.IsSatisfiedBy(principal)),
-            RequirementCollectionMatchType.MatchAny => Requirements.Any(r => r.IsSatisfiedBy(principal)),
-            _ => false
-        };
+    public sealed override bool Equals(ClaimRequirement? other)
+    {
+        if (other is not ClaimRequirementCollection c)
+            return false;
+
+        return MatchType == c.MatchType &&
+            Requirements.Count == c.Requirements.Count &&
+            Requirements.SequenceEqual(c.Requirements);
+    }
 }
 
 public enum RequirementCollectionMatchType

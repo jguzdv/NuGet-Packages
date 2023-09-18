@@ -6,7 +6,7 @@ namespace JGUZDV.Extensions.Authorization;
 public sealed class ClaimValueRequirement : ClaimRequirement
 {
     [JsonConstructor]
-    public ClaimValueRequirement(string claimType, string claimValue, 
+    public ClaimValueRequirement(string claimType, string claimValue,
         bool disableWildcardMatch,
         StringComparison claimTypeComparison,
         StringComparison claimValueComparison)
@@ -22,8 +22,8 @@ public sealed class ClaimValueRequirement : ClaimRequirement
     }
 
     public ClaimValueRequirement(string claimType, string claimValue) : this(claimType, claimValue, false) { }
-    
-    public ClaimValueRequirement(string claimType, string claimValue, bool disableWildcardMatch) 
+
+    public ClaimValueRequirement(string claimType, string claimValue, bool disableWildcardMatch)
         : this(claimType, claimValue, disableWildcardMatch, StringComparison.OrdinalIgnoreCase, StringComparison.Ordinal) { }
 
     public string ClaimType { get; }
@@ -33,14 +33,32 @@ public sealed class ClaimValueRequirement : ClaimRequirement
     public StringComparison ClaimTypeComparison { get; }
     public StringComparison ClaimValueComparison { get; }
 
+
     public sealed override bool IsSatisfiedBy(ClaimsPrincipal? principal)
-        =>  principal != null && principal.HasClaim(c =>
+        => principal != null && principal.HasClaim(c =>
             (c.Type.Equals(ClaimType, ClaimTypeComparison) || (!DisableWildcardMatch && ClaimType.Equals("*"))) &&
             (c.Value.Equals(ClaimValue, ClaimValueComparison) || (!DisableWildcardMatch && ClaimValue.Equals("*")))
         );
 
-    public override ClaimValueRequirement Clone()
+
+
+    public sealed override ClaimValueRequirement Clone()
     {
-        return new ClaimValueRequirement(ClaimType,ClaimValue,DisableWildcardMatch,ClaimTypeComparison,ClaimValueComparison);
+        return new ClaimValueRequirement(
+            ClaimType, ClaimValue, 
+            DisableWildcardMatch, 
+            ClaimTypeComparison, ClaimValueComparison);
+    }
+
+    public sealed override bool Equals(ClaimRequirement? other)
+    {
+        if (other is not ClaimValueRequirement c)
+            return false;
+
+        return ClaimType.Equals(c.ClaimType) &&
+            ClaimValue.Equals(c.ClaimValue) &&
+            DisableWildcardMatch == c.DisableWildcardMatch &&
+            ClaimTypeComparison == c.ClaimTypeComparison &&
+            ClaimValueComparison == c.ClaimValueComparison;
     }
 }
