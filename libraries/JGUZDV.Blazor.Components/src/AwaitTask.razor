@@ -3,25 +3,47 @@
 @using Microsoft.Extensions.Localization;
 
 @typeparam TResult
+@attribute [Obsolete("Use <Await> and <AwaitResult>")]
 
 @code {
     [Inject, NotNull] 
     private IStringLocalizer<ComponentStrings>? LR { get; set; }
 
+    /// <summary>
+    /// The Task that will be awaited before showing the contents of ChildContent / WhenFinished
+    /// </summary>
     [Parameter]
     public Task<TResult>? Task { get; set; }
 
 
-    [Parameter]
-    public RenderFragment<TResult> ChildContent { get => Finished; set => Finished = value; }
-
+    /// <summary>
+    /// The render fragment that will be shown, when the task finished successfully.
+    /// </summary>
     [Parameter]
     public RenderFragment<TResult> Finished { get; set; } = (result) => @<div>@result?.ToString()</div>;
 
-
     [Parameter]
-    public RenderFragment Running { get; set; } = @<ActivityIndicator />;
+    public RenderFragment<TResult> ChildContent { get => Finished; set => Finished = value; }
 
+
+    /// <summary>
+    /// Wraps the default &lt;ActivityIndicator /&gt in a &lt;div class=&quot;RunningClass&quot; /&gt;
+    /// </summary>
+    [Parameter]
+    public string? RunningClass { get; set; }
+
+    /// <summary>
+    /// The render fragment that will be shown, when the task is still running.
+    /// By default this will be &ltActivityIndicator /&gt
+    /// </summary>
+    [Parameter]
+    public RenderFragment? Running { get; set; } =@<ActivityIndicator />;
+
+    /// <summary>
+    /// The render fragment that will be shown, when the task failed.
+    /// By default it shows a generic message and hides the exception.
+    /// To expose the exception set ExposeException to true.
+    /// </summary>
     [Parameter]
     public RenderFragment<(string Message, AggregateException? Exception)> Failed { get; set; } =
         (data) =>
@@ -41,12 +63,18 @@
             </div>
     ;
 
+    /// <summary>
+    /// Makes the failed render-fragment expose the exception.
+    /// </summary>
+    [Parameter]
+    public bool ExposeException { get; set; }
+
+    /// <summary>
+    /// Shown, if the task is null.
+    /// </summary>
     [Parameter]
     public RenderFragment? Empty { get; set; }
 
-
-    [Parameter]
-    public bool ExposeException { get; set; }
 
     protected override async Task OnParametersSetAsync()
     {
@@ -74,7 +102,16 @@
     }
     else if (!Task.IsCompleted)
     {
-        @Running
+        @if (RunningClass != null)
+        {
+            <div class="@RunningClass">
+                @Running
+            </div>
+        }
+        else
+        {
+            @Running
+        }
     }
 } 
 else
