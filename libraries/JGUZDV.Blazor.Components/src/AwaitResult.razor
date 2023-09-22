@@ -1,0 +1,121 @@
+﻿@using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+@using Microsoft.Extensions.DependencyInjection;
+@using Microsoft.Extensions.Localization;
+
+@typeparam TResult
+
+@code {
+    [Inject, NotNull] 
+    private IStringLocalizer<ComponentStrings>? LR { get; set; }
+
+    /// <summary>
+    /// The Task that will be awaited before showing the contents of ChildContent / WhenFinished
+    /// </summary>
+    [Parameter]
+    public Task<TResult>? Task { get; set; }
+
+
+    /// <summary>
+    /// The render fragment that will be shown, when the task finished successfully.
+    /// </summary>
+    [Parameter]
+    public RenderFragment<TResult> Finished { get; set; } = (result) => @<div>@result?.ToString()</div>;
+
+    [Parameter]
+    public RenderFragment<TResult> ChildContent { get => Finished; set => Finished = value; }
+
+
+    /// <summary>
+    /// Wraps the default &lt;ActivityIndicator /&gt in a &lt;div class=&quot;RunningClass&quot; /&gt;
+    /// </summary>
+    [Parameter]
+    public string? RunningClass { get; set; }
+
+    /// <summary>
+    /// The render fragment that will be shown, when the task is still running.
+    /// By default this will be &ltActivityIndicator /&gt
+    /// </summary>
+    [Parameter]
+    public RenderFragment? Running { get; set; } =@<ActivityIndicator />;
+
+    /// <summary>
+    /// The render fragment that will be shown, when the task failed.
+    /// By default it shows a generic message and hides the exception.
+    /// To expose the exception set ExposeException to true.
+    /// </summary>
+    [Parameter]
+    public RenderFragment<(string Message, AggregateException? Exception)> Failed { get; set; } =
+        (data) =>
+            @<div class="alert alert-danger">
+                @data.Message
+                @if(data.Exception != null)
+                {
+                    var ex = data.Exception;
+                    <pre>
+                        @(ex.Message + "\r\n")
+                        @for (int i = 0; i < ex.InnerExceptions.Count; i++)
+                        {
+                            @("\t" + ex.InnerExceptions[i] + "\r\n")
+                        }
+                    </pre>    
+                }
+            </div>
+    ;
+
+    /// <summary>
+    /// Makes the failed render-fragment expose the exception.
+    /// </summary>
+    [Parameter]
+    public bool ExposeException { get; set; }
+
+    /// <summary>
+    /// Shown, if the task is null.
+    /// </summary>
+    [Parameter]
+    public RenderFragment? Empty { get; set; }
+
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+
+        if (Task?.IsCompleted != true)
+        {
+            _ = Task?.ContinueWith(t =>
+            {
+                StateHasChanged();
+            });
+        }
+    }
+}
+
+@if(Task != null) {
+    if(Task.IsCompletedSuccessfully)
+    {
+        @Finished.Invoke(Task.Result)
+    }
+    else if (Task.IsCompleted && Task.IsFaulted)
+    {
+        AggregateException? ex = ExposeException ? Task.Exception : null;
+        @Failed.Invoke((LR["AsyncTask.TaskFailed"], ex))
+    }
+    else if (!Task.IsCompleted)
+    {
+        @if (RunningClass != null)
+        {
+            <div class="@RunningClass">
+                @Running
+            </div>
+        }
+        else
+        {
+            @Running
+        }
+    }
+} 
+else
+{
+    if(Empty != null) {
+        @Empty
+    }
+}
