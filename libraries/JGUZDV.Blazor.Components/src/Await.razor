@@ -2,9 +2,6 @@
 @using Microsoft.Extensions.DependencyInjection;
 @using Microsoft.Extensions.Localization;
 
-@typeparam TResult
-@attribute [Obsolete("Use <Await> and <AwaitResult>")]
-
 @code {
     [Inject, NotNull] 
     private IStringLocalizer<ComponentStrings>? LR { get; set; }
@@ -13,17 +10,17 @@
     /// The Task that will be awaited before showing the contents of ChildContent / WhenFinished
     /// </summary>
     [Parameter]
-    public Task<TResult>? Task { get; set; }
+    public Task? Task { get; set; }
 
 
     /// <summary>
     /// The render fragment that will be shown, when the task finished successfully.
     /// </summary>
     [Parameter]
-    public RenderFragment<TResult> Finished { get; set; } = (result) => @<div>@result?.ToString()</div>;
+    public RenderFragment? Finished { get; set; } = @<div></div>;
 
     [Parameter]
-    public RenderFragment<TResult> ChildContent { get => Finished; set => Finished = value; }
+    public RenderFragment? ChildContent { get => Finished; set => Finished = value; }
 
 
     /// <summary>
@@ -37,7 +34,7 @@
     /// By default this will be &ltActivityIndicator /&gt
     /// </summary>
     [Parameter]
-    public RenderFragment? Running { get; set; } =@<ActivityIndicator />;
+    public RenderFragment? Running { get; set; } = @<ActivityIndicator />;
 
     /// <summary>
     /// The render fragment that will be shown, when the task failed.
@@ -93,7 +90,7 @@
 @if(Task != null) {
     if(Task.IsCompletedSuccessfully)
     {
-        @Finished.Invoke(Task.Result)
+        @Finished
     }
     else if (Task.IsCompleted && Task.IsFaulted)
     {
