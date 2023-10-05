@@ -1,0 +1,52 @@
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.AspNetCore.Components.Forms
+
+<Modal Title="@Title" TModel="string" @ref="_modal">
+    <Body>
+        <p>@context.Model</p>
+    </Body>
+    <Footer>
+        <div class="btn-group">
+            @if (AcceptText != null)
+            {
+                <button class="btn btn-success" @onclick="() => context.Modal.Close(ModalResult.Accepted)">@AcceptText</button>
+            }
+            @if (DenyText != null)
+            {
+                <button class="btn btn-danger" @onclick="() => context.Modal.Close(DenyResult)">@DenyText</button>
+            }
+            @if (CancelText != null)
+            {
+                <button class="btn btn-secondary" @onclick="() => context.Modal.Close(CancelResult)">@CancelText</button>
+            }
+        </div>
+    </Footer>
+</Modal>
+
+@code {
+    [Parameter]
+    public string? Title { get; set; }
+
+    [Parameter]
+    public string? AcceptText { get; set; }
+
+    [Parameter]
+    public string? DenyText { get; set; }
+
+    [Parameter]
+    public string? CancelText { get; set; }
+
+
+    [Parameter]
+    public ModalResult DenyResult { get; set; } = ModalResult.Dismissed;
+
+    [Parameter]
+    public ModalResult CancelResult { get; set; } = ModalResult.Undefined;
+
+
+    private Modal<string>? _modal { get; set; }
+
+    public Task<ModalResult> ShowModal(string prompt) 
+        => _modal?.ShowModal(prompt) 
+        ?? throw new InvalidOperationException($"@ref has not been resolved before calling {nameof(ShowModal)}. You might need to wait for a render cycle to complete.");
+}
