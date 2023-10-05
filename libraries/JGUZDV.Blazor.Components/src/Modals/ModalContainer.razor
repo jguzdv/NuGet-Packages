@@ -1,18 +1,18 @@
+@using Microsoft.AspNetCore.Components.Web
 @inject ModalService _modalService
+
+@if (Current != null)
+{
+    <div class="modal-backdrop fade @(ShouldShow ? "show" : null)"></div>
+}
 
 @foreach (var modal in _modalService.Modals)
 {
     var willShow = ShouldShow && modal == Current;
 
-    <div @key="modal" class="modal fade @(willShow ? "show d-block" : "d-none") tabindex="-1" aria-modal="true" role="dialog">
+    <div @key="modal" class="modal fade @(willShow ? "show d-block" : "d-none")" tabindex="-1" aria-modal="true" role="dialog">
         @modal.ChildContent
     </div>
-}
-
-
-@if (Current != null)
-{
-    <div class="modal-backdrop fade @(ShouldShow ? "show" : null)" @onclick="@(() => Current.Close(ModalResult.Dismissed))"></div>
 }
 
 

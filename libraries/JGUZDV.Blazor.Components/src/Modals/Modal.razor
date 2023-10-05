@@ -1,5 +1,4 @@
 @using Microsoft.AspNetCore.Components.Web
-@using Microsoft.AspNetCore.Components.Forms
 
 @implements IModal
 @inject ModalService _modalService
@@ -7,6 +6,8 @@
 
 @code {
     private ModalContext? _context;
+
+    private RenderFragment<ModalContext>? _renderFragment;
 
     [Parameter]
     public RenderFragment<ModalContext>? ChildContent { get; set; }
@@ -21,6 +22,7 @@
     [Parameter]
     public RenderFragment<ModalContext>? Footer { get; set; }
 
+
     [Parameter]
     public string? Title { get; set; }
 
@@ -33,7 +35,8 @@
     [Parameter]
     public string? ModalFooterClasses { get; set; }
 
-    RenderFragment IModal.ChildContent => ChildContent?.Invoke(_context);
+
+    RenderFragment IModal.ChildContent => _renderFragment.Invoke(_context);
 
     protected override void OnParametersSet()
     {
@@ -42,34 +45,35 @@
         if (Title != null && Header != null)
             throw new InvalidOperationException($"{nameof(Title)} cannot be set, if {nameof(Header)} is set.");
 
-        if (Title != null)
-        {
-            Header = (ctx) => __builder => {
-                <h5 class="modal-title">Modal title</h5>
-                <button type="button" class="btn-close" aria-label="Close" @onclick="() => ctx.Modal.Close(ModalResult.Dismissed)"></button>
-            };
-        }
-
-        if ((Header != null || Footer != null) && Body == null)
+        if ((Title != null || Header != null || Footer != null) && Body == null)
             throw new InvalidOperationException($"{nameof(Header)}, {nameof(Title)} or {nameof(Footer)} may only be set together with {nameof(Body)}");
 
         if (Body != null && Content != null)
             throw new InvalidOperationException($"{nameof(Body)} may not be set, if {nameof(Content)} is set.");
 
-        if (Body != null)
-        {
-            Content = (ctx) =>
+        RenderFragment<ModalContext>? content = Body == null
+            ? Content
+            : (ctx) =>
                 @<div class="modal-content">
-                    @if (Header != null)
+                    @if (Header != null || Title != null)
                     {
                         <div class="modal-header @ModalHeaderClasses">
-                            @if(Title != null)
+                        @if (Header != null)
+                        {
                             @Header.Invoke(ctx)
+                        } 
+                        else
+                        {
+                            <h5 class="modal-title">@Title</h5>
+                            <button type="button" class="btn-close" aria-label="Close" @onclick="() => ctx.Modal.Close(ModalResult.Dismissed)"></button>
+                        }
                         </div>
                     }
+
                     <div class="modal-body @ModalBodyClasses">
                         @Body.Invoke(ctx)
                     </div>
+
                     @if (Footer != null)
                     {
                         <div class="modal-footer @ModalFooterClasses">
@@ -77,18 +81,16 @@
                         </div>
                     }
                 </div>;
-        }
 
-        if (Content != null && ChildContent != null)
+        if (content != null && ChildContent != null)
             throw new InvalidOperationException($"{nameof(Content)} may not be set, if {nameof(ChildContent)} is set.");
 
-        if (Content != null)
-        {
-            ChildContent = (ctx) =>
+        _renderFragment = content == null
+            ? ChildContent
+            : (ctx) =>
                 @<div class="modal-dialog @ModalDialogClasses" @onclick:stopPropagation="true">
-                    @Content.Invoke(ctx)
+                    @content.Invoke(ctx)
                 </div>;
-        }
     }
 
 
@@ -98,7 +100,7 @@
         return _modalService.ShowModal(this);
     }
 
-    public void CloseModal()
+    public void Close()
         => Close(ModalResult.Undefined);
     public void Close(ModalResult result)
         => _modalService.Close(this, result);

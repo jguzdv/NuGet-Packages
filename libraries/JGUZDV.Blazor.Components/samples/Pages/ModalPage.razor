@@ -1,7 +1,10 @@
 ﻿@page "/modal"
 @using JGUZDV.Blazor.Components.Modals;
 
-<button @onclick="() => OpenModal()">Klick mich!</button>
+<button @onclick="() => OpenModal1()">Klick mich!</button>
+<button @onclick="() => OpenModal2()">Klick mich!</button>
+<button @onclick="() => OpenModal3()">Klick mich!</button>
+<button @onclick="() => OpenModal4()">Klick mich!</button>
 
 <p>@(Container?.Value ?? "- kein Wert -")</p>
 
@@ -9,8 +12,8 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Modal title</h5>
-                <button type="button" class="btn-close" aria-label="Close" @onclick="() => context.Modal.CloseModal()"></button>
+                <h5 class="modal-title">Modal with ChildContent</h5>
+                <button type="button" class="btn-close" aria-label="Close" @onclick="() => context.Modal.Close()"></button>
             </div>
             <div class="modal-body">
                 <input @bind="context.Model.Value" />
@@ -27,8 +30,8 @@
     <Content>
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Modal title</h5>
-                <button type="button" class="btn-close" aria-label="Close" @onclick="() => context.Modal.CloseModal()"></button>
+                <h5 class="modal-title">Modal with Content</h5>
+                <button type="button" class="btn-close" aria-label="Close" @onclick="() => context.Modal.Close()"></button>
             </div>
             <div class="modal-body">
                 <input @bind="context.Model.Value" />
@@ -43,8 +46,8 @@
 
 <JGUZDV.Blazor.Components.Modals.Modal @ref="MyModalWithBody" TModel="MyContainer">
     <Header>
-        <h5 class="modal-title">Modal title</h5>
-        <button type="button" class="btn-close"  aria-label="Close" @onclick="() => context.Modal.CloseModal()"></button>
+        <h5 class="modal-title">Modal with Body parts</h5>
+        <button type="button" class="btn-close"  aria-label="Close" @onclick="() => context.Modal.Close()"></button>
     </Header>
     <Body>
         <input @bind="context.Model.Value" />
@@ -55,7 +58,7 @@
     </Footer>
 </JGUZDV.Blazor.Components.Modals.Modal>
 
-<JGUZDV.Blazor.Components.Modals.Modal @ref="MyModalWithBodyAndTitle" TModel="MyContainer" Title="This is a title!">
+<JGUZDV.Blazor.Components.Modals.Modal @ref="MyModalWithBodyAndTitle" TModel="MyContainer" Title="Modal with title">
     <Body>
         <input @bind="context.Model.Value" />
     </Body>
@@ -74,7 +77,6 @@
     }
 
     public MyContainer Container { get; set; }
-    //public ModalContext<MyContainer>? ModalContext { get; set; }
 
     public Modal<MyContainer> MyModalWithChildContent { get; set; }
     public Modal<MyContainer> MyModalWithContent { get; set; }
@@ -85,8 +87,23 @@
         public string Value { get; set; } = "Hallo!";
     }
 
-    private async Task OpenModal()
+    private Task OpenModal1()
     {
-        
+        return MyModalWithChildContent.ShowModal(Container);
+    }
+
+    private Task OpenModal2()
+    {
+        return MyModalWithContent.ShowModal(Container);
+    }
+
+    private Task OpenModal3()
+    {
+        return MyModalWithBody.ShowModal(Container);
+    }
+
+    private Task OpenModal4()
+    {
+        return MyModalWithBodyAndTitle.ShowModal(Container);
     }
 }
