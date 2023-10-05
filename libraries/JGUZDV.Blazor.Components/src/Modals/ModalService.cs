@@ -16,7 +16,7 @@ namespace JGUZDV.Blazor.Components.Modals
             _logger = logger;
         }
 
-        public Task ShowModal(IModal modal)
+        public Task<ModalResult> ShowModal(IModal modal)
         {
             _modals.Add(new(modal));
 
@@ -24,7 +24,7 @@ namespace JGUZDV.Blazor.Components.Modals
             return _modals.Last().TaskCompletionSource.Task;
         }
 
-        public void CloseModal(IModal modal)
+        public void CloseModal(IModal modal, ModalResult result)
         {
             if(!_modals.Any())
             {
@@ -38,7 +38,7 @@ namespace JGUZDV.Blazor.Components.Modals
                 return;
             }
 
-            _modals[_modals.Count - 1].TaskCompletionSource.SetResult();
+            _modals[_modals.Count - 1].TaskCompletionSource.SetResult(result);
             _modals.RemoveAt(_modals.Count - 1);
 
             ModalChanged?.Invoke(this, _modals.LastOrDefault()?.Modal);
@@ -46,7 +46,7 @@ namespace JGUZDV.Blazor.Components.Modals
 
         private record ModalCompletionSource(IModal Modal)
         {
-            public TaskCompletionSource TaskCompletionSource { get; } = new();
+            public TaskCompletionSource<ModalResult> TaskCompletionSource { get; } = new();
         }
     }
 }

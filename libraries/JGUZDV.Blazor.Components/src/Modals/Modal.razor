@@ -1,0 +1,105 @@
+@using Microsoft.AspNetCore.Components.Forms
+
+@implements IModal
+@inject ModalService _modalService
+@typeparam TModel where TModel : class
+
+@code {
+    private ModalContext? _context;
+
+    [Parameter]
+    public RenderFragment<ModalContext>? ChildContent { get; set; }
+
+    [Parameter]
+    public RenderFragment<ModalContext>? Content { get; set; }
+
+    [Parameter]
+    public RenderFragment<ModalContext>? Header { get; set; }
+    [Parameter]
+    public RenderFragment<ModalContext>? Body { get; set; }
+    [Parameter]
+    public RenderFragment<ModalContext>? Footer { get; set; }
+
+    [Parameter]
+    public string? Title { get; set; }
+
+    RenderFragment IModal.ChildContent => ChildContent?.Invoke(_context);
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        if (Title != null && Header != null)
+            throw new InvalidOperationException($"{nameof(Title)} cannot be set, if {nameof(Header)} is set.");
+
+        if (Title != null)
+        {
+            Header = (ctx) =>
+                @<div class="modal-header">
+                    <h5 class="modal-title">Modal title</h5>
+                    <button type="button" class="btn-close" aria-label="Close" @onclick="() => ctx.Dismiss()"></button>
+                </div>;
+        }
+
+        if ((Header != null || Footer != null) && Body == null)
+            throw new InvalidOperationException($"{nameof(Header)}, {nameof(Title)} or {nameof(Footer)} may only be set together with {nameof(Body)}");
+
+        if (Body != null && Content != null)
+            throw new InvalidOperationException($"{nameof(Body)} may not be set, if {nameof(Content)} is set.");
+
+        if (Body != null)
+        {
+            Content = (ctx) =>
+                @<div class="modal-content">
+                    @if (Header != null)
+                    {
+                        <div class="modal-header">
+                            @Header.Invoke(ctx)
+                        </div>
+                    }
+                    <div class="modal-body">
+                        @Body.Invoke(ctx)
+                    </div>
+                    @if (Footer != null)
+                    {
+                        <div class="modal-footer">
+                            @Footer.Invoke(ctx)
+                        </div>
+                    }
+                </div>;
+        }
+
+        if (Content != null && ChildContent != null)
+            throw new InvalidOperationException($"{nameof(Content)} may not be set, if {nameof(ChildContent)} is set.");
+
+        if (Content != null)
+        {
+            ChildContent = (ctx) =>
+                @<div class="modal-dialog">
+                    @Content.Invoke(ctx)
+                </div>;
+        }
+    }
+
+
+    public Task<ModalResult> ShowModal(TModel model)
+    {
+        _context = new ModalContext(this, model);
+        return _modalService.ShowModal(this);
+    }
+
+    public void CloseModal()
+        => CloseModal(ModalResult.Undefined);
+    public void CloseModal(ModalResult result)
+        => _modalService.CloseModal(this, result);
+
+
+    public void Accept() =>
+        _modalService.CloseModal(this, ModalResult.Accepted);
+
+    public void Dismiss()
+        => _modalService.CloseModal(this, ModalResult.Dismissed);
+
+
+    public record ModalContext(Modal<TModel> Modal, TModel Model);
+}

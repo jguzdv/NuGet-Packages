@@ -10,7 +10,7 @@
 
 @if (Current != null)
 {
-    <div class="modal-backdrop fade @ModalShowClass" @onclick="() => Current.Dismiss()"></div>
+    <div class="modal-backdrop fade @ModalShowClass" @onclick="@(() => Current.CloseModal(ModalResult.Dismissed))"></div>
 }
 
 
