@@ -1,3 +1,4 @@
+@using Microsoft.AspNetCore.Components.Web
 @using Microsoft.AspNetCore.Components.Forms
 
 @implements IModal
@@ -37,7 +38,7 @@
             Header = (ctx) =>
                 @<div class="modal-header">
                     <h5 class="modal-title">Modal title</h5>
-                    <button type="button" class="btn-close" aria-label="Close" @onclick="() => ctx.Dismiss()"></button>
+                    <button type="button" class="btn-close" aria-label="Close" @onclick="() => ctx.Modal.Close(ModalResult.Dismissed)"></button>
                 </div>;
         }
 
@@ -89,16 +90,16 @@
     }
 
     public void CloseModal()
-        => CloseModal(ModalResult.Undefined);
-    public void CloseModal(ModalResult result)
-        => _modalService.CloseModal(this, result);
+        => Close(ModalResult.Undefined);
+    public void Close(ModalResult result)
+        => _modalService.Close(this, result);
 
 
     public void Accept() =>
-        _modalService.CloseModal(this, ModalResult.Accepted);
+        _modalService.Close(this, ModalResult.Accepted);
 
     public void Dismiss()
-        => _modalService.CloseModal(this, ModalResult.Dismissed);
+        => _modalService.Close(this, ModalResult.Dismissed);
 
 
     public record ModalContext(Modal<TModel> Modal, TModel Model);

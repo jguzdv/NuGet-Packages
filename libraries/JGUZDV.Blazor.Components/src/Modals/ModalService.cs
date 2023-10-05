@@ -24,7 +24,7 @@ namespace JGUZDV.Blazor.Components.Modals
             return _modals.Last().TaskCompletionSource.Task;
         }
 
-        public void CloseModal(IModal modal, ModalResult result)
+        public void Close(IModal modal, ModalResult result)
         {
             if(!_modals.Any())
             {

@@ -2,7 +2,9 @@
 
 @foreach (var modal in _modalService.Modals)
 {
-    <div @key="modal" class="modal fade @ModalShowClass @( modal == Current ? "" : "d-none")" style="@ModalStyle" tabindex="-1" aria-modal="true" role="dialog">
+    var willShow = ShouldShow && modal == Current;
+
+    <div @key="modal" class="modal fade @(willShow ? "show d-block" : "d-none") tabindex="-1" aria-modal="true" role="dialog">
         @modal.ChildContent
     </div>
 }
@@ -10,7 +12,7 @@
 
 @if (Current != null)
 {
-    <div class="modal-backdrop fade @ModalShowClass" @onclick="@(() => Current.CloseModal(ModalResult.Dismissed))"></div>
+    <div class="modal-backdrop fade @(ShouldShow ? "show" : null)" @onclick="@(() => Current.Close(ModalResult.Dismissed))"></div>
 }
 
 
@@ -26,7 +28,7 @@
 
             Task.Delay(10).ContinueWith((t) =>
             {
-                IsShowing = Current != null;
+                ShouldShow = Current != null;
                 InvokeAsync(StateHasChanged);
             });
         };
@@ -34,8 +36,5 @@
 
     public IModal? Current { get; set; }
 
-    public bool IsShowing { get; set; }
-
-    public string? ModalShowClass => IsShowing ? "show" : null;
-    public string? ModalStyle => IsShowing ? "display: block" : null;
+    public bool ShouldShow { get; set; }
 }

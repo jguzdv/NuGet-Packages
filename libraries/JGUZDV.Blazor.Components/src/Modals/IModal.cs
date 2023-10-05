@@ -6,6 +6,6 @@ namespace JGUZDV.Blazor.Components.Modals
     {
         RenderFragment ChildContent { get; }
 
-        void CloseModal(ModalResult result);
+        void Close(ModalResult result);
     }
 }
