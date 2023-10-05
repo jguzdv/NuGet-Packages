@@ -1,0 +1,92 @@
+﻿@page "/modal"
+@using JGUZDV.Blazor.Components.Modals;
+
+<button @onclick="() => OpenModal()">Klick mich!</button>
+
+<p>@(Container?.Value ?? "- kein Wert -")</p>
+
+<JGUZDV.Blazor.Components.Modals.Modal @ref="MyModalWithChildContent" TModel="MyContainer">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="btn-close" aria-label="Close" @onclick="() => context.Modal.CloseModal()"></button>
+            </div>
+            <div class="modal-body">
+                <input @bind="context.Model.Value" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" @onclick="() => context.Modal.CloseModal(ModalResult.Dismissed)">Close</button>
+                <button type="button" class="btn btn-primary" @onclick="() => context.Modal.CloseModal(ModalResult.Accepted)">Save changes</button>
+            </div>
+        </div>
+    </div>
+</JGUZDV.Blazor.Components.Modals.Modal>
+
+<JGUZDV.Blazor.Components.Modals.Modal @ref="MyModalWithContent" TModel="MyContainer">
+    <Content>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="btn-close" aria-label="Close" @onclick="() => context.Modal.CloseModal()"></button>
+            </div>
+            <div class="modal-body">
+                <input @bind="context.Model.Value" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" @onclick="() => context.Modal.CloseModal(ModalResult.Dismissed)">Close</button>
+                <button type="button" class="btn btn-primary" @onclick="() => context.Modal.CloseModal(ModalResult.Accepted)">Save changes</button>
+            </div>
+        </div>
+    </Content>
+</JGUZDV.Blazor.Components.Modals.Modal>
+
+<JGUZDV.Blazor.Components.Modals.Modal @ref="MyModalWithBody" TModel="MyContainer">
+    <Header>
+        <h5 class="modal-title">Modal title</h5>
+        <button type="button" class="btn-close"  aria-label="Close" @onclick="() => context.Modal.CloseModal()"></button>
+    </Header>
+    <Body>
+        <input @bind="context.Model.Value" />
+    </Body>
+    <Footer>
+        <button type="button" class="btn btn-secondary" @onclick="() => context.Modal.CloseModal(ModalResult.Dismissed)">Close</button>
+        <button type="button" class="btn btn-primary" @onclick="() => context.Modal.CloseModal(ModalResult.Accepted)">Save changes</button>
+    </Footer>
+</JGUZDV.Blazor.Components.Modals.Modal>
+
+<JGUZDV.Blazor.Components.Modals.Modal @ref="MyModalWithBodyAndTitle" TModel="MyContainer" Title="This is a title!">
+    <Body>
+        <input @bind="context.Model.Value" />
+    </Body>
+    <Footer>
+        <button type="button" class="btn btn-secondary" @onclick="() => context.Modal.CloseModal(ModalResult.Dismissed)">Close</button>
+        <button type="button" class="btn btn-primary" @onclick="() => context.Modal.CloseModal(ModalResult.Accepted)">Save changes</button>
+    </Footer>
+</JGUZDV.Blazor.Components.Modals.Modal>
+
+<ModalContainer />
+
+@code {
+    public ModalPage()
+    {
+        Container = new();
+    }
+
+    public MyContainer Container { get; set; }
+    //public ModalContext<MyContainer>? ModalContext { get; set; }
+
+    public Modal<MyContainer> MyModalWithChildContent { get; set; }
+    public Modal<MyContainer> MyModalWithContent { get; set; }
+    public Modal<MyContainer> MyModalWithBody { get; set; }
+    public Modal<MyContainer> MyModalWithBodyAndTitle { get; set; }
+
+    public class MyContainer {
+        public string Value { get; set; } = "Hallo!";
+    }
+
+    private async Task OpenModal()
+    {
+        
+    }
+}
