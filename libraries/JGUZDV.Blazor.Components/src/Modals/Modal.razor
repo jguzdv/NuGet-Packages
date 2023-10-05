@@ -24,6 +24,15 @@
     [Parameter]
     public string? Title { get; set; }
 
+    [Parameter]
+    public string? ModalDialogClasses { get; set; }
+    [Parameter]
+    public string? ModalHeaderClasses { get; set; }
+    [Parameter]
+    public string? ModalBodyClasses { get; set; }
+    [Parameter]
+    public string? ModalFooterClasses { get; set; }
+
     RenderFragment IModal.ChildContent => ChildContent?.Invoke(_context);
 
     protected override void OnParametersSet()
@@ -35,11 +44,10 @@
 
         if (Title != null)
         {
-            Header = (ctx) =>
-                @<div class="modal-header">
-                    <h5 class="modal-title">Modal title</h5>
-                    <button type="button" class="btn-close" aria-label="Close" @onclick="() => ctx.Modal.Close(ModalResult.Dismissed)"></button>
-                </div>;
+            Header = (ctx) => __builder => {
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="btn-close" aria-label="Close" @onclick="() => ctx.Modal.Close(ModalResult.Dismissed)"></button>
+            };
         }
 
         if ((Header != null || Footer != null) && Body == null)
@@ -54,16 +62,17 @@
                 @<div class="modal-content">
                     @if (Header != null)
                     {
-                        <div class="modal-header">
+                        <div class="modal-header @ModalHeaderClasses">
+                            @if(Title != null)
                             @Header.Invoke(ctx)
                         </div>
                     }
-                    <div class="modal-body">
+                    <div class="modal-body @ModalBodyClasses">
                         @Body.Invoke(ctx)
                     </div>
                     @if (Footer != null)
                     {
-                        <div class="modal-footer">
+                        <div class="modal-footer @ModalFooterClasses">
                             @Footer.Invoke(ctx)
                         </div>
                     }
@@ -76,7 +85,7 @@
         if (Content != null)
         {
             ChildContent = (ctx) =>
-                @<div class="modal-dialog">
+                @<div class="modal-dialog @ModalDialogClasses" @onclick:stopPropagation="true">
                     @Content.Invoke(ctx)
                 </div>;
         }
