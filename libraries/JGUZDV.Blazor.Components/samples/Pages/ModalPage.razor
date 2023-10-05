@@ -16,8 +16,8 @@
                 <input @bind="context.Model.Value" />
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" @onclick="() => context.Modal.CloseModal(ModalResult.Dismissed)">Close</button>
-                <button type="button" class="btn btn-primary" @onclick="() => context.Modal.CloseModal(ModalResult.Accepted)">Save changes</button>
+                <button type="button" class="btn btn-secondary" @onclick="() => context.Modal.Close(ModalResult.Dismissed)">Close</button>
+                <button type="button" class="btn btn-primary" @onclick="() => context.Modal.Close(ModalResult.Accepted)">Save changes</button>
             </div>
         </div>
     </div>
@@ -34,8 +34,8 @@
                 <input @bind="context.Model.Value" />
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" @onclick="() => context.Modal.CloseModal(ModalResult.Dismissed)">Close</button>
-                <button type="button" class="btn btn-primary" @onclick="() => context.Modal.CloseModal(ModalResult.Accepted)">Save changes</button>
+                <button type="button" class="btn btn-secondary" @onclick="() => context.Modal.Close(ModalResult.Dismissed)">Close</button>
+                <button type="button" class="btn btn-primary" @onclick="() => context.Modal.Close(ModalResult.Accepted)">Save changes</button>
             </div>
         </div>
     </Content>
@@ -50,8 +50,8 @@
         <input @bind="context.Model.Value" />
     </Body>
     <Footer>
-        <button type="button" class="btn btn-secondary" @onclick="() => context.Modal.CloseModal(ModalResult.Dismissed)">Close</button>
-        <button type="button" class="btn btn-primary" @onclick="() => context.Modal.CloseModal(ModalResult.Accepted)">Save changes</button>
+        <button type="button" class="btn btn-secondary" @onclick="() => context.Modal.Close(ModalResult.Dismissed)">Close</button>
+        <button type="button" class="btn btn-primary" @onclick="() => context.Modal.Close(ModalResult.Accepted)">Save changes</button>
     </Footer>
 </JGUZDV.Blazor.Components.Modals.Modal>
 
@@ -60,8 +60,8 @@
         <input @bind="context.Model.Value" />
     </Body>
     <Footer>
-        <button type="button" class="btn btn-secondary" @onclick="() => context.Modal.CloseModal(ModalResult.Dismissed)">Close</button>
-        <button type="button" class="btn btn-primary" @onclick="() => context.Modal.CloseModal(ModalResult.Accepted)">Save changes</button>
+        <button type="button" class="btn btn-secondary" @onclick="() => context.Modal.Close(ModalResult.Dismissed)">Close</button>
+        <button type="button" class="btn btn-primary" @onclick="() => context.Modal.Close(ModalResult.Accepted)">Save changes</button>
     </Footer>
 </JGUZDV.Blazor.Components.Modals.Modal>
 
