@@ -2,7 +2,7 @@
 {
     public abstract class ModalContext
     {
-        internal Modal? Parent { get; set; }
+        internal IModal? Parent { get; set; }
         public bool Dismissed { get; set; }
 
         public Task ShowModal() {
@@ -19,6 +19,6 @@
 
     public class ModalContext<TModel> : ModalContext
     {
-        public required TModel Model { get; set; }
+        public TModel? Model { get; set; }
     }
 }

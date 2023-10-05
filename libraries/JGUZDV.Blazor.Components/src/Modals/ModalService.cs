@@ -4,12 +4,11 @@ namespace JGUZDV.Blazor.Components.Modals
 {
     internal class ModalService
     {
-        public IEnumerable<Modal> Modals => _modals.Select(x => x.Modal);
+        public IEnumerable<IModal> Modals => _modals.Select(x => x.Modal);
 
-        public event EventHandler<Modal>? ModalChanged;
-        private readonly List<(Modal Modal, TaskCompletionSource TaskCompletionSource)> _modals = new();
+        public event EventHandler<IModal?>? ModalChanged;
+        private readonly List<ModalCompletionSource> _modals = new();
 
-        
         private readonly ILogger<ModalService> _logger;
 
         public ModalService(ILogger<ModalService> logger)
@@ -17,15 +16,15 @@ namespace JGUZDV.Blazor.Components.Modals
             _logger = logger;
         }
 
-        public Task ShowModal(Modal modal)
+        public Task ShowModal(IModal modal)
         {
-            _modals.Add((modal, new()));
+            _modals.Add(new(modal));
 
             ModalChanged?.Invoke(this, modal);
             return _modals.Last().TaskCompletionSource.Task;
         }
 
-        public void CloseModal(Modal modal)
+        public void CloseModal(IModal modal)
         {
             if(!_modals.Any())
             {
@@ -42,7 +41,12 @@ namespace JGUZDV.Blazor.Components.Modals
             _modals[_modals.Count - 1].TaskCompletionSource.SetResult();
             _modals.RemoveAt(_modals.Count - 1);
 
-            ModalChanged?.Invoke(this, _modals.LastOrDefault().Modal);
+            ModalChanged?.Invoke(this, _modals.LastOrDefault()?.Modal);
+        }
+
+        private record ModalCompletionSource(IModal Modal)
+        {
+            public TaskCompletionSource TaskCompletionSource { get; } = new();
         }
     }
 }
