@@ -1,10 +1,13 @@
 ﻿@page "/modal"
 @using JGUZDV.Blazor.Components.Modals;
 
-<button @onclick="() => OpenModal1()">Klick mich!</button>
-<button @onclick="() => OpenModal2()">Klick mich!</button>
-<button @onclick="() => OpenModal3()">Klick mich!</button>
-<button @onclick="() => OpenModal4()">Klick mich!</button>
+<div class="d-flex">
+    <button @onclick="() => OpenModal1()">Modal Variante: ChildContent</button>
+    <button @onclick="() => OpenModal2()">Modal Variante: Content</button>
+    <button @onclick="() => OpenModal3()">Modal Variante: Body</button>
+    <button @onclick="() => OpenModal4()">Modal Variante: Title</button>
+    <button @onclick="() => OpenModal5()">Zwei Modale</button>
+</div>
 
 <p>@(Container?.Value ?? "- kein Wert -")</p>
 
@@ -104,6 +107,12 @@
 
     private Task OpenModal4()
     {
+        return MyModalWithBodyAndTitle.ShowModal(Container);
+    }
+
+    private Task OpenModal5()
+    {
+        _ = MyModalWithBody.ShowModal(Container);
         return MyModalWithBodyAndTitle.ShowModal(Container);
     }
 }
