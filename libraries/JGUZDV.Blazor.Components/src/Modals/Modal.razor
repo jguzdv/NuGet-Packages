@@ -36,7 +36,7 @@
     public string? ModalFooterClasses { get; set; }
 
 
-    RenderFragment IModal.ChildContent => _renderFragment.Invoke(_context);
+    RenderFragment? IModal.ChildContent => _renderFragment?.Invoke(_context);
 
     protected override void OnParametersSet()
     {
