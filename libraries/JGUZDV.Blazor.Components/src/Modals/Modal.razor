@@ -1,0 +1,125 @@
+@using Microsoft.AspNetCore.Components.Web
+
+@implements IModal
+@inject ModalService _modalService
+@typeparam TModel where TModel : class
+
+@code {
+    private ModalContext? _context;
+
+    private RenderFragment<ModalContext>? _renderFragment;
+
+    [Parameter]
+    public RenderFragment<ModalContext>? ChildContent { get; set; }
+
+    [Parameter]
+    public RenderFragment<ModalContext>? Content { get; set; }
+
+    [Parameter]
+    public RenderFragment<ModalContext>? Header { get; set; }
+    [Parameter]
+    public RenderFragment<ModalContext>? Body { get; set; }
+    [Parameter]
+    public RenderFragment<ModalContext>? Footer { get; set; }
+
+
+    [Parameter]
+    public string? Title { get; set; }
+
+    [Parameter]
+    public string? ModalDialogClasses { get; set; }
+    [Parameter]
+    public string? ModalHeaderClasses { get; set; }
+    [Parameter]
+    public string? ModalBodyClasses { get; set; }
+    [Parameter]
+    public string? ModalFooterClasses { get; set; }
+
+
+    RenderFragment? IModal.ChildContent {
+        get
+        {
+            if (_renderFragment == null || _context == null)
+                return null;
+
+            return _renderFragment?.Invoke(_context);
+        }
+    }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        if (Title != null && Header != null)
+            throw new InvalidOperationException($"{nameof(Title)} cannot be set, if {nameof(Header)} is set.");
+
+        if ((Title != null || Header != null || Footer != null) && Body == null)
+            throw new InvalidOperationException($"{nameof(Header)}, {nameof(Title)} or {nameof(Footer)} may only be set together with {nameof(Body)}");
+
+        if (Body != null && Content != null)
+            throw new InvalidOperationException($"{nameof(Body)} may not be set, if {nameof(Content)} is set.");
+
+        RenderFragment<ModalContext>? content = Body == null
+            ? Content
+            : (ctx) =>
+                @<div class="modal-content">
+                    @if (Header != null || Title != null)
+                    {
+                        <div class="modal-header @ModalHeaderClasses">
+                        @if (Header != null)
+                        {
+                            @Header.Invoke(ctx)
+                        } 
+                        else
+                        {
+                            <h5 class="modal-title">@Title</h5>
+                            <button type="button" class="btn-close" aria-label="Close" @onclick="() => ctx.Modal.Close(ModalResult.Dismissed)"></button>
+                        }
+                        </div>
+                    }
+
+                    <div class="modal-body @ModalBodyClasses">
+                        @Body.Invoke(ctx)
+                    </div>
+
+                    @if (Footer != null)
+                    {
+                        <div class="modal-footer @ModalFooterClasses">
+                            @Footer.Invoke(ctx)
+                        </div>
+                    }
+                </div>;
+
+        if (content != null && ChildContent != null)
+            throw new InvalidOperationException($"{nameof(Content)} may not be set, if {nameof(ChildContent)} is set.");
+
+        _renderFragment = content == null
+            ? ChildContent
+            : (ctx) =>
+                @<div class="modal-dialog @ModalDialogClasses" @onclick:stopPropagation="true">
+                    @content.Invoke(ctx)
+                </div>;
+    }
+
+
+    public Task<ModalResult> ShowModal(TModel model)
+    {
+        _context = new ModalContext(this, model);
+        return _modalService.ShowModal(this);
+    }
+
+    public void Close()
+        => Close(ModalResult.Undefined);
+    public void Close(ModalResult result)
+        => _modalService.Close(this, result);
+
+
+    public void Accept() =>
+        _modalService.Close(this, ModalResult.Accepted);
+
+    public void Dismiss()
+        => _modalService.Close(this, ModalResult.Dismissed);
+
+
+    public record ModalContext(Modal<TModel> Modal, TModel Model);
+}
