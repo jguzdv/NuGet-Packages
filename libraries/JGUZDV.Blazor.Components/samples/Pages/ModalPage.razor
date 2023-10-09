@@ -1,0 +1,118 @@
+﻿@page "/modal"
+@using JGUZDV.Blazor.Components.Modals;
+
+<div class="d-flex">
+    <button @onclick="() => OpenModal1()">Modal Variante: ChildContent</button>
+    <button @onclick="() => OpenModal2()">Modal Variante: Content</button>
+    <button @onclick="() => OpenModal3()">Modal Variante: Body</button>
+    <button @onclick="() => OpenModal4()">Modal Variante: Title</button>
+    <button @onclick="() => OpenModal5()">Zwei Modale</button>
+</div>
+
+<p>@(Container?.Value ?? "- kein Wert -")</p>
+
+<JGUZDV.Blazor.Components.Modals.Modal @ref="MyModalWithChildContent" TModel="MyContainer">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal with ChildContent</h5>
+                <button type="button" class="btn-close" aria-label="Close" @onclick="() => context.Modal.Close()"></button>
+            </div>
+            <div class="modal-body">
+                <input @bind="context.Model.Value" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" @onclick="() => context.Modal.Close(ModalResult.Dismissed)">Close</button>
+                <button type="button" class="btn btn-primary" @onclick="() => context.Modal.Close(ModalResult.Accepted)">Save changes</button>
+            </div>
+        </div>
+    </div>
+</JGUZDV.Blazor.Components.Modals.Modal>
+
+<JGUZDV.Blazor.Components.Modals.Modal @ref="MyModalWithContent" TModel="MyContainer">
+    <Content>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal with Content</h5>
+                <button type="button" class="btn-close" aria-label="Close" @onclick="() => context.Modal.Close()"></button>
+            </div>
+            <div class="modal-body">
+                <input @bind="context.Model.Value" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" @onclick="() => context.Modal.Close(ModalResult.Dismissed)">Close</button>
+                <button type="button" class="btn btn-primary" @onclick="() => context.Modal.Close(ModalResult.Accepted)">Save changes</button>
+            </div>
+        </div>
+    </Content>
+</JGUZDV.Blazor.Components.Modals.Modal>
+
+<JGUZDV.Blazor.Components.Modals.Modal @ref="MyModalWithBody" TModel="MyContainer">
+    <Header>
+        <h5 class="modal-title">Modal with Body parts</h5>
+        <button type="button" class="btn-close"  aria-label="Close" @onclick="() => context.Modal.Close()"></button>
+    </Header>
+    <Body>
+        <input @bind="context.Model.Value" />
+    </Body>
+    <Footer>
+        <button type="button" class="btn btn-secondary" @onclick="() => context.Modal.Close(ModalResult.Dismissed)">Close</button>
+        <button type="button" class="btn btn-primary" @onclick="() => context.Modal.Close(ModalResult.Accepted)">Save changes</button>
+    </Footer>
+</JGUZDV.Blazor.Components.Modals.Modal>
+
+<JGUZDV.Blazor.Components.Modals.Modal @ref="MyModalWithBodyAndTitle" TModel="MyContainer" Title="Modal with title">
+    <Body>
+        <input @bind="context.Model.Value" />
+    </Body>
+    <Footer>
+        <button type="button" class="btn btn-secondary" @onclick="() => context.Modal.Close(ModalResult.Dismissed)">Close</button>
+        <button type="button" class="btn btn-primary" @onclick="() => context.Modal.Close(ModalResult.Accepted)">Save changes</button>
+    </Footer>
+</JGUZDV.Blazor.Components.Modals.Modal>
+
+<ModalContainer />
+
+@code {
+    public ModalPage()
+    {
+        Container = new();
+    }
+
+    public MyContainer Container { get; set; }
+
+    public Modal<MyContainer> MyModalWithChildContent { get; set; }
+    public Modal<MyContainer> MyModalWithContent { get; set; }
+    public Modal<MyContainer> MyModalWithBody { get; set; }
+    public Modal<MyContainer> MyModalWithBodyAndTitle { get; set; }
+
+    public class MyContainer {
+        public string Value { get; set; } = "Hallo!";
+    }
+
+    private Task OpenModal1()
+    {
+        return MyModalWithChildContent.ShowModal(Container);
+    }
+
+    private Task OpenModal2()
+    {
+        return MyModalWithContent.ShowModal(Container);
+    }
+
+    private Task OpenModal3()
+    {
+        return MyModalWithBody.ShowModal(Container);
+    }
+
+    private Task OpenModal4()
+    {
+        return MyModalWithBodyAndTitle.ShowModal(Container);
+    }
+
+    private Task OpenModal5()
+    {
+        _ = MyModalWithBody.ShowModal(Container);
+        return MyModalWithBodyAndTitle.ShowModal(Container);
+    }
+}
