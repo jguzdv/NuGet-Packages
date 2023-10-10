@@ -98,7 +98,8 @@
             : (ctx) =>
                 @<div class="modal-dialog @ModalDialogClasses" @onclick:stopPropagation="true">
                     @content.Invoke(ctx)
-                </div>;
+        </div>
+    ;
     }
 
 
@@ -121,5 +122,16 @@
         => _modalService.Close(this, ModalResult.Dismissed);
 
 
-    public record ModalContext(Modal<TModel> Modal, TModel Model);
+    public class ModalContext {
+        [SetsRequiredMembers]
+        public ModalContext(Modal<TModel> modal, TModel model)
+        {
+            Modal = modal;
+            Model = model;
+        }
+
+        public Modal<TModel> Modal { get; }
+
+        public TModel Model { get; set; }
+    }
 }
