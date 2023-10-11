@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="AddButton.AddClaimRequirement" xml:space="preserve">
+    <value>Claimrequirement hinzufügen</value>
+  </data>
+  <data name="AddButton.AddClaimRequirementCollection" xml:space="preserve">
+    <value>ClaimrequirementCollection hinzufügen</value>
+  </data>
+  <data name="CollectionEditor.MatchAll" xml:space="preserve">
+    <value>Match all</value>
+  </data>
+  <data name="CollectionEditor.MatchAny" xml:space="preserve">
+    <value>Match any</value>
+  </data>
+  <data name="CollectionEditor.ChooseMatching" xml:space="preserve">
+    <value>Matchbedingung wählen</value>
+  </data>
+  <data name="Editor.Delete" xml:space="preserve">
+    <value>Löschen</value>
+  </data>
+  <data name="Editor.Save" xml:space="preserve">
+    <value>Speichern</value>
+  </data>
+  <data name="Editor.Discard" xml:space="preserve">
+    <value>Verwerfen</value>
+  </data>
+  <data name="ClaimsRequirement.ClaimType" xml:space="preserve">
+    <value>Claim-Typ</value>
+  </data>
+  <data name="ClaimsRequirement.CalimValue" xml:space="preserve">
+    <value>Claim-Wert</value>
+  </data>
+  <data name="Viewer.ClaimUndefined" xml:space="preserve">
+    <value>Es wurde kein Requirement definiert.</value>
+  </data>
+  <data name="Viewer.And" xml:space="preserve">
+    <value>UND</value>
+  </data>
+  <data name="Viewer.Or" xml:space="preserve">
+    <value>ODER</value>
+  </data>
+  <data name="ValueEditor.NoWildcardMatch" xml:space="preserve">
+    <value>Wildcardmatch deaktivieren</value>
+  </data>
+  <data name="ValueEditor.ClaimTypeStringComparison" xml:space="preserve">
+    <value>Stringcimparison für Claim-Typ</value>
+  </data>
+  <data name="ValueEditor.ClaimValueStringComparison" xml:space="preserve">
+    <value>Stringcomparison für Claim-Wert</value>
+  </data>
+</root>

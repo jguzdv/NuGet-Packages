@@ -4,10 +4,10 @@
 <div>
     <div class="form-floating pb-2">
         <select id="@($"MatchTypeSelect-{_guid}")" class="form-select" @onchange="(e) => MatchTypeChanged(e.Value.ToString())">
-            <option value="@RequirementCollectionMatchType.MatchAll" selected="@(ClaimRequirementCollection.MatchType == RequirementCollectionMatchType.MatchAll)">Match All</option>
-            <option value="@RequirementCollectionMatchType.MatchAny" selected="@(ClaimRequirementCollection.MatchType == RequirementCollectionMatchType.MatchAny)">Match Any</option>
+            <option value="@RequirementCollectionMatchType.MatchAll" selected="@(ClaimRequirementCollection.MatchType == RequirementCollectionMatchType.MatchAll)">@LR["CollectionEditor.MatchAll"]</option>
+            <option value="@RequirementCollectionMatchType.MatchAny" selected="@(ClaimRequirementCollection.MatchType == RequirementCollectionMatchType.MatchAny)">@LR["CollectionEditor.MatchAny"]</option>
         </select>
-        <label for="@($"MatchTypeSelect-{_guid}")">Matchbedingung wählen</label>
+        <label for="@($"MatchTypeSelect-{_guid}")">@LR["CollectionEditor.ChooseMatching"]</label>
     </div>
     @for (int i = 0; i < ClaimRequirementCollection.Requirements.Count; i++)
     {

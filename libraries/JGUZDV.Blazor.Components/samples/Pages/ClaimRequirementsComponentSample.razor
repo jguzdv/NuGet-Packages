@@ -1,0 +1,10 @@
+﻿@using JGUZDV.Blazor.Components.ClaimRequirements;
+@using JGUZDV.Extensions.Authorization;
+
+@page "/claim-requirements"
+
+<ClaimRequirementViewer ClaimRequirement="CR"></ClaimRequirementViewer>
+
+@code{
+    public ClaimRequirement CR { get; set; }
+}

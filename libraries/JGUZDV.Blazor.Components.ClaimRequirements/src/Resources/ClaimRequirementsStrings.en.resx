@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="AddButton.AddClaimRequirement" xml:space="preserve">
+    <value>Add claim requirement</value>
+  </data>
+  <data name="AddButton.AddClaimRequirementCollection" xml:space="preserve">
+    <value>Add claim requirement collection</value>
+  </data>
+  <data name="CollectionEditor.MatchAll" xml:space="preserve">
+    <value>Match all</value>
+  </data>
+  <data name="CollectionEditor.MatchAny" xml:space="preserve">
+    <value>Match any</value>
+  </data>
+  <data name="CollectionEditor.ChooseMatching" xml:space="preserve">
+    <value>Choose match condition</value>
+  </data>
+  <data name="Editor.Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Editor.Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Editor.Discard" xml:space="preserve">
+    <value>Discard</value>
+  </data>
+  <data name="ClaimsRequirement.ClaimType" xml:space="preserve">
+    <value>Claim-Type</value>
+  </data>
+  <data name="ClaimsRequirement.CalimValue" xml:space="preserve">
+    <value>Claim-Value</value>
+  </data>
+  <data name="Viewer.ClaimUndefined" xml:space="preserve">
+    <value>No requirement was defined.</value>
+  </data>
+  <data name="Viewer.Or" xml:space="preserve">
+    <value>OR</value>
+  </data>
+  <data name="Viewer.And" xml:space="preserve">
+    <value>AND</value>
+  </data>
+  <data name="ValueEditor.NoWildcardMatch" xml:space="preserve">
+    <value>Deactivate wildcard match</value>
+  </data>
+  <data name="ValueEditor.ClaimTypeStringComparison" xml:space="preserve">
+    <value>String comparison for claim type</value>
+  </data>
+  <data name="ValueEditor.ClaimValueStringComparison" xml:space="preserve">
+    <value>String comparison for claim value</value>
+  </data>
+</root>

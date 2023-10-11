@@ -5,10 +5,10 @@
     @if (ClaimRequirement is ClaimValueRequirement cvr)
     {
         <div class="ps-3">
-            ClaimTyp: @cvr.ClaimType - @WriteComparison(cvr.ClaimTypeComparison)
+            @LR["ClaimsRequirements.ClaimType"]: @cvr.ClaimType - @WriteComparison(cvr.ClaimTypeComparison)
         </div>
         <div class="ps-3">
-            Claimwert: @cvr.ClaimValue - @WriteComparison(cvr.ClaimValueComparison)
+            @LR["ClaimsRequirement.ClaimValue"]: @cvr.ClaimValue - @WriteComparison(cvr.ClaimValueComparison)
         </div>
 
     }
@@ -16,7 +16,7 @@
     @if (ClaimRequirement is NullRequirement nr)
     {
         <div>
-            Es wurde kein Requirement definiert.
+            @LR["Viewer.ClaimUndefined"]"
         </div>
     }
 
@@ -30,13 +30,13 @@
             @if (crc.MatchType == RequirementCollectionMatchType.MatchAll && i != crc.Requirements.Count - 1)
             {
                 <div>
-                    UND
+                    @LR["Viewer.And"]
                 </div>
             }
             @if (crc.MatchType == RequirementCollectionMatchType.MatchAny && i != crc.Requirements.Count - 1)
             {
                 <div>
-                    ODER
+                    @LR["Viewer.Or"]
                 </div>
             }
         }

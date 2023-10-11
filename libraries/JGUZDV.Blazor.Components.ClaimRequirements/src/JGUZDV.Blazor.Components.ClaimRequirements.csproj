@@ -21,9 +21,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="JGUZDV.Extensions.Authorization" Version="2.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.12" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="[7.0.12,)" />
+    <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="[7.0.0,)" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="[7.0.1,)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\JGUZDV.Extensions.Authorization\src\JGUZDV.Extensions.Authorization.csproj" />
   </ItemGroup>
 
 </Project>
