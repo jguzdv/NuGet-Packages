@@ -27,7 +27,7 @@
   <data name="ClaimsRequirement.ClaimType" xml:space="preserve">
     <value>Claim-Type</value>
   </data>
-  <data name="ClaimsRequirement.CalimValue" xml:space="preserve">
+  <data name="ClaimsRequirement.ClaimValue" xml:space="preserve">
     <value>Claim-Value</value>
   </data>
   <data name="Viewer.ClaimUndefined" xml:space="preserve">

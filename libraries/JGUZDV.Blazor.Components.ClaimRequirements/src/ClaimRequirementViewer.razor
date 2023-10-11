@@ -5,7 +5,7 @@
     @if (ClaimRequirement is ClaimValueRequirement cvr)
     {
         <div class="ps-3">
-            @LR["ClaimsRequirements.ClaimType"]: @cvr.ClaimType - @WriteComparison(cvr.ClaimTypeComparison)
+            @LR["ClaimsRequirement.ClaimType"]: @cvr.ClaimType - @WriteComparison(cvr.ClaimTypeComparison)
         </div>
         <div class="ps-3">
             @LR["ClaimsRequirement.ClaimValue"]: @cvr.ClaimValue - @WriteComparison(cvr.ClaimValueComparison)
@@ -16,7 +16,7 @@
     @if (ClaimRequirement is NullRequirement nr)
     {
         <div>
-            @LR["Viewer.ClaimUndefined"]"
+            @LR["Viewer.ClaimUndefined"]
         </div>
     }
 

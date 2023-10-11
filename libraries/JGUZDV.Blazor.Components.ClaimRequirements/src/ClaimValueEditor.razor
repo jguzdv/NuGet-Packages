@@ -1,10 +1,10 @@
 ﻿@using JGUZDV.Extensions.Authorization;
 <div class="row">
     <div class="col">
-        <label for="Claimtyp">@LR["ClaimsRequirement.CalimType"]</label>
+        <label for="Claimtyp">@LR["ClaimsRequirement.ClaimType"]</label>
         <input class="form-control" type="text" value="@ClaimValueRequirement.ClaimType" @onchange="((e) => OnClaimRequirementChanged(claimType: e.Value?.ToString()))">
 
-        <label for="Claimwert">"</label>
+        <label for="Claimwert">@LR["ClaimsRequirement.ClaimValue"]</label>
         <input class="form-control" type="text" value="@ClaimValueRequirement.ClaimValue" @onchange="((e) => OnClaimRequirementChanged(claimValue: e.Value?.ToString()))">
 
         <div class="form-check form-switch py-2">
