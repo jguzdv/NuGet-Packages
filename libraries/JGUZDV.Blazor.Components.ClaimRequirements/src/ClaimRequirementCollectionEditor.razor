@@ -1,0 +1,89 @@
+﻿@using JGUZDV.Extensions.Authorization;
+@using Microsoft.Extensions.Logging;
+
+<div>
+    <div class="form-floating pb-2">
+        <select id="@($"MatchTypeSelect-{_guid}")" class="form-select" @onchange="(e) => MatchTypeChanged(e.Value.ToString())">
+            <option value="@RequirementCollectionMatchType.MatchAll" selected="@(ClaimRequirementCollection.MatchType == RequirementCollectionMatchType.MatchAll)">Match All</option>
+            <option value="@RequirementCollectionMatchType.MatchAny" selected="@(ClaimRequirementCollection.MatchType == RequirementCollectionMatchType.MatchAny)">Match Any</option>
+        </select>
+        <label for="@($"MatchTypeSelect-{_guid}")">Matchbedingung wählen</label>
+    </div>
+    @for (int i = 0; i < ClaimRequirementCollection.Requirements.Count; i++)
+    {
+        var current = ClaimRequirementCollection.Requirements[i];
+        <div class="pb-2">
+            <ClaimRequirementEditor ClaimRequirement="current" ClaimRequirementChanged="(e) => UpdateCollection(current,e)"></ClaimRequirementEditor>
+        </div>
+    }
+
+    <ClaimRequirementAddButton OnAddClaimValue="() => AddClaimValue()" OnAddClaimCollcetion="() => AddClaimCollection()"></ClaimRequirementAddButton>
+</div>
+
+
+@code {
+    [Inject]
+    public ILogger<ClaimRequirementEditor> _logger { get; set; }
+
+    [Parameter]
+    public ClaimRequirementCollection ClaimRequirementCollection { get; set; }
+
+    [Parameter]
+    public EventCallback<ClaimRequirementCollection> OnClaimRequirementCollectionChanged { get; set; }
+
+    private RequirementCollectionMatchType _selectedMatchType;
+
+    private Guid _guid = Guid.NewGuid();
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        _selectedMatchType = ClaimRequirementCollection.MatchType;
+    }
+
+    private void MatchTypeChanged(string value)
+    {
+        var matchType = Enum.Parse<RequirementCollectionMatchType>(value, true);
+        OnClaimRequirementChanged(matchType: matchType);
+    }
+
+    private void OnClaimRequirementChanged(RequirementCollectionMatchType? matchType = null,
+                                            List<ClaimRequirement>? claimRequirements = null)
+    {
+        var result = new ClaimRequirementCollection(
+            claimRequirements ?? ClaimRequirementCollection.Requirements,
+            matchType ?? ClaimRequirementCollection.MatchType
+        );
+        _logger.LogInformation($"ResultMatchtype: {result.MatchType} und matchType: {matchType}");
+        _ = OnClaimRequirementCollectionChanged.InvokeAsync(result);
+    }
+
+    private void UpdateCollection(ClaimRequirement oldRequirement, ClaimRequirement newRequirement)
+    {
+        if (newRequirement is NullRequirement)
+        {
+            ClaimRequirementCollection.Requirements.Remove(oldRequirement);
+        }
+        else
+        {
+            var index = ClaimRequirementCollection.Requirements.IndexOf(oldRequirement);
+            ClaimRequirementCollection.Requirements[index] = newRequirement;
+        }
+
+        _ = OnClaimRequirementCollectionChanged.InvokeAsync(ClaimRequirementCollection);
+    }
+
+    public void AddClaimValue()
+    {
+        var cvr = new ClaimValueRequirement("role", "admin");
+        ClaimRequirementCollection.Requirements.Add(cvr);
+        _ = OnClaimRequirementCollectionChanged.InvokeAsync(ClaimRequirementCollection);
+    }
+
+    public void AddClaimCollection()
+    {
+        var crc = new ClaimRequirementCollection(new List<ClaimRequirement>(), RequirementCollectionMatchType.MatchAll);
+        ClaimRequirementCollection.Requirements.Add(crc);
+        _ = OnClaimRequirementCollectionChanged.InvokeAsync(ClaimRequirementCollection);
+    }
+}

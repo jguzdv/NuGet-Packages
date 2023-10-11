@@ -1,0 +1,71 @@
+﻿@using JGUZDV.Extensions.Authorization;
+<div class="p-3 border">
+    @if (ClaimRequirement is NullRequirement or null)
+    {
+        <ClaimRequirementAddButton OnAddClaimValue="CreateClaimValue" OnAddClaimCollcetion="CreateClaimRequirementCollection"></ClaimRequirementAddButton>
+    }
+    else
+    {
+        <div class="row">
+            
+            @if (ClaimRequirement is ClaimValueRequirement cvr)
+            {
+                <div class="col">
+                    <ClaimValueEditor ClaimValueRequirement="cvr" ClaimValueRequirementChanged=" (e) => ClaimRequirementChanged.InvokeAsync(e)"></ClaimValueEditor>
+                </div>
+            }
+
+            @if (ClaimRequirement is ClaimRequirementCollection crc)
+            {
+                <div class="col ps-5">
+                    <ClaimRequirementCollectionEditor ClaimRequirementCollection="crc" OnClaimRequirementCollectionChanged="ClaimCollectionUpdate"></ClaimRequirementCollectionEditor>
+                </div>
+            }
+            <div class="col col-auto">
+                <button class="btn btn-danger" @onclick="DeleteRequirement">Löschen</button>
+            </div>
+
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public ClaimRequirement ClaimRequirement { get; set; }
+
+
+    [Parameter]
+    public EventCallback<ClaimRequirement> ClaimRequirementChanged { get; set; }
+
+    protected override void OnInitialized()
+    {
+
+    }
+
+    private void ClaimCollectionUpdate(ClaimRequirementCollection crc)
+    {
+        ClaimRequirement = crc;
+        _ = ClaimRequirementChanged.InvokeAsync(crc);
+    }
+
+    private void DeleteRequirement()
+    {
+        ClaimRequirement = new NullRequirement();
+        _ = ClaimRequirementChanged.InvokeAsync(ClaimRequirement);
+    }
+
+    private void CreateClaimValue()
+    {
+        var cvr = new ClaimValueRequirement("role", "admin");
+        ClaimRequirement = cvr;
+        ClaimRequirementChanged.InvokeAsync(cvr);
+    }
+
+    private void CreateClaimRequirementCollection()
+    {
+        var crc = new ClaimRequirementCollection(new List<ClaimRequirement>(), RequirementCollectionMatchType.MatchAll);
+        ClaimRequirement = crc;
+        ClaimRequirementChanged.InvokeAsync(ClaimRequirement);
+    }
+
+}

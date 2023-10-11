@@ -1,0 +1,18 @@
+﻿@using JGUZDV.Extensions.Authorization;
+
+<ClaimRequirementEditor @bind-ClaimRequirement="ClaimRequirement"></ClaimRequirementEditor>
+<button class="btn btn-success" @onclick="() => OnSave.InvokeAsync(ClaimRequirement)">Speichern</button>
+<button class="btn btn-primary" @onclick="() => OnClose.InvokeAsync()">Verwerfen</button>
+
+@code {
+    [Parameter]
+    public ClaimRequirement ClaimRequirement { get; set; }
+
+    [Parameter]
+    public EventCallback<ClaimRequirement> OnSave { get; set; }
+
+    [Parameter]
+    public EventCallback OnClose { get; set; }
+
+
+}

@@ -1,0 +1,23 @@
+﻿<div>
+<button class="btn btn-primary" @onclick="HandleClaimValueButtonClick">Claimvaluerequirement hinzufügen</button>
+
+<button class="btn btn-primary" @onclick="HandleClaimCollectionButtonClick">ClaimrequirementCollection hinzufügen</button>
+</div>
+
+@code {
+    [Parameter]
+    public EventCallback OnAddClaimValue { get; set; }
+
+    [Parameter]
+    public EventCallback OnAddClaimCollcetion { get; set; }
+
+    private void HandleClaimValueButtonClick()
+    {
+        _ = OnAddClaimValue.InvokeAsync();
+    }
+
+    private void HandleClaimCollectionButtonClick()
+    {
+        _ = OnAddClaimCollcetion.InvokeAsync();
+    }
+}
