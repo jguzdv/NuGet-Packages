@@ -79,6 +79,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.AspNetCore.Authentic
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.AspNetCore.Authentication.Cookies.Tests", "libraries\JGUZDV.AspNetCore.Authentication.Cookies\test\JGUZDV.AspNetCore.Authentication.Cookies.Tests.csproj", "{AADC7783-3155-4905-9524-61EE2E5E01C2}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.Blazor.Components.ClaimRequirements", "libraries\JGUZDV.Blazor.Components.ClaimRequirements\src\JGUZDV.Blazor.Components.ClaimRequirements.csproj", "{AA17601D-39CD-4736-BB86-F5F39D6ED927}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -201,6 +203,10 @@ Global
 		{AADC7783-3155-4905-9524-61EE2E5E01C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AADC7783-3155-4905-9524-61EE2E5E01C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AADC7783-3155-4905-9524-61EE2E5E01C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA17601D-39CD-4736-BB86-F5F39D6ED927}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA17601D-39CD-4736-BB86-F5F39D6ED927}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA17601D-39CD-4736-BB86-F5F39D6ED927}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA17601D-39CD-4736-BB86-F5F39D6ED927}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -238,6 +244,7 @@ Global
 		{1DE8AF4D-4D46-4766-844E-819757AC4E4C} = {5F18EE62-3FBC-42F5-96DC-8C61C3D9EF27}
 		{D0DE2AFA-498B-489B-9DC4-3AFC8CA60EF0} = {5F18EE62-3FBC-42F5-96DC-8C61C3D9EF27}
 		{AADC7783-3155-4905-9524-61EE2E5E01C2} = {50252EFB-8629-4B1D-AC2F-5F29CB6F684D}
+		{AA17601D-39CD-4736-BB86-F5F39D6ED927} = {5F18EE62-3FBC-42F5-96DC-8C61C3D9EF27}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {46ECC226-1874-4539-8589-8B2029909C4A}
