@@ -1,0 +1,49 @@
+﻿@using System.Diagnostics.CodeAnalysis;
+@using JGUZDV.L10n;
+@using System.Globalization
+
+@if (L10n != null)
+{
+    @foreach (var lang in languages)
+    {
+        <div class="input-group mb-1">
+            <span class="input-group-text" id="@lang">@lang</span>
+            <input type="text" class="form-control" aria-describedby="@lang" value="@L10n[lang]" @onchange="(e) => HandleChange(e, lang)" />
+        </div>
+    }
+}
+
+
+@code {
+    [Parameter, EditorRequired]
+    public L10nString L10n { get; set; } = new();
+
+    [Parameter]
+    public EventCallback L10nChanged { get; set; }
+
+    [Parameter]
+    public List<string>? SupportedCultures { get; set; }
+
+    [Inject]
+    public ISupportedCultureService _service { get; set; } = default!;
+
+    public List<string> languages = new();
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        if(SupportedCultures != null)
+        {
+            languages = SupportedCultures;
+        }else
+        {
+            languages = _service.GetSupportedCultures();
+        }
+    }
+
+    private void HandleChange(ChangeEventArgs e, string language)
+    {
+        L10n[language] = e.Value as string;
+        L10nChanged.InvokeAsync(L10n);
+    }
+}

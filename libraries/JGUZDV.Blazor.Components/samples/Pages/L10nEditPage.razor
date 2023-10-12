@@ -1,0 +1,51 @@
+﻿@page "/l10nEdit"
+
+@using JGUZDV.Blazor.Components.L10n;
+@using JGUZDV.L10n;
+
+<div class="p-3">
+<JGUZDV.Blazor.Components.L10n.L10nEditor L10n="firstTestVaue" L10nChanged="ShowChangedValue"></JGUZDV.Blazor.Components.L10n.L10nEditor>
+</div>
+
+<div class="p-3">
+    <JGUZDV.Blazor.Components.L10n.L10nEditor L10n="secondRestValue" SupportedCultures="_languages" L10nChanged="ShowChangedValue"></JGUZDV.Blazor.Components.L10n.L10nEditor>
+</div>
+
+@if (isChanged)
+{
+    <div class="d-flex">
+        <div>@firstTestVaue["DE"], </div>
+        <div>@firstTestVaue["EN"]</div>
+    </div>
+    <div class="d-flex">
+        <div>@secondRestValue["DE"], </div>
+        <div>@secondRestValue["EN"]</div>
+    </div>
+}
+
+@code {
+    [Inject]
+    public ISupportedCultureService _service { get; set; } = default!;
+
+    public List<string> _languages = new() { "de", "en", "fr" };
+    public L10nString firstTestVaue = new();
+    public L10nString secondRestValue = new();
+    public bool isChanged;
+
+    protected override void OnInitialized()
+    {
+        _service.SetSupportedCultures(new List<string>() { "de", "en" });
+
+        firstTestVaue["DE"] = "Speicherplatz";
+        firstTestVaue["EN"] = "storage space";
+
+        secondRestValue["DE"] = "Mitarbeitende";
+        secondRestValue["EN"] = "staff";
+        secondRestValue["FR"] = "employés";
+    }
+
+    public void ShowChangedValue()
+    {
+        isChanged = true;
+    }
+}
