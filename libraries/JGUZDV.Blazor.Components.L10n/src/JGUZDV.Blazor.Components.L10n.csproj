@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\JGUZDV.L10n\src\JGUZDV.L10n.csproj" />
+    <ProjectReference Include="..\..\JGUZDV.L10n\src\JGUZDV.L10n.csproj" />
   </ItemGroup>
 
 </Project>

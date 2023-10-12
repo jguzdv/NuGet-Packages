@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\JGUZDV.Blazor.Components.L10n\JGUZDV.Blazor.Components.L10n.csproj" />
+    <ProjectReference Include="..\..\JGUZDV.Blazor.Components.L10n\src\JGUZDV.Blazor.Components.L10n.csproj" />
     <ProjectReference Include="..\src\JGUZDV.Blazor.Components.csproj" />
   </ItemGroup>
 

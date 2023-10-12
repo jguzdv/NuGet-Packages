@@ -7,7 +7,7 @@
     @foreach (var lang in languages)
     {
         <div class="input-group mb-1">
-            <span class="input-group-text" id="@lang">@lang</span>
+            <span style="width: @remString;" class="input-group-text" id="@lang">@lang</span>
             <input type="text" class="form-control" aria-describedby="@lang" value="@L10n[lang]" @onchange="(e) => HandleChange(e, lang)" />
         </div>
     }
@@ -28,6 +28,7 @@
     public ISupportedCultureService _service { get; set; } = default!;
 
     public List<string> languages = new();
+    public string remString = "";
 
     protected override void OnParametersSet()
     {
@@ -39,11 +40,20 @@
         {
             languages = _service.GetSupportedCultures();
         }
+
+        CalculateBoxWidth();
     }
 
     private void HandleChange(ChangeEventArgs e, string language)
     {
         L10n[language] = e.Value as string;
         L10nChanged.InvokeAsync(L10n);
+    }
+
+
+    public void CalculateBoxWidth()
+    {
+        var remCounter = languages.Aggregate("", (max, cur) => max.Length > cur.Length ? max : cur).Length;
+        remString = remCounter.ToString() + "rem";
     }
 }
