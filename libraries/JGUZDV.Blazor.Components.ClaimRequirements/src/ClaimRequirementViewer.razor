@@ -10,7 +10,6 @@
         <div class="ps-3">
             @LR["ClaimsRequirement.ClaimValue"]: @cvr.ClaimValue - @WriteComparison(cvr.ClaimValueComparison)
         </div>
-
     }
 
     @if (ClaimRequirement is NullRequirement nr)
@@ -40,9 +39,25 @@
                 </div>
             }
         }
-
     }
 }
+
+@* @if (ClaimRequirement != null)
+{
+    <div class="mb-3">
+        <div class="inline-block mb-3 mt-1">
+            <span class="px-3">@LR["Viewer.ComparisonTypes"]: CI = Case insensitive, CS = Case sensitive</span>
+        </div>
+        @if (ClaimRequirement is ClaimValueRequirement cvr)
+        {
+            <div class="inline-block">
+                <div class="">
+                    <span class="px-3">{ @LR["ClaimRequirement.ClaimType"]: @cvr.ClaimType (@WriteComparison(cvr.ClaimTypeComparison)), @LR["ClaimRequirement.ClaimValue"]: @cvr.ClaimValue (@WriteComparison(cvr.ClaimValueComparison)) }</span>
+                </div>
+            </div>
+        }
+    </div>
+} *@
 
 @code {
     [Parameter, EditorRequired]

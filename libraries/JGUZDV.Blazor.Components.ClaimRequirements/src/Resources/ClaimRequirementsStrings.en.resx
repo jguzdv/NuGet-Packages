@@ -24,11 +24,11 @@
   <data name="Editor.Discard" xml:space="preserve">
     <value>Discard</value>
   </data>
-  <data name="ClaimsRequirement.ClaimType" xml:space="preserve">
-    <value>Claim-Type</value>
+  <data name="ClaimRequirement.ClaimType" xml:space="preserve">
+    <value>Type</value>
   </data>
-  <data name="ClaimsRequirement.ClaimValue" xml:space="preserve">
-    <value>Claim-Value</value>
+  <data name="ClaimRequirement.ClaimValue" xml:space="preserve">
+    <value>Value</value>
   </data>
   <data name="Viewer.ClaimUndefined" xml:space="preserve">
     <value>No requirement was defined.</value>
@@ -43,9 +43,15 @@
     <value>Deactivate wildcard match</value>
   </data>
   <data name="ValueEditor.ClaimTypeStringComparison" xml:space="preserve">
-    <value>String comparison for claim type</value>
+    <value>String comparison for type</value>
   </data>
   <data name="ValueEditor.ClaimValueStringComparison" xml:space="preserve">
-    <value>String comparison for claim value</value>
+    <value>String comparison for value</value>
+  </data>
+  <data name="Viewer.ComparisonType" xml:space="preserve">
+    <value>Comparison type</value>
+  </data>
+  <data name="Viewer.ComparisonTypes" xml:space="preserve">
+    <value>Comparison types</value>
   </data>
 </root>
