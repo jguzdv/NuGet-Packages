@@ -1,0 +1,40 @@
+@using Microsoft.AspNetCore.Components.Web
+@inject ModalService _modalService
+
+@if (Current != null)
+{
+    <div class="modal-backdrop fade @(ShouldShow ? "show" : null)"></div>
+}
+
+@foreach (var modal in _modalService.Modals)
+{
+    var willShow = ShouldShow && modal == Current;
+
+    <div @key="modal" class="modal fade @(willShow ? "show d-block" : "d-none")" tabindex="-1" aria-modal="true" role="dialog">
+        @modal.ChildContent
+    </div>
+}
+
+
+@code {
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        _modalService.ModalChanged += (_, c) =>
+        {
+            Current = c;
+            InvokeAsync(StateHasChanged);
+
+            Task.Delay(10).ContinueWith((t) =>
+            {
+                ShouldShow = Current != null;
+                InvokeAsync(StateHasChanged);
+            });
+        };
+    }
+
+    public IModal? Current { get; set; }
+
+    public bool ShouldShow { get; set; }
+}

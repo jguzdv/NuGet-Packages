@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Reflection;
 
-namespace JGUZDV.Blazor.Statemanagement;
+namespace JGUZDV.Blazor.StateManagement;
 
 /// <summary>
 /// Components with Properties of type <see cref="IState{T}"/> can inherit from StateListener to automatically register 

@@ -1,26 +1,26 @@
 <Project Sdk="Microsoft.NET.Sdk.Razor">
 
-  <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
 
-      <PackageId>JGUZDV.Blazor.Components</PackageId>
-      <IsPackable>true</IsPackable>
-      <Version>1.0.1</Version>
-      <Authors>Thomas Ottenhus, Aylin Siebel</Authors>
-      <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
-      <PackageDescription>Blazor component library - build for Bootstrap 5</PackageDescription>
+        <PackageId>JGUZDV.Blazor.Components</PackageId>
+        <IsPackable>true</IsPackable>
+        <Version>1.2.1</Version>
+        <Authors>Thomas Ottenhus, Aylin Siebel</Authors>
+        <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
+        <PackageDescription>Blazor component library - build for Bootstrap 5</PackageDescription>
 
-      <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
-  </PropertyGroup>
+        <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Authentication\*.cs" />
-    <Content Remove="Authentication\*.razor" />
-    <Content Remove="Authentication\*.razor.css" />
-    <None Include="Authentication\*.*" />
-  </ItemGroup>
+    <ItemGroup>
+        <Compile Remove="Authentication\*.cs" />
+        <Content Remove="Authentication\*.razor" />
+        <Content Remove="Authentication\*.razor.css" />
+        <None Include="Authentication\*.*" />
+    </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="[7.0.0,)" />

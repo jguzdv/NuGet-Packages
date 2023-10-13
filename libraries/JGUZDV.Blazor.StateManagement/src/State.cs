@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
 
-namespace JGUZDV.Blazor.Statemanagement;
+namespace JGUZDV.Blazor.StateManagement;
 
 //TODO: hat die Registrierung über das Interface tatsächlich einen Vorteil für den Anwender?
 /// <summary>
