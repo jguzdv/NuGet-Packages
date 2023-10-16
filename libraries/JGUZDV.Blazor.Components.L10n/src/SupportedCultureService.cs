@@ -1,18 +1,31 @@
 ﻿namespace JGUZDV.Blazor.Components.L10n
 {
+    /// <summary>
+    /// Service used to handle methods implemented in the ISupportedCultureService.
+    /// </summary>
     public class SupportedCultureService : ISupportedCultureService
     {
-        private List<string> _cultures;
-        public List<string> GetSupportedCultures()
+        private readonly List<string> _supportedCultures;
+
+        /// <summary>
+        /// Constructor of Service to integrate the list of supported cultures.
+        /// </summary>
+        /// <param name="supportedCultures"></param>
+        public SupportedCultureService(List<string> supportedCultures)
         {
-            return _cultures == null
-                ? throw new Exception("The list of supported cultures is null. To fix that issue please set the cultures via the SupportedCultureService method or via parameter in the L10nEditor component.")
-                : _cultures;
+            _supportedCultures = supportedCultures;
         }
 
-        public void SetSupportedCultures(List<string> cultures)
+        /// <summary>
+        /// Method to get all the supported cultures.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public List<string> GetSupportedCultures()
         {
-            _cultures = cultures;
+            return _supportedCultures.Any()
+                ? _supportedCultures :
+                throw new Exception("The list of supported cultures is null. To fix that issue please set the cultures via the SupportedCultureService method or via parameter in the L10nEditor component.");
         }
     }
 }

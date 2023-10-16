@@ -24,9 +24,6 @@
 }
 
 @code {
-    [Inject]
-    public ISupportedCultureService _service { get; set; } = default!;
-
     public List<string> _languages = new() { "de", "en", "fr" };
     public L10nString firstTestVaue = new();
     public L10nString secondRestValue = new();
@@ -34,8 +31,6 @@
 
     protected override void OnInitialized()
     {
-        _service.SetSupportedCultures(new List<string>() { "de", "en" });
-
         firstTestVaue["DE"] = "Speicherplatz";
         firstTestVaue["EN"] = "storage space";
 
