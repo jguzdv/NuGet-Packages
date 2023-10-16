@@ -36,15 +36,11 @@
         }
         else
         {
-            try
-            {
-                var service = ServiceProvider.GetRequiredService<ISupportedCultureService>();
-                _languages = service.GetSupportedCultures();
-            }
-            catch (Exception)
-            {
+            var service = ServiceProvider.GetRequiredService<ISupportedCultureService>();
+            if (service == null)
                 throw new Exception($"Neither the parameter {nameof(SupportedCultures)} nor an {nameof(ISupportedCultureService)} was supplied.");
-            }
+
+            _languages = service.GetSupportedCultures();
         }
     }
 
