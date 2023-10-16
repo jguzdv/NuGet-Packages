@@ -1,6 +1,4 @@
-﻿@using System.Diagnostics.CodeAnalysis;
-@using JGUZDV.L10n;
-@using System.Globalization
+﻿@using JGUZDV.L10n;
 @using Microsoft.Extensions.DependencyInjection;
 
 @if (L10n != null)
@@ -45,7 +43,7 @@
             }
             catch (Exception)
             {
-                throw new Exception("Neither the Parameter for the L10nEditor was found nor the Service was used.");
+                throw new Exception($"Neither the parameter {nameof(SupportedCultures)} nor an {nameof(ISupportedCultureService)} was supplied.");
             }
         }
     }
