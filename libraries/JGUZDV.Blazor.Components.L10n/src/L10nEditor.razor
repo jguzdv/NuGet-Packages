@@ -5,13 +5,13 @@
 
 @if (L10n != null)
 {
-    @foreach (var lang in languages)
-    {
-        <div class="input-group mb-1">
-            <span style=@("width: " + languages.Select(x => x.Length).Max() + "rem;") class="input-group-text" id="@lang">@lang</span>
-            <input type="text" class="form-control" aria-describedby="@lang" value="@L10n[lang]" @onchange="(e) => HandleChange(e, lang)" />
-        </div>
-    }
+    <div class="l10n-grid">
+        @foreach (var lang in _languages)
+        {
+            <span class="input-group-text l10n-grid-language" id="@lang">@lang</span>
+            <input type="text" class="form-control l10n-grid-input" aria-describedby="@lang" value="@L10n[lang]" @onchange="(e) => HandleChange(e, lang)" />
+        }
+    </div>
 }
 
 @code {
@@ -19,7 +19,7 @@
     public L10nString L10n { get; set; } = new();
 
     [Parameter]
-    public EventCallback L10nChanged { get; set; }
+    public EventCallback<L10nString> L10nChanged { get; set; }
 
     [Parameter]
     public List<string>? SupportedCultures { get; set; }
@@ -27,21 +27,21 @@
     [Inject]
     public IServiceProvider ServiceProvider { get; set; } = default!;
 
-    public List<string> languages = new();
+    private List<string> _languages = new();
 
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
         if (SupportedCultures != null)
         {
-            languages = SupportedCultures;
+            _languages = SupportedCultures;
         }
         else
         {
             try
             {
                 var service = ServiceProvider.GetRequiredService<ISupportedCultureService>();
-                languages = service.GetSupportedCultures();
+                _languages = service.GetSupportedCultures();
             }
             catch (Exception)
             {
