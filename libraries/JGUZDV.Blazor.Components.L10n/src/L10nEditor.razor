@@ -36,7 +36,7 @@
         }
         else
         {
-            var service = ServiceProvider.GetRequiredService<ISupportedCultureService>();
+            var service = ServiceProvider.GetService<ISupportedCultureService>();
             if (service == null)
                 throw new Exception($"Neither the parameter {nameof(SupportedCultures)} nor an {nameof(ISupportedCultureService)} was supplied.");
 
