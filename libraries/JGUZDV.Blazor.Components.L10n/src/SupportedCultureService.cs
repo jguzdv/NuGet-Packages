@@ -1,14 +1,14 @@
 ﻿namespace JGUZDV.Blazor.Components.L10n
 {
     /// <summary>
-    /// Service used to handle methods implemented in the ISupportedCultureService.
+    /// Handles methods and processes regarding the supported cultures.
     /// </summary>
     public class SupportedCultureService : ISupportedCultureService
     {
         private readonly List<string> _supportedCultures;
 
         /// <summary>
-        /// Constructor of Service to integrate the list of supported cultures.
+        /// Assigns the supported cultures.
         /// </summary>
         /// <param name="supportedCultures"></param>
         public SupportedCultureService(List<string> supportedCultures)
@@ -17,9 +17,9 @@
         }
 
         /// <summary>
-        /// Method to get all the supported cultures.
+        /// Returns all the supported cultures.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>List of strings including culture shortcuts.</returns>
         /// <exception cref="Exception"></exception>
         public List<string> GetSupportedCultures()
         {

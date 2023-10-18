@@ -3,12 +3,12 @@
 namespace JGUZDV.Blazor.Components.L10n
 {
     /// <summary>
-    /// Service extension.
+    /// Handles the method to pass on the supported cultures.
     /// </summary>
     public static class SupportedCultureServiceCollectionExtensions
     {
         /// <summary>
-        /// Method to add the service and interface to the project and to pass on the supported cultures.
+        /// Adds the service and interface to the project and passes on the supported cultures.
         /// </summary>
         /// <param name="services"></param>
         /// <param name="supportedCultures"></param>

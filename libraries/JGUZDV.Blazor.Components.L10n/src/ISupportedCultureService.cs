@@ -1,14 +1,14 @@
 ﻿namespace JGUZDV.Blazor.Components.L10n
 {
     /// <summary>
-    /// Interface used to implement methods for the SupportedCultureService.
+    /// Defines methods and processes regarding the supported cultures.
     /// </summary>
     public interface ISupportedCultureService
     {
         /// <summary>
-        /// Method to get all the supported cultures.
+        /// Returns all the supported cultures.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>>List of strings including culture shortcuts.</returns>
         List<string> GetSupportedCultures();
     }
 }
