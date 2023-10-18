@@ -1,0 +1,47 @@
+﻿@page "/l10nEdit"
+
+@using JGUZDV.Blazor.Components.L10n;
+@using JGUZDV.L10n;
+
+<div class="p-3">
+<JGUZDV.Blazor.Components.L10n.L10nEditor L10n="_firstTestVaue" L10nChanged="ShowChangedValue"></JGUZDV.Blazor.Components.L10n.L10nEditor>
+</div>
+
+<div class="p-3">
+    <JGUZDV.Blazor.Components.L10n.L10nEditor L10n="_secondRestValue" SupportedCultures="_languages" L10nChanged="ShowChangedValue"></JGUZDV.Blazor.Components.L10n.L10nEditor>
+</div>
+
+@if (_isChanged)
+{
+    <div class="d-flex">
+        <div>@_firstTestVaue["DE"], </div>
+        <div>@_firstTestVaue["EN"]</div>
+    </div>
+    <div class="d-flex">
+        <div>@_secondRestValue["DE"], </div>
+        <div>@_secondRestValue["EN"], </div>
+        <div>@_secondRestValue["FR"]</div>
+    </div>
+}
+
+@code {
+    private List<string> _languages = new() { "de", "en", "fr" };
+    private L10nString _firstTestVaue = new();
+    private L10nString _secondRestValue = new();
+    private bool _isChanged;
+
+    protected override void OnInitialized()
+    {
+        _firstTestVaue["DE"] = "Speicherplatz";
+        _firstTestVaue["EN"] = "storage space";
+
+        _secondRestValue["DE"] = "Mitarbeitende";
+        _secondRestValue["EN"] = "staff";
+        _secondRestValue["FR"] = "employés";
+    }
+
+    public void ShowChangedValue()
+    {
+        _isChanged = true;
+    }
+}
