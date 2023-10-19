@@ -13,9 +13,9 @@ namespace JGUZDV.Blazor.Components.L10n
         /// <param name="services"></param>
         /// <param name="supportedCultures"></param>
         /// <returns></returns>
-        public static IServiceCollection AddSupportedCultures(this IServiceCollection services, List<string> supportedCultures)
+        public static IServiceCollection AddSupportedCultures(this IServiceCollection services, IEnumerable<string> supportedCultures)
         {
-            services.AddSingleton<ISupportedCultureService, SupportedCultureService>(x => new SupportedCultureService(supportedCultures));
+            services.AddSingleton<ISupportedCultureService, SupportedCultureService>(x => new SupportedCultureService(supportedCultures.ToList()));
             return services;
         }
     }
