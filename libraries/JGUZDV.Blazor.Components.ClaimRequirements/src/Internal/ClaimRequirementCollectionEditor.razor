@@ -1,7 +1,4 @@
-﻿@using JGUZDV.Extensions.Authorization;
-@using Microsoft.Extensions.Logging;
-
-<div>
+﻿<div>
     <div class="form-floating pb-2">
         <select id="@($"MatchTypeSelect-{_guid}")" class="form-select" @onchange="(e) => MatchTypeChanged(e.Value.ToString())">
             <option value="@RequirementCollectionMatchType.MatchAll" selected="@(ClaimRequirementCollection.MatchType == RequirementCollectionMatchType.MatchAll)">@LR["CollectionEditor.MatchAll"]</option>

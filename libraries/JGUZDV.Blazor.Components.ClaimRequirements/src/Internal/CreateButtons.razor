@@ -1,7 +1,11 @@
 ﻿<div>
-<button class="btn btn-primary" @onclick="HandleClaimValueButtonClick">@LR["AddButton.AddClaimRequirement"]</button>
+    <button type="button" class="btn btn-primary" @onclick="HandleClaimValueButtonClick">
+        @LR["AddButton.AddClaimRequirement"]
+    </button>
 
-<button class="btn btn-primary" @onclick="HandleClaimCollectionButtonClick">@LR["AddButton.AddClaimRequirementCollection"]</button>
+    <button type="button" class="btn btn-primary" @onclick="HandleClaimCollectionButtonClick">
+        @LR["AddButton.AddClaimRequirementCollection"]
+    </button>
 </div>
 
 @code {
