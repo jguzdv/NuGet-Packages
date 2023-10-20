@@ -1,41 +1,37 @@
 ﻿@using JGUZDV.Extensions.Authorization;
 <div class="p-3 border">
-    @if (ClaimRequirement is NullRequirement or null)
-    {
-        <ClaimRequirementAddButton OnAddClaimValue="CreateClaimValue" OnAddClaimCollcetion="CreateClaimRequirementCollection"></ClaimRequirementAddButton>
-    }
-    else
-    {
-        <div class="row">
-            
-            @if (ClaimRequirement is ClaimValueRequirement cvr)
-            {
-                <div class="col">
-                    <ClaimValueEditor ClaimValueRequirement="cvr" ClaimValueRequirementChanged=" (e) => ClaimRequirementChanged.InvokeAsync(e)"></ClaimValueEditor>
-                </div>
-            }
-
-            @if (ClaimRequirement is ClaimRequirementCollection crc)
-            {
-                <div class="col ps-5">
+    <div class="row">
+        @if (Requirement is NullRequirement or null)
+        {
+            <CreateButtons OnAddClaimValue="CreateClaimValue" OnAddClaimCollcetion="CreateClaimRequirementCollection"></CreateButtons>
+        }
+        else
+        {
+            <div class="col @(Requirement is ClaimRequirementCollection?"ps-5":null)">
+                @if (Requirement is ClaimRequirementCollection crc)
+                {
                     <ClaimRequirementCollectionEditor ClaimRequirementCollection="crc" OnClaimRequirementCollectionChanged="ClaimCollectionUpdate"></ClaimRequirementCollectionEditor>
-                </div>
-            }
+                }
+
+                @if (Requirement is ClaimValueRequirement cvr)
+                {
+                    <ClaimValueEditor ClaimValueRequirement="cvr" ClaimValueRequirementChanged=" (e) => RequirementChanged.InvokeAsync(e)"></ClaimValueEditor>
+                }
+            </div>
             <div class="col col-auto">
                 <button class="btn btn-danger" @onclick="DeleteRequirement">@LR["Editor.Delete"]</button>
             </div>
-
-        </div>
-    }
+        }
+    </div>
 </div>
 
 @code {
     [Parameter]
-    public ClaimRequirement ClaimRequirement { get; set; }
+    public ClaimRequirement? Requirement { get; set; }
 
 
     [Parameter]
-    public EventCallback<ClaimRequirement> ClaimRequirementChanged { get; set; }
+    public EventCallback<ClaimRequirement> RequirementChanged { get; set; }
 
     protected override void OnInitialized()
     {
@@ -44,28 +40,28 @@
 
     private void ClaimCollectionUpdate(ClaimRequirementCollection crc)
     {
-        ClaimRequirement = crc;
-        _ = ClaimRequirementChanged.InvokeAsync(crc);
+        Requirement = crc;
+        _ = RequirementChanged.InvokeAsync(crc);
     }
 
     private void DeleteRequirement()
     {
-        ClaimRequirement = new NullRequirement();
-        _ = ClaimRequirementChanged.InvokeAsync(ClaimRequirement);
+        Requirement = new NullRequirement();
+        _ = RequirementChanged.InvokeAsync(Requirement);
     }
 
     private void CreateClaimValue()
     {
         var cvr = new ClaimValueRequirement("role", "admin");
-        ClaimRequirement = cvr;
-        ClaimRequirementChanged.InvokeAsync(cvr);
+        Requirement = cvr;
+        RequirementChanged.InvokeAsync(Requirement);
     }
 
     private void CreateClaimRequirementCollection()
     {
         var crc = new ClaimRequirementCollection(new List<ClaimRequirement>(), RequirementCollectionMatchType.MatchAll);
-        ClaimRequirement = crc;
-        ClaimRequirementChanged.InvokeAsync(ClaimRequirement);
+        Requirement = crc;
+        RequirementChanged.InvokeAsync(Requirement);
     }
 
 }
