@@ -1,0 +1,27 @@
+﻿<div>
+    <button type="button" class="btn btn-primary" @onclick="HandleClaimValueButtonClick">
+        @LR["AddButton.AddClaimRequirement"]
+    </button>
+
+    <button type="button" class="btn btn-primary" @onclick="HandleClaimCollectionButtonClick">
+        @LR["AddButton.AddClaimRequirementCollection"]
+    </button>
+</div>
+
+@code {
+    [Parameter]
+    public EventCallback OnAddClaimValue { get; set; }
+
+    [Parameter]
+    public EventCallback OnAddClaimCollcetion { get; set; }
+
+    private void HandleClaimValueButtonClick()
+    {
+        _ = OnAddClaimValue.InvokeAsync();
+    }
+
+    private void HandleClaimCollectionButtonClick()
+    {
+        _ = OnAddClaimCollcetion.InvokeAsync();
+    }
+}

@@ -14,4 +14,7 @@ builder.Services.AddSupportedCultures(new List<string>() { "de", "en" });
 
 builder.Services.AddLocalization();
 
-await builder.Build().RunAsync();
+
+var app = builder.Build();
+
+await app.RunAsync();

@@ -1,0 +1,63 @@
+﻿@using JGUZDV.Extensions.Authorization;
+<div class="p-3 border">
+    <div class="row">
+        @if (Requirement is NullRequirement or null)
+        {
+            <CreateButtons OnAddClaimValue="CreateClaimValue" OnAddClaimCollcetion="CreateClaimRequirementCollection" />
+        }
+        else
+        {
+            <div class="col @(Requirement is ClaimRequirementCollection?"ps-5":null)">
+                @if (Requirement is ClaimRequirementCollection crc)
+                {
+                    <CollectionEditor RequirementCollection="crc" OnRequirementCollectionChanged="ClaimCollectionUpdate" />
+                }
+
+                @if (Requirement is ClaimValueRequirement cvr)
+                {
+                    <ClaimValueEditor Requirement="cvr" RequirementChanged="(e) => RequirementChanged.InvokeAsync(e)" />
+                }
+            </div>
+            <div class="col col-auto">
+                <button class="btn btn-danger" @onclick="DeleteRequirement">@LR["Editor.Delete"]</button>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public ClaimRequirement? Requirement { get; set; }
+
+    [Parameter]
+    public EventCallback<ClaimRequirement> RequirementChanged { get; set; }
+
+
+    
+    private void ClaimCollectionUpdate(ClaimRequirementCollection crc)
+    {
+        Requirement = crc;
+        _ = RequirementChanged.InvokeAsync(crc);
+    }
+
+    private void DeleteRequirement()
+    {
+        Requirement = new NullRequirement();
+        _ = RequirementChanged.InvokeAsync(Requirement);
+    }
+
+    private void CreateClaimValue()
+    {
+        var cvr = new ClaimValueRequirement("role", "admin");
+        Requirement = cvr;
+        RequirementChanged.InvokeAsync(Requirement);
+    }
+
+    private void CreateClaimRequirementCollection()
+    {
+        var crc = new ClaimRequirementCollection(new List<ClaimRequirement>(), RequirementCollectionMatchType.MatchAll);
+        Requirement = crc;
+        RequirementChanged.InvokeAsync(Requirement);
+    }
+
+}
