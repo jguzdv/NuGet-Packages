@@ -1,0 +1,78 @@
+﻿@using JGUZDV.Extensions.Authorization;
+<div class="row">
+    <div class="col">
+        <label for="Claimtyp">@LR["ClaimRequirement.ClaimType"]</label>
+        <input class="form-control" type="text" value="@Requirement.ClaimType" @onchange="((e) => OnClaimRequirementChanged(claimType: e.Value?.ToString()))">
+
+        <label for="Claimwert">@LR["ClaimRequirement.ClaimValue"]</label>
+        <input class="form-control" type="text" value="@Requirement.ClaimValue" @onchange="((e) => OnClaimRequirementChanged(claimValue: e.Value?.ToString()))">
+
+        <div class="form-check form-switch py-2">
+            <input class="form-check-input" type="checkbox" checked="@Requirement.DisableWildcardMatch" role="switch" id="@($"DisableWildcardMatchSwitch-{_guid}")" @onchange="((e) => OnClaimRequirementChanged(disableWildcardMatch: e.Value as bool?))">
+            <label class="form-check-label" for="@($"DisableWildcardMatchSwitch-{_guid}")">@LR["ValueEditor.NoWildcardMatch"]</label>
+        </div>
+        <div class="pb-2 form-floating">
+            <select class="form-select" id="@($"ClaimTypeComparisonSelect-{_guid}")" @onchange="(e) => ClaimTypeComparisonChanged(e.Value?.ToString())">
+                @ComparisonOptions(Requirement.ClaimTypeComparison)
+            </select>
+            <label for="@($"ClaimTypeComparisonSelect-{_guid}")">@LR["ValueEditor.ClaimTypeStringComparison"]</label>
+        </div>
+
+        <div class="pb-2 form-floating">
+            <select class="form-select" id="@($"ClaimValueComparisonSelect-{_guid}")" @onchange="(e) => ClaimValueComparisonChanged(e.Value?.ToString())">
+                @ComparisonOptions(Requirement.ClaimValueComparison)
+            </select>
+            <label for="@($"ClaimValueComparisonSelect-{_guid}")">@LR["ValueEditor.ClaimValueStringComparison"]</label>
+        </div>
+
+    </div>
+</div>
+
+@code {
+    private static RenderFragment<StringComparison> ComparisonOptions = (ctx) => __builder =>
+    {
+        <option value="@StringComparison.OrdinalIgnoreCase" selected="@(ctx == StringComparison.OrdinalIgnoreCase)">OrdinalIgnoreCase</option>
+        <option value="@StringComparison.Ordinal" selected="@(ctx == StringComparison.Ordinal)">Ordinal</option>
+    };
+
+
+    private Guid _guid = Guid.NewGuid();
+
+
+    [Parameter, EditorRequired, NotNull]
+    public ClaimValueRequirement? Requirement { get; set; }
+
+    [Parameter]
+    public EventCallback<ClaimValueRequirement> RequirementChanged { get; set; }
+
+
+    private void ClaimTypeComparisonChanged(string? stringComparison)
+    {
+        if(Enum.TryParse<StringComparison>(stringComparison, true, out var comparison))
+            OnClaimRequirementChanged(claimTypeComparison: comparison);
+    }
+
+    private void ClaimValueComparisonChanged(string? stringComparison)
+    {
+        if (Enum.TryParse<StringComparison>(stringComparison, true, out var comparison))
+            OnClaimRequirementChanged(claimValueComparison: comparison);
+    }
+
+    private void OnClaimRequirementChanged(
+        string? claimType = null,
+        string? claimValue = null,
+        bool? disableWildcardMatch = null,
+        StringComparison? claimTypeComparison = null,
+        StringComparison? claimValueComparison = null)
+    {
+        Requirement = new ClaimValueRequirement(
+            claimType ?? Requirement.ClaimType,
+            claimValue ?? Requirement.ClaimValue,
+            disableWildcardMatch ?? Requirement.DisableWildcardMatch,
+            claimTypeComparison ?? Requirement.ClaimTypeComparison,
+            claimValueComparison ?? Requirement.ClaimValueComparison);
+
+        _ = RequirementChanged.InvokeAsync(Requirement);
+    }
+
+}

@@ -1,0 +1,56 @@
+﻿@using JGUZDV.Extensions.Authorization;
+
+@if (ClaimRequirement != null)
+{
+    @if (ClaimRequirement is NullRequirement nr)
+    {
+        <div>
+            @LR["Viewer.ClaimUndefined"]
+        </div>
+    }
+
+    @if (ClaimRequirement is ClaimValueRequirement cvr)
+    {
+        <div class="ps-3">
+            <pre class="d-inline">@cvr.ClaimType</pre> (@WriteComparison(cvr.ClaimTypeComparison)):
+            <pre class="d-inline">@cvr.ClaimValue</pre> (@WriteComparison(cvr.ClaimValueComparison))
+        </div>
+    }
+
+    @if (ClaimRequirement is ClaimRequirementCollection crc)
+    {
+        @for (int i = 0; i < crc.Requirements.Count; i++)
+        {
+            <div class="ps-3 border-start">
+                <ClaimRequirementViewer ClaimRequirement="crc.Requirements[i]" />
+            </div>
+            @if (i != crc.Requirements.Count - 1)
+            {
+                <div>
+                @if (crc.MatchType == RequirementCollectionMatchType.MatchAll)
+                {
+                    @LR["Viewer.And"]
+                }
+                else if (crc.MatchType == RequirementCollectionMatchType.MatchAny)
+                {
+                    @LR["Viewer.Or"]
+                }
+                </div>
+            }
+        }
+    }
+}
+
+@code {
+    [Parameter, EditorRequired]
+    public ClaimRequirement? ClaimRequirement { get; set; }
+
+    private string WriteComparison(StringComparison stringComparison)
+     => stringComparison switch
+     {
+         StringComparison.OrdinalIgnoreCase => "CI",
+         StringComparison.Ordinal => "CS",
+         _ => "k/a"
+     };
+
+}
