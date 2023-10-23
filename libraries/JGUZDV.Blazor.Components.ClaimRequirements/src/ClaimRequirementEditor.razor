@@ -3,19 +3,19 @@
     <div class="row">
         @if (Requirement is NullRequirement or null)
         {
-            <CreateButtons OnAddClaimValue="CreateClaimValue" OnAddClaimCollcetion="CreateClaimRequirementCollection"></CreateButtons>
+            <CreateButtons OnAddClaimValue="CreateClaimValue" OnAddClaimCollcetion="CreateClaimRequirementCollection" />
         }
         else
         {
             <div class="col @(Requirement is ClaimRequirementCollection?"ps-5":null)">
                 @if (Requirement is ClaimRequirementCollection crc)
                 {
-                    <ClaimRequirementCollectionEditor ClaimRequirementCollection="crc" OnClaimRequirementCollectionChanged="ClaimCollectionUpdate"></ClaimRequirementCollectionEditor>
+                    <CollectionEditor RequirementCollection="crc" OnRequirementCollectionChanged="ClaimCollectionUpdate" />
                 }
 
                 @if (Requirement is ClaimValueRequirement cvr)
                 {
-                    <ClaimValueEditor ClaimValueRequirement="cvr" ClaimValueRequirementChanged=" (e) => RequirementChanged.InvokeAsync(e)"></ClaimValueEditor>
+                    <ClaimValueEditor Requirement="cvr" RequirementChanged="(e) => RequirementChanged.InvokeAsync(e)" />
                 }
             </div>
             <div class="col col-auto">
@@ -29,15 +29,11 @@
     [Parameter]
     public ClaimRequirement? Requirement { get; set; }
 
-
     [Parameter]
     public EventCallback<ClaimRequirement> RequirementChanged { get; set; }
 
-    protected override void OnInitialized()
-    {
 
-    }
-
+    
     private void ClaimCollectionUpdate(ClaimRequirementCollection crc)
     {
         Requirement = crc;

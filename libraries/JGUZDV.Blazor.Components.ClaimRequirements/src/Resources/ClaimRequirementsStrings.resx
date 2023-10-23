@@ -1,19 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <data name="AddButton.AddClaimRequirement" xml:space="preserve">
-    <value>Claimrequirement hinzufügen</value>
+    <value>Typ/Wert-Regel hinzufügen</value>
   </data>
   <data name="AddButton.AddClaimRequirementCollection" xml:space="preserve">
-    <value>ClaimrequirementCollection hinzufügen</value>
+    <value>Regelsatz hinzufügen</value>
   </data>
   <data name="CollectionEditor.MatchAll" xml:space="preserve">
-    <value>Match all</value>
+    <value>Alle (UND)</value>
   </data>
   <data name="CollectionEditor.MatchAny" xml:space="preserve">
-    <value>Match any</value>
+    <value>Mindestens einer (ODER)</value>
   </data>
   <data name="CollectionEditor.ChooseMatching" xml:space="preserve">
-    <value>Matchbedingung wählen</value>
+    <value>Verknüpfung wählen</value>
   </data>
   <data name="Editor.Delete" xml:space="preserve">
     <value>Löschen</value>
@@ -31,7 +31,7 @@
     <value>Wert</value>
   </data>
   <data name="Viewer.ClaimUndefined" xml:space="preserve">
-    <value>Es wurde kein Requirement definiert.</value>
+    <value>Es wurden keine Regeln definiert.</value>
   </data>
   <data name="Viewer.And" xml:space="preserve">
     <value>UND</value>
@@ -40,13 +40,13 @@
     <value>ODER</value>
   </data>
   <data name="ValueEditor.NoWildcardMatch" xml:space="preserve">
-    <value>Wildcardmatch deaktivieren</value>
+    <value>Wildcard (*) deaktivieren</value>
   </data>
   <data name="ValueEditor.ClaimTypeStringComparison" xml:space="preserve">
-    <value>Stringcimparison für Typ</value>
+    <value>Vergleichsart für Typ</value>
   </data>
   <data name="ValueEditor.ClaimValueStringComparison" xml:space="preserve">
-    <value>Stringcomparison für Wert</value>
+    <value>Vergleichsart für Wert</value>
   </data>
   <data name="Viewer.ComparisonType" xml:space="preserve">
     <value>Vergleichsart</value>

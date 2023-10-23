@@ -1,0 +1,85 @@
+﻿<div>
+    <div class="form-floating pb-2">
+        <select id="@($"MatchTypeSelect-{_guid}")" class="form-select" @onchange="(e) => MatchTypeChanged(e.Value?.ToString())">
+            <option value="@RequirementCollectionMatchType.MatchAll" selected="@(RequirementCollection.MatchType == RequirementCollectionMatchType.MatchAll)">@LR["CollectionEditor.MatchAll"]</option>
+            <option value="@RequirementCollectionMatchType.MatchAny" selected="@(RequirementCollection.MatchType == RequirementCollectionMatchType.MatchAny)">@LR["CollectionEditor.MatchAny"]</option>
+        </select>
+        <label for="@($"MatchTypeSelect-{_guid}")">@LR["CollectionEditor.ChooseMatching"]</label>
+    </div>
+    @for (int i = 0; i < RequirementCollection.Requirements.Count; i++)
+    {
+        var current = RequirementCollection.Requirements[i];
+        <div class="pb-2">
+            <ClaimRequirementEditor Requirement="current" RequirementChanged="(e) => UpdateCollection(current,e)"></ClaimRequirementEditor>
+        </div>
+    }
+
+    <CreateButtons OnAddClaimValue="() => AddClaimValue()" OnAddClaimCollcetion="() => AddClaimCollection()"></CreateButtons>
+</div>
+
+
+@code {
+    [Parameter, EditorRequired, NotNull]
+    public ClaimRequirementCollection? RequirementCollection { get; set; }
+
+    [Parameter]
+    public EventCallback<ClaimRequirementCollection> OnRequirementCollectionChanged { get; set; }
+
+    private RequirementCollectionMatchType _selectedMatchType;
+
+    private Guid _guid = Guid.NewGuid();
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        _selectedMatchType = RequirementCollection.MatchType;
+    }
+
+    private void MatchTypeChanged(string value)
+    {
+        if (Enum.TryParse<RequirementCollectionMatchType>(value, true, out var matchType))
+            OnClaimRequirementChanged(matchType: matchType);
+    }
+
+    private void OnClaimRequirementChanged(RequirementCollectionMatchType? matchType = null,
+                                            List<ClaimRequirement>? claimRequirements = null)
+    {
+        var result = new ClaimRequirementCollection(
+            claimRequirements ?? RequirementCollection.Requirements,
+            matchType ?? RequirementCollection.MatchType
+        );
+
+        _ = OnRequirementCollectionChanged.InvokeAsync(result);
+    }
+
+    private void UpdateCollection(ClaimRequirement oldRequirement, ClaimRequirement newRequirement)
+    {
+        if (newRequirement is NullRequirement)
+        {
+            RequirementCollection.Requirements.Remove(oldRequirement);
+        }
+        else
+        {
+            var index = RequirementCollection.Requirements.IndexOf(oldRequirement);
+            RequirementCollection.Requirements[index] = newRequirement;
+        }
+
+        _ = OnRequirementCollectionChanged.InvokeAsync(RequirementCollection);
+    }
+
+    public void AddClaimValue()
+    {
+        var cvr = new ClaimValueRequirement("*", "*");
+        RequirementCollection.Requirements.Add(cvr);
+
+        _ = OnRequirementCollectionChanged.InvokeAsync(RequirementCollection);
+    }
+
+    public void AddClaimCollection()
+    {
+        var crc = new ClaimRequirementCollection(new List<ClaimRequirement>(), RequirementCollectionMatchType.MatchAll);
+        RequirementCollection.Requirements.Add(crc);
+
+        _ = OnRequirementCollectionChanged.InvokeAsync(RequirementCollection);
+    }
+}

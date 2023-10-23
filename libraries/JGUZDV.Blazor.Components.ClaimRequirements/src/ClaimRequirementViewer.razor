@@ -2,20 +2,18 @@
 
 @if (ClaimRequirement != null)
 {
-    @if (ClaimRequirement is ClaimValueRequirement cvr)
-    {
-        <div class="ps-3">
-            @LR["ClaimRequirement.ClaimType"]: @cvr.ClaimType - @WriteComparison(cvr.ClaimTypeComparison)
-        </div>
-        <div class="ps-3">
-            @LR["ClaimRequirement.ClaimValue"]: @cvr.ClaimValue - @WriteComparison(cvr.ClaimValueComparison)
-        </div>
-    }
-
     @if (ClaimRequirement is NullRequirement nr)
     {
         <div>
             @LR["Viewer.ClaimUndefined"]
+        </div>
+    }
+
+    @if (ClaimRequirement is ClaimValueRequirement cvr)
+    {
+        <div class="ps-3">
+            <pre class="d-inline">@cvr.ClaimType</pre> (@WriteComparison(cvr.ClaimTypeComparison)):
+            <pre class="d-inline">@cvr.ClaimValue</pre> (@WriteComparison(cvr.ClaimValueComparison))
         </div>
     }
 
@@ -26,38 +24,22 @@
             <div class="ps-3 border-start">
                 <ClaimRequirementViewer ClaimRequirement="crc.Requirements[i]" />
             </div>
-            @if (crc.MatchType == RequirementCollectionMatchType.MatchAll && i != crc.Requirements.Count - 1)
+            @if (i != crc.Requirements.Count - 1)
             {
                 <div>
+                @if (crc.MatchType == RequirementCollectionMatchType.MatchAll)
+                {
                     @LR["Viewer.And"]
-                </div>
-            }
-            @if (crc.MatchType == RequirementCollectionMatchType.MatchAny && i != crc.Requirements.Count - 1)
-            {
-                <div>
+                }
+                else if (crc.MatchType == RequirementCollectionMatchType.MatchAny)
+                {
                     @LR["Viewer.Or"]
+                }
                 </div>
             }
         }
     }
 }
-
-@* @if (ClaimRequirement != null)
-{
-    <div class="mb-3">
-        <div class="inline-block mb-3 mt-1">
-            <span class="px-3">@LR["Viewer.ComparisonTypes"]: CI = Case insensitive, CS = Case sensitive</span>
-        </div>
-        @if (ClaimRequirement is ClaimValueRequirement cvr)
-        {
-            <div class="inline-block">
-                <div class="">
-                    <span class="px-3">{ @LR["ClaimRequirement.ClaimType"]: @cvr.ClaimType (@WriteComparison(cvr.ClaimTypeComparison)), @LR["ClaimRequirement.ClaimValue"]: @cvr.ClaimValue (@WriteComparison(cvr.ClaimValueComparison)) }</span>
-                </div>
-            </div>
-        }
-    </div>
-} *@
 
 @code {
     [Parameter, EditorRequired]
