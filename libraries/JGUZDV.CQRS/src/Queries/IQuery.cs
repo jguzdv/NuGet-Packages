@@ -1,6 +1,9 @@
-﻿namespace JGUZDV.CQRS.Queries;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace JGUZDV.CQRS.Queries;
 
 public interface IQuery { }
 public interface IQuery<T> : IQuery {
-    QueryResult<T> Result { get; set; }
+    [DisallowNull]
+    QueryResult<T>? Result { get; set; }
 }

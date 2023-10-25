@@ -1,4 +1,5 @@
-﻿using JGUZDV.CQRS.Queries;
+﻿using JGUZDV.CQRS.AspNetCore.Http;
+using JGUZDV.CQRS.Queries;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 
@@ -10,7 +11,7 @@ namespace JGUZDV.CQRS.AspNetCore.Mvc
             where TQuery : IQuery<TResult>
         {
             await queryHandler.ExecuteAsync(query, controller.User, controller.HttpContext.RequestAborted);
-            return query.Result.ToActionResult<TResult>(loc);
+            return query.Result.ToActionResult(loc);
         }
     }
 }
