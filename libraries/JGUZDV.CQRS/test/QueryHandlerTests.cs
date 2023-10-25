@@ -32,7 +32,7 @@ namespace JGUZDV.CQRS.Tests
             await sut.ExecuteAsync(query, null, default);
 
             Assert.NotNull(query.Result);
-            Assert.IsType<UnauthorizedResult>(query.Result.HandlerResult);
+            Assert.IsType<UnauthorizedResult>(query.Result?.HandlerResult);
         }
 
         [Fact]
@@ -44,7 +44,7 @@ namespace JGUZDV.CQRS.Tests
             await sut.ExecuteAsync(query, null, default);
 
             Assert.NotNull(query.Result);
-            Assert.IsType<UnauthorizedResult>(query.Result.HandlerResult);
+            Assert.IsType<UnauthorizedResult>(query.Result?.HandlerResult);
         }
 
 
@@ -57,7 +57,7 @@ namespace JGUZDV.CQRS.Tests
             await sut.ExecuteAsync(query, null, default);
 
             Assert.NotNull(query.Result);
-            Assert.IsType<ValidationErrorResult>(query.Result.HandlerResult);
+            Assert.IsType<ValidationErrorResult>(query.Result?.HandlerResult);
         }
 
         [Fact]
@@ -69,7 +69,7 @@ namespace JGUZDV.CQRS.Tests
             await sut.ExecuteAsync(query, null, default);
 
             Assert.NotNull(query.Result);
-            Assert.IsType<GenericErrorResult>(query.Result.HandlerResult);
+            Assert.IsType<GenericErrorResult>(query.Result?.HandlerResult);
         }
 
         [Fact]
@@ -79,8 +79,8 @@ namespace JGUZDV.CQRS.Tests
             var query = new TestQuery(true, true, true, true, new());
 
             var queryResult = await sut.ExecuteQuery(query, null, default);
-            Assert.True(queryResult.HasValue);
-            Assert.NotNull(queryResult.HandlerResult);
+            Assert.NotNull(queryResult?.HandlerResult);
+            Assert.True(queryResult?.HasValue);
         }
     }
 }
