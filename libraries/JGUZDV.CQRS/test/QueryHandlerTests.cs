@@ -13,7 +13,7 @@ namespace JGUZDV.CQRS.Tests
 
             await sut.ExecuteAsync(query, null, default);
 
-            Assert.True(query.Result.HasValue);
+            Assert.True(query.Result?.HasValue);
 
             Assert.Equal(5, query.Methods.Count);
             Assert.Equal(TestQueryHandler.NormalizeQueryMethod, query.Methods.Dequeue());
