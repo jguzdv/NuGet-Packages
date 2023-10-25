@@ -27,7 +27,7 @@ namespace JGUZDV.CQRS.Tests
         public bool IsResultAuthorized { get; }
         public bool CanExecute { get; }
         public TestResult ResultToBeSet { get; }
-        public QueryResult<TestResult> Result { get; set; }
+        public QueryResult<TestResult>? Result { get; set; }
 
         public Queue<string> Methods { get; }
         public void TraceMethod([CallerMemberName] string method = null!)
