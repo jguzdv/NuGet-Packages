@@ -1,0 +1,41 @@
+﻿.multi-select {
+    
+}
+
+.multi-select + .multi-select {
+    border-top : 0px!important;
+}
+
+.fade-in {
+    animation: fade-in;
+    animation-timing-function: linear;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+}
+
+.fade-out {
+    animation: fade-out;
+    animation-timing-function: linear;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes fade-out {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
