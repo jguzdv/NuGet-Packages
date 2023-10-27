@@ -1,4 +1,4 @@
-﻿@typeparam T where T : class
+﻿@typeparam T where T : class, new()
 @using Microsoft.AspNetCore.Components.Web;
 @using Modals;
 
@@ -8,7 +8,7 @@
 }
 else if (Button == null)
 {
-    <button class="@ButtonClass" @onclick="() => Modal?.ShowModal(null)!">@ButtonText</button>
+    <button class="@ButtonClass" @onclick="() => Modal?.ShowModal(new T())!">@ButtonText</button>
 }
 
 @{
@@ -30,15 +30,15 @@ else if (Button == null)
 }
 
 @code {
-    private Modal<T?>? _modal;
-    private Modal<T?>? Modal
+    private Modal<T>? _modal;
+    private Modal<T>? Modal
     {
         get => _modal;
         set { _modal = value; InvokeAsync(StateHasChanged); }
     }
 
     [Parameter]
-    public RenderFragment<Modal<T?>>? Button { get; set; }
+    public RenderFragment<Modal<T>>? Button { get; set; }
 
     [Parameter]
     public string? ButtonText { get; set; }
