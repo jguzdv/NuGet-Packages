@@ -72,14 +72,35 @@
 </JGUZDV.Blazor.Components.Modals.Modal>
 
 
-<ModalButton Title="A Modal" T="string">
+<ModalButton ModalTitle="A Modal" T="string">
     <Button>
         <div class="btn btn-primary" @onclick="@(() => context.ShowModal("some text"))">ModalButton</div>
     </Button>
-    <Body>
+    <ModalBody>
         @context.Model
-    </Body>
+    </ModalBody>
 </ModalButton>
+
+<ModalConfirmationButton 
+    Title="Confirmation"
+    ButtonText="Delete Something"
+    ConfirmationPrompt="Do you really want to delete this?"
+    AcceptText="Accept"
+    DenyText="Deny"
+    CancelText="Cancel"
+    OnModalClosed="@(async (x) => {await Task.Delay(1000);Console.WriteLine($"Closed with result {x}");})"
+></ModalConfirmationButton>
+
+<ModalConfirmationButton 
+    Title="Confirmation"
+    AcceptText="Accept"
+    CancelText="Cancel"
+    ConfirmationPrompt="Do you really want to delete this?"
+    OnModalClosed="@(async (x) => {await Task.Delay(1000);Console.WriteLine($"Closed with result {x}");})">
+<Button>
+    <div class="btn btn-primary" @onclick="() => context.ShowModal()">button render fragment</div>
+</Button>
+</ModalConfirmationButton>
 
 
 <ModalContainer />
