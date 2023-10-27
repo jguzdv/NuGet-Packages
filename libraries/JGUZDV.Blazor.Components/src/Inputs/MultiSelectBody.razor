@@ -1,0 +1,112 @@
+﻿@typeparam T
+@typeparam TKey
+
+@if (!string.IsNullOrWhiteSpace(FilterLabel))
+{
+    <div class="mt-2 position-relative">
+        <i class="position-absolute top-50 translate-middle-y ps-2 fa fa-search"></i>
+        <input class="form-control" style="padding-left: 2rem;" placeholder="@FilterLabel" @bind="_filter" @bind:event="oninput" />
+    </div>
+}
+
+@if (!string.IsNullOrWhiteSpace(AllOptionLabel) && string.IsNullOrWhiteSpace(_filter))
+{
+    <div class="my-2" style="cursor:pointer" @onclick="HandleAllClicked">
+        @if (Value.Count == Items.Count)
+        {
+            <div class="border p-2 small border-success text-nowrap text-success d-flex justify-content-between">
+                <span>@AllOptionLabel</span>
+                <i class="fa fa-fw fa-check align-self-center"></i>
+            </div>
+        }
+        else
+        {
+            <div class="border p-2 small">
+                @AllOptionLabel
+            </div>
+        }
+    </div>
+}
+
+<div class="row @RowCols mt-2">
+    @foreach (var item in Items.Where(x => string.IsNullOrWhiteSpace(_filter)
+    || ItemName(x).Contains(_filter, StringComparison.OrdinalIgnoreCase)))
+    {
+        <div class="mb-2" style="cursor:pointer" @onclick="() => HandleItemClicked(item)">
+            @if (Value.Any(x => ItemKey(x).Equals(ItemKey(item))))
+            {
+                <div class="border p-2 small border-success text-nowrap text-success d-flex justify-content-between">
+                    <span>@ItemName(item)</span>
+                    <i class="fa fa-fw fa-check align-self-center"></i>
+                </div>
+            }
+            else
+            {
+                <div class="border p-2 small">
+                    @ItemName(item)
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+
+    [Parameter]
+    [EditorRequired]
+    public IReadOnlyList<T> Items { get; set; } = default!;
+
+    [Parameter]
+    [EditorRequired]
+    public Func<T, string> ItemName { get; set; } = default!;
+
+    [Parameter]
+    [EditorRequired]
+    public Func<T, TKey> ItemKey { get; set; } = default!;
+
+    [Parameter]
+    [EditorRequired]
+    public IReadOnlyList<T> Value { get; set; } = default!;
+
+    [Parameter]
+    public EventCallback<IReadOnlyList<T>> ValueChanged { get; set; }
+
+    [Parameter]
+    public string? AllOptionLabel { get; set; }
+
+    [Parameter]
+    public string? FilterLabel { get; set; }
+
+    [Parameter]
+    public string? RowCols { get; set; } = "row-cols-1";
+
+    private string? _filter;
+
+    private async Task HandleItemClicked(T item)
+    {
+        if (Value.Any(x => ItemKey(x).Equals(ItemKey(item))))
+        {
+            Value = Value.Where(x => !ItemKey(x).Equals(ItemKey(item))).ToList();
+            await ValueChanged.InvokeAsync(Value);
+        }
+        else
+        {
+            Value = Value.Append(item).ToList();
+            await ValueChanged.InvokeAsync(Value);
+        }
+    }
+
+    private async Task HandleAllClicked()
+    {
+        if (Value.Count == Items.Count)
+        {
+            Value = new List<T>();
+            await ValueChanged.InvokeAsync(Value);
+        }
+        else
+        {
+            Value = Items.Union(Value).ToList();
+            await ValueChanged.InvokeAsync(Value);
+        }
+    }
+}

@@ -1,0 +1,116 @@
+﻿@typeparam T
+@typeparam TKey
+
+<div class="py-2 border-top border-bottom multi-select">
+    <div class="@ContentClass">
+        <div class="d-flex justify-content-between" style="cursor:pointer" @onclick="ToggleSelection">
+            <div class="d-flex flex-nowrap overflow-hidden text-nowrap text-truncate">
+                <span class="me-1">@Title </span>
+                @if (Value.Any())
+                {
+                    <span class="text-muted small text-truncate align-self-center" title="@(Value.Select(x => ItemName(x)).Aggregate((a,b) => $"{a}, {b}"))">
+                        <span> (@Value.Select(x => ItemName(x)).Aggregate((a,b) => $"{a}, {b}"))</span>
+                    </span>
+                }
+            </div>
+            <div class="ms-1">
+                @if (_isOpen)
+                {
+                    <i class="fa fa-fw fa-minus align-self-center"></i>
+                }
+                else
+                {
+                    <i class="fa fa-fw fa-plus align-self-center"></i>
+                }
+            </div>
+        </div>
+
+        @if (_isOpen)
+        {
+            <MultiSelectBody Items="@Items"
+                             Value="@Value"
+                             ValueChanged="@ValueChanged"
+                             FilterLabel="@FilterLabel"
+                             RowCols="@RowCols"
+                             ItemKey="@ItemKey"
+                             ItemName="@ItemName"
+                             AllOptionLabel="@AllOptionLabel">
+
+            </MultiSelectBody>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public IReadOnlyList<T> Items { get; set; } = default!;
+
+    [Parameter]
+    [EditorRequired]
+    public Func<T, string> ItemName { get; set; } = default!;
+
+    [Parameter]
+    [EditorRequired]
+    public Func<T, TKey> ItemKey { get; set; } = default!;
+
+    [Parameter]
+    [EditorRequired]
+    public IReadOnlyList<T> Value { get; set; } = default!;
+
+    [Parameter]
+    public EventCallback<IReadOnlyList<T>> ValueChanged { get; set; }
+
+    [Parameter]
+    [EditorRequired]
+    public string Title { get; set; } = default!;
+
+    [Parameter]
+    public string? AllOptionLabel { get; set; }
+
+    [Parameter]
+    public string? FilterLabel { get; set; }
+
+    [Parameter]
+    public string? RowCols { get; set; } = "row-cols-1";
+
+    [Parameter]
+    public string? ContentClass { get; set; }
+
+    private bool _isOpen;
+
+    private string? _filter;
+
+    private async Task HandleItemClicked(T item)
+    {
+        if (Value.Any(x => ItemKey(x).Equals(ItemKey(item))))
+        {
+            Value = Value.Where(x => !ItemKey(x).Equals(ItemKey(item))).ToList();
+            await ValueChanged.InvokeAsync(Value);
+        }
+        else
+        {
+            Value = Value.Append(item).ToList();
+            await ValueChanged.InvokeAsync(Value);
+        }
+    }
+
+    private async Task HandleAllClicked()
+    {
+        if (Value.Count == Items.Count)
+        {
+            Value = new List<T>();
+            await ValueChanged.InvokeAsync(Value);
+        }
+        else
+        {
+            Value = Items.Union(Value).ToList();
+            await ValueChanged.InvokeAsync(Value);
+        }
+    }
+
+    private void ToggleSelection()
+    {
+        _isOpen = !_isOpen;
+    }
+}
