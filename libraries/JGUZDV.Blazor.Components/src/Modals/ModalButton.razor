@@ -1,4 +1,4 @@
-﻿@typeparam T where T : class, new()
+﻿@typeparam T where T : class
 @using Microsoft.AspNetCore.Components.Web;
 @using Modals;
 
@@ -6,13 +6,9 @@
 {
     @Button(Modal)
 }
-else if (Button == null)
-{
-    <button class="@ButtonClass" @onclick="() => Modal?.ShowModal(new T())!">@ButtonText</button>
-}
 
 @{
-#pragma warning disable 8601
+#pragma warning disable 8601 // warning is wrong
 }
 <Modal @ref=Modal TModel="T"
        ChildContent="@ChildContent"
@@ -38,14 +34,8 @@ else if (Button == null)
     }
 
     [Parameter]
+    [EditorRequired]
     public RenderFragment<Modal<T>>? Button { get; set; }
-
-    [Parameter]
-    public string? ButtonText { get; set; }
-
-    [Parameter]
-    public string ButtonClass { get; set; } = "btn btn-primary";
-
 
     [Parameter]
     public RenderFragment<Modal<T>.ModalContext>? ChildContent { get; set; }
@@ -59,7 +49,6 @@ else if (Button == null)
     public RenderFragment<Modal<T>.ModalContext>? Body { get; set; }
     [Parameter]
     public RenderFragment<Modal<T>.ModalContext>? Footer { get; set; }
-
 
     [Parameter]
     public string? Title { get; set; }
