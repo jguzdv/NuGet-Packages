@@ -2,7 +2,7 @@
 @using Microsoft.AspNetCore.Components.Web;
 @using Modals;
 
-@if (Button != null && Modal != null)
+@if (Modal != null)
 {
     @Button(Modal)
 }
@@ -11,12 +11,12 @@
 #pragma warning disable 8601 // warning is wrong
 }
 <Modal @ref=Modal TModel="T"
-       ChildContent="@ChildContent"
-       Content="@Content"
-       Header="@Header"
-       Body="@Body"
-       Footer="@Footer"
-       Title="@Title"
+       ChildContent="@ModalChildContent"
+       Content="@ModalContent"
+       Header="@ModalHeader"
+       Body="@ModalBody"
+       Footer="@ModalFooter"
+       Title="@ModalTitle"
        ModalDialogClasses="@ModalDialogClasses"
        ModalHeaderClasses="@ModalHeaderClasses"
        ModalBodyClasses="@ModalBodyClasses"
@@ -35,23 +35,23 @@
 
     [Parameter]
     [EditorRequired]
-    public RenderFragment<Modal<T>>? Button { get; set; }
+    public RenderFragment<Modal<T>> Button { get; set; } = default!;
 
     [Parameter]
-    public RenderFragment<Modal<T>.ModalContext>? ChildContent { get; set; }
+    public RenderFragment<Modal<T>.ModalContext>? ModalChildContent { get; set; }
 
     [Parameter]
-    public RenderFragment<Modal<T>.ModalContext>? Content { get; set; }
+    public RenderFragment<Modal<T>.ModalContext>? ModalContent { get; set; }
 
     [Parameter]
-    public RenderFragment<Modal<T>.ModalContext>? Header { get; set; }
+    public RenderFragment<Modal<T>.ModalContext>? ModalHeader { get; set; }
     [Parameter]
-    public RenderFragment<Modal<T>.ModalContext>? Body { get; set; }
+    public RenderFragment<Modal<T>.ModalContext>? ModalBody { get; set; }
     [Parameter]
-    public RenderFragment<Modal<T>.ModalContext>? Footer { get; set; }
+    public RenderFragment<Modal<T>.ModalContext>? ModalFooter { get; set; }
 
     [Parameter]
-    public string? Title { get; set; }
+    public string? ModalTitle { get; set; }
 
     [Parameter]
     public string? ModalDialogClasses { get; set; }
