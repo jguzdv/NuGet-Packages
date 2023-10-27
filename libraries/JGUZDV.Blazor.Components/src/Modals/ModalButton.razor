@@ -1,0 +1,77 @@
+﻿@typeparam T where T : class
+@using Microsoft.AspNetCore.Components.Web;
+@using Modals;
+
+@if (Button != null && Modal != null)
+{
+    @Button(Modal)
+}
+else if (Button == null)
+{
+    <button class="@ButtonClass" @onclick="() => Modal?.ShowModal(null)!">@ButtonText</button>
+}
+
+@{
+#pragma warning disable 8601
+}
+<Modal @ref=Modal TModel="T"
+       ChildContent="@ChildContent"
+       Content="@Content"
+       Header="@Header"
+       Body="@Body"
+       Footer="@Footer"
+       Title="@Title"
+       ModalDialogClasses="@ModalDialogClasses"
+       ModalHeaderClasses="@ModalHeaderClasses"
+       ModalBodyClasses="@ModalBodyClasses"
+       ModalFooterClasses="@ModalFooterClasses" />
+@{
+#pragma warning restore
+}
+
+@code {
+    private Modal<T?>? _modal;
+    private Modal<T?>? Modal
+    {
+        get => _modal;
+        set { _modal = value; InvokeAsync(StateHasChanged); }
+    }
+
+    [Parameter]
+    public RenderFragment<Modal<T?>>? Button { get; set; }
+
+    [Parameter]
+    public string? ButtonText { get; set; }
+
+    [Parameter]
+    public string ButtonClass { get; set; } = "btn btn-primary";
+
+
+    [Parameter]
+    public RenderFragment<Modal<T>.ModalContext>? ChildContent { get; set; }
+
+    [Parameter]
+    public RenderFragment<Modal<T>.ModalContext>? Content { get; set; }
+
+    [Parameter]
+    public RenderFragment<Modal<T>.ModalContext>? Header { get; set; }
+    [Parameter]
+    public RenderFragment<Modal<T>.ModalContext>? Body { get; set; }
+    [Parameter]
+    public RenderFragment<Modal<T>.ModalContext>? Footer { get; set; }
+
+
+    [Parameter]
+    public string? Title { get; set; }
+
+    [Parameter]
+    public string? ModalDialogClasses { get; set; }
+    [Parameter]
+    public string? ModalHeaderClasses { get; set; }
+    [Parameter]
+    public string? ModalBodyClasses { get; set; }
+    [Parameter]
+    public string? ModalFooterClasses { get; set; }
+
+
+}

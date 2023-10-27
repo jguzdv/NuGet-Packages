@@ -71,6 +71,17 @@
     </Footer>
 </JGUZDV.Blazor.Components.Modals.Modal>
 
+
+<ModalButton Title="A Modal" T="string">
+    <Button>
+        <div class="btn btn-primary" @onclick="@(() => context.ShowModal("some text"))">ModalButton</div>
+    </Button>
+    <Body>
+        @context.Model
+    </Body>
+</ModalButton>
+
+
 <ModalContainer />
 
 @code {
