@@ -88,7 +88,7 @@
     AcceptText="Accept"
     DenyText="Deny"
     CancelText="Cancel"
-    OnModalClosed="@((x) => {Console.WriteLine($"Closed with result {x}");})"
+    OnModalClosed="@(async (x) => {await Task.Delay(1000);Console.WriteLine($"Closed with result {x}");})"
 ></ModalConfirmationButton>
 
 <ModalConfirmationButton 
@@ -96,7 +96,7 @@
     AcceptText="Accept"
     CancelText="Cancel"
     ConfirmationPrompt="Do you really want to delete this?"
-    OnModalClosed="@((x) => {Console.WriteLine($"Closed with result {x}");})">
+    OnModalClosed="@(async (x) => {await Task.Delay(1000);Console.WriteLine($"Closed with result {x}");})">
 <Button>
     <div class="btn btn-primary" @onclick="() => context.ShowModal()">button render fragment</div>
 </Button>

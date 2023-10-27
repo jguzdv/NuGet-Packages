@@ -7,7 +7,8 @@
 }
 else if (Button == null && Modal != null)
 {
-    <div class="@ButtonClass" @onclick="ShowModal">@ButtonText</div>
+    //TODO: Actionbuttons
+    <button role="button" class="@ButtonClass" @onclick="ShowModal" disabled="@_isRunning">@ButtonText</button>
 }
 
 <ModalConfirmation @ref=Modal
@@ -77,10 +78,15 @@ else if (Button == null && Modal != null)
     [Parameter]
     public ModalResult CancelResult { get; set; } = ModalResult.Undefined;
 
+    private bool _isRunning;
+
     public async Task ShowModal()
     {
+        _isRunning = true;
+        await InvokeAsync(StateHasChanged);
         var result = await Modal!.ShowModal(ConfirmationPrompt);
         await OnModalClosed.InvokeAsync(result);
+        _isRunning = false;
     }
 
     protected override void OnParametersSet()
