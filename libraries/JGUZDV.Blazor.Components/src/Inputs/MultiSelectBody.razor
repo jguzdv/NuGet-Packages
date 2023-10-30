@@ -9,10 +9,10 @@
     </div>
 }
 
-@if (!string.IsNullOrWhiteSpace(AllOptionLabel) && string.IsNullOrWhiteSpace(_filter))
+@if (!string.IsNullOrWhiteSpace(AllOptionLabel) && string.IsNullOrWhiteSpace(_filter) && !IsSingle)
 {
     <div class="my-2" style="cursor:pointer" @onclick="HandleAllClicked">
-        @if (Value.Count == Items.Count)
+        @if (Values.Count == Items.Count)
         {
             <div class="border p-2 small border-success text-nowrap text-success d-flex justify-content-between">
                 <span>@AllOptionLabel</span>
@@ -33,7 +33,7 @@
     || ItemName(x).Contains(_filter, StringComparison.OrdinalIgnoreCase)))
     {
         <div class="mb-2" style="cursor:pointer" @onclick="() => HandleItemClicked(item)">
-            @if (Value.Any(x => ItemKey(x).Equals(ItemKey(item))))
+            @if (Values.Any(x => ItemKey(x).Equals(ItemKey(item))))
             {
                 <div class="border p-2 small border-success text-nowrap text-success d-flex justify-content-between">
                     <span>@ItemName(item)</span>
@@ -66,10 +66,16 @@
 
     [Parameter]
     [EditorRequired]
-    public IReadOnlyList<T> Value { get; set; } = default!;
+    public IReadOnlyList<T> Values { get; set; } = default!;
 
     [Parameter]
-    public EventCallback<IReadOnlyList<T>> ValueChanged { get; set; }
+    public EventCallback<IReadOnlyList<T>> ValuesChanged { get; set; }
+
+    [Parameter]
+    public T? Value { get; set; } = default!;
+
+    [Parameter]
+    public EventCallback<T> ValueChanged { get; set; }
 
     [Parameter]
     public string? AllOptionLabel { get; set; }
@@ -80,33 +86,56 @@
     [Parameter]
     public string? RowCols { get; set; } = "row-cols-1";
 
+    [Parameter]
+    public bool IsSingle { get; set; }
+
     private string? _filter;
+
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        if (Value != null && Values != null)
+            throw new InvalidOperationException("Single and Multiple does not work simultaneously");
+
+        if (!IsSingle && Values == null)
+            throw new InvalidOperationException($"Parameter {nameof(Values)} may not be null if multipe values are allowed");
+    }
 
     private async Task HandleItemClicked(T item)
     {
-        if (Value.Any(x => ItemKey(x).Equals(ItemKey(item))))
+        if (IsSingle)
         {
-            Value = Value.Where(x => !ItemKey(x).Equals(ItemKey(item))).ToList();
-            await ValueChanged.InvokeAsync(Value);
+            Value = item;
+            await ValueChanged.InvokeAsync(item);
+            return;
+        }
+
+
+        if (Values.Any(x => ItemKey(x).Equals(ItemKey(item))))
+        {
+            Values = Values.Where(x => !ItemKey(x).Equals(ItemKey(item))).ToList();
+            await ValuesChanged.InvokeAsync(Values);
         }
         else
         {
-            Value = Value.Append(item).ToList();
-            await ValueChanged.InvokeAsync(Value);
+            Values = Values.Append(item).ToList();
+            await ValuesChanged.InvokeAsync(Values);
         }
     }
 
     private async Task HandleAllClicked()
     {
-        if (Value.Count == Items.Count)
+        if (Values.Count == Items.Count)
         {
-            Value = new List<T>();
-            await ValueChanged.InvokeAsync(Value);
+            Values = new List<T>();
+            await ValuesChanged.InvokeAsync(Values);
         }
         else
         {
-            Value = Items.Union(Value).ToList();
-            await ValueChanged.InvokeAsync(Value);
+            Values = Items.Union(Values).ToList();
+            await ValuesChanged.InvokeAsync(Values);
         }
     }
 }

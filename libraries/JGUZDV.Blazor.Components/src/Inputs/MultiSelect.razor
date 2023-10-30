@@ -6,10 +6,15 @@
         <div class="d-flex justify-content-between" style="cursor:pointer" @onclick="ToggleSelection">
             <div class="d-flex flex-nowrap overflow-hidden text-nowrap text-truncate">
                 <span class="me-1">@Title </span>
-                @if (Value.Any())
+                @if (!IsSingle && Values!.Any())
                 {
-                    <span class="text-muted small text-truncate align-self-center" title="@(Value.Select(x => ItemName(x)).Aggregate((a,b) => $"{a}, {b}"))">
-                        <span> (@Value.Select(x => ItemName(x)).Aggregate((a,b) => $"{a}, {b}"))</span>
+                    <span class="text-muted small text-truncate align-self-center" title="@(Values!.Select(x => ItemName(x)).Aggregate((a,b) => $"{a}, {b}"))">
+                        <span> (@Values!.Select(x => ItemName(x)).Aggregate((a,b) => $"{a}, {b}"))</span>
+                    </span>
+                }else if(Value != null && IsSingle)
+                {
+                    <span class="text-muted small text-truncate align-self-center" title="@ItemName(Value)">
+                        <span> (@ItemName(Value))</span>
                     </span>
                 }
             </div>
@@ -28,14 +33,18 @@
         @if (_isOpen)
         {
             <MultiSelectBody Items="@Items"
+                             Values="@Values"
+                             ValuesChanged="@ValuesChanged"
                              Value="@Value"
                              ValueChanged="@ValueChanged"
                              FilterLabel="@FilterLabel"
                              RowCols="@RowCols"
                              ItemKey="@ItemKey"
                              ItemName="@ItemName"
-                             AllOptionLabel="@AllOptionLabel">
-
+                             AllOptionLabel="@AllOptionLabel"
+                             IsSingle="@IsSingle"
+                             T="T"
+                             TKey="TKey">
             </MultiSelectBody>
         }
     </div>
@@ -55,11 +64,16 @@
     public Func<T, TKey> ItemKey { get; set; } = default!;
 
     [Parameter]
-    [EditorRequired]
-    public IReadOnlyList<T> Value { get; set; } = default!;
+    public IReadOnlyList<T>? Values { get; set; } = default!;
 
     [Parameter]
-    public EventCallback<IReadOnlyList<T>> ValueChanged { get; set; }
+    public EventCallback<IReadOnlyList<T>> ValuesChanged { get; set; }
+
+    [Parameter]
+    public T? Value { get; set; } = default!;
+
+    [Parameter]
+    public EventCallback<T> ValueChanged { get; set; }
 
     [Parameter]
     [EditorRequired]
@@ -77,36 +91,22 @@
     [Parameter]
     public string? ContentClass { get; set; }
 
+    [Parameter]
+    public bool IsSingle { get; set; }
+
     private bool _isOpen;
 
     private string? _filter;
 
-    private async Task HandleItemClicked(T item)
+    protected override void OnParametersSet()
     {
-        if (Value.Any(x => ItemKey(x).Equals(ItemKey(item))))
-        {
-            Value = Value.Where(x => !ItemKey(x).Equals(ItemKey(item))).ToList();
-            await ValueChanged.InvokeAsync(Value);
-        }
-        else
-        {
-            Value = Value.Append(item).ToList();
-            await ValueChanged.InvokeAsync(Value);
-        }
-    }
+        base.OnParametersSet();
 
-    private async Task HandleAllClicked()
-    {
-        if (Value.Count == Items.Count)
-        {
-            Value = new List<T>();
-            await ValueChanged.InvokeAsync(Value);
-        }
-        else
-        {
-            Value = Items.Union(Value).ToList();
-            await ValueChanged.InvokeAsync(Value);
-        }
+        if (Value != null && Values != null)
+            throw new InvalidOperationException("Single and Multiple does not work simultaneously");
+
+        if (!IsSingle && Values == null)
+            throw new InvalidOperationException($"Parameter {nameof(Values)} may not be null if multipe values are allowed");
     }
 
     private void ToggleSelection()
