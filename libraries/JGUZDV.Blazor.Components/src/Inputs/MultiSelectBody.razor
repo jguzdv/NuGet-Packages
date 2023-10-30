@@ -1,6 +1,8 @@
 ﻿@typeparam T
 @typeparam TKey
 
+@using Microsoft.AspNetCore.Components.Web;
+
 @if (!string.IsNullOrWhiteSpace(FilterLabel))
 {
     <div class="mt-2 position-relative">
@@ -33,7 +35,8 @@
     || ItemName(x).Contains(_filter, StringComparison.OrdinalIgnoreCase)))
     {
         <div class="mb-2" style="cursor:pointer" @onclick="() => HandleItemClicked(item)">
-            @if (Values.Any(x => ItemKey(x).Equals(ItemKey(item))))
+            @if ((!IsSingle && Values.Any(x => ItemKey(x).Equals(ItemKey(item))))
+           || IsSingle && ItemKey(item).Equals(ItemKey(Value)))
             {
                 <div class="border p-2 small border-success text-nowrap text-success d-flex justify-content-between">
                     <span>@ItemName(item)</span>
@@ -49,27 +52,26 @@
         </div>
     }
 </div>
-
 @code {
 
     [Parameter]
     [EditorRequired]
-    public IReadOnlyList<T> Items { get; set; } = default!;
+    public List<T> Items { get; set; } = default!;
 
     [Parameter]
     [EditorRequired]
-    public Func<T, string> ItemName { get; set; } = default!;
+    public Func<T?, string> ItemName { get; set; } = default!;
 
     [Parameter]
     [EditorRequired]
-    public Func<T, TKey> ItemKey { get; set; } = default!;
+    public Func<T?, TKey> ItemKey { get; set; } = default!;
 
     [Parameter]
     [EditorRequired]
-    public IReadOnlyList<T> Values { get; set; } = default!;
+    public List<T> Values { get; set; } = default!;
 
     [Parameter]
-    public EventCallback<IReadOnlyList<T>> ValuesChanged { get; set; }
+    public EventCallback<List<T>> ValuesChanged { get; set; }
 
     [Parameter]
     public T? Value { get; set; } = default!;
@@ -101,6 +103,9 @@
 
         if (!IsSingle && Values == null)
             throw new InvalidOperationException($"Parameter {nameof(Values)} may not be null if multipe values are allowed");
+
+        if (IsSingle && Values != null)
+            throw new InvalidOperationException($"Parameter {nameof(Values)} may not be set if only one value is allowed");
     }
 
     private async Task HandleItemClicked(T item)
