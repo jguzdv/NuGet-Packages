@@ -1,0 +1,66 @@
+﻿@typeparam T where T : class
+@using Microsoft.AspNetCore.Components.Web;
+@using Modals;
+
+@if (Modal != null)
+{
+    @Button(Modal)
+}
+
+@{
+#pragma warning disable 8601 // warning is wrong
+}
+<Modal @ref=Modal TModel="T"
+       ChildContent="@ModalChildContent"
+       Content="@ModalContent"
+       Header="@ModalHeader"
+       Body="@ModalBody"
+       Footer="@ModalFooter"
+       Title="@ModalTitle"
+       ModalDialogClasses="@ModalDialogClasses"
+       ModalHeaderClasses="@ModalHeaderClasses"
+       ModalBodyClasses="@ModalBodyClasses"
+       ModalFooterClasses="@ModalFooterClasses" />
+@{
+#pragma warning restore
+}
+
+@code {
+    private Modal<T>? _modal;
+    private Modal<T>? Modal
+    {
+        get => _modal;
+        set { _modal = value; InvokeAsync(StateHasChanged); }
+    }
+
+    [Parameter]
+    [EditorRequired]
+    public RenderFragment<Modal<T>> Button { get; set; } = default!;
+
+    [Parameter]
+    public RenderFragment<Modal<T>.ModalContext>? ModalChildContent { get; set; }
+
+    [Parameter]
+    public RenderFragment<Modal<T>.ModalContext>? ModalContent { get; set; }
+
+    [Parameter]
+    public RenderFragment<Modal<T>.ModalContext>? ModalHeader { get; set; }
+    [Parameter]
+    public RenderFragment<Modal<T>.ModalContext>? ModalBody { get; set; }
+    [Parameter]
+    public RenderFragment<Modal<T>.ModalContext>? ModalFooter { get; set; }
+
+    [Parameter]
+    public string? ModalTitle { get; set; }
+
+    [Parameter]
+    public string? ModalDialogClasses { get; set; }
+    [Parameter]
+    public string? ModalHeaderClasses { get; set; }
+    [Parameter]
+    public string? ModalBodyClasses { get; set; }
+    [Parameter]
+    public string? ModalFooterClasses { get; set; }
+
+
+}

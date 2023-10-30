@@ -1,0 +1,102 @@
+﻿@using Microsoft.AspNetCore.Components.Web;
+@using Modals;
+
+@if (Button != null && Modal != null)
+{
+    @Button(this)
+}
+else if (Button == null && Modal != null)
+{
+    //TODO: Actionbuttons
+    <button role="button" class="@ButtonClass" @onclick="ShowModal" disabled="@_isRunning">@ButtonText</button>
+}
+
+<ModalConfirmation @ref=Modal
+                   Title="@Title"
+                   AcceptText="@AcceptText"
+                   DenyText="@DenyText"
+                   CancelText="@CancelText"
+                   AcceptResult="@AcceptResult"
+                   DenyResult="@DenyResult"
+                   CancelResult="@CancelResult"
+                   ModalDialogClasses="@ModalDialogClasses"
+                   ModalHeaderClasses="@ModalHeaderClasses"
+                   ModalBodyClasses="@ModalBodyClasses"
+                   ModalFooterClasses="@ModalFooterClasses" />
+
+@code {
+    private ModalConfirmation? _modal;
+    private ModalConfirmation? Modal
+    {
+        get => _modal;
+        set { _modal = value; InvokeAsync(StateHasChanged); }
+    }
+
+    [Parameter]
+    public RenderFragment<ModalConfirmationButton>? Button { get; set; }
+
+    [Parameter]
+    public string? ButtonText { get; set; }
+
+    [Parameter]
+    public string? ButtonClass { get; set; } = "btn btn-primary";
+
+    [Parameter]
+    [EditorRequired]
+    public string ConfirmationPrompt { get; set; } = default!;
+
+    [Parameter]
+    public EventCallback<ModalResult> OnModalClosed { get; set; }
+
+    [Parameter]
+    public string? Title { get; set; }
+
+    [Parameter]
+    [EditorRequired]
+    public string AcceptText { get; set; } = default!;
+
+    [Parameter]
+    public string? DenyText { get; set; }
+    [Parameter]
+    public string? CancelText { get; set; }
+
+
+    [Parameter]
+    public string? ModalDialogClasses { get; set; }
+    [Parameter]
+    public string? ModalHeaderClasses { get; set; }
+    [Parameter]
+    public string? ModalBodyClasses { get; set; }
+    [Parameter]
+    public string? ModalFooterClasses { get; set; }
+
+
+    [Parameter]
+    public ModalResult AcceptResult { get; set; } = ModalResult.Accepted;
+    [Parameter]
+    public ModalResult DenyResult { get; set; } = ModalResult.Dismissed;
+    [Parameter]
+    public ModalResult CancelResult { get; set; } = ModalResult.Undefined;
+
+    private bool _isRunning;
+
+    public async Task ShowModal()
+    {
+        _isRunning = true;
+        await InvokeAsync(StateHasChanged);
+        var result = await Modal!.ShowModal(ConfirmationPrompt);
+        await OnModalClosed.InvokeAsync(result);
+        _isRunning = false;
+    }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        if (Title == null && DenyText == null && CancelText == null)
+            throw new InvalidOperationException($"At least one must be set: '{nameof(Title)}', '{nameof(DenyText)}', '{nameof(CancelText)}'");
+
+        if (Button == null && ButtonText == null)
+            throw new InvalidOperationException($"If parameter '{nameof(Button)}' is not set parameter '{nameof(ButtonText)}' must be set.");
+    }
+}
