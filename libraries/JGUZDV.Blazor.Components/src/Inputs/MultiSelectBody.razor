@@ -5,7 +5,7 @@
 
 @if (!string.IsNullOrWhiteSpace(FilterLabel))
 {
-    <div class="mt-2 position-relative">
+    <div class="my-2 position-relative">
         <i class="position-absolute top-50 translate-middle-y ps-2 fa fa-search"></i>
         <input class="form-control" style="padding-left: 2rem;" placeholder="@FilterLabel" @bind="_filter" @bind:event="oninput" />
     </div>
@@ -30,7 +30,7 @@
     </div>
 }
 
-<div class="row @RowCols mt-2">
+<div class="@ItemsContainerClass">
     @foreach (var item in Items.Where(x => string.IsNullOrWhiteSpace(_filter)
     || ItemName(x).Contains(_filter, StringComparison.OrdinalIgnoreCase)))
     {
@@ -54,39 +54,39 @@
 </div>
 @code {
 
-    [Parameter]
-    [EditorRequired]
-    public List<T> Items { get; set; } = default!;
+        [Parameter]
+        [EditorRequired]
+        public List<T> Items { get; set; } = default!;
 
-    [Parameter]
-    [EditorRequired]
-    public Func<T?, string> ItemName { get; set; } = default!;
+        [Parameter]
+        [EditorRequired]
+        public Func<T?, string> ItemName { get; set; } = default!;
 
-    [Parameter]
-    [EditorRequired]
-    public Func<T?, TKey> ItemKey { get; set; } = default!;
+        [Parameter]
+        [EditorRequired]
+        public Func<T?, TKey> ItemKey { get; set; } = default!;
 
-    [Parameter]
-    [EditorRequired]
-    public List<T> Values { get; set; } = default!;
+        [Parameter]
+        [EditorRequired]
+        public List<T> Values { get; set; } = default!;
 
-    [Parameter]
-    public EventCallback<List<T>> ValuesChanged { get; set; }
+        [Parameter]
+        public EventCallback<List<T>> ValuesChanged { get; set; }
 
-    [Parameter]
-    public T? Value { get; set; } = default!;
+        [Parameter]
+        public T? Value { get; set; } = default!;
 
-    [Parameter]
-    public EventCallback<T> ValueChanged { get; set; }
+        [Parameter]
+        public EventCallback<T> ValueChanged { get; set; }
 
-    [Parameter]
-    public string? AllOptionLabel { get; set; }
+        [Parameter]
+        public string? AllOptionLabel { get; set; }
 
-    [Parameter]
-    public string? FilterLabel { get; set; }
+        [Parameter]
+        public string? FilterLabel { get; set; }
 
-    [Parameter]
-    public string? RowCols { get; set; } = "row-cols-1";
+        [Parameter]
+        public string? ItemsContainerClass { get; set; } = "row row-cols-1 mt-2";
 
     [Parameter]
     public bool IsSingle { get; set; }

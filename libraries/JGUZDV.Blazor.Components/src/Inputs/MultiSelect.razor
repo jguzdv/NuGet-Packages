@@ -3,17 +3,17 @@
 
 @using Microsoft.AspNetCore.Components.Web;
 
-<div class="@(Class == null ? "px-2 py-1 border" : $"{Class}")">
+<div class="@(HostClass == null ? "px-2 py-1 border" : $"{HostClass}")">
     <div class="d-flex justify-content-between" role="button" style="cursor:pointer" @onclick="ToggleSelection">
         <div class="d-flex flex-nowrap overflow-hidden text-nowrap text-truncate">
             <span class="me-1">@Title </span>
-            @if (!IsSingle && Values!.Any())
+            @if (!UseSingleSelectionMode && Values!.Any())
             {
                 <span class="text-muted small text-truncate align-self-center" title="@(Values!.Select(x => ItemName(x)).Aggregate((a,b) => $"{a}, {b}"))">
                     <span> (@Values!.Select(x => ItemName(x)).Aggregate((a,b) => $"{a}, {b}"))</span>
                 </span>
             }
-            else if (Value != null && IsSingle)
+            else if (Value != null && UseSingleSelectionMode)
             {
                 <span class="text-muted small text-truncate align-self-center" title="@ItemName(Value)">
                     <span> (@ItemName(Value))</span>
@@ -41,11 +41,11 @@
                              Value="@Value"
                              ValueChanged="@ValueChanged"
                              FilterLabel="@FilterLabel"
-                             RowCols="@RowCols"
+                             ItemsContainerClass="@ItemsContainerClass"
                              ItemKey="@ItemKey"
                              ItemName="@ItemName"
                              AllOptionLabel="@AllOptionLabel"
-                             IsSingle="@IsSingle"
+                             IsSingle="@UseSingleSelectionMode"
                              T="T"
                              TKey="TKey">
             </MultiSelectBody>
@@ -85,16 +85,16 @@
     public string? AllOptionLabel { get; set; }
 
     [Parameter]
-    public string? Class { get; set; }
+    public string? HostClass { get; set; }
 
     [Parameter]
     public string? FilterLabel { get; set; }
 
     [Parameter]
-    public string? RowCols { get; set; } = "row-cols-1";
+    public string? ItemsContainerClass { get; set; } = "row-cols-1";
 
     [Parameter]
-    public bool IsSingle { get; set; }
+    public bool UseSingleSelectionMode { get; set; }
 
     private bool _isOpen;
 
@@ -105,10 +105,10 @@
         if (Value != null && Values != null)
             throw new InvalidOperationException("Single and Multiple does not work simultaneously");
 
-        if (!IsSingle && Values == null)
+        if (!UseSingleSelectionMode && Values == null)
             throw new InvalidOperationException($"Parameter {nameof(Values)} may not be null if multipe values are allowed");
 
-        if (IsSingle && Values != null)
+        if (UseSingleSelectionMode && Values != null)
             throw new InvalidOperationException($"Parameter {nameof(Values)} may not be set if only one value is allowed");
     }
 

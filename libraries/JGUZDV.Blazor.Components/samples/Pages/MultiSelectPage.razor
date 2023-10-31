@@ -10,7 +10,7 @@
         <MultiSelect Items="_items!"
                      Title="Wähle ein Land aus"
         @bind-Value="_selectedCountry"
-                     IsSingle=true ItemKey="(x) => x?.Id"
+                     UseSingleSelectionMode=true ItemKey="(x) => x?.Id"
                      ItemName="x => x?.Name">
         </MultiSelect>
 
@@ -19,7 +19,7 @@
                      AllOptionLabel="Alle"
                      FilterLabel="Suche"
         @bind-Values="_selectedCounties"
-                     IsSingle=false ItemKey="(x) => x?.Id"
+                     UseSingleSelectionMode=false ItemKey="(x) => x?.Id"
                      ItemName="x => x?.Name">
         </MultiSelect>
     </div>
@@ -31,10 +31,10 @@
         <label>test</label>
         <input class="form-control" disabled />
     </div>
-    <MultiSelect Class="mb-2" Items="_items"
+    <MultiSelect HostClass="mb-2" Items="_items"
                  Title="Wähle Länder aus"
     @bind-Values="_selectedCounties"
-                 IsSingle=false ItemKey="(x) => x?.Id"
+                 UseSingleSelectionMode=false ItemKey="(x) => x?.Id"
                  ItemName="x => x?.Name">
     </MultiSelect>
     <div class="mb-2 row">
@@ -47,18 +47,18 @@
         <label>test</label>
         <input class="form-control" disabled />
     </div>
-    <MultiSelect Class="mb-2 px-2 py-1 border" Items="_items"
+    <MultiSelect HostClass="mb-2 px-2 py-1 border" Items="_items"
                  Title="Wähle Länder aus"
                  FilterLabel="Suche"
     @bind-Values="_selectedCounties"
-                 IsSingle=false ItemKey="(x) => x?.Id"
+                 UseSingleSelectionMode=false ItemKey="(x) => x?.Id"
                  ItemName="x => x?.Name">
     </MultiSelect>
-    <MultiSelect Class="mb-2 form-control" Items="_items"
+    <MultiSelect HostClass="mb-2 form-control" Items="_items"
                  Title="Wähle Länder aus"
                  AllOptionLabel="Alle"
     @bind-Values="_selectedCounties"
-                 IsSingle=false ItemKey="(x) => x?.Id"
+                 UseSingleSelectionMode=false ItemKey="(x) => x?.Id"
                  ItemName="x => x?.Name">
     </MultiSelect>
     <div class="mb-2 row">
