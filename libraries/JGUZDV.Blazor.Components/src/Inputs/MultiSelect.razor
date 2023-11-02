@@ -59,8 +59,7 @@
     public List<T> Items { get; set; } = default!;
 
     [Parameter]
-    [EditorRequired]
-    public RenderFragment<T> ItemTemplate { get; set; } = default!;
+    public RenderFragment<T>? ItemTemplate { get; set; } = default!;
 
     [Parameter]
     [EditorRequired]
@@ -112,6 +111,9 @@
 
         if (FilterLabel != null && Filter == null)
             Filter = x => ItemName(x.item).Contains(x.query, StringComparison.OrdinalIgnoreCase);
+
+        if (ItemTemplate == null)
+            ItemTemplate = x => @<span>@ItemName(x)</span>;
 
         if (Value != null && Values != null)
             throw new InvalidOperationException("Single and Multiple does not work simultaneously");

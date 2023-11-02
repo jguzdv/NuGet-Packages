@@ -74,10 +74,7 @@
                  AllOptionLabel="Alle"
     @bind-Values="_selectedCounties"
                  UseSingleSelectionMode=false ItemKey="(x) => x?.Id"
-                 ItemName="x => x?.Name">
-        <ItemTemplate>
-            @context?.Name
-        </ItemTemplate>
+                 ItemName="x => x?.Name">       
     </MultiSelect>
     <div class="mb-2 row">
         <label class="col-2 col-form-label">test</label>
