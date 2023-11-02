@@ -9,7 +9,10 @@ namespace JGUZDV.Extensions.Authorization;
 [JsonDerivedType(typeof(NullRequirement), typeDiscriminator: "Null")]
 public abstract class ClaimRequirement : IEquatable<ClaimRequirement>
 {
-    public abstract bool IsSatisfiedBy(ClaimsPrincipal? principal);
+    public virtual bool IsSatisfiedBy(ClaimsPrincipal? principal)
+        => IsSatisfiedBy(principal?.Claims);
+        
+    public abstract bool IsSatisfiedBy(IEnumerable<Claim>? claims);
 
     public abstract ClaimRequirement Clone();
 

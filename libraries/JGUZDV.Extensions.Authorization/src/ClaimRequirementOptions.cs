@@ -62,7 +62,5 @@ public class ClaimRequirementOptions : IValidatableObject
             if (ClaimType == null || ClaimValue == null)
                 yield return new ValidationResult("Both ClaimType and ClaimValue must be defined");
         }
-
-        
     }
 }
