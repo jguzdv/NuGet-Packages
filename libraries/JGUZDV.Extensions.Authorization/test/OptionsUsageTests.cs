@@ -32,8 +32,8 @@ namespace JGUZDV.Extensions.Authorization.Tests
 
         public class OptionsDTO
         {
-            public ClaimRequirementOptions ClaimRequirementCollection { get; set; }
-            public ClaimRequirementOptions ClaimValueRequirement { get; set; }
+            public ClaimRequirementOptions? ClaimRequirementCollection { get; set; }
+            public ClaimRequirementOptions? ClaimValueRequirement { get; set; }
         }
 
         [Fact]
@@ -50,8 +50,8 @@ namespace JGUZDV.Extensions.Authorization.Tests
             var options = new OptionsDTO();
             config.Bind(options);
             
-            Assert.NotNull(options.ClaimRequirementCollection.ClaimRequirement); 
-            Assert.NotNull(options.ClaimValueRequirement.ClaimRequirement);
+            Assert.NotNull(options.ClaimRequirementCollection?.ClaimRequirement); 
+            Assert.NotNull(options.ClaimValueRequirement?.ClaimRequirement);
         }
     }
 }
