@@ -1,7 +1,7 @@
 ﻿# Blazor State Management
 
 Sharing state across an app can be cumbersome and error prone. How can we notify other components on state changes? What problems can arise and how can they be solved?
-In the following we take a look at some problems and requirements of state management and how the ZDVMainz.BlazorState package can help you to easily share state across components or an entire app. 
+In the following we take a look at some problems and requirements of state management and how the JGUZDV.Blazor.StateManagement package can help you to easily share state across components or an entire app. 
 
 ## Why you might be interested
 
