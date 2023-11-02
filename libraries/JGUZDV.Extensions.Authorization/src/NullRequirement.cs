@@ -12,7 +12,7 @@ namespace JGUZDV.Extensions.Authorization
         public override bool Equals(ClaimRequirement? other)
             => other is NullRequirement;
 
-        public override bool IsSatisfiedBy(ClaimsPrincipal? principal) 
+        public override bool IsSatisfiedBy(IEnumerable<Claim>? principal) 
             => false;
     }
 }
