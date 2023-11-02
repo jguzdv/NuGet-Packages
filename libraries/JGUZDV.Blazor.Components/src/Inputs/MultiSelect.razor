@@ -15,7 +15,7 @@
             }
             else if (Value != null && UseSingleSelectionMode)
             {
-                <span class="text-muted small text-truncate align-self-center" title="@ItemTemplate(Value)">
+                <span class="text-muted small text-truncate align-self-center" title="@ItemName(Value)">
                     <span> (@ItemTemplate(Value))</span>
                 </span>
             }
@@ -35,6 +35,9 @@
     @if (_isOpen)
     {
         <div class="fade-in">
+            @{
+#pragma warning disable 8601 // warning is wrong
+            }
             <MultiSelectBody Items="@Items"
                              Values="@Values"
                              ValuesChanged="@ValuesChanged"
@@ -50,6 +53,9 @@
                              T="T"
                              TKey="TKey">
             </MultiSelectBody>
+            @{
+#pragma warning restore
+            }
         </div>
     }
 </div>
@@ -59,6 +65,7 @@
     public List<T> Items { get; set; } = default!;
 
     [Parameter]
+    [NotNull]
     public RenderFragment<T>? ItemTemplate { get; set; } = default!;
 
     [Parameter]
