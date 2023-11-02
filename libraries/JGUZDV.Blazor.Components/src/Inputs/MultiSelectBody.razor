@@ -1,0 +1,151 @@
+﻿@typeparam T
+@typeparam TKey
+
+@using JGUZDV.Blazor.Components.Util;
+@using Microsoft.AspNetCore.Components.Web;
+
+@if (Filter != null)
+{
+    <div class="my-2 position-relative">
+        <i class="position-absolute top-50 translate-middle-y ps-2 fa fa-search"></i>
+        <input class="form-control" style="padding-left: 2rem;" placeholder="@FilterLabel" @bind="_filter" @bind:event="oninput" />
+    </div>
+}
+
+@if (!string.IsNullOrWhiteSpace(AllOptionLabel) && string.IsNullOrWhiteSpace(_filter) && !UseSingleSelectionMode)
+{
+    <div class="my-2" style="cursor:pointer" @onclick="HandleAllClicked">
+        @if (Values.Count == Items.Count)
+        {
+            <div class="border p-2 small border-success text-nowrap text-success d-flex justify-content-between">
+                <span>@AllOptionLabel</span>
+                <i class="fa fa-fw fa-check align-self-center"></i>
+            </div>
+        }
+        else
+        {
+            <div class="border p-2 small">
+                @AllOptionLabel
+            </div>
+        }
+    </div>
+}
+
+<div class="@ItemsContainerClass">
+    @foreach (var item in Items.Where(x => Filter == null || string.IsNullOrWhiteSpace(_filter) || Filter((x, _filter))))
+    {
+        <div class="mb-2" style="cursor:pointer" @onclick="() => HandleItemClicked(item)">
+            @if ((!UseSingleSelectionMode && Values.Any(x => ItemKey(x).Equals(ItemKey(item))))
+           || UseSingleSelectionMode && ItemKey(item).Equals(ItemKey(Value)))
+            {
+                <div class="border p-2 small border-success text-nowrap text-success d-flex justify-content-between">
+                    <span>@ItemTemplate(item)</span>
+                    <i class="fa fa-fw fa-check align-self-center"></i>
+                </div>
+            }
+            else
+            {
+                <div class="border p-2 small">
+                    @ItemTemplate(item)
+                </div>
+            }
+        </div>
+    }
+</div>
+@code {
+
+    [Parameter]
+    [EditorRequired]
+    public List<T> Items { get; set; } = default!;
+
+    [Parameter]
+    [EditorRequired]
+    public RenderFragment<T> ItemTemplate { get; set; } = default!;
+
+    [Parameter]
+    [EditorRequired]
+    public Func<T?, TKey> ItemKey { get; set; } = default!;
+
+    [Parameter]
+    [EditorRequired]
+    public List<T> Values { get; set; } = default!;
+
+    [Parameter]
+    public EventCallback<List<T>> ValuesChanged { get; set; }
+
+    [Parameter]
+    public T? Value { get; set; } = default!;
+
+    [Parameter]
+    public EventCallback<T> ValueChanged { get; set; }
+
+    [Parameter]
+    public string? AllOptionLabel { get; set; }
+
+    [Parameter]
+    public string? FilterLabel { get; set; }
+
+    [Parameter]
+    public Func<(T item, string query), bool>? Filter { get; set; }
+
+    [Parameter]
+    public string? ItemsContainerClass { get; set; } = "row row-cols-1 mt-2";
+
+    [Parameter]
+    public bool UseSingleSelectionMode { get; set; }
+
+    private string? _filter;
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        if (Value != null && Values != null)
+            throw new InvalidOperationException("Single and Multiple does not work simultaneously");
+
+        if (!UseSingleSelectionMode && Values == null)
+            throw new InvalidOperationException($"Parameter {nameof(Values)} may not be null if multipe values are allowed");
+
+        if (UseSingleSelectionMode && Values != null)
+            throw new InvalidOperationException($"Parameter {nameof(Values)} may not be set if only one value is allowed");
+
+        if (FilterLabel != null && Filter == null)
+            throw new InvalidOperationException($"{nameof(Filter)} must be set to use filtering");
+    }
+
+    private async Task HandleItemClicked(T item)
+    {
+        if (UseSingleSelectionMode)
+        {
+            Value = item;
+            await ValueChanged.InvokeAsync(item);
+            return;
+        }
+
+
+        if (Values.Any(x => ItemKey(x).Equals(ItemKey(item))))
+        {
+            Values = Values.Where(x => !ItemKey(x).Equals(ItemKey(item))).ToList();
+            await ValuesChanged.InvokeAsync(Values);
+        }
+        else
+        {
+            Values = Values.Append(item).ToList();
+            await ValuesChanged.InvokeAsync(Values);
+        }
+    }
+
+    private async Task HandleAllClicked()
+    {
+        if (Values.Count == Items.Count)
+        {
+            Values = new List<T>();
+            await ValuesChanged.InvokeAsync(Values);
+        }
+        else
+        {
+            Values = Items.Union(Values).ToList();
+            await ValuesChanged.InvokeAsync(Values);
+        }
+    }
+}

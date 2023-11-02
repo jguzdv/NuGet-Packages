@@ -1,0 +1,139 @@
+﻿@typeparam T
+@typeparam TKey
+
+@using Microsoft.AspNetCore.Components.Web;
+
+<div class="@(HostClass == null ? "px-2 py-1 border" : $"{HostClass}")">
+    <div class="d-flex justify-content-between" role="button" style="cursor:pointer" @onclick="ToggleSelection">
+        <div class="d-flex flex-nowrap overflow-hidden text-nowrap text-truncate">
+            <span class="me-1">@Title </span>
+            @if (!UseSingleSelectionMode && Values!.Any())
+            {
+                <span class="text-muted small text-truncate align-self-center" title="@(Values!.Select(x => ItemName(x)).Aggregate((a,b) => $"{a}, {b}"))">
+                    <span> (@Values!.Select(x => ItemName(x)).Aggregate((a,b) => $"{a}, {b}"))</span>
+                </span>
+            }
+            else if (Value != null && UseSingleSelectionMode)
+            {
+                <span class="text-muted small text-truncate align-self-center" title="@ItemName(Value)">
+                    <span> (@ItemTemplate(Value))</span>
+                </span>
+            }
+        </div>
+        <div class="ms-1">
+            @if (_isOpen)
+            {
+                <i class="fa fa-fw fa-minus align-self-center"></i>
+            }
+            else
+            {
+                <i class="fa fa-fw fa-plus align-self-center"></i>
+            }
+        </div>
+    </div>
+
+    @if (_isOpen)
+    {
+        <div class="fade-in">
+            @{
+#pragma warning disable 8601 // warning is wrong
+            }
+            <MultiSelectBody Items="@Items"
+                             Values="@Values"
+                             ValuesChanged="@ValuesChanged"
+                             Value="@Value"
+                             ValueChanged="@ValueChanged"
+                             FilterLabel="@FilterLabel"
+                             Filter="@Filter"
+                             ItemsContainerClass="@ItemsContainerClass"
+                             ItemKey="@ItemKey"
+                             ItemTemplate="@ItemTemplate"
+                             AllOptionLabel="@AllOptionLabel"
+                             UseSingleSelectionMode="@UseSingleSelectionMode"
+                             T="T"
+                             TKey="TKey">
+            </MultiSelectBody>
+            @{
+#pragma warning restore
+            }
+        </div>
+    }
+</div>
+@code {
+    [Parameter]
+    [EditorRequired]
+    public List<T> Items { get; set; } = default!;
+
+    [Parameter]
+    [NotNull]
+    public RenderFragment<T>? ItemTemplate { get; set; } = default!;
+
+    [Parameter]
+    [EditorRequired]
+    public Func<T, string> ItemName { get; set; } = default!;
+
+    [Parameter]
+    [EditorRequired]
+    public Func<T, TKey> ItemKey { get; set; } = default!;
+
+    [Parameter]
+    public List<T>? Values { get; set; } = default!;
+
+    [Parameter]
+    public EventCallback<List<T>> ValuesChanged { get; set; }
+
+    [Parameter]
+    public T? Value { get; set; } = default!;
+
+    [Parameter]
+    public EventCallback<T> ValueChanged { get; set; }
+
+    [Parameter]
+    [EditorRequired]
+    public string Title { get; set; } = default!;
+
+    [Parameter]
+    public string? AllOptionLabel { get; set; }
+
+    [Parameter]
+    public string? HostClass { get; set; }
+
+    [Parameter]
+    public string? FilterLabel { get; set; }
+
+    [Parameter]
+    public Func<(T item, string query), bool>? Filter { get; set; }
+
+    [Parameter]
+    public string? ItemsContainerClass { get; set; } = "row row-cols-1 mt-2";
+
+    [Parameter]
+    public bool UseSingleSelectionMode { get; set; }
+
+    private bool _isOpen;
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        if (FilterLabel != null && Filter == null)
+            Filter = x => ItemName(x.item).Contains(x.query, StringComparison.OrdinalIgnoreCase);
+
+        if (ItemTemplate == null)
+            ItemTemplate = x => @<span>@ItemName(x)</span>;
+
+        if (Value != null && Values != null)
+            throw new InvalidOperationException("Single and Multiple does not work simultaneously");
+
+        if (!UseSingleSelectionMode && Values == null)
+            throw new InvalidOperationException($"Parameter {nameof(Values)} may not be null if multipe values are allowed");
+
+        if (UseSingleSelectionMode && Values != null)
+            throw new InvalidOperationException($"Parameter {nameof(Values)} may not be set if only one value is allowed");
+    }
+
+    private void ToggleSelection()
+    {
+        _isOpen = !_isOpen;
+    }
+}
