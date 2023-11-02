@@ -12,6 +12,9 @@
         @bind-Value="_selectedCountry"
                      UseSingleSelectionMode=true ItemKey="(x) => x?.Id"
                      ItemName="x => x?.Name">
+                     <ItemTemplate>
+                         @context?.Name
+                     </ItemTemplate>
         </MultiSelect>
 
         <MultiSelect Items="_items"
@@ -21,6 +24,9 @@
         @bind-Values="_selectedCounties"
                      UseSingleSelectionMode=false ItemKey="(x) => x?.Id"
                      ItemName="x => x?.Name">
+            <ItemTemplate>
+                @context?.Name
+            </ItemTemplate>
         </MultiSelect>
     </div>
     <div class="mb-2">
@@ -36,6 +42,9 @@
     @bind-Values="_selectedCounties"
                  UseSingleSelectionMode=false ItemKey="(x) => x?.Id"
                  ItemName="x => x?.Name">
+        <ItemTemplate>
+            @context?.Name
+        </ItemTemplate>
     </MultiSelect>
     <div class="mb-2 row">
         <label class="col-2 col-form-label">test</label>
@@ -50,9 +59,15 @@
     <MultiSelect HostClass="mb-2 px-2 py-1 border" Items="_items"
                  Title="Wähle Länder aus"
                  FilterLabel="Suche"
+                 Filter="@(x => x.item.Name.Contains(x.query, StringComparison.OrdinalIgnoreCase))"
     @bind-Values="_selectedCounties"
                  UseSingleSelectionMode=false ItemKey="(x) => x?.Id"
                  ItemName="x => x?.Name">
+        <ItemTemplate>
+            Name:
+            <br />
+            @context?.Name
+        </ItemTemplate>
     </MultiSelect>
     <MultiSelect HostClass="mb-2 form-control" Items="_items"
                  Title="Wähle Länder aus"
@@ -60,6 +75,9 @@
     @bind-Values="_selectedCounties"
                  UseSingleSelectionMode=false ItemKey="(x) => x?.Id"
                  ItemName="x => x?.Name">
+        <ItemTemplate>
+            @context?.Name
+        </ItemTemplate>
     </MultiSelect>
     <div class="mb-2 row">
         <label class="col-2 col-form-label">test</label>

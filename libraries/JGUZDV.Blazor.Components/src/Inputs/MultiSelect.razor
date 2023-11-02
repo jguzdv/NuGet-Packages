@@ -15,8 +15,8 @@
             }
             else if (Value != null && UseSingleSelectionMode)
             {
-                <span class="text-muted small text-truncate align-self-center" title="@ItemName(Value)">
-                    <span> (@ItemName(Value))</span>
+                <span class="text-muted small text-truncate align-self-center" title="@ItemTemplate(Value)">
+                    <span> (@ItemTemplate(Value))</span>
                 </span>
             }
         </div>
@@ -41,11 +41,12 @@
                              Value="@Value"
                              ValueChanged="@ValueChanged"
                              FilterLabel="@FilterLabel"
+                             Filter="@Filter"
                              ItemsContainerClass="@ItemsContainerClass"
                              ItemKey="@ItemKey"
-                             ItemName="@ItemName"
+                             ItemTemplate="@ItemTemplate"
                              AllOptionLabel="@AllOptionLabel"
-                             IsSingle="@UseSingleSelectionMode"
+                             UseSingleSelectionMode="@UseSingleSelectionMode"
                              T="T"
                              TKey="TKey">
             </MultiSelectBody>
@@ -56,6 +57,10 @@
     [Parameter]
     [EditorRequired]
     public List<T> Items { get; set; } = default!;
+
+    [Parameter]
+    [EditorRequired]
+    public RenderFragment<T> ItemTemplate { get; set; } = default!;
 
     [Parameter]
     [EditorRequired]
@@ -91,7 +96,10 @@
     public string? FilterLabel { get; set; }
 
     [Parameter]
-    public string? ItemsContainerClass { get; set; } = "row-cols-1";
+    public Func<(T item, string query), bool>? Filter { get; set; }
+
+    [Parameter]
+    public string? ItemsContainerClass { get; set; } = "row row-cols-1 mt-2";
 
     [Parameter]
     public bool UseSingleSelectionMode { get; set; }
@@ -101,6 +109,9 @@
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
+
+        if (FilterLabel != null && Filter == null)
+            Filter = x => ItemName(x.item).Contains(x.query, StringComparison.OrdinalIgnoreCase);
 
         if (Value != null && Values != null)
             throw new InvalidOperationException("Single and Multiple does not work simultaneously");
