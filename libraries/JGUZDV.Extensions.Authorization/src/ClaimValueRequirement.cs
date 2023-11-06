@@ -61,4 +61,7 @@ public sealed class ClaimValueRequirement : ClaimRequirement
             ClaimTypeComparison == c.ClaimTypeComparison &&
             ClaimValueComparison == c.ClaimValueComparison;
     }
+
+    public static ClaimValueRequirement FromClaim(Claim claim, bool allowWildcard = false)
+        => new(claim.Type, claim.Value, !allowWildcard, StringComparison.Ordinal, StringComparison.Ordinal);
 }
