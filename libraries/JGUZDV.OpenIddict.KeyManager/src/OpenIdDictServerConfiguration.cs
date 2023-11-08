@@ -1,32 +1,30 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
 
 using OpenIddict.Server;
 
 namespace JGUZDV.OpenIddict.KeyManager;
 
-public class KeyManagerConfiguration : IConfigureOptions<OpenIddictServerOptions>
+public class OpenIdDictServerConfiguration : IConfigureOptions<OpenIddictServerOptions>
 {
-    private readonly X509KeyStore _keyStore;
-    private readonly ILogger<KeyManagerConfiguration> _logger;
+    private readonly KeyContainer _keyContainer;
+    private readonly ILogger<OpenIdDictServerConfiguration> _logger;
 
-    public KeyManagerConfiguration(
-        X509KeyStore keyStore,
-        ILogger<KeyManagerConfiguration> logger)
+    public OpenIdDictServerConfiguration(
+        KeyContainer keyContainer,
+        ILogger<OpenIdDictServerConfiguration> logger)
     {
-        _keyStore = keyStore;
+        _keyContainer = keyContainer;
         _logger = logger;
     }
 
     public void Configure(OpenIddictServerOptions options)
     {
-        foreach(var signingKey in _keyStore.GetCachedKeys(KeyUsage.Signature))
+        foreach(var signingKey in _keyContainer.SignatureKeys)
             AddSignatureKey(signingKey);
 
-        foreach(var encryptionKey in _keyStore.GetCachedKeys(KeyUsage.Encryption))
+        foreach(var encryptionKey in _keyContainer.EncryptionKeys)
             AddEncryptionKey(encryptionKey);
 
 
@@ -91,33 +89,5 @@ public class KeyManagerConfiguration : IConfigureOptions<OpenIddictServerOptions
 
             throw new InvalidOperationException("Neither RsaSha256 nor HmacSha256 ar supported by the encryption key");
         }
-    }
-}
-
-public class KeyConfigurationProvider : IConfigurationProvider
-{
-    public IEnumerable<string> GetChildKeys(IEnumerable<string> earlierKeys, string parentPath)
-    {
-        throw new NotImplementedException();
-    }
-
-    public IChangeToken GetReloadToken()
-    {
-        throw new NotImplementedException();
-    }
-
-    public void Load()
-    {
-        throw new NotImplementedException();
-    }
-
-    public void Set(string key, string value)
-    {
-        throw new NotImplementedException();
-    }
-
-    public bool TryGet(string key, out string value)
-    {
-        throw new NotImplementedException();
     }
 }

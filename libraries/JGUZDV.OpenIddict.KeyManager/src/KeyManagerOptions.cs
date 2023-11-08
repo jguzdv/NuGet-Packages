@@ -1,8 +1,11 @@
-﻿namespace JGUZDV.OpenIddict.KeyManager;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace JGUZDV.OpenIddict.KeyManager;
 
 public class KeyManagerOptions
 {
-    public string KeyStorePath { get; set; }
+    [NotNull]
+    public string? KeyStorePath { get; set; }
     public bool DisableKeyGeneration { get; set; }
 
     public TimeSpan KeyReloadInterval { get; set; } = TimeSpan.FromMinutes(15);

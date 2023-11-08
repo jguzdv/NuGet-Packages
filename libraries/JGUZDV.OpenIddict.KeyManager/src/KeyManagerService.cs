@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
 namespace JGUZDV.OpenIddict.KeyManager;
 
@@ -10,6 +11,7 @@ public class KeyManagerService : IHostedService
 {
     private readonly X509KeyStore _keyStore;
     private readonly X509CertificateKeyGenerator _keyGenerator;
+    private readonly KeyContainer _keyContainer;
     private readonly TimeProvider _timeProvider;
     private readonly IConfigurationRoot _config;
     private readonly IOptions<KeyManagerOptions> _options;
@@ -22,6 +24,7 @@ public class KeyManagerService : IHostedService
     public KeyManagerService(
         X509KeyStore keyStore,
         X509CertificateKeyGenerator keyGenerator,
+        KeyContainer keyContainer,
         TimeProvider timeProvider,
         IConfigurationRoot config,
         IOptions<KeyManagerOptions> options, 
@@ -29,11 +32,13 @@ public class KeyManagerService : IHostedService
     {
         _keyStore = keyStore;
         _keyGenerator = keyGenerator;
+        _keyContainer = keyContainer;
         _timeProvider = timeProvider;
         _config = config;
         _options = options;
         _logger = logger;
     }
+
 
     public async Task StartAsync(CancellationToken ct)
     {
@@ -60,123 +65,160 @@ public class KeyManagerService : IHostedService
     }
 
 
+
     private void ExecuteTimer(object? state)
         => _ = ExecuteKeyManagement(_cts.Token);
 
 
+
     private async Task ExecuteKeyManagement(CancellationToken ct)
     {
-        await _keyStore.ReloadKeysAsync(ct);
+        var keyInfos = await _keyStore.LoadKeysAsync(ct);
         
-        if(_options.Value.DisableKeyGeneration)
+        
+        if(!_options.Value.DisableKeyGeneration)
         {
-            _config.Reload();
-            return;
+            keyInfos = await EnsureUsableKeysAsync(keyInfos, ct);
+            await ExecuteKeyManagement(keyInfos, ct);
         }
 
-        _logger.LogInformation("Starting automatic key generation.");
-        await Task.WhenAll(
-            ExecuteKeyManagement(KeyUsage.Signature, ct),
-            ExecuteKeyManagement(KeyUsage.Encryption, ct)
-        );
-
+        _keyContainer.ReplaceAllKeys(keyInfos);
         _config.Reload();
     }
 
-    private async Task ExecuteKeyManagement(KeyUsage keyUsage, CancellationToken ct)
+    private async Task ExecuteKeyManagement(List<KeyInfo> keyInfos, CancellationToken ct)
     {
-        var keys = await _keyStore.GetKeysAsync(keyUsage, true, ct);
-        if (_options.Value.DisableKeyGeneration)
-            return;
+        var utcNow = _timeProvider.GetUtcNow();
+        await PrepareNextKeysAsync(keyInfos);
+        await PurgeExpiredKeysAsync();
 
-        if(!keys.Any())
+
+        async Task PrepareNextKeysAsync(List<KeyInfo> keyInfos)
         {
-            await EnsureUsableKeysAsync(keyUsage, ct);
-            return;
+            var usages = new[] { KeyUsage.Signature, KeyUsage.Encryption };
+            foreach (var usage in usages)
+            {
+                var securityKeys = keyInfos.Where(x => x.KeyUsage == usage)
+                    .Select(x => x.SecurityKey);
+
+                var maxNotAfter = securityKeys
+                    .Where(x => x.Certificate.NotAfter < utcNow && x.Certificate.NotAfter > utcNow)
+                    .Max(x => x.Certificate.NotAfter);
+
+                // The threshold date will be 1/3 * MaxKeyAge before any valid the maximum of NotAfter of the current keys 
+                var thresholdDate = maxNotAfter.Add(-0.3 * _options.Value.MaxKeyAge);
+
+                // TODO: Test this with real data.
+                if (thresholdDate <= utcNow)
+                    continue;
+
+                var nextKey = await PrepareNextKeyAsync(usage, maxNotAfter, securityKeys);
+                if(nextKey != null)
+                    keyInfos.Add(new(usage, nextKey));
+            }
         }
 
-        var utcNow = _timeProvider.GetUtcNow();
-        await PrepareNextKey();
-        await PurgeExpiredKeysAsync();
-        _config.Reload();
-
-        async Task PrepareNextKey()
+        async Task<X509SecurityKey?> PrepareNextKeyAsync(KeyUsage usage, DateTimeOffset refDate,
+            IEnumerable<X509SecurityKey> securityKeys)
         {
-            var maxNotAfter = keys
-                .Where(x => x.Certificate.NotBefore < utcNow && x.Certificate.NotAfter > utcNow)
-                .Max(x => x.Certificate.NotAfter);
 
-            var prepareNextKeyFrom = maxNotAfter.Add(_options.Value.MaxKeyAge / -1.5);
+            var futureKey = securityKeys
+                .Where(x =>
+                    x.Certificate.NotBefore < refDate &&
+                    x.Certificate.NotAfter > refDate
+                ).FirstOrDefault();
 
-            if (prepareNextKeyFrom <= utcNow)
-                return;
-
-            var futureKey = keys.Where(x =>
-                x.Certificate.NotAfter > utcNow &&
-                x.Certificate.NotBefore < maxNotAfter &&
-                x.Certificate.NotAfter > maxNotAfter)
-                .FirstOrDefault();
-
+            // This is necessary to check, since we might already have a future key
             if (futureKey is not null)
-                return;
+                return null;
 
-            var nextKey = _keyGenerator.CreateKey(keyUsage, maxNotAfter.AddDays(-1), maxNotAfter.Add(_options.Value.MaxKeyAge));
-            await _keyStore.SaveKeyAsync(keyUsage, nextKey, ct);
+            var nextKey = _keyGenerator.CreateKey(usage, refDate.AddDays(-1), refDate.Add(_options.Value.MaxKeyAge));
+            await _keyStore.SaveKeyAsync(usage, nextKey, ct);
+
+            return nextKey;
         }
 
         async Task PurgeExpiredKeysAsync()
         {
-            await _keyStore.PurgeExpiredKeysAsync(keyUsage, utcNow + _options.Value.KeyRetention, ct);
+            await _keyStore.PurgeExpiredKeys(utcNow + _options.Value.KeyRetention, ct);
         }
     }
     
 
 
-    private async Task EnsureUsableKeysAsync(CancellationToken ct)
+    public async Task EnsureUsableKeysAsync(CancellationToken ct)
     {
-        await _keyStore.ReloadKeysAsync(ct);
-
-        await Task.WhenAll(
-            EnsureUsableKeysAsync(KeyUsage.Signature, ct),
-            EnsureUsableKeysAsync(KeyUsage.Encryption, ct)
-        );
+        var keyInfos = await _keyStore.LoadKeysAsync();
+        await EnsureUsableKeysAsync(keyInfos, ct);
     }
 
-    private async Task EnsureUsableKeysAsync(KeyUsage usage, CancellationToken ct)
+    /// <returns>True, if it created keys.</returns>
+    private async Task<List<KeyInfo>> EnsureUsableKeysAsync(IEnumerable<KeyInfo> keyInfos, CancellationToken ct)
     {
         var utcNow = _timeProvider.GetUtcNow();
-        while(!ct.IsCancellationRequested && await CheckIfKeyExists())
-        {
-            var didCreateKey = await TryCreateNewKey();
-            if(!didCreateKey)
-            {
-                await Task.Delay(_options.Value.RetryDelay, ct);
-            }
-        } 
+        var localKeyInfos = keyInfos.ToList();
 
-        async Task<bool> CheckIfKeyExists()
-        {
-            var keys = await _keyStore.GetKeysAsync(usage, true, ct);
-            return keys.Any(x => x.Certificate.NotBefore < utcNow && x.Certificate.NotAfter > utcNow);
-        }
-
-        async Task<bool> TryCreateNewKey()
+        while(!ct.IsCancellationRequested && CheckIfKeyExists(localKeyInfos))
         {
             if (_options.Value.DisableKeyGeneration)
-                return false;
-
-            try
             {
-                var createdKey = _keyGenerator.CreateKey(usage, utcNow.Date, utcNow.Date.Add(_options.Value.MaxKeyAge));
-                await _keyStore.SaveKeyAsync(usage, createdKey, ct);
-
-                return true;
+                _logger.LogInformation("No key has been found and key generation is disabled. Waiting for key to be created.");
             }
-            catch(Exception ex)
+            else
             {
-                _logger.LogError(ex, "Could not create new key.");
-                return false;
+                if (await TryCreateNewKeys(localKeyInfos, ct))
+                    break;
             }
+            
+            // If we could not find or create a new key for whatever reason.
+            localKeyInfos = await DelayAndReload(ct);
+            await Task.Delay(_options.Value.RetryDelay, ct);
+        }
+
+        return localKeyInfos;
+
+
+
+        bool CheckIfKeyExists(List<KeyInfo> keyInfos)
+            => CheckIfKeyWithUsageExists(keyInfos, KeyUsage.Signature)
+                && CheckIfKeyWithUsageExists(keyInfos, KeyUsage.Encryption);
+
+        bool CheckIfKeyWithUsageExists(List<KeyInfo> keyInfos, KeyUsage usage)
+            => keyInfos.Any(x => x.KeyUsage == usage && IsKeyUsable(x.SecurityKey, utcNow));
+
+        bool IsKeyUsable(X509SecurityKey securityKey, DateTimeOffset refDate) 
+            => securityKey.Certificate.NotBefore < refDate && securityKey.Certificate.NotAfter > refDate;
+
+        async Task<List<KeyInfo>> DelayAndReload(CancellationToken ct)
+        {
+            await Task.Delay(_options.Value.RetryDelay, ct);
+            return await _keyStore.LoadKeysAsync(ct);
+        }
+
+        async Task<bool> TryCreateNewKeys(List<KeyInfo> keyInfos, CancellationToken ct)
+        {
+            var usages = new[] { KeyUsage.Signature, KeyUsage.Encryption };
+
+            var result = true;
+            foreach (var usage in usages)
+            {
+                if (CheckIfKeyWithUsageExists(keyInfos, usage))
+                    continue;
+
+                try
+                {
+                    var createdKey = _keyGenerator.CreateKey(usage, utcNow.Date, utcNow.Date.Add(_options.Value.MaxKeyAge));
+                    await _keyStore.SaveKeyAsync(usage, createdKey, ct);
+                    keyInfos.Add(new(usage, createdKey));
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Could not create new key.");
+                    result = false;
+                }
+            }
+
+            return result;
         }
     }
 }
