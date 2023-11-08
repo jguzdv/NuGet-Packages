@@ -11,28 +11,17 @@ namespace JGUZDV.OpenIddict.KeyManager
         internal IReadOnlyList<SecurityKey> EncryptionKeys => _encryptionKeys;
 
 
-        internal void ReplaceAllKeys(List<KeyInfo> keyInfos)
+        internal void ReplaceAllKeys(IEnumerable<KeyInfo> keyInfos)
         {
-            ReplaceKeyList(
-                keyInfos.Where(x => x.KeyUsage == KeyUsage.Signature).Select(x => x.SecurityKey),
-                ref _signatureKeys
-                );
+            _signatureKeys = new(
+                keyInfos.Where(x => x.KeyUsage == KeyUsage.Signature)
+                .Select(x => x.SecurityKey)
+            );
 
-            ReplaceKeyList(
-                keyInfos.Where(x => x.KeyUsage == KeyUsage.Encryption).Select(x => x.SecurityKey),
-                ref _encryptionKeys
-                );
-        }
-
-
-        private void ReplaceKeyList(IEnumerable<SecurityKey> keys, ref List<SecurityKey> keyList)
-        {
-            if(keys.Any())
-            {
-                var newKeys = new List<SecurityKey>(keyList);
-                newKeys.AddRange(keys);
-                keyList = newKeys;
-            }
+            _encryptionKeys = new(
+                keyInfos.Where(x => x.KeyUsage == KeyUsage.Encryption)
+                .Select(x => x.SecurityKey)
+            );
         }
     }
 }

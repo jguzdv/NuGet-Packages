@@ -33,7 +33,8 @@ public class X509KeyStore
         var keyStorePath = _options.Value.KeyStorePath;
 
         var keyLoadTasks = Directory.EnumerateFiles(keyStorePath, FilePattern)
-            .Select(x => LoadKeyAsync(x, ct));
+            .Select(x => LoadKeyAsync(x, ct))
+            .ToList();
 
         await Task.WhenAll(keyLoadTasks);
 

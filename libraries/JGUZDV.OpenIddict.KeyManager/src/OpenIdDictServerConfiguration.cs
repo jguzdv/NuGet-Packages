@@ -52,14 +52,15 @@ public class OpenIdDictServerConfiguration : IConfigureOptions<OpenIddictServerO
                 options.EncryptionCredentials.Add(new EncryptingCredentials(key,
                     SecurityAlgorithms.Aes256KW, SecurityAlgorithms.Aes256CbcHmacSha512));
             }
-
-            if (key.IsSupportedAlgorithm(SecurityAlgorithms.RsaOAEP))
+            else if (key.IsSupportedAlgorithm(SecurityAlgorithms.RsaOAEP))
             {
                 options.EncryptionCredentials.Add(new EncryptingCredentials(key,
                     SecurityAlgorithms.RsaOAEP, SecurityAlgorithms.Aes256CbcHmacSha512));
             }
-
-            throw new InvalidOperationException("Neither RsaOAEP nor Aes256KW ar supported by the encryption key");
+            else
+            {
+                throw new InvalidOperationException("Neither RsaOAEP nor Aes256KW ar supported by the encryption key");
+            }
         }
 
         void AddSignatureKey(SecurityKey key)
@@ -80,14 +81,14 @@ public class OpenIdDictServerConfiguration : IConfigureOptions<OpenIddictServerO
             {
                 options.SigningCredentials.Add(new SigningCredentials(key, SecurityAlgorithms.RsaSha256));
             }
-
-            if (key.IsSupportedAlgorithm(SecurityAlgorithms.HmacSha256))
+            else if (key.IsSupportedAlgorithm(SecurityAlgorithms.HmacSha256))
             {
                 options.SigningCredentials.Add(new SigningCredentials(key, SecurityAlgorithms.HmacSha256));
             }
-
-
-            throw new InvalidOperationException("Neither RsaSha256 nor HmacSha256 ar supported by the encryption key");
+            else
+            {
+                throw new InvalidOperationException("Neither RsaSha256 nor HmacSha256 ar supported by the encryption key");
+            }
         }
     }
 }

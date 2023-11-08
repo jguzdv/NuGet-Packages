@@ -6,7 +6,6 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace JGUZDV.OpenIddict.KeyManager;
 
-// TODO: The logic that decides, if a config reload is necessary is .. flawed.
 public class KeyManagerService : IHostedService
 {
     private readonly X509KeyStore _keyStore;
@@ -149,7 +148,9 @@ public class KeyManagerService : IHostedService
     public async Task EnsureUsableKeysAsync(CancellationToken ct)
     {
         var keyInfos = await _keyStore.LoadKeysAsync();
-        await EnsureUsableKeysAsync(keyInfos, ct);
+        keyInfos = await EnsureUsableKeysAsync(keyInfos, ct);
+
+        _keyContainer.ReplaceAllKeys(keyInfos);
     }
 
     /// <returns>True, if it created keys.</returns>
@@ -158,7 +159,7 @@ public class KeyManagerService : IHostedService
         var utcNow = _timeProvider.GetUtcNow();
         var localKeyInfos = keyInfos.ToList();
 
-        while(!ct.IsCancellationRequested && CheckIfKeyExists(localKeyInfos))
+        while(!ct.IsCancellationRequested && !KeysExist(localKeyInfos))
         {
             if (_options.Value.DisableKeyGeneration)
             {
@@ -179,11 +180,11 @@ public class KeyManagerService : IHostedService
 
 
 
-        bool CheckIfKeyExists(List<KeyInfo> keyInfos)
-            => CheckIfKeyWithUsageExists(keyInfos, KeyUsage.Signature)
-                && CheckIfKeyWithUsageExists(keyInfos, KeyUsage.Encryption);
+        bool KeysExist(List<KeyInfo> keyInfos)
+            => KeyForUsageExists(keyInfos, KeyUsage.Signature)
+                && KeyForUsageExists(keyInfos, KeyUsage.Encryption);
 
-        bool CheckIfKeyWithUsageExists(List<KeyInfo> keyInfos, KeyUsage usage)
+        bool KeyForUsageExists(List<KeyInfo> keyInfos, KeyUsage usage)
             => keyInfos.Any(x => x.KeyUsage == usage && IsKeyUsable(x.SecurityKey, utcNow));
 
         bool IsKeyUsable(X509SecurityKey securityKey, DateTimeOffset refDate) 
@@ -202,7 +203,7 @@ public class KeyManagerService : IHostedService
             var result = true;
             foreach (var usage in usages)
             {
-                if (CheckIfKeyWithUsageExists(keyInfos, usage))
+                if (KeyForUsageExists(keyInfos, usage))
                     continue;
 
                 try
