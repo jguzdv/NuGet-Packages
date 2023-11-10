@@ -11,7 +11,7 @@
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
-    <PackageReference Include="OpenIddict.Server" Version="4.0.0" />
+    <PackageReference Include="OpenIddict.Server" Version="5.0.0-preview1.23520.63" />
   </ItemGroup>
 
 </Project>
