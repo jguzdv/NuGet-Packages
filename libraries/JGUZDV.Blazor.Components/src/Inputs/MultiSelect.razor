@@ -122,9 +122,6 @@
         if (ItemTemplate == null)
             ItemTemplate = x => @<span>@ItemName(x)</span>;
 
-        if (Value != null && Values != null)
-            throw new InvalidOperationException("Single and Multiple does not work simultaneously");
-
         if (!UseSingleSelectionMode && Values == null)
             throw new InvalidOperationException($"Parameter {nameof(Values)} may not be null if multipe values are allowed");
 
