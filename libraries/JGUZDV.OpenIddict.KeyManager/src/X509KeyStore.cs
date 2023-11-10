@@ -94,6 +94,8 @@ public class X509KeyStore
 
         var certificateBytes = securityKey.Certificate.Export(X509ContentType.Pkcs12, string.Empty);
         await File.WriteAllBytesAsync(fileName, certificateBytes, ct);
+
+        _logger.LogDebug("X509SecurityKey ({keyUsage}) has been written as {fileName}", keyUsage, fileName);
     }
 
 

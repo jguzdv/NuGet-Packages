@@ -8,8 +8,8 @@ namespace JGUZDV.OpenIddict.KeyManager;
 
 public class KeyManagerService : IHostedService
 {
-    private readonly X509KeyStore _keyStore;
     private readonly X509CertificateKeyGenerator _keyGenerator;
+    private readonly X509KeyStore _keyStore;
     private readonly KeyContainer _keyContainer;
     private readonly TimeProvider _timeProvider;
     private readonly IConfigurationRoot _config;
@@ -21,8 +21,8 @@ public class KeyManagerService : IHostedService
     private Timer? _timer;
 
     public KeyManagerService(
-        X509KeyStore keyStore,
         X509CertificateKeyGenerator keyGenerator,
+        X509KeyStore keyStore,
         KeyContainer keyContainer,
         TimeProvider timeProvider,
         IConfigurationRoot config,
@@ -74,7 +74,6 @@ public class KeyManagerService : IHostedService
     {
         var keyInfos = await _keyStore.LoadKeysAsync(ct);
         
-        
         if(!_options.Value.DisableKeyGeneration)
         {
             keyInfos = await EnsureUsableKeysAsync(keyInfos, ct);
@@ -94,6 +93,7 @@ public class KeyManagerService : IHostedService
 
         async Task PrepareNextKeysAsync(List<KeyInfo> keyInfos)
         {
+            
             var usages = new[] { KeyUsage.Signature, KeyUsage.Encryption };
             foreach (var usage in usages)
             {
@@ -101,15 +101,17 @@ public class KeyManagerService : IHostedService
                     .Select(x => x.SecurityKey);
 
                 var maxNotAfter = securityKeys
-                    .Where(x => x.Certificate.NotAfter < utcNow && x.Certificate.NotAfter > utcNow)
+                    .Where(x => x.Certificate.NotBefore < utcNow && x.Certificate.NotAfter > utcNow)
                     .Max(x => x.Certificate.NotAfter);
 
-                // The threshold date will be 1/3 * MaxKeyAge before any valid the maximum of NotAfter of the current keys 
-                var thresholdDate = maxNotAfter.Add(-0.3 * _options.Value.MaxKeyAge);
+                // The threshold date will be _options.Value.ThresholdFactor * MaxKeyAge before any valid the maximum of NotAfter of the current keys 
+                var thresholdDate = maxNotAfter.Add(-1* Math.Abs(_options.Value.ThresholdFactor) * _options.Value.MaxKeyAge);
 
-                // TODO: Test this with real data.
-                if (thresholdDate <= utcNow)
+                if (utcNow <= thresholdDate)
+                {
+                    _logger.LogDebug("Threshold date ({thresholdDate} for certificate creation has not been reached.", thresholdDate);
                     continue;
+                }
 
                 var nextKey = await PrepareNextKeyAsync(usage, maxNotAfter, securityKeys);
                 if(nextKey != null)
@@ -120,16 +122,18 @@ public class KeyManagerService : IHostedService
         async Task<X509SecurityKey?> PrepareNextKeyAsync(KeyUsage usage, DateTimeOffset refDate,
             IEnumerable<X509SecurityKey> securityKeys)
         {
-
             var futureKey = securityKeys
                 .Where(x =>
                     x.Certificate.NotBefore < refDate &&
-                    x.Certificate.NotAfter > refDate
+                    x.Certificate.NotAfter > refDate.AddDays(1)
                 ).FirstOrDefault();
 
             // This is necessary to check, since we might already have a future key
             if (futureKey is not null)
+            {
+                _logger.LogDebug("A {usage} key that is valid after {refDate} already exists.", usage, refDate);
                 return null;
+            }
 
             var nextKey = _keyGenerator.CreateKey(usage, refDate.AddDays(-1), refDate.Add(_options.Value.MaxKeyAge));
             await _keyStore.SaveKeyAsync(usage, nextKey, ct);
