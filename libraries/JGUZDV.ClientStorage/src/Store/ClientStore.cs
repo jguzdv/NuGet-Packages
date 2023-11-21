@@ -154,10 +154,12 @@ public class ClientStore : IDisposable
             _cache.Set(key, item, expiresIn);
             _ = _storage.SetItem(key, item);
             ValueChanged?.Invoke(new StoreChangedEvent { Key = key });
-            _loadingTasks.Remove(key);
         }
 
-        _loadingTasks[key] = Refresh(key, expiresIn, loadFunc);
+        var task = Refresh(key, expiresIn, loadFunc);
+        _loadingTasks[key] = task;
+        await task;
+        _loadingTasks.Remove(key);
     }
 
     /// <summary>
