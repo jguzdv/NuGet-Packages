@@ -189,6 +189,8 @@ public class ClientStore : IDisposable
             //try refreshing cache
             await RefreshEntry(key);
             item = _cache.Get<StoreEntry<T>>(key);
+            if (item is null)
+                throw new InvalidOperationException("tried to access cache after failed refresh");
 
             var context = new LoadingContext { Key = key, LoadedHot = true };
             StoreEntryLoaded?.Invoke(context);
