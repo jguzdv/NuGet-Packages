@@ -39,6 +39,9 @@ namespace JGUZDV.ClientStorage.Tests
         {
             public event EventHandler? Stopped;
             public event EventHandler? Resumed;
+
+            public void TriggerStopped(object s, EventArgs a) => Stopped?.Invoke(s, a);
+            public void TriggerResumed(object s, EventArgs a) => Resumed?.Invoke(s, a);
         }
 
         [Fact]
@@ -95,6 +98,35 @@ namespace JGUZDV.ClientStorage.Tests
 
             Assert.False(entry.Context.LoadedFromCache);
             Assert.True(entry.Context.LoadedFromStorage);
+        }
+
+
+        [Fact]
+        public async Task TestStopResume()
+        {
+            IOptions<MemoryCacheOptions> cacheOptions = Options.Create(new MemoryCacheOptions());
+            IMemoryCache cache = new MemoryCache(cacheOptions);
+            var storage = new KeyValueStorage();
+            var events = new LifeCycleEvents();
+            var store = new ClientStore(cache, storage, events);
+
+            var count = 0;
+            store.Register("testKey", new StoreOptions<string>
+            {
+                LoadFunc = (ct) => { count++; return Task.FromResult("testValue"); },
+                UsesBackgroundRefresh = true,
+                ValueExpiry = TimeSpan.FromMilliseconds(5)
+            });
+
+            Assert.Equal(1, count);
+            events.TriggerStopped(this, new());
+
+            await Task.Delay(25);
+            Assert.Equal(1, count);
+
+            events.TriggerResumed(this, new());
+            await store.Get<string>("testKey");
+            Assert.Equal(2, count);
         }
     }
 }

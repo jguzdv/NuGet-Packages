@@ -15,6 +15,7 @@ public class ClientStore : IDisposable
 
     private readonly Dictionary<string, CancellationTokenSource> _cancellationTokenSources = new();
     private readonly Dictionary<string, (TimeSpan ExiresIn, Func<CancellationToken, Task<object>> LoadFunc, bool UseBackgroundRefresh, Func<(object Value, DateTimeOffset CreatedAt, DateTimeOffset ExpiresIn), IStoreEntry> CreateEntry)> _jobInformation = new();
+    private readonly Dictionary<string, Task> _loadingTasks = new();
 
     /// <summary>
     /// 
@@ -137,16 +138,28 @@ public class ClientStore : IDisposable
     /// <returns></returns>
     public async Task RefreshEntry(string key)
     {
+        if (_loadingTasks.ContainsKey(key))
+        {
+            await _loadingTasks[key];
+            return;
+        }
+
         var (expiresIn, loadFunc, _, _) = _jobInformation[key];
 
-        var value = await loadFunc(CancellationToken.None);
+        async Task Refresh(string key, TimeSpan expiresIn, Func<CancellationToken, Task<object>> loadFunc)
+        {
+            var value = await loadFunc(CancellationToken.None);
+            var item = _jobInformation[key].CreateEntry((value, DateTimeOffset.Now, DateTimeOffset.Now.AddTicks(expiresIn.Ticks)));
 
-        var item = _jobInformation[key].CreateEntry((value, DateTimeOffset.Now, DateTimeOffset.Now.AddTicks(expiresIn.Ticks)));
+            _cache.Set(key, item, expiresIn);
+            _ = _storage.SetItem(key, item);
+            ValueChanged?.Invoke(new StoreChangedEvent { Key = key });
+        }
 
-        _cache.Set(key, item, expiresIn);
-        _ = _storage.SetItem(key, item);
-        ValueChanged?.Invoke(new StoreChangedEvent { Key = key });
-
+        var task = Refresh(key, expiresIn, loadFunc);
+        _loadingTasks[key] = task;
+        await task;
+        _loadingTasks.Remove(key);
     }
 
     /// <summary>
@@ -176,6 +189,8 @@ public class ClientStore : IDisposable
             //try refreshing cache
             await RefreshEntry(key);
             item = _cache.Get<StoreEntry<T>>(key);
+            if (item is null)
+                throw new InvalidOperationException("tried to access cache after failed refresh");
 
             var context = new LoadingContext { Key = key, LoadedHot = true };
             StoreEntryLoaded?.Invoke(context);
