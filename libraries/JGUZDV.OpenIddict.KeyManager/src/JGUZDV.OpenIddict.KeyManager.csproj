@@ -1,17 +1,25 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Bcl.TimeProvider" Version="8.0.0-preview.7.23375.6" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
-    <PackageReference Include="OpenIddict.Server" Version="5.0.0-preview1.23520.63" />
-  </ItemGroup>
+
+        <PackageId>JGUZDV.OpenIddict.KeyManager</PackageId>
+        <IsPackable>true</IsPackable>
+        <Version>1.0.0-beta</Version>
+        <Authors>Thomas Ottenhus</Authors>
+        <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
+        <PackageDescription>Automatic key rollover for OpenIdDict</PackageDescription>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Bcl.TimeProvider" Version="[8.0.0,)" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="[6.0.0,)" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="[6.0.0,)" />
+        <PackageReference Include="Microsoft.Extensions.Options" Version="[6.0.0,)" />
+        <PackageReference Include="OpenIddict.Server" Version="5.0.0-preview2.23564.72" />
+    </ItemGroup>
 
 </Project>
