@@ -1,5 +1,5 @@
 <Project>
-	<PropertyGroup>
+    <PropertyGroup>
         <!-- Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
 
@@ -11,12 +11,14 @@
 		<AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
 
         <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageIcon>NuGet-Package-Icon.png</PackageIcon>
 	</PropertyGroup>
 	<ItemGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All"/>
 	</ItemGroup>
 
-	<ItemGroup>
+	<ItemGroup Condition="$(IsPackable)">
 		<None Include="README.md" Pack="true" PackagePath="/" />
+        <None Include="$(MSBuildThisFileDirectory)/NuGet-Package-Icon.png" Pack="true" PackagePath="/" />
 	</ItemGroup>
 </Project>
