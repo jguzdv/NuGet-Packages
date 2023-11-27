@@ -83,7 +83,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.OpenIddict.KeyManage
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.OpenIddict.KeyManager.Tests", "libraries\JGUZDV.OpenIddict.KeyManager\test\JGUZDV.OpenIddict.KeyManager.Tests.csproj", "{397C9A29-83DB-4944-9D4E-93159CDA60B6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.ClientStorage.Extensions", "libraries\JGUZDV.ClientStorage.Extensions\JGUZDV.ClientStorage.Extensions.csproj", "{D316ACB4-A377-4387-A238-7D5F6E55D8E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.ClientStorage.Blazor", "libraries\JGUZDV.ClientStorage.Extensions\JGUZDV.ClientStorage.Blazor.csproj", "{D316ACB4-A377-4387-A238-7D5F6E55D8E8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

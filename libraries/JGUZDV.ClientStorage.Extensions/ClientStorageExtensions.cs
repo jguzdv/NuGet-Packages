@@ -1,6 +1,5 @@
-﻿
-using JGUZDV.ClientStorage;
-using JGUZDV.ClientStorage.Extensions;
+﻿using JGUZDV.ClientStorage;
+using JGUZDV.ClientStorage.Defaults;
 using JGUZDV.ClientStorage.Store;
 
 namespace Microsoft.Extensions.DependencyInjection;
@@ -11,27 +10,14 @@ namespace Microsoft.Extensions.DependencyInjection;
 public static class ClientStorageExtensions
 {
     /// <summary>
-    /// Adds <see cref="ClientStore"/> without client side persistence.
+    /// Adds <see cref="ClientStore"/> with localStorage persistence. Uses <see cref="BlazorLifeCycleEvents"/> for <see cref="ILifeCycleEvents"/> 
     /// </summary>
     /// <param name="services"></param>
     /// <returns></returns>
-    public static IServiceCollection AddClientStoreWithNullStorage(this IServiceCollection services)
-    {
-        services.AddSingleton<IKeyValueStorage, NullStorage>();
-        services.AddSingleton<ILifeCycleEvents, LifeCycleEvents>();
-        services.AddSingleton<ClientStore>();
-        return services;
-    }
-
-    /// <summary>
-    /// Adds <see cref="ClientStore"/> with localStorage persistence
-    /// </summary>
-    /// <param name="services"></param>
-    /// <returns></returns>
-    public static IServiceCollection AddClientStoreWASMDefaults(this IServiceCollection services)
+    public static IServiceCollection AddClientStoreBlazorDefaults(this IServiceCollection services)
     {
         services.AddSingleton<IKeyValueStorage, LocalStorage>();
-        services.AddSingleton<ILifeCycleEvents, LifeCycleEvents>();
+        services.AddSingleton<ILifeCycleEvents, BlazorLifeCycleEvents>();
         services.AddSingleton<ClientStore>();
         return services;
     }

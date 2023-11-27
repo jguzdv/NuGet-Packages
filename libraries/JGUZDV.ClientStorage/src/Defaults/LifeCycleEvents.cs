@@ -1,4 +1,4 @@
-﻿namespace JGUZDV.ClientStorage.Extensions;
+﻿namespace JGUZDV.ClientStorage.Defaults;
 
 /// <summary>
 /// Simple implementation for ILifeCycleEvents <see cref="Stopped"/> and <see cref="Resumed"/> 
@@ -7,7 +7,6 @@
 /// </summary>
 public class LifeCycleEvents : ILifeCycleEvents
 {
-
     /// <summary>
     /// Trigger the stopped event
     /// </summary>

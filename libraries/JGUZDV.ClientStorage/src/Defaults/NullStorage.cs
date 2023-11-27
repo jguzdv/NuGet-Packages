@@ -1,4 +1,4 @@
-﻿namespace JGUZDV.ClientStorage.Extensions;
+﻿namespace JGUZDV.ClientStorage.Defaults;
 
 /// <summary>
 /// Null storage if no client side persistence is needed
