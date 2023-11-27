@@ -91,6 +91,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.Blazor.Components.Cl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.Blazor.Components.ClaimRequirements.Tests", "libraries\JGUZDV.Blazor.Components.ClaimRequirements\test\JGUZDV.Blazor.Components.ClaimRequirements.Tests.csproj", "{D2359AAE-F8E5-48FD-8DD7-047695E9DF3A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.ClientStorage.Extensions", "JGUZDV.ClientStorage.Extensions\JGUZDV.ClientStorage.Extensions.csproj", "{9B91D5AB-E931-42B0-ABB0-CD04E165DBCF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -237,6 +239,10 @@ Global
 		{D2359AAE-F8E5-48FD-8DD7-047695E9DF3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D2359AAE-F8E5-48FD-8DD7-047695E9DF3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D2359AAE-F8E5-48FD-8DD7-047695E9DF3A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B91D5AB-E931-42B0-ABB0-CD04E165DBCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B91D5AB-E931-42B0-ABB0-CD04E165DBCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B91D5AB-E931-42B0-ABB0-CD04E165DBCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B91D5AB-E931-42B0-ABB0-CD04E165DBCF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -280,6 +286,7 @@ Global
 		{F9B2F533-F6EF-4534-ADF8-7B99624C7618} = {50252EFB-8629-4B1D-AC2F-5F29CB6F684D}
 		{E7BD8A96-9A2E-4576-B498-6C9C580F4D5B} = {5F18EE62-3FBC-42F5-96DC-8C61C3D9EF27}
 		{D2359AAE-F8E5-48FD-8DD7-047695E9DF3A} = {50252EFB-8629-4B1D-AC2F-5F29CB6F684D}
+		{9B91D5AB-E931-42B0-ABB0-CD04E165DBCF} = {5F18EE62-3FBC-42F5-96DC-8C61C3D9EF27}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {46ECC226-1874-4539-8589-8B2029909C4A}
