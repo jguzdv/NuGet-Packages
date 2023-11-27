@@ -13,10 +13,10 @@ public class BlazorLifeCycleEvents : ILifeCycleEvents
         _jsRuntime = jsRuntime;
         _ = Init();
     }
+
     private async Task Init()
     {
-        var module = await _jsRuntime.InvokeAsync<IJSObjectReference>("import", "_content/JGUZDV.ClientStorage.Blazor/js/LifeCycleEvents.js");
-
+        var module = await _jsRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/JGUZDV.ClientStorage.Blazor/js/LifeCycleEvents.js");
         var dotNetRef = DotNetObjectReference.Create(this);
         await module.InvokeVoidAsync("addLifeCycleEvents", dotNetRef);
     }

@@ -13,7 +13,7 @@ builder.Services.AddModals();
 builder.Services.AddSupportedCultures(new List<string>() { "de", "en" });
 
 builder.Services.AddLocalization();
-
+builder.Services.AddClientStoreBlazorDefaults();
 
 var app = builder.Build();
 

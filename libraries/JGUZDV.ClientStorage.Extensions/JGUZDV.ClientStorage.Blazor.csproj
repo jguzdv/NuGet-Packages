@@ -5,7 +5,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
 
-        <PackageId>JGUZDV.ClientStorage.Extensions</PackageId>
+        <PackageId>JGUZDV.ClientStorage.Blazor</PackageId>
         <IsPackable>true</IsPackable>
         <Version>1.0.0</Version>
         <Authors>Aaron Puhl</Authors>

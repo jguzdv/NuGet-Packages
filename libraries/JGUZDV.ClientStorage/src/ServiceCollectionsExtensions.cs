@@ -19,6 +19,7 @@ public static class ServiceCollectionsExtensions
     {
         services.AddSingleton<IKeyValueStorage, NullStorage>();
         services.AddSingleton<ILifeCycleEvents, LifeCycleEvents>();
+        services.AddMemoryCache();
         services.AddSingleton<ClientStore>();
         return services;
     }

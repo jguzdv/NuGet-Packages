@@ -7,7 +7,7 @@ namespace Microsoft.Extensions.DependencyInjection;
 /// <summary>
 /// ServiceCollection extensions for ClientStorage package.
 /// </summary>
-public static class ClientStorageExtensions
+public static class ServiceCollectionExtensions
 {
     /// <summary>
     /// Adds <see cref="ClientStore"/> with localStorage persistence. Uses <see cref="BlazorLifeCycleEvents"/> for <see cref="ILifeCycleEvents"/> 
@@ -18,6 +18,7 @@ public static class ClientStorageExtensions
     {
         services.AddSingleton<IKeyValueStorage, LocalStorage>();
         services.AddSingleton<ILifeCycleEvents, BlazorLifeCycleEvents>();
+        services.AddMemoryCache();
         services.AddSingleton<ClientStore>();
         return services;
     }

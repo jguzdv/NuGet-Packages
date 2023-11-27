@@ -1,0 +1,33 @@
+﻿@page "/client-storage"
+@using JGUZDV.ClientStorage.Store
+
+<h3>ClientStorageBlazor</h3>
+
+refreshs: @count
+
+@code {
+    [Inject]
+    public ClientStore Store { get; set; }
+
+    private class MyClass
+    {
+        public bool Value { get; set; }
+    }
+
+    private int count;
+    private MyClass _flag;
+    protected override async Task OnInitializedAsync()
+    {
+        var result = new MyClass
+            {
+                Value = false
+            };
+
+        _flag = await Store.GetOrLoad<MyClass>("key", new StoreOptions<MyClass>()
+            {
+                LoadFunc = (ct) => {count++; StateHasChanged(); return  Task.FromResult(result); },
+                ValueExpiry = TimeSpan.FromMilliseconds(1000),
+                UsesBackgroundRefresh = true
+            });
+    }
+}
