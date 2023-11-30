@@ -3,7 +3,7 @@
 
 @typeparam TModel where TModel : class
 
-<dialog id="@_guid" class="p-0 border-0">
+<dialog id="@_componentId" class="p-0 border-0">
     <div class="modal show d-block">
         @if (_renderFragment != null && _context != null)
         {
@@ -18,7 +18,7 @@
     private IJSRuntime? JSRuntime { get; set; }
     private IJSObjectReference? _jsModule;
 
-    private readonly Guid _guid = Guid.NewGuid();
+    private readonly string _componentId = Guid.NewGuid().ToString();
     protected TaskCompletionSource<ModalResult> _taskCompletionSource = new();
 
     private RenderFragment<ModalContext>? _renderFragment;
@@ -110,7 +110,7 @@
     public async Task<ModalResult> ShowModal(TModel model)
     {
         _context = new ModalContext(this, model);
-        await _jsModule!.InvokeVoidAsync("OpenDialog", _guid.ToString());
+        await _jsModule!.InvokeVoidAsync("OpenDialog", _componentId);
 
         _taskCompletionSource = new();
         return await _taskCompletionSource.Task;
@@ -118,7 +118,7 @@
 
     public async Task Close(ModalResult result)
     {
-        await _jsModule!.InvokeVoidAsync("CloseDialog", _guid.ToString());
+        await _jsModule!.InvokeVoidAsync("CloseDialog", _componentId);
         _taskCompletionSource.SetResult(result);
     }
 
