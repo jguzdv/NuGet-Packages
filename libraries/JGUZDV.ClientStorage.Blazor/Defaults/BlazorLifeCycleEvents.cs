@@ -8,6 +8,7 @@ namespace JGUZDV.ClientStorage.Defaults;
 public class BlazorLifeCycleEvents : ILifeCycleEvents
 {
     private readonly IJSRuntime _jsRuntime;
+    private readonly Task _init;
 
     /// <summary>
     /// Constructor for <see cref="BlazorLifeCycleEvents"/>
@@ -18,21 +19,31 @@ public class BlazorLifeCycleEvents : ILifeCycleEvents
     {
         _jsRuntime = jsRuntime;
 
+        _init = Init();
+    }
+
+    /// <summary>
+    /// Connects <see cref="Stopped"/> and <see cref="Resumed"/> with the underlying javascript events
+    /// </summary>
+    /// <returns></returns>
+    public async Task Init()
+    {
+        if (_init != null)
+        {
+            await _init;
+            return;
+        };
+
         try
         {
-            Init().Wait(); //TODO
+            var module = await _jsRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/JGUZDV.ClientStorage.Blazor/js/LifeCycleEvents.js");
+            var dotNetRef = DotNetObjectReference.Create(this);
+            await module.InvokeVoidAsync("addLifeCycleEvents", dotNetRef);
         }
         catch (Exception e)
         {
             throw new InvalidOperationException($"Could not initialize {nameof(BlazorLifeCycleEvents)}", e);
         }
-    }
-
-    private async Task Init()
-    {
-        var module = await _jsRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/JGUZDV.ClientStorage.Blazor/js/LifeCycleEvents.js");
-        var dotNetRef = DotNetObjectReference.Create(this);
-        await module.InvokeVoidAsync("addLifeCycleEvents", dotNetRef);
     }
 
     /// <summary>
