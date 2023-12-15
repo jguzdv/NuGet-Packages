@@ -1,13 +1,28 @@
 @using Microsoft.AspNetCore.Components.Web
+@using Microsoft.JSInterop
 
-@implements IModal
-@inject ModalService _modalService
 @typeparam TModel where TModel : class
 
+<dialog id="@_componentId" class="p-0 border-0">
+    <div class="modal show d-block">
+        @if (_renderFragment != null && _context != null)
+        {
+            @_renderFragment(_context)
+        }
+    </div>
+</dialog>
+
+
 @code {
-    private ModalContext? _context;
+    [Inject, NotNull]
+    private IJSRuntime? JSRuntime { get; set; }
+    private IJSObjectReference? _jsModule;
+
+    private readonly string _componentId = Guid.NewGuid().ToString();
+    protected TaskCompletionSource<ModalResult> _taskCompletionSource = new();
 
     private RenderFragment<ModalContext>? _renderFragment;
+    private ModalContext? _context;
 
     [Parameter]
     public RenderFragment<ModalContext>? ChildContent { get; set; }
@@ -35,20 +50,10 @@
     [Parameter]
     public string? ModalFooterClasses { get; set; }
 
-
-    RenderFragment? IModal.ChildContent {
-        get
-        {
-            if (_renderFragment == null || _context == null)
-                return null;
-
-            return _renderFragment?.Invoke(_context);
-        }
-    }
-
-    protected override void OnParametersSet()
+    protected override async Task OnParametersSetAsync()
     {
-        base.OnParametersSet();
+        await base.OnParametersSetAsync();
+        _jsModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/JGUZDV.Blazor.Components/js/Modal.js").AsTask();
 
         if (Title != null && Header != null)
             throw new InvalidOperationException($"{nameof(Title)} cannot be set, if {nameof(Header)} is set.");
@@ -60,69 +65,74 @@
             throw new InvalidOperationException($"{nameof(Body)} may not be set, if {nameof(Content)} is set.");
 
         RenderFragment<ModalContext>? content = Body == null
-            ? Content
-            : (ctx) =>
-                @<div class="modal-content">
-                    @if (Header != null || Title != null)
-                    {
-                        <div class="modal-header @ModalHeaderClasses">
-                        @if (Header != null)
-                        {
-                            @Header.Invoke(ctx)
-                        } 
-                        else
-                        {
-                            <h5 class="modal-title">@Title</h5>
-                            <button type="button" class="btn-close" aria-label="Close" @onclick="() => ctx.Modal.Close(ModalResult.Dismissed)"></button>
-                        }
-                        </div>
-                    }
+        ? Content
+        : (ctx) =>
+        @<div class="modal-content">
+            @if (Header != null || Title != null)
+        {
+            <div class="modal-header @ModalHeaderClasses">
+                @if (Header != null)
+            {
+                @Header.Invoke(ctx)
+            }
+            else
+            {
+                <h5 class="modal-title">@Title</h5>
+            <button type="button" class="btn-close" aria-label="Close" @onclick="() => Close()"></button>
+            }
+            </div>
+        }
 
-                    <div class="modal-body @ModalBodyClasses">
-                        @Body.Invoke(ctx)
-                    </div>
+            <div class="modal-body @ModalBodyClasses">
+                @Body.Invoke(ctx)
+            </div>
 
-                    @if (Footer != null)
-                    {
-                        <div class="modal-footer @ModalFooterClasses">
-                            @Footer.Invoke(ctx)
-                        </div>
-                    }
-                </div>;
+            @if (Footer != null)
+        {
+            <div class="modal-footer @ModalFooterClasses">
+                @Footer.Invoke(ctx)
+            </div>
+        }
+        </div>;
 
         if (content != null && ChildContent != null)
             throw new InvalidOperationException($"{nameof(Content)} may not be set, if {nameof(ChildContent)} is set.");
 
         _renderFragment = content == null
-            ? ChildContent
-            : (ctx) =>
-                @<div class="modal-dialog @ModalDialogClasses" @onclick:stopPropagation="true">
-                    @content.Invoke(ctx)
+        ? ChildContent
+        : (ctx) =>
+        @<div class="modal-dialog @ModalDialogClasses" @onclick:stopPropagation="true">
+            @content.Invoke(ctx)
         </div>
     ;
     }
 
-
-    public Task<ModalResult> ShowModal(TModel model)
+    public async Task<ModalResult> ShowModal(TModel model)
     {
         _context = new ModalContext(this, model);
-        return _modalService.ShowModal(this);
+        await _jsModule!.InvokeVoidAsync("OpenDialog", _componentId);
+
+        _taskCompletionSource = new();
+        return await _taskCompletionSource.Task;
     }
 
-    public void Close()
-        => Close(ModalResult.Undefined);
-    public void Close(ModalResult result)
-        => _modalService.Close(this, result);
+    public async Task Close(ModalResult result)
+    {
+        await _jsModule!.InvokeVoidAsync("CloseDialog", _componentId);
+        _taskCompletionSource.SetResult(result);
+    }
 
+    public async Task Close()
+        => await Close(ModalResult.Undefined);
 
-    public void Accept() =>
-        _modalService.Close(this, ModalResult.Accepted);
+    public async Task Accept()
+        => await Close(ModalResult.Accepted);
 
-    public void Dismiss()
-        => _modalService.Close(this, ModalResult.Dismissed);
+    public async Task Dismiss()
+        => await Close(ModalResult.Dismissed);
 
-
-    public class ModalContext {
+    public class ModalContext
+    {
         [SetsRequiredMembers]
         public ModalContext(Modal<TModel> modal, TModel model)
         {
