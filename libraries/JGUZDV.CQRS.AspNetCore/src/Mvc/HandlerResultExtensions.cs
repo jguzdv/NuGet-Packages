@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Localization;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Localization;
 
 using AspNetCoreMvc = Microsoft.AspNetCore.Mvc;
 
@@ -27,7 +28,13 @@ public static class HandlerResultExtensions
         return response;
     }
 
+    public static AspNetCoreMvc.ActionResult ToActionResult<T>(this HandlerResult result, Func<CreatedResult, T> func, IStringLocalizer? sl = null)
+    {
+        if (result is CreatedResult r)
+            return new AspNetCoreMvc.ObjectResult(func(r)) { StatusCode = StatusCodes.Status201Created };
 
+        return result.ToActionResult(sl);
+    }
 
     private static AspNetCoreMvc.ActionResult Generic(HandlerResult r)
     {
