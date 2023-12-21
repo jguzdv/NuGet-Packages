@@ -1,6 +1,7 @@
 ﻿using JGUZDV.ClientStorage.Defaults;
 using JGUZDV.ClientStorage.Store;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace JGUZDV.ClientStorage;
 
@@ -17,10 +18,10 @@ public static class ServiceCollectionsExtensions
     /// <returns></returns>
     public static IServiceCollection AddClientStoreWithNullStorage(this IServiceCollection services)
     {
-        services.AddSingleton<IKeyValueStorage, NullStorage>();
-        services.AddSingleton<ILifeCycleEvents, LifeCycleEvents>();
+        services.TryAddSingleton<IKeyValueStorage, NullStorage>();
+        services.TryAddSingleton<ILifeCycleEvents, LifeCycleEvents>();
         services.AddMemoryCache();
-        services.AddSingleton<ClientStore>();
+        services.TryAddSingleton<ClientStore>();
         return services;
     }
 }

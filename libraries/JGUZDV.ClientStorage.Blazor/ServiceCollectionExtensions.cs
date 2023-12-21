@@ -2,6 +2,8 @@
 using JGUZDV.ClientStorage.Defaults;
 using JGUZDV.ClientStorage.Store;
 
+using Microsoft.Extensions.DependencyInjection.Extensions;
+
 namespace Microsoft.Extensions.DependencyInjection;
 
 /// <summary>
@@ -14,12 +16,12 @@ public static class ServiceCollectionExtensions
     /// </summary>
     /// <param name="services"></param>
     /// <returns></returns>
-    public static IServiceCollection AddClientStoreBlazorDefaults(this IServiceCollection services)
+    public static IServiceCollection AddBrowserClientStore(this IServiceCollection services)
     {
-        services.AddSingleton<IKeyValueStorage, LocalStorage>();
-        services.AddSingleton<ILifeCycleEvents, BlazorLifeCycleEvents>();
+        services.TryAddSingleton<IKeyValueStorage, LocalStorage>();
+        services.TryAddSingleton<ILifeCycleEvents, BlazorLifeCycleEvents>();
         services.AddMemoryCache();
-        services.AddSingleton<ClientStore>();
+        services.TryAddSingleton<ClientStore>();
         return services;
     }
 }
