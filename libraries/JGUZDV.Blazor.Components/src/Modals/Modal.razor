@@ -107,29 +107,31 @@
     ;
     }
 
-    public async Task<ModalResult> ShowModal(TModel model)
+    public Task<ModalResult> ShowModal(TModel model)
     {
         _context = new ModalContext(this, model);
-        await _jsModule!.InvokeVoidAsync("OpenDialog", _componentId);
+        StateHasChanged();
+
+        _ = _jsModule!.InvokeVoidAsync("OpenDialog", _componentId);
 
         _taskCompletionSource = new();
-        return await _taskCompletionSource.Task;
+        return _taskCompletionSource.Task;
     }
 
-    public async Task Close(ModalResult result)
+    public void Close(ModalResult result)
     {
-        await _jsModule!.InvokeVoidAsync("CloseDialog", _componentId);
+        _ = _jsModule!.InvokeVoidAsync("CloseDialog", _componentId);
         _taskCompletionSource.SetResult(result);
     }
 
-    public async Task Close()
-        => await Close(ModalResult.Undefined);
+    public void Close()
+        => Close(ModalResult.Undefined);
 
-    public async Task Accept()
-        => await Close(ModalResult.Accepted);
+    public void Accept()
+        => Close(ModalResult.Accepted);
 
-    public async Task Dismiss()
-        => await Close(ModalResult.Dismissed);
+    public void Dismiss()
+        => Close(ModalResult.Dismissed);
 
     public class ModalContext
     {
