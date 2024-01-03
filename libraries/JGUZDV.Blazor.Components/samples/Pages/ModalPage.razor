@@ -7,6 +7,7 @@
     <button @onclick="() => OpenModal3()">Modal Variante: Body</button>
     <button @onclick="() => OpenModal4()">Modal Variante: Title</button>
     <button @onclick="() => OpenModal5()">Zwei Modale</button>
+    <button @onclick="() => OpenModal6()">Modal Confirmation</button>
 </div>
 
 <p>@(Container?.Value ?? "- kein Wert -")</p>
@@ -101,7 +102,10 @@
     <div class="btn btn-primary" @onclick="() => context.ShowModal()">button render fragment</div>
 </Button>
 </ModalConfirmationButton>
-
+ 
+<ModalConfirmation @ref="ModalConfirmation"
+    Title="ModalConfirmation" AcceptText="Accept">
+</ModalConfirmation>
 
 @code {
     public ModalPage()
@@ -115,6 +119,7 @@
     public Modal<MyContainer> MyModalWithContent { get; set; }
     public Modal<MyContainer> MyModalWithBody { get; set; }
     public Modal<MyContainer> MyModalWithBodyAndTitle { get; set; }
+    public ModalConfirmation ModalConfirmation { get; set; }
 
     public class MyContainer {
         public string Value { get; set; } = "Hallo!";
@@ -144,5 +149,10 @@
     {
         _ = MyModalWithBody.ShowModal(Container);
         return MyModalWithBodyAndTitle.ShowModal(Container);
+    }
+
+    private Task OpenModal6()
+    {
+        return ModalConfirmation.ShowModal("Heeyyy!");
     }
 }
