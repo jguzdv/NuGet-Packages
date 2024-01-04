@@ -4,7 +4,7 @@
 @typeparam TModel where TModel : class
 
 <dialog id="@_componentId" class="p-0 border-0">
-    <div class="modal show d-block">
+    <div class="modal show d-block" style="backdrop-filter: blur(5px);">
         @if (_renderFragment != null && _context != null)
         {
             @_renderFragment(_context)
@@ -67,10 +67,10 @@
         RenderFragment<ModalContext>? content = Body == null
         ? Content
         : (ctx) =>
-        @<div class="modal-content">
+    @<div class="modal-content">
             @if (Header != null || Title != null)
         {
-            <div class="modal-header @ModalHeaderClasses">
+        <div class="modal-header @ModalHeaderClasses">
                 @if (Header != null)
             {
                 @Header.Invoke(ctx)
