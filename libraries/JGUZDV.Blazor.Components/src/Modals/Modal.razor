@@ -3,8 +3,8 @@
 
 @typeparam TModel where TModel : class
 
-<dialog id="@_componentId" class="p-0 border-0">
-    <div class="modal show d-block" style="backdrop-filter: blur(5px);">
+<dialog id="@_componentId" class="p-0 border-0" >
+    <div class="modal show d-block">
         @if (_renderFragment != null && _context != null)
         {
             @_renderFragment(_context)
