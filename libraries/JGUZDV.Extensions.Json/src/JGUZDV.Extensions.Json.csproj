@@ -7,7 +7,7 @@
 
 		<PackageId>JGUZDV.Extensions.Json</PackageId>
 		<IsPackable>true</IsPackable>
-		<Version>1.0.2</Version>
+		<Version>1.1.0</Version>
 		<Authors>Thomas Ottenhus</Authors>
 		<Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
 		<PackageDescription>Extensions for JSONSettings and some converters</PackageDescription>
