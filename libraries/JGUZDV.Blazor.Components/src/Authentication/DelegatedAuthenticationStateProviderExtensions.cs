@@ -16,4 +16,11 @@ public static class DelegatedAuthenticationStateProviderExtensions
 
         return services;
     }
+
+    public static IServiceCollection AddDefaultAuthenticationStateProvider(this IServiceCollection services)
+    {
+        services.AddAuthenticationStateProvider<DefaultFetchClaimsPrincipal>();
+
+        return services;
+    }
 }
