@@ -87,6 +87,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.Blazor.WasmHost", "l
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.Blazor.WasmHost.Tests", "libraries\JGUZDV.Blazor.WasmHost\test\JGUZDV.Blazor.WasmHost.Tests.csproj", "{A2AF6E5E-C42E-47A1-AE81-ED81B84C57DD}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.Blazor.WasmHost", "libraries\JGUZDV.Blazor.WasmHost\src\JGUZDV.Blazor.WasmHost.csproj", "{68E91C38-4D95-4DCE-9BC2-4AE71236B289}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.Blazor.WasmHost.Tests", "libraries\JGUZDV.Blazor.WasmHost\test\JGUZDV.Blazor.WasmHost.Tests.csproj", "{A2AF6E5E-C42E-47A1-AE81-ED81B84C57DD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
