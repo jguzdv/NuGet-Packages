@@ -41,15 +41,12 @@ public class DelegatedAuthenticationStateProvider : AuthenticationStateProvider
 
     private async Task<AuthenticationState> FetchAuthenticationStateAsync()
     {
-        var result = await _fetchAuthenticationState.FetchPrincipalAsync();
+        var result = await _fetchAuthenticationState.FetchPrincipalAsync(default);
 
         _stateExpiry = result.ExpiresAt ?? DateTimeOffset.MinValue;
-        
-        if (result.User == null)
-        {
-            return UnauthorizedUser;
-        }
 
-        return new AuthenticationState(result.User);
+        return result.User != null 
+            ? new AuthenticationState(result.User) 
+            : UnauthorizedUser;
     }
 }
