@@ -4,5 +4,5 @@ namespace JGUZDV.Blazor.Components.Authentication;
 
 public interface IFetchAuthenticationState
 {
-    public Task<(ClaimsPrincipal? User, DateTimeOffset? ExpiresAt)> FetchPrincipalAsync();
+    public Task<(ClaimsPrincipal? User, DateTimeOffset? ExpiresAt)> FetchPrincipalAsync(CancellationToken ct);
 }
