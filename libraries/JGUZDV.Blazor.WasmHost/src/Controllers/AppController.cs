@@ -21,6 +21,17 @@ namespace JGUZDV.Blazor.WasmHost.Controllers
             return LocalRedirect(nextUrl);
         }
 
+        [HttpGet("sign-out")]
+        public async Task<IActionResult> SignOutAsync(string nextUrl = "~/")
+        {
+            if (!nextUrl.StartsWith('~'))
+                nextUrl = '~' + nextUrl;
+
+            await HttpContext.SignOutAsync();
+            return LocalRedirect(nextUrl);
+        }
+
+
         [HttpGet("principal")]
         public IActionResult GetPrincipal()
         {
@@ -38,16 +49,11 @@ namespace JGUZDV.Blazor.WasmHost.Controllers
         }
 
 
-        [HttpGet("sign-out")]
-        public async Task<IActionResult> SignOutAsync(string nextUrl = "~/")
+        [HttpGet("features")]
+        public IActionResult GetFeatures()
         {
-            if (!nextUrl.StartsWith('~'))
-                nextUrl = '~' + nextUrl;
-
-            await HttpContext.SignOutAsync();
-            return LocalRedirect(nextUrl);
+            //TODO: Add feature Manager GetAll()
+            return Ok();
         }
-
-
     }
 }
