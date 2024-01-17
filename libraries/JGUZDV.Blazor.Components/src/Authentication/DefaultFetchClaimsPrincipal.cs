@@ -30,12 +30,19 @@ namespace JGUZDV.Blazor.Components.Authentication
             if (!options.Converters.Any(x => x is ClaimsPrincipalConverter))
                 options.Converters.Add(new ClaimsPrincipalConverter());
 
-            var principal = await _httpClient.GetFromJsonAsync<ClaimsPrincipal>(_uri, options, ct);
-            if (principal == null)
-                return (null, null);
+            try
+            {
+                var principal = await _httpClient.GetFromJsonAsync<ClaimsPrincipal>(_uri, options, ct);
+                if (principal == null)
+                    return (null, null);
 
-            var expiresAt = GetExpirationOrDefault(principal);
-            return (principal, expiresAt);
+                var expiresAt = GetExpirationOrDefault(principal);
+                return (principal, expiresAt);
+            }
+            catch
+            {
+                return (null, null);
+            }
         }
 
         private DateTimeOffset? GetExpirationOrDefault(ClaimsPrincipal cp)
