@@ -28,10 +28,6 @@
     </ItemGroup>
     
     <ItemGroup>
-        <Folder Include="wwwroot\css\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\..\JGUZDV.AspNetCore.Authentication.Cookies\src\JGUZDV.AspNetCore.Authentication.Cookies.csproj" />
       <ProjectReference Include="..\..\JGUZDV.AspNetCore.DataProtection\src\JGUZDV.AspNetCore.DataProtection.csproj" />
       <ProjectReference Include="..\..\JGUZDV.Extensions.Json\src\JGUZDV.Extensions.Json.csproj" />

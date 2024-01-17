@@ -1,4 +1,6 @@
-﻿using JGUZDV.Blazor.WasmHost.Extensions;
+﻿using System.Diagnostics.Metrics;
+
+using JGUZDV.Blazor.WasmHost.Extensions;
 using JGUZDV.YARP.SimpleReverseProxy;
 
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -20,18 +22,16 @@ public static partial class BlazorWasmHost
         public const string Telemetry = "ApplicationInsights";
     }
 
-    public static WebApplicationBuilder ConfigureWasmHostServices(this WebApplicationBuilder builder)
-    {
-        builder.Services.ConfigureWasmHostServices(builder.Configuration, builder.Environment);
-        return builder;
-    }
 
-
-    public static IServiceCollection ConfigureWasmHostServices(
-        this IServiceCollection services,
-        IConfiguration configuration,
-        IWebHostEnvironment environment)
+    public static WebApplicationBuilder ConfigureWasmHostServices(
+        this WebApplicationBuilder builder,
+        bool useInteractiveWebAssembly
+        )
     {
+        var services = builder.Services;
+        var config = builder.Configuration;
+        var env = builder.Environment;
+
         var sp = services.BuildServiceProvider();
         var loggerFactory = sp.GetService<ILoggerFactory>();
 
@@ -43,9 +43,16 @@ public static partial class BlazorWasmHost
             services.AddControllers();
             services.AddRazorPages();
 
+            // Enable InteractiveWebAssembly
+            if (useInteractiveWebAssembly)
+            {
+                builder.Services.AddRazorComponents()
+                    .AddInteractiveWebAssemblyComponents();
+            }
+
             // Add Localization for DE, EN and RequestLocaltization
             services.AddLocalization();
-            var locales = configuration
+            var locales = config
                 .GetSection("RequestLocalization:Cultures")
                 .Get<string[]>() ?? ["de", "en"];
 
@@ -59,7 +66,7 @@ public static partial class BlazorWasmHost
 
 
             // Add reverse proxy
-            if (configuration.HasConfigSection(ConfigSections.ReverseProxy))
+            if (config.HasConfigSection(ConfigSections.ReverseProxy))
             {
                 services.AddSimpleReverseProxy(ConfigSections.ReverseProxy);
             }
@@ -70,11 +77,11 @@ public static partial class BlazorWasmHost
 
 
             // Add distributed cache
-            if (environment.IsProduction() && configuration.HasConfigSection(ConfigSections.DistributedCache))
+            if (env.IsProduction() && config.HasConfigSection(ConfigSections.DistributedCache))
             {
                 services.AddDistributedSqlServerCache(opt =>
                 {
-                    configuration.GetSection(ConfigSections.DistributedCache).Bind(opt);
+                    config.GetSection(ConfigSections.DistributedCache).Bind(opt);
                 });
             }
             else
@@ -82,26 +89,26 @@ public static partial class BlazorWasmHost
                 services.AddDistributedMemoryCache();
             }
 
-            if (!configuration.HasConfigSection(ConfigSections.DistributedCache))
+            if (!config.HasConfigSection(ConfigSections.DistributedCache))
                 Log.MissingConfig(logger, ConfigSections.DistributedCache);
 
 
             // Add data protection
-            if (environment.IsProduction() && configuration.HasConfigSection(ConfigSections.DataProtection))
+            if (env.IsProduction() && config.HasConfigSection(ConfigSections.DataProtection))
             {
-                services.AddJGUZDVDataProtection(configuration, environment);
+                services.AddJGUZDVDataProtection(config, env);
             }
             else
             {
                 services.AddDataProtection();
             }
 
-            if (!configuration.HasConfigSection(ConfigSections.DataProtection))
+            if (!config.HasConfigSection(ConfigSections.DataProtection))
                 Log.MissingConfig(logger, ConfigSections.DataProtection);
 
 
             // Add authentication and authorization
-            if (configuration.HasConfigSection(ConfigSections.Authentication))
+            if (config.HasConfigSection(ConfigSections.Authentication))
             {
                 var authBuilder = services.AddAuthentication(opt =>
                 {
@@ -114,7 +121,7 @@ public static partial class BlazorWasmHost
                         opt.SaveTokens = true;
                         opt.GetClaimsFromUserInfoEndpoint = true;
 
-                        var oidcConfig = configuration.GetSection(ConfigSections.Authentication + ":OpenIdConnect");
+                        var oidcConfig = config.GetSection(ConfigSections.Authentication + ":OpenIdConnect");
                         oidcConfig.Bind(opt);
 
                         opt.Scope.Clear();
@@ -125,18 +132,21 @@ public static partial class BlazorWasmHost
                     })
                     .AddCookie(opt =>
                     {
-                        opt.Cookie.Name = environment.ApplicationName;
+                        opt.Cookie.Name = env.ApplicationName;
                         opt.SlidingExpiration = false;
 
-                        var cookieConfig = configuration.GetSection(ConfigSections.Authentication + ":Cookie");
+                        var cookieConfig = config.GetSection(ConfigSections.Authentication + ":Cookie");
                         cookieConfig.Bind(opt);
                     })
                     .AddCookieDistributedTicketStore();
 
                 services.AddAuthorization();
 
-                services.AddScoped<AuthenticationStateProvider, ServerAuthenticationStateProvider>();
-                services.AddCascadingAuthenticationState();
+                if (useInteractiveWebAssembly)
+                {
+                    services.AddScoped<AuthenticationStateProvider, ServerAuthenticationStateProvider>();
+                    services.AddCascadingAuthenticationState();
+                }
             }
             else
             {
@@ -145,7 +155,7 @@ public static partial class BlazorWasmHost
 
 
 
-            if (configuration.HasConfigSection(ConfigSections.Telemetry))
+            if (config.HasConfigSection(ConfigSections.Telemetry))
             {
                 // TODO: Add default calls for Telemetry and Healthchecks
                 services.AddHealthChecks();
@@ -156,7 +166,7 @@ public static partial class BlazorWasmHost
                 services.AddHealthChecks();
             }
 
-            return services;
+            return builder;
         }
         finally
         {
@@ -166,19 +176,13 @@ public static partial class BlazorWasmHost
 
 
 
-    public static WebApplication ConfigureWasmHost(this WebApplication app)
+    public static WebApplication ConfigureWasmHost<TBlazorApp>(this WebApplication app,
+        params System.Reflection.Assembly[] assemblies)
     {
-        ConfigureWasmHost(app, app.Configuration, app.Environment);
-        return app;
-    }
+        var conf = app.Configuration;
+        var env = app.Environment;
 
-
-    public static IApplicationBuilder ConfigureWasmHost(
-        this IApplicationBuilder app,
-        IConfiguration configuration,
-        IHostEnvironment environment)
-    {
-        if (environment.IsDevelopment())
+        if (env.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
             app.UseWebAssemblyDebugging();
@@ -189,9 +193,11 @@ public static partial class BlazorWasmHost
             app.UseHsts();
         }
 
+
         app.UseHttpsRedirection();
-        app.UseBlazorFrameworkFiles();
+
         app.UseStaticFiles();
+        app.UseAntiforgery();
 
         app.UseRequestLocalization();
         app.UseRouting();
@@ -199,18 +205,64 @@ public static partial class BlazorWasmHost
         app.UseAuthentication();
         app.UseAuthorization();
 
-        app.UseEndpoints(endpoints =>
-        {
-            endpoints.MapControllers();
-            endpoints.MapRazorPages();
-            endpoints.MapFallbackToPage("/Index");
-            endpoints.MapZdvHealthEndpoint();
+        app.MapRazorComponents<TBlazorApp>()
+            .AddInteractiveWebAssemblyRenderMode()
+            .AddAdditionalAssemblies(assemblies);
 
-            if (configuration.HasConfigSection(ConfigSections.ReverseProxy))
-            {
-                endpoints.MapSimpleReverseProxy();
-            }
-        });
+        app.MapControllers();
+        
+        app.MapHealthChecks("/health");
+
+        if (conf.HasConfigSection(ConfigSections.ReverseProxy))
+        {
+            app.MapSimpleReverseProxy();
+        }
+
+
+        return app;
+    }
+
+
+    public static WebApplication ConfigureWasmHost(
+        this WebApplication app)
+    {
+        var conf = app.Configuration;
+        var env = app.Environment;
+
+        if (env.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
+            app.UseWebAssemblyDebugging();
+        }
+        else
+        {
+            app.UseExceptionHandler("/Error");
+            app.UseHsts();
+        }
+
+
+        app.UseHttpsRedirection();
+
+        app.UseBlazorFrameworkFiles();
+        app.UseStaticFiles();
+        
+        app.UseRequestLocalization();
+        app.UseRouting();
+
+        app.UseAuthentication();
+        app.UseAuthorization();
+
+        app.MapControllers();
+        app.MapRazorPages();
+        app.MapFallbackToPage("/Index");
+
+        app.MapHealthChecks("/health");
+
+        if (conf.HasConfigSection(ConfigSections.ReverseProxy))
+        {
+            app.MapSimpleReverseProxy();
+        }
+
 
         return app;
     }
