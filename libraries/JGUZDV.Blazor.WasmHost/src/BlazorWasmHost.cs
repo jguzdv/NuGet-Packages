@@ -1,10 +1,10 @@
 ﻿using JGUZDV.Blazor.WasmHost.Extensions;
+using JGUZDV.YARP.SimpleReverseProxy;
 
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging.Abstractions;
 
 namespace JGUZDV.Blazor.WasmHost;
@@ -14,9 +14,9 @@ public static partial class BlazorWasmHost
     public static class ConfigSections
     {
         public const string Authentication = "Authentication";
-        public const string BFF = "ReverseProxy";
         public const string DataProtection = AspNetCore.DataProtection.Constants.DefaultSectionName;
         public const string DistributedCache = "DistributedCache";
+        public const string ReverseProxy = "ReverseProxy";
         public const string Telemetry = "ApplicationInsights";
     }
 
@@ -59,13 +59,13 @@ public static partial class BlazorWasmHost
 
 
             // Add reverse proxy
-            if (configuration.HasConfigSection(ConfigSections.BFF))
+            if (configuration.HasConfigSection(ConfigSections.ReverseProxy))
             {
-                services.AddBFFProxy(ConfigSections.BFF);
+                services.AddSimpleReverseProxy(ConfigSections.ReverseProxy);
             }
             else
             {
-                Log.MissingConfig(logger, ConfigSections.BFF);
+                Log.MissingConfig(logger, ConfigSections.ReverseProxy);
             }
 
 
@@ -206,9 +206,9 @@ public static partial class BlazorWasmHost
             endpoints.MapFallbackToPage("/Index");
             endpoints.MapZdvHealthEndpoint();
 
-            if (configuration.HasConfigSection("BFFProxy"))
+            if (configuration.HasConfigSection(ConfigSections.ReverseProxy))
             {
-                endpoints.MapBFFProxy();
+                endpoints.MapSimpleReverseProxy();
             }
         });
 

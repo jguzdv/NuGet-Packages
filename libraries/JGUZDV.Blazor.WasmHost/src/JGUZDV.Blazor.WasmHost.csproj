@@ -21,19 +21,20 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="JGUZDV.AspNetCore.DataProtection" Version="1.1.1" />
-        <PackageReference Include="JGUZDV.AspNetCore.Logging" Version="1.0.6" />
-        <PackageReference Include="JGUZDV.Extensions.Json" Version="1.1.0" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="[8.0,)">
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
+        <PackageReference Include="Microsoft.Extensions.Caching.SqlServer" Version="[8.0,)" />
     </ItemGroup>
     
     <ItemGroup>
-        <PackageReference Include="Microsoft.Extensions.Caching.SqlServer" Version="8.0.0" />
+        <Folder Include="wwwroot\css\" />
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="wwwroot\css\" />
+      <ProjectReference Include="..\..\JGUZDV.AspNetCore.Authentication.Cookies\src\JGUZDV.AspNetCore.Authentication.Cookies.csproj" />
+      <ProjectReference Include="..\..\JGUZDV.AspNetCore.DataProtection\src\JGUZDV.AspNetCore.DataProtection.csproj" />
+      <ProjectReference Include="..\..\JGUZDV.Extensions.Json\src\JGUZDV.Extensions.Json.csproj" />
+      <ProjectReference Include="..\..\JGUZDV.YARP.SimpleReverseProxy\src\JGUZDV.YARP.SimpleReverseProxy.csproj" />
     </ItemGroup>
 </Project>
