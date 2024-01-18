@@ -9,17 +9,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Using Include="Xunit" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<ProjectReference Include="..\src\JGUZDV.L10n.csproj" />
 	</ItemGroup>
-
-	<ItemGroup>
-		<None Update="appsettings.test.json">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-	</ItemGroup>
-
 </Project>
