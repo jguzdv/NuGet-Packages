@@ -30,6 +30,7 @@
     <ItemGroup>
       <ProjectReference Include="..\..\JGUZDV.AspNetCore.Authentication.Cookies\src\JGUZDV.AspNetCore.Authentication.Cookies.csproj" />
       <ProjectReference Include="..\..\JGUZDV.AspNetCore.DataProtection\src\JGUZDV.AspNetCore.DataProtection.csproj" />
+      <ProjectReference Include="..\..\JGUZDV.AspNetCore.Logging\src\JGUZDV.AspNetCore.Logging.csproj" />
       <ProjectReference Include="..\..\JGUZDV.Extensions.Json\src\JGUZDV.Extensions.Json.csproj" />
       <ProjectReference Include="..\..\JGUZDV.YARP.SimpleReverseProxy\src\JGUZDV.YARP.SimpleReverseProxy.csproj" />
     </ItemGroup>

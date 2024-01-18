@@ -32,6 +32,8 @@ public static partial class BlazorWasmHost
         var config = builder.Configuration;
         var env = builder.Environment;
 
+        builder.UseJGUZDVLogging();
+
         var sp = services.BuildServiceProvider();
         var loggerFactory = sp.GetService<ILoggerFactory>();
 
