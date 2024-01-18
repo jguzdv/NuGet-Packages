@@ -47,13 +47,5 @@ namespace JGUZDV.Blazor.WasmHost.Controllers
 
             return Ok();
         }
-
-
-        [HttpGet("features")]
-        public IActionResult GetFeatures()
-        {
-            //TODO: Add feature Manager GetAll()
-            return Ok();
-        }
     }
 }

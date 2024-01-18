@@ -1,12 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using System.Diagnostics;
+
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Microsoft.ApplicationInsights.MetricDimensionNames.TelemetryContext;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace JGUZDV.Blazor.WasmHost.Pages
 {
