@@ -83,9 +83,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.OpenIddict.KeyManage
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.OpenIddict.KeyManager.Tests", "libraries\JGUZDV.OpenIddict.KeyManager\test\JGUZDV.OpenIddict.KeyManager.Tests.csproj", "{397C9A29-83DB-4944-9D4E-93159CDA60B6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.Blazor.WasmHost", "libraries\JGUZDV.Blazor.WasmHost\src\JGUZDV.Blazor.WasmHost.csproj", "{68E91C38-4D95-4DCE-9BC2-4AE71236B289}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.Blazor.WasmServerHost", "libraries\JGUZDV.Blazor.WasmServerHost\src\JGUZDV.Blazor.WasmServerHost.csproj", "{68E91C38-4D95-4DCE-9BC2-4AE71236B289}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.Blazor.WasmHost.Tests", "libraries\JGUZDV.Blazor.WasmHost\test\JGUZDV.Blazor.WasmHost.Tests.csproj", "{A2AF6E5E-C42E-47A1-AE81-ED81B84C57DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.Blazor.WasmServerHost.Tests", "libraries\JGUZDV.Blazor.WasmServerHost\test\JGUZDV.Blazor.WasmServerHost.Tests.csproj", "{A2AF6E5E-C42E-47A1-AE81-ED81B84C57DD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.YARP.SimpleReverseProxy", "libraries\JGUZDV.YARP.SimpleReverseProxy\src\JGUZDV.YARP.SimpleReverseProxy.csproj", "{7D6C1BB8-4E00-4DB0-9063-859A98C69927}"
 EndProject
