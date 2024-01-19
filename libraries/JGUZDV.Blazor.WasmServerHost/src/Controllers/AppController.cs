@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace JGUZDV.Blazor.WasmHost.Controllers
+namespace JGUZDV.Blazor.WasmServerHost.Controllers
 {
     [Route("_app")]
     public class AppController : ControllerBase

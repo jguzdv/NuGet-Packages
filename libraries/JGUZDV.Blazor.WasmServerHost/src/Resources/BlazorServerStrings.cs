@@ -1,3 +1,3 @@
-﻿namespace JGUZDV.Blazor.WasmHost.Resources;
+﻿namespace JGUZDV.Blazor.WasmServerHost.Resources;
 
 public class BlazorServerStrings { }

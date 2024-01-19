@@ -8,9 +8,9 @@
         <ImplicitUsings>enable</ImplicitUsings>
 
         <NeutralLanguage>de</NeutralLanguage>
-        <RootNamespace>JGUZDV.Blazor.WasmHost</RootNamespace>
+        <RootNamespace>JGUZDV.Blazor.WasmServerHost</RootNamespace>
 
-        <PackageId>JGUZDV.Blazor.WasmHost</PackageId>
+        <PackageId>JGUZDV.Blazor.WasmServerHost</PackageId>
         <IsPackable>true</IsPackable>
         <Version>1.0.0-beta</Version>
         <Authors>Thomas Ottenhus</Authors>
