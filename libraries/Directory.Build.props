@@ -13,6 +13,7 @@
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageIcon>NuGet-Package-Icon.png</PackageIcon>
 	</PropertyGroup>
+    
 	<ItemGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All"/>
 	</ItemGroup>
@@ -21,4 +22,19 @@
 		<None Include="README.md" Pack="true" PackagePath="/" />
         <None Include="$(MSBuildThisFileDirectory)/NuGet-Package-Icon.png" Pack="true" PackagePath="/" />
 	</ItemGroup>
+
+    <ItemGroup Condition="$(IsTestProject) == 'true'">
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+        <PackageReference Include="xunit" Version="2.6.6" />
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.5.6">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="coverlet.collector" Version="6.0.0">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+
+        <Using Include="Xunit" />
+    </ItemGroup>
 </Project>

@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
+
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
 
@@ -9,13 +10,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\src\JGUZDV.AspNetCore.DataProtection.csproj" />
+        <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="8.0.0" />
     </ItemGroup>
 
     <ItemGroup>
-        <None Update="appsettings.test.json">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
+        <ProjectReference Include="..\src\JGUZDV.YARP.SimpleReverseProxy.csproj" />
     </ItemGroup>
 
 </Project>

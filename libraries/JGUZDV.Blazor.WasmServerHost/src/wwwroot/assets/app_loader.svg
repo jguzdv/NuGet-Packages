@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg preserveAspectRatio="xMinYMin meet" viewBox="0 0 405 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <rect id="bg" width="100%" height="100%" style="fill:#c10b25" />
+  <defs>
+    <rect id="rect" width="75" height="30" fill="#FFF" />
+  </defs>
+  <g opacity=".4">
+    <use xlink:href="#rect" x="5" y="5" />
+    <use xlink:href="#rect" x="85" y="5" />
+    <use xlink:href="#rect" x="165" y="5" />
+    <use xlink:href="#rect" x="245" y="5" />
+    <use xlink:href="#rect" x="325" y="5" />
+  </g>
+  <g>
+    <use xlink:href="#rect" y="5">
+      <animate values="5;85;165;245;325" attributeName="x" dur="3.75" repeatDur="indefinite" begin="0" calcMode="discrete" />
+      <animate values="0;1;0" attributeName="opacity" dur="0.75" repeatDur="indefinite" />
+    </use>
+  </g>
+</svg>
