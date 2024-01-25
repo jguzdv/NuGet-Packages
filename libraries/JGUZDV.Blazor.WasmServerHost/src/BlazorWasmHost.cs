@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.Metrics;
-
-using JGUZDV.Blazor.WasmServerHost.Extensions;
+﻿using JGUZDV.Blazor.WasmServerHost.Extensions;
 using JGUZDV.YARP.SimpleReverseProxy;
 
 using Microsoft.AspNetCore.Authentication.Cookies;
