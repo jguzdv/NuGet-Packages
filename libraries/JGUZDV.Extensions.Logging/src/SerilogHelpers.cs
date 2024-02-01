@@ -51,7 +51,7 @@ public static class SerilogHelpers
                 var path = fileConfig.GetValue<string?>("Path") ?? string.Empty;
                 var isolatePath = fileConfig.GetValue<bool?>("UseIsolatedPath") ?? true;
                 var applicationName = fileConfig.GetValue<string?>("ApplicationName") ?? hostEnvironment.ApplicationName;
-                var fileName = fileConfig.GetValue<string?>("FileName") ?? $"{Environment.MachineName}.log";
+                var fileName = fileConfig.GetValue<string?>("FileName") ?? $"{Environment.MachineName}_.log";
 
                 var useJson = fileName.EndsWith(".json", StringComparison.OrdinalIgnoreCase) || fileConfig.GetValue<bool?>("UseJson") != false;
 
@@ -62,9 +62,17 @@ public static class SerilogHelpers
                 l.ApplyLogLevels(fileConfig);
 
                 if (useJson)
-                    l.WriteTo.File(new CompactJsonFormatter(), logFileName, rollingInterval: RollingInterval.Day);
+                {
+                    l.WriteTo.File(new CompactJsonFormatter(), logFileName, 
+                        rollingInterval: RollingInterval.Day, 
+                        rollOnFileSizeLimit: true,
+                        fileSizeLimitBytes: 5_000_000);
+                }
                 else
-                    l.WriteTo.File(logFileName, rollingInterval: RollingInterval.Day);
+                    l.WriteTo.File(logFileName, 
+                        rollingInterval: RollingInterval.Day,
+                        rollOnFileSizeLimit: true,
+                        fileSizeLimitBytes: 5_000_000);
 
             });
         }
