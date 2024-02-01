@@ -5,7 +5,7 @@
 
 ## Overview
 
-**JGUZDV.JobHost** is a .NET 8.0 package designed to simplify the creation of background jobs in a Windows service using the `IHostBuilder` and **Quartz.net**. You can easily register jobs with a cron schedule, and they will be executed in the background as part of a Windows service.
+**JGUZDV.JobHost** is a .NET package designed to simplify the creation of background jobs in a Windows service using the `IHostBuilder` and `Quartz.net`. You can easily register jobs with a cron schedule, and they will be executed in the background as part of a Windows service.
 
 ## Installation
 
@@ -46,7 +46,7 @@ class Program
     {
         var host = new HostBuilder()
             .AddJob<MyJob>() // with the configuration above the job runs every second
-            .AddJob<MyJob2>() // with the configuration above the job runs 5 minutes (at 0, 5, 10, 15.... etc Minutes)
+            .AddJob<MyJob2>() // with the configuration above the job runs every 5 minutes (at 0, 5, 10, 15.... etc Minutes)
             .Build();
 
         host.Run();
