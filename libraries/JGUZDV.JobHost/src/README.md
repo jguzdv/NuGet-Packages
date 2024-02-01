@@ -1,7 +1,5 @@
 # JGUZDV.JobHost
 
-## Overview
-
 **JGUZDV.JobHost** is a .NET package designed to simplify the creation of background jobs in a Windows service using the `IHostBuilder` and `Quartz.net`. You can easily register jobs with a cron schedule, and they will be executed in the background as part of a Windows service.
 
 ## Configuration
@@ -38,5 +36,3 @@ class Program
     }
 }
 ```
-## Issues
-If you discover any issues, please open an issue on GitHub.
