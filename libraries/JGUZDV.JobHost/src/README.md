@@ -44,12 +44,12 @@ class Program
 {
     static void Main(string[] args)
     {
-        var host = new HostBuilder()
-            .AddJob<MyJob>() // with the configuration above the job runs every second
-            .AddJob<MyJob2>() // with the configuration above the job runs every 5 minutes (at 0, 5, 10, 15.... etc Minutes)
+        var host = JobHost.CreateJobHostBuilder(args, configureWindowsService, quartzHostedServiceOptions)
+            .AddHostedJob<MyJob>() // with the configuration above the job runs every second
+            .AddHostedJob<MyJob2>() // with the configuration above the job runs every 5 minutes (at 0, 5, 10, 15.... etc Minutes)
             .Build();
 
-        host.Run();
+        _ = host.RunAsync();
     }
 }
 ```

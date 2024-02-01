@@ -1,6 +1,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
+using Quartz;
+
 namespace JGUZDV.JobHost.Tests
 {
 
@@ -9,7 +11,9 @@ namespace JGUZDV.JobHost.Tests
         [Fact]
         public async Task RegisterAndRunJobsTest()
         {
-            var builder = JobHost.CreateJobHostBuilder(Array.Empty<string>(), (wslo) => wslo.ServiceName = "Test", (cq) => cq.WaitForJobsToComplete = true);
+            var builder = JobHost.CreateJobHostBuilder(Array.Empty<string>(), 
+                configureWindowsService => configureWindowsService.ServiceName = "Test", 
+                quartzHostedServiceOptions => quartzHostedServiceOptions.WaitForJobsToComplete = true);
             var testObject = new JobHostWrapper();
 
             builder.ConfigureServices((ctx, services) => {
