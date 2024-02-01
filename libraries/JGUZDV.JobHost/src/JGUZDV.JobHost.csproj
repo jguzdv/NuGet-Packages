@@ -1,28 +1,28 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
 
-      <PackageId>JGUZDV.JobHost</PackageId>
-      <IsPackable>true</IsPackable>
-      <Version>1.0.0</Version>
-      <Authors>Thomas Ottenhus</Authors>
-      <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
-      <PackageDescription>Host for background jobs using Quartz.net</PackageDescription>
+        <PackageId>JGUZDV.JobHost</PackageId>
+        <IsPackable>true</IsPackable>
+        <Version>1.0.0</Version>
+        <Authors>Marcus Lunau</Authors>
+        <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
+        <PackageDescription>Host for background jobs using Quartz.net</PackageDescription>
+        <OutputType>Library</OutputType>
+        <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
 
-      <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
-      
-  </PropertyGroup>
+    </PropertyGroup>
 
-    
-    
-  <ItemGroup>
-    <PackageReference Include="JGUZDV.AspNetCore.Logging" Version="1.0.6" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="8.0.0" />
-    <PackageReference Include="Quartz.Extensions.Hosting" Version="3.8.0" />
-  </ItemGroup>
+
+
+    <ItemGroup>
+        <PackageReference Include="JGUZDV.AspNetCore.Logging" Version="1.0.6" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="8.0.0" />
+        <PackageReference Include="Quartz.Extensions.Hosting" Version="3.8.0" />
+    </ItemGroup>
 
 </Project>
