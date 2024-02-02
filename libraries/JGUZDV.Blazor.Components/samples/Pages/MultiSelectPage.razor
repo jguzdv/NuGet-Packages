@@ -82,6 +82,14 @@
             <input class="form-control" disabled />
         </div>
     </div>
+
+    <MultiSelect HostClass="mb-2 form-control" Items="_manyItems"
+                 Title="Wähle Länder aus"
+                 AllOptionLabel="Alle"
+    @bind-Values="_selectedCounties"
+                 UseSingleSelectionMode=false ItemKey="(x) => x?.Id"
+                 ItemName="x => x?.Name">       
+    </MultiSelect>
 </div>
 @code {
 
@@ -93,6 +101,12 @@
 
     private Country? _selectedCountry;
     private List<Country> _selectedCounties = new();
+
+    private List<Country> _manyItems = Enumerable.Range(0, 40).Select(x => new Country
+        {
+            Id = x,
+            Name = x.ToString()
+        }).ToList();
 
     private List<Country> _items = new()
     {

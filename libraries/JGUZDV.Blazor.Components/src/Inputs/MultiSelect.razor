@@ -7,10 +7,10 @@
     <div class="d-flex justify-content-between" role="button" style="cursor:pointer" @onclick="ToggleSelection">
         <div class="d-flex flex-nowrap overflow-hidden text-nowrap text-truncate">
             <span class="me-1">@Title </span>
-            @if (!UseSingleSelectionMode && Values!.Any())
+            @if (!UseSingleSelectionMode && Values!.Any() && !_isOpen)
             {
                 <span class="text-muted small text-truncate align-self-center" title="@(Values!.Select(x => ItemName(x)).Aggregate((a,b) => $"{a}, {b}"))">
-                    <span> (@Values!.Select(x => ItemName(x)).Aggregate((a,b) => $"{a}, {b}"))</span>
+                    <span> (@Values!.Select(x => ItemName(x)).Aggregate((a, b) => $"{a}, {b}"))</span>
                 </span>
             }
             else if (Value != null && UseSingleSelectionMode)
@@ -31,6 +31,16 @@
             }
         </div>
     </div>
+
+    @if (!UseSingleSelectionMode && Values!.Any() && _isOpen)
+    {
+        <div class="d-flex gap-2 flex-wrap my-2">
+        @foreach (var item in Values)
+        {
+            <span class="badge rounded-pill bg-secondary " style="cursor:pointer;" @onclick="() => {Values.Remove(item);ValuesChanged.InvokeAsync(Values);}">@ItemName(item) <i class="far fa-times-circle"></i></span>
+        }
+        </div>
+    }
 
     @if (_isOpen)
     {
@@ -56,6 +66,11 @@
             @{
 #pragma warning restore
             }
+        </div>
+        <div @onclick="ToggleSelection">
+            <button class="btn btn-outline-secondary w-100">
+                <i class="fas fa-chevron-up"></i>
+            </button>
         </div>
     }
 </div>
