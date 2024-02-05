@@ -4,7 +4,7 @@
 @using Microsoft.AspNetCore.Components.Web;
 
 <div class="@(HostClass == null ? "px-2 py-1 border" : $"{HostClass}")">
-    <div class="d-flex justify-content-between" role="button" style="cursor:pointer" @onclick="ToggleSelection">
+    <div @ref="_anchor" class="d-flex justify-content-between" role="button" tabindex="0" style="cursor:pointer" @onkeypress="HandleAnchorPress" @onclick="ToggleSelection">
         <div class="d-flex flex-nowrap overflow-hidden text-nowrap text-truncate">
             <span class="me-1">@Title </span>
             @if (!UseSingleSelectionMode && Values!.Any() && !_isOpen)
@@ -35,10 +35,10 @@
     @if (!UseSingleSelectionMode && Values!.Any() && _isOpen)
     {
         <div class="d-flex gap-2 flex-wrap my-2">
-        @foreach (var item in Values)
-        {
-            <span class="badge rounded-pill bg-secondary " style="cursor:pointer;" @onclick="() => {Values.Remove(item);ValuesChanged.InvokeAsync(Values);}">@ItemName(item) <i class="far fa-times-circle"></i></span>
-        }
+            @foreach (var item in Values)
+            {
+                <span class="badge text-bg-secondary" style="cursor:pointer;" @onclick="() => {Values.Remove(item);ValuesChanged.InvokeAsync(Values);}">@ItemName(item) <i class="far fa-times-circle"></i></span>
+            }
         </div>
     }
 
@@ -67,8 +67,8 @@
 #pragma warning restore
             }
         </div>
-        <div @onclick="ToggleSelection">
-            <button class="btn btn-outline-secondary w-100">
+        <div>
+            <button class="btn btn-outline-secondary w-100" @onclick="ToggleSelection">
                 <i class="fas fa-chevron-up"></i>
             </button>
         </div>
@@ -127,6 +127,8 @@
 
     private bool _isOpen;
 
+    private ElementReference _anchor;
+
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
@@ -147,5 +149,14 @@
     private void ToggleSelection()
     {
         _isOpen = !_isOpen;
+        if (!_isOpen)
+            _anchor.FocusAsync();
+    }
+    private void HandleAnchorPress(KeyboardEventArgs e)
+    {
+        if (e.Code == "Enter")
+        {
+            ToggleSelection();
+        }
     }
 }
