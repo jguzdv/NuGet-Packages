@@ -8,7 +8,8 @@ You can configure your schedules in the **appsettings.json**. The default sectio
 {
   "HostedJobs": {
     "MyJob": "* * * * * ?",
-    "MyJob2": "* 0/5 * * * ?"
+    "MyJob2": "* 0/5 * * * ?",
+    "MyJob3": "false" //this prevents the job from being registered e.g. for appsettings.development.json
   }
 }
 ```

@@ -34,10 +34,28 @@ namespace JGUZDV.JobHost.Tests
         }
     }
 
+    internal class TestJob3 : IJob
+    {
+        public TestJob3(JobHostWrapper jobHostWrapper)
+        {
+            JobHostWrapper = jobHostWrapper;
+        }
+
+        public JobHostWrapper JobHostWrapper { get; set; }
+
+        public Task Execute(IJobExecutionContext context)
+        {
+            JobHostWrapper.TestValue3 = true;
+            return Task.CompletedTask;
+        }
+    }
+
     internal class JobHostWrapper
     {
         public bool TestValue { get; set; } = false;
         public bool TestValue2 { get; set; } = false;
+        public bool TestValue3 { get; set; } = false;
+       
     }
 
 }
