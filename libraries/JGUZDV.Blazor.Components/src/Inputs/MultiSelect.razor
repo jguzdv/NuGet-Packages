@@ -72,7 +72,7 @@
 #pragma warning restore
             }
         </div>
-        <div role="button" @onclick="ToggleSelection" @onkeypress="e => e.OnEnter(ToggleSelection)">
+        <div role="button" tabindex="0" @onclick="ToggleSelection" @onkeypress="e => e.OnEnter(ToggleSelection)">
             @CloseButton
         </div>
     }
