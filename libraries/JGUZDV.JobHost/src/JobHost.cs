@@ -43,6 +43,10 @@ namespace JGUZDV.JobHost
             builder.ConfigureServices((ctx, services) => {
                 var schedule = ctx.Configuration[$"{DefaultConfigSection}:{typeof(TJob).Name}"] 
                     ?? throw new InvalidOperationException($"'{DefaultConfigSection}:{typeof(TJob).Name}' could not be read from configuration.");
+                if(schedule == "false")
+                {
+                    return;
+                }
                 AddHostedJob<TJob>(services, schedule);
             });
 
