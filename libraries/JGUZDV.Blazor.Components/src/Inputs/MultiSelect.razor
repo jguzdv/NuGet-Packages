@@ -2,9 +2,10 @@
 @typeparam TKey
 
 @using Microsoft.AspNetCore.Components.Web;
+@using JGUZDV.Blazor.Components.Extensions;
 
 <div class="@(HostClass == null ? "px-2 py-1 border" : $"{HostClass}")">
-    <div @ref="_anchor" class="d-flex justify-content-between" role="button" tabindex="0" style="cursor:pointer" @onkeypress="HandleAnchorPress" @onclick="ToggleSelection">
+    <div @ref="_anchor" class="d-flex justify-content-between" role="button" tabindex="0" style="cursor:pointer" @onkeypress="e => e.OnEnter(ToggleSelection)" @onclick="ToggleSelection">
         <div class="d-flex flex-nowrap overflow-hidden text-nowrap text-truncate">
             <span class="me-1">@Title </span>
             @if (!UseSingleSelectionMode && Values!.Any() && !_isOpen)
@@ -23,28 +24,32 @@
         <div class="ms-1">
             @if (_isOpen)
             {
-                <i class="fa fa-fw fa-minus align-self-center"></i>
+                <i class="@CloseIcon align-self-center"></i>
             }
             else
             {
-                <i class="fa fa-fw fa-plus align-self-center"></i>
+                <i class="@OpenIcon align-self-center"></i>
             }
         </div>
     </div>
 
     @if (!UseSingleSelectionMode && Values!.Any() && _isOpen)
     {
-        <div class="d-flex gap-2 flex-wrap my-2">
-            @foreach (var item in Values)
+        <div class="d-flex gap-2 flex-wrap my-3">
+            @foreach (var item in Values!)
             {
-                <span class="badge text-bg-secondary" style="cursor:pointer;" @onclick="() => {Values.Remove(item);ValuesChanged.InvokeAsync(Values);}">@ItemName(item) <i class="far fa-times-circle"></i></span>
+                <span class="badge button text-bg-secondary" tabindex="0"
+                      @onkeypress="e => e.OnEnter(() => HandleBadgeClick(item))"
+                      @onclick="() => HandleBadgeClick(item)">
+                    @ItemName(item) <i class="far fa-times-circle"></i>
+                </span>
             }
         </div>
     }
 
     @if (_isOpen)
     {
-        <div class="fade-in">
+        <div class="fade-in my-3">
             @{
 #pragma warning disable 8601 // warning is wrong
             }
@@ -67,10 +72,8 @@
 #pragma warning restore
             }
         </div>
-        <div>
-            <button class="btn btn-outline-secondary w-100" @onclick="ToggleSelection">
-                <i class="fas fa-chevron-up"></i>
-            </button>
+        <div role="button" @onclick="ToggleSelection" @onkeypress="e => e.OnEnter(ToggleSelection)">
+            @CloseButton
         </div>
     }
 </div>
@@ -117,13 +120,29 @@
     public string? FilterLabel { get; set; }
 
     [Parameter]
+    public string FilterIcon { get; set; } = "fa fa-search";
+
+    [Parameter]
     public Func<(T item, string query), bool>? Filter { get; set; }
 
     [Parameter]
-    public string? ItemsContainerClass { get; set; } = "row row-cols-1 mt-2";
+    public string? ItemsContainerClass { get; set; } = "row row-cols-1";
 
     [Parameter]
     public bool UseSingleSelectionMode { get; set; }
+
+    [Parameter]
+    public RenderFragment CloseButton { get; set; } =
+        @<div class="btn btn-outline-secondary w-100">
+            <i class="fas fa-chevron-up"></i>
+        </div>
+    ;
+
+    [Parameter]
+    public string CloseIcon { get; set; } = "fa fa-fw fa-minus";
+
+    [Parameter]
+    public string OpenIcon { get; set; } = "fa fa-fw fa-plus";
 
     private bool _isOpen;
 
@@ -140,7 +159,7 @@
             ItemTemplate = x => @<span>@ItemName(x)</span>;
 
         if (!UseSingleSelectionMode && Values == null)
-            throw new InvalidOperationException($"Parameter {nameof(Values)} may not be null if multipe values are allowed");
+            throw new InvalidOperationException($"Parameter {nameof(Values)} may not be null if multiple values are allowed");
 
         if (UseSingleSelectionMode && Values != null)
             throw new InvalidOperationException($"Parameter {nameof(Values)} may not be set if only one value is allowed");
@@ -152,11 +171,10 @@
         if (!_isOpen)
             _anchor.FocusAsync();
     }
-    private void HandleAnchorPress(KeyboardEventArgs e)
+
+    private void HandleBadgeClick(T item)
     {
-        if (e.Code == "Enter")
-        {
-            ToggleSelection();
-        }
+        Values = Values?.Where(x => !ItemKey(x)!.Equals(ItemKey(item))).ToList();
+        ValuesChanged.InvokeAsync(Values);
     }
 }
