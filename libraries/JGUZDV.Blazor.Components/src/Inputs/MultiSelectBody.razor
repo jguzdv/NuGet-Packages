@@ -37,8 +37,8 @@
     {
         <div class="col">
             @{
-                var isSelected = ((!UseSingleSelectionMode && Values.Any(x => ItemKey(x).Equals(ItemKey(item))))
-                || UseSingleSelectionMode && ItemKey(item).Equals(ItemKey(Value)));
+                var isSelected = ((!UseSingleSelectionMode && Values.Any(x => ItemKey(x)!.Equals(ItemKey(item))))
+                || UseSingleSelectionMode && ItemKey(item)!.Equals(ItemKey(Value)));
                 var selectedClass = isSelected
                 ? "border-success text-nowrap text-success d-flex justify-content-between"
                 : "";
@@ -125,9 +125,9 @@
             return;
         }
 
-        if (Values.Any(x => ItemKey(x).Equals(ItemKey(item))))
+        if (Values.Any(x => ItemKey(x)!.Equals(ItemKey(item))))
         {
-            Values = Values.Where(x => !ItemKey(x).Equals(ItemKey(item))).ToList();
+            Values = Values.Where(x => !ItemKey(x)!.Equals(ItemKey(item))).ToList();
             await ValuesChanged.InvokeAsync(Values);
         }
         else

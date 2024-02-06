@@ -92,7 +92,7 @@
 
     [Parameter]
     [EditorRequired]
-    public Func<T, TKey> ItemKey { get; set; } = default!;
+    public Func<T?, TKey> ItemKey { get; set; } = default!;
 
     [Parameter]
     public List<T>? Values { get; set; } = default!;
