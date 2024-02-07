@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using JGUZDV.CQRS.AspNetCore.Mvc;
+
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Localization;
 
 namespace JGUZDV.CQRS.AspNetCore.Http;
@@ -26,7 +28,16 @@ public static class HandlerResultExtensions
         return response;
     }
 
+    public static IResult ToHttpResult<T>(this HandlerResult result, Func<CreatedResult, (string Uri, T Obj)> func, IStringLocalizer? sl = null)
+    {
+        if (result is CreatedResult r)
+        {
+            var funcResult = func(r);
+            return Results.Created(funcResult.Uri, funcResult.Obj); // mir it an der stelle nichts besseres eingefallen
+        }
 
+        return result.ToHttpResult(sl);
+    }
 
     private static IResult Generic(HandlerResult r)
     {
