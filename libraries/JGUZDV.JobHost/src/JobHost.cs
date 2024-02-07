@@ -1,10 +1,7 @@
-﻿using JGUZDV.AspNetCore.Logging;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+
 using Quartz;
-using System.ServiceProcess;
-using static Quartz.Logging.OperationName;
 
 namespace JGUZDV.JobHost
 {
