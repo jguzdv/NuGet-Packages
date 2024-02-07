@@ -1,0 +1,15 @@
+﻿@page "/Error"
+@model ErrorModel
+@{
+    Layout = "_BlazorBaseLayout";
+}
+
+<div id="app" class="jbs-app">
+    <div class="vh-100 d-flex flex-column align-items-center justify-content-center">
+        <span class="fs-4">😩</span>
+        @if(Model.ShowRequestId)
+        {
+            <span>RequestId: @Model.RequestId</span>
+        }
+    </div>
+</div>

@@ -65,71 +65,72 @@
             throw new InvalidOperationException($"{nameof(Body)} may not be set, if {nameof(Content)} is set.");
 
         RenderFragment<ModalContext>? content = Body == null
-        ? Content
-        : (ctx) =>
-        @<div class="modal-content">
-            @if (Header != null || Title != null)
-        {
-            <div class="modal-header @ModalHeaderClasses">
-                @if (Header != null)
-            {
-                @Header.Invoke(ctx)
-            }
-            else
-            {
-                <h5 class="modal-title">@Title</h5>
-            <button type="button" class="btn-close" aria-label="Close" @onclick="() => Close()"></button>
-            }
-            </div>
-        }
+            ? Content
+            : (ctx) =>
+                @<div class="modal-content">
+                    @if (Header != null || Title != null)
+                    {
+                        <div class="modal-header @ModalHeaderClasses">
+                        @if (Header != null)
+                        {
+                            @Header.Invoke(ctx)
+                        }
+                        else
+                        {
+                            <h5 class="modal-title">@Title</h5>
+                            <button type="button" class="btn-close" aria-label="Close" @onclick="() => Close()"></button>
+                        }
+                        </div>
+                    }
 
-            <div class="modal-body @ModalBodyClasses">
-                @Body.Invoke(ctx)
-            </div>
+                    <div class="modal-body @ModalBodyClasses">
+                        @Body.Invoke(ctx)
+                    </div>
 
-            @if (Footer != null)
-        {
-            <div class="modal-footer @ModalFooterClasses">
-                @Footer.Invoke(ctx)
-            </div>
-        }
-        </div>;
+                    @if (Footer != null)
+                    {
+                        <div class="modal-footer @ModalFooterClasses">
+                            @Footer.Invoke(ctx)
+                        </div>
+                    }
+                </div>;
 
         if (content != null && ChildContent != null)
             throw new InvalidOperationException($"{nameof(Content)} may not be set, if {nameof(ChildContent)} is set.");
 
         _renderFragment = content == null
-        ? ChildContent
-        : (ctx) =>
-        @<div class="modal-dialog @ModalDialogClasses" @onclick:stopPropagation="true">
-            @content.Invoke(ctx)
-        </div>
-    ;
+            ? ChildContent
+            : (ctx) =>
+                @<div class="modal-dialog @ModalDialogClasses" @onclick:stopPropagation="true">
+                    @content.Invoke(ctx)
+                </div>;
     }
 
-    public async Task<ModalResult> ShowModal(TModel model)
+    public Task<ModalResult> ShowModal(TModel model)
     {
         _context = new ModalContext(this, model);
-        await _jsModule!.InvokeVoidAsync("OpenDialog", _componentId);
+        StateHasChanged();
+
+        _ = _jsModule!.InvokeVoidAsync("OpenDialog", _componentId);
 
         _taskCompletionSource = new();
-        return await _taskCompletionSource.Task;
+        return _taskCompletionSource.Task;
     }
 
-    public async Task Close(ModalResult result)
+    public void Close(ModalResult result)
     {
-        await _jsModule!.InvokeVoidAsync("CloseDialog", _componentId);
+        _ = _jsModule!.InvokeVoidAsync("CloseDialog", _componentId);
         _taskCompletionSource.SetResult(result);
     }
 
-    public async Task Close()
-        => await Close(ModalResult.Undefined);
+    public void Close()
+        => Close(ModalResult.Undefined);
 
-    public async Task Accept()
-        => await Close(ModalResult.Accepted);
+    public void Accept()
+        => Close(ModalResult.Accepted);
 
-    public async Task Dismiss()
-        => await Close(ModalResult.Dismissed);
+    public void Dismiss()
+        => Close(ModalResult.Dismissed);
 
     public class ModalContext
     {

@@ -7,7 +7,7 @@
 
 		<PackageId>JGUZDV.Extensions.Logging</PackageId>
 		<IsPackable>true</IsPackable>
-		<Version>1.0.1</Version>
+		<Version>1.0.2</Version>
 		<Authors>Thomas Ottenhus</Authors>
 		<Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
 		<PackageDescription>Adds file logging based on serilog via IHostBuilder.</PackageDescription>
@@ -32,9 +32,5 @@
 		<PackageReference Include="Serilog.Sinks.Debug" Version="[2.0.0,)" />
 		<PackageReference Include="Serilog.Sinks.EventLog" Version="[3.1.0,)" />
 		<PackageReference Include="Serilog.Sinks.File" Version="[5.0.0,)" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<None Include="README.md" Pack="true" PackagePath="/" />
 	</ItemGroup>
 </Project>

@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+@inject IWebHostEnvironment _env;
+@inject IConfiguration _configuration;
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>@(ViewBag.Title ?? "Set ViewBag.Title via Index.cshtml!")</title>
+    <base href="@Url.Content("~/")" />
+
+    <link rel="icon" href="https://cdn.zdv.uni-mainz.de/web/assets/JGU-Quader.ico" />
+    <link rel="icon" sizes="16x16 32x32 64x64" href="https://cdn.zdv.uni-mainz.de/web/assets/JGU-Quader.ico">
+    <link rel="icon" sizes="180x180" href="https://cdn.zdv.uni-mainz.de/web/assets/JGU-Quader-180.png">
+
+    <link href="https://cdn.zdv.uni-mainz.de/web/jg-ootstrap/jg-ootstrap.css" rel="stylesheet" />
+    <link href="_content/JGUZDV.Blazor.WasmServerHost/css/_blazor.css" rel="stylesheet" />
+    @RenderSection("Styles", false)
+
+    <link href="https://cdn.zdv.uni-mainz.de/web/fontawesome/5-free/css/all.min.css" rel="stylesheet" />
+</head>
+
+<body>
+    @if (_env.IsDevelopment())
+    {
+        <div style="position: fixed; bottom: 0; right: 0; background-color: darkred; color: white;">
+            <div class="d-block d-sm-none">XS</div>
+            <div class="d-none d-sm-block d-md-none">SM</div>
+            <div class="d-none d-md-block d-lg-none">MD</div>
+            <div class="d-none d-lg-block d-xl-none">LG</div>
+            <div class="d-none d-xl-block d-xxl-none">XL</div>
+            <div class="d-none d-xxl-block">XXL</div>
+        </div>
+    }
+    
+    @if(_configuration["ShowPreviewWatermark"] == "true"){
+        <div class="p-2 px-4 bg-warning text-danger fw-bold fs-4" style="position: fixed;top:0; left: 200px;">Preview</div>
+    }
+
+    @RenderBody()
+    @RenderSection("Scripts", false)
+</body>
+</html>
