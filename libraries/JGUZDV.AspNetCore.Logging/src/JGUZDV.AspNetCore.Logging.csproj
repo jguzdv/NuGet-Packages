@@ -20,7 +20,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="JGUZDV.Extensions.Logging" Version="[1.0.0,)" />
 		<PackageReference Include="Serilog.AspNetCore" Version="[6.1.0,)" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\JGUZDV.Extensions.Logging\src\JGUZDV.Extensions.Logging.csproj" />
 	</ItemGroup>
 </Project>

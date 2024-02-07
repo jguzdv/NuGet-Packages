@@ -7,7 +7,7 @@
 
         <PackageId>JGUZDV.JobHost</PackageId>
         <IsPackable>true</IsPackable>
-        <Version>1.0.1</Version>
+        <Version>1.0.2</Version>
         <Authors>Marcus Lunau</Authors>
         <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
         <PackageDescription>Host for background jobs using Quartz.net</PackageDescription>
@@ -16,13 +16,14 @@
 
     </PropertyGroup>
 
-
-
     <ItemGroup>
-        <PackageReference Include="JGUZDV.AspNetCore.Logging" Version="1.0.6" />
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
         <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="8.0.0" />
         <PackageReference Include="Quartz.Extensions.Hosting" Version="3.8.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\JGUZDV.Extensions.Logging\src\JGUZDV.Extensions.Logging.csproj" />
     </ItemGroup>
 
 </Project>
