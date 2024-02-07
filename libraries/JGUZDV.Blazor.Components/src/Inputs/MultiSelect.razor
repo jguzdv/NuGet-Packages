@@ -24,11 +24,11 @@
         <div class="ms-1">
             @if (_isOpen)
             {
-                <i class="@CloseIcon align-self-center"></i>
+                @CloseIcon("align-self-center")
             }
             else
             {
-                <i class="@OpenIcon align-self-center"></i>
+                @OpenIcon("align-self-center")
             }
         </div>
     </div>
@@ -41,7 +41,7 @@
                 <span class="badge button text-bg-secondary" tabindex="0"
                       @onkeypress="e => e.OnEnter(() => HandleBadgeClick(item))"
                       @onclick="() => HandleBadgeClick(item)">
-                    @ItemName(item) <i class="far fa-times-circle"></i>
+                    @ItemName(item) @BadgeIcon("")
                 </span>
             }
         </div>
@@ -120,7 +120,7 @@
     public string? FilterLabel { get; set; }
 
     [Parameter]
-    public string FilterIcon { get; set; } = "fa fa-search";
+    public RenderFragment<string> FilterIcon { get; set; } = Icons.Filter;
 
     [Parameter]
     public Func<(T item, string query), bool>? Filter { get; set; }
@@ -134,15 +134,18 @@
     [Parameter]
     public RenderFragment CloseButton { get; set; } =
         @<div class="btn btn-outline-secondary w-100">
-            <i class="fas fa-chevron-up"></i>
+            @Icons.Collapsed("")
         </div>
     ;
 
     [Parameter]
-    public string CloseIcon { get; set; } = "fa fa-fw fa-minus";
+    public RenderFragment<string> CloseIcon { get; set; } = Icons.Collapsed;
 
     [Parameter]
-    public string OpenIcon { get; set; } = "fa fa-fw fa-plus";
+    public RenderFragment<string> OpenIcon { get; set; } = Icons.Collapseable;
+
+    [Parameter]
+    public RenderFragment<string> BadgeIcon { get; set; } = Icons.RemoveCircle;
 
     private bool _isOpen;
 
