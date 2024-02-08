@@ -300,6 +300,11 @@ public class ClientStore : IDisposable
 
     private void OnResumed(object? sender, EventArgs args)
     {
+        foreach (var source in _cancellationTokenSources)
+        {
+            source.Value.Cancel();
+        }
+
         foreach (var job in _jobInformation)
         {
             if (!job.Value.UseBackgroundRefresh)

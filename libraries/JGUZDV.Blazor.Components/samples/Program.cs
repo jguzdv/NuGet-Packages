@@ -12,7 +12,7 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 builder.Services.AddSupportedCultures(new List<string>() { "de", "en" });
 
 builder.Services.AddLocalization();
-
+builder.Services.AddBrowserClientStore();
 
 var app = builder.Build();
 
