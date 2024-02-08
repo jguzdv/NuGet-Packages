@@ -2,53 +2,56 @@
 @typeparam TKey
 
 @using JGUZDV.Blazor.Components.Util;
+@using JGUZDV.Blazor.Components.Extensions;
 @using Microsoft.AspNetCore.Components.Web;
 
 @if (Filter != null)
 {
-    <div class="my-2 position-relative">
-        <i class="position-absolute top-50 translate-middle-y ps-2 fa fa-search"></i>
-        <input class="form-control" style="padding-left: 2rem;" placeholder="@FilterLabel" @bind="_filter" @bind:event="oninput" />
+    <div class="mb-3 position-relative">
+        @FilterIcon("position-absolute top-50 translate-middle-y ps-2")
+        <input class="form-control filter-input" placeholder="@FilterLabel" @bind="_filter" @bind:event="oninput" />
     </div>
 }
 
-@if (!string.IsNullOrWhiteSpace(AllOptionLabel) && string.IsNullOrWhiteSpace(_filter) && !UseSingleSelectionMode)
-{
-    <div class="my-2" style="cursor:pointer" @onclick="HandleAllClicked">
-        @if (Values.Count == Items.Count)
-        {
-            <div class="border p-2 small border-success text-nowrap text-success d-flex justify-content-between">
-                <span>@AllOptionLabel</span>
-                <i class="fa fa-fw fa-check align-self-center"></i>
+<div class="@ItemsContainerClass g-2">
+    @if (!string.IsNullOrWhiteSpace(AllOptionLabel) && string.IsNullOrWhiteSpace(_filter) && !UseSingleSelectionMode)
+    {
+        <div class="col-12">
+            @{
+                var selectedClass = (Values.Count == Items.Count) ?
+                "border-success text-nowrap text-success d-flex justify-content-between"
+                : "";
+            }
+            <div @onkeypress="e => e.OnEnter(ToggleAll)" @onclick="ToggleAll"
+                 tabindex="0"
+                 class="bg-body button border p-2 small @selectedClass">
+                <span class="text-truncate" title="@AllOptionLabel">@AllOptionLabel</span>
+                @if (Values.Count == Items.Count)
+                {
+                    @Icons.Check("align-self-center")
+                }
             </div>
-        }
-        else
-        {
-            <div class="border p-2 small">
-                @AllOptionLabel
-            </div>
-        }
-    </div>
-}
-
-<div class="@ItemsContainerClass">
+        </div>
+    }
     @foreach (var item in Items.Where(x => Filter == null || string.IsNullOrWhiteSpace(_filter) || Filter((x, _filter))))
     {
-        <div class="mb-2" style="cursor:pointer" @onclick="() => HandleItemClicked(item)">
-            @if ((!UseSingleSelectionMode && Values.Any(x => ItemKey(x).Equals(ItemKey(item))))
-           || UseSingleSelectionMode && ItemKey(item).Equals(ItemKey(Value)))
-            {
-                <div class="border p-2 small border-success text-nowrap text-success d-flex justify-content-between">
-                    <span>@ItemTemplate(item)</span>
-                    <i class="fa fa-fw fa-check align-self-center"></i>
-                </div>
+        <div class="col">
+            @{
+                var isSelected = ((!UseSingleSelectionMode && Values.Any(x => ItemKey(x)!.Equals(ItemKey(item))))
+                || UseSingleSelectionMode && ItemKey(item)!.Equals(ItemKey(Value)));
+                var selectedClass = isSelected
+                ? "border-success text-nowrap text-success d-flex justify-content-between"
+                : "";
             }
-            else
-            {
-                <div class="border p-2 small">
-                    @ItemTemplate(item)
-                </div>
-            }
+            <div tabindex="0"
+                 @onkeypress="e => e.OnEnter(() => HandleItemClicked(item))" @onclick="() => HandleItemClicked(item)"
+                 class="border bg-body button p-2 small @selectedClass">
+                <span class="text-truncate">@ItemTemplate(item)</span>
+                @if (isSelected)
+                {
+                    @Icons.Check("align-self-center")
+                }
+            </div>
         </div>
     }
 </div>
@@ -86,10 +89,13 @@
     public string? FilterLabel { get; set; }
 
     [Parameter]
+    public RenderFragment<string> FilterIcon { get; set; } = Icons.Filter;
+
+    [Parameter]
     public Func<(T item, string query), bool>? Filter { get; set; }
 
     [Parameter]
-    public string? ItemsContainerClass { get; set; } = "row row-cols-1 mt-2";
+    public string? ItemsContainerClass { get; set; } = "row row-cols-1";
 
     [Parameter]
     public bool UseSingleSelectionMode { get; set; }
@@ -119,10 +125,9 @@
             return;
         }
 
-
-        if (Values.Any(x => ItemKey(x).Equals(ItemKey(item))))
+        if (Values.Any(x => ItemKey(x)!.Equals(ItemKey(item))))
         {
-            Values = Values.Where(x => !ItemKey(x).Equals(ItemKey(item))).ToList();
+            Values = Values.Where(x => !ItemKey(x)!.Equals(ItemKey(item))).ToList();
             await ValuesChanged.InvokeAsync(Values);
         }
         else
@@ -132,7 +137,7 @@
         }
     }
 
-    private async Task HandleAllClicked()
+    private async Task ToggleAll()
     {
         if (Values.Count == Items.Count)
         {
