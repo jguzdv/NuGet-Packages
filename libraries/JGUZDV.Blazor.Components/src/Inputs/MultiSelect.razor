@@ -5,7 +5,7 @@
 @using JGUZDV.Blazor.Components.Extensions;
 
 <div class="@(HostClass == null ? "px-2 py-1 border" : $"{HostClass}")">
-    <div @ref="_anchor" class="d-flex justify-content-between" role="button" tabindex="0" style="cursor:pointer" @onkeypress="e => e.OnEnter(ToggleSelection)" @onclick="ToggleSelection">
+    <div @ref="_anchor" class="d-flex justify-content-between clickable" role="button" tabindex="0" @onkeypress="e => e.OnEnter(ToggleSelection)" @onclick="ToggleSelection">
         <div class="d-flex flex-nowrap overflow-hidden text-nowrap text-truncate">
             <span class="me-1">@Title </span>
             @if (!UseSingleSelectionMode && Values!.Any() && !_isOpen)
@@ -142,7 +142,7 @@
     public RenderFragment<string> CloseIcon { get; set; } = Icons.Collapsed;
 
     [Parameter]
-    public RenderFragment<string> OpenIcon { get; set; } = Icons.Collapseable;
+    public RenderFragment<string> OpenIcon { get; set; } = Icons.Collapsible;
 
     [Parameter]
     public RenderFragment<string> BadgeIcon { get; set; } = Icons.RemoveCircle;
