@@ -18,7 +18,7 @@ public static partial class WebApiHost
     }
 
 
-    public static WebApplicationBuilder ConfigureWasmHostServices(
+    public static WebApplicationBuilder ConfigureWebApiHostServices(
         this WebApplicationBuilder builder,
         bool useInteractiveWebAssembly
         )
@@ -36,12 +36,15 @@ public static partial class WebApiHost
         {
             var logger = loggerFactory?.CreateLogger(nameof(WebApiHost)) ?? NullLogger.Instance;
 
-            // Enable MVC controllers
-            services.AddControllers();
-
             // Enable ApiExplorer
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
+
+
+            // Enable MVC controllers
+            services.AddControllers();
+            services.AddProblemDetails();
+
 
             // Add Localization for DE, EN and RequestLocaltization
             services.AddLocalization();
