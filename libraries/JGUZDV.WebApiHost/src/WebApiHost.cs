@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.FeatureManagement;
 
 namespace JGUZDV.WebApiHost;
 
@@ -14,6 +15,7 @@ public static partial class WebApiHost
         public const string Authentication = "Authentication";
         public const string DataProtection = AspNetCore.DataProtection.Constants.DefaultSectionName;
         public const string DistributedCache = "DistributedCache";
+        public const string FeatureManagement = "FeatureManagement";
         public const string Telemetry = "ApplicationInsights";
     }
 
@@ -141,7 +143,18 @@ public static partial class WebApiHost
             }
 
 
+            // Feature Management
+            if (config.HasConfigSection(ConfigSections.FeatureManagement))
+            {
+                services.AddScopedFeatureManagement(config.GetSection(ConfigSections.FeatureManagement));
+            }
+            else
+            {
+                Log.MissingConfig(logger, ConfigSections.FeatureManagement);
+            }
 
+
+            // Telemetry
             if (config.HasConfigSection(ConfigSections.Telemetry))
             {
                 // TODO: Add default calls for Telemetry and Healthchecks
