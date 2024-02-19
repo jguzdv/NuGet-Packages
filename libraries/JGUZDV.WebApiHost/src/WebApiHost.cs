@@ -1,4 +1,5 @@
 ﻿using JGUZDV.Blazor.WasmServerHost.Extensions;
+using JGUZDV.WebApiHost.FeatureManagement;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -146,7 +147,8 @@ public static partial class WebApiHost
             // Feature Management
             if (config.HasConfigSection(ConfigSections.FeatureManagement))
             {
-                services.AddScopedFeatureManagement(config.GetSection(ConfigSections.FeatureManagement));
+                services.AddScopedFeatureManagement(config.GetSection(ConfigSections.FeatureManagement))
+                    .AddFeatureFilter<ClaimRequirementFeatureFilter>();
             }
             else
             {
