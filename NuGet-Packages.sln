@@ -7,6 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 		.gitignore = .gitignore
+		AddLibrary.ps1 = AddLibrary.ps1
 		LICENSE = LICENSE
 	EndProjectSection
 EndProject
@@ -17,145 +18,139 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "libraries", "libraries", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JGUZDV.ActiveDirectory.ClaimProvider", "JGUZDV.ActiveDirectory.ClaimProvider", "{FBF7BAF0-B8E9-45C5-9B50-7B8DDD607467}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.ActiveDirectory.ClaimProvider", "libraries\JGUZDV.ActiveDirectory.ClaimProvider\src\JGUZDV.ActiveDirectory.ClaimProvider.csproj", "{675D258E-525C-4048-8E88-97C5E78ED819}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.ActiveDirectory.ClaimProvider", "libraries\JGUZDV.ActiveDirectory.ClaimProvider\src\JGUZDV.ActiveDirectory.ClaimProvider.csproj", "{675D258E-525C-4048-8E88-97C5E78ED819}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.ActiveDirectory.ClaimProvider.Tests", "libraries\JGUZDV.ActiveDirectory.ClaimProvider\test\JGUZDV.ActiveDirectory.ClaimProvider.Tests.csproj", "{5CE38D63-D07F-46F1-9008-8206AB6F4231}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.ActiveDirectory.ClaimProvider.Tests", "libraries\JGUZDV.ActiveDirectory.ClaimProvider\test\JGUZDV.ActiveDirectory.ClaimProvider.Tests.csproj", "{5CE38D63-D07F-46F1-9008-8206AB6F4231}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JGUZDV.AspNetCore.Authentication.Cookies", "JGUZDV.AspNetCore.Authentication.Cookies", "{ED0A40A7-2790-42F3-822E-C475F021D7D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.AspNetCore.Authentication.Cookies", "libraries\JGUZDV.AspNetCore.Authentication.Cookies\src\JGUZDV.AspNetCore.Authentication.Cookies.csproj", "{3848AAF1-D8CA-4C55-A0B6-FCE23DDE8D9C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.AspNetCore.Authentication.Cookies", "libraries\JGUZDV.AspNetCore.Authentication.Cookies\src\JGUZDV.AspNetCore.Authentication.Cookies.csproj", "{3848AAF1-D8CA-4C55-A0B6-FCE23DDE8D9C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.AspNetCore.Authentication.Cookies.Tests", "libraries\JGUZDV.AspNetCore.Authentication.Cookies\test\JGUZDV.AspNetCore.Authentication.Cookies.Tests.csproj", "{FDFA7DDF-05D0-44F6-9000-71A4DD07BED0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.AspNetCore.Authentication.Cookies.Tests", "libraries\JGUZDV.AspNetCore.Authentication.Cookies\test\JGUZDV.AspNetCore.Authentication.Cookies.Tests.csproj", "{FDFA7DDF-05D0-44F6-9000-71A4DD07BED0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JGUZDV.AspNetCore.DataProtection", "JGUZDV.AspNetCore.DataProtection", "{F86B6B96-D027-4FF4-931D-69AA0891F539}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.AspNetCore.DataProtection", "libraries\JGUZDV.AspNetCore.DataProtection\src\JGUZDV.AspNetCore.DataProtection.csproj", "{29CE7134-3831-4E4A-A502-C84233D1ED35}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.AspNetCore.DataProtection", "libraries\JGUZDV.AspNetCore.DataProtection\src\JGUZDV.AspNetCore.DataProtection.csproj", "{29CE7134-3831-4E4A-A502-C84233D1ED35}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.AspNetCore.DataProtection.Tests", "libraries\JGUZDV.AspNetCore.DataProtection\test\JGUZDV.AspNetCore.DataProtection.Tests.csproj", "{20E70A44-016E-470C-947D-C1FC4161D1FB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.AspNetCore.DataProtection.Tests", "libraries\JGUZDV.AspNetCore.DataProtection\test\JGUZDV.AspNetCore.DataProtection.Tests.csproj", "{20E70A44-016E-470C-947D-C1FC4161D1FB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JGUZDV.AspNetCore.Logging", "JGUZDV.AspNetCore.Logging", "{458FC9E2-3D73-44AF-BE0A-C5C0F23AFE2B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.AspNetCore.Logging", "libraries\JGUZDV.AspNetCore.Logging\src\JGUZDV.AspNetCore.Logging.csproj", "{5D5F2C2A-24CD-4C27-902D-FA439E84AD13}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.AspNetCore.Logging", "libraries\JGUZDV.AspNetCore.Logging\src\JGUZDV.AspNetCore.Logging.csproj", "{5D5F2C2A-24CD-4C27-902D-FA439E84AD13}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.AspNetCore.Logging.Tests", "libraries\JGUZDV.AspNetCore.Logging\test\JGUZDV.AspNetCore.Logging.Tests.csproj", "{88A3D096-F763-47DB-A94B-040D416746E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.AspNetCore.Logging.Tests", "libraries\JGUZDV.AspNetCore.Logging\test\JGUZDV.AspNetCore.Logging.Tests.csproj", "{88A3D096-F763-47DB-A94B-040D416746E8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JGUZDV.Blazor.Components", "JGUZDV.Blazor.Components", "{DD6389E2-3940-4E3A-AB5F-3B041AFDCAED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.Blazor.Components.Samples", "libraries\JGUZDV.Blazor.Components\samples\JGUZDV.Blazor.Components.Samples.csproj", "{FB3900A8-72B4-4186-90A8-9FA9F585C20E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.Blazor.Components.Samples", "libraries\JGUZDV.Blazor.Components\samples\JGUZDV.Blazor.Components.Samples.csproj", "{FB3900A8-72B4-4186-90A8-9FA9F585C20E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.Blazor.Components", "libraries\JGUZDV.Blazor.Components\src\JGUZDV.Blazor.Components.csproj", "{73A3EE19-DEE8-4F79-85F5-DE42FE638F16}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.Blazor.Components", "libraries\JGUZDV.Blazor.Components\src\JGUZDV.Blazor.Components.csproj", "{73A3EE19-DEE8-4F79-85F5-DE42FE638F16}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.Blazor.Components.Tests", "libraries\JGUZDV.Blazor.Components\test\JGUZDV.Blazor.Components.Tests.csproj", "{ADADE7CE-4766-4220-AF7B-F51B5C1F334B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.Blazor.Components.Tests", "libraries\JGUZDV.Blazor.Components\test\JGUZDV.Blazor.Components.Tests.csproj", "{ADADE7CE-4766-4220-AF7B-F51B5C1F334B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JGUZDV.Blazor.Components.ClaimRequirements", "JGUZDV.Blazor.Components.ClaimRequirements", "{CD85DC7B-D7D3-4DFF-99D1-B7841BD1F4D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.Blazor.Components.ClaimRequirements", "libraries\JGUZDV.Blazor.Components.ClaimRequirements\src\JGUZDV.Blazor.Components.ClaimRequirements.csproj", "{662FB941-E473-401D-B856-BC6564101B5D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.Blazor.Components.ClaimRequirements", "libraries\JGUZDV.Blazor.Components.ClaimRequirements\src\JGUZDV.Blazor.Components.ClaimRequirements.csproj", "{662FB941-E473-401D-B856-BC6564101B5D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.Blazor.Components.ClaimRequirements.Tests", "libraries\JGUZDV.Blazor.Components.ClaimRequirements\test\JGUZDV.Blazor.Components.ClaimRequirements.Tests.csproj", "{8E600186-574C-41F7-AC0F-B8BC61ED03F7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.Blazor.Components.ClaimRequirements.Tests", "libraries\JGUZDV.Blazor.Components.ClaimRequirements\test\JGUZDV.Blazor.Components.ClaimRequirements.Tests.csproj", "{8E600186-574C-41F7-AC0F-B8BC61ED03F7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JGUZDV.Blazor.Components.L10n", "JGUZDV.Blazor.Components.L10n", "{51FA04BB-81A2-4EA7-B722-CF4A16BA75E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.Blazor.Components.L10n", "libraries\JGUZDV.Blazor.Components.L10n\src\JGUZDV.Blazor.Components.L10n.csproj", "{C806F47E-41BF-47D8-975B-A19C8EC14E39}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.Blazor.Components.L10n", "libraries\JGUZDV.Blazor.Components.L10n\src\JGUZDV.Blazor.Components.L10n.csproj", "{C806F47E-41BF-47D8-975B-A19C8EC14E39}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.Blazor.Components.L10n.Tests", "libraries\JGUZDV.Blazor.Components.L10n\test\JGUZDV.Blazor.Components.L10n.Tests.csproj", "{76CE3554-41C4-402F-805E-C7C90387B8DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.Blazor.Components.L10n.Tests", "libraries\JGUZDV.Blazor.Components.L10n\test\JGUZDV.Blazor.Components.L10n.Tests.csproj", "{76CE3554-41C4-402F-805E-C7C90387B8DD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JGUZDV.Blazor.StateManagement", "JGUZDV.Blazor.StateManagement", "{31F5F80A-A66E-4443-BA0B-052D5B836CD6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.Blazor.StateManagement", "libraries\JGUZDV.Blazor.StateManagement\src\JGUZDV.Blazor.StateManagement.csproj", "{2C82E6F1-FEDC-46A1-AE8F-AF550CFA52AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.Blazor.StateManagement", "libraries\JGUZDV.Blazor.StateManagement\src\JGUZDV.Blazor.StateManagement.csproj", "{2C82E6F1-FEDC-46A1-AE8F-AF550CFA52AB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.Blazor.StateManagement.Tests", "libraries\JGUZDV.Blazor.StateManagement\test\JGUZDV.Blazor.StateManagement.Tests.csproj", "{26405220-3D38-4D2E-867E-DC53130B0FEB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.Blazor.StateManagement.Tests", "libraries\JGUZDV.Blazor.StateManagement\test\JGUZDV.Blazor.StateManagement.Tests.csproj", "{26405220-3D38-4D2E-867E-DC53130B0FEB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JGUZDV.Blazor.WasmServerHost", "JGUZDV.Blazor.WasmServerHost", "{1645F9F0-9447-4249-B15C-790FF70E1968}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.Blazor.WasmServerHost", "libraries\JGUZDV.Blazor.WasmServerHost\src\JGUZDV.Blazor.WasmServerHost.csproj", "{4CD5DE24-C829-4038-8875-1C8B63C96EB7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.Blazor.WasmServerHost", "libraries\JGUZDV.Blazor.WasmServerHost\src\JGUZDV.Blazor.WasmServerHost.csproj", "{4CD5DE24-C829-4038-8875-1C8B63C96EB7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.Blazor.WasmServerHost.Tests", "libraries\JGUZDV.Blazor.WasmServerHost\test\JGUZDV.Blazor.WasmServerHost.Tests.csproj", "{DBD08C7B-B0FD-4EBD-8D3E-41EDFDD35EA7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.Blazor.WasmServerHost.Tests", "libraries\JGUZDV.Blazor.WasmServerHost\test\JGUZDV.Blazor.WasmServerHost.Tests.csproj", "{DBD08C7B-B0FD-4EBD-8D3E-41EDFDD35EA7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JGUZDV.ClientStorage", "JGUZDV.ClientStorage", "{BEE249C5-60E0-43AE-BE52-F65A736BCF32}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.ClientStorage", "libraries\JGUZDV.ClientStorage\src\JGUZDV.ClientStorage.csproj", "{5A65ADF6-09D7-4934-92D2-6EA8EB3D3556}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.ClientStorage", "libraries\JGUZDV.ClientStorage\src\JGUZDV.ClientStorage.csproj", "{5A65ADF6-09D7-4934-92D2-6EA8EB3D3556}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.ClientStorage.Tests", "libraries\JGUZDV.ClientStorage\test\JGUZDV.ClientStorage.Tests.csproj", "{9A27AAA8-AFE9-43D4-A3C6-E5D3DAC2ED2B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.ClientStorage.Tests", "libraries\JGUZDV.ClientStorage\test\JGUZDV.ClientStorage.Tests.csproj", "{9A27AAA8-AFE9-43D4-A3C6-E5D3DAC2ED2B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JGUZDV.CQRS", "JGUZDV.CQRS", "{D2EEC902-ED1E-419F-9BDA-E91C35498B9A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.CQRS", "libraries\JGUZDV.CQRS\src\JGUZDV.CQRS.csproj", "{70C6FC9D-94BC-4394-AA8E-EB4A329FADB0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.CQRS", "libraries\JGUZDV.CQRS\src\JGUZDV.CQRS.csproj", "{70C6FC9D-94BC-4394-AA8E-EB4A329FADB0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.CQRS.Tests", "libraries\JGUZDV.CQRS\test\JGUZDV.CQRS.Tests.csproj", "{86427769-9110-4A15-894E-264601C062BD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.CQRS.Tests", "libraries\JGUZDV.CQRS\test\JGUZDV.CQRS.Tests.csproj", "{86427769-9110-4A15-894E-264601C062BD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JGUZDV.CQRS.AspNetCore", "JGUZDV.CQRS.AspNetCore", "{449665D2-57FF-4DFC-BB3A-6E397C49CE72}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.CQRS.AspNetCore", "libraries\JGUZDV.CQRS.AspNetCore\src\JGUZDV.CQRS.AspNetCore.csproj", "{D8484887-7778-4307-B7A1-4E7CDA711E91}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.CQRS.AspNetCore", "libraries\JGUZDV.CQRS.AspNetCore\src\JGUZDV.CQRS.AspNetCore.csproj", "{D8484887-7778-4307-B7A1-4E7CDA711E91}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.CQRS.AspNetCore.Tests", "libraries\JGUZDV.CQRS.AspNetCore\test\JGUZDV.CQRS.AspNetCore.Tests.csproj", "{F00F6E41-A1E5-45DA-A579-EA17696CC19A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.CQRS.AspNetCore.Tests", "libraries\JGUZDV.CQRS.AspNetCore\test\JGUZDV.CQRS.AspNetCore.Tests.csproj", "{F00F6E41-A1E5-45DA-A579-EA17696CC19A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JGUZDV.Extensions.Authorization", "JGUZDV.Extensions.Authorization", "{06DEFC5F-DBE4-4B79-B025-08E097216E5A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.Extensions.Authorization", "libraries\JGUZDV.Extensions.Authorization\src\JGUZDV.Extensions.Authorization.csproj", "{F3565C4B-7BF8-4AB5-94B1-2FCD1B5CCF4B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.Extensions.Authorization", "libraries\JGUZDV.Extensions.Authorization\src\JGUZDV.Extensions.Authorization.csproj", "{F3565C4B-7BF8-4AB5-94B1-2FCD1B5CCF4B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.Extensions.Authorization.Tests", "libraries\JGUZDV.Extensions.Authorization\test\JGUZDV.Extensions.Authorization.Tests.csproj", "{64994378-C809-4702-BF71-9CACEFEB47E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.Extensions.Authorization.Tests", "libraries\JGUZDV.Extensions.Authorization\test\JGUZDV.Extensions.Authorization.Tests.csproj", "{64994378-C809-4702-BF71-9CACEFEB47E5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JGUZDV.Extensions.Json", "JGUZDV.Extensions.Json", "{47CC715C-603B-4C1A-88B5-14562727C6E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.Extensions.Json", "libraries\JGUZDV.Extensions.Json\src\JGUZDV.Extensions.Json.csproj", "{A3E254D9-8D81-4EC3-B52C-55D9354E9955}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.Extensions.Json", "libraries\JGUZDV.Extensions.Json\src\JGUZDV.Extensions.Json.csproj", "{A3E254D9-8D81-4EC3-B52C-55D9354E9955}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.Extensions.Json.Tests", "libraries\JGUZDV.Extensions.Json\test\JGUZDV.Extensions.Json.Tests.csproj", "{F05F64E2-8906-4AD1-89E5-5F40A30F55BB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.Extensions.Json.Tests", "libraries\JGUZDV.Extensions.Json\test\JGUZDV.Extensions.Json.Tests.csproj", "{F05F64E2-8906-4AD1-89E5-5F40A30F55BB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JGUZDV.Extensions.Logging", "JGUZDV.Extensions.Logging", "{D9C7551A-2F65-4D5F-9D4E-A42704D850B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.Extensions.Logging", "libraries\JGUZDV.Extensions.Logging\src\JGUZDV.Extensions.Logging.csproj", "{0D48D910-83B8-4FEE-A0AD-E0FB3536BC80}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.Extensions.Logging", "libraries\JGUZDV.Extensions.Logging\src\JGUZDV.Extensions.Logging.csproj", "{0D48D910-83B8-4FEE-A0AD-E0FB3536BC80}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.Extensions.Logging.Tests", "libraries\JGUZDV.Extensions.Logging\test\JGUZDV.Extensions.Logging.Tests.csproj", "{130E8BF8-97A3-468C-80A8-92247DCBFF51}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.Extensions.Logging.Tests", "libraries\JGUZDV.Extensions.Logging\test\JGUZDV.Extensions.Logging.Tests.csproj", "{130E8BF8-97A3-468C-80A8-92247DCBFF51}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JGUZDV.JobHost", "JGUZDV.JobHost", "{B06ACF77-B0EF-42F4-BA33-776F7496E2E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.JobHost", "libraries\JGUZDV.JobHost\src\JGUZDV.JobHost.csproj", "{57FBEC02-58DA-435C-82FC-BE9EEC064362}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.JobHost", "libraries\JGUZDV.JobHost\src\JGUZDV.JobHost.csproj", "{57FBEC02-58DA-435C-82FC-BE9EEC064362}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.JobHost.Tests", "libraries\JGUZDV.JobHost\test\JGUZDV.JobHost.Tests.csproj", "{A8DDE01F-50DC-49D1-805B-4F9331A3DDD5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.JobHost.Tests", "libraries\JGUZDV.JobHost\test\JGUZDV.JobHost.Tests.csproj", "{A8DDE01F-50DC-49D1-805B-4F9331A3DDD5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JGUZDV.L10n", "JGUZDV.L10n", "{D93740E7-7EAB-4B4C-957E-E21CD73AA1BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.L10n", "libraries\JGUZDV.L10n\src\JGUZDV.L10n.csproj", "{B385CC10-A10B-4986-8BF3-443658D5C46B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.L10n", "libraries\JGUZDV.L10n\src\JGUZDV.L10n.csproj", "{B385CC10-A10B-4986-8BF3-443658D5C46B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.L10n.Tests", "libraries\JGUZDV.L10n\test\JGUZDV.L10n.Tests.csproj", "{F8BBA3C2-9DAC-412D-8084-E69F5F2F3018}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.L10n.Tests", "libraries\JGUZDV.L10n\test\JGUZDV.L10n.Tests.csproj", "{F8BBA3C2-9DAC-412D-8084-E69F5F2F3018}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JGUZDV.L10n.EntityFramework", "JGUZDV.L10n.EntityFramework", "{E5F92691-2BEB-491C-9219-CBA30A54A3E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.L10n.EntityFramework", "libraries\JGUZDV.L10n.EntityFramework\src\JGUZDV.L10n.EntityFramework.csproj", "{67E30962-CD08-4700-B1F8-8E7C029F40CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.L10n.EntityFramework", "libraries\JGUZDV.L10n.EntityFramework\src\JGUZDV.L10n.EntityFramework.csproj", "{67E30962-CD08-4700-B1F8-8E7C029F40CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.L10n.EntityFramework.Tests", "libraries\JGUZDV.L10n.EntityFramework\test\JGUZDV.L10n.EntityFramework.Tests.csproj", "{49AA7C6A-AB52-457C-BB9E-C927082DBA34}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.L10n.EntityFramework.Tests", "libraries\JGUZDV.L10n.EntityFramework\test\JGUZDV.L10n.EntityFramework.Tests.csproj", "{49AA7C6A-AB52-457C-BB9E-C927082DBA34}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JGUZDV.Linq", "JGUZDV.Linq", "{4F001AAE-FC38-4071-94B2-DC33FE5C3735}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.Linq", "libraries\JGUZDV.Linq\src\JGUZDV.Linq.csproj", "{33895E03-3FB0-4FE1-9660-A0A8D1F92FDD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.Linq", "libraries\JGUZDV.Linq\src\JGUZDV.Linq.csproj", "{33895E03-3FB0-4FE1-9660-A0A8D1F92FDD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.Linq.Tests", "libraries\JGUZDV.Linq\test\JGUZDV.Linq.Tests.csproj", "{228AB90A-19B5-4678-802C-ECA16AA848ED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.Linq.Tests", "libraries\JGUZDV.Linq\test\JGUZDV.Linq.Tests.csproj", "{228AB90A-19B5-4678-802C-ECA16AA848ED}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JGUZDV.OpenIddict.KeyManager", "JGUZDV.OpenIddict.KeyManager", "{FAB5A604-6D92-46FA-9B3C-AF6165ED8042}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.OpenIddict.KeyManager", "libraries\JGUZDV.OpenIddict.KeyManager\src\JGUZDV.OpenIddict.KeyManager.csproj", "{6813FD87-FAA4-4572-ABF5-3730726E214B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.OpenIddict.KeyManager", "libraries\JGUZDV.OpenIddict.KeyManager\src\JGUZDV.OpenIddict.KeyManager.csproj", "{6813FD87-FAA4-4572-ABF5-3730726E214B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.OpenIddict.KeyManager.Tests", "libraries\JGUZDV.OpenIddict.KeyManager\test\JGUZDV.OpenIddict.KeyManager.Tests.csproj", "{C6B6D866-3CD2-4724-BE9C-E70A78C9D9D5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.OpenIddict.KeyManager.Tests", "libraries\JGUZDV.OpenIddict.KeyManager\test\JGUZDV.OpenIddict.KeyManager.Tests.csproj", "{C6B6D866-3CD2-4724-BE9C-E70A78C9D9D5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JGUZDV.YARP.SimpleReverseProxy", "JGUZDV.YARP.SimpleReverseProxy", "{B264316F-1CF0-4CF2-9D21-CB908688960D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.YARP.SimpleReverseProxy", "libraries\JGUZDV.YARP.SimpleReverseProxy\src\JGUZDV.YARP.SimpleReverseProxy.csproj", "{2EC9B3D0-C6AB-45D7-BF92-8016D83A4010}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.YARP.SimpleReverseProxy", "libraries\JGUZDV.YARP.SimpleReverseProxy\src\JGUZDV.YARP.SimpleReverseProxy.csproj", "{2EC9B3D0-C6AB-45D7-BF92-8016D83A4010}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.YARP.SimpleReverseProxy.Tests", "libraries\JGUZDV.YARP.SimpleReverseProxy\test\JGUZDV.YARP.SimpleReverseProxy.Tests.csproj", "{2DB861F2-5DEA-481B-BECD-6F00EC8C6802}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.YARP.SimpleReverseProxy.Tests", "libraries\JGUZDV.YARP.SimpleReverseProxy\test\JGUZDV.YARP.SimpleReverseProxy.Tests.csproj", "{2DB861F2-5DEA-481B-BECD-6F00EC8C6802}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JGUZDV.WebApiHost", "JGUZDV.WebApiHost", "{4AADAD6A-4BA0-427E-9EA1-4AFE211C1200}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.WebApiHost", "libraries\JGUZDV.WebApiHost\src\JGUZDV.WebApiHost.csproj", "{53D9AE20-2981-411C-87CD-5DCD71D181B4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.WebApiHost", "libraries\JGUZDV.WebApiHost\src\JGUZDV.WebApiHost.csproj", "{53D9AE20-2981-411C-87CD-5DCD71D181B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.WebApiHost.Tests", "libraries\JGUZDV.WebApiHost\test\JGUZDV.WebApiHost.Tests.csproj", "{892EA5E4-A98F-4A36-B901-8A1FAB27623E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.WebApiHost.Tests", "libraries\JGUZDV.WebApiHost\test\JGUZDV.WebApiHost.Tests.csproj", "{892EA5E4-A98F-4A36-B901-8A1FAB27623E}"
 EndProject
 Global
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {46ECC226-1874-4539-8589-8B2029909C4A}
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|x64 = Debug|x64
@@ -706,6 +701,9 @@ Global
 		{892EA5E4-A98F-4A36-B901-8A1FAB27623E}.Release|x86.ActiveCfg = Release|Any CPU
 		{892EA5E4-A98F-4A36-B901-8A1FAB27623E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{FBF7BAF0-B8E9-45C5-9B50-7B8DDD607467} = {DA4DE709-E5BC-4B93-88D2-838656C217CE}
 		{675D258E-525C-4048-8E88-97C5E78ED819} = {FBF7BAF0-B8E9-45C5-9B50-7B8DDD607467}
@@ -774,5 +772,8 @@ Global
 		{4AADAD6A-4BA0-427E-9EA1-4AFE211C1200} = {DA4DE709-E5BC-4B93-88D2-838656C217CE}
 		{53D9AE20-2981-411C-87CD-5DCD71D181B4} = {4AADAD6A-4BA0-427E-9EA1-4AFE211C1200}
 		{892EA5E4-A98F-4A36-B901-8A1FAB27623E} = {4AADAD6A-4BA0-427E-9EA1-4AFE211C1200}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {46ECC226-1874-4539-8589-8B2029909C4A}
 	EndGlobalSection
 EndGlobal
