@@ -13,7 +13,8 @@ namespace JGUZDV.WebApiHost.Controllers
             _featureManager = featureManager;
         }
 
-        [HttpGet("features")]
+        [HttpGet("app/features")]
+        [Produces<FeatureList>]
         public async Task<IActionResult> GetFeatures()
         {
             var result = new List<Feature>();

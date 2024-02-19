@@ -224,7 +224,7 @@ public static partial class WebApiHost
         [LoggerMessage(LogLevel.Information, "Could not find config Authentication:JwtBearer:ValidAudiences, audiences will not be considered.")]
         public static partial void NoValidAudiences(ILogger logger);
 
-        [LoggerMessage(LogLevel.Warning, "Could not find config Authentication:JwtBearer:RequiredScopes, consider addings required scopes for .")]
+        [LoggerMessage(LogLevel.Warning, "Could not find config Authentication:JwtBearer:RequiredScopes, consider addings required scopes to validate the token is meant for us.")]
         public static partial void NoRequiredScopes(ILogger logger);
     }
 }
