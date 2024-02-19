@@ -1,9 +1,11 @@
 ﻿using JGUZDV.Blazor.WasmServerHost.Extensions;
 using JGUZDV.WebApiHost.FeatureManagement;
 
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.FeatureManagement;
 
@@ -23,7 +25,10 @@ public static partial class WebApiHost
 
     public static WebApplicationBuilder ConfigureWebApiHostServices(
         this WebApplicationBuilder builder,
-        bool useInteractiveWebAssembly
+        Action<AuthenticationBuilder>? authenticationBuilderAction = null,
+        Action<IDataProtectionBuilder>? dataProtectionBuilderAction = null,
+        Action<IFeatureManagementBuilder>? featureManagementBuilderAction = null,
+        Action<IMvcBuilder>? mvcBuilderAction = null
         )
     {
         var services = builder.Services;
@@ -43,10 +48,12 @@ public static partial class WebApiHost
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
 
-
-            // Enable MVC controllers
-            services.AddControllers();
+            // Enable Problem Details
             services.AddProblemDetails();
+            
+            // Enable MVC controllers
+            var mvcBuilder = services.AddControllers();
+            mvcBuilderAction?.Invoke(mvcBuilder);
 
 
             // Add Localization for DE, EN and RequestLocaltization
@@ -77,14 +84,17 @@ public static partial class WebApiHost
 
 
             // Add data protection
+            IDataProtectionBuilder dataProtectionBuilder;
             if (environment.IsProduction() && config.HasConfigSection(ConfigSections.DataProtection))
             {
-                services.AddJGUZDVDataProtection(config, environment);
+                dataProtectionBuilder = services.AddJGUZDVDataProtection(config, environment);
             }
             else
             {
-                services.AddDataProtection();
+                dataProtectionBuilder = services.AddDataProtection();
             }
+
+            dataProtectionBuilderAction?.Invoke(dataProtectionBuilder);
 
             if (!config.HasConfigSection(ConfigSections.DataProtection))
                 Log.MissingConfig(logger, ConfigSections.DataProtection);
@@ -111,6 +121,8 @@ public static partial class WebApiHost
                             Log.NoValidAudiences(logger);
                     });
 
+                authenticationBuilderAction?.Invoke(authBuilder);
+
                 services.AddAuthorization(opt =>
                 {
                     var scopes = configSection.GetSection("RequiredScopes").Get<ICollection<string>?>() ?? [];
@@ -131,12 +143,6 @@ public static partial class WebApiHost
                         opt.DefaultPolicy = opt.GetPolicy("ScopedDefault")!;
                     }
                 });
-
-                if (useInteractiveWebAssembly)
-                {
-                    services.AddScoped<AuthenticationStateProvider, ServerAuthenticationStateProvider>();
-                    services.AddCascadingAuthenticationState();
-                }
             }
             else
             {
@@ -147,8 +153,12 @@ public static partial class WebApiHost
             // Feature Management
             if (config.HasConfigSection(ConfigSections.FeatureManagement))
             {
-                services.AddScopedFeatureManagement(config.GetSection(ConfigSections.FeatureManagement))
+                var featureManagementBuilder = services.AddScopedFeatureManagement(
+                        config.GetSection(ConfigSections.FeatureManagement)
+                    )
                     .AddFeatureFilter<ClaimRequirementFeatureFilter>();
+
+                featureManagementBuilderAction?.Invoke(featureManagementBuilder);
             }
             else
             {
