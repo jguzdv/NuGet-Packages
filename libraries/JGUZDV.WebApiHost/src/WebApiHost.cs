@@ -27,7 +27,7 @@ public static partial class WebApiHost
     {
         var services = builder.Services;
         var config = builder.Configuration;
-        var env = builder.Environment;
+        var environment = builder.Environment;
 
         builder.UseJGUZDVLogging();
 
@@ -62,7 +62,7 @@ public static partial class WebApiHost
 
 
             // Add distributed cache
-            if (env.IsProduction() && config.HasConfigSection(ConfigSections.DistributedCache))
+            if (environment.IsProduction() && config.HasConfigSection(ConfigSections.DistributedCache))
             {
                 services.AddDistributedSqlServerCache(opt => config.GetSection(ConfigSections.DistributedCache).Bind(opt));
             }
@@ -76,9 +76,9 @@ public static partial class WebApiHost
 
 
             // Add data protection
-            if (env.IsProduction() && config.HasConfigSection(ConfigSections.DataProtection))
+            if (environment.IsProduction() && config.HasConfigSection(ConfigSections.DataProtection))
             {
-                services.AddJGUZDVDataProtection(config, env);
+                services.AddJGUZDVDataProtection(config, environment);
             }
             else
             {
