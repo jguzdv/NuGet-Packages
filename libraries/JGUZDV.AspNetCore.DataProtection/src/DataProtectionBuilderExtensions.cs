@@ -7,9 +7,14 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace JGUZDV.AspNetCore.DataProtection;
 
+/// <summary>
+/// Extension methods for configuring data protection.
+/// </summary>
 public static class DataProtectionBuilderExtensions
 {
-
+    /// <summary>
+    /// Configures the data protection system with the specified configuration.
+    /// </summary>
     public static IDataProtectionBuilder UseDataProtectionConfig(this IDataProtectionBuilder builder, IConfigurationSection configuration, IWebHostEnvironment? environment)
     {
         var config = new Configuration();
