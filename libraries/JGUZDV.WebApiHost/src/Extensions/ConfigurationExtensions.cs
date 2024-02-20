@@ -1,4 +1,6 @@
-﻿namespace JGUZDV.Blazor.WasmServerHost.Extensions
+﻿using Microsoft.Extensions.Configuration;
+
+namespace JGUZDV.Blazor.WasmServerHost.Extensions
 {
     internal static class ConfigurationExtensions
     {

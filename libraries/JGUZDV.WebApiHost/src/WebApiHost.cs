@@ -1,13 +1,22 @@
-﻿using JGUZDV.Blazor.WasmServerHost.Extensions;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Text.Json.Serialization;
+
+using JGUZDV.Blazor.WasmServerHost.Extensions;
+using JGUZDV.Extensions.Json;
 using JGUZDV.WebApiHost.FeatureManagement;
 
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Components.Server;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Http.Json;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.FeatureManagement;
+using Microsoft.IdentityModel.Logging;
 
 namespace JGUZDV.WebApiHost;
 
@@ -35,6 +44,9 @@ public static partial class WebApiHost
         var config = builder.Configuration;
         var environment = builder.Environment;
 
+        JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
+        IdentityModelEventSource.ShowPII = builder.Configuration.GetValue<bool>("ShowPII", false);
+
         builder.UseJGUZDVLogging();
 
         var sp = services.BuildServiceProvider();
@@ -54,6 +66,18 @@ public static partial class WebApiHost
             // Enable MVC controllers
             var mvcBuilder = services.AddControllers();
             mvcBuilderAction?.Invoke(mvcBuilder);
+            mvcBuilder.AddJsonOptions(opt =>
+            {
+                opt.JsonSerializerOptions.SetJGUZDVDefaults();
+                opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            });
+
+            // Set json options for minimal API
+            services.Configure<JsonOptions>(opt =>
+            {
+                opt.SerializerOptions.SetJGUZDVDefaults();
+                opt.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            });
 
 
             // Add Localization for DE, EN and RequestLocaltization
@@ -84,15 +108,10 @@ public static partial class WebApiHost
 
 
             // Add data protection
-            IDataProtectionBuilder dataProtectionBuilder;
-            if (environment.IsProduction() && config.HasConfigSection(ConfigSections.DataProtection))
-            {
-                dataProtectionBuilder = services.AddJGUZDVDataProtection(config, environment);
-            }
-            else
-            {
-                dataProtectionBuilder = services.AddDataProtection();
-            }
+            IDataProtectionBuilder dataProtectionBuilder = 
+                environment.IsProduction() && config.HasConfigSection(ConfigSections.DataProtection)
+                    ? services.AddJGUZDVDataProtection(config, environment)
+                    : services.AddDataProtection();
 
             dataProtectionBuilderAction?.Invoke(dataProtectionBuilder);
 
@@ -197,20 +216,14 @@ public static partial class WebApiHost
         {
             app.UseDeveloperExceptionPage();
         }
-        else
-        {
-            app.UseExceptionHandler("/Error");
-            app.UseHsts();
-        }
 
 
-        app.UseHttpsRedirection();
-
-        app.UseRequestLocalization();
         app.UseRouting();
 
         app.UseAuthentication();
         app.UseAuthorization();
+
+        app.UseRequestLocalization();
 
         app.MapControllers();
         

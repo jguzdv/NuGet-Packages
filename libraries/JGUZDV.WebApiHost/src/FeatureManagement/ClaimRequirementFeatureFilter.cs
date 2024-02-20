@@ -1,5 +1,7 @@
 ﻿using JGUZDV.Extensions.Authorization;
 
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.FeatureManagement;
 
 namespace JGUZDV.WebApiHost.FeatureManagement
