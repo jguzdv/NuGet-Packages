@@ -1,0 +1,60 @@
+﻿@code {
+    protected override bool ShouldRender()
+    {
+        return false;
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        throw new InvalidOperationException("What are you doing");
+    }
+
+    public static RenderFragment<string?> Close { get; set; } = classes =>
+    @<i class="fas fa-times @classes"></i>;
+
+    public static RenderFragment<string?> Collapsed { get; set; } = classes =>
+    @<i class="fas fa-chevron-up @classes"></i>;
+
+    public static RenderFragment<string?> Collapsible { get; set; } = classes =>
+    @<i class="fas fa-chevron-down @classes"></i>;
+
+    public static RenderFragment<string?> Add { get; set; } = classes =>
+    @<i class="fas fa-plus @classes"></i>;
+
+    public static RenderFragment<string?> Remove { get; set; } = classes =>
+    @<i class="fas fa-minus @classes"></i>;
+
+    public static RenderFragment<string?> RemoveCircle { get; set; } = classes =>
+    @<i class="far fa-times-circle @classes"></i>;
+
+    public static RenderFragment<string?> CheckCircle { get; set; } = classes =>
+    @<i class="far fa-check-circle @classes"></i>;
+
+    public static RenderFragment<string?> Check { get; set; } = classes =>
+    @<i class="fas fa-check @classes"></i>;
+
+    public static RenderFragment<string?> CheckFail { get; set; } = classes =>
+    @<i class="fas fa-times @classes"></i>;
+
+    public static RenderFragment<string?> CheckFailCircle { get; set; } = classes =>
+    @<i class="far fa-times-circle @classes"></i>;
+
+    public static RenderFragment<string?> Delete { get; set; } = classes =>
+    @<i class="fas fa-trash-alt @classes"></i>;
+
+    public static RenderFragment<string?> Search { get; set; } = classes =>
+    @<i class="fas fa-search @classes"></i>;
+
+    public static RenderFragment<string?> Filter { get; set; } = classes =>
+    @<i class="fas fa-filter @classes"></i>;
+
+    public static RenderFragment<string?> Sort { get; set; } = classes =>
+    @<i class="fas fa-sort @classes"></i>;
+
+    public static RenderFragment<string?> SortUp { get; set; } = classes =>
+    @<i class="fas fa-sort-up @classes"></i>;
+
+    public static RenderFragment<string?> SortDown { get; set; } = classes =>
+    @<i class="fas fa-sort-down @classes"></i>;
+}

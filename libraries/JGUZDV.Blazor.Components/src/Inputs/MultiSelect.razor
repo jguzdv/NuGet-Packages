@@ -2,15 +2,16 @@
 @typeparam TKey
 
 @using Microsoft.AspNetCore.Components.Web;
+@using JGUZDV.Blazor.Components.Extensions;
 
 <div class="@(HostClass == null ? "px-2 py-1 border" : $"{HostClass}")">
-    <div class="d-flex justify-content-between" role="button" style="cursor:pointer" @onclick="ToggleSelection">
+    <div @ref="_anchor" class="d-flex justify-content-between clickable" role="button" tabindex="0" @onkeypress="e => e.OnEnter(ToggleSelection)" @onclick="ToggleSelection">
         <div class="d-flex flex-nowrap overflow-hidden text-nowrap text-truncate">
             <span class="me-1">@Title </span>
-            @if (!UseSingleSelectionMode && Values!.Any())
+            @if (!UseSingleSelectionMode && Values!.Any() && !_isOpen)
             {
                 <span class="text-muted small text-truncate align-self-center" title="@(Values!.Select(x => ItemName(x)).Aggregate((a,b) => $"{a}, {b}"))">
-                    <span> (@Values!.Select(x => ItemName(x)).Aggregate((a,b) => $"{a}, {b}"))</span>
+                    <span> (@Values!.Select(x => ItemName(x)).Aggregate((a, b) => $"{a}, {b}"))</span>
                 </span>
             }
             else if (Value != null && UseSingleSelectionMode)
@@ -23,18 +24,32 @@
         <div class="ms-1">
             @if (_isOpen)
             {
-                <i class="fa fa-fw fa-minus align-self-center"></i>
+                @CloseIcon("align-self-center")
             }
             else
             {
-                <i class="fa fa-fw fa-plus align-self-center"></i>
+                @OpenIcon("align-self-center")
             }
         </div>
     </div>
 
+    @if (!UseSingleSelectionMode && Values!.Any() && _isOpen)
+    {
+        <div class="d-flex gap-2 flex-wrap my-3">
+            @foreach (var item in Values!)
+            {
+                <span class="badge button text-bg-secondary" tabindex="0"
+                      @onkeypress="e => e.OnEnter(() => HandleBadgeClick(item))"
+                      @onclick="() => HandleBadgeClick(item)">
+                    @ItemName(item) @BadgeIcon("")
+                </span>
+            }
+        </div>
+    }
+
     @if (_isOpen)
     {
-        <div class="fade-in">
+        <div class="fade-in my-3">
             @{
 #pragma warning disable 8601 // warning is wrong
             }
@@ -57,6 +72,9 @@
 #pragma warning restore
             }
         </div>
+        <div role="button" tabindex="0" @onclick="ToggleSelection" @onkeypress="e => e.OnEnter(ToggleSelection)">
+            @CloseButton
+        </div>
     }
 </div>
 @code {
@@ -74,7 +92,7 @@
 
     [Parameter]
     [EditorRequired]
-    public Func<T, TKey> ItemKey { get; set; } = default!;
+    public Func<T?, TKey> ItemKey { get; set; } = default!;
 
     [Parameter]
     public List<T>? Values { get; set; } = default!;
@@ -102,15 +120,36 @@
     public string? FilterLabel { get; set; }
 
     [Parameter]
+    public RenderFragment<string> FilterIcon { get; set; } = Icons.Filter;
+
+    [Parameter]
     public Func<(T item, string query), bool>? Filter { get; set; }
 
     [Parameter]
-    public string? ItemsContainerClass { get; set; } = "row row-cols-1 mt-2";
+    public string? ItemsContainerClass { get; set; } = "row row-cols-1";
 
     [Parameter]
     public bool UseSingleSelectionMode { get; set; }
 
+    [Parameter]
+    public RenderFragment CloseButton { get; set; } =
+        @<div class="btn btn-outline-secondary w-100">
+            @Icons.Collapsed("")
+        </div>
+    ;
+
+    [Parameter]
+    public RenderFragment<string> CloseIcon { get; set; } = Icons.Collapsed;
+
+    [Parameter]
+    public RenderFragment<string> OpenIcon { get; set; } = Icons.Collapsible;
+
+    [Parameter]
+    public RenderFragment<string> BadgeIcon { get; set; } = Icons.RemoveCircle;
+
     private bool _isOpen;
+
+    private ElementReference _anchor;
 
     protected override void OnParametersSet()
     {
@@ -123,7 +162,7 @@
             ItemTemplate = x => @<span>@ItemName(x)</span>;
 
         if (!UseSingleSelectionMode && Values == null)
-            throw new InvalidOperationException($"Parameter {nameof(Values)} may not be null if multipe values are allowed");
+            throw new InvalidOperationException($"Parameter {nameof(Values)} may not be null if multiple values are allowed");
 
         if (UseSingleSelectionMode && Values != null)
             throw new InvalidOperationException($"Parameter {nameof(Values)} may not be set if only one value is allowed");
@@ -132,5 +171,13 @@
     private void ToggleSelection()
     {
         _isOpen = !_isOpen;
+        if (!_isOpen)
+            _anchor.FocusAsync();
+    }
+
+    private void HandleBadgeClick(T item)
+    {
+        Values = Values?.Where(x => !ItemKey(x)!.Equals(ItemKey(item))).ToList();
+        ValuesChanged.InvokeAsync(Values);
     }
 }

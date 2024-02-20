@@ -12,6 +12,8 @@
 
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageIcon>NuGet-Package-Icon.png</PackageIcon>
+
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
 	</PropertyGroup>
     
 	<ItemGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">

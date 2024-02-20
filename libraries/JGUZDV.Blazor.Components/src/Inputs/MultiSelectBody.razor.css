@@ -1,0 +1,10 @@
+﻿
+.button:hover {
+    /*opacity: 0.50;*/
+    filter: brightness(0.95);
+    cursor: pointer;
+}
+
+.filter-input {
+    padding-left: 2rem
+}
