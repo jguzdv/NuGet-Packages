@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Components\" />
+    <ProjectReference Include="..\..\JGUZDV.JobHost.Database\src\JGUZDV.JobHost.Database.csproj" />
   </ItemGroup>
 
 </Project>

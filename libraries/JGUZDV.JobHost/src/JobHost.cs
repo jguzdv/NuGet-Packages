@@ -60,7 +60,6 @@ namespace JGUZDV.JobHost
                 q.AddTrigger(opts => opts
                     .ForJob(jobKey)
                     .WithCronSchedule(cronSchedule));
-
             });
         }
 

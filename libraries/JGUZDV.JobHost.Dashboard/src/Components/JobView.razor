@@ -1,0 +1,42 @@
+﻿@using JGUZDV.JobHost.Dashboard.Model
+@using JGUZDV.JobHost.Dashboard.Services
+@using Microsoft.AspNetCore.Components.Authorization
+
+<h3>JobView</h3>
+<AuthorizeView>
+
+</AuthorizeView>
+@if(_jobs != null)
+{
+    foreach(var pair in _jobs.JobsByHost)
+    {
+        <div>
+            <div class="fw-bold">
+                @pair.Key.Name
+            </div>
+            <ul>
+                @foreach(var item in pair.Value)
+                {
+                    <li>
+                        @item.Name
+                    </li>
+                }
+            </ul>
+        </div>
+        <hr/>
+    }
+}
+
+@code {
+    [Inject]
+    public required IDashboardService Service { get; set; }
+
+    private JobCollection? _jobs;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+
+        _jobs = await Service.GetJobs();
+    }
+}
