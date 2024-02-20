@@ -1,35 +1,19 @@
 # JGUZDV.Blazor.WasmServerHost
 
 This package is intended to be used as a helper to configure services and the request
-pipeline needed to host a WASM aka Blazor application on an AspNetCore host.  
-It is compatible with full client side WASM as well as more recent server side rendering with
-interactivity via WASM.  
-
-It's *not* intended for Blazor Server applciations, that use SingalR.
+pipeline needed to host a AspNetCore WebAPI application.  
+It's highly opinionated and will use our other packeges to provide a default configuration.
 
 ## Usage
 
 **Program.cs**
 ```csharp
 var builder = WebApplicationBuilder.Create(args);
-builder.ConfigureWasmHostServices(useInteractiveWebAssembly: true);
+builder.ConfigureWebApiHost(); // You can extend this by using the provided actions
 
 var app = builder.Build();
 
-app.ConfigueWasmHost<App>();
-app.Run();
-```
-
-or with classic Blazor WASM
-  
-**Program.cs**
-```csharp
-var builder = WebApplicationBuilder.Create(args);
-builder.ConfigureWasmHostServices(useInteractiveWebAssembly: false);
-
-var app = builder.Build();
-
-app.ConfigueWasmHost();
+app.ConfigureWebApiHost();
 app.Run();
 ```
 
@@ -49,27 +33,35 @@ To use all features, you need to have configuration sections, each referring to 
   },
 
   "Authentication": {
-    "OpenIdConnect": { ... },
-    "Cookies": { ... }
+    "JwtBearer": { 
+      "Authority": "https://example.com",
+      "Audience": "example",
+      "RequiredScopes": [ "scope1", "scope2" ]
+      "ScopeType": "ClaimTypeOfScopes" // "scope" if empty
+    }
   },
 
-  "DistributedCache": {
+  "DistributedCache": { // Omit if not needed
     "ConnectionString": "...",
     "SchemaName": "...",
     "TableName": "..."
   },
 
-  "ReverseProxy": {
-    "Proxies": [
-      {
-        "PathMatch": "/api/{**catch-all}",
-        "UpstreamUrl": "https://upstream.example/",
-        "PathPrefix": "/api",
-        "UseAccessToken": true
-      }
-    ]
+  "FeatureManagement": {
+    "Feature1": true,
+    "Feature2": false,
+    "Feature3": {
+        "EnabledFor": [
+        {
+            "Name": "ClaimRequirement",
+            "Parameters": {
+                "ClaimType": "custom-claim",
+                "ClaimValue": "value
 
-    ... // see https://nuget.org/jguzdv/JGUZDV.YARP.SimpleReverseProxy
+                ... // see https://nuget.org/jguzdv/JGUZDV.Extensions.Authorization
+            }
+        } 
+    }
   },
 }
 ```
