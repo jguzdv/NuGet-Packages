@@ -1,11 +1,16 @@
-﻿using JGUZDV.AspNetCore.Logging;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
+/// <summary>
+/// Extension methods for configuring logging.
+/// </summary>
 public static class JGUZDVLoggingExtensions
 {
-    public static WebApplicationBuilder UseJGUZDVLogging(this WebApplicationBuilder builder, string configSectionName = Constants.DefaultSectionName)
+    /// <summary>
+    /// Configures the web host to use the default logging configuration.
+    /// </summary>
+    public static WebApplicationBuilder UseJGUZDVLogging(this WebApplicationBuilder builder, string configSectionName = JGUZDV.Extensions.Logging.Constants.DefaultSectionName)
     {
         builder.Host.UseJGUZDVLogging(configSectionName);
         return builder;

@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 
 namespace JGUZDV.Extensions.Logging;
 
-public static class SerilogHelpers
+internal static class SerilogHelpers
 {
     internal static void BuildSerilogLogger(this LoggerConfiguration logger, IHostEnvironment hostEnvironment, IConfiguration configuration, string configSectionName)
     {

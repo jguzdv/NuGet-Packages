@@ -7,31 +7,47 @@ using JGUZDV.WebApiHost.FeatureManagement;
 
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http.Json;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.FeatureManagement;
 using Microsoft.IdentityModel.Logging;
 
 namespace JGUZDV.WebApiHost;
 
+/// <summary>
+/// WebApiHost is a helper class to configure a WebApiHost with common services and features.
+/// </summary>
 public static partial class WebApiHost
 {
+    /// <summary>
+    /// Default Config Sections for WebApiHost
+    /// </summary>
     public static class ConfigSections
     {
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
         public const string Authentication = "Authentication";
         public const string DataProtection = AspNetCore.DataProtection.Constants.DefaultSectionName;
         public const string DistributedCache = "DistributedCache";
         public const string FeatureManagement = "FeatureManagement";
         public const string Telemetry = "ApplicationInsights";
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
     }
 
-
+    /// <summary>
+    /// Configures services of the WebApplicationBuilder:
+    /// - Adds JGUZDVLogging
+    /// - Adds ApiExplorer and Swagger
+    /// - Adds ProblemDetails
+    /// - Adds MVC controllers and sets default JsonOptions (minimal API as well as MVC)
+    /// - Adds RequestLocalization ("de", "en" as default)
+    /// - Adds Distributed Cache
+    /// - Adds Data Protection
+    /// - Adds Authentication and Authorization
+    /// - Adds Feature Management
+    /// - Adds Telemetry
+    /// - Adds HealthChecks
+    /// </summary>
     public static WebApplicationBuilder ConfigureWebApiHostServices(
         this WebApplicationBuilder builder,
         Action<AuthenticationBuilder>? authenticationBuilderAction = null,
@@ -206,7 +222,19 @@ public static partial class WebApiHost
     }
 
 
-
+    /// <summary>
+    /// Configures the web application pipeline:
+    /// - Adds DeveloperExceptionPage (in Development)
+    /// - Adds Routing
+    /// - Adds Authentication and Authorization
+    /// - Adds RequestLocalization
+    /// - Adds Controllers
+    /// - Adds HealthChecks
+    /// - Adds Swagger
+    /// - Adds SwaggerUI
+    /// </summary>
+    /// <param name="app"></param>
+    /// <returns></returns>
     public static WebApplication ConfigureWebApiHost(this WebApplication app)
     {
         var conf = app.Configuration;
