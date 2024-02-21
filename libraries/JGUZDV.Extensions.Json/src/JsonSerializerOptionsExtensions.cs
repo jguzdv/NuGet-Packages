@@ -4,14 +4,17 @@ using System.Text.Json.Serialization;
 
 namespace JGUZDV.Extensions.Json;
 
+/// <summary>
+/// Extension methods for <see cref="JsonSerializerOptions"/>.
+/// </summary>
 public static class JsonSerializerOptionsExtensions
 {
     /// <summary>
     /// This will set some default behaviour to JsonSerializerOptions:
-#if NET6_0
-    /// - Add DateOnlyConverter
-    /// - Add TimeOnlyConverter
-#endif
+    /// - if NET6_0:
+    ///   - Add DateOnlyConverter
+    ///   - Add TimeOnlyConverter
+    /// - always:
     /// - Add StringTrimmingJsonConverter
     /// - Set DefaultIgnoreCondition to "WhenWritingNull"
     /// - PropertyNamingPolicy to 'null'

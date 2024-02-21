@@ -4,8 +4,12 @@ using System.Text.Json.Serialization;
 
 namespace JGUZDV.Extensions.Json.Converters
 {
+    /// <summary>
+    /// Converts a <see cref="ClaimsPrincipal"/> to and from JSON.
+    /// </summary>
     public class ClaimsPrincipalConverter : JsonConverter<ClaimsPrincipal>
     {
+        /// <inheritdoc/>
         public override ClaimsPrincipal? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             if (reader.TokenType is JsonTokenType.Null)
@@ -157,7 +161,7 @@ namespace JGUZDV.Extensions.Json.Converters
         }
 
 
-
+        /// <inheritdoc/>
         public override void Write(Utf8JsonWriter writer, ClaimsPrincipal value, JsonSerializerOptions options)
         {
             writer.WriteStartObject();
