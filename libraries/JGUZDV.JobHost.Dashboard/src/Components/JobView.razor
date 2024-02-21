@@ -2,10 +2,6 @@
 @using JGUZDV.JobHost.Dashboard.Services
 @using Microsoft.AspNetCore.Components.Authorization
 
-<h3>JobView</h3>
-<AuthorizeView>
-
-</AuthorizeView>
 @if(_jobs != null)
 {
     foreach(var pair in _jobs.JobsByHost)

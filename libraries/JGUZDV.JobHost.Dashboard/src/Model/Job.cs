@@ -2,16 +2,16 @@
 {
     public class Job
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Schedule { get; set; }
+        public required int Id { get; set; }
+        public required string Name { get; set; }
+        public required string Schedule { get; set; }
 
-        public DateTimeOffset LastExecutedAt { get; set; }
-        public string LastResult { get; set; }
-        public string LastResultMessage { get; set; }
+        public required DateTimeOffset LastExecutedAt { get; set; }
+        public required string LastResult { get; set; }
+        public required string LastResultMessage { get; set; }
 
-        public bool ShouldExecute { get; set; }
+        public required bool ShouldExecute { get; set; }
 
-        public int HostId { get; set; }
+        public required int HostId { get; set; }
     }
 }

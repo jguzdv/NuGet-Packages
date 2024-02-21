@@ -2,7 +2,7 @@
 {
     public class Host
     {
-        public string Name { get; set; }
-        public string MonitoringUrl { get; set; }
+        public required string Name { get; set; }
+        public required string MonitoringUrl { get; set; }
     }
 }

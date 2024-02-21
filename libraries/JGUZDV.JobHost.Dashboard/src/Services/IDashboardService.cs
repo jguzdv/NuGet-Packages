@@ -5,5 +5,7 @@ namespace JGUZDV.JobHost.Dashboard.Services
     public interface IDashboardService
     {
         public Task<JobCollection> GetJobs();
+
+        public Task ExecuteNow(int jobId);
     }
 }

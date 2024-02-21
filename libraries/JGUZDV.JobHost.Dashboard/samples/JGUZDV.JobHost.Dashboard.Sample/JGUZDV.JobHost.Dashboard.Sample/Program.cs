@@ -1,11 +1,14 @@
-using JGUZDV.JobHost.Dashboard.Sample.Client.Pages;
+using JGUZDV.JobHost.Dashboard.Extensions;
 using JGUZDV.JobHost.Dashboard.Sample.Components;
+using JGUZDV.JobHost.Dashboard.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveWebAssemblyComponents();
+
+builder.Services.AddScoped<IDashboardService, DatabaseService>();
 
 var app = builder.Build();
 
@@ -26,6 +29,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseAntiforgery();
+
+app.MapJobHostDashboardApi("api");
 
 app.MapRazorComponents<App>()
     .AddInteractiveWebAssemblyRenderMode()
