@@ -12,7 +12,7 @@
 
         <PackageId>JGUZDV.WebApiHost</PackageId>
         <IsPackable>true</IsPackable>
-        <Version>1.0.0</Version>
+        <Version>1.0.0-beta</Version>
         <Authors>Thomas Ottenhus</Authors>
         <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
         <PackageDescription>Host for WebApi Applications based on our other packages</PackageDescription>
