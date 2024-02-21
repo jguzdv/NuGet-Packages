@@ -150,8 +150,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.WebApiHost", "librar
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.WebApiHost.Tests", "libraries\JGUZDV.WebApiHost\test\JGUZDV.WebApiHost.Tests.csproj", "{892EA5E4-A98F-4A36-B901-8A1FAB27623E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.ClientStorage.Blazor", "libraries\JGUZDV.ClientStorage.Blazor\JGUZDV.ClientStorage.Blazor.csproj", "{FD6D3808-5542-458E-88C0-4918F074D8A3}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -776,6 +774,8 @@ Global
 		{892EA5E4-A98F-4A36-B901-8A1FAB27623E} = {4AADAD6A-4BA0-427E-9EA1-4AFE211C1200}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
+		RESX_SortFileContentOnSave = True
+		RESX_NeutralResourcesLanguage = de-DE
 		SolutionGuid = {46ECC226-1874-4539-8589-8B2029909C4A}
 	EndGlobalSection
 EndGlobal
