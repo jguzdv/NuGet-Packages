@@ -97,13 +97,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.JobHost.Tests", "lib
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.ClientStorage.Blazor", "libraries\JGUZDV.ClientStorage.Blazor\JGUZDV.ClientStorage.Blazor.csproj", "{FD6D3808-5542-458E-88C0-4918F074D8A3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.JobHost.Dashboard", "libraries\JGUZDV.JobHost.Dashboard\src\JGUZDV.JobHost.Dashboard.csproj", "{97D9FB0E-9F01-4DD6-A21A-EA44C26709B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.JobHost.Dashboard.Sample", "libraries\JGUZDV.JobHost.Dashboard\samples\JGUZDV.JobHost.Dashboard.Sample\JGUZDV.JobHost.Dashboard.Sample\JGUZDV.JobHost.Dashboard.Sample.csproj", "{6B1E8A23-EBF0-4B10-95B4-843906F0CA0C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.JobHost.Dashboard.Sample", "libraries\JGUZDV.JobHost.Dashboard\samples\JGUZDV.JobHost.Dashboard.Sample\JGUZDV.JobHost.Dashboard.Sample\JGUZDV.JobHost.Dashboard.Sample.csproj", "{6B1E8A23-EBF0-4B10-95B4-843906F0CA0C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.JobHost.Dashboard.Sample.Client", "libraries\JGUZDV.JobHost.Dashboard\samples\JGUZDV.JobHost.Dashboard.Sample\JGUZDV.JobHost.Dashboard.Sample.Client\JGUZDV.JobHost.Dashboard.Sample.Client.csproj", "{E91C0ACB-1A97-4878-9B10-96D8497B99F9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.JobHost.Dashboard.Sample.Client", "libraries\JGUZDV.JobHost.Dashboard\samples\JGUZDV.JobHost.Dashboard.Sample\JGUZDV.JobHost.Dashboard.Sample.Client\JGUZDV.JobHost.Dashboard.Sample.Client.csproj", "{E91C0ACB-1A97-4878-9B10-96D8497B99F9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.JobHost.Database", "libraries\JGUZDV.JobHost.Database\src\JGUZDV.JobHost.Database.csproj", "{BC1284B1-1F8F-4686-8135-2CF13EC24B23}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.JobHost.Dashboard.Api", "libraries\JGUZDV.JobHost.Dashboard.Api\JGUZDV.JobHost.Dashboard.Api.csproj", "{3B5EC186-75AD-42BE-839F-1AE2AEA4A386}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.JobHost.Dashboard", "libraries\JGUZDV.JobHost.Dashboard\src\JGUZDV.JobHost.Dashboard.csproj", "{4D5E4C25-8778-44C5-AB90-830E2BDAFDE3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.JobHost.Dashboard.Blazor", "libraries\JGUZDV.JobHost.Dashboard.Blazor\JGUZDV.JobHost.Dashboard.Blazor.csproj", "{E17ACC9A-C45E-4A03-B8EF-A1358D59CD13}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -263,10 +267,6 @@ Global
 		{FD6D3808-5542-458E-88C0-4918F074D8A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD6D3808-5542-458E-88C0-4918F074D8A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD6D3808-5542-458E-88C0-4918F074D8A3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{97D9FB0E-9F01-4DD6-A21A-EA44C26709B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{97D9FB0E-9F01-4DD6-A21A-EA44C26709B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{97D9FB0E-9F01-4DD6-A21A-EA44C26709B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{97D9FB0E-9F01-4DD6-A21A-EA44C26709B2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6B1E8A23-EBF0-4B10-95B4-843906F0CA0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6B1E8A23-EBF0-4B10-95B4-843906F0CA0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6B1E8A23-EBF0-4B10-95B4-843906F0CA0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -279,6 +279,18 @@ Global
 		{BC1284B1-1F8F-4686-8135-2CF13EC24B23}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC1284B1-1F8F-4686-8135-2CF13EC24B23}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC1284B1-1F8F-4686-8135-2CF13EC24B23}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B5EC186-75AD-42BE-839F-1AE2AEA4A386}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B5EC186-75AD-42BE-839F-1AE2AEA4A386}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B5EC186-75AD-42BE-839F-1AE2AEA4A386}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B5EC186-75AD-42BE-839F-1AE2AEA4A386}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D5E4C25-8778-44C5-AB90-830E2BDAFDE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D5E4C25-8778-44C5-AB90-830E2BDAFDE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D5E4C25-8778-44C5-AB90-830E2BDAFDE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D5E4C25-8778-44C5-AB90-830E2BDAFDE3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E17ACC9A-C45E-4A03-B8EF-A1358D59CD13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E17ACC9A-C45E-4A03-B8EF-A1358D59CD13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E17ACC9A-C45E-4A03-B8EF-A1358D59CD13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E17ACC9A-C45E-4A03-B8EF-A1358D59CD13}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -325,10 +337,12 @@ Global
 		{02F83C77-C526-41D5-853B-1E40EF7F5CDA} = {5F18EE62-3FBC-42F5-96DC-8C61C3D9EF27}
 		{E081A3D2-23D1-4C02-80F0-2832DCB502EF} = {50252EFB-8629-4B1D-AC2F-5F29CB6F684D}
 		{FD6D3808-5542-458E-88C0-4918F074D8A3} = {5F18EE62-3FBC-42F5-96DC-8C61C3D9EF27}
-		{97D9FB0E-9F01-4DD6-A21A-EA44C26709B2} = {5F18EE62-3FBC-42F5-96DC-8C61C3D9EF27}
 		{6B1E8A23-EBF0-4B10-95B4-843906F0CA0C} = {AA0D0715-5EAE-437A-ABF5-D596B127544B}
 		{E91C0ACB-1A97-4878-9B10-96D8497B99F9} = {AA0D0715-5EAE-437A-ABF5-D596B127544B}
 		{BC1284B1-1F8F-4686-8135-2CF13EC24B23} = {5F18EE62-3FBC-42F5-96DC-8C61C3D9EF27}
+		{3B5EC186-75AD-42BE-839F-1AE2AEA4A386} = {5F18EE62-3FBC-42F5-96DC-8C61C3D9EF27}
+		{4D5E4C25-8778-44C5-AB90-830E2BDAFDE3} = {5F18EE62-3FBC-42F5-96DC-8C61C3D9EF27}
+		{E17ACC9A-C45E-4A03-B8EF-A1358D59CD13} = {5F18EE62-3FBC-42F5-96DC-8C61C3D9EF27}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {46ECC226-1874-4539-8589-8B2029909C4A}

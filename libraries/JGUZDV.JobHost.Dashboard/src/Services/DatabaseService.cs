@@ -14,7 +14,14 @@ namespace JGUZDV.JobHost.Dashboard.Services
             _dbContext = dbContext;
         }
 
-        public async Task<JobCollection> GetJobs()
+        public virtual Task ExecuteNow(int jobId)
+        {
+            return _dbContext.Jobs
+                .Where(x => x.Id == jobId)
+                .ExecuteUpdateAsync(x => x.SetProperty(x => x.ShouldExecute, true));
+        }
+
+        public virtual async Task<JobCollection> GetJobs()
         {
             var jobsByHost = await _dbContext.Jobs
                 .Include(x => x.Host)
@@ -24,7 +31,8 @@ namespace JGUZDV.JobHost.Dashboard.Services
                     Host = new Model.Host
                     {
                         MonitoringUrl = x.Key.MonitoringUrl,
-                        Name = x.Key.Name
+                        Name = x.Key.Name,
+                        Id = x.Key.Id
                     },
                     Jobs = x.Select(x => new Model.Job
                     {
@@ -38,9 +46,13 @@ namespace JGUZDV.JobHost.Dashboard.Services
                         ShouldExecute = x.ShouldExecute,
                     }).ToList()
                 })
-                .ToDictionaryAsync(x => x.Host, x => x.Jobs);
+                .ToListAsync();
 
-            return new JobCollection { JobsByHost = jobsByHost };
+            return new JobCollection
+            {
+                JobsByHost = jobsByHost.ToDictionary(x => x.Host.Id, x => x.Jobs),
+                Hosts = jobsByHost.ToDictionary(x => x.Host.Id, x => x.Host)
+            };
         }
     }
 }

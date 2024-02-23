@@ -1,4 +1,6 @@
-﻿using JGUZDV.JobHost.Dashboard.Model;
+﻿using System.Net.Http.Json;
+
+using JGUZDV.JobHost.Dashboard.Model;
 
 namespace JGUZDV.JobHost.Dashboard.Services
 {
@@ -6,13 +8,9 @@ namespace JGUZDV.JobHost.Dashboard.Services
     {
         private readonly HttpClient _httpClient;
 
-        public ApiClient(HttpClient client, string? baseAddress = null)
-        {
-            if (!string.IsNullOrWhiteSpace(baseAddress))
-            {
-                client.BaseAddress = new Uri(baseAddress);
-            }
 
+        public ApiClient(HttpClient client)
+        {
             _httpClient = client;
         }
 
@@ -21,9 +19,10 @@ namespace JGUZDV.JobHost.Dashboard.Services
             return _httpClient.PostAsync(Routes.ExecuteNow(jobId), null);
         }
 
-        public Task<JobCollection> GetJobs()
+        public async Task<JobCollection> GetJobs()
         {
-            return _httpClient.GetFromJsonAsync<JobCollection>(Routes.GetJobs)!;
+            return await _httpClient.GetFromJsonAsync<JobCollection>(Routes.GetJobs)!;
         }
+        
     }
 }

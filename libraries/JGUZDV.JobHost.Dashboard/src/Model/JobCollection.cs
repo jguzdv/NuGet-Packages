@@ -2,6 +2,8 @@
 {
     public class JobCollection
     {
-        public required Dictionary<Host, List<Job>> JobsByHost { get; set; }
+        public Dictionary<int, Host> Hosts { get; set; }
+
+        public required Dictionary<int, List<Job>> JobsByHost { get; set; }
     }
 }

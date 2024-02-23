@@ -1,17 +1,16 @@
 ﻿@using JGUZDV.JobHost.Dashboard.Model
 @using JGUZDV.JobHost.Dashboard.Services
-@using Microsoft.AspNetCore.Components.Authorization
 
-@if(_jobs != null)
+@if (_jobs != null)
 {
-    foreach(var pair in _jobs.JobsByHost)
+    foreach (var pair in _jobs.JobsByHost)
     {
         <div>
             <div class="fw-bold">
-                @pair.Key.Name
+                @_jobs.Hosts[pair.Key]
             </div>
             <ul>
-                @foreach(var item in pair.Value)
+                @foreach (var item in pair.Value)
                 {
                     <li>
                         @item.Name
@@ -19,7 +18,7 @@
                 }
             </ul>
         </div>
-        <hr/>
+        <hr />
     }
 }
 
