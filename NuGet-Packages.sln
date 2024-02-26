@@ -107,7 +107,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.JobHost.Dashboard.Ap
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.JobHost.Dashboard", "libraries\JGUZDV.JobHost.Dashboard\src\JGUZDV.JobHost.Dashboard.csproj", "{4D5E4C25-8778-44C5-AB90-830E2BDAFDE3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.JobHost.Dashboard.Blazor", "libraries\JGUZDV.JobHost.Dashboard.Blazor\JGUZDV.JobHost.Dashboard.Blazor.csproj", "{E17ACC9A-C45E-4A03-B8EF-A1358D59CD13}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.JobHost.Dashboard.Blazor", "libraries\JGUZDV.JobHost.Dashboard.Blazor\JGUZDV.JobHost.Dashboard.Blazor.csproj", "{E17ACC9A-C45E-4A03-B8EF-A1358D59CD13}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

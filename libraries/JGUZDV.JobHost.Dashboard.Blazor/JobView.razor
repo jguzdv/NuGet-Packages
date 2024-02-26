@@ -3,28 +3,31 @@
 
 @if (_jobs != null)
 {
-    foreach (var pair in _jobs.JobsByHost)
+    @foreach (var host in HostSort(_jobs.Hosts.Values.ToList()))
     {
-        <div>
-            <div class="fw-bold">
-                @_jobs.Hosts[pair.Key]
-            </div>
-            <ul>
-                @foreach (var item in pair.Value)
-                {
-                    <li>
-                        @item.Name
-                    </li>
-                }
-            </ul>
+        <h1>
+            @host.Name
+        </h1>
+        <div class="row row-cols-1 row-cols-lg-2 row-cols-xxl-3 g-2 mb-4">
+            @foreach (var job in JobSort(_jobs.JobsByHost[host.Id]))
+            {
+                <div class="col">
+                    <JobCard Job="job" OnExecuteNow="ExecuteNow"></JobCard>
+                </div>
+            }
         </div>
-        <hr />
     }
 }
 
 @code {
     [Inject]
     public required IDashboardService Service { get; set; }
+
+    [Parameter]
+    public Func<List<Host>, List<Host>> HostSort { get; set; } = x => x.OrderBy(x => x.Name).ToList();
+
+    [Parameter]
+    public Func<List<Job>, List<Job>> JobSort { get; set; } = x => x.OrderBy(x => x.Name).ToList();
 
     private JobCollection? _jobs;
 
@@ -33,5 +36,10 @@
         await base.OnParametersSetAsync();
 
         _jobs = await Service.GetJobs();
+    }
+
+    private async Task ExecuteNow(Job job)
+    {
+        await Service.ExecuteNow(job.Id);
     }
 }
