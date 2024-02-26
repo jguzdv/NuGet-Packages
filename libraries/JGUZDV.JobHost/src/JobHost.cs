@@ -13,18 +13,21 @@ namespace JGUZDV.JobHost
         public static IHostBuilder CreateJobHostBuilder(string[] args, Action<WindowsServiceLifetimeOptions> configureWindowsService, Action<QuartzHostedServiceOptions> configureQuartz)
         {
             var builder = Host.CreateDefaultBuilder(args)
-                            .ConfigureServices((services) =>
+                            .ConfigureServices((ctx, services) =>
                             {
                                 services.AddQuartzHostedService(configureQuartz);
+
+                                ctx.Properties["UsesDashboard"] = true;
                             })
                            .UseJGUZDVLogging()
                            .UseWindowsService(configureWindowsService);
+
 
             return builder;
         }
               
         public static IHostBuilder AddHostedJob<TJob>(this IHostBuilder builder, string cronSchedule)
-            where TJob : IJob
+            where TJob : class, IJob
         {
             builder.ConfigureServices((ctx, services) =>
             {
@@ -35,7 +38,7 @@ namespace JGUZDV.JobHost
         }
         
         public static IHostBuilder AddHostedJob<TJob>(this IHostBuilder builder)
-            where TJob : IJob
+            where TJob : class, IJob
         {
             builder.ConfigureServices((ctx, services) => {
                 var schedule = ctx.Configuration[$"{DefaultConfigSection}:{typeof(TJob).Name}"] 
@@ -44,6 +47,7 @@ namespace JGUZDV.JobHost
                 {
                     return;
                 }
+
                 AddHostedJob<TJob>(services, schedule);
             });
 
@@ -51,7 +55,7 @@ namespace JGUZDV.JobHost
         }
 
         private static void AddHostedJob<TJob>(IServiceCollection services, string cronSchedule) 
-            where TJob : IJob
+            where TJob : class, IJob
         {
             services.AddQuartz(q =>
             {

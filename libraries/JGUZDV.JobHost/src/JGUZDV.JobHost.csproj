@@ -24,6 +24,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\JGUZDV.Extensions.Logging\src\JGUZDV.Extensions.Logging.csproj" />
+      <ProjectReference Include="..\..\JGUZDV.JobHost.Database\src\JGUZDV.JobHost.Database.csproj" />
     </ItemGroup>
 
 </Project>
