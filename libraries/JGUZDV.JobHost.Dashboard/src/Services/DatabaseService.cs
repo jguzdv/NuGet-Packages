@@ -42,6 +42,7 @@ namespace JGUZDV.JobHost.Dashboard.Services
                         LastExecutedAt = x.LastExecutedAt,
                         LastResult = x.LastResult,
                         LastResultMessage = x.LastResultMessage,
+                        NextExecutionAt = x.NextExecutionAt,
                         Schedule = x.Schedule,
                         ShouldExecute = x.ShouldExecute,
                     }).ToList()

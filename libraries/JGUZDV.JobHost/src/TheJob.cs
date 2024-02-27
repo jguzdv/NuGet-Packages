@@ -20,7 +20,7 @@ namespace JGUZDV.JobHost
             try
             {
                 await _job.Execute(context);
-                //write success
+                var name = typeof(T).Name;
             }
             catch
             {

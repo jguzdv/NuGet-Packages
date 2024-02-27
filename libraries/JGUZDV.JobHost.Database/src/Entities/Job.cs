@@ -10,6 +10,8 @@
         public string LastResult { get; set; }
         public string LastResultMessage { get; set; }
 
+        public DateTimeOffset? NextExecutionAt { get; set; }
+
         public bool ShouldExecute { get; set; }
 
         public Host? Host { get; set; }
