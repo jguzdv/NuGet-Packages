@@ -1,3 +1,5 @@
+using System.Data;
+
 using JGUZDV.JobHost.Database;
 
 using Microsoft.EntityFrameworkCore;
@@ -77,6 +79,8 @@ namespace JGUZDV.JobHost.Tests
 
             builder.AddHostedJob<TestJob>();
             builder.AddHostedJob<TestJob2>();
+            builder.AddHostedJob<FailJob>();
+
             var host = builder.Build();
             _ = host.RunAsync();
 
@@ -89,11 +93,12 @@ namespace JGUZDV.JobHost.Tests
                 var jobs = await dbContext.Jobs.ToListAsync();
                 var hosts = await dbContext.Hosts.ToListAsync();
 
-                Assert.Equal(2, jobs.Count);
+                Assert.Equal(3, jobs.Count);
                 Assert.Single(hosts);
 
-                Assert.Equal("success", jobs[0].LastResult);
-                Assert.Equal("success", jobs[1].LastResult);
+                Assert.Equal("success", jobs.Where(x => x.Name != nameof(FailJob)).ToList()[0].LastResult);
+                Assert.Equal("success", jobs.Where(x => x.Name != nameof(FailJob)).ToList()[1].LastResult);
+                Assert.Equal("error", jobs.Where(x => x.Name == nameof(FailJob)).ToList()[0].LastResult);
             }
 
             await host.StopAsync();

@@ -43,7 +43,7 @@ namespace JGUZDV.JobHost
             {
                 //TODO job.NextExecutionAt - check retry policy and set based on that?
 
-                job.LastResult = "success";
+                job.LastResult = "error";
                 job.LastExecutedAt = now;
             }
             finally
