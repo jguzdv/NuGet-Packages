@@ -79,7 +79,7 @@ namespace JGUZDV.JobHost
         private static void AddHostedJob<TJob>(HostBuilderContext ctx, IServiceCollection services, string cronSchedule)
             where TJob : class, IJob
         {
-            if (ctx.Properties["UsesDashboard"] as bool? == true)
+            if (ctx.Properties.ContainsKey("UsesDashboard") && ctx.Properties["UsesDashboard"] as bool? == true)
             {
                 services.AddQuartz(q =>
                 {
