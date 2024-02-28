@@ -45,6 +45,10 @@ namespace JGUZDV.JobHost
                 job.LastResult = "success";
                 job.LastExecutedAt = now;
             }
+            finally
+            {
+                await _dbContext.SaveChangesAsync();
+            }
         }
     }
 }

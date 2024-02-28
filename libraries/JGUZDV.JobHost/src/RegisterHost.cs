@@ -3,25 +3,28 @@
 using Microsoft.EntityFrameworkCore;
 
 using Quartz;
+using Quartz.Impl.Matchers;
 
 namespace JGUZDV.JobHost
 {
     internal class RegisterHost : IJob
     {
         private readonly IEnumerable<RegisterJob> _jobs;
-        private readonly IScheduler _scheduler;
+        private readonly ISchedulerFactory _schedulerFactory;
         private readonly JobHostContext _dbContext;
 
-        public RegisterHost(JobHostContext dbContext, IEnumerable<RegisterJob> jobs, IScheduler scheduler)
+        public RegisterHost(JobHostContext dbContext, IEnumerable<RegisterJob> jobs, ISchedulerFactory schedulerFactory)
         {
             _jobs = jobs;
             _dbContext = dbContext;
-            _scheduler = scheduler;
+            _schedulerFactory =  schedulerFactory;
         }
 
         public async Task Execute(IJobExecutionContext context)
         {
-            await _scheduler.PauseAll();
+            var scheduler = await _schedulerFactory.GetScheduler();
+
+            await scheduler.PauseJobs(GroupMatcher<JobKey>.GroupEquals(JobKey.DefaultGroup));
             try
             {
                 var hostName = (string)context.JobDetail.JobDataMap["JobHostName"];
@@ -40,12 +43,16 @@ namespace JGUZDV.JobHost
 
                 foreach (var item in _jobs)
                 {
-                    await item.Execute(host.Id);
+                    await item.Execute(host.Id, scheduler);
                 }
+            }
+            catch(Exception e)
+            {
+                //log
             }
             finally
             {
-                await _scheduler.ResumeAll();
+                await scheduler.ResumeJobs(GroupMatcher<JobKey>.GroupEquals(JobKey.DefaultGroup));
             }
         }
     }
