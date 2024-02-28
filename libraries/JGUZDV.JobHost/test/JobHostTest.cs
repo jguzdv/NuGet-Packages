@@ -82,19 +82,19 @@ namespace JGUZDV.JobHost.Tests
 
             await Task.Delay(TimeSpan.FromSeconds(3));
 
-            //using (var scope = host.Services.CreateScope())
-            //{
-            //    var dbContext = scope.ServiceProvider.GetRequiredService<JobHostContext>();
+            using (var scope = host.Services.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<JobHostContext>();
 
-            //    var jobs = await dbContext.Jobs.ToListAsync();
-            //    var hosts = await dbContext.Hosts.ToListAsync();
+                var jobs = await dbContext.Jobs.ToListAsync();
+                var hosts = await dbContext.Hosts.ToListAsync();
 
-            //    Assert.Equal(2, jobs.Count);
-            //    Assert.Single(hosts);
+                Assert.Equal(2, jobs.Count);
+                Assert.Single(hosts);
 
-            //    Assert.Equal("success", jobs[0].LastResult);
-            //    Assert.Equal("success", jobs[1].LastResult);
-            //}
+                Assert.Equal("success", jobs[0].LastResult);
+                Assert.Equal("success", jobs[1].LastResult);
+            }
 
             await host.StopAsync();
 
