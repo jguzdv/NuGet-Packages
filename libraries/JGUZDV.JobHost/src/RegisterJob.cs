@@ -1,4 +1,5 @@
 ﻿using JGUZDV.JobHost.Database;
+using JGUZDV.JobHost.Database.Entities;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -21,9 +22,9 @@ namespace JGUZDV.JobHost
             _jobType = jobType;
         }
 
-        public async Task Execute(int hostId, IScheduler scheduler)
+        public async Task Execute(Host host, IScheduler scheduler)
         {
-            var job = await _dbContext.Jobs.FirstOrDefaultAsync(x => x.HostId == hostId && x.Name == _jobName);
+            var job = await _dbContext.Jobs.FirstOrDefaultAsync(x => x.HostId == host.Id && x.Name == _jobName);
             if (job != null)
                 return;
 
@@ -38,14 +39,17 @@ namespace JGUZDV.JobHost
                 LastResultMessage = "",
                 Schedule = _cronSchedule,
                 Name = _jobName,
-                HostId = hostId,
+                HostId = host.Id,
             };
+
+            _dbContext.Jobs.Add(job);
 
             await _dbContext.SaveChangesAsync();
 
             var jobDetail = JobBuilder
-                .Create(_jobType)
+                .Create(typeof(TheJob<>).MakeGenericType(_jobType))
                 .WithIdentity(new JobKey(_jobType.Name))
+                .UsingJobData("JobHostName", host.Name)
                 .Build();
 
             var trigger = TriggerBuilder.Create()
@@ -53,7 +57,7 @@ namespace JGUZDV.JobHost
                 .WithCronSchedule(_cronSchedule)
                 .Build();
 
-            await scheduler.ScheduleJob(jobDetail,trigger);
+            await scheduler.ScheduleJob(jobDetail, trigger);
         }
     }
 }

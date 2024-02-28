@@ -17,7 +17,7 @@ namespace JGUZDV.JobHost
         {
             _jobs = jobs;
             _dbContext = dbContext;
-            _schedulerFactory =  schedulerFactory;
+            _schedulerFactory = schedulerFactory;
         }
 
         public async Task Execute(IJobExecutionContext context)
@@ -43,10 +43,10 @@ namespace JGUZDV.JobHost
 
                 foreach (var item in _jobs)
                 {
-                    await item.Execute(host.Id, scheduler);
+                    await item.Execute(host, scheduler);
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 //log
             }

@@ -24,6 +24,7 @@ namespace JGUZDV.JobHost
             var host = (string)context.JobDetail.JobDataMap["JobHostName"];
 
             var name = typeof(T).Name;
+            var jobs = await _dbContext.Jobs.ToListAsync();
             var job = await _dbContext.Jobs.FirstAsync(x => x.Name == name && x.Host!.Name == host);
 
             var now = DateTimeOffset.Now;

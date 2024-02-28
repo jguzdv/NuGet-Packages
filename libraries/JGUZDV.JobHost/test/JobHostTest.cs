@@ -1,3 +1,5 @@
+using JGUZDV.JobHost.Database;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -47,7 +49,7 @@ namespace JGUZDV.JobHost.Tests
             });
 
             builder.AddHostedJob<TestJob3>();
-            
+
             var host = builder.Build();
             _ = host.RunAsync();
 
@@ -64,8 +66,8 @@ namespace JGUZDV.JobHost.Tests
             var builder = JobHost.CreateJobHostBuilder(Array.Empty<string>(),
                     configureWindowsService => configureWindowsService.ServiceName = "Test",
                     quartzHostedServiceOptions => quartzHostedServiceOptions.WaitForJobsToComplete = true)
-                .UseDashboard("Test","www.test.de",
-                    (x,y) => x.UseInMemoryDatabase("testdb"));
+                .UseDashboard("Test", "www.test.de",
+                    (x, y) => x.UseInMemoryDatabase("testdb"));
             var testObject = new JobHostWrapper();
 
             builder.ConfigureServices((ctx, services) =>
@@ -78,7 +80,22 @@ namespace JGUZDV.JobHost.Tests
             var host = builder.Build();
             _ = host.RunAsync();
 
-            await Task.Delay(TimeSpan.FromSeconds(2));
+            await Task.Delay(TimeSpan.FromSeconds(3));
+
+            //using (var scope = host.Services.CreateScope())
+            //{
+            //    var dbContext = scope.ServiceProvider.GetRequiredService<JobHostContext>();
+
+            //    var jobs = await dbContext.Jobs.ToListAsync();
+            //    var hosts = await dbContext.Hosts.ToListAsync();
+
+            //    Assert.Equal(2, jobs.Count);
+            //    Assert.Single(hosts);
+
+            //    Assert.Equal("success", jobs[0].LastResult);
+            //    Assert.Equal("success", jobs[1].LastResult);
+            //}
+
             await host.StopAsync();
 
             Assert.True(testObject.TestValue);
