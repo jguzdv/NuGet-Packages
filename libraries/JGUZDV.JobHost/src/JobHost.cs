@@ -1,6 +1,4 @@
-﻿using System.Xml.Serialization;
-
-using JGUZDV.JobHost.Database;
+﻿using JGUZDV.JobHost.Database;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -31,14 +29,19 @@ namespace JGUZDV.JobHost
 
         public static IHostBuilder UseDashboard(this IHostBuilder builder,
             string jobHostName,
+            string monitoringUrl,
             Action<DbContextOptionsBuilder, IConfiguration> configureDbContext)
         {
             builder.ConfigureServices((ctx, services) =>
             {
                 services.AddDbContext<JobHostContext>(x => configureDbContext(x, ctx.Configuration));
                 ctx.Properties["UsesDashboard"] = true;
+                ctx.Properties["JobHostName"] = jobHostName;
 
-                services.AddHostedService(x => new RegisterHost(x.GetRequiredService<IEnumerable<RegisterJob>>(), jobHostName));
+                services.AddQuartz(x => x.ScheduleJob<RegisterHost>(x => x
+                    .StartNow()
+                    .WithPriority(int.MaxValue), 
+                    x => x.UsingJobData(new JobDataMap { { "JobHostName", jobHostName }, { "MonitoringUrl", monitoringUrl} })));
             });
 
             return builder;
@@ -81,9 +84,10 @@ namespace JGUZDV.JobHost
                 services.AddQuartz(q =>
                 {
                     var jobKey = new JobKey(typeof(TJob).Name);
-                    q.AddJob<TheJob<TJob>>(jobKey);
+                    q.AddJob<TheJob<TJob>>(x => x.UsingJobData("JobHostName", (string)ctx.Properties["JobHostName"]));
                     q.AddTrigger(opts => opts
                         .ForJob(jobKey)
+                        .StartAt(DateTimeOffset.Now.AddMilliseconds(50)) // TODO: check if necessary and/or better solution available
                         .WithCronSchedule(cronSchedule));
 
                     services.AddScoped(x => new RegisterJob(x.GetRequiredService<JobHostContext>(), jobKey.Name, cronSchedule));

@@ -21,6 +21,14 @@ namespace JGUZDV.JobHost.Database
                 .WithMany()
                 .HasForeignKey(x => x.HostId);
 
+            modelBuilder.Entity<Job>()
+                .HasIndex(x => new { x.HostId, x.Name })
+                .IsUnique();
+
+            modelBuilder.Entity<Host>()
+                .HasIndex(x => x.Name)
+                .IsUnique();
+
             var converter = new ValueConverter<DateTimeOffset, DateTimeOffset>(x => x.ToOffset(TimeSpan.Zero), x => x.ToLocalTime());
             foreach (var entity in modelBuilder.Model.GetEntityTypes())
             {

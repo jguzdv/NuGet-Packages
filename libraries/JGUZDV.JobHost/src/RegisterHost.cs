@@ -1,48 +1,52 @@
 ﻿using JGUZDV.JobHost.Database;
-using JGUZDV.JobHost.Database.Entities;
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
+
+using Quartz;
 
 namespace JGUZDV.JobHost
 {
-    internal class RegisterHost : IHostedService
+    internal class RegisterHost : IJob
     {
-        private IEnumerable<RegisterJob> _jobs;
-        private string _jobHostName;
+        private readonly IEnumerable<RegisterJob> _jobs;
+        private readonly IScheduler _scheduler;
         private readonly JobHostContext _dbContext;
 
-        public RegisterHost(JobHostContext dbContext, IEnumerable<RegisterJob> jobs, string jobHostName)
+        public RegisterHost(JobHostContext dbContext, IEnumerable<RegisterJob> jobs, IScheduler scheduler)
         {
             _jobs = jobs;
-            _jobHostName = jobHostName;
             _dbContext = dbContext;
+            _scheduler = scheduler;
         }
 
-        public async Task StartAsync(CancellationToken cancellationToken)
+        public async Task Execute(IJobExecutionContext context)
         {
-            var host = await _dbContext.Hosts.FirstOrDefaultAsync(x => x.Name == _jobHostName);
-            if (host == null)
+            await _scheduler.PauseAll();
+            try
             {
-                host = new Database.Entities.Host
+                var hostName = (string)context.JobDetail.JobDataMap["JobHostName"];
+                var host = await _dbContext.Hosts.FirstOrDefaultAsync(x => x.Name == hostName);
+                if (host == null)
                 {
-                    MonitoringUrl = _jobHostName,
-                    Name = _jobHostName
-                };
+                    host = new Database.Entities.Host
+                    {
+                        MonitoringUrl = (string)context.JobDetail.JobDataMap["MonitoringUrl"],
+                        Name = hostName
+                    };
 
-                _dbContext.Hosts.Add(host);
-                await _dbContext.SaveChangesAsync();
+                    _dbContext.Hosts.Add(host);
+                    await _dbContext.SaveChangesAsync();
+                }
+
+                foreach (var item in _jobs)
+                {
+                    await item.Execute(host.Id);
+                }
             }
-
-            foreach(var item in _jobs)
+            finally
             {
-                await item.Execute(host.Id);
+                await _scheduler.ResumeAll();
             }
-        }
-
-        public Task StopAsync(CancellationToken cancellationToken)
-        {
-            return Task.CompletedTask;
         }
     }
 }

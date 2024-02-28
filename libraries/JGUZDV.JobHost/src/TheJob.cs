@@ -1,4 +1,8 @@
-﻿using JGUZDV.JobHost.Database;
+﻿using System.Xml.Linq;
+
+using JGUZDV.JobHost.Database;
+
+using Microsoft.EntityFrameworkCore;
 
 using Quartz;
 
@@ -17,14 +21,29 @@ namespace JGUZDV.JobHost
 
         public async Task Execute(IJobExecutionContext context)
         {
+            var host = (string)context.JobDetail.JobDataMap["JobHostName"];
+
+            var name = typeof(T).Name;
+            var job = await _dbContext.Jobs.FirstAsync(x => x.Name == name && x.Host!.Name == host);
+
+            var now = DateTimeOffset.Now;
+            var nextExecution = new CronExpression(job.Schedule).GetNextValidTimeAfter(now);
+
             try
             {
                 await _job.Execute(context);
-                var name = typeof(T).Name;
+
+                job.NextExecutionAt = nextExecution;
+
+                job.LastResult = "success";
+                job.LastExecutedAt = now;
             }
             catch
             {
-                //write fail
+                //TODO job.NextExecutionAt - check retry policy and set based on that?
+
+                job.LastResult = "success";
+                job.LastExecutedAt = now;
             }
         }
     }
