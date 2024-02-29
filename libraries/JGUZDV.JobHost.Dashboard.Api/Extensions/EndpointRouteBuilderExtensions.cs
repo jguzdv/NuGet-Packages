@@ -10,7 +10,7 @@ namespace JGUZDV.JobHost.Dashboard.Extensions
 
             group.MapGet(Routes.GetJobs, async (IDashboardService service) =>
             {
-                var result = await service.GetJobs();
+                var result = await service.GetSteveJobs();
 
                 return Results.Ok(result);
             });

@@ -21,7 +21,7 @@ namespace JGUZDV.JobHost.Dashboard.Services
                 .ExecuteUpdateAsync(x => x.SetProperty(x => x.ShouldExecute, true));
         }
 
-        public virtual async Task<JobCollection> GetJobs()
+        public virtual async Task<JobCollection> GetSteveJobs()
         {
             var jobsByHost = await _dbContext.Jobs
                 .Include(x => x.Host)

@@ -19,7 +19,7 @@ namespace JGUZDV.JobHost.Dashboard.Services
             return _httpClient.PostAsync(Routes.ExecuteNow(jobId), null);
         }
 
-        public async Task<JobCollection> GetJobs()
+        public async Task<JobCollection> GetSteveJobs()
         {
             return await _httpClient.GetFromJsonAsync<JobCollection>(Routes.GetJobs)!;
         }

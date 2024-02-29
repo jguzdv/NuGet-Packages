@@ -55,7 +55,7 @@
     {
         await base.OnParametersSetAsync();
 
-        _jobs = await Service.GetJobs();
+        _jobs = await Service.GetSteveJobs();
     }
 
     private async Task ExecuteNow(Job job)
