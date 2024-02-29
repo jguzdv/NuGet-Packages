@@ -44,7 +44,11 @@ namespace JGUZDV.JobHost
                         .WithPriority(int.MaxValue),
                     x => x
                         .WithIdentity(nameof(RegisterHost),nameof(RegisterHost))
-                        .UsingJobData(new JobDataMap { { "JobHostName", jobHostName }, { "MonitoringUrl", monitoringUrl } })));
+                        .UsingJobData(new JobDataMap { 
+                            { "JobHostName", jobHostName }, 
+                            { "MonitoringUrl", monitoringUrl },
+                            { "ExecuteNowSchedule", "0/15 * * * * ?" }
+                        })));
             });
 
             return builder;

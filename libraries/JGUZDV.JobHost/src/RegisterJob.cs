@@ -14,6 +14,8 @@ namespace JGUZDV.JobHost
         private readonly JobHostContext _dbContext;
         private readonly Type _jobType;
 
+        public string JobName => _jobName;
+
         public RegisterJob(JobHostContext dbContext, Type jobType, string cronSchedule)
         {
             _jobName = jobType.Name;
@@ -25,29 +27,29 @@ namespace JGUZDV.JobHost
         public async Task Execute(Host host, IScheduler scheduler)
         {
             var job = await _dbContext.Jobs.FirstOrDefaultAsync(x => x.HostId == host.Id && x.Name == _jobName);
-            if (job != null)
-                return;
+            
+            if (job == null)
+            {
+                job = new Database.Entities.Job
+                {
+                    LastExecutedAt = DateTimeOffset.MinValue,
+                    LastResult = "",
+                    LastResultMessage = "",
+                    Schedule = _cronSchedule,
+                    Name = _jobName,
+                    HostId = host.Id,
+                };
+
+                _dbContext.Jobs.Add(job);
+            }
 
             var cron = new CronExpression(_cronSchedule);
-            var nextExecutionAt = cron.GetNextValidTimeAfter(DateTimeOffset.Now);
-
-            job = new Database.Entities.Job
-            {
-                LastExecutedAt = DateTimeOffset.MinValue,
-                LastResult = "",
-                NextExecutionAt = nextExecutionAt,
-                LastResultMessage = "",
-                Schedule = _cronSchedule,
-                Name = _jobName,
-                HostId = host.Id,
-            };
-
-            _dbContext.Jobs.Add(job);
+            job.NextExecutionAt = cron.GetNextValidTimeAfter(DateTimeOffset.Now);
 
             await _dbContext.SaveChangesAsync();
 
             var jobDetail = JobBuilder
-                .Create(typeof(TheJob<>).MakeGenericType(_jobType))
+                .Create(typeof(MetaJob<>).MakeGenericType(_jobType))
                 .WithIdentity(new JobKey(_jobType.Name))
                 .UsingJobData("JobHostName", host.Name)
                 .Build();

@@ -23,14 +23,15 @@ namespace JGUZDV.JobHost
         public async Task Execute(IJobExecutionContext context)
         {
             var scheduler = await _schedulerFactory.GetScheduler();
-
             await scheduler.PauseJobs(GroupMatcher<JobKey>.GroupEquals(JobKey.DefaultGroup));
             try
             {
                 var hostName = (string)context.JobDetail.JobDataMap["JobHostName"];
                 var host = await _dbContext.Hosts.FirstOrDefaultAsync(x => x.Name == hostName);
+                
                 if (host == null)
                 {
+                    // register the host
                     host = new Database.Entities.Host
                     {
                         MonitoringUrl = (string)context.JobDetail.JobDataMap["MonitoringUrl"],
@@ -40,11 +41,44 @@ namespace JGUZDV.JobHost
                     _dbContext.Hosts.Add(host);
                     await _dbContext.SaveChangesAsync();
                 }
+                else
+                {
+                    // clean up old jobs
+                    var jobs = await _dbContext
+                        .Jobs
+                        .AsNoTracking()
+                        .Where(x => x.HostId == host.Id)
+                        .ToListAsync();
 
+                    var oldJobs = jobs
+                        .Where(x => !_jobs.Any(y => y.JobName == x.Name))
+                        .Select(x => x.Id)
+                        .ToList();
+
+                    await _dbContext.Jobs
+                        .Where(x => oldJobs.Contains(x.Id))
+                        .ExecuteDeleteAsync();
+                }
+
+                // register jobs
                 foreach (var item in _jobs)
                 {
                     await item.Execute(host, scheduler);
                 }
+
+                // register execute now polling job
+                var jobDetail = JobBuilder
+                .Create<ExecuteNowJob>()
+                .WithIdentity(new JobKey(nameof(ExecuteNowJob)))
+                .UsingJobData("JobHostName", host.Name)
+                .Build();
+
+                var schedule = (string)context.JobDetail.JobDataMap["ExecuteNowSchedule"];
+                var trigger = TriggerBuilder.Create()
+                    .ForJob(jobDetail)
+                    .WithCronSchedule(schedule)
+                    .Build();
+
             }
             catch (Exception e)
             {

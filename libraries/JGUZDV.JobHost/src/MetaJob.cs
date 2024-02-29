@@ -1,19 +1,15 @@
-﻿using System.Xml.Linq;
-
-using JGUZDV.JobHost.Database;
-
+﻿using JGUZDV.JobHost.Database;
 using Microsoft.EntityFrameworkCore;
-
 using Quartz;
 
 namespace JGUZDV.JobHost
 {
-    internal class TheJob<T> : IJob where T : IJob
+    internal class MetaJob<T> : IJob where T : IJob
     {
         private readonly JobHostContext _dbContext;
         private readonly T _job;
 
-        public TheJob(JobHostContext dbContext, T job)
+        public MetaJob(JobHostContext dbContext, T job)
         {
             _dbContext = dbContext;
             _job = job;
@@ -27,27 +23,22 @@ namespace JGUZDV.JobHost
             var jobs = await _dbContext.Jobs.ToListAsync();
             var job = await _dbContext.Jobs.FirstAsync(x => x.Name == name && x.Host!.Name == host);
 
-            var now = DateTimeOffset.Now;
-            var nextExecution = new CronExpression(job.Schedule).GetNextValidTimeAfter(now);
-
             try
             {
                 await _job.Execute(context);
-
-                job.NextExecutionAt = nextExecution;
-
                 job.LastResult = "success";
-                job.LastExecutedAt = now;
             }
             catch
             {
-                //TODO job.NextExecutionAt - check retry policy and set based on that?
-
                 job.LastResult = "error";
-                job.LastExecutedAt = now;
             }
             finally
             {
+                // Only valid as long as there is no rescheduling
+                var now = DateTimeOffset.Now;
+                job.NextExecutionAt = new CronExpression(job.Schedule).GetNextValidTimeAfter(now);
+                job.LastExecutedAt = now;
+
                 await _dbContext.SaveChangesAsync();
             }
         }
