@@ -79,6 +79,7 @@ namespace JGUZDV.JobHost
                     .WithCronSchedule(schedule)
                     .Build();
 
+                await scheduler.ScheduleJob(jobDetail, trigger);
             }
             catch (Exception e)
             {

@@ -31,7 +31,7 @@ namespace JGUZDV.JobHost.Tests
             var host = builder.Build();
             _ = host.RunAsync();
 
-            await Task.Delay(TimeSpan.FromSeconds(2));
+            await Task.Delay(TimeSpan.FromSeconds(3));
             await host.StopAsync();
 
             Assert.True(testObject.TestValue);
@@ -66,10 +66,10 @@ namespace JGUZDV.JobHost.Tests
         public async Task DashboardTest()
         {
             var builder = JobHost.CreateJobHostBuilder(Array.Empty<string>(),
-                    configureWindowsService => configureWindowsService.ServiceName = "Test",
+                    configureWindowsService => configureWindowsService.ServiceName = "DashboardTest",
                     quartzHostedServiceOptions => quartzHostedServiceOptions.WaitForJobsToComplete = true)
                 .UseDashboard("Test", "www.test.de",
-                    (x, y) => x.UseInMemoryDatabase("testdb"));
+                    (x, y) => x.UseInMemoryDatabase("DashboardTest"));
             var testObject = new JobHostWrapper();
 
             builder.ConfigureServices((ctx, services) =>
@@ -84,7 +84,7 @@ namespace JGUZDV.JobHost.Tests
             var host = builder.Build();
             _ = host.RunAsync();
 
-            await Task.Delay(TimeSpan.FromSeconds(3));
+            await Task.Delay(TimeSpan.FromSeconds(2));
 
             using (var scope = host.Services.CreateScope())
             {
@@ -105,6 +105,53 @@ namespace JGUZDV.JobHost.Tests
 
             Assert.True(testObject.TestValue);
             Assert.True(testObject.TestValue2);
+        }
+
+        [Fact]
+        public async Task ExecuteNowTest()
+        {
+            var builder = JobHost.CreateJobHostBuilder(Array.Empty<string>(),
+                    configureWindowsService => configureWindowsService.ServiceName = "ExecuteNowTest",
+                    quartzHostedServiceOptions => quartzHostedServiceOptions.WaitForJobsToComplete = true)
+                .UseDashboard("Test", "www.test.de",
+                    (x, y) => x.UseInMemoryDatabase("ExecuteNowTest"),
+                    "* * * * * ?");
+            var testObject = new JobHostWrapper();
+
+            builder.ConfigureServices((ctx, services) =>
+            {
+                services.AddSingleton(testObject);
+            });
+
+            var now = DateTimeOffset.Now;
+            builder.AddHostedJob<TestJob3>($"{(now.Second + 30) % 60} * * * * ?");
+
+            var host = builder.Build();
+            _ = host.RunAsync();
+
+            await Task.Delay(TimeSpan.FromMilliseconds(1000));
+            using (var scope = host.Services.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<JobHostContext>();
+
+                var job = await dbContext.Jobs.FirstOrDefaultAsync();
+                job.ShouldExecute = true;
+                await dbContext.SaveChangesAsync();
+            }
+            
+            await Task.Delay(TimeSpan.FromMilliseconds(1050));
+
+            using (var scope = host.Services.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<JobHostContext>();
+
+                var job = await dbContext.Jobs.FirstOrDefaultAsync();
+
+                Assert.False(job.ShouldExecute);
+                Assert.True(testObject.TestValue3);
+            }
+
+            await host.StopAsync();
         }
     }
 }

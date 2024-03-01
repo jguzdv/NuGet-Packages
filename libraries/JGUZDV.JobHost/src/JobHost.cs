@@ -30,7 +30,8 @@ namespace JGUZDV.JobHost
         public static IHostBuilder UseDashboard(this IHostBuilder builder,
             string jobHostName,
             string monitoringUrl,
-            Action<DbContextOptionsBuilder, IConfiguration> configureDbContext)
+            Action<DbContextOptionsBuilder, IConfiguration> configureDbContext,
+            string executeNowSchedule= "0/15 * * * * ?")
         {
             builder.ConfigureServices((ctx, services) =>
             {
@@ -47,7 +48,7 @@ namespace JGUZDV.JobHost
                         .UsingJobData(new JobDataMap { 
                             { "JobHostName", jobHostName }, 
                             { "MonitoringUrl", monitoringUrl },
-                            { "ExecuteNowSchedule", "0/15 * * * * ?" }
+                            { "ExecuteNowSchedule", executeNowSchedule }
                         })));
             });
 
