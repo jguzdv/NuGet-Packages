@@ -1,9 +1,10 @@
+using JGUZDV.JobHost.Dashboard.Extensions;
 using JGUZDV.JobHost.Dashboard.Services;
 
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
-
+builder.Services.AddDashboard();
 builder.Services.AddTransient<IDashboardService, ApiClient>(x =>
 {
     var baseUrl = new Uri(new Uri(builder.HostEnvironment.BaseAddress), "api/");
