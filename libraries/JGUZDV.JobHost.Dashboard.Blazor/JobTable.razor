@@ -2,7 +2,8 @@
 @using JGUZDV.JobHost.Dashboard.Model
 @using JGUZDV.JobHost.Dashboard.Services
 
-<JGUZDV.Blazor.Components.AwaitResult Task="State.Value.Jobs" Context="_jobs">
+<JGUZDV.Blazor.StateManagement.Components.StateView T="DashboardState" Context="State">
+<JGUZDV.Blazor.Components.AwaitResult Task="State.Jobs" Context="_jobs">
     <table class="table">
         <thead>
             <tr>
@@ -34,18 +35,16 @@
                         @item.Schedule
                     </td>
                     <td>
-                        <button class="btn btn-sm btn-outline-secondary" @onclick="() => ExecuteNow(item)">trigger now</button>
+                        <button class="btn btn-sm btn-outline-secondary" @onclick="() => ExecuteNow(State,item)">trigger now</button>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 </JGUZDV.Blazor.Components.AwaitResult>
-
+</JGUZDV.Blazor.StateManagement.Components.StateView>
 @code {
-    [Inject]
-    public required IState<DashboardState> State { get; set; }
-
+   
     [Parameter]
     public Func<List<Job>, List<Job>> JobSort { get; set; } = x => x.OrderBy(x => x.Name).ToList();
 
@@ -55,8 +54,8 @@
 
     }
 
-    private async Task ExecuteNow(Job job)
+    private async Task ExecuteNow(DashboardState state, Job job)
     {
-        await State.Value.ExecuteNow(job.Id);
+        await state.ExecuteNow(job.Id);
     }
 }
