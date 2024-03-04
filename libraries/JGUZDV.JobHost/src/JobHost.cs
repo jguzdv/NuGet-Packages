@@ -90,13 +90,7 @@ namespace JGUZDV.JobHost
             if (ctx.Properties.ContainsKey("UsesDashboard") && ctx.Properties["UsesDashboard"] as bool? == true)
             {
                 services.AddScoped<TJob>();
-                services.AddQuartz(q =>
-                {
-                    var jobKey = new JobKey(typeof(TJob).Name);
-                    var hostName = (string)ctx.Properties["JobHostName"];
-
-                    services.AddScoped(x => new RegisterJob(x.GetRequiredService<JobHostContext>(), typeof(TJob), cronSchedule));
-                });
+                services.AddScoped(x => new RegisterJob(x.GetRequiredService<JobHostContext>(), typeof(TJob), cronSchedule));
             }
             else
             {

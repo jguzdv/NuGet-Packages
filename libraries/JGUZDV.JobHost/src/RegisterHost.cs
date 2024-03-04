@@ -1,6 +1,7 @@
 ﻿using JGUZDV.JobHost.Database;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 using Quartz;
 using Quartz.Impl.Matchers;
@@ -11,13 +12,18 @@ namespace JGUZDV.JobHost
     {
         private readonly IEnumerable<RegisterJob> _jobs;
         private readonly ISchedulerFactory _schedulerFactory;
+        private readonly ILogger<RegisterHost> _logger;
         private readonly JobHostContext _dbContext;
 
-        public RegisterHost(JobHostContext dbContext, IEnumerable<RegisterJob> jobs, ISchedulerFactory schedulerFactory)
+        public RegisterHost(JobHostContext dbContext, 
+            IEnumerable<RegisterJob> jobs, 
+            ISchedulerFactory schedulerFactory,
+            ILogger<RegisterHost> logger)
         {
             _jobs = jobs;
             _dbContext = dbContext;
             _schedulerFactory = schedulerFactory;
+            _logger = logger;
         }
 
         public async Task Execute(IJobExecutionContext context)
@@ -83,7 +89,7 @@ namespace JGUZDV.JobHost
             }
             catch (Exception e)
             {
-                //log
+                _logger.LogError(e, $"Error during host initialization and register work");
             }
             finally
             {
