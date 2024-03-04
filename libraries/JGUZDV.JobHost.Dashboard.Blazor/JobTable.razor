@@ -1,8 +1,8 @@
-﻿@using JGUZDV.JobHost.Dashboard.Model
+﻿@using JGUZDV.Blazor.StateManagement
+@using JGUZDV.JobHost.Dashboard.Model
 @using JGUZDV.JobHost.Dashboard.Services
 
-@if (_jobs != null)
-{
+<JGUZDV.Blazor.Components.AwaitResult Task="State.Value.Jobs" Context="_jobs">
     <table class="table">
         <thead>
             <tr>
@@ -40,26 +40,23 @@
             }
         </tbody>
     </table>
-}
+</JGUZDV.Blazor.Components.AwaitResult>
 
 @code {
     [Inject]
-    public required IDashboardService Service { get; set; }
+    public required IState<DashboardState> State { get; set; }
 
     [Parameter]
     public Func<List<Job>, List<Job>> JobSort { get; set; } = x => x.OrderBy(x => x.Name).ToList();
-
-    private JobCollection? _jobs;
 
     protected override async Task OnParametersSetAsync()
     {
         await base.OnParametersSetAsync();
 
-        _jobs = await Service.GetSteveJobs();
     }
 
     private async Task ExecuteNow(Job job)
     {
-        await Service.ExecuteNow(job.Id);
+        await State.Value.ExecuteNow(job.Id);
     }
 }
