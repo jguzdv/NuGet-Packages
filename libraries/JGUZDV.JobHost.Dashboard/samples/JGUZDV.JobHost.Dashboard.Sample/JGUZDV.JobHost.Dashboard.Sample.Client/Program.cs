@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.Services.AddDashboard();
+builder.Services.AddLocalization();
 builder.Services.AddTransient<IDashboardService, ApiClient>(x =>
 {
     var baseUrl = new Uri(new Uri(builder.HostEnvironment.BaseAddress), "api/");

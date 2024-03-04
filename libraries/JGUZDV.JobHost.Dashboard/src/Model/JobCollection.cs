@@ -2,7 +2,7 @@
 
 namespace JGUZDV.JobHost.Dashboard.Model
 {
-    public class JobCollection : INotifyPropertyChanged
+    public class JobCollection 
     {
         private IReadOnlyDictionary<int, Host>? _hosts;
         private IReadOnlyDictionary<int, List<Job>>? _jobsByHost;
@@ -10,23 +10,19 @@ namespace JGUZDV.JobHost.Dashboard.Model
         public required IReadOnlyDictionary<int, Host> Hosts 
         { 
             get => _hosts!; 
-            set 
+            init 
             { 
                 _hosts = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Hosts)));
             } 
         }
 
         public required IReadOnlyDictionary<int, List<Job>> JobsByHost 
         { 
             get => _jobsByHost!;
-            set 
+            init  
             { 
                 _jobsByHost = value; 
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(JobsByHost)));
             }
         }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
     }
 }

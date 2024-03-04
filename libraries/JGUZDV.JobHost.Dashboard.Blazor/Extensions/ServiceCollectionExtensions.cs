@@ -16,7 +16,6 @@ namespace JGUZDV.JobHost.Dashboard.Extensions
     {
         public static IServiceCollection AddDashboard(this IServiceCollection services)
         {
-            services.AddHostedService<DashboardStateInitializer>();
             services.AddClientStoreWithNullStorage();
             services.AddSingleton<DashboardState>();
             services.AddSingleton<IState<DashboardState>, State<DashboardState>>();

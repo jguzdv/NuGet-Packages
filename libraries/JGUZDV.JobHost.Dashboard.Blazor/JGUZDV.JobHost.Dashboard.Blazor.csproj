@@ -1,30 +1,32 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <None Include="JobView.razor" />
-  </ItemGroup>
+    <ItemGroup>
+        <None Include="JobView.razor" />
+    </ItemGroup>
 
 
-  <ItemGroup>
-    <SupportedPlatform Include="browser" />
-  </ItemGroup>
+    <ItemGroup>
+        <SupportedPlatform Include="browser" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.2" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.2" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Localization" Version="8.0.0" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\JGUZDV.Blazor.StateManagement\src\JGUZDV.Blazor.StateManagement.csproj" />
-    <ProjectReference Include="..\JGUZDV.ClientStorage\src\JGUZDV.ClientStorage.csproj" />
-    <ProjectReference Include="..\JGUZDV.JobHost.Dashboard\src\JGUZDV.JobHost.Dashboard.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\JGUZDV.Blazor.Components\src\JGUZDV.Blazor.Components.csproj" />
+        <ProjectReference Include="..\JGUZDV.Blazor.StateManagement\src\JGUZDV.Blazor.StateManagement.csproj" />
+        <ProjectReference Include="..\JGUZDV.ClientStorage\src\JGUZDV.ClientStorage.csproj" />
+        <ProjectReference Include="..\JGUZDV.JobHost.Dashboard\src\JGUZDV.JobHost.Dashboard.csproj" />
+    </ItemGroup>
 
 </Project>

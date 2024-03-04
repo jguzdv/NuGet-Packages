@@ -2,16 +2,14 @@
 @using JGUZDV.JobHost.Dashboard.Model
 @using JGUZDV.JobHost.Dashboard.Services
 @inherits StateListener
-
-@if (_jobs != null)
-{
-    @foreach (var host in HostSort(_jobs.Hosts.Values.ToList()))
+<JGUZDV.Blazor.Components.AwaitResult Task="_jobs" Context="jobs">
+    @foreach (var host in HostSort(jobs.Hosts.Values.ToList()))
     {
         <h1>
             @host.Name
         </h1>
         <div class="row row-cols-1 row-cols-lg-2 row-cols-xxl-3 g-2 mb-4">
-            @foreach (var job in JobSort(_jobs.JobsByHost[host.Id]))
+            @foreach (var job in JobSort(jobs.JobsByHost[host.Id]))
             {
                 <div class="col">
                     <JobCard Job="job" OnExecuteNow="ExecuteNow"></JobCard>
@@ -19,7 +17,7 @@
             }
         </div>
     }
-}
+</JGUZDV.Blazor.Components.AwaitResult>
 
 @code {
     [Inject]
@@ -31,7 +29,7 @@
     [Parameter]
     public Func<List<Job>, List<Job>> JobSort { get; set; } = x => x.OrderBy(x => x.Name).ToList();
 
-    private JobCollection? _jobs => State.Value.Jobs;
+    private Task<JobCollection> _jobs => State.Value.Jobs;
 
     protected override async Task OnParametersSetAsync()
     {
