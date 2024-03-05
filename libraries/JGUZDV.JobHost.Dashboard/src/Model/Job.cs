@@ -8,7 +8,6 @@
 
         public required DateTimeOffset LastExecutedAt { get; set; }
         public required string LastResult { get; set; }
-        public required string LastResultMessage { get; set; }
 
         public required DateTimeOffset? NextExecutionAt { get; set; }
 
