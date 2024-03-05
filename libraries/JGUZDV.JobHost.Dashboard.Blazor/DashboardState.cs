@@ -6,6 +6,10 @@ using JGUZDV.JobHost.Dashboard.Services;
 
 namespace JGUZDV.JobHost.Dashboard.Blazor
 {
+    /// <summary>
+    /// The state of the dashboard. 
+    /// This class is used by the dashboard views and handles initialization and reloading of data.
+    /// </summary>
     public partial class DashboardState : ObservableObject
     {
         private readonly ClientStore _clientStore;
@@ -14,21 +18,31 @@ namespace JGUZDV.JobHost.Dashboard.Blazor
         [ObservableProperty]
         private Task<JobCollection> _jobs;
 
+        /// <summary>
+        /// Ctor.
+        /// </summary>
+        /// <param name="dashboardService"></param>
+        /// <param name="clientStore"></param>
         public DashboardState(IDashboardService dashboardService, ClientStore clientStore)
         {
             _dashboardService = dashboardService;
             _clientStore = clientStore;
-            Initialize();
+            _jobs = Initialize();
         }
 
+        /// <summary>
+        /// Marks the speciefied job to be executed
+        /// </summary>
+        /// <param name="jobId"></param>
+        /// <returns></returns>
         public Task ExecuteNow(int jobId)
         {
             return _dashboardService.ExecuteNow(jobId);
         }
 
-        private void Initialize()
+        private Task<JobCollection> Initialize()
         {
-            Jobs = _clientStore.GetOrLoad(
+            var jobs = _clientStore.GetOrLoad(
                  "SteveJobs",
                  new StoreOptions<JobCollection>
                  {
@@ -40,6 +54,7 @@ namespace JGUZDV.JobHost.Dashboard.Blazor
             _clientStore.ValueChanged +=
                  (e) =>
                 Jobs = _clientStore.Get<JobCollection>(e.Key);
+            return jobs;
         }
     }
 }

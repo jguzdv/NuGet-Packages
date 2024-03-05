@@ -5,10 +5,13 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace JGUZDV.JobHost.Database
 {
+    /// <inheritdoc/>
     public class JobHostContext : DbContext
     {
+        /// <inheritdoc/>
         public JobHostContext(DbContextOptions options) : base(options) { }
 
+        /// <inheritdoc/>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -43,8 +46,13 @@ namespace JGUZDV.JobHost.Database
                 }
             }
         }
-
+        /// <summary>
+        /// DbSet for the Jobs
+        /// </summary>
         public virtual DbSet<Job> Jobs { get; set; }
+        /// <summary>
+        /// DbSet for the hosts
+        /// </summary>
         public virtual DbSet<Entities.Host> Hosts { get; set; }
     }
 }

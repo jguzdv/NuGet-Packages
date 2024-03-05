@@ -17,7 +17,7 @@ namespace JGUZDV.JobHost
 
         public async Task Execute(IJobExecutionContext context)
         {
-            var host = (string)context.JobDetail.JobDataMap["JobHostName"];
+            var host = (string)context.JobDetail.JobDataMap[Constants.JobHostName];
 
             var name = typeof(T).Name;
             var jobs = await _dbContext.Jobs.ToListAsync();

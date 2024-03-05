@@ -32,7 +32,7 @@ namespace JGUZDV.JobHost
             await scheduler.PauseJobs(GroupMatcher<JobKey>.GroupEquals(JobKey.DefaultGroup));
             try
             {
-                var hostName = (string)context.JobDetail.JobDataMap["JobHostName"];
+                var hostName = (string)context.JobDetail.JobDataMap[Constants.JobHostName];
                 var host = await _dbContext.Hosts.FirstOrDefaultAsync(x => x.Name == hostName);
                 
                 if (host == null)
@@ -40,7 +40,7 @@ namespace JGUZDV.JobHost
                     // register the host
                     host = new Database.Entities.Host
                     {
-                        MonitoringUrl = (string)context.JobDetail.JobDataMap["MonitoringUrl"],
+                        MonitoringUrl = (string)context.JobDetail.JobDataMap[Constants.MonitoringUrl],
                         Name = hostName
                     };
 
@@ -76,10 +76,10 @@ namespace JGUZDV.JobHost
                 var jobDetail = JobBuilder
                 .Create<ExecuteNowJob>()
                 .WithIdentity(new JobKey(nameof(ExecuteNowJob)))
-                .UsingJobData("JobHostName", host.Name)
+                .UsingJobData(Constants.JobHostName, host.Name)
                 .Build();
 
-                var schedule = (string)context.JobDetail.JobDataMap["ExecuteNowSchedule"];
+                var schedule = (string)context.JobDetail.JobDataMap[Constants.ExecuteNowSchedule];
                 var trigger = TriggerBuilder.Create()
                     .ForJob(jobDetail)
                     .WithCronSchedule(schedule)

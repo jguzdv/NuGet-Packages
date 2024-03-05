@@ -14,11 +14,13 @@ namespace JGUZDV.JobHost.Dashboard.Services
             _httpClient = client;
         }
 
+        /// <inheritdoc/>
         public Task ExecuteNow(int jobId)
         {
             return _httpClient.PostAsync(Routes.ExecuteNow(jobId), null);
         }
 
+        /// <inheritdoc/>
         public async Task<JobCollection> GetSteveJobs()
         {
             return await _httpClient.GetFromJsonAsync<JobCollection>(Routes.GetJobs)!;

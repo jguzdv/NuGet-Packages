@@ -34,7 +34,6 @@ namespace JGUZDV.JobHost
                 {
                     LastExecutedAt = DateTimeOffset.MinValue,
                     LastResult = "",
-                    LastResultMessage = "",
                     Schedule = _cronSchedule,
                     Name = _jobName,
                     HostId = host.Id,
@@ -51,7 +50,7 @@ namespace JGUZDV.JobHost
             var jobDetail = JobBuilder
                 .Create(typeof(MetaJob<>).MakeGenericType(_jobType))
                 .WithIdentity(new JobKey(_jobType.Name))
-                .UsingJobData("JobHostName", host.Name)
+                .UsingJobData(Constants.JobHostName, host.Name)
                 .Build();
 
             var trigger = TriggerBuilder.Create()

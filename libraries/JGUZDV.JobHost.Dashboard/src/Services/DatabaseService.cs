@@ -5,25 +5,30 @@ using Microsoft.EntityFrameworkCore;
 
 namespace JGUZDV.JobHost.Dashboard.Services
 {
+
     public class DatabaseService : IDashboardService
     {
-        private readonly JobHostContext _dbContext;
+        private readonly IDbContextFactory<JobHostContext> _dbContextFactory;
 
-        public DatabaseService(JobHostContext dbContext)
+        public DatabaseService(IDbContextFactory<JobHostContext> dbContextFactory)
         {
-            _dbContext = dbContext;
+            _dbContextFactory = dbContextFactory;
         }
 
-        public virtual Task ExecuteNow(int jobId)
+        /// <inheritdoc/>
+        public virtual async Task ExecuteNow(int jobId)
         {
-            return _dbContext.Jobs
+            var context = await _dbContextFactory.CreateDbContextAsync();
+            await context.Jobs
                 .Where(x => x.Id == jobId)
                 .ExecuteUpdateAsync(x => x.SetProperty(x => x.ShouldExecute, true));
         }
 
+        /// <inheritdoc/>
         public virtual async Task<JobCollection> GetSteveJobs()
         {
-            var jobsByHost = await _dbContext.Jobs
+            var context = await _dbContextFactory.CreateDbContextAsync();
+            var jobsByHost = await context.Jobs
                 .Include(x => x.Host)
                 .GroupBy(x => x.Host!)
                 .Select(x => new
@@ -41,7 +46,6 @@ namespace JGUZDV.JobHost.Dashboard.Services
                         Id = x.Id,
                         LastExecutedAt = x.LastExecutedAt,
                         LastResult = x.LastResult,
-                        LastResultMessage = x.LastResultMessage,
                         NextExecutionAt = x.NextExecutionAt,
                         Schedule = x.Schedule,
                         ShouldExecute = x.ShouldExecute,

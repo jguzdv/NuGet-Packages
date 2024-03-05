@@ -9,15 +9,17 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddLocalization();
+
 builder.Services.AddRazorComponents()
     .AddInteractiveWebAssemblyComponents();
 
-builder.Services.AddDbContext<JobHostContext>(
+builder.Services.AddDbContextFactory<JobHostContext>(
         x => x.UseInMemoryDatabase("MemoryDatabase")
     );
 
-builder.Services.AddScoped<IDashboardService, DatabaseService>();
-
+builder.Services.AddSingleton<IDashboardService, DatabaseService>();
+builder.Services.AddDashboard();
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())

@@ -12,8 +12,16 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace JGUZDV.JobHost.Dashboard.Extensions 
 { 
+    /// <summary>
+    /// Extension class for the service collection
+    /// </summary>
     public static class ServiceCollectionExtensions
     {
+        /// <summary>
+        /// Adds required services for the dashboard
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns></returns>
         public static IServiceCollection AddDashboard(this IServiceCollection services)
         {
             services.AddClientStoreWithNullStorage();
