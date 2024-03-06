@@ -84,7 +84,7 @@
         {
             _ = Task?.ContinueWith(t =>
             {
-                InvokeAsync(StateHasChanged);
+                StateHasChanged();
             });
         }
     }
