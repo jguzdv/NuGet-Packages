@@ -30,11 +30,10 @@ namespace JGUZDV.JobHost
         {
             var scheduler = await _schedulerFactory.GetScheduler();
             await scheduler.PauseJobs(GroupMatcher<JobKey>.GroupEquals(JobKey.DefaultGroup));
-            using var transaction = _dbContext.Database.BeginTransaction();
+            var hostName = (string)context.JobDetail.JobDataMap[Constants.JobHostName];
+            
             try
             {
-                
-                var hostName = (string)context.JobDetail.JobDataMap[Constants.JobHostName];
                 var host = await _dbContext.Hosts.FirstOrDefaultAsync(x => x.Name == hostName);
                 
                 if (host == null)
@@ -88,12 +87,18 @@ namespace JGUZDV.JobHost
                     .Build();
 
                 await scheduler.ScheduleJob(jobDetail, trigger);
-                transaction.Commit();   
             }
             catch (Exception e)
             {
                 _logger.LogError(e, $"Error during host initialization and register work");
-                transaction.Rollback();
+                var host = await _dbContext.Hosts.FirstOrDefaultAsync(x => x.Name == hostName);
+                if(host != null)
+                {
+                    var jobs = await _dbContext.Jobs.Where(x => x.HostId == host.Id).ToListAsync();
+                    _dbContext.Jobs.RemoveRange(jobs);
+                    _dbContext.Hosts.Remove(host);
+                    await _dbContext.SaveChangesAsync();
+                }
             }
             finally
             {

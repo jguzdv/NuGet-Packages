@@ -164,7 +164,7 @@ namespace JGUZDV.JobHost
             if (ctx.Properties.ContainsKey(Constants.UsesDashboard) && ctx.Properties[Constants.UsesDashboard] as bool? == true)
             {
                 services.AddScoped<TJob>();
-                services.AddScoped(x => new RegisterJob(x.GetRequiredService<JobHostContext>(), typeof(TJob), cronSchedule));
+                services.AddScoped(x => new RegisterJob(typeof(TJob), cronSchedule));
             }
             else
             {
