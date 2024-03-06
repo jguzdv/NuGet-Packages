@@ -11,22 +11,20 @@ namespace JGUZDV.JobHost
     {
         private readonly string _jobName;
         private readonly string _cronSchedule;
-        private readonly JobHostContext _dbContext;
         private readonly Type _jobType;
 
         public string JobName => _jobName;
 
-        public RegisterJob(JobHostContext dbContext, Type jobType, string cronSchedule)
+        public RegisterJob(Type jobType, string cronSchedule)
         {
             _jobName = jobType.Name;
             _cronSchedule = cronSchedule;
-            _dbContext = dbContext;
             _jobType = jobType;
         }
 
-        public async Task Execute(Host host, IScheduler scheduler)
+        public async Task Execute(Host host, IScheduler scheduler, JobHostContext dbContext)
         {
-            var job = await _dbContext.Jobs.FirstOrDefaultAsync(x => x.HostId == host.Id && x.Name == _jobName);
+            var job = await dbContext.Jobs.FirstOrDefaultAsync(x => x.HostId == host.Id && x.Name == _jobName);
             
             if (job == null)
             {
@@ -39,13 +37,13 @@ namespace JGUZDV.JobHost
                     HostId = host.Id,
                 };
 
-                _dbContext.Jobs.Add(job);
+                dbContext.Jobs.Add(job);
             }
 
             var cron = new CronExpression(_cronSchedule);
             job.NextExecutionAt = cron.GetNextValidTimeAfter(DateTimeOffset.Now);
 
-            await _dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
             var jobDetail = JobBuilder
                 .Create(typeof(MetaJob<>).MakeGenericType(_jobType))

@@ -61,9 +61,25 @@ namespace JGUZDV.JobHost
                 executeNowSchedule = ctx.Configuration[$"{section}:{Constants.ExecuteNowSchedule}"]
                     ?? throw new InvalidOperationException($"'{section}:{Constants.ExecuteNowSchedule}' could not be read from configuration.");
 
+                services.AddDbContext<JobHostContext>(x => configureDbContext(x, ctx.Configuration));
+                ctx.Properties[Constants.UsesDashboard] = true;
+                ctx.Properties[Constants.JobHostName] = jobHostName;
+
+                services.AddQuartz(x => x.ScheduleJob<RegisterHost>(
+                   x => x
+                       .StartNow()
+                       .WithPriority(int.MaxValue),
+                   x => x
+                       .WithIdentity(nameof(RegisterHost), nameof(RegisterHost))
+                       .UsingJobData(new JobDataMap {
+                            { Constants.JobHostName, jobHostName },
+                            { Constants.MonitoringUrl, monitoringUrl },
+                            { Constants.ExecuteNowSchedule, executeNowSchedule }
+                       })));
+
             });
 
-            return builder.UseDashboard(jobHostName,monitoringUrl,configureDbContext,executeNowSchedule);
+            return builder;
         }
 
         /// <summary>

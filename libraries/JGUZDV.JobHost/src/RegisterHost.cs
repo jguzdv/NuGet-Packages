@@ -30,8 +30,10 @@ namespace JGUZDV.JobHost
         {
             var scheduler = await _schedulerFactory.GetScheduler();
             await scheduler.PauseJobs(GroupMatcher<JobKey>.GroupEquals(JobKey.DefaultGroup));
+            using var transaction = _dbContext.Database.BeginTransaction();
             try
             {
+                
                 var hostName = (string)context.JobDetail.JobDataMap[Constants.JobHostName];
                 var host = await _dbContext.Hosts.FirstOrDefaultAsync(x => x.Name == hostName);
                 
@@ -69,7 +71,7 @@ namespace JGUZDV.JobHost
                 // register jobs
                 foreach (var item in _jobs)
                 {
-                    await item.Execute(host, scheduler);
+                    await item.Execute(host, scheduler, _dbContext);
                 }
 
                 // register execute now polling job
@@ -86,10 +88,12 @@ namespace JGUZDV.JobHost
                     .Build();
 
                 await scheduler.ScheduleJob(jobDetail, trigger);
+                transaction.Commit();   
             }
             catch (Exception e)
             {
                 _logger.LogError(e, $"Error during host initialization and register work");
+                transaction.Rollback();
             }
             finally
             {

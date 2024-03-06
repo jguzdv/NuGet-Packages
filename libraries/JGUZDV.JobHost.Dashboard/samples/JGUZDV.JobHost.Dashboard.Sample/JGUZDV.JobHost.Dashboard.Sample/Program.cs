@@ -15,7 +15,7 @@ builder.Services.AddRazorComponents()
     .AddInteractiveWebAssemblyComponents();
 
 builder.Services.AddDbContextFactory<JobHostContext>(
-        x => x.UseInMemoryDatabase("MemoryDatabase")
+       x =>   x.UseSqlServer("Server=(LocalDb)\\MSSQLLocalDB;Database=JobHostDashboardSample;Trusted_Connection=True;MultipleActiveResultSets=true;Encrypt=False")
     );
 
 builder.Services.AddSingleton<IDashboardService, DatabaseService>();
@@ -25,8 +25,9 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<JobHostContext>();
-
-    SeedData.AddSeedData(context);
+    context.Database.EnsureCreated();
+    if(!context.Hosts.Any())
+        SeedData.AddSeedData(context);
 }
 
 // Configure the HTTP request pipeline.
