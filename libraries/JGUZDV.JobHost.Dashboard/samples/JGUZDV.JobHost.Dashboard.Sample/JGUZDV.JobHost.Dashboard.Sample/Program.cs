@@ -48,7 +48,7 @@ app.UseStaticFiles();
 
 app.UseAntiforgery();
 
-app.MapJobHostDashboardApi("api");
+app.MapGroup("api").MapJobHostDashboardApi();
 
 app.MapRazorComponents<App>()
     .AddInteractiveWebAssemblyRenderMode()

@@ -5,10 +5,11 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <Version>1.0.0</Version>
-
         <OutputType>Library</OutputType>
-
         <IsPackable>true</IsPackable>
+        <Authors>Aaron Puhl, Marcus Lunau</Authors>
+        <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
+        <PackageDescription>Dashboard API for JGUZDV.JobHost package.</PackageDescription>
     </PropertyGroup>
 
     <ItemGroup>

@@ -5,6 +5,9 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <Version>1.0.0</Version>
+        <Authors>Aaron Puhl, Marcus Lunau</Authors>
+        <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
+        <PackageDescription>Blazor components of Dashboard for JGUZDV.JobHost package.</PackageDescription>
     </PropertyGroup>
 
     <ItemGroup>

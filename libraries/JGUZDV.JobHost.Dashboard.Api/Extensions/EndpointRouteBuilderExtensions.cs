@@ -11,25 +11,22 @@ namespace JGUZDV.JobHost.Dashboard.Extensions
         /// Maps endpoints required by the dashboard
         /// </summary>
         /// <param name="builder"></param>
-        /// <param name="routePrefix"></param>
         /// <returns></returns>
-        public static RouteGroupBuilder MapJobHostDashboardApi(this IEndpointRouteBuilder builder, string routePrefix)
+        public static IEndpointRouteBuilder MapJobHostDashboardApi(this IEndpointRouteBuilder builder)
         {
-            var group = builder.MapGroup(routePrefix);
-
-            group.MapGet(Routes.GetJobs, async (IDashboardService service) =>
+            builder.MapGet(Routes.GetJobs, async (IDashboardService service) =>
             {
                 var result = await service.GetJobs();
 
                 return Results.Ok(result);
             });
 
-            group.MapPost(Routes.ExecuteNowTemplate, async (int jobId, IDashboardService service) =>
+            builder.MapPost(Routes.ExecuteNowTemplate, async (int jobId, IDashboardService service) =>
             {
                 await service.ExecuteNow(jobId);
             });
 
-            return group;
+            return builder;
         }
     }
 }
