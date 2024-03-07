@@ -25,7 +25,7 @@ namespace JGUZDV.JobHost.Dashboard.Services
         }
 
         /// <inheritdoc/>
-        public async Task<JobCollection> GetSteveJobs()
+        public async Task<JobCollection> GetJobs()
         {
             return await _httpClient.GetFromJsonAsync<JobCollection>(Routes.GetJobs) ?? new JobCollection { 
                 Hosts = new Dictionary<int,Host>(),

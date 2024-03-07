@@ -11,7 +11,7 @@ namespace JGUZDV.JobHost.Dashboard.Services
         /// Loads the registered jobs and hosts 
         /// </summary>
         /// <returns></returns>
-        public Task<JobCollection> GetSteveJobs();
+        public Task<JobCollection> GetJobs();
 
         /// <summary>
         /// Marks the speciefied job to be executed

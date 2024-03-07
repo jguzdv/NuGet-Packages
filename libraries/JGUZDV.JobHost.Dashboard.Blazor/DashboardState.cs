@@ -43,10 +43,10 @@ namespace JGUZDV.JobHost.Dashboard.Blazor
         private Task<JobCollection> Initialize()
         {
             var jobs = _clientStore.GetOrLoad(
-                 "SteveJobs",
+                 "Jobs",
                  new StoreOptions<JobCollection>
                  {
-                     LoadFunc = (ct) => _dashboardService.GetSteveJobs(),
+                     LoadFunc = (ct) => _dashboardService.GetJobs(),
                      UsesBackgroundRefresh = true,
                      ValueExpiry = TimeSpan.FromSeconds(15)
                  });

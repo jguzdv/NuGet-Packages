@@ -29,7 +29,7 @@ namespace JGUZDV.JobHost.Dashboard.Services
         }
 
         /// <inheritdoc/>
-        public virtual async Task<JobCollection> GetSteveJobs()
+        public virtual async Task<JobCollection> GetJobs()
         {
             var context = await _dbContextFactory.CreateDbContextAsync();
             var jobsByHost = await context.Jobs
