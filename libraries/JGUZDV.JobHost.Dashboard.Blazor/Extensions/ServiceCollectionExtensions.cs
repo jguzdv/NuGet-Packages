@@ -23,7 +23,7 @@ namespace JGUZDV.JobHost.Dashboard.Extensions
             services.AddOptions<DashboardOptions>().Configure(x => x.PollingInterval = pollingInterval);
             services.AddClientStoreWithNullStorage();
             services.TryAddSingleton<DashboardState>();
-            services.AddSingleton<IState<DashboardState>, State<DashboardState>>();
+            services.TryAddSingleton<IState<DashboardState>, State<DashboardState>>();
 
             return services;
         }
