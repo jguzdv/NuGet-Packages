@@ -12,10 +12,14 @@ namespace JGUZDV.Blazor.StateManagement;
 public class State<T> : IState<T>
        where T : INotifyPropertyChanged
 {
-    private List<INotifyPropertyChanged> _observables;
+    private readonly List<INotifyPropertyChanged> _observables;
 
-    private Dictionary<object, List<PropertyData>> _children = new();
+    private readonly Dictionary<object, List<PropertyData>> _children = new();
 
+    /// <summary>
+    /// Creates the state for the specified value
+    /// </summary>
+    /// <param name="value"></param>
     public State(T value)
     {
         _observables = new();
@@ -88,6 +92,7 @@ public class State<T> : IState<T>
         StateChanged?.Invoke(new(s, e.PropertyName));
     }
 
+    /// <inheritdoc/>
     public void Dispose()
     {
         foreach (var observable in _observables)
@@ -96,8 +101,10 @@ public class State<T> : IState<T>
         }
     }
 
+    /// <inheritdoc/>
     public T Value { get; private set; }
 
+    /// <inheritdoc/>
     public event Action<StateChangedEventArgs>? StateChanged;
 
     private class PropertyData
@@ -113,23 +120,49 @@ public class State<T> : IState<T>
     }
 }
 
+/// <summary>
+/// <see cref="IState{T}"/> should wrap your state and be used as a Property in e. g. <see cref="StateListener" /> components, which listen on default to <see cref="IState{T}.StateChanged"/>.
+/// It can be used without or with dependency injection/> 
+/// </summary>
+/// <typeparam name="T"></typeparam>
 public interface IState<out T> : IDisposable
     where T : INotifyPropertyChanged
 {
+    /// <summary>
+    /// The state value
+    /// </summary>
     T Value { get; }
 
+    /// <summary>
+    /// Event that fires when the state has changed
+    /// </summary>
     event Action<StateChangedEventArgs>? StateChanged;
 };
 
+/// <summary>
+/// The event data of <see cref="IState{T}.StateChanged"/>
+/// </summary>
 public class StateChangedEventArgs
 {
+    /// <summary>
+    /// ctor
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="propertyName"></param>
     public StateChangedEventArgs(object? sender, string? propertyName)
     {
         Sender = sender;
         PropertyName = propertyName;
     }
 
+    /// <summary>
+    /// The sender of the event
+    /// </summary>
     public object? Sender { get; }
+
+    /// <summary>
+    /// Name of the changed property
+    /// </summary>
     public string? PropertyName { get; }
 }
 
