@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using JGUZDV.Blazor.StateManagement;
+﻿using JGUZDV.Blazor.StateManagement;
 using JGUZDV.ClientStorage;
 using JGUZDV.JobHost.Dashboard.Blazor;
 
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace JGUZDV.JobHost.Dashboard.Extensions 
+namespace JGUZDV.JobHost.Dashboard.Extensions
 {
     /// <summary>
     /// Extension class for the service collection
@@ -28,7 +22,7 @@ namespace JGUZDV.JobHost.Dashboard.Extensions
         {
             services.AddOptions<DashboardOptions>().Configure(x => x.PollingInterval = pollingInterval);
             services.AddClientStoreWithNullStorage();
-            services.AddSingleton<DashboardState>();
+            services.TryAddSingleton<DashboardState>();
             services.AddSingleton<IState<DashboardState>, State<DashboardState>>();
 
             return services;
