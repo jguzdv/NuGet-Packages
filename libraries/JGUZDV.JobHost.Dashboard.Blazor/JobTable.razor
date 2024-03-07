@@ -2,8 +2,8 @@
 @using JGUZDV.JobHost.Dashboard.Model
 @using JGUZDV.JobHost.Dashboard.Services
 
-<JGUZDV.Blazor.StateManagement.Components.StateView T="DashboardState" Context="State">
-<JGUZDV.Blazor.Components.AwaitResult Task="State.Jobs" Context="_jobs">
+<StateView T="DashboardState" Context="State">
+<AwaitResult Task="State.Jobs" Context="_jobs">
     <table class="table">
         <thead>
             <tr>
@@ -41,8 +41,8 @@
             }
         </tbody>
     </table>
-</JGUZDV.Blazor.Components.AwaitResult>
-</JGUZDV.Blazor.StateManagement.Components.StateView>
+</AwaitResult>
+</StateView>
 @code {
    
     [Parameter]

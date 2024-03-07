@@ -2,7 +2,7 @@
 @using JGUZDV.JobHost.Dashboard.Model
 @using JGUZDV.JobHost.Dashboard.Services
 @inherits StateListener
-<JGUZDV.Blazor.Components.AwaitResult Task="_jobs" Context="jobs">
+<AwaitResult Task="_jobs" Context="jobs">
     @foreach (var host in HostSort(jobs.Hosts.Values.ToList()))
     {
         <h1>
@@ -17,7 +17,7 @@
             }
         </div>
     }
-</JGUZDV.Blazor.Components.AwaitResult>
+</AwaitResult>
 
 @code {
     [Inject]

@@ -11,11 +11,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Include="JobView.razor" />
-    </ItemGroup>
-
-
-    <ItemGroup>
         <SupportedPlatform Include="browser" />
     </ItemGroup>
 
