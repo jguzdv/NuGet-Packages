@@ -4,6 +4,8 @@ using JGUZDV.ClientStorage.Store;
 using JGUZDV.JobHost.Dashboard.Model;
 using JGUZDV.JobHost.Dashboard.Services;
 
+using Microsoft.Extensions.Options;
+
 namespace JGUZDV.JobHost.Dashboard.Blazor
 {
     /// <summary>
@@ -14,6 +16,7 @@ namespace JGUZDV.JobHost.Dashboard.Blazor
     {
         private readonly ClientStore _clientStore;
         private readonly IDashboardService _dashboardService;
+        private IOptions<DashboardOptions> _options;
 
         [ObservableProperty]
         private Task<JobCollection> _jobs;
@@ -23,10 +26,11 @@ namespace JGUZDV.JobHost.Dashboard.Blazor
         /// </summary>
         /// <param name="dashboardService"></param>
         /// <param name="clientStore"></param>
-        public DashboardState(IDashboardService dashboardService, ClientStore clientStore)
+        public DashboardState(IDashboardService dashboardService, ClientStore clientStore, IOptions<DashboardOptions> options)
         {
             _dashboardService = dashboardService;
             _clientStore = clientStore;
+            _options = options;
             _jobs = Initialize();
         }
 
@@ -48,7 +52,7 @@ namespace JGUZDV.JobHost.Dashboard.Blazor
                  {
                      LoadFunc = (ct) => _dashboardService.GetJobs(),
                      UsesBackgroundRefresh = true,
-                     ValueExpiry = TimeSpan.FromSeconds(15)
+                     ValueExpiry = TimeSpan.FromSeconds(_options.Value.PollingInterval)
                  });
 
             _clientStore.ValueChanged +=
