@@ -6,12 +6,13 @@ namespace JGUZDV.Blazor.StateManagement;
 
 /// <summary>
 /// Components with Properties of type <see cref="IState{T}"/> can inherit from StateListener to automatically register 
-/// (the overrideable) <see cref="PropertyChangedEventHandler(StateChangedEventArgs)"/> to <see cref="IState{T}.StateChanged"/>
+/// (the overridable) <see cref="PropertyChangedEventHandler(StateChangedEventArgs)"/> to <see cref="IState{T}.StateChanged"/>
 /// </summary>
 public class StateListener : ComponentBase, IDisposable
 {
-    private List<IState<INotifyPropertyChanged>> _states = new();
+    private readonly List<IState<INotifyPropertyChanged>> _states = new();
 
+    /// <inheritdoc />
     protected override void OnInitialized()
     {
         base.OnInitialized();
@@ -32,11 +33,16 @@ public class StateListener : ComponentBase, IDisposable
         }
     }
 
+    /// <summary>
+    /// Handler of the <see cref="IState{T}.StateChanged"/> event. Calls <see cref="ComponentBase.StateHasChanged"/> per default/>
+    /// </summary>
+    /// <param name="args"></param>
     public virtual void PropertyChangedEventHandler(StateChangedEventArgs args)
     {
         InvokeAsync(StateHasChanged);
     }
 
+    /// <inheritdoc/>
     public void Dispose()
     {
         foreach (var state in _states)
