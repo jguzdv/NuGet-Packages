@@ -124,6 +124,7 @@ namespace JGUZDV.JobHost
         /// with its cron schedule retrieved from configuration.
         /// </summary>
         /// <param name="builder">The host builder to extend.</param>
+        /// <param name="cronSchedule">The cron schedule for added Job.</param>
         /// <returns>The extended host builder.</returns>
         public static IHostBuilder AddHostedJob<TJob>(this IHostBuilder builder, string cronSchedule)
             where TJob : class, IJob
@@ -139,7 +140,6 @@ namespace JGUZDV.JobHost
         /// <summary>
         /// Adds a hosted job to the host environment based on whether a dashboard is being used or not.
         /// </summary>
-        /// <param name="ctx">The host builder context.</param>
         public static IHostBuilder AddHostedJob<TJob>(this IHostBuilder builder)
             where TJob : class, IJob
         {

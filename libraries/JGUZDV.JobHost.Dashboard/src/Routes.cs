@@ -1,5 +1,8 @@
 ﻿namespace JGUZDV.JobHost.Dashboard
 {
+    /// <summary>
+    /// API Routes
+    /// </summary>
     public static class Routes
     {
         /// <summary>

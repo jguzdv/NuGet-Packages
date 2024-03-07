@@ -28,7 +28,7 @@
         /// <summary>
         /// The result of the last execution
         /// </summary>
-        public string LastResult { get; set; }
+        public required string LastResult { get; set; }
         
         /// <summary>
         /// The timestamp of the next execution

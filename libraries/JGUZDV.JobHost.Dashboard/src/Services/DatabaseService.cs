@@ -5,11 +5,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace JGUZDV.JobHost.Dashboard.Services
 {
-
+    /// <inheritdoc/>
     public class DatabaseService : IDashboardService
     {
         private readonly IDbContextFactory<JobHostContext> _dbContextFactory;
 
+        /// <summary>
+        /// Ctor
+        /// </summary>
+        /// <param name="dbContextFactory"></param>
         public DatabaseService(IDbContextFactory<JobHostContext> dbContextFactory)
         {
             _dbContextFactory = dbContextFactory;

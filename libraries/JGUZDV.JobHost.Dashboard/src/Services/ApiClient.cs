@@ -4,11 +4,15 @@ using JGUZDV.JobHost.Dashboard.Model;
 
 namespace JGUZDV.JobHost.Dashboard.Services
 {
+    /// <inheritdoc/>
     public class ApiClient : IDashboardService
     {
         private readonly HttpClient _httpClient;
 
-
+        /// <summary>
+        /// Ctor
+        /// </summary>
+        /// <param name="client"></param>
         public ApiClient(HttpClient client)
         {
             _httpClient = client;
@@ -23,7 +27,10 @@ namespace JGUZDV.JobHost.Dashboard.Services
         /// <inheritdoc/>
         public async Task<JobCollection> GetSteveJobs()
         {
-            return await _httpClient.GetFromJsonAsync<JobCollection>(Routes.GetJobs)!;
+            return await _httpClient.GetFromJsonAsync<JobCollection>(Routes.GetJobs) ?? new JobCollection { 
+                Hosts = new Dictionary<int,Host>(),
+                JobsByHost = new Dictionary<int,List<Job>>()
+            };
         }
         
     }

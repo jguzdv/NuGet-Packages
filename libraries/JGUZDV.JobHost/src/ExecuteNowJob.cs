@@ -20,7 +20,7 @@ namespace JGUZDV.JobHost
         public async Task Execute(IJobExecutionContext context)
         {
             var hostName = (string)context.JobDetail.JobDataMap["JobHostName"];
-            var jobs = await _dbContext.Jobs.Where(x => x.Host.Name == hostName && x.ShouldExecute == true).ToListAsync();
+            var jobs = await _dbContext.Jobs.Where(x => x.Host!.Name == hostName && x.ShouldExecute == true).ToListAsync();
             var scheduler = await _schedulerFactory.GetScheduler();
 
             foreach (var job in jobs)

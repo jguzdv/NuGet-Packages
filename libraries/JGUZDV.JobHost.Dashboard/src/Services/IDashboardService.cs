@@ -2,6 +2,9 @@
 
 namespace JGUZDV.JobHost.Dashboard.Services
 {
+    /// <summary>
+    /// The service for the dashboard. Loads and executes registered jobs.
+    /// </summary>
     public interface IDashboardService
     {
         /// <summary>
