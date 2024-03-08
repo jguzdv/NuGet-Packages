@@ -26,14 +26,14 @@
 
 
     /// <summary>
-    /// Wraps the default &lt;ActivityIndicator /&gt in a &lt;div class=&quot;RunningClass&quot; /&gt;
+    /// Wraps the default &lt;ActivityIndicator /&gt; in a &lt;div class=&quot;RunningClass&quot; /&gt;
     /// </summary>
     [Parameter]
     public string? RunningClass { get; set; }
 
     /// <summary>
     /// The render fragment that will be shown, when the task is still running.
-    /// By default this will be &ltActivityIndicator /&gt
+    /// By default this will be &lt;ActivityIndicator /&gt;
     /// </summary>
     [Parameter]
     public RenderFragment? Running { get; set; } =@<ActivityIndicator />;
@@ -83,7 +83,7 @@
         {
             _ = Task?.ContinueWith(t =>
             {
-                StateHasChanged();
+                InvokeAsync(StateHasChanged);
             });
         }
     }
