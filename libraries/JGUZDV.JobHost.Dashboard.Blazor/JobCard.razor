@@ -6,6 +6,7 @@
         @Job.Name
     </div>
     <hr />
+    
     <div class="my-2">
         <div>
             <label class="fw-bold">
@@ -17,6 +18,14 @@
         </div>
         <div>
             <label class="fw-bold">
+                run time:
+            </label>
+            <span>
+                @Job.RunTime.ToString("g")
+            </span>
+        </div>
+        <div>
+            <label class="fw-bold">
                 schedule:
             </label>
             <span>
@@ -24,6 +33,14 @@
             </span>
         </div>
     </div>
+
+    @if (!string.IsNullOrWhiteSpace(Job.FailMessage))
+    {
+        <div class="my-2 alert alert-danger">
+            @Job.FailMessage
+        </div>
+    }
+
 </div>
 
 @code {

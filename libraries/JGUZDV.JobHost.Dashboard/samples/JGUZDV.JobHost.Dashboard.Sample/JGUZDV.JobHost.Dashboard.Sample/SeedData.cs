@@ -30,6 +30,7 @@ namespace JGUZDV.JobHost.Dashboard.Sample
                         Host = host,
                         LastExecutedAt = DateTime.UtcNow,
                         LastResult = i % mod == 0 ? "success" : "error",
+                        FailMessage = i % mod == 0 ? null : "Critical error during execution - uh OH",
                         Name = $"Job-{i}",
                         Schedule = "* 0/15 * * *",
                         ShouldExecute = i % mod == 0,
