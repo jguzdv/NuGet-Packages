@@ -49,5 +49,15 @@
         /// The id of the jobhost of this job
         /// </summary>
         public int HostId { get; set; }
+
+        /// <summary>
+        /// The amount of time the job ran for
+        /// </summary>
+        public TimeSpan RunTime { get; set; }
+
+        /// <summary>
+        /// Cause of failure
+        /// </summary>
+        public string? FailMessage { get; set; }
     }
 }

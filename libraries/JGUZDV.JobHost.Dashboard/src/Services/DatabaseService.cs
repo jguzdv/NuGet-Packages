@@ -53,6 +53,8 @@ namespace JGUZDV.JobHost.Dashboard.Services
                         NextExecutionAt = x.NextExecutionAt,
                         Schedule = x.Schedule,
                         ShouldExecute = x.ShouldExecute,
+                        FailMessage = x.FailMessage,
+                        RunTime = x.RunTime
                     }).ToList()
                 })
                 .ToListAsync();

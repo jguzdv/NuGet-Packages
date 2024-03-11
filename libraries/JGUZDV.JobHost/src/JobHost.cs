@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 using Quartz;
+using Quartz.Impl.Matchers;
 
 namespace JGUZDV.JobHost
 {
@@ -26,7 +27,11 @@ namespace JGUZDV.JobHost
             var builder = Host.CreateDefaultBuilder(args)
                             .ConfigureServices((ctx, services) =>
                             {
-                                services.AddQuartzHostedService(configureQuartz);
+                                services.AddQuartzHostedService(x =>
+                                {
+                                    configureQuartz(x);
+                                    x.AwaitApplicationStarted = true;
+                                });
                             })
                            .UseJGUZDVLogging()
                            .UseWindowsService(configureWindowsService);
@@ -61,21 +66,27 @@ namespace JGUZDV.JobHost
                 executeNowSchedule = ctx.Configuration[$"{section}:{Constants.ExecuteNowSchedule}"]
                     ?? throw new InvalidOperationException($"'{section}:{Constants.ExecuteNowSchedule}' could not be read from configuration.");
 
-                services.AddDbContext<JobHostContext>(x => configureDbContext(x, ctx.Configuration));
+                services.AddDbContextFactory<JobHostContext>(x => configureDbContext(x, ctx.Configuration));
                 ctx.Properties[Constants.UsesDashboard] = true;
                 ctx.Properties[Constants.JobHostName] = jobHostName;
 
-                services.AddQuartz(x => x.ScheduleJob<RegisterHost>(
-                   x => x
-                       .StartNow()
-                       .WithPriority(int.MaxValue),
-                   x => x
-                       .WithIdentity(nameof(RegisterHost), nameof(RegisterHost))
-                       .UsingJobData(new JobDataMap {
+                services.AddQuartz(x =>
+                {
+                    var matcher = GroupMatcher<JobKey>.GroupEquals(JobKey.DefaultGroup);
+                    x.AddJobListener<JobListener>(matcher);
+
+                    x.ScheduleJob<RegisterHost>(
+                       x => x
+                           .StartNow()
+                           .WithPriority(int.MaxValue),
+                       x => x
+                           .WithIdentity(nameof(RegisterHost), nameof(RegisterHost))
+                           .UsingJobData(new JobDataMap {
                             { Constants.JobHostName, jobHostName },
                             { Constants.MonitoringUrl, monitoringUrl },
                             { Constants.ExecuteNowSchedule, executeNowSchedule }
-                       })));
+                           }));
+                });
 
             });
 
@@ -99,21 +110,26 @@ namespace JGUZDV.JobHost
         {
             builder.ConfigureServices((ctx, services) =>
             {
-                services.AddDbContext<JobHostContext>(x => configureDbContext(x, ctx.Configuration));
+                services.AddDbContextFactory<JobHostContext>(x => configureDbContext(x, ctx.Configuration));
                 ctx.Properties[Constants.UsesDashboard] = true;
                 ctx.Properties[Constants.JobHostName] = jobHostName;
 
-                services.AddQuartz(x => x.ScheduleJob<RegisterHost>(
-                    x => x
-                        .StartNow()
-                        .WithPriority(int.MaxValue),
-                    x => x
-                        .WithIdentity(nameof(RegisterHost), nameof(RegisterHost))
-                        .UsingJobData(new JobDataMap {
+                services.AddQuartz(x =>
+                {
+                    var matcher = GroupMatcher<JobKey>.GroupEquals(JobKey.DefaultGroup);
+                    x.AddJobListener<JobListener>(matcher);
+                    x.ScheduleJob<RegisterHost>(
+                        x => x
+                            .StartNow()
+                            .WithPriority(int.MaxValue),
+                        x => x
+                            .WithIdentity(nameof(RegisterHost), nameof(RegisterHost))
+                            .UsingJobData(new JobDataMap {
                             { Constants.JobHostName, jobHostName },
                             { Constants.MonitoringUrl, monitoringUrl },
                             { Constants.ExecuteNowSchedule, executeNowSchedule }
-                        })));
+                            }));
+                });
             });
 
             return builder;
@@ -171,7 +187,10 @@ namespace JGUZDV.JobHost
                 services.AddQuartz(q =>
                 {
                     var jobKey = new JobKey(typeof(TJob).Name);
-                    q.AddJob<TJob>(jobKey);
+                    q.AddJob<TJob>(jobKey, cfg =>
+                    {
+                        cfg.DisallowConcurrentExecution();
+                    });
                     q.AddTrigger(opts => opts
                         .ForJob(jobKey)
                         .WithCronSchedule(cronSchedule));

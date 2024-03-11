@@ -46,9 +46,10 @@ namespace JGUZDV.JobHost
             await dbContext.SaveChangesAsync();
 
             var jobDetail = JobBuilder
-                .Create(typeof(MetaJob<>).MakeGenericType(_jobType))
+                .Create(_jobType)
                 .WithIdentity(new JobKey(_jobType.Name))
                 .UsingJobData(Constants.JobHostName, host.Name)
+                .DisallowConcurrentExecution()
                 .Build();
 
             var trigger = TriggerBuilder.Create()
