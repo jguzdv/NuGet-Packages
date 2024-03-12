@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
 using JGUZDV.ClientStorage.Store;
-using JGUZDV.JobHost.Dashboard.Model;
+using JGUZDV.JobHost.Abstractions.Model;
 using JGUZDV.JobHost.Dashboard.Services;
 
 using Microsoft.Extensions.Options;

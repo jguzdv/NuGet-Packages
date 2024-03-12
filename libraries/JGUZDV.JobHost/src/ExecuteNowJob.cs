@@ -1,6 +1,4 @@
-﻿using JGUZDV.JobHost.Database;
-
-using Microsoft.EntityFrameworkCore;
+﻿using JGUZDV.JobHost.Abstractions;
 
 using Quartz;
 
@@ -8,25 +6,26 @@ namespace JGUZDV.JobHost
 {
     internal class ExecuteNowJob : IJob
     {
-        private readonly JobHostContext _dbContext;
+        private readonly IJobExecutionReporterFactory _reporterFactory;
         private readonly ISchedulerFactory _schedulerFactory;
 
-        public ExecuteNowJob(JobHostContext dbContext, ISchedulerFactory schedulerFactory)
+        public ExecuteNowJob(IJobExecutionReporterFactory reporterFactory, ISchedulerFactory schedulerFactory)
         {
-            _dbContext = dbContext;
+            _reporterFactory = reporterFactory;
             _schedulerFactory = schedulerFactory;
         }
 
         public async Task Execute(IJobExecutionContext context)
         {
-            var hostName = (string)context.JobDetail.JobDataMap["JobHostName"];
-            var jobs = await _dbContext.Jobs.Where(x => x.Host!.Name == hostName && x.ShouldExecute == true).ToListAsync();
+            var reporter = await _reporterFactory.CreateAsync();
+
+            var jobs = await reporter.GetPendingJobs();
+
             var scheduler = await _schedulerFactory.GetScheduler();
 
             foreach (var job in jobs)
             {
-                job.ShouldExecute = false;
-                await _dbContext.SaveChangesAsync();
+                await reporter.RemoveFromPending(job.Id);
 
                 var jobKey = new JobKey(job.Name);
                 await scheduler.TriggerJob(jobKey);

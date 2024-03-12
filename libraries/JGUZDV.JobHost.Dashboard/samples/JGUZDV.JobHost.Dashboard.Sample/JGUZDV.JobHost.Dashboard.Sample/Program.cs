@@ -20,8 +20,8 @@ builder.Services.AddDbContextFactory<JobHostContext>(
 
 builder.Services.AddSingleton<IDashboardService, DatabaseService>();
 builder.Services.AddDashboard();
-var app = builder.Build();
 
+var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<JobHostContext>();

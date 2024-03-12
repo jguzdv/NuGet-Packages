@@ -1,4 +1,4 @@
-﻿namespace JGUZDV.JobHost.Dashboard.Model
+﻿namespace JGUZDV.JobHost.Abstractions.Model
 {
     /// <summary>
     /// The Model class for a job

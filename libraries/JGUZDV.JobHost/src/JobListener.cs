@@ -1,6 +1,4 @@
-﻿using JGUZDV.JobHost.Database;
-
-using Microsoft.EntityFrameworkCore;
+﻿using JGUZDV.JobHost.Abstractions;
 
 using Quartz;
 using Quartz.Listener;
@@ -9,9 +7,9 @@ namespace JGUZDV.JobHost
 {
     internal class JobListener : JobListenerSupport
     {
-        private readonly IDbContextFactory<JobHostContext> _dbContextFactory;
+        private readonly IJobExecutionReporterFactory _dbContextFactory;
 
-        public JobListener(IDbContextFactory<JobHostContext> dbContextFactory)
+        public JobListener(IJobExecutionReporterFactory dbContextFactory)
         {
             _dbContextFactory = dbContextFactory;
         }
@@ -22,27 +20,18 @@ namespace JGUZDV.JobHost
         {
             try
             {
-                var dbContext = await _dbContextFactory.CreateDbContextAsync();
-                var name = context.JobInstance.GetType().Name;
-                var host = (string)context.JobDetail.JobDataMap[Constants.JobHostName];
+                var reporter = await _dbContextFactory.CreateAsync();
 
-                var job = await dbContext.Jobs.FirstAsync(x => x.Name == name && x.Host!.Name == host);
-
-                if (jobException == null)
+                await reporter.ReportJobExecutionAsync(new()
                 {
-                    job.LastResult = "success";
-                }
-                else
-                {
-                    job.LastResult = "error";
-                    job.FailMessage = GetFailMessage(jobException);
-                }
-
-                job.RunTime = context.JobRunTime;
-                job.NextExecutionAt = context.NextFireTimeUtc;
-                job.LastExecutedAt = context.FireTimeUtc;
-                
-                await dbContext.SaveChangesAsync();
+                    Failed = jobException != null,
+                    FailMessage = GetFailMessage(jobException),
+                    FireTimeUtc = context.FireTimeUtc,
+                    Host = (string)context.JobDetail.JobDataMap[Constants.JobHostName],
+                    Name = context.JobInstance.GetType().Name,
+                    NextFireTimeUtc = context.NextFireTimeUtc,
+                    RunTime = context.JobRunTime
+                });
             }
             catch
             {
@@ -50,8 +39,13 @@ namespace JGUZDV.JobHost
             }
         }
 
-        private string GetFailMessage(Exception exception)
+        private string? GetFailMessage(Exception? exception)
         {
+            if (exception == null)
+            {
+                return null;
+            }
+
             while(true)
             {
                 if (exception is not SchedulerException || exception.InnerException == null)

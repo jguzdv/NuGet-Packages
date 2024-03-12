@@ -1,8 +1,7 @@
-﻿using JGUZDV.JobHost.Database;
+﻿using JGUZDV.JobHost.Abstractions;
 
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 
 using Quartz;
@@ -47,9 +46,8 @@ namespace JGUZDV.JobHost
         /// <param name="section">Configuration section containing dashboard settings (default is <see cref="Constants.DefaultDashboardConfigSection"/>).</param>
         /// <returns>The extended host builder.</returns>
         /// <exception cref="InvalidOperationException"></exception>
-        public static IHostBuilder UseDashboard(this IHostBuilder builder,
-          Action<DbContextOptionsBuilder, IConfiguration> configureDbContext,
-          string section = Constants.DefaultDashboardConfigSection)
+        public static IHostBuilder UseJobReporting<T>(this IHostBuilder builder,
+          string section = Constants.DefaultDashboardConfigSection) where T : class, IJobExecutionReporter
         {
             var jobHostName = "";
             var monitoringUrl = "";
@@ -65,32 +63,45 @@ namespace JGUZDV.JobHost
 
                 executeNowSchedule = ctx.Configuration[$"{section}:{Constants.ExecuteNowSchedule}"]
                     ?? throw new InvalidOperationException($"'{section}:{Constants.ExecuteNowSchedule}' could not be read from configuration.");
-
-                services.AddDbContextFactory<JobHostContext>(x => configureDbContext(x, ctx.Configuration));
-                ctx.Properties[Constants.UsesDashboard] = true;
-                ctx.Properties[Constants.JobHostName] = jobHostName;
-
-                services.AddQuartz(x =>
-                {
-                    var matcher = GroupMatcher<JobKey>.GroupEquals(JobKey.DefaultGroup);
-                    x.AddJobListener<JobListener>(matcher);
-
-                    x.ScheduleJob<RegisterHost>(
-                       x => x
-                           .StartNow()
-                           .WithPriority(int.MaxValue),
-                       x => x
-                           .WithIdentity(nameof(RegisterHost), nameof(RegisterHost))
-                           .UsingJobData(new JobDataMap {
-                            { Constants.JobHostName, jobHostName },
-                            { Constants.MonitoringUrl, monitoringUrl },
-                            { Constants.ExecuteNowSchedule, executeNowSchedule }
-                           }));
-                });
+                
+                ConfigureReporting<T>(ctx, services, jobHostName, monitoringUrl, executeNowSchedule);
 
             });
 
             return builder;
+        }
+
+        private static void ConfigureReporting<T>(HostBuilderContext ctx, IServiceCollection services, string jobHostName, string monitoringUrl, string executeNowSchedule) where T : class, IJobExecutionReporter
+        {
+            services.Configure<JobReportOptions>(x =>
+            {
+                x.MonitoringUrl = monitoringUrl;
+                x.ExecuteNowSchedule = executeNowSchedule;
+                x.JobHostName = jobHostName;
+            });
+
+            services.TryAddScoped<IJobExecutionReporter, T>();
+            services.TryAddSingleton<IJobExecutionReporterFactory, JobExecutionReporterFactory>();
+            ctx.Properties[Constants.UsesDashboard] = true;
+            ctx.Properties[Constants.JobHostName] = jobHostName;
+
+            services.AddQuartz(x =>
+            {
+                var matcher = GroupMatcher<JobKey>.GroupEquals(JobKey.DefaultGroup);
+                x.AddJobListener<JobListener>(matcher);
+
+                x.ScheduleJob<RegisterHost>(
+                   x => x
+                       .StartNow()
+                       .WithPriority(int.MaxValue),
+                   x => x
+                       .WithIdentity(nameof(RegisterHost), nameof(RegisterHost))
+                       .UsingJobData(new JobDataMap {
+                            { Constants.JobHostName, jobHostName },
+                            { Constants.MonitoringUrl, monitoringUrl },
+                            { Constants.ExecuteNowSchedule, executeNowSchedule }
+                       }));
+            });
         }
 
         /// <summary>
@@ -99,37 +110,16 @@ namespace JGUZDV.JobHost
         /// <param name="builder">The host builder to extend.</param>
         /// <param name="jobHostName">The name of the job host.</param>
         /// <param name="monitoringUrl">The URL for monitoring.</param>
-        /// <param name="configureDbContext">Action to configure the database context options.</param>
         /// <param name="executeNowSchedule">Cron expression for polling interval for the execute now job(default is "0/15 * * * * ?").</param>
         /// <returns>The extended host builder.</returns>
-        public static IHostBuilder UseDashboard(this IHostBuilder builder,
+        public static IHostBuilder UseJobReporting<T>(this IHostBuilder builder,
             string jobHostName,
             string monitoringUrl,
-            Action<DbContextOptionsBuilder, IConfiguration> configureDbContext,
-            string executeNowSchedule = "0/15 * * * * ?")
+            string executeNowSchedule = "0/15 * * * * ?") where T : class, IJobExecutionReporter
         {
             builder.ConfigureServices((ctx, services) =>
             {
-                services.AddDbContextFactory<JobHostContext>(x => configureDbContext(x, ctx.Configuration));
-                ctx.Properties[Constants.UsesDashboard] = true;
-                ctx.Properties[Constants.JobHostName] = jobHostName;
-
-                services.AddQuartz(x =>
-                {
-                    var matcher = GroupMatcher<JobKey>.GroupEquals(JobKey.DefaultGroup);
-                    x.AddJobListener<JobListener>(matcher);
-                    x.ScheduleJob<RegisterHost>(
-                        x => x
-                            .StartNow()
-                            .WithPriority(int.MaxValue),
-                        x => x
-                            .WithIdentity(nameof(RegisterHost), nameof(RegisterHost))
-                            .UsingJobData(new JobDataMap {
-                            { Constants.JobHostName, jobHostName },
-                            { Constants.MonitoringUrl, monitoringUrl },
-                            { Constants.ExecuteNowSchedule, executeNowSchedule }
-                            }));
-                });
+                ConfigureReporting<T>(ctx, services, jobHostName, monitoringUrl, executeNowSchedule);
             });
 
             return builder;

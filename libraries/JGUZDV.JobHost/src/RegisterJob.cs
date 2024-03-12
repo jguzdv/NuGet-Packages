@@ -1,9 +1,4 @@
-﻿using JGUZDV.JobHost.Database;
-using JGUZDV.JobHost.Database.Entities;
-
-using Microsoft.EntityFrameworkCore;
-
-using Quartz;
+﻿using Quartz;
 
 namespace JGUZDV.JobHost
 {
@@ -14,6 +9,8 @@ namespace JGUZDV.JobHost
         private readonly Type _jobType;
 
         public string JobName => _jobName;
+        public string CronSchedule => _cronSchedule;
+
 
         public RegisterJob(Type jobType, string cronSchedule)
         {
@@ -22,33 +19,12 @@ namespace JGUZDV.JobHost
             _jobType = jobType;
         }
 
-        public async Task Execute(Host host, IScheduler scheduler, JobHostContext dbContext)
+        public async Task Execute(string hostName, IScheduler scheduler)
         {
-            var job = await dbContext.Jobs.FirstOrDefaultAsync(x => x.HostId == host.Id && x.Name == _jobName);
-            
-            if (job == null)
-            {
-                job = new Database.Entities.Job
-                {
-                    LastExecutedAt = DateTimeOffset.MinValue,
-                    LastResult = "",
-                    Schedule = _cronSchedule,
-                    Name = _jobName,
-                    HostId = host.Id,
-                };
-
-                dbContext.Jobs.Add(job);
-            }
-
-            var cron = new CronExpression(_cronSchedule);
-            job.NextExecutionAt = cron.GetNextValidTimeAfter(DateTimeOffset.Now);
-
-            await dbContext.SaveChangesAsync();
-
             var jobDetail = JobBuilder
                 .Create(_jobType)
                 .WithIdentity(new JobKey(_jobType.Name))
-                .UsingJobData(Constants.JobHostName, host.Name)
+                .UsingJobData(Constants.JobHostName, hostName)
                 .DisallowConcurrentExecution()
                 .Build();
 

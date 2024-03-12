@@ -1,6 +1,5 @@
-﻿using JGUZDV.JobHost.Database;
+﻿using JGUZDV.JobHost.Abstractions;
 
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 using Quartz;
@@ -13,15 +12,15 @@ namespace JGUZDV.JobHost
         private readonly IEnumerable<RegisterJob> _jobs;
         private readonly ISchedulerFactory _schedulerFactory;
         private readonly ILogger<RegisterHost> _logger;
-        private readonly JobHostContext _dbContext;
+        private readonly IJobExecutionReporter _reporter;
 
-        public RegisterHost(JobHostContext dbContext, 
-            IEnumerable<RegisterJob> jobs, 
+        public RegisterHost(IJobExecutionReporter reporter,
+            IEnumerable<RegisterJob> jobs,
             ISchedulerFactory schedulerFactory,
             ILogger<RegisterHost> logger)
         {
             _jobs = jobs;
-            _dbContext = dbContext;
+            _reporter = reporter;
             _schedulerFactory = schedulerFactory;
             _logger = logger;
         }
@@ -31,53 +30,32 @@ namespace JGUZDV.JobHost
             var scheduler = await _schedulerFactory.GetScheduler();
             await scheduler.PauseJobs(GroupMatcher<JobKey>.GroupEquals(JobKey.DefaultGroup));
             var hostName = (string)context.JobDetail.JobDataMap[Constants.JobHostName];
-            
+
             try
             {
-                var host = await _dbContext.Hosts.FirstOrDefaultAsync(x => x.Name == hostName);
-                
-                if (host == null)
+                await _reporter.RegisterHostAndJobsAsync(new JobHostDescription
                 {
-                    // register the host
-                    host = new Database.Entities.Host
+                    HostName = hostName,
+                    MonitoringUrl = (string)context.JobDetail.JobDataMap[Constants.MonitoringUrl],
+                    Jobs = _jobs.Select(x => new JobDescription
                     {
-                        MonitoringUrl = (string)context.JobDetail.JobDataMap[Constants.MonitoringUrl],
-                        Name = hostName
-                    };
+                        CronSchedule = x.CronSchedule,
+                        Name = x.JobName,
+                        NextExecutionAt = new CronExpression(x.CronSchedule).GetNextValidTimeAfter(DateTimeOffset.Now) ?? new() //TODO: TimeProvider
+                    }).ToList()
+                });
 
-                    _dbContext.Hosts.Add(host);
-                    await _dbContext.SaveChangesAsync();
-                }
-                else
-                {
-                    // clean up old jobs
-                    var jobs = await _dbContext
-                        .Jobs
-                        .AsNoTracking()
-                        .Where(x => x.HostId == host.Id)
-                        .ToListAsync();
-
-                    var oldJobs = jobs
-                        .Where(x => !_jobs.Any(y => y.JobName == x.Name))
-                        .Select(x => x.Id)
-                        .ToList();
-
-                    await _dbContext.Jobs
-                        .Where(x => oldJobs.Contains(x.Id))
-                        .ExecuteDeleteAsync();
-                }
-
-                // register jobs
+                // register quartz jobs
                 foreach (var item in _jobs)
                 {
-                    await item.Execute(host, scheduler, _dbContext);
+                    await item.Execute(hostName, scheduler);
                 }
 
                 // register execute now polling job
                 var jobDetail = JobBuilder
                 .Create<ExecuteNowJob>()
                 .WithIdentity(new JobKey(nameof(ExecuteNowJob)))
-                .UsingJobData(Constants.JobHostName, host.Name)
+                .UsingJobData(Constants.JobHostName, hostName)
                 .Build();
 
                 var schedule = (string)context.JobDetail.JobDataMap[Constants.ExecuteNowSchedule];
@@ -91,14 +69,7 @@ namespace JGUZDV.JobHost
             catch (Exception e)
             {
                 _logger.LogError(e, $"Error during host initialization and register work");
-                var host = await _dbContext.Hosts.FirstOrDefaultAsync(x => x.Name == hostName);
-                if(host != null)
-                {
-                    var jobs = await _dbContext.Jobs.Where(x => x.HostId == host.Id).ToListAsync();
-                    _dbContext.Jobs.RemoveRange(jobs);
-                    _dbContext.Hosts.Remove(host);
-                    await _dbContext.SaveChangesAsync();
-                }
+               
             }
             finally
             {

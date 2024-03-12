@@ -1,4 +1,4 @@
-﻿using JGUZDV.JobHost.Dashboard.Model;
+﻿using JGUZDV.JobHost.Abstractions.Model;
 using JGUZDV.JobHost.Database;
 
 using Microsoft.EntityFrameworkCore;

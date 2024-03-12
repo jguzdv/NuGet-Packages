@@ -164,6 +164,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.JobHost.Dashboard.Sa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.JobHost.Dashboard.Sample.Client", "libraries\JGUZDV.JobHost.Dashboard\samples\JGUZDV.JobHost.Dashboard.Sample\JGUZDV.JobHost.Dashboard.Sample.Client\JGUZDV.JobHost.Dashboard.Sample.Client.csproj", "{2A66E690-45C0-4E23-8226-41B92611AABF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.JobHost.Abstractions", "libraries\JGUZDV.JobHost.Abstractions\JGUZDV.JobHost.Abstractions.csproj", "{CD0074F4-5B64-46DE-9558-E18A8EACB5E3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -798,6 +800,18 @@ Global
 		{2A66E690-45C0-4E23-8226-41B92611AABF}.Release|x64.Build.0 = Release|Any CPU
 		{2A66E690-45C0-4E23-8226-41B92611AABF}.Release|x86.ActiveCfg = Release|Any CPU
 		{2A66E690-45C0-4E23-8226-41B92611AABF}.Release|x86.Build.0 = Release|Any CPU
+		{CD0074F4-5B64-46DE-9558-E18A8EACB5E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD0074F4-5B64-46DE-9558-E18A8EACB5E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD0074F4-5B64-46DE-9558-E18A8EACB5E3}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{CD0074F4-5B64-46DE-9558-E18A8EACB5E3}.Debug|x64.Build.0 = Debug|Any CPU
+		{CD0074F4-5B64-46DE-9558-E18A8EACB5E3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{CD0074F4-5B64-46DE-9558-E18A8EACB5E3}.Debug|x86.Build.0 = Debug|Any CPU
+		{CD0074F4-5B64-46DE-9558-E18A8EACB5E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD0074F4-5B64-46DE-9558-E18A8EACB5E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD0074F4-5B64-46DE-9558-E18A8EACB5E3}.Release|x64.ActiveCfg = Release|Any CPU
+		{CD0074F4-5B64-46DE-9558-E18A8EACB5E3}.Release|x64.Build.0 = Release|Any CPU
+		{CD0074F4-5B64-46DE-9558-E18A8EACB5E3}.Release|x86.ActiveCfg = Release|Any CPU
+		{CD0074F4-5B64-46DE-9558-E18A8EACB5E3}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -877,10 +891,11 @@ Global
 		{6B1C28BD-057E-4DE0-AE43-3DD03155E4A4} = {B06ACF77-B0EF-42F4-BA33-776F7496E2E6}
 		{11C17E8E-B586-4008-92D3-F8513F8E0C2C} = {B06ACF77-B0EF-42F4-BA33-776F7496E2E6}
 		{2A66E690-45C0-4E23-8226-41B92611AABF} = {B06ACF77-B0EF-42F4-BA33-776F7496E2E6}
+		{CD0074F4-5B64-46DE-9558-E18A8EACB5E3} = {B06ACF77-B0EF-42F4-BA33-776F7496E2E6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {46ECC226-1874-4539-8589-8B2029909C4A}
-		RESX_NeutralResourcesLanguage = de-DE
 		RESX_SortFileContentOnSave = True
+		RESX_NeutralResourcesLanguage = de-DE
+		SolutionGuid = {46ECC226-1874-4539-8589-8B2029909C4A}
 	EndGlobalSection
 EndGlobal
