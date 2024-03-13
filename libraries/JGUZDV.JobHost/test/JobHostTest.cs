@@ -1,6 +1,6 @@
 using System.Data;
 
-using JGUZDV.JobHost.Database;
+using JGUZDV.JobHost.Dashboard.EntityFrameworkCore;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;

@@ -1,8 +1,8 @@
+using JGUZDV.JobHost.Dashboard.EntityFrameworkCore;
 using JGUZDV.JobHost.Dashboard.Extensions;
 using JGUZDV.JobHost.Dashboard.Sample;
 using JGUZDV.JobHost.Dashboard.Sample.Components;
 using JGUZDV.JobHost.Dashboard.Services;
-using JGUZDV.JobHost.Database;
 
 using Microsoft.EntityFrameworkCore;
 

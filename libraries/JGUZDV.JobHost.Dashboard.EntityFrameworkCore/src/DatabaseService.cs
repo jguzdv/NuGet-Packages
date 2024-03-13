@@ -1,9 +1,9 @@
-﻿using JGUZDV.JobHost.Abstractions.Model;
-using JGUZDV.JobHost.Database;
+﻿using JGUZDV.JobHost.Dashboard.Services;
+using JGUZDV.JobHost.Shared.Model;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace JGUZDV.JobHost.Dashboard.Services
+namespace JGUZDV.JobHost.Dashboard.EntityFrameworkCore
 {
     /// <inheritdoc/>
     public class DatabaseService : IDashboardService
@@ -37,13 +37,13 @@ namespace JGUZDV.JobHost.Dashboard.Services
                 .GroupBy(x => x.Host!)
                 .Select(x => new
                 {
-                    Host = new Model.Host
+                    Host = new Host
                     {
                         MonitoringUrl = x.Key.MonitoringUrl,
                         Name = x.Key.Name,
                         Id = x.Key.Id
                     },
-                    Jobs = x.Select(x => new Model.Job
+                    Jobs = x.Select(x => new Job
                     {
                         Name = x.Name,
                         HostId = x.HostId,

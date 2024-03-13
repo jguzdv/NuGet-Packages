@@ -1,8 +1,7 @@
-﻿using System.Net.Http.Json;
+﻿using JGUZDV.JobHost.Dashboard.Services;
+using JGUZDV.JobHost.Shared.Model;
 
-using JGUZDV.JobHost.Abstractions.Model;
-
-namespace JGUZDV.JobHost.Dashboard.Services
+namespace JGUZDV.JobHost.Dashboard.Api
 {
     /// <inheritdoc/>
     public class ApiClient : IDashboardService
@@ -28,7 +27,7 @@ namespace JGUZDV.JobHost.Dashboard.Services
         public async Task<JobCollection> GetJobs()
         {
             return await _httpClient.GetFromJsonAsync<JobCollection>(Routes.GetJobs) ?? new JobCollection { 
-                Hosts = new Dictionary<int,Host>(),
+                Hosts = new Dictionary<int, Shared.Model.Host>(),
                 JobsByHost = new Dictionary<int,List<Job>>()
             };
         }

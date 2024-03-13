@@ -1,4 +1,4 @@
-﻿namespace JGUZDV.JobHost.Abstractions
+﻿namespace JGUZDV.JobHost.Shared
 {
     public class JobHostDescription
     {

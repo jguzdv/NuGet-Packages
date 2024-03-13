@@ -5,6 +5,8 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <Version>1.0.0</Version>
+        <PackageId>JGUZDV.JobHost.Dashboard.Blazor</PackageId>
+        <IsPackable>true</IsPackable>
         <Authors>Aaron Puhl, Marcus Lunau</Authors>
         <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
         <PackageDescription>Blazor components of Dashboard for JGUZDV.JobHost package.</PackageDescription>
@@ -26,6 +28,7 @@
         <ProjectReference Include="..\JGUZDV.Blazor.StateManagement\src\JGUZDV.Blazor.StateManagement.csproj" />
         <ProjectReference Include="..\JGUZDV.ClientStorage\src\JGUZDV.ClientStorage.csproj" />
         <ProjectReference Include="..\JGUZDV.JobHost.Dashboard\src\JGUZDV.JobHost.Dashboard.csproj" />
+        <ProjectReference Include="..\JGUZDV.JobHost.Shared\JGUZDV.JobHost.Shared.csproj" />
     </ItemGroup>
 
 </Project>

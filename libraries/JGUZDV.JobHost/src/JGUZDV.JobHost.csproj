@@ -8,7 +8,7 @@
         <PackageId>JGUZDV.JobHost</PackageId>
         <IsPackable>true</IsPackable>
         <Version>1.0.3</Version>
-        <Authors>Marcus Lunau</Authors>
+        <Authors>Marcus Lunau, Aaron Puhl</Authors>
         <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
         <PackageDescription>Host for background jobs using Quartz.net</PackageDescription>
         <OutputType>Library</OutputType>
@@ -24,7 +24,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\JGUZDV.Extensions.Logging\src\JGUZDV.Extensions.Logging.csproj" />
-      <ProjectReference Include="..\..\JGUZDV.JobHost.Abstractions\JGUZDV.JobHost.Abstractions.csproj" />
+      <ProjectReference Include="..\..\JGUZDV.JobHost.Shared\JGUZDV.JobHost.Shared.csproj" />
     </ItemGroup>
 
 </Project>

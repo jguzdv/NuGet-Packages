@@ -1,4 +1,4 @@
-﻿using JGUZDV.JobHost.Abstractions.Model;
+﻿using JGUZDV.JobHost.Shared.Model;
 
 namespace JGUZDV.JobHost.Dashboard.Services
 {

@@ -1,6 +1,6 @@
-﻿using JGUZDV.JobHost.Abstractions.Model;
+﻿using JGUZDV.JobHost.Shared.Model;
 
-namespace JGUZDV.JobHost.Abstractions
+namespace JGUZDV.JobHost.Shared
 {
     public interface IJobExecutionReporter
     {

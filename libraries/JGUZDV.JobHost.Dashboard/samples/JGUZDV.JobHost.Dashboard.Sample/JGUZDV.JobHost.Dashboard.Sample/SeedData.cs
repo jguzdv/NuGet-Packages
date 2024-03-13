@@ -1,4 +1,4 @@
-﻿using JGUZDV.JobHost.Database;
+﻿using JGUZDV.JobHost.Dashboard.EntityFrameworkCore;
 
 namespace JGUZDV.JobHost.Dashboard.Sample
 {

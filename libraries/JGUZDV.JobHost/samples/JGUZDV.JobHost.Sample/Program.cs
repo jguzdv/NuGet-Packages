@@ -1,6 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using JGUZDV.JobHost;
-using JGUZDV.JobHost.Database;
+using JGUZDV.JobHost.Dashboard.EntityFrameworkCore;
 using JGUZDV.JobHost.Sample;
 
 using Microsoft.EntityFrameworkCore;

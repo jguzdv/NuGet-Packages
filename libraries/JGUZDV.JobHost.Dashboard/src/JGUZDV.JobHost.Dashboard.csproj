@@ -1,18 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <Version>1.0.0</Version>
-    <Authors>Aaron Puhl, Marcus Lunau</Authors>
-    <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
-    <PackageDescription>Dashboard for JGUZDV.JobHost package.</PackageDescription>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <Version>1.0.0</Version>
 
+        <PackageId>JGUZDV.JobHost.Dashboard</PackageId>
+        <IsPackable>true</IsPackable>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\JGUZDV.JobHost.Database\src\JGUZDV.JobHost.Database.csproj" />
-  </ItemGroup>
+        <Authors>Aaron Puhl, Marcus Lunau</Authors>
+        <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
+        <PackageDescription>Dashboard for JGUZDV.JobHost package.</PackageDescription>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\JGUZDV.JobHost.Shared\JGUZDV.JobHost.Shared.csproj" />
+    </ItemGroup>
 
 </Project>

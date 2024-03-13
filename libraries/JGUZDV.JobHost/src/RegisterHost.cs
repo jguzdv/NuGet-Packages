@@ -1,4 +1,4 @@
-﻿using JGUZDV.JobHost.Abstractions;
+﻿using JGUZDV.JobHost.Shared;
 
 using Microsoft.Extensions.Logging;
 

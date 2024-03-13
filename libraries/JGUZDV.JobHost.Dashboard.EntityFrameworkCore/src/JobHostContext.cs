@@ -1,9 +1,9 @@
-﻿using JGUZDV.JobHost.Database.Entities;
+﻿using JGUZDV.JobHost.Dashboard.EntityFrameworkCore.Entities;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace JGUZDV.JobHost.Database
+namespace JGUZDV.JobHost.Dashboard.EntityFrameworkCore
 {
     /// <inheritdoc/>
     public class JobHostContext : DbContext
@@ -21,16 +21,16 @@ namespace JGUZDV.JobHost.Database
             // TODO: Do we want to assume relational database provider?
             modelBuilder.HasDefaultSchema(nameof(JobHost));
 
-            modelBuilder.Entity<Entities.Job>()
+            modelBuilder.Entity<Job>()
                 .HasOne(x => x.Host)
                 .WithMany()
                 .HasForeignKey(x => x.HostId);
 
-            modelBuilder.Entity<Entities.Job>()
+            modelBuilder.Entity<Job>()
                 .HasIndex(x => new { x.HostId, x.Name })
                 .IsUnique();
 
-            modelBuilder.Entity<Entities.Host>()
+            modelBuilder.Entity<Host>()
                 .HasIndex(x => x.Name)
                 .IsUnique();
 
@@ -59,6 +59,6 @@ namespace JGUZDV.JobHost.Database
         /// </summary>
         public virtual DbSet<Host> Hosts { get; set; }
 
-       
+
     }
 }

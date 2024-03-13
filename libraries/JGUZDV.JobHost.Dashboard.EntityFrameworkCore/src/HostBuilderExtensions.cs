@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace JGUZDV.JobHost.Database
+namespace JGUZDV.JobHost.Dashboard.EntityFrameworkCore
 {
     /// <summary>
     /// Extensions for the IHostBuilder
@@ -19,8 +19,8 @@ namespace JGUZDV.JobHost.Database
         /// <param name="section">Configuration section containing dashboard settings (default is <see cref="Constants.DefaultDashboardConfigSection"/>).</param>
         /// <returns>The extended host builder.</returns>
         /// <exception cref="InvalidOperationException"></exception>
-        public static IHostBuilder UseJobHostContextReporting(this IHostBuilder builder, 
-            string section = JGUZDV.JobHost.Constants.DefaultDashboardConfigSection)
+        public static IHostBuilder UseJobHostContextReporting(this IHostBuilder builder,
+            string section = Constants.DefaultDashboardConfigSection)
         {
             builder.UseJobReporting<JobHostContextReporter>(section);
 
@@ -37,9 +37,9 @@ namespace JGUZDV.JobHost.Database
         /// <param name="monitoringUrl">The URL for monitoring.</param>
         /// <param name="executeNowSchedule">Cron expression for polling interval for the execute now job(default is "0/15 * * * * ?").</param>
         /// <returns>The extended host builder.</returns>
-        public static IHostBuilder UseJobHostContextReporting(this IHostBuilder builder, 
-            string jobHostName, 
-            string monitoringUrl, 
+        public static IHostBuilder UseJobHostContextReporting(this IHostBuilder builder,
+            string jobHostName,
+            string monitoringUrl,
             string executeNowSchedule = "0/15 * * * * ?")
         {
             builder.UseJobReporting<JobHostContextReporter>(jobHostName, monitoringUrl, executeNowSchedule);
@@ -59,7 +59,7 @@ namespace JGUZDV.JobHost.Database
         /// <exception cref="InvalidOperationException"></exception>
         public static IHostBuilder UseJobHostContextReporting(this IHostBuilder builder,
             Action<DbContextOptionsBuilder> configureDbContext,
-            string section = JGUZDV.JobHost.Constants.DefaultDashboardConfigSection)
+            string section = Constants.DefaultDashboardConfigSection)
         {
             builder.ConfigureServices(services =>
             {

@@ -1,7 +1,7 @@
-﻿namespace JGUZDV.JobHost.Database.Entities
+﻿namespace JGUZDV.JobHost.Shared.Model
 {
     /// <summary>
-    /// Entity class for a jobhosts
+    /// Model class for a jobhosts
     /// </summary>
     public class Host
     {
@@ -9,7 +9,7 @@
         /// The id of the jobhost
         /// </summary>
         public int Id { get; set; }
-        
+
         /// <summary>
         /// THe Name of the jobhost
         /// </summary>
@@ -18,6 +18,6 @@
         /// <summary>
         /// The Url for the monitoring
         /// </summary>
-        public required string MonitoringUrl { get; set; } 
+        public required string MonitoringUrl { get; set; }
     }
 }

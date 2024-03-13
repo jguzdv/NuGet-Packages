@@ -1,9 +1,10 @@
-﻿using JGUZDV.JobHost.Abstractions;
+﻿using JGUZDV.JobHost.Shared;
+using JGUZDV.JobHost.Shared.Model;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
-namespace JGUZDV.JobHost.Database
+namespace JGUZDV.JobHost.Dashboard.EntityFrameworkCore
 {
     public class JobHostContextReporter : IJobExecutionReporter
     {
@@ -25,7 +26,7 @@ namespace JGUZDV.JobHost.Database
             if (host == null)
             {
                 // register the host
-                host = new Database.Entities.Host
+                host = new Entities.Host
                 {
                     MonitoringUrl = jobHost.MonitoringUrl,
                     Name = jobHost.HostName
@@ -61,7 +62,7 @@ namespace JGUZDV.JobHost.Database
 
                 if (job == null)
                 {
-                    job = new Database.Entities.Job
+                    job = new Entities.Job
                     {
                         LastExecutedAt = DateTimeOffset.MinValue,
                         NextExecutionAt = item.NextExecutionAt,
@@ -105,14 +106,14 @@ namespace JGUZDV.JobHost.Database
             await dbContext.SaveChangesAsync();
         }
 
-        public async Task<List<Abstractions.Model.Job>> GetPendingJobs()
+        public async Task<List<Job>> GetPendingJobs()
         {
             await using var dbContext = await _dbContextFactory.CreateDbContextAsync();
 
             var host = _jobReportOptions.Value.JobHostName;
             var jobs = await dbContext.Jobs
                 .Where(x => x.Host.Name == host && x.ShouldExecute == true)
-                .Select(x => new Abstractions.Model.Job
+                .Select(x => new Shared.Model.Job
                 {
                     FailMessage = x.FailMessage,
                     HostId = x.HostId,

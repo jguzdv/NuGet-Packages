@@ -1,7 +1,7 @@
-﻿namespace JGUZDV.JobHost.Abstractions.Model
+﻿namespace JGUZDV.JobHost.Dashboard.EntityFrameworkCore.Entities
 {
     /// <summary>
-    /// Model class for a jobhosts
+    /// Entity class for a jobhosts
     /// </summary>
     public class Host
     {

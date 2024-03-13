@@ -1,4 +1,4 @@
-﻿namespace JGUZDV.JobHost.Abstractions.Model
+﻿namespace JGUZDV.JobHost.Shared.Model
 {
     /// <summary>
     /// The Model class for a job
