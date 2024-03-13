@@ -16,7 +16,7 @@ namespace JGUZDV.JobHost.Dashboard.Blazor
     {
         private readonly ClientStore _clientStore;
         private readonly IDashboardService _dashboardService;
-        private IOptions<DashboardOptions> _options;
+        private readonly IOptions<DashboardOptions> _options;
 
         [ObservableProperty]
         private Task<JobCollection> _jobs;
@@ -26,6 +26,7 @@ namespace JGUZDV.JobHost.Dashboard.Blazor
         /// </summary>
         /// <param name="dashboardService"></param>
         /// <param name="clientStore"></param>
+        /// <param name="options"></param>
         public DashboardState(IDashboardService dashboardService, ClientStore clientStore, IOptions<DashboardOptions> options)
         {
             _dashboardService = dashboardService;
@@ -35,7 +36,7 @@ namespace JGUZDV.JobHost.Dashboard.Blazor
         }
 
         /// <summary>
-        /// Marks the speciefied job to be executed
+        /// Marks the specified job to be executed
         /// </summary>
         /// <param name="jobId"></param>
         /// <returns></returns>

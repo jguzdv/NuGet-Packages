@@ -14,7 +14,7 @@ namespace JGUZDV.JobHost.Dashboard.Services
         public Task<JobCollection> GetJobs();
 
         /// <summary>
-        /// Marks the speciefied job to be executed
+        /// Marks the specified job to be executed
         /// </summary>
         /// <param name="jobId"></param>
         /// <returns></returns>

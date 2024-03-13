@@ -6,17 +6,20 @@ using Microsoft.Extensions.Options;
 
 namespace JGUZDV.JobHost.Dashboard.EntityFrameworkCore
 {
+    /// <inheritdoc/>
     public class JobHostContextReporter : IJobExecutionReporter
     {
         private readonly IOptions<JobReportOptions> _jobReportOptions;
         private readonly IDbContextFactory<JobHostContext> _dbContextFactory;
 
+        /// <inheritdoc/>
         public JobHostContextReporter(IOptions<JobReportOptions> jobReportOptions, IDbContextFactory<JobHostContext> dbContextFactory)
         {
             _jobReportOptions = jobReportOptions;
             _dbContextFactory = dbContextFactory;
         }
 
+        /// <inheritdoc/>
         public async Task RegisterHostAndJobsAsync(JobHostDescription jobHost)
         {
             await using var dbContext = await _dbContextFactory.CreateDbContextAsync();
@@ -79,6 +82,7 @@ namespace JGUZDV.JobHost.Dashboard.EntityFrameworkCore
             await dbContext.SaveChangesAsync();
         }
 
+        /// <inheritdoc/>
         public async Task ReportJobExecutionAsync(JobExecutionReport jobReport)
         {
             await using var dbContext = await _dbContextFactory.CreateDbContextAsync();
@@ -106,13 +110,14 @@ namespace JGUZDV.JobHost.Dashboard.EntityFrameworkCore
             await dbContext.SaveChangesAsync();
         }
 
+        /// <inheritdoc/>
         public async Task<List<Job>> GetPendingJobs()
         {
             await using var dbContext = await _dbContextFactory.CreateDbContextAsync();
 
             var host = _jobReportOptions.Value.JobHostName;
             var jobs = await dbContext.Jobs
-                .Where(x => x.Host.Name == host && x.ShouldExecute == true)
+                .Where(x => x.Host!.Name == host && x.ShouldExecute == true)
                 .Select(x => new Shared.Model.Job
                 {
                     FailMessage = x.FailMessage,
@@ -131,11 +136,12 @@ namespace JGUZDV.JobHost.Dashboard.EntityFrameworkCore
             return jobs;
         }
 
+        /// <inheritdoc/>
         public async Task RemoveFromPending(int jobId)
         {
             await using var dbContext = await _dbContextFactory.CreateDbContextAsync();
 
-            var entity = await dbContext.Jobs.FirstAsync(x => x.Id == jobId && x.Host.Name == _jobReportOptions.Value.JobHostName);
+            var entity = await dbContext.Jobs.FirstAsync(x => x.Id == jobId && x.Host!.Name == _jobReportOptions.Value.JobHostName);
             entity.ShouldExecute = false;
             await dbContext.SaveChangesAsync();
         }
