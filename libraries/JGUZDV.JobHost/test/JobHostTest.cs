@@ -1,6 +1,5 @@
 using System.Data;
 
-using JGUZDV.JobHost.Abstractions;
 using JGUZDV.JobHost.Database;
 
 using Microsoft.EntityFrameworkCore;
@@ -70,9 +69,8 @@ namespace JGUZDV.JobHost.Tests
                 .ConfigureServices(services =>
                 {
                     services.AddDbContextFactory<JobHostContext>(x => x.UseInMemoryDatabase("DashboardTest"));
-                    services.AddSingleton<IJobExecutionReporterFactory, TestFactory>();
                 })
-                .UseJobReporting<JobHostContext>("Test", "www.test.de");
+                .UseJobHostContextReporting("Test", "www.test.de");
 
             var testObject = new JobHostWrapper();
 
@@ -117,8 +115,8 @@ namespace JGUZDV.JobHost.Tests
             var builder = JobHost.CreateJobHostBuilder(Array.Empty<string>(),
                     configureWindowsService => configureWindowsService.ServiceName = "ExecuteNowTest",
                     quartzHostedServiceOptions => quartzHostedServiceOptions.WaitForJobsToComplete = true)
-                .ConfigureServices(services => services.AddDbContext<JobHostContext>(x => x.UseInMemoryDatabase("ExecuteNowTest")))
-                .UseJobReporting<JobHostContext>("Test", "www.test.de",
+                .ConfigureServices(services => services.AddDbContextFactory<JobHostContext>(x => x.UseInMemoryDatabase("ExecuteNowTest")))
+                .UseJobReporting<JobHostContextReporter>("Test", "www.test.de",
                     "* * * * * ?");
             var testObject = new JobHostWrapper();
 

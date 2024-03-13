@@ -15,7 +15,7 @@ var builder = JobHost.CreateJobHostBuilder(args, configureWindowsService => conf
 
 builder.ConfigureServices(services => services.AddDbContext<JobHostContext>(x => x.UseSqlServer("Server=(LocalDb)\\MSSQLLocalDB;Database=JobHostDashboardSample;Trusted_Connection=True;MultipleActiveResultSets=true;Encrypt=False")));
 
-builder.UseJobReporting<JobHostContext>();
+builder.UseJobReporting<JobHostContextReporter>();
 builder.AddHostedJob<SampleJob>();
 
 var host = builder.Build();

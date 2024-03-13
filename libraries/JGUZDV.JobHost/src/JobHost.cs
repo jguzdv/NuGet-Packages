@@ -42,7 +42,6 @@ namespace JGUZDV.JobHost
         /// Extends the host builder to configure job monitoring.
         /// </summary>
         /// <param name="builder">The host builder to extend.</param>
-        /// <param name="configureDbContext">Action to configure the database context options.</param>
         /// <param name="section">Configuration section containing dashboard settings (default is <see cref="Constants.DefaultDashboardConfigSection"/>).</param>
         /// <returns>The extended host builder.</returns>
         /// <exception cref="InvalidOperationException"></exception>
@@ -80,8 +79,8 @@ namespace JGUZDV.JobHost
                 x.JobHostName = jobHostName;
             });
 
-            services.TryAddScoped<IJobExecutionReporter, T>();
-            services.TryAddSingleton<IJobExecutionReporterFactory, JobExecutionReporterFactory>();
+            services.TryAddSingleton<IJobExecutionReporter, T>();
+
             ctx.Properties[Constants.UsesDashboard] = true;
             ctx.Properties[Constants.JobHostName] = jobHostName;
 

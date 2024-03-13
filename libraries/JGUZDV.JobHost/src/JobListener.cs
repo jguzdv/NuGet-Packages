@@ -7,11 +7,11 @@ namespace JGUZDV.JobHost
 {
     internal class JobListener : JobListenerSupport
     {
-        private readonly IJobExecutionReporterFactory _dbContextFactory;
+        private readonly IJobExecutionReporter _reporter;
 
-        public JobListener(IJobExecutionReporterFactory dbContextFactory)
+        public JobListener(IJobExecutionReporter reporter)
         {
-            _dbContextFactory = dbContextFactory;
+            _reporter = reporter;
         }
 
         public override string Name => nameof(JobListener);
@@ -20,9 +20,8 @@ namespace JGUZDV.JobHost
         {
             try
             {
-                var reporter = await _dbContextFactory.CreateAsync();
 
-                await reporter.ReportJobExecutionAsync(new()
+                await _reporter.ReportJobExecutionAsync(new()
                 {
                     Failed = jobException != null,
                     FailMessage = GetFailMessage(jobException),
