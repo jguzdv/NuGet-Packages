@@ -35,7 +35,7 @@ public static class JGUZDVAspNetCoreOpenTelemetryExtensions
 
             if (string.IsNullOrWhiteSpace(connectionString))
             {
-                throw new ArgumentException("Found AzureMonitor settings node, but no ConnectionString setting is provided.");
+                throw new ArgumentException("Found AzureMonitor settings section, but no ConnectionString setting is provided.");
             }
 
             var serviceNamespace = settings.GetValue<string>("ServiceNamespace");
@@ -47,7 +47,7 @@ public static class JGUZDVAspNetCoreOpenTelemetryExtensions
 
             if (string.IsNullOrWhiteSpace(serviceNamespace))
             {
-                throw new ArgumentException("Found AzureMonitor settings node, but no " +
+                throw new ArgumentException("Found AzureMonitor settings section, but no " +
                     "setting 'ServiceNamespace' is provided and no default application name was found.");
             }
 
@@ -60,7 +60,7 @@ public static class JGUZDVAspNetCoreOpenTelemetryExtensions
 
             if (string.IsNullOrWhiteSpace(serviceName))
             {
-                throw new ArgumentException("Found AzureMonitor settings node, but no " +
+                throw new ArgumentException("Found AzureMonitor settings section, but no " +
                     "setting 'ServiceName' is provided and no default application name was found.");
             }
 

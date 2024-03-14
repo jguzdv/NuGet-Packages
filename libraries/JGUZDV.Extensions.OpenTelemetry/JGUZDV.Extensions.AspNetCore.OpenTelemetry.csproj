@@ -23,5 +23,12 @@
   <ItemGroup>
     <PackageReference Include="Azure.Monitor.OpenTelemetry.AspNetCore" Version="1.1.0" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Update="README.md">
+      <PackagePath>/</PackagePath>
+      <Pack>true</Pack>
+    </None>
+  </ItemGroup>
   
 </Project>
