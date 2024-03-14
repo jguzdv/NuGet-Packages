@@ -31,7 +31,9 @@ public static class JGUZDVAspNetCoreOpenTelemetryExtensions
 
         if (settings.Exists())
         {
-            if (string.IsNullOrWhiteSpace(settings.GetValue<string>("ConnectionString")))
+            var connectionString = settings.GetValue<string>("ConnectionString");
+
+            if (string.IsNullOrWhiteSpace(connectionString))
             {
                 throw new ArgumentException("Found AzureMonitor settings node, but no ConnectionString setting is provided.");
             }
@@ -64,8 +66,8 @@ public static class JGUZDVAspNetCoreOpenTelemetryExtensions
 
             // Attribute service.instance.id (CloudRoleInstance) defaults to host name/device name.
             var attributes = new Dictionary<string, object>() {
-                { "service.namespace", settings.GetValue<string>("ServiceNamespace")! },
-                { "service.name", settings.GetValue<string>("ServiceName")! }
+                { "service.namespace", serviceNamespace },
+                { "service.name", serviceName }
             };
 
             // Add the OpenTelemetry telemetry service to the application.
@@ -77,7 +79,7 @@ public static class JGUZDVAspNetCoreOpenTelemetryExtensions
                     tracing.AddHttpClientInstrumentation();
                 }).UseAzureMonitor(options =>
                 {
-                    options.ConnectionString = settings.GetValue<string>("ConnectionString")!;
+                    options.ConnectionString = connectionString;
                 });
 
             builder.Services.ConfigureOpenTelemetryTracerProvider((sp, builder) =>
@@ -90,7 +92,7 @@ public static class JGUZDVAspNetCoreOpenTelemetryExtensions
                     options.SetResourceBuilder(ResourceBuilder.CreateEmpty().AddAttributes(attributes));
                     options.AddAzureMonitorLogExporter(opts =>
                     {
-                        opts.ConnectionString = settings.GetValue<string>("ConnectionString")!;
+                        opts.ConnectionString = connectionString;
                     });
 
                     options.IncludeFormattedMessage = true;
