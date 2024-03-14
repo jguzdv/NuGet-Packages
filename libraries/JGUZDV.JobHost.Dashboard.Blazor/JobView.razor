@@ -1,0 +1,42 @@
+﻿@using JGUZDV.Blazor.StateManagement
+@using JGUZDV.JobHost.Shared.Model
+@inherits StateListener
+<AwaitResult Task="_jobs" Context="jobs">
+    @foreach (var host in HostSort(jobs.Hosts.Values.ToList()))
+    {
+        <h1>
+            @host.Name
+        </h1>
+        <div class="row row-cols-1 row-cols-lg-2 row-cols-xxl-3 g-2 mb-4">
+            @foreach (var job in JobSort(jobs.JobsByHost[host.Id]))
+            {
+                <div class="col">
+                    <JobCard Job="job" OnExecuteNow="ExecuteNow"></JobCard>
+                </div>
+            }
+        </div>
+    }
+</AwaitResult>
+
+@code {
+    [Inject]
+    public required IState<DashboardState> State { get; set; }
+
+    [Parameter]
+    public Func<List<Host>, List<Host>> HostSort { get; set; } = x => x.OrderBy(x => x.Name).ToList();
+
+    [Parameter]
+    public Func<List<Job>, List<Job>> JobSort { get; set; } = x => x.OrderBy(x => x.Name).ToList();
+
+    private Task<JobCollection> _jobs => State.Value.Jobs;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+    }
+
+    private async Task ExecuteNow(Job job)
+    {
+        await State.Value.ExecuteNow(job.Id);
+    }
+}

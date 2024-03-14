@@ -50,6 +50,14 @@ namespace JGUZDV.JobHost.Tests
         }
     }
 
+    internal class FailJob : IJob
+    {
+        public Task Execute(IJobExecutionContext context)
+        {
+            throw new Exception();
+        }
+    }
+
     internal class JobHostWrapper
     {
         public bool TestValue { get; set; } = false;
