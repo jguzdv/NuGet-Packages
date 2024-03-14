@@ -152,7 +152,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.WebApiHost.Tests", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JGUZDV.AspNetCore.Extensions.OpenTelemetry", "JGUZDV.AspNetCore.Extensions.OpenTelemetry", "{B1DC4BB7-3BB1-43FB-8264-C9E1712AD741}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.Extensions.AspNetCore.OpenTelemetry", "libraries\JGUZDV.AspNetCore.Extensions.OpenTelemetry\JGUZDV.Extensions.AspNetCore.OpenTelemetry.csproj", "{F0298DA6-73BA-4C3B-AD47-678CC0F099C8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.AspNetCore.Extensions.OpenTelemetry", "libraries\JGUZDV.AspNetCore.Extensions.OpenTelemetry\JGUZDV.AspNetCore.Extensions.OpenTelemetry.csproj", "{F0298DA6-73BA-4C3B-AD47-678CC0F099C8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
