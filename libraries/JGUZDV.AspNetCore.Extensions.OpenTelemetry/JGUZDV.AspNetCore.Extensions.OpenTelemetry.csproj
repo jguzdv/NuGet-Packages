@@ -5,7 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
-    <PackageId>JGUZDV.Extensions.AspNetCore.OpenTelemetry</PackageId>
+    <PackageId>JGUZDV.AspNetCore.Extensions.OpenTelemetry</PackageId>
     <IsPackable>true</IsPackable>
     <Version>1.0.0</Version>
     <Authors>Tobias Beckhoff</Authors>
