@@ -1,8 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
 using JGUZDV.ClientStorage.Store;
+using JGUZDV.JobHost.Shared;
 using JGUZDV.JobHost.Shared.Model;
-using JGUZDV.JobHost.Dashboard.Services;
 
 using Microsoft.Extensions.Options;
 
@@ -42,7 +42,7 @@ namespace JGUZDV.JobHost.Dashboard.Blazor
         /// <returns></returns>
         public Task ExecuteNow(int jobId)
         {
-            return _dashboardService.ExecuteNow(jobId);
+            return _dashboardService.ExecuteNow(jobId, CancellationToken.None);
         }
 
         private Task<JobCollection> Initialize()
@@ -51,7 +51,7 @@ namespace JGUZDV.JobHost.Dashboard.Blazor
                  "Jobhost:Jobs",
                  new StoreOptions<JobCollection>
                  {
-                     LoadFunc = (ct) => _dashboardService.GetJobs(),
+                     LoadFunc = (ct) => _dashboardService.GetJobs(ct),
                      UsesBackgroundRefresh = true,
                      ValueExpiry = TimeSpan.FromSeconds(_options.Value.PollingInterval)
                  });

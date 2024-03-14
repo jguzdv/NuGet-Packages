@@ -46,7 +46,7 @@ namespace JGUZDV.JobHost
         /// <returns>The extended host builder.</returns>
         /// <exception cref="InvalidOperationException"></exception>
         public static IHostBuilder UseJobReporting<T>(this IHostBuilder builder,
-          string section = Constants.DefaultDashboardConfigSection) where T : class, IJobExecutionReporter
+          string section = Constants.DefaultDashboardConfigSection) where T : class, IJobExecutionManager
         {
             var jobHostName = "";
             var monitoringUrl = "";
@@ -70,7 +70,7 @@ namespace JGUZDV.JobHost
             return builder;
         }
 
-        private static void ConfigureReporting<T>(HostBuilderContext ctx, IServiceCollection services, string jobHostName, string monitoringUrl, string executeNowSchedule) where T : class, IJobExecutionReporter
+        private static void ConfigureReporting<T>(HostBuilderContext ctx, IServiceCollection services, string jobHostName, string monitoringUrl, string executeNowSchedule) where T : class, IJobExecutionManager
         {
             services.Configure<JobReportOptions>(x =>
             {
@@ -79,7 +79,7 @@ namespace JGUZDV.JobHost
                 x.JobHostName = jobHostName;
             });
 
-            services.TryAddSingleton<IJobExecutionReporter, T>();
+            services.TryAddSingleton<IJobExecutionManager, T>();
 
             ctx.Properties[Constants.UsesDashboard] = true;
             ctx.Properties[Constants.JobHostName] = jobHostName;
@@ -114,7 +114,7 @@ namespace JGUZDV.JobHost
         public static IHostBuilder UseJobReporting<T>(this IHostBuilder builder,
             string jobHostName,
             string monitoringUrl,
-            string executeNowSchedule = "0/15 * * * * ?") where T : class, IJobExecutionReporter
+            string executeNowSchedule = "0/15 * * * * ?") where T : class, IJobExecutionManager
         {
             builder.ConfigureServices((ctx, services) =>
             {

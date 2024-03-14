@@ -1,6 +1,6 @@
 ﻿using JGUZDV.JobHost.Shared.Model;
 
-namespace JGUZDV.JobHost.Dashboard.Services
+namespace JGUZDV.JobHost.Shared
 {
     /// <summary>
     /// The service for the dashboard. Loads and executes registered jobs.
@@ -11,13 +11,12 @@ namespace JGUZDV.JobHost.Dashboard.Services
         /// Loads the registered jobs and hosts 
         /// </summary>
         /// <returns></returns>
-        public Task<JobCollection> GetJobs();
+        public Task<JobCollection> GetJobs(CancellationToken ct);
 
         /// <summary>
         /// Marks the specified job to be executed
         /// </summary>
-        /// <param name="jobId"></param>
         /// <returns></returns>
-        public Task ExecuteNow(int jobId);
+        public Task ExecuteNow(int jobId, CancellationToken ct);
     }
 }

@@ -8,7 +8,7 @@ namespace JGUZDV.JobHost.Dashboard.Sample
         {
             var hosts = Enumerable
                 .Range(0, 3)
-                .Select(x => new Database.Entities.Host
+                .Select(x => new EntityFrameworkCore.Entities.Host
                 {
                     MonitoringUrl = $"www.url-{x}.com",
                     Name = $"Host-{x}"
@@ -25,7 +25,7 @@ namespace JGUZDV.JobHost.Dashboard.Sample
                 var jobs = Enumerable
                     .Range(0, x.Next(2, 5))
                     .Select(i =>
-                    new Database.Entities.Job
+                    new EntityFrameworkCore.Entities.Job
                     {
                         Host = host,
                         LastExecutedAt = DateTime.UtcNow,
@@ -33,7 +33,7 @@ namespace JGUZDV.JobHost.Dashboard.Sample
                         FailMessage = i % mod == 0 ? null : "Critical error during execution - uh OH",
                         Name = $"Job-{i}",
                         Schedule = "* 0/15 * * *",
-                        ShouldExecute = i % mod == 0,
+                        ShouldExecuteAt = DateTimeOffset.Now,
                     })
                     .ToList();
 

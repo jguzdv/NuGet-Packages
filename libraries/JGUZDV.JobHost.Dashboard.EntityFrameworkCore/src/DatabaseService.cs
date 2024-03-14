@@ -1,4 +1,4 @@
-﻿using JGUZDV.JobHost.Dashboard.Services;
+﻿using JGUZDV.JobHost.Shared;
 using JGUZDV.JobHost.Shared.Model;
 
 using Microsoft.EntityFrameworkCore;
@@ -20,16 +20,16 @@ namespace JGUZDV.JobHost.Dashboard.EntityFrameworkCore
         }
 
         /// <inheritdoc/>
-        public virtual async Task ExecuteNow(int jobId)
+        public virtual async Task ExecuteNow(int jobId, CancellationToken ct)
         {
-            var context = await _dbContextFactory.CreateDbContextAsync();
+            var context = await _dbContextFactory.CreateDbContextAsync(ct);
             await context.Jobs
                 .Where(x => x.Id == jobId)
-                .ExecuteUpdateAsync(x => x.SetProperty(x => x.ShouldExecute, true));
+                .ExecuteUpdateAsync(x => x.SetProperty(x => x.ShouldExecuteAt, DateTimeOffset.Now), ct);
         }
 
         /// <inheritdoc/>
-        public virtual async Task<JobCollection> GetJobs()
+        public virtual async Task<JobCollection> GetJobs(CancellationToken ct)
         {
             var context = await _dbContextFactory.CreateDbContextAsync();
             var jobsByHost = await context.Jobs
@@ -52,7 +52,7 @@ namespace JGUZDV.JobHost.Dashboard.EntityFrameworkCore
                         LastResult = x.LastResult,
                         NextExecutionAt = x.NextExecutionAt,
                         Schedule = x.Schedule,
-                        ShouldExecute = x.ShouldExecute,
+                        ShouldExecuteAt = x.ShouldExecuteAt,
                         FailMessage = x.FailMessage,
                         RunTime = x.RunTime
                     }).ToList()

@@ -137,7 +137,7 @@ namespace JGUZDV.JobHost.Tests
                 var dbContext = scope.ServiceProvider.GetRequiredService<JobHostContext>();
 
                 var job = await dbContext.Jobs.FirstOrDefaultAsync();
-                job.ShouldExecute = true;
+                job.ShouldExecuteAt = now;
                 await dbContext.SaveChangesAsync();
             }
 
@@ -149,7 +149,7 @@ namespace JGUZDV.JobHost.Tests
 
                 var job = await dbContext.Jobs.FirstOrDefaultAsync();
 
-                Assert.False(job.ShouldExecute);
+                Assert.True(job.ShouldExecuteAt <= job.LastExecutedAt);
                 Assert.True(testObject.TestValue3);
             }
 

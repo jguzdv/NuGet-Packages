@@ -19,7 +19,7 @@ namespace JGUZDV.JobHost
             _jobType = jobType;
         }
 
-        public async Task Execute(string hostName, IScheduler scheduler)
+        public async Task Execute(string hostName, IScheduler scheduler, CancellationToken cancellationToken)
         {
             var jobDetail = JobBuilder
                 .Create(_jobType)
@@ -33,7 +33,7 @@ namespace JGUZDV.JobHost
                 .WithCronSchedule(_cronSchedule)
                 .Build();
 
-            await scheduler.ScheduleJob(jobDetail, trigger);
+            await scheduler.ScheduleJob(jobDetail, trigger, cancellationToken);
         }
     }
 }

@@ -6,10 +6,10 @@ namespace JGUZDV.JobHost
 {
     internal class ExecuteNowJob : IJob
     {
-        private readonly IJobExecutionReporter _reporter;
+        private readonly IJobExecutionManager _reporter;
         private readonly ISchedulerFactory _schedulerFactory;
 
-        public ExecuteNowJob(IJobExecutionReporter reporter, ISchedulerFactory schedulerFactory)
+        public ExecuteNowJob(IJobExecutionManager reporter, ISchedulerFactory schedulerFactory)
         {
             _reporter = reporter;
             _schedulerFactory = schedulerFactory;
@@ -17,16 +17,14 @@ namespace JGUZDV.JobHost
 
         public async Task Execute(IJobExecutionContext context)
         {
-            var jobs = await _reporter.GetPendingJobs();
+            var jobs = await _reporter.GetPendingJobsAsync(context.CancellationToken);
 
-            var scheduler = await _schedulerFactory.GetScheduler();
+            var scheduler = await _schedulerFactory.GetScheduler(context.CancellationToken);
 
             foreach (var job in jobs)
             {
-                await _reporter.RemoveFromPending(job.Id);
-
                 var jobKey = new JobKey(job.Name);
-                await scheduler.TriggerJob(jobKey);
+                await scheduler.TriggerJob(jobKey, context.CancellationToken);
             }
         }
     }

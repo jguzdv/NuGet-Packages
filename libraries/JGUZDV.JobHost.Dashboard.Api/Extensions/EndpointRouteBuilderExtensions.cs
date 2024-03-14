@@ -1,4 +1,4 @@
-﻿using JGUZDV.JobHost.Dashboard.Services;
+﻿using JGUZDV.JobHost.Shared;
 
 namespace JGUZDV.JobHost.Dashboard.Extensions
 {
@@ -14,16 +14,16 @@ namespace JGUZDV.JobHost.Dashboard.Extensions
         /// <returns></returns>
         public static IEndpointRouteBuilder MapJobHostDashboardApi(this IEndpointRouteBuilder builder)
         {
-            builder.MapGet(Routes.GetJobs, async (IDashboardService service) =>
+            builder.MapGet(Routes.GetJobs, async (IDashboardService service, HttpContext context) =>
             {
-                var result = await service.GetJobs();
+                var result = await service.GetJobs(context.RequestAborted);
 
                 return Results.Ok(result);
             });
 
-            builder.MapPost(Routes.ExecuteNowTemplate, async (int jobId, IDashboardService service) =>
+            builder.MapPost(Routes.ExecuteNowTemplate, async (int jobId, IDashboardService service, HttpContext context) =>
             {
-                await service.ExecuteNow(jobId);
+                await service.ExecuteNow(jobId, context.RequestAborted);
             });
 
             return builder;

@@ -1,7 +1,9 @@
-﻿using JGUZDV.JobHost.Dashboard.Services;
+﻿using System.Net.Http.Json;
+
+using JGUZDV.JobHost.Shared;
 using JGUZDV.JobHost.Shared.Model;
 
-namespace JGUZDV.JobHost.Dashboard.Api
+namespace JGUZDV.JobHost.Dashboard
 {
     /// <inheritdoc/>
     public class ApiClient : IDashboardService
@@ -18,15 +20,15 @@ namespace JGUZDV.JobHost.Dashboard.Api
         }
 
         /// <inheritdoc/>
-        public Task ExecuteNow(int jobId)
+        public Task ExecuteNow(int jobId, CancellationToken ct)
         {
-            return _httpClient.PostAsync(Routes.ExecuteNow(jobId), null);
+            return _httpClient.PostAsync(Routes.ExecuteNow(jobId), null, ct);
         }
 
         /// <inheritdoc/>
-        public async Task<JobCollection> GetJobs()
+        public async Task<JobCollection> GetJobs(CancellationToken ct)
         {
-            return await _httpClient.GetFromJsonAsync<JobCollection>(Routes.GetJobs) ?? new JobCollection { 
+            return await _httpClient.GetFromJsonAsync<JobCollection>(Routes.GetJobs, ct) ?? new JobCollection { 
                 Hosts = new Dictionary<int, Shared.Model.Host>(),
                 JobsByHost = new Dictionary<int,List<Job>>()
             };

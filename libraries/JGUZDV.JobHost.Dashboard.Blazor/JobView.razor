@@ -1,6 +1,5 @@
 ﻿@using JGUZDV.Blazor.StateManagement
 @using JGUZDV.JobHost.Shared.Model
-@using JGUZDV.JobHost.Dashboard.Services
 @inherits StateListener
 <AwaitResult Task="_jobs" Context="jobs">
     @foreach (var host in HostSort(jobs.Hosts.Values.ToList()))

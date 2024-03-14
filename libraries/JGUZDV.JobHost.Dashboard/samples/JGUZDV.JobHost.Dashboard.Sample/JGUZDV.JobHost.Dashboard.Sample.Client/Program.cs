@@ -1,5 +1,6 @@
+using JGUZDV.JobHost.Dashboard;
 using JGUZDV.JobHost.Dashboard.Extensions;
-using JGUZDV.JobHost.Dashboard.Services;
+using JGUZDV.JobHost.Shared;
 
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 

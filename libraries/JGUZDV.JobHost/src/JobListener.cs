@@ -7,9 +7,9 @@ namespace JGUZDV.JobHost
 {
     internal class JobListener : JobListenerSupport
     {
-        private readonly IJobExecutionReporter _reporter;
+        private readonly IJobExecutionManager _reporter;
 
-        public JobListener(IJobExecutionReporter reporter)
+        public JobListener(IJobExecutionManager reporter)
         {
             _reporter = reporter;
         }
@@ -20,7 +20,6 @@ namespace JGUZDV.JobHost
         {
             try
             {
-
                 await _reporter.ReportJobExecutionAsync(new()
                 {
                     Failed = jobException != null,

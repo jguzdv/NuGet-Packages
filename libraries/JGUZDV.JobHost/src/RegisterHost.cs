@@ -12,9 +12,9 @@ namespace JGUZDV.JobHost
         private readonly IEnumerable<RegisterJob> _jobs;
         private readonly ISchedulerFactory _schedulerFactory;
         private readonly ILogger<RegisterHost> _logger;
-        private readonly IJobExecutionReporter _reporter;
+        private readonly IJobExecutionManager _reporter;
 
-        public RegisterHost(IJobExecutionReporter reporter,
+        public RegisterHost(IJobExecutionManager reporter,
             IEnumerable<RegisterJob> jobs,
             ISchedulerFactory schedulerFactory,
             ILogger<RegisterHost> logger)
@@ -43,12 +43,12 @@ namespace JGUZDV.JobHost
                         Name = x.JobName,
                         NextExecutionAt = new CronExpression(x.CronSchedule).GetNextValidTimeAfter(DateTimeOffset.Now) ?? new() //TODO: TimeProvider
                     }).ToList()
-                });
+                }, context.CancellationToken);
 
                 // register quartz jobs
                 foreach (var item in _jobs)
                 {
-                    await item.Execute(hostName, scheduler);
+                    await item.Execute(hostName, scheduler, context.CancellationToken);
                 }
 
                 // register execute now polling job
@@ -64,7 +64,7 @@ namespace JGUZDV.JobHost
                     .WithCronSchedule(schedule)
                     .Build();
 
-                await scheduler.ScheduleJob(jobDetail, trigger);
+                await scheduler.ScheduleJob(jobDetail, trigger, context.CancellationToken);
             }
             catch (Exception e)
             {

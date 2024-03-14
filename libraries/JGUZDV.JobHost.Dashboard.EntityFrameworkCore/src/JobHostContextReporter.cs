@@ -7,7 +7,7 @@ using Microsoft.Extensions.Options;
 namespace JGUZDV.JobHost.Dashboard.EntityFrameworkCore
 {
     /// <inheritdoc/>
-    public class JobHostContextReporter : IJobExecutionReporter
+    public class JobHostContextReporter : IJobExecutionManager
     {
         private readonly IOptions<JobReportOptions> _jobReportOptions;
         private readonly IDbContextFactory<JobHostContext> _dbContextFactory;
@@ -20,11 +20,12 @@ namespace JGUZDV.JobHost.Dashboard.EntityFrameworkCore
         }
 
         /// <inheritdoc/>
-        public async Task RegisterHostAndJobsAsync(JobHostDescription jobHost)
+        public async Task RegisterHostAndJobsAsync(JobHostDescription jobHost, CancellationToken ct)
         {
-            await using var dbContext = await _dbContextFactory.CreateDbContextAsync();
+            await using var dbContext = await _dbContextFactory.CreateDbContextAsync(ct);
 
-            var host = await dbContext.Hosts.FirstOrDefaultAsync(x => x.Name == jobHost.HostName);
+            var host = await dbContext.Hosts.FirstOrDefaultAsync(x => x.Name == jobHost.HostName, ct);
+            var jobs = await dbContext.Jobs.Where(x => x.Host!.Name == jobHost.HostName).ToListAsync(ct);
 
             if (host == null)
             {
@@ -36,32 +37,22 @@ namespace JGUZDV.JobHost.Dashboard.EntityFrameworkCore
                 };
 
                 dbContext.Hosts.Add(host);
-                await dbContext.SaveChangesAsync();
             }
             else
             {
                 // clean up old jobs
-                var jobs = await dbContext.Jobs
-                    .AsNoTracking()
-                    .Where(x => x.HostId == host.Id)
-                    .ToListAsync();
-
                 var oldJobs = jobs
                     .Where(x => !jobHost.Jobs.Any(y => y.Name == x.Name))
-                    .Select(x => x.Id)
                     .ToList();
 
-                await dbContext.Jobs
-                    .Where(x => oldJobs.Contains(x.Id))
-                    .ExecuteDeleteAsync();
-
-                await dbContext.SaveChangesAsync();
+                dbContext.Jobs.RemoveRange(oldJobs);
             }
 
             // register jobs
+            
             foreach (var item in jobHost.Jobs)
             {
-                var job = await dbContext.Jobs.FirstOrDefaultAsync(x => x.HostId == host.Id && x.Name == item.Name);
+                var job = jobs.FirstOrDefault(x => x.Name == item.Name);
 
                 if (job == null)
                 {
@@ -77,9 +68,13 @@ namespace JGUZDV.JobHost.Dashboard.EntityFrameworkCore
 
                     dbContext.Jobs.Add(job);
                 }
+                else
+                {
+                    job.Schedule = item.CronSchedule;
+                }
             }
 
-            await dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync(ct);
         }
 
         /// <inheritdoc/>
@@ -105,19 +100,18 @@ namespace JGUZDV.JobHost.Dashboard.EntityFrameworkCore
             job.RunTime = jobReport.RunTime;
             job.NextExecutionAt = jobReport.NextFireTimeUtc;
             job.LastExecutedAt = jobReport.FireTimeUtc;
-            job.ShouldExecute = false;
 
             await dbContext.SaveChangesAsync();
         }
 
         /// <inheritdoc/>
-        public async Task<List<Job>> GetPendingJobs()
+        public async Task<List<Job>> GetPendingJobsAsync(CancellationToken ct)
         {
-            await using var dbContext = await _dbContextFactory.CreateDbContextAsync();
+            await using var dbContext = await _dbContextFactory.CreateDbContextAsync(ct);
 
             var host = _jobReportOptions.Value.JobHostName;
             var jobs = await dbContext.Jobs
-                .Where(x => x.Host!.Name == host && x.ShouldExecute == true)
+                .Where(x => x.Host!.Name == host && x.ShouldExecuteAt > x.LastExecutedAt)
                 .Select(x => new Shared.Model.Job
                 {
                     FailMessage = x.FailMessage,
@@ -129,21 +123,11 @@ namespace JGUZDV.JobHost.Dashboard.EntityFrameworkCore
                     NextExecutionAt = x.NextExecutionAt,
                     RunTime = x.RunTime,
                     Schedule = x.Schedule,
-                    ShouldExecute = x.ShouldExecute
+                    ShouldExecuteAt = x.ShouldExecuteAt
                 })
-                .ToListAsync();
+                .ToListAsync(ct);
 
             return jobs;
-        }
-
-        /// <inheritdoc/>
-        public async Task RemoveFromPending(int jobId)
-        {
-            await using var dbContext = await _dbContextFactory.CreateDbContextAsync();
-
-            var entity = await dbContext.Jobs.FirstAsync(x => x.Id == jobId && x.Host!.Name == _jobReportOptions.Value.JobHostName);
-            entity.ShouldExecute = false;
-            await dbContext.SaveChangesAsync();
         }
     }
 }

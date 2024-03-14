@@ -36,9 +36,9 @@
         public DateTimeOffset? NextExecutionAt { get; set; }
 
         /// <summary>
-        /// The flag for an instant execution of the job
+        /// Indicates when the job should execute (regardless of schedule)
         /// </summary>
-        public bool ShouldExecute { get; set; }
+        public DateTimeOffset? ShouldExecuteAt { get; set; }
 
         /// <summary>
         /// The jobhost of this job
