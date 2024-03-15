@@ -9,14 +9,14 @@ using OpenTelemetry.Trace;
 namespace Microsoft.Extensions.DependencyInjection;
 
 /// <summary>
-/// Extension methods for default configuration of AzureMonitor OpenTelemetry transfer.
+/// Extension methods for default configuration of OpenTelemetry/AzureMonitor transfer.
 /// </summary>
 public static class JGUZDVAspNetCoreOpenTelemetryExtensions
 {
     /// <summary>
     /// Adds default OpenTelemetry support for transitting data to Azure Monitor resources if a 
-    /// config section "AzureMonitor" is available with the following configuration parameters:
-    /// ConnectionString - Represents connection to a Azure Monitor resource to transfer telemetry.
+    /// config section "OpenTelemetry" is available with the following configuration parameters:
+    /// AzureMonitor:ConnectionString - Represents connection to a Azure Monitor resource to transfer telemetry.
     /// ServiceNamespace - A namespace string representing the running web application.
     /// ServiceName - A name string representing the running web application.
     /// </summary>
@@ -27,15 +27,15 @@ public static class JGUZDVAspNetCoreOpenTelemetryExtensions
     {
         // Configure the OpenTelemetry tracer provider to add the resource attributes to all traces.
         // @see https://learn.microsoft.com/en-us/azure/azure-monitor/app/opentelemetry-configuration?tabs=aspnetcore
-        var settings = builder.Configuration.GetSection("AzureMonitor");
+        var settings = builder.Configuration.GetSection("OpenTelemetry");
 
         if (settings.Exists())
         {
-            var connectionString = settings.GetValue<string>("ConnectionString");
+            var connectionString = settings.GetValue<string>("AzureMonitor:ConnectionString");
 
             if (string.IsNullOrWhiteSpace(connectionString))
             {
-                throw new ArgumentException("Found AzureMonitor settings section, but no ConnectionString setting is provided.");
+                throw new ArgumentException("Found OpenTelemetry settings section, but no AzureMonitor:ConnectionString setting is provided.");
             }
 
             var serviceNamespace = settings.GetValue<string>("ServiceNamespace");
@@ -47,7 +47,7 @@ public static class JGUZDVAspNetCoreOpenTelemetryExtensions
 
             if (string.IsNullOrWhiteSpace(serviceNamespace))
             {
-                throw new ArgumentException("Found AzureMonitor settings section, but no " +
+                throw new ArgumentException("Found OpenTelemetry settings section, but no " +
                     "setting 'ServiceNamespace' is provided and no default application name was found.");
             }
 
@@ -60,7 +60,7 @@ public static class JGUZDVAspNetCoreOpenTelemetryExtensions
 
             if (string.IsNullOrWhiteSpace(serviceName))
             {
-                throw new ArgumentException("Found AzureMonitor settings section, but no " +
+                throw new ArgumentException("Found OpenTelemetry settings section, but no " +
                     "setting 'ServiceName' is provided and no default application name was found.");
             }
 
