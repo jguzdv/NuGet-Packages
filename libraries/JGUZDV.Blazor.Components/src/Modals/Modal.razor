@@ -3,7 +3,7 @@
 
 @typeparam TModel where TModel : class
 
-<dialog id="@_componentId" class="p-0 border-0">
+<dialog id="@_componentId" class="p-0 border-0" @onkeydown="checkForEsc">
     <div class="modal show d-block">
         @if (_renderFragment != null && _context != null)
         {
@@ -37,7 +37,7 @@
     [Parameter]
     public RenderFragment<ModalContext>? Footer { get; set; }
 
-
+   
     [Parameter]
     public string? Title { get; set; }
 
@@ -131,6 +131,14 @@
 
     public void Dismiss()
         => Close(ModalResult.Dismissed);
+
+    public void checkForEsc(KeyboardEventArgs test)
+    {
+        if (test.Code.Equals("Escape"))
+        {
+            Dismiss();
+        }
+    }
 
     public class ModalContext
     {
