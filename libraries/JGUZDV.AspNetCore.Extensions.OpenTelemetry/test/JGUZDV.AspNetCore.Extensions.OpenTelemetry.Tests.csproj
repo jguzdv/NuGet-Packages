@@ -4,10 +4,13 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="C:\Users\tbeckhof\source\github\NuGet-Packages\libraries\/NuGet-Package-Icon.png" />
+    <ProjectReference Include="..\src\JGUZDV.AspNetCore.Extensions.OpenTelemetry.csproj" />
   </ItemGroup>
 
 </Project>
