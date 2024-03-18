@@ -3,7 +3,7 @@
 namespace JGUZDV.Blazor.Components.Extensions
 {
     /// <summary>
-    /// Brower event extensions
+    /// Browser event extensions
     /// </summary>
     public static class BrowserEventExtensions
     {
