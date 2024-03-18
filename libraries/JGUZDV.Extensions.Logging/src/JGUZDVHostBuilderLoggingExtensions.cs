@@ -18,6 +18,6 @@ public static class JGUZDVHostBuilderLoggingExtensions
     /// <summary>
     /// Configures the host builder to use the specified logging configuration.
     /// </summary>
-    public static IHostBuilder UseJGUZDVLogging(this IHostBuilder hostBuilder, string configSectionName)
-        => hostBuilder.UseSerilog((ctx, logger) => logger.BuildSerilogLogger(ctx.HostingEnvironment, ctx.Configuration, configSectionName));
+    public static IHostBuilder UseJGUZDVLogging(this IHostBuilder hostBuilder, string configSectionName, bool writeToProviders = true)
+        => hostBuilder.UseSerilog((ctx, logger) => logger.BuildSerilogLogger(ctx.HostingEnvironment, ctx.Configuration, configSectionName), writeToProviders: writeToProviders);
 }

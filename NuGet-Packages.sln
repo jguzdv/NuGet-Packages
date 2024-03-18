@@ -150,6 +150,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.WebApiHost", "librar
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.WebApiHost.Tests", "libraries\JGUZDV.WebApiHost\test\JGUZDV.WebApiHost.Tests.csproj", "{892EA5E4-A98F-4A36-B901-8A1FAB27623E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JGUZDV.AspNetCore.Extensions.OpenTelemetry", "JGUZDV.AspNetCore.Extensions.OpenTelemetry", "{B1DC4BB7-3BB1-43FB-8264-C9E1712AD741}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.AspNetCore.Extensions.OpenTelemetry", "libraries\JGUZDV.AspNetCore.Extensions.OpenTelemetry\src\JGUZDV.AspNetCore.Extensions.OpenTelemetry.csproj", "{BDF176E0-07BD-4A8F-BD68-D4F29A2EDB79}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.AspNetCore.Extensions.OpenTelemetry.Tests", "libraries\JGUZDV.AspNetCore.Extensions.OpenTelemetry\test\JGUZDV.AspNetCore.Extensions.OpenTelemetry.Tests.csproj", "{C63B4A9F-06DF-49FB-8E9B-518AE031FC2A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -700,6 +706,30 @@ Global
 		{892EA5E4-A98F-4A36-B901-8A1FAB27623E}.Release|x64.Build.0 = Release|Any CPU
 		{892EA5E4-A98F-4A36-B901-8A1FAB27623E}.Release|x86.ActiveCfg = Release|Any CPU
 		{892EA5E4-A98F-4A36-B901-8A1FAB27623E}.Release|x86.Build.0 = Release|Any CPU
+		{BDF176E0-07BD-4A8F-BD68-D4F29A2EDB79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDF176E0-07BD-4A8F-BD68-D4F29A2EDB79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDF176E0-07BD-4A8F-BD68-D4F29A2EDB79}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{BDF176E0-07BD-4A8F-BD68-D4F29A2EDB79}.Debug|x64.Build.0 = Debug|Any CPU
+		{BDF176E0-07BD-4A8F-BD68-D4F29A2EDB79}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BDF176E0-07BD-4A8F-BD68-D4F29A2EDB79}.Debug|x86.Build.0 = Debug|Any CPU
+		{BDF176E0-07BD-4A8F-BD68-D4F29A2EDB79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDF176E0-07BD-4A8F-BD68-D4F29A2EDB79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDF176E0-07BD-4A8F-BD68-D4F29A2EDB79}.Release|x64.ActiveCfg = Release|Any CPU
+		{BDF176E0-07BD-4A8F-BD68-D4F29A2EDB79}.Release|x64.Build.0 = Release|Any CPU
+		{BDF176E0-07BD-4A8F-BD68-D4F29A2EDB79}.Release|x86.ActiveCfg = Release|Any CPU
+		{BDF176E0-07BD-4A8F-BD68-D4F29A2EDB79}.Release|x86.Build.0 = Release|Any CPU
+		{C63B4A9F-06DF-49FB-8E9B-518AE031FC2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C63B4A9F-06DF-49FB-8E9B-518AE031FC2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C63B4A9F-06DF-49FB-8E9B-518AE031FC2A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C63B4A9F-06DF-49FB-8E9B-518AE031FC2A}.Debug|x64.Build.0 = Debug|Any CPU
+		{C63B4A9F-06DF-49FB-8E9B-518AE031FC2A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C63B4A9F-06DF-49FB-8E9B-518AE031FC2A}.Debug|x86.Build.0 = Debug|Any CPU
+		{C63B4A9F-06DF-49FB-8E9B-518AE031FC2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C63B4A9F-06DF-49FB-8E9B-518AE031FC2A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C63B4A9F-06DF-49FB-8E9B-518AE031FC2A}.Release|x64.ActiveCfg = Release|Any CPU
+		{C63B4A9F-06DF-49FB-8E9B-518AE031FC2A}.Release|x64.Build.0 = Release|Any CPU
+		{C63B4A9F-06DF-49FB-8E9B-518AE031FC2A}.Release|x86.ActiveCfg = Release|Any CPU
+		{C63B4A9F-06DF-49FB-8E9B-518AE031FC2A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -772,10 +802,13 @@ Global
 		{4AADAD6A-4BA0-427E-9EA1-4AFE211C1200} = {DA4DE709-E5BC-4B93-88D2-838656C217CE}
 		{53D9AE20-2981-411C-87CD-5DCD71D181B4} = {4AADAD6A-4BA0-427E-9EA1-4AFE211C1200}
 		{892EA5E4-A98F-4A36-B901-8A1FAB27623E} = {4AADAD6A-4BA0-427E-9EA1-4AFE211C1200}
+		{B1DC4BB7-3BB1-43FB-8264-C9E1712AD741} = {DA4DE709-E5BC-4B93-88D2-838656C217CE}
+		{BDF176E0-07BD-4A8F-BD68-D4F29A2EDB79} = {B1DC4BB7-3BB1-43FB-8264-C9E1712AD741}
+		{C63B4A9F-06DF-49FB-8E9B-518AE031FC2A} = {B1DC4BB7-3BB1-43FB-8264-C9E1712AD741}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		RESX_SortFileContentOnSave = True
-		RESX_NeutralResourcesLanguage = de-DE
 		SolutionGuid = {46ECC226-1874-4539-8589-8B2029909C4A}
+		RESX_NeutralResourcesLanguage = de-DE
+		RESX_SortFileContentOnSave = True
 	EndGlobalSection
 EndGlobal
