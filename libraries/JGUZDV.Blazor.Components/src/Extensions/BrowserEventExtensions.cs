@@ -2,8 +2,15 @@
 
 namespace JGUZDV.Blazor.Components.Extensions
 {
+    /// <summary>
+    /// Browser event extensions
+    /// </summary>
     public static class BrowserEventExtensions
     {
+        /// <summary>
+        /// Executes the specified function on enter
+        /// </summary>
+        /// <returns></returns>
         public static async Task OnEnter(this KeyboardEventArgs e, Func<Task> action)
         {
             if (e.Code == "Enter")
@@ -12,6 +19,11 @@ namespace JGUZDV.Blazor.Components.Extensions
             }
         }
 
+        /// <summary>
+        /// Executes the specified action on enter
+        /// </summary>
+        /// <param name="e"></param>
+        /// <param name="action"></param>
         public static void OnEnter(this KeyboardEventArgs e, Action action)
         {
             if (e.Code == "Enter")

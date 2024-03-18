@@ -56,52 +56,91 @@
     }
 </div>
 @code {
-
+    /// <summary>
+    /// The selectable items
+    /// </summary>
     [Parameter]
     [EditorRequired]
     public List<T> Items { get; set; } = default!;
 
+    /// <summary>
+    /// Item view template
+    /// </summary>
     [Parameter]
     [EditorRequired]
     public RenderFragment<T> ItemTemplate { get; set; } = default!;
 
+    /// <summary>
+    /// Key selector
+    /// </summary>
     [Parameter]
     [EditorRequired]
     public Func<T?, TKey> ItemKey { get; set; } = default!;
 
+    /// <summary>
+    /// The selected values.
+    /// </summary>
     [Parameter]
     [EditorRequired]
     public List<T> Values { get; set; } = default!;
 
+    /// <summary>
+    /// Change EventCallback for <see cref="Values"/>
+    /// </summary>
     [Parameter]
     public EventCallback<List<T>> ValuesChanged { get; set; }
 
+    /// <summary>
+    /// The selected value.
+    /// </summary>
     [Parameter]
     public T? Value { get; set; } = default!;
 
+    /// <summary>
+    /// Change EventCallback for <see cref="Value"/>
+    /// </summary>
     [Parameter]
     public EventCallback<T> ValueChanged { get; set; }
 
+    /// <summary>
+    /// If set enables "select all" functionality and will be used as the label
+    /// </summary>
     [Parameter]
     public string? AllOptionLabel { get; set; }
 
+    /// <summary>
+    /// If set enables "filter" functionality and will be used as the placeholder
+    /// </summary>
     [Parameter]
     public string? FilterLabel { get; set; }
 
+    /// <summary>
+    /// icon for the "filter" functionality
+    /// </summary>
     [Parameter]
-    public RenderFragment<string> FilterIcon { get; set; } = Icons.Filter;
+    public RenderFragment<string?> FilterIcon { get; set; } = Icons.Filter;
 
+    /// <summary>
+    /// The filter for the "filter" functionality
+    /// </summary>
     [Parameter]
     public Func<(T item, string query), bool>? Filter { get; set; }
 
+    /// <summary>
+    /// css class of the items container
+    /// </summary>
     [Parameter]
     public string? ItemsContainerClass { get; set; } = "row row-cols-1";
 
+    /// <summary>
+    /// Enables single selection mode, i.e. <see cref="Value"/> will be used instead of <see cref="Values"/>
+    /// </summary>
     [Parameter]
     public bool UseSingleSelectionMode { get; set; }
 
     private string? _filter;
 
+    /// <inheritdoc/>
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
