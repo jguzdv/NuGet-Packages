@@ -1,0 +1,62 @@
+﻿@using JGUZDV.Blazor.Components.Extensions
+@using Microsoft.AspNetCore.Components.Web
+
+<button @attributes="AdditionalAttributes"
+        class="@AdditionalAttributes?.GetValueOrDefault("class") @(_isRunning  ? "position-relative" : "")"
+        disabled="@(_isRunning || ((bool?)AdditionalAttributes?.GetValueOrDefault("disabled")) == true)"
+        @onclick="HandleClick"
+        @onkeypress="HandlePress">
+
+    @if (_isRunning)
+    {
+        <i class="top-50 start-50 translate-middle position-absolute"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></i>
+        <span class="invisible">@ChildContent</span>
+    }
+    else
+    {
+        @ChildContent
+    }
+</button>
+
+
+@code {
+    [Parameter]
+    public required RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public EventCallback OnAction { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private bool _isRunning = false;
+
+    private async Task HandleClick()
+    {
+        _isRunning = true;
+
+        try
+        {
+            await OnAction.InvokeAsync();
+        }
+        finally
+        {
+            _isRunning = false;
+        }
+    }
+
+    private async Task HandlePress(KeyboardEventArgs e)
+    {
+        _isRunning = true;
+
+        try
+        {
+            await e.OnEnter(OnAction.InvokeAsync);
+        }
+        finally
+        {
+            _isRunning = false;
+        }
+    }
+}
+
