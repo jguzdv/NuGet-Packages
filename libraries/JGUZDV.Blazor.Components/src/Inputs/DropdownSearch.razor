@@ -172,7 +172,7 @@
 
 	@if (SearchTask != null && SearchIsOpen)
 	{
-        <AwaitTask Task="SearchTask">
+        <AwaitResult Task="SearchTask">
 			<Running>
 				<div class="sr-container border bg-light p-3">
 					<ActivityIndicator Style="ActivityIndicator.IndicatorStyle.Marquee" />
@@ -207,7 +207,7 @@
                     </div>
 				}
 		</Finished>
-	</AwaitTask>
+	</AwaitResult>
 	}
 	else if (SearchIsOpen)
 	{
