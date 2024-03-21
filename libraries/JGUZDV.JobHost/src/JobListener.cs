@@ -44,15 +44,12 @@ namespace JGUZDV.JobHost
                 return null;
             }
 
-            while(true)
+            while(exception is SchedulerException && exception.InnerException != null)
             {
-                if (exception is not SchedulerException || exception.InnerException == null)
-                {
-                    return exception.Message;
-                }
-
                 exception = exception.InnerException;
             }
+
+            return exception.Message;
         }
     }
 }
