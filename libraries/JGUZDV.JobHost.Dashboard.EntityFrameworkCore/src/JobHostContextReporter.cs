@@ -49,7 +49,7 @@ namespace JGUZDV.JobHost.Dashboard.EntityFrameworkCore
             }
 
             // register jobs
-            
+
             foreach (var item in jobHost.Jobs)
             {
                 var job = jobs.FirstOrDefault(x => x.Name == item.Name);
@@ -85,23 +85,16 @@ namespace JGUZDV.JobHost.Dashboard.EntityFrameworkCore
             var name = jobReport.Name;
             var host = jobReport.Host;
 
-            var job = await dbContext.Jobs.FirstAsync(x => x.Name == name && x.Host!.Name == host);
-
-            if (!jobReport.Failed)
-            {
-                job.LastResult = "success";
-            }
-            else
-            {
-                job.LastResult = "error";
-                job.FailMessage = jobReport.FailMessage;
-            }
-
-            job.RunTime = jobReport.RunTime;
-            job.NextExecutionAt = jobReport.NextFireTimeUtc;
-            job.LastExecutedAt = jobReport.FireTimeUtc;
-
-            await dbContext.SaveChangesAsync();
+            var result = jobReport.Failed ? "success" : "error";
+            await dbContext.Jobs
+                .Where(x => x.Name == name && x.Host!.Name == host)
+                .ExecuteUpdateAsync(entity => entity
+                    .SetProperty(x => x.RunTime, jobReport.RunTime)
+                    .SetProperty(x => x.NextExecutionAt, jobReport.NextFireTimeUtc)
+                    .SetProperty(x => x.LastExecutedAt, jobReport.FireTimeUtc)
+                    .SetProperty(x => x.LastResult, result)
+                    .SetProperty(x => x.FailMessage, jobReport.FailMessage)
+            );
         }
 
         /// <inheritdoc/>
