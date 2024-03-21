@@ -22,7 +22,7 @@ namespace JGUZDV.JobHost.Dashboard.EntityFrameworkCore
         /// <inheritdoc/>
         public virtual async Task ExecuteNow(int jobId, CancellationToken ct)
         {
-            var context = await _dbContextFactory.CreateDbContextAsync(ct);
+            await using var context = await _dbContextFactory.CreateDbContextAsync(ct);
             await context.Jobs
                 .Where(x => x.Id == jobId)
                 .ExecuteUpdateAsync(x => x.SetProperty(x => x.ShouldExecuteAt, DateTimeOffset.Now), ct);
@@ -31,7 +31,7 @@ namespace JGUZDV.JobHost.Dashboard.EntityFrameworkCore
         /// <inheritdoc/>
         public virtual async Task<JobCollection> GetJobs(CancellationToken ct)
         {
-            var context = await _dbContextFactory.CreateDbContextAsync();
+            await using var context = await _dbContextFactory.CreateDbContextAsync();
             var jobsByHost = await context.Jobs
                 .Include(x => x.Host)
                 .GroupBy(x => x.Host!)
