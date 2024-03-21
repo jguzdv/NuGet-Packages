@@ -34,7 +34,7 @@
                         @item.Schedule
                     </td>
                     <td>
-                        <button class="btn btn-sm btn-outline-secondary" @onclick="() => ExecuteNow(State,item)">trigger now</button>
+                        <button class="btn btn-sm btn-outline-secondary" @onclick="() => State.ExecuteNow(item.Id)">trigger now</button>
                     </td>
                 </tr>
             }
@@ -43,12 +43,7 @@
 </AwaitResult>
 </StateView>
 @code {
-   
     [Parameter]
     public Func<List<Job>, List<Job>> JobSort { get; set; } = x => x.OrderBy(x => x.Name).ToList();
 
-    private async Task ExecuteNow(DashboardState state, Job job)
-    {
-        await state.ExecuteNow(job.Id);
-    }
 }
