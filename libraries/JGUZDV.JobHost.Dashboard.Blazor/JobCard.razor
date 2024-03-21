@@ -2,7 +2,7 @@
 <div class="border h-100 shadow-sm p-3">
     <button @onclick="() => OnExecuteNow.InvokeAsync(Job)" class="float-end btn btn-sm btn-outline-secondary">execute now</button>
     <div class="mb-2 fw-bold">
-        <i class="fa @(Job.LastResult == "error" ? "fa-times-circle text-danger" : "fa-check-circle text-success")"></i>
+        <i class="fa @(Job.LastResult == Job.Error ? "fa-times-circle text-danger" : "fa-check-circle text-success")"></i>
         @Job.Name
     </div>
     <hr />

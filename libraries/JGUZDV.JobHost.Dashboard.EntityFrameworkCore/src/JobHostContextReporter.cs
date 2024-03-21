@@ -85,7 +85,7 @@ namespace JGUZDV.JobHost.Dashboard.EntityFrameworkCore
             var name = jobReport.Name;
             var host = jobReport.Host;
 
-            var result = jobReport.Failed ? "success" : "error";
+            var result = jobReport.Failed ? Job.Success : Job.Error;
             await dbContext.Jobs
                 .Where(x => x.Name == name && x.Host!.Name == host)
                 .ExecuteUpdateAsync(entity => entity

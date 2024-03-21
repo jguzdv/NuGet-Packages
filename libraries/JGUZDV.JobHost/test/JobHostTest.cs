@@ -1,6 +1,7 @@
 using System.Data;
 
 using JGUZDV.JobHost.Dashboard.EntityFrameworkCore;
+using JGUZDV.JobHost.Shared.Model;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -98,9 +99,9 @@ namespace JGUZDV.JobHost.Tests
                 //Assert.Equal(3, jobs.Count);
                 Assert.Single(hosts);
 
-                Assert.Equal("success", jobs.Where(x => x.Name != nameof(FailJob)).ToList()[0].LastResult);
-                Assert.Equal("success", jobs.Where(x => x.Name != nameof(FailJob)).ToList()[1].LastResult);
-                Assert.Equal("error", jobs.Where(x => x.Name == nameof(FailJob)).ToList()[0].LastResult);
+                Assert.Equal(Job.Success, jobs.Where(x => x.Name != nameof(FailJob)).ToList()[0].LastResult);
+                Assert.Equal(Job.Success, jobs.Where(x => x.Name != nameof(FailJob)).ToList()[1].LastResult);
+                Assert.Equal(Job.Error, jobs.Where(x => x.Name == nameof(FailJob)).ToList()[0].LastResult);
             }
 
             await host.StopAsync();

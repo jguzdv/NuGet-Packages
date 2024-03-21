@@ -6,6 +6,16 @@
     public class Job
     {
         /// <summary>
+        /// Success result
+        /// </summary>
+        public static string Success => "success";
+
+        /// <summary>
+        /// Error result
+        /// </summary>
+        public static string Error => "error";
+
+        /// <summary>
         /// The id of the job
         /// </summary>
         public required int Id { get; set; }

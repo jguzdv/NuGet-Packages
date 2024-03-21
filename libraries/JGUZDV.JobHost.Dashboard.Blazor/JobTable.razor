@@ -19,7 +19,7 @@
             {
                 <tr>
                     <td>
-                        <i class="fa @(item.LastResult == "error" ? "fa-times-circle text-danger" : "fa-check-circle text-success")"></i>
+                        <i class="fa @(item.LastResult == Job.Error ? "fa-times-circle text-danger" : "fa-check-circle text-success")"></i>
                     </td>
                     <td>
                         @item.Name

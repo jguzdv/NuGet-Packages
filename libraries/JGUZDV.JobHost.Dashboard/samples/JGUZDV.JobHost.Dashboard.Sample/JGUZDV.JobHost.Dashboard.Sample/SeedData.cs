@@ -1,4 +1,5 @@
 ﻿using JGUZDV.JobHost.Dashboard.EntityFrameworkCore;
+using JGUZDV.JobHost.Shared.Model;
 
 namespace JGUZDV.JobHost.Dashboard.Sample
 {
@@ -29,7 +30,7 @@ namespace JGUZDV.JobHost.Dashboard.Sample
                     {
                         Host = host,
                         LastExecutedAt = DateTime.UtcNow,
-                        LastResult = i % mod == 0 ? "success" : "error",
+                        LastResult = i % mod == 0 ? Job.Success : Job.Error,
                         FailMessage = i % mod == 0 ? null : "Critical error during execution - uh OH",
                         Name = $"Job-{i}",
                         Schedule = "* 0/15 * * *",
