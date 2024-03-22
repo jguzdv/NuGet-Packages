@@ -8,16 +8,16 @@
         /// <summary>
         /// name of the job host
         /// </summary>
-        public string? JobHostName { get; set; }
+        public required string JobHostName { get; set; }
 
         /// <summary>
         /// the url of external monitoring
         /// </summary>
-        public string? MonitoringUrl { get; set; }
+        public required string MonitoringUrl { get; set; }
 
         /// <summary>
         /// the schedule for execute now option
         /// </summary>
-        public string? ExecuteNowSchedule { get; set; }
+        public required string ExecuteNowSchedule { get; set; }
     }
 }

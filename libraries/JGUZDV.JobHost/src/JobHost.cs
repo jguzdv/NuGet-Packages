@@ -89,18 +89,9 @@ namespace JGUZDV.JobHost
                 var matcher = GroupMatcher<JobKey>.GroupEquals(JobKey.DefaultGroup);
                 x.AddJobListener<JobListener>(matcher);
 
-                x.ScheduleJob<RegisterHost>(
-                   x => x
-                       .StartNow()
-                       .WithPriority(int.MaxValue),
-                   x => x
-                       .WithIdentity(nameof(RegisterHost), nameof(RegisterHost))
-                       .UsingJobData(new JobDataMap {
-                            { Constants.JobHostName, jobHostName },
-                            { Constants.MonitoringUrl, monitoringUrl },
-                            { Constants.ExecuteNowSchedule, executeNowSchedule }
-                       }));
             });
+
+            services.AddHostedService<RegisterHost>();
         }
 
         /// <summary>

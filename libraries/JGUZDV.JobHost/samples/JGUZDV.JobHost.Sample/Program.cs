@@ -13,7 +13,7 @@ var builder = JobHost.CreateJobHostBuilder(args, configureWindowsService => conf
                 quartzHostedServiceOptions => quartzHostedServiceOptions.WaitForJobsToComplete = true);
 
 
-builder.ConfigureServices(services => services.AddDbContext<JobHostContext>(x => x.UseSqlServer("Server=(LocalDb)\\MSSQLLocalDB;Database=JobHostDashboardSample;Trusted_Connection=True;MultipleActiveResultSets=true;Encrypt=False")));
+builder.ConfigureServices(services => services.AddDbContextFactory<JobHostContext>(x => x.UseSqlServer("Server=(LocalDb)\\MSSQLLocalDB;Database=JobHostDashboardSample;Trusted_Connection=True;MultipleActiveResultSets=true;Encrypt=False")));
 
 builder.UseJobReporting<JobHostContextReporter>();
 builder.AddHostedJob<SampleJob>();
@@ -21,6 +21,7 @@ builder.AddHostedJob<SampleJob>();
 var host = builder.Build();
 using(var scope =  host.Services.CreateScope()){
     var context = scope.ServiceProvider.GetRequiredService<JobHostContext>();
+    context.Database.EnsureDeleted();
     context.Database.EnsureCreated();
 }
 

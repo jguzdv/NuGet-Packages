@@ -63,7 +63,7 @@ namespace JGUZDV.JobHost.Dashboard.EntityFrameworkCore
                         LastResult = "",
                         Schedule = item.CronSchedule,
                         Name = item.Name,
-                        HostId = host.Id,
+                        Host = host,
                     };
 
                     dbContext.Jobs.Add(job);
@@ -85,7 +85,7 @@ namespace JGUZDV.JobHost.Dashboard.EntityFrameworkCore
             var name = jobReport.Name;
             var host = jobReport.Host;
 
-            var result = jobReport.Failed ? Job.Success : Job.Error;
+            var result = jobReport.Failed ? Job.Error : Job.Success;
             await dbContext.Jobs
                 .Where(x => x.Name == name && x.Host!.Name == host)
                 .ExecuteUpdateAsync(entity => entity

@@ -10,8 +10,10 @@ using Microsoft.Extensions.Hosting;
 namespace JGUZDV.JobHost.Tests
 {
 
-    public class JobHostTest
+    public class JobHostTest : IDisposable
     {
+        private string _connectionString = "Server=(LocalDb)\\MSSQLLocalDB;Database=JobHostDashboard_Test;Trusted_Connection=True;MultipleActiveResultSets=true;Encrypt=False";
+
         [Fact]
         public async Task RegisterAndRunJobsTest()
         {
@@ -61,15 +63,31 @@ namespace JGUZDV.JobHost.Tests
         }
 
 
+        private void InitDb()
+        {
+            var contextOptions = new DbContextOptionsBuilder<JobHostContext>()
+                .UseSqlServer(_connectionString)
+                .Options;
+
+            using (var context = new JobHostContext(contextOptions))
+            {
+                context.Database.EnsureDeleted();
+                context.Database.EnsureCreated();
+            }
+
+        }
+
         [Fact]
         public async Task DashboardTest()
         {
+            InitDb();
+
             var builder = JobHost.CreateJobHostBuilder(Array.Empty<string>(),
                     configureWindowsService => configureWindowsService.ServiceName = "DashboardTest",
                     quartzHostedServiceOptions => quartzHostedServiceOptions.WaitForJobsToComplete = true)
                 .ConfigureServices(services =>
                 {
-                    services.AddDbContextFactory<JobHostContext>(x => x.UseInMemoryDatabase("DashboardTest"));
+                    services.AddDbContextFactory<JobHostContext>(x => x.UseSqlServer(_connectionString));
                 })
                 .UseJobHostContextReporting("Test", "www.test.de");
 
@@ -86,7 +104,6 @@ namespace JGUZDV.JobHost.Tests
 
             var host = builder.Build();
             _ = host.RunAsync();
-
             await Task.Delay(TimeSpan.FromSeconds(2));
 
             using (var scope = host.Services.CreateScope())
@@ -96,7 +113,7 @@ namespace JGUZDV.JobHost.Tests
                 var jobs = await dbContext.Jobs.ToListAsync();
                 var hosts = await dbContext.Hosts.ToListAsync();
 
-                //Assert.Equal(3, jobs.Count);
+                Assert.Equal(3, jobs.Count);
                 Assert.Single(hosts);
 
                 Assert.Equal(Job.Success, jobs.Where(x => x.Name != nameof(FailJob)).ToList()[0].LastResult);
@@ -113,10 +130,12 @@ namespace JGUZDV.JobHost.Tests
         [Fact]
         public async Task ExecuteNowTest()
         {
+            InitDb();
+
             var builder = JobHost.CreateJobHostBuilder(Array.Empty<string>(),
                     configureWindowsService => configureWindowsService.ServiceName = "ExecuteNowTest",
                     quartzHostedServiceOptions => quartzHostedServiceOptions.WaitForJobsToComplete = true)
-                .ConfigureServices(services => services.AddDbContextFactory<JobHostContext>(x => x.UseInMemoryDatabase("ExecuteNowTest")))
+                .ConfigureServices(services => services.AddDbContextFactory<JobHostContext>(x => x.UseSqlServer(_connectionString)))
                 .UseJobReporting<JobHostContextReporter>("Test", "www.test.de",
                     "* * * * * ?");
             var testObject = new JobHostWrapper();
@@ -155,6 +174,18 @@ namespace JGUZDV.JobHost.Tests
             }
 
             await host.StopAsync();
+        }
+
+        public void Dispose()
+        {
+            var contextOptions = new DbContextOptionsBuilder<JobHostContext>()
+                .UseSqlServer(_connectionString)
+                .Options;
+
+            using (var context = new JobHostContext(contextOptions))
+            {
+                context.Database.EnsureDeleted();
+            }
         }
     }
 }
