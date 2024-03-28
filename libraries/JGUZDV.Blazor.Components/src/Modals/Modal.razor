@@ -3,7 +3,7 @@
 
 @typeparam TModel where TModel : class
 
-<dialog id="@_componentId" class="p-0 border-0" @onkeydown="checkForEsc">
+<dialog id="@_componentId" class="p-0 border-0">
     <div class="modal show d-block">
         @if (_renderFragment != null && _context != null)
         {
@@ -37,7 +37,7 @@
     [Parameter]
     public RenderFragment<ModalContext>? Footer { get; set; }
 
-   
+
     [Parameter]
     public string? Title { get; set; }
 
@@ -50,11 +50,17 @@
     [Parameter]
     public string? ModalFooterClasses { get; set; }
 
+    protected override async Task OnInitializedAsync()
+    {
+        _jsModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/JGUZDV.Blazor.Components/js/Modal.js").AsTask();
+        var reference = DotNetObjectReference.Create(this);
+        _ = _jsModule.InvokeVoidAsync("EscapeListener", _componentId, reference);
+    }
+
     protected override async Task OnParametersSetAsync()
     {
         await base.OnParametersSetAsync();
-        _jsModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/JGUZDV.Blazor.Components/js/Modal.js").AsTask();
-
+   
         if (Title != null && Header != null)
             throw new InvalidOperationException($"{nameof(Title)} cannot be set, if {nameof(Header)} is set.");
 
@@ -123,6 +129,7 @@
         _taskCompletionSource.SetResult(result);
     }
 
+    [JSInvokable]
     public void Close()
         => Close(ModalResult.Undefined);
 
@@ -131,14 +138,6 @@
 
     public void Dismiss()
         => Close(ModalResult.Dismissed);
-
-    public void checkForEsc(KeyboardEventArgs test)
-    {
-        if (test.Code.Equals("Escape"))
-        {
-            Dismiss();
-        }
-    }
 
     public class ModalContext
     {
