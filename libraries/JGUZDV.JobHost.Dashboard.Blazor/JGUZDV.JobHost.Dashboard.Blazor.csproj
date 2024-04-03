@@ -27,7 +27,7 @@
         <ProjectReference Include="..\JGUZDV.Blazor.Components\src\JGUZDV.Blazor.Components.csproj" />
         <ProjectReference Include="..\JGUZDV.Blazor.StateManagement\src\JGUZDV.Blazor.StateManagement.csproj" />
         <ProjectReference Include="..\JGUZDV.ClientStorage\src\JGUZDV.ClientStorage.csproj" />
-        <ProjectReference Include="..\JGUZDV.JobHost.Dashboard\src\JGUZDV.JobHost.Dashboard.csproj" />
+        <ProjectReference Include="..\JGUZDV.JobHost.Dashboard\src\JGUZDV.JobHost.Dashboard.Shared.csproj" />
         <ProjectReference Include="..\JGUZDV.JobHost.Shared\JGUZDV.JobHost.Shared.csproj" />
     </ItemGroup>
 

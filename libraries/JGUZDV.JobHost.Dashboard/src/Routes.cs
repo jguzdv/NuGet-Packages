@@ -1,4 +1,4 @@
-﻿namespace JGUZDV.JobHost.Dashboard
+﻿namespace JGUZDV.JobHost.Dashboard.Shared
 {
     /// <summary>
     /// API Routes

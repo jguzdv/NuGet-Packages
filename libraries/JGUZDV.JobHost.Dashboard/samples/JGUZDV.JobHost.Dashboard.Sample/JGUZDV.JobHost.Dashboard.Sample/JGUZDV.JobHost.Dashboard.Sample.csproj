@@ -9,7 +9,7 @@
     <ItemGroup>
         <ProjectReference Include="..\..\..\..\JGUZDV.JobHost.Dashboard.Api\JGUZDV.JobHost.Dashboard.Api.csproj" />
         <ProjectReference Include="..\..\..\..\JGUZDV.JobHost.Dashboard.EntityFrameworkCore\src\JGUZDV.JobHost.Dashboard.EntityFrameworkCore.csproj" />
-        <ProjectReference Include="..\..\..\src\JGUZDV.JobHost.Dashboard.csproj" />
+        <ProjectReference Include="..\..\..\src\JGUZDV.JobHost.Dashboard.Shared.csproj" />
         <ProjectReference Include="..\JGUZDV.JobHost.Dashboard.Sample.Client\JGUZDV.JobHost.Dashboard.Sample.Client.csproj" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.2" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.2" />

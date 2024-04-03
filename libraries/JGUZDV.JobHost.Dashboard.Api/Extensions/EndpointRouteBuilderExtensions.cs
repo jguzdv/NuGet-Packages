@@ -1,4 +1,5 @@
-﻿using JGUZDV.JobHost.Shared;
+﻿using JGUZDV.JobHost.Dashboard.Shared;
+using JGUZDV.JobHost.Shared;
 
 namespace JGUZDV.JobHost.Dashboard.Extensions
 {

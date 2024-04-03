@@ -3,7 +3,7 @@
 using JGUZDV.JobHost.Shared;
 using JGUZDV.JobHost.Shared.Model;
 
-namespace JGUZDV.JobHost.Dashboard
+namespace JGUZDV.JobHost.Dashboard.Shared
 {
     /// <inheritdoc/>
     public class ApiClient : IDashboardService
@@ -29,7 +29,7 @@ namespace JGUZDV.JobHost.Dashboard
         public async Task<JobCollection> GetJobs(CancellationToken ct)
         {
             return await _httpClient.GetFromJsonAsync<JobCollection>(Routes.GetJobs, ct) ?? new JobCollection { 
-                Hosts = new Dictionary<int, Shared.Model.Host>(),
+                Hosts = new Dictionary<int, Host>(),
                 JobsByHost = new Dictionary<int,List<Job>>()
             };
         }

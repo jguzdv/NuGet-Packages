@@ -150,7 +150,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.WebApiHost", "librar
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.WebApiHost.Tests", "libraries\JGUZDV.WebApiHost\test\JGUZDV.WebApiHost.Tests.csproj", "{892EA5E4-A98F-4A36-B901-8A1FAB27623E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.JobHost.Dashboard", "libraries\JGUZDV.JobHost.Dashboard\src\JGUZDV.JobHost.Dashboard.csproj", "{E5642F62-074F-4AC9-90FD-3FD4AF0EBF73}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.JobHost.Dashboard.Shared", "libraries\JGUZDV.JobHost.Dashboard\src\JGUZDV.JobHost.Dashboard.Shared.csproj", "{E5642F62-074F-4AC9-90FD-3FD4AF0EBF73}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.JobHost.Dashboard.Api", "libraries\JGUZDV.JobHost.Dashboard.Api\JGUZDV.JobHost.Dashboard.Api.csproj", "{C46B9E04-4935-4675-B84E-F2FC90E6660C}"
 EndProject
@@ -894,8 +894,8 @@ Global
 		{A70B57ED-CE42-462F-8B6E-CC3C3E7A52F9} = {B06ACF77-B0EF-42F4-BA33-776F7496E2E6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		RESX_SortFileContentOnSave = True
-		RESX_NeutralResourcesLanguage = de-DE
 		SolutionGuid = {46ECC226-1874-4539-8589-8B2029909C4A}
+		RESX_NeutralResourcesLanguage = de-DE
+		RESX_SortFileContentOnSave = True
 	EndGlobalSection
 EndGlobal

@@ -105,7 +105,7 @@ namespace JGUZDV.JobHost.Dashboard.EntityFrameworkCore
             var host = _jobReportOptions.Value.JobHostName;
             var jobs = await dbContext.Jobs
                 .Where(x => x.Host!.Name == host && x.ShouldExecuteAt > x.LastExecutedAt)
-                .Select(x => new Shared.Model.Job
+                .Select(x => new Job
                 {
                     FailMessage = x.FailMessage,
                     HostId = x.HostId,

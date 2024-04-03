@@ -15,7 +15,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\..\..\JGUZDV.JobHost.Dashboard.Blazor\JGUZDV.JobHost.Dashboard.Blazor.csproj" />
-        <ProjectReference Include="..\..\..\src\JGUZDV.JobHost.Dashboard.csproj" />
+        <ProjectReference Include="..\..\..\src\JGUZDV.JobHost.Dashboard.Shared.csproj" />
     </ItemGroup>
 
 </Project>

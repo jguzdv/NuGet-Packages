@@ -14,7 +14,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\JGUZDV.JobHost.Dashboard\src\JGUZDV.JobHost.Dashboard.csproj" />
+      <ProjectReference Include="..\JGUZDV.JobHost.Dashboard\src\JGUZDV.JobHost.Dashboard.Shared.csproj" />
       <ProjectReference Include="..\JGUZDV.JobHost.Shared\JGUZDV.JobHost.Shared.csproj" />
     </ItemGroup>
 
