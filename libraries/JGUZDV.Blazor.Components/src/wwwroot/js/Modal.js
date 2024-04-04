@@ -3,16 +3,13 @@
     dialog.showModal();
 };
 
-export function CloseDialog(guid) {
+export function CloseDialog(guid, reference) {
     var dialog = document.getElementById(guid);
+    dialog.removeEventListener("close", () => { reference.invokeMethodAsync("Close"); });
     dialog.close();
 };
 
-export function EscapeListener(guid, reference) {
+export function CloseListener(guid, reference) {
     var dialog = document.getElementById(guid);
-    dialog.addEventListener("close", () => {
-        reference.invokeMethodAsync("Close");
-    })
-}
-
-
+    dialog.addEventListener("close", () => { reference.invokeMethodAsync("Close"); });
+    }
