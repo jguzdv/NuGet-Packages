@@ -18,6 +18,6 @@
         /// <summary>
         /// the schedule for execute now option
         /// </summary>
-        public required string ExecuteNowSchedule { get; set; }
+        public string ExecuteNowSchedule { get; set; } = "0/15 * * * * ?";
     }
 }

@@ -1,5 +1,6 @@
 ﻿using JGUZDV.JobHost.Shared;
 
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
@@ -48,47 +49,32 @@ namespace JGUZDV.JobHost
         public static IHostBuilder UseJobReporting<T>(this IHostBuilder builder,
           string section = Constants.DefaultDashboardConfigSection) where T : class, IJobExecutionManager
         {
-            var jobHostName = "";
-            var monitoringUrl = "";
-            var executeNowSchedule = "";
-
             builder.ConfigureServices((ctx, services) =>
             {
-                jobHostName = ctx.Configuration[$"{section}:{Constants.JobHostName}"]
-                     ?? throw new InvalidOperationException($"'{section}:{Constants.JobHostName}' could not be read from configuration.");
-
-                monitoringUrl = ctx.Configuration[$"{section}:{Constants.MonitoringUrl}"]
-                    ?? throw new InvalidOperationException($"'{section}:{Constants.MonitoringUrl}' could not be read from configuration.");
-
-                executeNowSchedule = ctx.Configuration[$"{section}:{Constants.ExecuteNowSchedule}"]
-                    ?? throw new InvalidOperationException($"'{section}:{Constants.ExecuteNowSchedule}' could not be read from configuration.");
-                
-                ConfigureReporting<T>(ctx, services, jobHostName, monitoringUrl, executeNowSchedule);
-
+                ConfigureReporting<T>(ctx, services, x =>
+                {
+                    ctx.Configuration.GetSection(section).Bind(x);
+                });
             });
 
             return builder;
         }
 
-        private static void ConfigureReporting<T>(HostBuilderContext ctx, IServiceCollection services, string jobHostName, string monitoringUrl, string executeNowSchedule) where T : class, IJobExecutionManager
+        private static void ConfigureReporting<T>(HostBuilderContext ctx, IServiceCollection services, Action<JobReportOptions> configureOptions) where T : class, IJobExecutionManager
         {
             services.Configure<JobReportOptions>(x =>
             {
-                x.MonitoringUrl = monitoringUrl;
-                x.ExecuteNowSchedule = executeNowSchedule;
-                x.JobHostName = jobHostName;
+                configureOptions(x);
             });
 
             services.TryAddSingleton<IJobExecutionManager, T>();
 
             ctx.Properties[Constants.UsesDashboard] = true;
-            ctx.Properties[Constants.JobHostName] = jobHostName;
 
             services.AddQuartz(x =>
             {
                 var matcher = GroupMatcher<JobKey>.GroupEquals(JobKey.DefaultGroup);
                 x.AddJobListener<JobListener>(matcher);
-
             });
 
             services.AddHostedService<RegisterHost>();
@@ -98,18 +84,14 @@ namespace JGUZDV.JobHost
         /// Extends the host builder to configure job monitoring with specified parameters.
         /// </summary>
         /// <param name="builder">The host builder to extend.</param>
-        /// <param name="jobHostName">The name of the job host.</param>
-        /// <param name="monitoringUrl">The URL for monitoring.</param>
-        /// <param name="executeNowSchedule">Cron expression for polling interval for the execute now job(default is "0/15 * * * * ?").</param>
+        /// <param name="configureOptions">Action that configures the <see cref="JobReportOptions"/></param>
         /// <returns>The extended host builder.</returns>
         public static IHostBuilder UseJobReporting<T>(this IHostBuilder builder,
-            string jobHostName,
-            string monitoringUrl,
-            string executeNowSchedule = "0/15 * * * * ?") where T : class, IJobExecutionManager
+            Action<JobReportOptions> configureOptions) where T : class, IJobExecutionManager
         {
             builder.ConfigureServices((ctx, services) =>
             {
-                ConfigureReporting<T>(ctx, services, jobHostName, monitoringUrl, executeNowSchedule);
+                ConfigureReporting<T>(ctx, services, configureOptions);
             });
 
             return builder;

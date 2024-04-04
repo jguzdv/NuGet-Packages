@@ -89,7 +89,11 @@ namespace JGUZDV.JobHost.Tests
                 {
                     services.AddDbContextFactory<JobHostContext>(x => x.UseSqlServer(_connectionString));
                 })
-                .UseJobHostContextReporting("Test", "www.test.de");
+                .UseJobHostContextReporting(x =>
+                {
+                    x.JobHostName = "Test";
+                    x.MonitoringUrl = "www.test.de";
+                });
 
             var testObject = new JobHostWrapper();
 
@@ -136,8 +140,12 @@ namespace JGUZDV.JobHost.Tests
                     configureWindowsService => configureWindowsService.ServiceName = "ExecuteNowTest",
                     quartzHostedServiceOptions => quartzHostedServiceOptions.WaitForJobsToComplete = true)
                 .ConfigureServices(services => services.AddDbContextFactory<JobHostContext>(x => x.UseSqlServer(_connectionString)))
-                .UseJobReporting<JobHostContextReporter>("Test", "www.test.de",
-                    "* * * * * ?");
+                .UseJobReporting<JobHostContextReporter>(x =>
+                {
+                    x.JobHostName = "Test";
+                    x.MonitoringUrl = "www.test.de";
+                    x.ExecuteNowSchedule = "* * * * * ?";
+                });
             var testObject = new JobHostWrapper();
 
             builder.ConfigureServices((ctx, services) =>

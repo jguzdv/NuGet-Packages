@@ -8,6 +8,6 @@
         /// <summary>
         /// Number of seconds for the polling interval for the dashboard. After each intervall the dashboard reloads data.
         /// </summary>
-        public int PollingInterval { get; set; }
+        public int PollingInterval { get; set; } = 15;
     }
 }

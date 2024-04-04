@@ -33,16 +33,12 @@ namespace JGUZDV.JobHost.Dashboard.EntityFrameworkCore
         /// The factory will NOT be registered for you
         /// </summary>
         /// <param name="builder">The host builder to extend.</param>
-        /// <param name="jobHostName">The name of the job host.</param>
-        /// <param name="monitoringUrl">The URL for monitoring.</param>
-        /// <param name="executeNowSchedule">Cron expression for polling interval for the execute now job(default is "0/15 * * * * ?").</param>
+        /// <param name="configureOptions">Action that configures the <see cref="JobReportOptions"/></param>
         /// <returns>The extended host builder.</returns>
         public static IHostBuilder UseJobHostContextReporting(this IHostBuilder builder,
-            string jobHostName,
-            string monitoringUrl,
-            string executeNowSchedule = "0/15 * * * * ?")
+            Action<JobReportOptions> configureOptions)
         {
-            builder.UseJobReporting<JobHostContextReporter>(jobHostName, monitoringUrl, executeNowSchedule);
+            builder.UseJobReporting<JobHostContextReporter>(configureOptions);
 
             return builder;
         }
@@ -77,22 +73,18 @@ namespace JGUZDV.JobHost.Dashboard.EntityFrameworkCore
         /// </summary>
         /// <param name="configureDbContext">configure action for the DbContext factory</param>
         /// <param name="builder">The host builder to extend.</param>
-        /// <param name="jobHostName">The name of the job host.</param>
-        /// <param name="monitoringUrl">The URL for monitoring.</param>
-        /// <param name="executeNowSchedule">Cron expression for polling interval for the execute now job(default is "0/15 * * * * ?").</param>
+        /// <param name="configureOptions">Action that configures the <see cref="JobReportOptions"/></param>
         /// <returns>The extended host builder.</returns>
         public static IHostBuilder UseJobHostContextReporting(this IHostBuilder builder,
             Action<DbContextOptionsBuilder> configureDbContext,
-            string jobHostName,
-            string monitoringUrl,
-            string executeNowSchedule = "0/15 * * * * ?")
+            Action<JobReportOptions> configureOptions)
         {
             builder.ConfigureServices(services =>
             {
                 services.AddDbContextFactory<JobHostContext>(configureDbContext);
             });
 
-            builder.UseJobReporting<JobHostContextReporter>(jobHostName, monitoringUrl, executeNowSchedule);
+            builder.UseJobReporting<JobHostContextReporter>(configureOptions);
 
             return builder;
         }

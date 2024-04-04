@@ -16,11 +16,14 @@ namespace JGUZDV.JobHost.Dashboard.Extensions
         /// Adds required services for the dashboard
         /// </summary>
         /// <param name="services"></param>
-        /// <param name="pollingInterval">Number of seconds for the polling interval for the dashboard. After each intervall the dashboard reloads data. Default: 15s</param>
+        /// <param name="configureOptions">action that configures the <see cref="DashboardOptions"/> </param>
         /// <returns></returns>
-        public static IServiceCollection AddDashboard(this IServiceCollection services, int pollingInterval = 15)
+        public static IServiceCollection AddDashboard(this IServiceCollection services, Action<DashboardOptions>? configureOptions = null)
         {
-            services.AddOptions<DashboardOptions>().Configure(x => x.PollingInterval = pollingInterval);
+            services
+                .AddOptions<DashboardOptions>()
+                .Configure(x => configureOptions?.Invoke(x));
+
             services.AddClientStoreWithNullStorage();
             services.TryAddSingleton<DashboardState>();
             services.TryAddSingleton<IState<DashboardState>, State<DashboardState>>();
