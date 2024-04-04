@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "JGUZDV.JobHost.Dashboard.Api": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:59997;http://localhost:59998"
+    }
+  }
+}
