@@ -1,0 +1,24 @@
+name: JGUZDV.JobHost.Dashboard.EntityFrameworkCore
+
+on:
+  workflow_dispatch:
+    inputs:
+      push-to-nuget:
+        description: Push package to NuGet
+        type: boolean
+
+  pull_request:
+    branches:
+      - main
+    paths:
+      - libraries/JGUZDV.JobHost.Dashboard.EntityFrameworkCore/**
+
+jobs:
+  call_default_build:
+    uses: ./.github/workflows/default_build.yml
+    with:
+      library-name: JGUZDV.JobHost.Dashboard.EntityFrameworkCore
+      push-to-nuget: ${{ inputs.push-to-nuget != '' && inputs.push-to-nuget }}
+      run-tests: false
+    secrets:
+      NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}

@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\JGUZDV.JobHost.Dashboard.EntityFrameworkCore\src\JGUZDV.JobHost.Dashboard.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\..\JGUZDV.JobHost.Shared\src\JGUZDV.JobHost.Shared.csproj" />
     <ProjectReference Include="..\src\JGUZDV.JobHost.csproj" />
   </ItemGroup>
 
