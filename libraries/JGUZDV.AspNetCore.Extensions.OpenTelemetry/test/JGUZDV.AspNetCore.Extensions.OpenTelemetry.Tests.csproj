@@ -1,16 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    
-    <IsPackable>false</IsPackable>
-    <IsTestProject>true</IsTestProject>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
 
-  <ItemGroup>
-    <ProjectReference Include="..\src\JGUZDV.AspNetCore.Extensions.OpenTelemetry.csproj" />
-  </ItemGroup>
+        <IsPackable>false</IsPackable>
+        <IsTestProject>true</IsTestProject>
+
+        <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\src\JGUZDV.AspNetCore.Extensions.OpenTelemetry.csproj" />
+    </ItemGroup>
 
 </Project>
