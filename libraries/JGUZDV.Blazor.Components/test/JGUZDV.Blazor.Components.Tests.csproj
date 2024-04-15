@@ -7,5 +7,7 @@
 
         <IsTestProject>true</IsTestProject>
         <IsPackable>false</IsPackable>
+
+        <GenerateDocumentationFile>false</GenerateDocumentationFile>
     </PropertyGroup>
 </Project>
