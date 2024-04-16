@@ -109,6 +109,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.Extensions.Logging.Tests", "libraries\JGUZDV.Extensions.Logging\test\JGUZDV.Extensions.Logging.Tests.csproj", "{130E8BF8-97A3-468C-80A8-92247DCBFF51}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JGUZDV.JobHost", "JGUZDV.JobHost", "{B06ACF77-B0EF-42F4-BA33-776F7496E2E6}"
+	ProjectSection(SolutionItems) = preProject
+		libraries\JGUZDV.JobHost\JobHost.Build.props = libraries\JGUZDV.JobHost\JobHost.Build.props
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JGUZDV.L10n", "JGUZDV.L10n", "{D93740E7-7EAB-4B4C-957E-E21CD73AA1BA}"
 EndProject
@@ -987,8 +990,8 @@ Global
 		{1F1A4656-CFAA-413B-8C92-1FE5C87067F3} = {B06ACF77-B0EF-42F4-BA33-776F7496E2E6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		RESX_SortFileContentOnSave = True
-		RESX_NeutralResourcesLanguage = de-DE
 		SolutionGuid = {46ECC226-1874-4539-8589-8B2029909C4A}
+		RESX_NeutralResourcesLanguage = de-DE
+		RESX_SortFileContentOnSave = True
 	EndGlobalSection
 EndGlobal
