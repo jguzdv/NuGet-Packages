@@ -50,7 +50,7 @@ jobs:
   build_dashboard_api:
     uses: ./.github/workflows/JGUZDV.JobHost.default_build.yml
     with:
-      library-name: JGUZDV.JobHost.Dashboard.API
+      library-name: JGUZDV.JobHost.Dashboard.Api
       push-to-nuget: ${{ inputs.push-to-nuget != '' && inputs.push-to-nuget }}
     secrets:
       NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
