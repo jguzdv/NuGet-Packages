@@ -8,14 +8,17 @@ on:
         required: false
         type: boolean
         default: false
+      run-tests:
+        type: boolean
+        default: true
     secrets:
       NUGET_API_KEY:
         required: true    
 
 env:
     dotnet-version: 7.0.x
-    src-proj: ./libraries/${{ inputs.library-name }}/src/${{ inputs.library-name }}.csproj
-    test-proj: ./libraries/${{ inputs.library-name }}/test/${{ inputs.library-name }}.Tests.csproj
+    src-proj: ./libraries/JGUZDV.JobHost/src/${{ inputs.library-name }}/src/${{ inputs.library-name }}.csproj
+    test-proj: ./libraries/JGUZDV.JobHost/src/${{ inputs.library-name }}/test/${{ inputs.library-name }}.Tests.csproj
     publish-path: ./publish/${{ inputs.library-name }}
 
 jobs:
@@ -41,6 +44,7 @@ jobs:
         run: dotnet build ${{ env.test-proj }} --no-restore -c Release
       
       - name: Run tests
+        if: ${{ inputs.run-tests }}
         run: dotnet test ${{ env.test-proj }} --no-build -c Release --verbosity normal
 
       - name: Pack library project

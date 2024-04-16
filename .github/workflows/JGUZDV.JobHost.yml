@@ -14,11 +14,51 @@ on:
       - libraries/JGUZDV.JobHost/**
 
 jobs:
-  call_default_build:
-    uses: ./.github/workflows/default_build.yml
+  build_shared:
+    uses: ./.github/workflows/JGUZDV.JobHost.default_build.yml
+    with:
+      library-name: JGUZDV.JobHost.Shared
+      push-to-nuget: ${{ inputs.push-to-nuget != '' && inputs.push-to-nuget }}
+    secrets:
+      NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+
+  build_jobhost:
+    uses: ./.github/workflows/JGUZDV.JobHost.default_build.yml
     with:
       library-name: JGUZDV.JobHost
       push-to-nuget: ${{ inputs.push-to-nuget != '' && inputs.push-to-nuget }}
       run-tests: false
+    secrets:
+      NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+
+  build_dashboard_shared:
+    uses: ./.github/workflows/JGUZDV.JobHost.default_build.yml
+    with:
+      library-name: JGUZDV.JobHost.Dashboard.Shared
+      push-to-nuget: ${{ inputs.push-to-nuget != '' && inputs.push-to-nuget }}
+    secrets:
+      NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+
+  build_dashboard_efcore:
+    uses: ./.github/workflows/JGUZDV.JobHost.default_build.yml
+    with:
+      library-name: JGUZDV.JobHost.Dashboard.EntityFrameworkCore
+      push-to-nuget: ${{ inputs.push-to-nuget != '' && inputs.push-to-nuget }}
+    secrets:
+      NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+
+  build_dashboard_api:
+    uses: ./.github/workflows/JGUZDV.JobHost.default_build.yml
+    with:
+      library-name: JGUZDV.JobHost.Dashboard.API
+      push-to-nuget: ${{ inputs.push-to-nuget != '' && inputs.push-to-nuget }}
+    secrets:
+      NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+
+  build_dashboard_blazor:
+    uses: ./.github/workflows/JGUZDV.JobHost.default_build.yml
+    with:
+      library-name: JGUZDV.JobHost.Dashboard.Blazor
+      push-to-nuget: ${{ inputs.push-to-nuget != '' && inputs.push-to-nuget }}
     secrets:
       NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
