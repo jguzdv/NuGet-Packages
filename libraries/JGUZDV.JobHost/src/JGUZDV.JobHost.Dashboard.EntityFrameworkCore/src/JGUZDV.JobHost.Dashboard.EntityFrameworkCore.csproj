@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <Version>1.0.0</Version>
+        <PackageId>JGUZDV.JobHost.Dashboard.EntityFrameworkCore</PackageId>
+        <IsPackable>true</IsPackable>
+        <Authors>Aaron Puhl, Marcus Lunau</Authors>
+        <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
+        <PackageDescription>Database of Dashboard for JGUZDV.JobHost package.</PackageDescription>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.2" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\JGUZDV.JobHost.Dashboard.Shared\src\JGUZDV.JobHost.Dashboard.Shared.csproj" />
+        <ProjectReference Include="..\..\JGUZDV.JobHost\src\JGUZDV.JobHost.csproj" />
+    </ItemGroup>
+
+</Project>

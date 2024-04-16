@@ -1,0 +1,78 @@
+on:
+  workflow_call:
+    inputs:
+      library-name:
+        required: true
+        type: string
+      push-to-nuget:
+        required: false
+        type: boolean
+        default: false
+      run-tests:
+        type: boolean
+        default: true
+    secrets:
+      NUGET_API_KEY:
+        required: true    
+
+env:
+    dotnet-version: 7.0.x
+    src-proj: ./libraries/JGUZDV.JobHost/src/${{ inputs.library-name }}/src/${{ inputs.library-name }}.csproj
+    test-proj: ./libraries/JGUZDV.JobHost/src/${{ inputs.library-name }}/test/${{ inputs.library-name }}.Tests.csproj
+    publish-path: ./publish/${{ inputs.library-name }}
+
+jobs:
+  build_test_pack:
+    name: Build and Test ${{ inputs.library-name }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET Core SDK ${{ env.dotnet-version }}
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ env.dotnet-version }}
+
+      - name: Restore library project
+        run: dotnet restore ${{ env.src-proj }}
+      - name: Restore test project
+        run: dotnet restore ${{ env.test-proj }}
+
+      - name: Build library project
+        run: dotnet build ${{ env.src-proj }} --no-restore -c Release
+      - name: Build test project
+        run: dotnet build ${{ env.test-proj }} --no-restore -c Release
+      
+      - name: Run tests
+        if: ${{ inputs.run-tests }}
+        run: dotnet test ${{ env.test-proj }} --no-build -c Release --verbosity normal
+
+      - name: Pack library project
+        run: dotnet pack ${{ env.src-proj }} --no-build -c Release --output ${{ env.publish-path }}
+
+      - name: Upload nupkg
+        uses: actions/upload-artifact@v3
+        with:
+          name: NuGetPackage
+          path: ${{ env.publish-path }}
+          retention-days: 7
+
+  push_to_nuget:
+    needs: build_test_pack
+    if: github.repository == 'jguzdv/NuGet-Packages' && github.ref == 'refs/heads/main' && inputs.push-to-nuget
+    name: Push ${{ inputs.library-name }}
+    runs-on: ubuntu-latest
+
+    env:
+      dotnet-version: 7.0.x
+
+    steps:
+      - name: Download nupkg
+        uses: actions/download-artifact@v3
+        with:
+          name: NuGetPackage
+          path: package
+
+      - name: Push library
+        run: dotnet nuget push package/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }}
+      

@@ -1,0 +1,52 @@
+﻿@using JGUZDV.JobHost.Shared.Model
+<div class="border h-100 shadow-sm p-3">
+    <button @onclick="() => OnExecuteNow.InvokeAsync(Job)" class="float-end btn btn-sm btn-outline-secondary">execute now</button>
+    <div class="mb-2 fw-bold">
+        <i class="fa @(Job.LastResult == Job.Error ? "fa-times-circle text-danger" : "fa-check-circle text-success")"></i>
+        @Job.Name
+    </div>
+    <hr />
+    
+    <div class="my-2">
+        <div>
+            <label class="fw-bold">
+                last executed:
+            </label>
+            <span>
+                @Job.LastExecutedAt.ToLocalTime().ToString("g") <span class="small">(local)</span>
+            </span>
+        </div>
+        <div>
+            <label class="fw-bold">
+                run time:
+            </label>
+            <span>
+                @Job.RunTime.ToString("g")
+            </span>
+        </div>
+        <div>
+            <label class="fw-bold">
+                schedule:
+            </label>
+            <span>
+                @Job.Schedule
+            </span>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(Job.FailMessage))
+    {
+        <div class="my-2 alert alert-danger">
+            @Job.FailMessage
+        </div>
+    }
+
+</div>
+
+@code {
+    [Parameter]
+    public required Job Job { get; set; }
+
+    [Parameter]
+    public EventCallback<Job> OnExecuteNow { get; set; }
+}
