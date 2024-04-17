@@ -4,7 +4,6 @@
         <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-        <Version>1.0.0</Version>
         <PackageId>JGUZDV.JobHost.Dashboard.Blazor</PackageId>
         <IsPackable>true</IsPackable>
         <Authors>Aaron Puhl, Marcus Lunau</Authors>

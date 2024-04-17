@@ -4,7 +4,6 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <Version>1.0.0</Version>
         <PackageId>JGUZDV.JobHost.Dashboard.EntityFrameworkCore</PackageId>
         <IsPackable>true</IsPackable>
         <Authors>Aaron Puhl, Marcus Lunau</Authors>

@@ -7,7 +7,6 @@
 
         <PackageId>JGUZDV.JobHost</PackageId>
         <IsPackable>true</IsPackable>
-        <Version>1.0.3</Version>
         <Authors>Marcus Lunau, Aaron Puhl</Authors>
         <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
         <PackageDescription>Host for background jobs using Quartz.net</PackageDescription>

@@ -23,6 +23,7 @@ jobs:
       NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
 
   build_jobhost:
+    needs: build_shared
     uses: ./.github/workflows/JGUZDV.JobHost.default_build.yml
     with:
       library-name: JGUZDV.JobHost
@@ -40,6 +41,7 @@ jobs:
       NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
 
   build_dashboard_efcore:
+    needs: [build_dashboard_shared, build_shared, build_jobhost]
     uses: ./.github/workflows/JGUZDV.JobHost.default_build.yml
     with:
       library-name: JGUZDV.JobHost.Dashboard.EntityFrameworkCore
@@ -48,6 +50,7 @@ jobs:
       NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
 
   build_dashboard_api:
+    needs: [build_dashboard_shared, build_shared]
     uses: ./.github/workflows/JGUZDV.JobHost.default_build.yml
     with:
       library-name: JGUZDV.JobHost.Dashboard.Api
@@ -56,6 +59,7 @@ jobs:
       NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
 
   build_dashboard_blazor:
+    needs: [build_dashboard_shared, build_shared]
     uses: ./.github/workflows/JGUZDV.JobHost.default_build.yml
     with:
       library-name: JGUZDV.JobHost.Dashboard.Blazor
