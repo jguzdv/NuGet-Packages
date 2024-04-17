@@ -74,5 +74,5 @@ jobs:
           path: package
 
       - name: Push library
-        run: dotnet nuget push package/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }}
+        run: dotnet nuget push package/${{ inputs.library-name }}*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }}
       
