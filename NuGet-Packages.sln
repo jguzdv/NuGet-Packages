@@ -149,7 +149,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.WebApiHost", "librar
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.WebApiHost.Tests", "libraries\JGUZDV.WebApiHost\test\JGUZDV.WebApiHost.Tests.csproj", "{892EA5E4-A98F-4A36-B901-8A1FAB27623E}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JGUZDV.AspNetCore.Extensions.OpenTelemetry", "JGUZDV.AspNetCore.Extensions.OpenTelemetry", "{B1DC4BB7-3BB1-43FB-8264-C9E1712AD741}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JGUZDV.AspNetCore.Extensions", "JGUZDV.AspNetCore.Extensions", "{B1DC4BB7-3BB1-43FB-8264-C9E1712AD741}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.AspNetCore.Extensions.OpenTelemetry", "libraries\JGUZDV.AspNetCore.Extensions.OpenTelemetry\src\JGUZDV.AspNetCore.Extensions.OpenTelemetry.csproj", "{BDF176E0-07BD-4A8F-BD68-D4F29A2EDB79}"
 EndProject
