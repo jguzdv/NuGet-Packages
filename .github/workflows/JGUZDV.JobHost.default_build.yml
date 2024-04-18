@@ -57,22 +57,3 @@ jobs:
           path: ${{ env.publish-path }}
           retention-days: 7
 
-  push_to_nuget:
-    needs: build_test_pack
-    if: github.repository == 'jguzdv/NuGet-Packages' && github.ref == 'refs/heads/main' && inputs.push-to-nuget
-    name: Push ${{ inputs.library-name }}
-    runs-on: ubuntu-latest
-
-    env:
-      dotnet-version: 7.0.x
-
-    steps:
-      - name: Download nupkg
-        uses: actions/download-artifact@v3
-        with:
-          name: NuGetPackage
-          path: package
-
-      - name: Push library
-        run: dotnet nuget push package/${{ inputs.library-name }}*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }}
-      

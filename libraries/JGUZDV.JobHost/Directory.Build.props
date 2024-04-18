@@ -1,6 +1,6 @@
 <Project>
     <PropertyGroup>
-        <Version>1.1.1</Version>
+        <Version>1.1.11</Version>
     </PropertyGroup>
 
     <ImportGroup>

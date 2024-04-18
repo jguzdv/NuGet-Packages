@@ -66,3 +66,23 @@ jobs:
       push-to-nuget: ${{ inputs.push-to-nuget != '' && inputs.push-to-nuget }}
     secrets:
       NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+
+  push_to_nuget:
+    needs: [build_dashboard_blazor,build_dashboard_api,build_dashboard_efcore,build_dashboard_shared,build_jobhost,build_shared]
+    if: github.repository == 'jguzdv/NuGet-Packages' && github.ref == 'refs/heads/main' && inputs.push-to-nuget
+    name: Push ${{ inputs.library-name }}
+    runs-on: ubuntu-latest
+
+    env:
+      dotnet-version: 7.0.x
+
+    steps:
+      - name: Download nupkg
+        uses: actions/download-artifact@v3
+        with:
+          name: NuGetPackage
+          path: package
+
+      - name: Push library
+        run: dotnet nuget push package/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }}
+      
