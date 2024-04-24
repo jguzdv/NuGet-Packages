@@ -12,7 +12,7 @@
 
         <PackageId>JGUZDV.Blazor.WasmServerHost</PackageId>
         <IsPackable>true</IsPackable>
-        <Version>1.0.0-beta4</Version>
+        <Version>1.0.0-beta5</Version>
         <Authors>Thomas Ottenhus</Authors>
         <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
         <PackageDescription>Host for Blazor WASM Applications based on our other packages</PackageDescription>

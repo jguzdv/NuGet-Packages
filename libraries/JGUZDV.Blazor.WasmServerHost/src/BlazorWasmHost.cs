@@ -175,7 +175,22 @@ public static partial class BlazorWasmHost
     }
 
 
-
+    /// <summary>
+    /// Add the following middleware to the pipeline:
+    /// - DeveloperExceptionPage (Development only)
+    /// - WebAssemblyDebugging (Development only)
+    /// - HttpsRedirection
+    /// - StaticFiles
+    /// - RequestLocalization
+    /// - Routing
+    /// - Authentication
+    /// - Authorization
+    /// - Antiforgery
+    /// - RazorComponents
+    /// - Controllers
+    /// - HealthChecks
+    /// - ReverseProxy
+    /// </summary>
     public static WebApplication ConfigureWasmHost<TBlazorApp>(this WebApplication app,
         params System.Reflection.Assembly[] assemblies)
     {
@@ -197,13 +212,14 @@ public static partial class BlazorWasmHost
         app.UseHttpsRedirection();
 
         app.UseStaticFiles();
-        app.UseAntiforgery();
 
         app.UseRequestLocalization();
         app.UseRouting();
 
         app.UseAuthentication();
         app.UseAuthorization();
+
+        app.UseAntiforgery();
 
         app.MapRazorComponents<TBlazorApp>()
             .AddInteractiveWebAssemblyRenderMode()
