@@ -32,6 +32,11 @@ namespace JGUZDV.ActiveDirectory.ClaimProvider
         }
 
 
+        /// <summary>
+        /// Get claims from Active Directory for the given subject.
+        /// ClaimTypes will be filtered using the known claim sources.
+        /// AD-Properties will be converted using the configured converters.
+        /// </summary>
         public List<(string Type, string Value)> GetClaims(ClaimsPrincipal subject, params string[] claimTypes)
         {
             var result = new List<(string Type, string Value)>();
@@ -54,27 +59,6 @@ namespace JGUZDV.ActiveDirectory.ClaimProvider
             }
 
             return result;
-        }
-
-
-        public bool IsUserActive(ClaimsPrincipal subject)
-        {
-            try
-            {
-                var userDirectoryEntry = GetUserDirectoryEntry(subject, new[] { accountControlProperty });
-                if (userDirectoryEntry?.Properties[accountControlProperty][0] is int adsUserFlags)
-                {
-                    //See https://docs.microsoft.com/en-us/windows/win32/api/iads/ne-iads-ads_user_flag_enum ADS_UF_ACCOUNTDISABLE 
-                    return (adsUserFlags & 0x2) != 2;
-                }
-
-                return false;
-            }
-            catch (InvalidOperationException ex)
-            {
-                _logger.LogError(ex, "Could not determine ActiveState of user.");
-                return false;
-            }
         }
 
 
