@@ -11,7 +11,6 @@ public class ActiveDirectoryOptions : IValidatableObject
     [NotNull]
     public string? UserClaimType { get; set; } = null!;
 
-    [NotNull]
     public string? UserFilter { get; set; } = null!;
 
 
@@ -26,8 +25,6 @@ public class ActiveDirectoryOptions : IValidatableObject
 
         if (string.IsNullOrWhiteSpace(UserClaimType))
             yield return new ValidationResult("UserClaimType MUST be configured.");
-        if (string.IsNullOrWhiteSpace(UserFilter))
-            yield return new ValidationResult("UserFilter MUST be configured.");
 
         foreach (var claimMap in ClaimSources)
         {

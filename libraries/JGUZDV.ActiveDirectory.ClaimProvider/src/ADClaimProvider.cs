@@ -117,8 +117,18 @@ namespace JGUZDV.ActiveDirectory.ClaimProvider
             var identifier = GetSubjectIdentifier(principal, _adOptions.Value.UserClaimType);
             var adConnection = _adOptions.Value.Connection;
 
+            var (isBindable, bindPath) = ADHelper.IsBindableIdentity(identifier);
+            if (isBindable)
+            {
+                return ADHelper.BindDirectoryEntry(adConnection.Server, bindPath, propertiesToLoad);
+            }
+
+            if (string.IsNullOrWhiteSpace(_adOptions.Value.UserFilter))
+                throw new InvalidOperationException("UserFilter is not configured.");
+
             return ADHelper.FindUserDirectoryEntry(
-                adConnection.Server, adConnection.BaseDN,
+                adConnection.Server, 
+                adConnection.BaseDN,
                 _adOptions.Value.UserFilter.Replace("{0}", identifier),
                 propertiesToLoad);
         }
