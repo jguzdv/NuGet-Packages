@@ -19,12 +19,12 @@
         <div class="col-12">
             @{
                 var selectedClass = (Values.Count == Items.Count) ?
-                "border-success text-nowrap text-success d-flex justify-content-between"
+                "border-success text-success"
                 : "";
             }
             <div @onkeypress="e => e.OnEnter(ToggleAll)" @onclick="ToggleAll"
                  tabindex="0"
-                 class="bg-body button border p-2 small @selectedClass">
+                 class="bg-body button border p-2 small d-flex justify-content-between @selectedClass">
                 <span class="text-truncate" title="@AllOptionLabel">@AllOptionLabel</span>
                 @if (Values.Count == Items.Count)
                 {
@@ -40,12 +40,12 @@
                 var isSelected = ((!UseSingleSelectionMode && Values.Any(x => ItemKey(x)!.Equals(ItemKey(item))))
                 || UseSingleSelectionMode && ItemKey(item)!.Equals(ItemKey(Value)));
                 var selectedClass = isSelected
-                ? "border-success text-nowrap text-success d-flex justify-content-between"
+                ? "border-success text-success "
                 : "";
             }
             <div tabindex="0"
                  @onkeypress="e => e.OnEnter(() => HandleItemClicked(item))" @onclick="() => HandleItemClicked(item)"
-                 class="border bg-body button p-2 small @selectedClass">
+                 class="border bg-body button p-2 small d-flex justify-content-between @selectedClass">
                 <span class="text-truncate">@ItemTemplate(item)</span>
                 @if (isSelected)
                 {

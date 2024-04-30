@@ -38,11 +38,11 @@
         <div class="d-flex gap-2 flex-wrap my-3">
             @foreach (var item in Values!)
             {
-                <span class="badge button text-bg-secondary" tabindex="0"
+                <div class="badge button d-flex justify-content-between gap-1 mw-0 text-bg-secondary" tabindex="0"
                       @onkeypress="e => e.OnEnter(() => HandleBadgeClick(item))"
                       @onclick="() => HandleBadgeClick(item)">
-                    @ItemName(item) @BadgeIcon("")
-                </span>
+                    <span class="text-truncate">@ItemName(item)</span> @BadgeIcon("")
+                </div>
             }
         </div>
     }
