@@ -36,6 +36,11 @@
     filter: brightness(0.95);
     cursor: pointer;
 }
+
 .clickable {
     cursor: pointer;
+}
+
+.mw-0 {
+    min-width: 0;
 }
