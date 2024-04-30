@@ -13,6 +13,7 @@ namespace JGUZDV.ActiveDirectory.ClaimProvider
         [GeneratedRegex("^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$", RegexOptions.IgnoreCase | RegexOptions.Compiled, 200, "de-DE")]
         private static partial Regex GuidRegex();
 
+
         private static string CreateLdapPath(string? ldapServer, string? pathOrBind)
         {
             var hasServer = !string.IsNullOrWhiteSpace(ldapServer);
@@ -26,17 +27,19 @@ namespace JGUZDV.ActiveDirectory.ClaimProvider
             return $"LDAP://{ldapServer}/{pathOrBind}";
         }
 
-        public static DirectoryEntry GetDirectoryEntry(string? ldapServer, string adIdentity, IEnumerable<string> propertiesToLoad)
+        public static (bool isBindable, string? BindPath) IsBindableIdentity(string adIdentity)
         {
-            string? ldapPath;
             if (SidRegex().IsMatch(adIdentity))
-                ldapPath = $"<SID={adIdentity}>";
+                return (true, $"<SID={adIdentity}>");
             else if (GuidRegex().IsMatch(adIdentity))
-                ldapPath = $"<GUID={adIdentity}>";
+                return (true, $"<GUID={adIdentity}>");
             else
-                throw new InvalidOperationException($"Could not determine type of identifier '{adIdentity}'");
+                return (false, null);
+        }
 
-            var directoryEntry = new DirectoryEntry(CreateLdapPath(ldapServer, ldapPath));
+        public static DirectoryEntry BindDirectoryEntry(string? ldapServer, string bindPath, IEnumerable<string> propertiesToLoad)
+        {
+            var directoryEntry = new DirectoryEntry(CreateLdapPath(ldapServer, bindPath));
             directoryEntry.RefreshCache(propertiesToLoad.ToArray());
 
             return directoryEntry;
