@@ -1,4 +1,5 @@
 ﻿using System.DirectoryServices;
+using System.Security.Principal;
 
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -36,7 +37,7 @@ public class PropertyValueReader
             return stringValue;
         }
 
-        return ReadAsString(propertyValues[0], propertyName, outputFormat);
+        return ReadAsString(propertyValues[0]!, propertyName, outputFormat);
     }
 
 
@@ -47,13 +48,17 @@ public class PropertyValueReader
             return Array.Empty<string>();
         }
 
-        var convertProperty = GetToStringConversion(typeof(string), propertyName);
-        return propertyValues.Select((x,i) => );
+        return propertyValues.Select(x => ReadAsString(x, propertyName, outputFormat)).ToArray();
     }
 
     private string? ReadAsString(object propertyValue, string propertyName, string? outputFormat = null)
     {
-        
+        if (propertyValue is string stringValue)
+        {
+            return stringValue;
+        }
+
+        return "";
 
         if (!_options.Value.PropertyInfos.TryGetValue(propertyName, out var propertyInfo))
         {
@@ -65,44 +70,78 @@ public class PropertyValueReader
     }
 
     /// <summary>
-    /// Reads all values from the property with the given name.
+    /// Reads the given property as an integer.
     /// </summary>
-    /// <typeparam name="T">If T does not match the native type, a type conversion will occur.</typeparam>
-    public IEnumerable<T> ReadValues<T>(PropertyCollection properties, string propertyName)
+    public static int ReadInt(PropertyCollection properties, string propertyName)
     {
-        if (!(properties[propertyName] is { Count: >0 } and { Value: object[] propertyValues }))
-        {
-            return Array.Empty<T>();
-        }
-
-        var convertProperty = GetPropertyConversion(typeof(T), propertyName);
-        return propertyValues.Select(x => (T)convertProperty(x!));
+        var propertyValues = properties[propertyName];
+        return propertyValues.Count != 0 ? (int)propertyValues[0]! : default;
     }
 
 
-    private Func<object, string> GetToStringConversion(Type sourceType, string propertyName)
+    /// <summary>
+    /// Reads the given property as a long.
+    /// </summary>
+    public static long ReadLong(PropertyCollection properties, string propertyName)
     {
-        if (!_options.Value.PropertyInfos.TryGetValue(propertyName, out var propertyInfo))
-        {
-            _logger.LogDebug("No property info found for {PropertyName}, a cast will be used for conversion.", propertyName);
-        }
-
-        if (propertyInfo == null || targetType == propertyInfo.PropertyType)
-        {
-            if (targetType == typeof(long))
-            {
-                return x => ConvertIAdsLargeInteger(x);
-            }
-        }
-
-        return x => x;
+        var propertyValues = properties[propertyName];
+        return propertyValues.Count != 0 ? ConvertIAdsLargeInteger(propertyValues[0]!) : default;
     }
+
+
+    /// <summary>
+    /// Reads the given property as a DateTime.
+    /// </summary>
+    public static DateTime ReadDateTime(PropertyCollection properties, string propertyName)
+    {
+        var propertyValues = properties[propertyName];
+        return propertyValues.Count != 0 ? (DateTime)propertyValues[0]! : default;
+    }
+
+    /// <summary>
+    /// Reads the given property as a byte array.
+    /// </summary>
+    public static byte[] ReadBytes(PropertyCollection properties, string propertyName)
+    {
+        var propertyValues = properties[propertyName];
+        return propertyValues.Count != 0 ? (byte[])propertyValues[0]! : Array.Empty<byte>();
+    }
+
+
+    /// <summary>
+    /// Reads the given property as a byte array and converts it to guid.
+    /// </summary>
+    public static Guid ReadBytesAsGuid(PropertyCollection properties, string propertyName)
+    {
+        var propertyValues = properties[propertyName];
+        return propertyValues.Count != 0 ? new Guid(ReadBytes(properties, propertyName)) : default;
+    }
+
+    /// <summary>
+    /// Reads the given property as a byte array and converts it to a SecurityIdentifier.
+    /// </summary>
+    public static SecurityIdentifier? ReadBytesSecurityIdentifier(PropertyCollection properties, string propertyName)
+    {
+        var propertyValues = properties[propertyName];
+        return propertyValues.Count != 0 ? new SecurityIdentifier(ReadBytes(properties, propertyName), 0) : default;
+    }
+
+    /// <summary>
+    /// Reads the given property as a long (file time) and converts it to a DateTimeOffset.
+    /// </summary>
+    public static DateTimeOffset ReadLongAsDateTime(PropertyCollection properties, string propertyName)
+    {
+        var propertyValues = properties[propertyName];
+        return propertyValues.Count != 0 ? DateTimeOffset.FromFileTime(ConvertIAdsLargeInteger(propertyValues[0]!)) : default;
+    }
+
 
     private static long ConvertIAdsLargeInteger(object value)
     {
         var iadsLargeIntType = value.GetType();
-        var highPart = (int)iadsLargeIntType.InvokeMember("HighPart", System.Reflection.BindingFlags.GetProperty, null, value, null);
-        var lowPart = (uint)iadsLargeIntType.InvokeMember("LowPart", System.Reflection.BindingFlags.GetProperty, null, value, null);
+        var highPart = (int)iadsLargeIntType.InvokeMember("HighPart", System.Reflection.BindingFlags.GetProperty, null, value, null)!;
+        var lowPart = (uint)iadsLargeIntType.InvokeMember("LowPart", System.Reflection.BindingFlags.GetProperty, null, value, null)!;
+
         return ((long)highPart << 32) | lowPart;
     }
 }

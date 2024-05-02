@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace JGUZDV.ActiveDirectory.Converters
 {
-    internal class IntToStringConverter
+    internal class IntToStringConverter : IToStringConverter<int>
     {
+        public string Convert(int value, string? outFormat)
+            => value.ToString(outFormat ?? "0");
     }
 }

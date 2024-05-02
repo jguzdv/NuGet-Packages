@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace JGUZDV.ActiveDirectory.Converters
+﻿namespace JGUZDV.ActiveDirectory.Converters
 {
-    internal class LongToStringConverter
+    internal class LongToStringConverter : IToStringConverter<long>
     {
+        public string Convert(long value, string? outFormat)
+            => value.ToString(outFormat ?? "0");
     }
 }
