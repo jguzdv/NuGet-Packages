@@ -4,7 +4,6 @@ using System.Security.Claims;
 using System.Text.RegularExpressions;
 
 using JGUZDV.ActiveDirectory.ClaimProvider.Configuration;
-using JGUZDV.ActiveDirectory.ClaimProvider.PropertyConverters;
 
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -16,18 +15,15 @@ namespace JGUZDV.ActiveDirectory.ClaimProvider
     {
         const string accountControlProperty = "userAccountControl";
 
-        private readonly IPropertyConverterFactory _converterFactory;
         private readonly IPropertyValueReader _propertyValueReader;
         private readonly IOptions<ActiveDirectoryOptions> _adOptions;
         private readonly ILogger<ADClaimProvider> _logger;
 
         public ADClaimProvider(
-            IPropertyConverterFactory converterFactory,
             IPropertyValueReader propertyValueReader,
             IOptions<ActiveDirectoryOptions> adOptions,
             ILogger<ADClaimProvider> logger)
         {
-            _converterFactory = converterFactory;
             _propertyValueReader = propertyValueReader;
             _adOptions = adOptions;
             _logger = logger;
@@ -53,9 +49,12 @@ namespace JGUZDV.ActiveDirectory.ClaimProvider
             
             foreach (var map in propertyMaps)
             {
-                var claimValues = ConvertProperty(userDirectoryEntry, map);
+                var claimValues = _propertyValueReader.ReadStrings(userDirectoryEntry.Properties, map.PropertyName, map.OutputFormat);
+                
                 if (map.ClaimValueDenyList?.Any() == true)
+                {
                     claimValues = FilterValues(claimValues, denyList: map.ClaimValueDenyList);
+                }
 
                 result.AddRange(claimValues.Select(x => (map.ClaimType, x)));
             }
@@ -63,31 +62,6 @@ namespace JGUZDV.ActiveDirectory.ClaimProvider
             return result;
         }
 
-
-
-        private static IEnumerable<object> GetPropertyValues(PropertyValueCollection propertyValues)
-        {
-            if (propertyValues.Value is not object[] values)
-            {
-                if (propertyValues.Value is null)
-                    return Array.Empty<object>();
-
-                values = new[] { propertyValues.Value };
-            }
-
-            return values;
-        }
-
-
-        private IEnumerable<string> ConvertProperty(DirectoryEntry userEntry, ClaimSource claimSource)
-        {
-            //var converter = _converterFactory.GetConverter(claimSource.PropertyName, claimSource.OutputFormat);
-            //var property = userEntry.Properties[claimSource.PropertyName];
-
-            //var result = converter.ConvertProperty(GetPropertyValues(property), claimSource.OutputFormat);
-            var result = _propertyValueReader.ReadStrings(userEntry.Properties, claimSource.PropertyName, claimSource.OutputFormat);
-            return result;
-        }
 
 
         private static IEnumerable<string> FilterValues(IEnumerable<string> claimValues, List<string> denyList)
