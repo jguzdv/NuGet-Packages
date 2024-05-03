@@ -1,7 +1,4 @@
-﻿using JGUZDV.ActiveDirectory.ClaimProvider.PropertyConverters;
-using JGUZDV.ActiveDirectory.Configuration;
-
-namespace JGUZDV.ActiveDirectory.ClaimProvider.Configuration
+﻿namespace JGUZDV.ActiveDirectory.ClaimProvider.Configuration
 {
     public static class Defaults
     {
