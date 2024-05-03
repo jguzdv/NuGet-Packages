@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 
+using JGUZDV.ActiveDirectory.Configuration;
+
 namespace JGUZDV.ActiveDirectory.ClaimProvider.Configuration;
 
 public class ActiveDirectoryOptions : IValidatableObject
@@ -15,7 +17,7 @@ public class ActiveDirectoryOptions : IValidatableObject
 
 
     public List<ClaimSource> ClaimSources { get; set; } = new(Defaults.KnownClaimSources);
-    public List<ADPropertyInfo> Properties { get; set; } = new(Defaults.KnownProperties);
+    public List<ADPropertyInfo> Properties { get; set; } = new(JGUZDV.ActiveDirectory.Configuration.Defaults.KnownProperties);
 
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

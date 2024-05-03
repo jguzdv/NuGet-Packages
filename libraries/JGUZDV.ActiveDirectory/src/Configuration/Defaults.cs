@@ -1,4 +1,4 @@
-﻿namespace JGUZDV.ActiveDirectory;
+﻿namespace JGUZDV.ActiveDirectory.Configuration;
 
 /// <summary>
 /// Defaults for the library.

@@ -1,4 +1,4 @@
-﻿namespace JGUZDV.ActiveDirectory;
+﻿namespace JGUZDV.ActiveDirectory.Configuration;
 
 /// <summary>
 /// Represents a property in Active Directory with its name and type.

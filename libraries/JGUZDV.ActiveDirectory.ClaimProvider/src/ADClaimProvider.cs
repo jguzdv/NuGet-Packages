@@ -17,16 +17,18 @@ namespace JGUZDV.ActiveDirectory.ClaimProvider
         const string accountControlProperty = "userAccountControl";
 
         private readonly IPropertyConverterFactory _converterFactory;
-
+        private readonly IPropertyValueReader _propertyValueReader;
         private readonly IOptions<ActiveDirectoryOptions> _adOptions;
         private readonly ILogger<ADClaimProvider> _logger;
 
         public ADClaimProvider(
             IPropertyConverterFactory converterFactory,
+            IPropertyValueReader propertyValueReader,
             IOptions<ActiveDirectoryOptions> adOptions,
             ILogger<ADClaimProvider> logger)
         {
             _converterFactory = converterFactory;
+            _propertyValueReader = propertyValueReader;
             _adOptions = adOptions;
             _logger = logger;
         }
@@ -79,10 +81,11 @@ namespace JGUZDV.ActiveDirectory.ClaimProvider
 
         private IEnumerable<string> ConvertProperty(DirectoryEntry userEntry, ClaimSource claimSource)
         {
-            var converter = _converterFactory.GetConverter(claimSource.PropertyName, claimSource.OutputFormat);
-            var property = userEntry.Properties[claimSource.PropertyName];
+            //var converter = _converterFactory.GetConverter(claimSource.PropertyName, claimSource.OutputFormat);
+            //var property = userEntry.Properties[claimSource.PropertyName];
 
-            var result = converter.ConvertProperty(GetPropertyValues(property), claimSource.OutputFormat);
+            //var result = converter.ConvertProperty(GetPropertyValues(property), claimSource.OutputFormat);
+            var result = _propertyValueReader.ReadStrings(userEntry.Properties, claimSource.PropertyName, claimSource.OutputFormat);
             return result;
         }
 
