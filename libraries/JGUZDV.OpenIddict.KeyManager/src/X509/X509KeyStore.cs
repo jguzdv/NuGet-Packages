@@ -1,26 +1,31 @@
 ﻿using System.Security.Cryptography.X509Certificates;
 
+using JGUZDV.OpenIddict.KeyManager.Configuration;
+
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
-namespace JGUZDV.OpenIddict.KeyManager;
+namespace JGUZDV.OpenIddict.KeyManager.X509;
 
-public class X509KeyStore
+internal class X509KeyStore : IKeyStore
 {
     private const string EncyptionFileExtension = "enc.pfx";
     private const string SignatureFileExtension = "sig.pfx";
     private const string FilePattern = "*.*.pfx";
-
+    private readonly IDataProtector _dataProtector;
     private readonly TimeProvider _timeProvider;
     private readonly IOptions<KeyManagerOptions> _options;
     private readonly ILogger<X509KeyStore> _logger;
 
     public X509KeyStore(
+        IDataProtectionProvider dataProtectionProvider,
         TimeProvider timeProvider,
         IOptions<KeyManagerOptions> options,
         ILogger<X509KeyStore> logger)
     {
+        _dataProtector = dataProtectionProvider.CreateProtector("KeyProtection");
         _timeProvider = timeProvider;
         _options = options;
         _logger = logger;
@@ -40,7 +45,7 @@ public class X509KeyStore
 
         return keyLoadTasks.Where(x => x.IsCompletedSuccessfully)
             .Select(x => x.Result)
-            .Where(x => x.SecurityKey.Certificate.NotAfter > utcNow)
+            .Where(x => x.NotAfter > utcNow)
             .ToList();
     }
 
@@ -49,7 +54,8 @@ public class X509KeyStore
     {
         try
         {
-            var certificateBytes = await File.ReadAllBytesAsync(fileName, ct);
+            var encryptedCertificateBytes = await File.ReadAllBytesAsync(fileName, ct);
+            var certificateBytes = _dataProtector.Unprotect(encryptedCertificateBytes);
             var certificate = new X509Certificate2(certificateBytes);
 
             KeyUsage keyUsage;
@@ -85,29 +91,35 @@ public class X509KeyStore
 
 
 
-    internal async Task SaveKeyAsync(KeyUsage keyUsage, X509SecurityKey securityKey, CancellationToken ct)
+    public async Task SaveKeyAsync(KeyInfo keyInfo, CancellationToken ct)
     {
+        if(keyInfo.SecurityKey is not X509SecurityKey x509SecurityKey)
+        {
+            throw new ArgumentException("SecurityKey must be of type X509SecurityKey", nameof(keyInfo.SecurityKey));
+        }
+
         var fileName = Path.Combine(
             _options.Value.KeyStorePath,
-            Path.ChangeExtension(securityKey.Certificate.Thumbprint, GetFileExtension(keyUsage))
+            Path.ChangeExtension(x509SecurityKey.Certificate.Thumbprint, GetFileExtension(keyInfo.KeyUsage))
         );
 
-        var certificateBytes = securityKey.Certificate.Export(X509ContentType.Pkcs12, string.Empty);
-        await File.WriteAllBytesAsync(fileName, certificateBytes, ct);
+        var certificateBytes = x509SecurityKey.Certificate.Export(X509ContentType.Pkcs12, string.Empty);
+        var encryptedCertificateBytes = _dataProtector.Protect(certificateBytes);
+        await File.WriteAllBytesAsync(fileName, encryptedCertificateBytes, ct);
 
-        _logger.LogDebug("X509SecurityKey ({keyUsage}) has been written as {fileName}", keyUsage, fileName);
+        _logger.LogDebug("X509SecurityKey ({keyUsage}) has been written as {fileName}", keyInfo.KeyUsage, fileName);
     }
 
 
 
-    internal async Task PurgeExpiredKeys(DateTimeOffset refDate, CancellationToken ct)
+    public async Task PurgeExpiredKeys(DateTimeOffset refDate, CancellationToken ct)
     {
         var keyStorePath = _options.Value.KeyStorePath;
 
         foreach (var fileName in Directory.EnumerateFiles(keyStorePath, FilePattern).ToList())
         {
             var key = await LoadKeyAsync(fileName, ct);
-            if (key.SecurityKey.Certificate.NotAfter > refDate)
+            if (key.NotAfter > refDate)
                 continue;
 
             File.Delete(fileName);

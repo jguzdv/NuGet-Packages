@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 
-namespace JGUZDV.OpenIddict.KeyManager;
+namespace JGUZDV.OpenIddict.KeyManager.Configuration;
 
 public class KeyManagerOptionsValidator : IValidateOptions<KeyManagerOptions>
 {

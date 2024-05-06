@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 
-namespace JGUZDV.OpenIddict.KeyManager;
+namespace JGUZDV.OpenIddict.KeyManager.Configuration;
 
 public class KeyManagerOptions
 {

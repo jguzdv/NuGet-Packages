@@ -1,14 +1,22 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿namespace JGUZDV.OpenIddict.KeyManager;
 
-namespace JGUZDV.OpenIddict.KeyManager;
-
-public record KeyInfo(
-    KeyUsage KeyUsage, 
-    X509SecurityKey SecurityKey);
-
+/// <summary>
+/// The intended key usage
+/// </summary>
 public enum KeyUsage
 {
+    /// <summary>
+    /// None or unknown - should not be used.
+    /// </summary>
     None = 0,
+
+    /// <summary>
+    /// Intended for signature
+    /// </summary>
     Signature,
+
+    /// <summary>
+    /// Intended for encryption
+    /// </summary>
     Encryption
 }

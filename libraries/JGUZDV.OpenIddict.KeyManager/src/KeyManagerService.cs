@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using JGUZDV.OpenIddict.KeyManager.Configuration;
+
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -8,8 +10,8 @@ namespace JGUZDV.OpenIddict.KeyManager;
 
 public class KeyManagerService : IHostedService
 {
-    private readonly X509CertificateKeyGenerator _keyGenerator;
-    private readonly X509KeyStore _keyStore;
+    private readonly IKeyGenerator _keyGenerator;
+    private readonly IKeyStore _keyStore;
     private readonly KeyContainer _keyContainer;
     private readonly TimeProvider _timeProvider;
     private readonly IConfigurationRoot _config;
@@ -21,8 +23,8 @@ public class KeyManagerService : IHostedService
     private Timer? _timer;
 
     public KeyManagerService(
-        X509CertificateKeyGenerator keyGenerator,
-        X509KeyStore keyStore,
+        IKeyGenerator keyGenerator,
+        IKeyStore keyStore,
         KeyContainer keyContainer,
         TimeProvider timeProvider,
         IConfigurationRoot config,
@@ -38,7 +40,7 @@ public class KeyManagerService : IHostedService
         _logger = logger;
     }
 
-
+    /// <inheritdoc />
     public async Task StartAsync(CancellationToken ct)
     {
         await EnsureUsableKeysAsync(ct);
@@ -52,6 +54,7 @@ public class KeyManagerService : IHostedService
         _config.Reload();
     }
 
+    /// <inheritdoc />
     public async Task StopAsync(CancellationToken ct)
     {
         _cts.Cancel();
@@ -97,12 +100,11 @@ public class KeyManagerService : IHostedService
             var usages = new[] { KeyUsage.Signature, KeyUsage.Encryption };
             foreach (var usage in usages)
             {
-                var securityKeys = keyInfos.Where(x => x.KeyUsage == usage)
-                    .Select(x => x.SecurityKey);
+                var securityKeys = keyInfos.Where(x => x.KeyUsage == usage);
 
                 var maxNotAfter = securityKeys
-                    .Where(x => x.Certificate.NotBefore < utcNow && x.Certificate.NotAfter > utcNow)
-                    .Max(x => x.Certificate.NotAfter);
+                    .Where(x => x.NotBefore < utcNow && x.NotAfter > utcNow)
+                    .Max(x => x.NotAfter);
 
                 // The threshold date will be _options.Value.ThresholdFactor * MaxKeyAge before any valid the maximum of NotAfter of the current keys 
                 var thresholdDate = maxNotAfter.Add(-1* Math.Abs(_options.Value.ThresholdFactor) * _options.Value.MaxKeyAge);
@@ -115,17 +117,17 @@ public class KeyManagerService : IHostedService
 
                 var nextKey = await PrepareNextKeyAsync(usage, maxNotAfter, securityKeys);
                 if(nextKey != null)
-                    keyInfos.Add(new(usage, nextKey));
+                    keyInfos.Add(nextKey);
             }
         }
 
-        async Task<X509SecurityKey?> PrepareNextKeyAsync(KeyUsage usage, DateTimeOffset refDate,
-            IEnumerable<X509SecurityKey> securityKeys)
+        async Task<KeyInfo?> PrepareNextKeyAsync(KeyUsage usage, DateTimeOffset refDate,
+            IEnumerable<KeyInfo> securityKeys)
         {
             var futureKey = securityKeys
                 .Where(x =>
-                    x.Certificate.NotBefore < refDate &&
-                    x.Certificate.NotAfter > refDate.AddDays(1)
+                    x.NotBefore < refDate &&
+                    x.NotAfter > refDate.AddDays(1)
                 ).FirstOrDefault();
 
             // This is necessary to check, since we might already have a future key
@@ -135,10 +137,14 @@ public class KeyManagerService : IHostedService
                 return null;
             }
 
-            var nextKey = _keyGenerator.CreateKey(usage, refDate.AddDays(-1), refDate.Add(_options.Value.MaxKeyAge));
-            await _keyStore.SaveKeyAsync(usage, nextKey, ct);
+            var notBefore = refDate.AddDays(-1);
+            var notAfter = refDate.Add(_options.Value.MaxKeyAge);
 
-            return nextKey;
+            var nextKey = _keyGenerator.CreateKey(usage, notBefore, notAfter);
+            var nextKeyInfo = new KeyInfo(usage, nextKey, notBefore, notAfter);
+            await _keyStore.SaveKeyAsync(nextKeyInfo, ct);
+
+            return nextKeyInfo;
         }
 
         async Task PurgeExpiredKeysAsync()
@@ -189,16 +195,17 @@ public class KeyManagerService : IHostedService
                 && KeyForUsageExists(keyInfos, KeyUsage.Encryption);
 
         bool KeyForUsageExists(List<KeyInfo> keyInfos, KeyUsage usage)
-            => keyInfos.Any(x => x.KeyUsage == usage && IsKeyUsable(x.SecurityKey, utcNow));
+            => keyInfos.Any(x => x.KeyUsage == usage && IsKeyUsable(x, utcNow));
 
-        bool IsKeyUsable(X509SecurityKey securityKey, DateTimeOffset refDate) 
-            => securityKey.Certificate.NotBefore < refDate && securityKey.Certificate.NotAfter > refDate;
+        bool IsKeyUsable(KeyInfo keyInfo, DateTimeOffset refDate) 
+            => keyInfo.NotBefore < refDate && keyInfo.NotAfter > refDate;
 
         async Task<List<KeyInfo>> DelayAndReload(CancellationToken ct)
         {
             await Task.Delay(_options.Value.RetryDelay, ct);
             return await _keyStore.LoadKeysAsync(ct);
         }
+
 
         async Task<bool> TryCreateNewKeys(List<KeyInfo> keyInfos, CancellationToken ct)
         {
@@ -212,9 +219,13 @@ public class KeyManagerService : IHostedService
 
                 try
                 {
-                    var createdKey = _keyGenerator.CreateKey(usage, utcNow.Date, utcNow.Date.Add(_options.Value.MaxKeyAge));
-                    await _keyStore.SaveKeyAsync(usage, createdKey, ct);
-                    keyInfos.Add(new(usage, createdKey));
+                    var notBefore = utcNow.Date;
+                    var notAfter = utcNow.Date.Add(_options.Value.MaxKeyAge);
+
+                    var createdKey = _keyGenerator.CreateKey(usage, notBefore, notAfter);
+                    var createdKeyInfo = new KeyInfo(usage, createdKey, notBefore, notAfter);
+                    await _keyStore.SaveKeyAsync(createdKeyInfo, ct);
+                    keyInfos.Add(createdKeyInfo);
                 }
                 catch (Exception ex)
                 {
