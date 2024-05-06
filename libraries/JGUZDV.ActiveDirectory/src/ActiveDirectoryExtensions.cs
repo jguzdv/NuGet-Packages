@@ -1,5 +1,7 @@
 ﻿using System.Runtime.Versioning;
 
+using JGUZDV.ActiveDirectory.Claims;
+
 using Microsoft.Extensions.DependencyInjection;
 
 namespace JGUZDV.ActiveDirectory
@@ -15,11 +17,27 @@ namespace JGUZDV.ActiveDirectory
         /// </summary>
         public static IServiceCollection AddPropertyReader(this IServiceCollection services, Action<Configuration.PropertyReaderOptions>? configure = null)
         {
-            services.AddSingleton<IPropertyValueReader, PropertyValueReader>();
             if (configure != null)
             {
                 services.Configure(configure);
             }
+            services.AddSingleton<IPropertyReader, PropertyReader>();
+
+            return services;
+        }
+
+        
+        /// <summary>
+        /// Adds the claim provider to the DI container.
+        /// </summary>
+        public static IServiceCollection AddClaimProvider(this IServiceCollection services, Action<Configuration.ClaimProviderOptions>? configure = null)
+        {
+            if (configure != null)
+            {
+                services.Configure(configure);
+            }
+
+            services.AddSingleton<IClaimProvider, ClaimProvider>();
 
             return services;
         }

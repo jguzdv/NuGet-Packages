@@ -6,7 +6,7 @@ namespace JGUZDV.ActiveDirectory
     /// <summary>
     /// Reads property values from an <see cref="PropertyCollection"/>.
     /// </summary>
-    public interface IPropertyValueReader
+    public interface IPropertyReader
     {
         /// <summary>
         /// Read a byte array from the property with the given name.

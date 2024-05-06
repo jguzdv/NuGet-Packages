@@ -16,12 +16,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "libraries", "libraries", "{
 		libraries\Directory.Build.props = libraries\Directory.Build.props
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JGUZDV.ActiveDirectory.ClaimProvider", "JGUZDV.ActiveDirectory.ClaimProvider", "{FBF7BAF0-B8E9-45C5-9B50-7B8DDD607467}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.ActiveDirectory.ClaimProvider", "libraries\JGUZDV.ActiveDirectory.ClaimProvider\src\JGUZDV.ActiveDirectory.ClaimProvider.csproj", "{675D258E-525C-4048-8E88-97C5E78ED819}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.ActiveDirectory.ClaimProvider.Tests", "libraries\JGUZDV.ActiveDirectory.ClaimProvider\test\JGUZDV.ActiveDirectory.ClaimProvider.Tests.csproj", "{5CE38D63-D07F-46F1-9008-8206AB6F4231}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JGUZDV.AspNetCore.Authentication.Cookies", "JGUZDV.AspNetCore.Authentication.Cookies", "{ED0A40A7-2790-42F3-822E-C475F021D7D8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.AspNetCore.Authentication.Cookies", "libraries\JGUZDV.AspNetCore.Authentication.Cookies\src\JGUZDV.AspNetCore.Authentication.Cookies.csproj", "{3848AAF1-D8CA-4C55-A0B6-FCE23DDE8D9C}"
@@ -185,9 +179,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.JobHost.Shared.Tests
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JGUZDV.ActiveDirectory", "JGUZDV.ActiveDirectory", "{203D1191-E358-44A5-A798-C590031DCB6A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.ActiveDirectory", "libraries\JGUZDV.ActiveDirectory\src\JGUZDV.ActiveDirectory.csproj", "{18889806-65F9-4834-A33C-52CCC6A18045}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.ActiveDirectory", "libraries\JGUZDV.ActiveDirectory\src\JGUZDV.ActiveDirectory.csproj", "{18889806-65F9-4834-A33C-52CCC6A18045}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.ActiveDirectory.Tests", "libraries\JGUZDV.ActiveDirectory\test\JGUZDV.ActiveDirectory.Tests.csproj", "{377AF50C-C428-45C8-B228-0AB96BAB55E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.ActiveDirectory.Tests", "libraries\JGUZDV.ActiveDirectory\test\JGUZDV.ActiveDirectory.Tests.csproj", "{377AF50C-C428-45C8-B228-0AB96BAB55E1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -199,30 +193,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{675D258E-525C-4048-8E88-97C5E78ED819}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{675D258E-525C-4048-8E88-97C5E78ED819}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{675D258E-525C-4048-8E88-97C5E78ED819}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{675D258E-525C-4048-8E88-97C5E78ED819}.Debug|x64.Build.0 = Debug|Any CPU
-		{675D258E-525C-4048-8E88-97C5E78ED819}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{675D258E-525C-4048-8E88-97C5E78ED819}.Debug|x86.Build.0 = Debug|Any CPU
-		{675D258E-525C-4048-8E88-97C5E78ED819}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{675D258E-525C-4048-8E88-97C5E78ED819}.Release|Any CPU.Build.0 = Release|Any CPU
-		{675D258E-525C-4048-8E88-97C5E78ED819}.Release|x64.ActiveCfg = Release|Any CPU
-		{675D258E-525C-4048-8E88-97C5E78ED819}.Release|x64.Build.0 = Release|Any CPU
-		{675D258E-525C-4048-8E88-97C5E78ED819}.Release|x86.ActiveCfg = Release|Any CPU
-		{675D258E-525C-4048-8E88-97C5E78ED819}.Release|x86.Build.0 = Release|Any CPU
-		{5CE38D63-D07F-46F1-9008-8206AB6F4231}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5CE38D63-D07F-46F1-9008-8206AB6F4231}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5CE38D63-D07F-46F1-9008-8206AB6F4231}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{5CE38D63-D07F-46F1-9008-8206AB6F4231}.Debug|x64.Build.0 = Debug|Any CPU
-		{5CE38D63-D07F-46F1-9008-8206AB6F4231}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{5CE38D63-D07F-46F1-9008-8206AB6F4231}.Debug|x86.Build.0 = Debug|Any CPU
-		{5CE38D63-D07F-46F1-9008-8206AB6F4231}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5CE38D63-D07F-46F1-9008-8206AB6F4231}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5CE38D63-D07F-46F1-9008-8206AB6F4231}.Release|x64.ActiveCfg = Release|Any CPU
-		{5CE38D63-D07F-46F1-9008-8206AB6F4231}.Release|x64.Build.0 = Release|Any CPU
-		{5CE38D63-D07F-46F1-9008-8206AB6F4231}.Release|x86.ActiveCfg = Release|Any CPU
-		{5CE38D63-D07F-46F1-9008-8206AB6F4231}.Release|x86.Build.0 = Release|Any CPU
 		{3848AAF1-D8CA-4C55-A0B6-FCE23DDE8D9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3848AAF1-D8CA-4C55-A0B6-FCE23DDE8D9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3848AAF1-D8CA-4C55-A0B6-FCE23DDE8D9C}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -936,9 +906,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{FBF7BAF0-B8E9-45C5-9B50-7B8DDD607467} = {DA4DE709-E5BC-4B93-88D2-838656C217CE}
-		{675D258E-525C-4048-8E88-97C5E78ED819} = {FBF7BAF0-B8E9-45C5-9B50-7B8DDD607467}
-		{5CE38D63-D07F-46F1-9008-8206AB6F4231} = {FBF7BAF0-B8E9-45C5-9B50-7B8DDD607467}
 		{ED0A40A7-2790-42F3-822E-C475F021D7D8} = {DA4DE709-E5BC-4B93-88D2-838656C217CE}
 		{3848AAF1-D8CA-4C55-A0B6-FCE23DDE8D9C} = {ED0A40A7-2790-42F3-822E-C475F021D7D8}
 		{FDFA7DDF-05D0-44F6-9000-71A4DD07BED0} = {ED0A40A7-2790-42F3-822E-C475F021D7D8}
@@ -1023,8 +990,8 @@ Global
 		{377AF50C-C428-45C8-B228-0AB96BAB55E1} = {203D1191-E358-44A5-A798-C590031DCB6A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		RESX_SortFileContentOnSave = True
-		RESX_NeutralResourcesLanguage = de-DE
 		SolutionGuid = {46ECC226-1874-4539-8589-8B2029909C4A}
+		RESX_NeutralResourcesLanguage = de-DE
+		RESX_SortFileContentOnSave = True
 	EndGlobalSection
 EndGlobal

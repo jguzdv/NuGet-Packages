@@ -13,12 +13,12 @@ namespace JGUZDV.ActiveDirectory;
 /// Reads property values from an <see cref="PropertyCollection"/>.
 /// </summary>
 [SupportedOSPlatform("windows")]
-internal class PropertyValueReader(
+internal class PropertyReader(
     IOptions<PropertyReaderOptions> options,
-    ILogger<PropertyValueReader> logger) : IPropertyValueReader
+    ILogger<PropertyReader> logger) : IPropertyReader
 {
     private readonly IOptions<PropertyReaderOptions> _options = options;
-    private readonly ILogger<PropertyValueReader> _logger = logger;
+    private readonly ILogger<PropertyReader> _logger = logger;
 
     /// <summary>
     /// Reads a value from the property with the given name.
@@ -27,12 +27,9 @@ internal class PropertyValueReader(
     public string? ReadString(PropertyCollection properties, string propertyName, string? outputFormat = null)
     {
         var propertyValues = properties[propertyName];
-        if (propertyValues.Count == 0)
-        {
-            return default;
-        }
-
-        return ReadAsString(propertyValues[0]!, propertyName, outputFormat);
+        return propertyValues.Count != 0 
+            ? ReadAsString(propertyValues[0]!, propertyName, outputFormat) 
+            : default;
     }
 
     /// <summary>
@@ -45,15 +42,17 @@ internal class PropertyValueReader(
         {
             return Array.Empty<string>();
         }
-
-        if (property.Count == 1)
+        else if (property.Count == 1)
         {
             return [ReadAsString(properties[propertyName][0]!, propertyName, outputFormat)!];
         }
-
-        return ((object[])property.Value!).Select(x => ReadAsString(x, propertyName, outputFormat))
-            .Where(x => x is not null)
-            .ToArray()!;
+        else
+        {
+            return ((object[])property.Value!)
+                .Select(x => ReadAsString(x, propertyName, outputFormat))
+                .Where(x => x is not null)
+                .ToArray()!;
+        }
     }
 
 
@@ -148,7 +147,9 @@ internal class PropertyValueReader(
     public byte[] ReadBytes(PropertyCollection properties, string propertyName)
     {
         var propertyValues = properties[propertyName];
-        return propertyValues.Count != 0 ? (byte[])propertyValues[0]! : Array.Empty<byte>();
+        return propertyValues.Count != 0 
+            ? (byte[])propertyValues[0]! 
+            : [];
     }
 
 
