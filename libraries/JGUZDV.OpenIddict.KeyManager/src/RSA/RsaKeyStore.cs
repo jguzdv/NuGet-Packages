@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json;
 
 using JGUZDV.OpenIddict.KeyManager.Configuration;
 
@@ -60,15 +61,18 @@ namespace JGUZDV.OpenIddict.KeyManager.RSA
             var rsaBytes = _dataProtector.Unprotect(encryptedRsaBytes);
 
             var rsaJson = Encoding.UTF8.GetString(rsaBytes);
-            var rsaParameters = System.Text.Json.JsonSerializer.Deserialize<RSAParameters>(rsaJson);
+            var rsaParameters = JsonSerializer.Deserialize<RSAParameters>(rsaJson, new JsonSerializerOptions { IncludeFields = true });
 
-            var fileName = Path.GetFileNameWithoutExtension(filePath);
+            var fileName = Path.GetFileName(filePath);
+
+            // our path is *.{enc,sig}.key, so we need two iterations to remove the dots
+            var datePart = Path.GetFileNameWithoutExtension(Path.GetFileNameWithoutExtension(filePath));
             var securityKey = new RsaSecurityKey(rsaParameters)
             {
-                KeyId = fileName
+                KeyId = datePart
             };
 
-            var effectiveDate = DateTimeOffset.ParseExact(fileName, "yyyyMMddHHmmss", CultureInfo.InvariantCulture);
+            var effectiveDate = DateTimeOffset.ParseExact(datePart, "yyyyMMddHHmmss", CultureInfo.InvariantCulture);
 
             KeyUsage keyUsage;
             if (fileName.EndsWith(SignatureFileExtension, StringComparison.OrdinalIgnoreCase))
@@ -102,7 +106,7 @@ namespace JGUZDV.OpenIddict.KeyManager.RSA
 
             var rsaParameters = rsaSecurityKey.Parameters;
 
-            var jsonRsaParameters = System.Text.Json.JsonSerializer.Serialize(rsaParameters);
+            var jsonRsaParameters = JsonSerializer.Serialize(rsaParameters, new JsonSerializerOptions { IncludeFields = true });
             var rsaBytes = Encoding.UTF8.GetBytes(jsonRsaParameters);
 
             var encryptedrsaBytes = _dataProtector.Protect(rsaBytes);
