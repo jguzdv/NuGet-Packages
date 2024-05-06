@@ -185,8 +185,8 @@ internal class PropertyReader(
     {
         var iadsLargeIntType = value.GetType();
         var highPart = (int)iadsLargeIntType.InvokeMember("HighPart", System.Reflection.BindingFlags.GetProperty, null, value, null)!;
-        var lowPart = (uint)iadsLargeIntType.InvokeMember("LowPart", System.Reflection.BindingFlags.GetProperty, null, value, null)!;
+        var lowPart = (int)iadsLargeIntType.InvokeMember("LowPart", System.Reflection.BindingFlags.GetProperty, null, value, null)!;
 
-        return ((long)highPart << 32) | lowPart;
+        return ((long)highPart << 32) | (uint)lowPart;
     }
 }
