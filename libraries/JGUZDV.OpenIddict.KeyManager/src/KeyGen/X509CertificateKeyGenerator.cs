@@ -1,10 +1,12 @@
 ﻿using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 
+using JGUZDV.OpenIddict.KeyManager.Model;
+
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 
-namespace JGUZDV.OpenIddict.KeyManager.X509;
+namespace JGUZDV.OpenIddict.KeyManager.KeyGen;
 
 internal class X509CertificateKeyGenerator : IKeyGenerator
 {
@@ -18,7 +20,7 @@ internal class X509CertificateKeyGenerator : IKeyGenerator
 
     public AsymmetricSecurityKey CreateKey(KeyUsage keyUsage, DateTimeOffset notBefore, DateTimeOffset notAfter)
     {
-        using var algorithm = System.Security.Cryptography.RSA.Create(keySizeInBits: 2048);
+        using var algorithm = RSA.Create(keySizeInBits: 2048);
 
         var subject = keyUsage switch
         {

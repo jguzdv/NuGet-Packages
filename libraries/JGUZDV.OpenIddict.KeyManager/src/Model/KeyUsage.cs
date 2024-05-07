@@ -1,4 +1,4 @@
-﻿namespace JGUZDV.OpenIddict.KeyManager;
+﻿namespace JGUZDV.OpenIddict.KeyManager.Model;
 
 /// <summary>
 /// The intended key usage

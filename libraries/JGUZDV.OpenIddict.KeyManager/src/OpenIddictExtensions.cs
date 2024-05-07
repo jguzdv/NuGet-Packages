@@ -1,7 +1,8 @@
 ﻿using JGUZDV.OpenIddict.KeyManager;
 using JGUZDV.OpenIddict.KeyManager.Configuration;
-using JGUZDV.OpenIddict.KeyManager.RSA;
-using JGUZDV.OpenIddict.KeyManager.X509;
+using JGUZDV.OpenIddict.KeyManager.KeyGen;
+using JGUZDV.OpenIddict.KeyManager.Model;
+using JGUZDV.OpenIddict.KeyManager.Store;
 
 namespace Microsoft.Extensions.DependencyInjection;
 

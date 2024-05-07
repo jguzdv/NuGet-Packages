@@ -1,6 +1,6 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 
-namespace JGUZDV.OpenIddict.KeyManager;
+namespace JGUZDV.OpenIddict.KeyManager.Model;
 
 /// <summary>
 /// Represents a key with its usage and security key.
@@ -10,9 +10,9 @@ public class KeyInfo
     public KeyInfo(
         KeyUsage keyUsage,
         X509SecurityKey securityKey)
-        :this(
-             keyUsage, 
-             securityKey, 
+        : this(
+             keyUsage,
+             securityKey,
              securityKey.Certificate.NotBefore,
              securityKey.Certificate.NotAfter)
     { }

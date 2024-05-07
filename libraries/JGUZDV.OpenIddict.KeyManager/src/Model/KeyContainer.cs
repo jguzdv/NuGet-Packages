@@ -1,11 +1,11 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 
-namespace JGUZDV.OpenIddict.KeyManager
+namespace JGUZDV.OpenIddict.KeyManager.Model
 {
     public class KeyContainer
     {
-        private List<SecurityKey> _signatureKeys = new ();
-        private List<SecurityKey> _encryptionKeys = new ();
+        private List<SecurityKey> _signatureKeys = new();
+        private List<SecurityKey> _encryptionKeys = new();
 
         internal IReadOnlyList<SecurityKey> SignatureKeys => _signatureKeys;
         internal IReadOnlyList<SecurityKey> EncryptionKeys => _encryptionKeys;

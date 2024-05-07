@@ -1,6 +1,6 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 
-namespace JGUZDV.OpenIddict.KeyManager.RSA
+namespace JGUZDV.OpenIddict.KeyManager.KeyGen
 {
     internal class RsaKeyGenerator : IKeyGenerator
     {

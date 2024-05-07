@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using JGUZDV.OpenIddict.KeyManager.Model;
+
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
@@ -23,6 +25,7 @@ public class OpenIdDictServerConfiguration : IConfigureOptions<OpenIddictServerO
     {
         foreach(var signingKey in _keyContainer.SignatureKeys)
             AddSignatureKey(signingKey);
+        
 
         foreach(var encryptionKey in _keyContainer.EncryptionKeys)
             AddEncryptionKey(encryptionKey);
@@ -30,6 +33,7 @@ public class OpenIdDictServerConfiguration : IConfigureOptions<OpenIddictServerO
 
         void AddEncryptionKey(SecurityKey key)
         {
+
             if (key is null)
             {
                 throw new ArgumentNullException(nameof(key));
