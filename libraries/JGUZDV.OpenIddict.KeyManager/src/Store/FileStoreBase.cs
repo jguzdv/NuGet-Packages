@@ -70,10 +70,10 @@ namespace JGUZDV.OpenIddict.KeyManager.Store
             foreach (var fileName in EnumerateFiles(keyUsage).ToList())
             {
                 var key = await LoadKeyAsync(fileName, keyUsage, ct);
-                if (key.NotAfter > refDate)
-                    continue;
-
-                File.Delete(fileName);
+                if (key.NotAfter < refDate)
+                {
+                    File.Delete(fileName);
+                }
             }
         }
 
