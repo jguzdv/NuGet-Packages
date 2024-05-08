@@ -34,8 +34,6 @@ internal sealed class X509KeyStore : FileStoreBase
 
     protected override KeyInfo ConvertFromBytes(byte[] bytes, string filepath, KeyUsage keyUsage)
     {
-        var x = new SecureString()
-
         var x509Cert = new X509Certificate2(bytes, _x509Options.Value.CertificatePassword);
         var securityKey = new X509SecurityKey(x509Cert);
 
