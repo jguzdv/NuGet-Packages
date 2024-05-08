@@ -10,25 +10,30 @@ namespace JGUZDV.OpenIddict.KeyManager;
 
 public class OpenIdDictServerConfiguration : IConfigureOptions<OpenIddictServerOptions>
 {
+    private readonly TimeProvider _timeProvider;
     private readonly KeyContainer _keyContainer;
     private readonly ILogger<OpenIdDictServerConfiguration> _logger;
 
     public OpenIdDictServerConfiguration(
+        TimeProvider timeProvider,
         KeyContainer keyContainer,
         ILogger<OpenIdDictServerConfiguration> logger)
     {
+        _timeProvider = timeProvider;
         _keyContainer = keyContainer;
         _logger = logger;
     }
 
     public void Configure(OpenIddictServerOptions options)
     {
-        foreach(var signingKey in _keyContainer.SignatureKeys)
-            AddSignatureKey(signingKey);
+        var utcNow = _timeProvider.GetUtcNow();
+
+        foreach(var signingKey in _keyContainer.SignatureKeys.Where(x => x.NotBefore <= utcNow && x.NotAfter >= utcNow))
+            AddSignatureKey(signingKey.SecurityKey);
         
 
-        foreach(var encryptionKey in _keyContainer.EncryptionKeys)
-            AddEncryptionKey(encryptionKey);
+        foreach(var encryptionKey in _keyContainer.EncryptionKeys.Where(x => x.NotBefore <= utcNow && x.NotAfter >= utcNow))
+            AddEncryptionKey(encryptionKey.SecurityKey);
 
 
         void AddEncryptionKey(SecurityKey key)

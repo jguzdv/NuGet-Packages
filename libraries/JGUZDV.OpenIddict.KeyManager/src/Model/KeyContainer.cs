@@ -4,22 +4,19 @@ namespace JGUZDV.OpenIddict.KeyManager.Model
 {
     public class KeyContainer
     {
-        private List<SecurityKey> _signatureKeys = new();
-        private List<SecurityKey> _encryptionKeys = new();
+        private List<KeyInfo> _signatureKeys = new();
+        private List<KeyInfo> _encryptionKeys = new();
 
-        internal IReadOnlyList<SecurityKey> SignatureKeys => _signatureKeys;
-        internal IReadOnlyList<SecurityKey> EncryptionKeys => _encryptionKeys;
+        internal IReadOnlyList<KeyInfo> SignatureKeys => _signatureKeys;
+        internal IReadOnlyList<KeyInfo> EncryptionKeys => _encryptionKeys;
 
 
-        internal void ReplaceAllKeys(IEnumerable<KeyInfo> signatureKeys, IEnumerable<KeyInfo> encryptionKeys)
+        internal void ReplaceAllKeys(
+            IEnumerable<KeyInfo> signatureKeys, 
+            IEnumerable<KeyInfo> encryptionKeys)
         {
-            _signatureKeys = new(
-                signatureKeys.Select(x => x.SecurityKey)
-            );
-
-            _encryptionKeys = new(
-                encryptionKeys.Select(x => x.SecurityKey)
-            );
+            _signatureKeys = new(signatureKeys);
+            _encryptionKeys = new(encryptionKeys);
         }
     }
 }
