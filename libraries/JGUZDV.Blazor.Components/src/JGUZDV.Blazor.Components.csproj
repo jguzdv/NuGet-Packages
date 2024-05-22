@@ -23,15 +23,27 @@
     </ItemGroup>
 
     <ItemGroup>
+      <None Include="Typescript\Modal.ts" />
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="[7.0.14,)" />
         <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="[7.0.14,)" />
         <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="[7.0.0,)" />
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="[7.0.0,)" />
         <PackageReference Include="Microsoft.Bcl.TimeProvider" Version="[8.0.0,)" />
+        <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="5.4.4">
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+          <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\..\JGUZDV.Extensions.Json\src\JGUZDV.Extensions.Json.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="wwwroot\js\" />
     </ItemGroup>
 
 </Project>

@@ -112,7 +112,8 @@
             : (ctx) =>
                 @<div class="modal-dialog @ModalDialogClasses" @onclick:stopPropagation="true">
                     @content.Invoke(ctx)
-                </div>;
+                </div>
+    ;
     }
 
     public Task<ModalResult> ShowModal(TModel model)
@@ -128,7 +129,7 @@
 
     public void Close(ModalResult result)
     {
-        if (_taskCompletionSource.Task.IsCompleted) return;
+        if (_taskCompletionSource.Task.IsCompleted) { return; }
         _ = _jsModule!.InvokeVoidAsync("CloseDialog", _componentId, DotNetObjectReference.Create(this));
         _taskCompletionSource.SetResult(result);
     }

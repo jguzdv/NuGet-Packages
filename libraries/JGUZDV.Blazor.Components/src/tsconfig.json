@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "alwaysStrict": false,
+    "noImplicitAny": false,
+    "noEmitOnError": true,
+    "removeComments": false,
+    "outDir": "./wwwroot/js",
+    "rootDir": "./Typescript",
+    "module": "ES6",
+    "target": "ES6",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "esModuleInterop": true
+  },
+  "include": [
+    "Typescript/**/*.ts"
+  ]
+}
