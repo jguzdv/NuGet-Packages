@@ -1,5 +1,4 @@
-﻿using System.Security;
-using System.Security.Cryptography.X509Certificates;
+﻿using System.Security.Cryptography.X509Certificates;
 
 using JGUZDV.OpenIddict.KeyManager.Configuration;
 using JGUZDV.OpenIddict.KeyManager.Model;
@@ -11,7 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace JGUZDV.OpenIddict.KeyManager.Store;
 
-internal sealed class X509KeyStore : FileStoreBase
+internal sealed class X509KeyStore : FileStoreBase, IKeyStore
 {
     private readonly IDataProtector _dataProtector;
     private readonly TimeProvider _timeProvider;

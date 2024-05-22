@@ -11,7 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace JGUZDV.OpenIddict.KeyManager.Store
 {
-    internal sealed class RsaKeyStore : ProtectedFileStoreBase
+    internal sealed class RsaKeyStore : ProtectedFileStoreBase, IKeyStore
     {
         private static readonly JsonSerializerOptions _jsonOptions = new() { IncludeFields = true };
 

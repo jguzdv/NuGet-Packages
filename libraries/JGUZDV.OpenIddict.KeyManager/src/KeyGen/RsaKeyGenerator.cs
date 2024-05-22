@@ -1,4 +1,6 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using JGUZDV.OpenIddict.KeyManager.Model;
+
+using Microsoft.IdentityModel.Tokens;
 
 namespace JGUZDV.OpenIddict.KeyManager.KeyGen
 {
