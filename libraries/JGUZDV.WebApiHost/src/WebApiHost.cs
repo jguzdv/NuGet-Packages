@@ -160,7 +160,12 @@ public static partial class WebApiHost
 
                 services.AddAuthorization(opt =>
                 {
-                    var scopes = configSection.GetSection("RequiredScopes").Get<ICollection<string>?>() ?? [];
+                    // RequiredScopes as name was misleading, since it requires one of those scopes to be present,
+                    // to not introduce breaking changes, we will keep the name and add AllowedScopes as well
+                    var scopes = (configSection.GetSection("RequiredScopes").Get<ICollection<string>?>() ?? [])
+                        .Concat(configSection.GetSection("AllowedScopes").Get<ICollection<string>?>() ?? [])
+                        .ToList();
+
                     if (scopes.Count == 0)
                     {
                         Log.NoRequiredScopes(logger);
@@ -169,13 +174,12 @@ public static partial class WebApiHost
                     {
                         var scopeClaimType = configSection["ScopeType"] ?? "scope";
 
-                        opt.AddPolicy("ScopedDefault", p =>
+                        opt.AddPolicy("DefaultWithScopeCheck", p =>
                         {
                             p.RequireAuthenticatedUser();
-                            p.RequireClaim("scope", scopes);
-
+                            p.RequireAssertion(ctx => ctx.User.FindAll(scopeClaimType).SelectMany(c => c.Value.Split(' ')).Intersect(scopes).Any());
                         });
-                        opt.DefaultPolicy = opt.GetPolicy("ScopedDefault")!;
+                        opt.DefaultPolicy = opt.GetPolicy("DefaultWithScopeCheck")!;
                     }
                 });
             }
