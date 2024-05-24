@@ -177,6 +177,8 @@ public static partial class WebApiHost
                         opt.AddPolicy("DefaultWithScopeCheck", p =>
                         {
                             p.RequireAuthenticatedUser();
+
+                            // The scope can either exist as a single claim per scope or as a single claim with multiple scopes separated by a space
                             p.RequireAssertion(ctx => ctx.User.FindAll(scopeClaimType).SelectMany(c => c.Value.Split(' ')).Intersect(scopes).Any());
                         });
                         opt.DefaultPolicy = opt.GetPolicy("DefaultWithScopeCheck")!;
