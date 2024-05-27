@@ -16,7 +16,7 @@ public static class AuthorizationPolicyBuilderExtensions
     {
         return builder.RequireAssertion(context =>
             context.User.FindAll(scopeClaimType).SelectMany(c => c.Value.Split(' '))
-                .Contains(allowedScope, StringComparer.OrdinalIgnoreCase)
+                .Contains(allowedScope, StringComparer.Ordinal)
         );
     }
 
@@ -29,7 +29,7 @@ public static class AuthorizationPolicyBuilderExtensions
     {
         return builder.RequireAssertion(context => 
             context.User.FindAll(scopeClaimType).SelectMany(c => c.Value.Split(' '))
-                .Intersect(allowedScopes, StringComparer.OrdinalIgnoreCase)
+                .Intersect(allowedScopes, StringComparer.Ordinal)
                 .Any()
         );
     }
