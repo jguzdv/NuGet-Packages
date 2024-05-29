@@ -19,7 +19,7 @@
     }
 }
 
-const testClass = new closeListener();
+const listener = new closeListener();
 
 export function OpenDialog(guid) {
     var dialog = document.getElementById(guid) as HTMLDialogElement;
@@ -28,10 +28,10 @@ export function OpenDialog(guid) {
 
 export function CloseDialog(guid, reference) {
     var dialog = document.getElementById(guid) as HTMLDialogElement;
-    testClass.removeListener(guid, reference);
+    listener.removeListener(guid, reference);
     dialog.close(); 
 };
 
 export function CloseListener(guid, reference) {
-    testClass.addListener(guid, reference);
+    listener.addListener(guid, reference);
 };

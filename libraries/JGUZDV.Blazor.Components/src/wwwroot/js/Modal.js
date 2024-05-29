@@ -15,7 +15,7 @@ export class closeListener {
         return () => reference.invokeMethodAsync("Close");
     }
 }
-const testClass = new closeListener();
+const listener = new closeListener();
 export function OpenDialog(guid) {
     var dialog = document.getElementById(guid);
     dialog.showModal();
@@ -23,12 +23,12 @@ export function OpenDialog(guid) {
 ;
 export function CloseDialog(guid, reference) {
     var dialog = document.getElementById(guid);
-    testClass.removeListener(guid, reference);
+    listener.removeListener(guid, reference);
     dialog.close();
 }
 ;
 export function CloseListener(guid, reference) {
-    testClass.addListener(guid, reference);
+    listener.addListener(guid, reference);
 }
 ;
 //# sourceMappingURL=Modal.js.map
