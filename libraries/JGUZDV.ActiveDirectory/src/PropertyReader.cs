@@ -42,7 +42,8 @@ internal class PropertyReader(
         {
             return Array.Empty<string>();
         }
-        else if (property.Count == 1)
+        
+        if (property.Count == 1)
         {
             return [ReadAsString(properties[propertyName][0]!, propertyName, outputFormat)!];
         }
@@ -77,8 +78,8 @@ internal class PropertyReader(
             {
                 return outputFormat switch
                 {
-                    "Guid" => new Guid(byteValue).ToString(),
-                    "SDDL" => new SecurityIdentifier(byteValue, 0).ToString(),
+                    OutputFormats.ByteArrays.Guid => new Guid(byteValue).ToString(),
+                    OutputFormats.ByteArrays.SDDL => new SecurityIdentifier(byteValue, 0).ToString(),
                     _ => Convert.ToBase64String(byteValue)
                 };
             }
@@ -94,7 +95,7 @@ internal class PropertyReader(
 
                 return outputFormat switch
                 {
-                    "FileTime" => DateTimeOffset.FromFileTime(longValue).ToString("O"),
+                    OutputFormats.Long.FileTime => DateTimeOffset.FromFileTime(longValue).ToString("O"),
                     _ => longValue.ToString(outputFormat ?? "0")
                 };
             }
@@ -156,10 +157,18 @@ internal class PropertyReader(
     /// <summary>
     /// Reads the given property as a byte array and converts it to guid.
     /// </summary>
-    public Guid ReadBytesAsGuid(PropertyCollection properties, string propertyName)
+    public Guid? ReadBytesAsGuid(PropertyCollection properties, string propertyName)
     {
-        var propertyValues = properties[propertyName];
-        return propertyValues.Count != 0 ? new Guid(ReadBytes(properties, propertyName)) : default;
+        try
+        {
+            var propertyValues = properties[propertyName];
+            return propertyValues.Count == 1 ? new Guid(ReadBytes(properties, propertyName)) : null;
+        }
+        catch (Exception e)
+        {
+            _logger.LogWarning(e, "Failed to convert property {PropertyName} to Guid", propertyName);
+            return default;
+        }
     }
 
     /// <summary>
@@ -167,8 +176,15 @@ internal class PropertyReader(
     /// </summary>
     public SecurityIdentifier? ReadBytesSecurityIdentifier(PropertyCollection properties, string propertyName)
     {
-        var propertyValues = properties[propertyName];
-        return propertyValues.Count != 0 ? new SecurityIdentifier(ReadBytes(properties, propertyName), 0) : default;
+        try { 
+            var propertyValues = properties[propertyName];
+            return propertyValues.Count != 0 ? new SecurityIdentifier(ReadBytes(properties, propertyName), 0) : default;
+        }
+        catch (Exception e)
+        {
+            _logger.LogWarning(e, "Failed to convert property {PropertyName} to SecurityIdentifier", propertyName);
+            return default;
+        }
     }
 
     /// <summary>
@@ -181,12 +197,20 @@ internal class PropertyReader(
     }
 
 
-    private static long ConvertIAdsLargeInteger(object value)
+    private long ConvertIAdsLargeInteger(object value)
     {
-        var iadsLargeIntType = value.GetType();
-        var highPart = (int)iadsLargeIntType.InvokeMember("HighPart", System.Reflection.BindingFlags.GetProperty, null, value, null)!;
-        var lowPart = (int)iadsLargeIntType.InvokeMember("LowPart", System.Reflection.BindingFlags.GetProperty, null, value, null)!;
+        try
+        {
+            var iadsLargeIntType = value.GetType();
+            var highPart = (int)iadsLargeIntType.InvokeMember("HighPart", System.Reflection.BindingFlags.GetProperty, null, value, null)!;
+            var lowPart = (int)iadsLargeIntType.InvokeMember("LowPart", System.Reflection.BindingFlags.GetProperty, null, value, null)!;
 
-        return ((long)highPart << 32) | (uint)lowPart;
+            return ((long)highPart << 32) | (uint)lowPart;
+        }
+        catch (Exception e)
+        {
+            _logger.LogWarning(e, "Failed to convert IAdsLargeInteger to long");
+            return default;
+        }
     }
 }

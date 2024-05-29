@@ -16,7 +16,7 @@ namespace JGUZDV.ActiveDirectory
         /// <summary>
         /// Read a byte array from the property with the given name and convert it to a <see cref="Guid"/>.
         /// </summary>
-        Guid ReadBytesAsGuid(PropertyCollection properties, string propertyName);
+        Guid? ReadBytesAsGuid(PropertyCollection properties, string propertyName);
 
         /// <summary>
         /// Read a byte array from the property with the given name and convert it to a <see cref="SecurityIdentifier"/>.
