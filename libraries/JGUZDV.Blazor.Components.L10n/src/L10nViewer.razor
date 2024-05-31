@@ -1,0 +1,43 @@
+﻿@using JGUZDV.L10n;
+@using Microsoft.Extensions.DependencyInjection;
+
+@if (L10n != null)
+{
+    <div class="l10n-grid">
+        @foreach (var lang in _languages)
+        {
+            <span class="input-group-text l10n-grid-language" id="@lang">@lang</span>
+            <input type="text" class="form-control l10n-grid-input" aria-describedby="@lang" value="@L10n[lang]" disabled/>
+        }
+    </div>
+}
+
+@code {
+    [Parameter, EditorRequired]
+    public L10nString L10n { get; set; } = new();
+
+    [Parameter]
+    public List<string>? SupportedCultures { get; set; }
+
+    [Inject]
+    public IServiceProvider ServiceProvider { get; set; } = default!;
+
+    private List<string> _languages = new();
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        if (SupportedCultures != null)
+        {
+            _languages = SupportedCultures;
+        }
+        else
+        {
+            var service = ServiceProvider.GetService<ISupportedCultureService>();
+            if (service == null)
+                throw new Exception($"Neither the parameter {nameof(SupportedCultures)} nor an {nameof(ISupportedCultureService)} was supplied.");
+
+            _languages = service.GetSupportedCultures();
+        }
+    }
+}
