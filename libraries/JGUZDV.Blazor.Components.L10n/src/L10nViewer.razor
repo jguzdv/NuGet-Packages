@@ -7,7 +7,7 @@
         @foreach (var lang in _languages)
         {
             <span class="input-group-text l10n-grid-language" id="@lang">@lang</span>
-            <input type="text" class="form-control l10n-grid-input" aria-describedby="@lang" value="@L10n[lang]" disabled/>
+            <div class="form-control l10n-grid-input" aria-describedby="@lang">@L10n[lang]</div>
         }
     </div>
 }
