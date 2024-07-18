@@ -5,7 +5,16 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <OutputType>Library</OutputType>
-      
+
+      <NeutralLanguage>de</NeutralLanguage>
+      <RootNamespace>JGUZDV.WebHost</RootNamespace>
+
+      <PackageId>JGUZDV.WebHost</PackageId>
+      <IsPackable>true</IsPackable>
+      <Version>1.0.0</Version>
+      <Authors>Marcus Lunau</Authors>
+      <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
+      <PackageDescription>Host for Web Applications using MVC or RazorPages based on our other packages</PackageDescription>
     
   </PropertyGroup>
 
