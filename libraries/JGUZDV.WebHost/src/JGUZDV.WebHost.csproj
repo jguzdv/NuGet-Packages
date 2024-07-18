@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <OutputType>Library</OutputType>
+
+      <NeutralLanguage>de</NeutralLanguage>
+      <RootNamespace>JGUZDV.WebHost</RootNamespace>
+
+      <PackageId>JGUZDV.WebHost</PackageId>
+      <IsPackable>true</IsPackable>
+      <Version>1.0.0</Version>
+      <Authors>Marcus Lunau</Authors>
+      <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
+      <PackageDescription>Host for Web Applications using MVC or RazorPages based on our other packages</PackageDescription>
+    
+  </PropertyGroup>
+
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="[8.0.0,)" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="[8.0.0,)" />
+        <PackageReference Include="Microsoft.Extensions.Caching.SqlServer" Version="[8.0.0,)" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\JGUZDV.AspNetCore.Authentication.Cookies\src\JGUZDV.AspNetCore.Authentication.Cookies.csproj" />
+        <ProjectReference Include="..\..\JGUZDV.AspNetCore.DataProtection\src\JGUZDV.AspNetCore.DataProtection.csproj" />
+        <ProjectReference Include="..\..\JGUZDV.AspNetCore.Logging\src\JGUZDV.AspNetCore.Logging.csproj" />
+        <ProjectReference Include="..\..\JGUZDV.Extensions.Authorization\src\JGUZDV.Extensions.Authorization.csproj" />
+        <ProjectReference Include="..\..\JGUZDV.Extensions.Json\src\JGUZDV.Extensions.Json.csproj" />
+        <ProjectReference Include="..\..\JGUZDV.Extensions.Logging\src\JGUZDV.Extensions.Logging.csproj" />
+    </ItemGroup>
+    
+    
+
+</Project>
