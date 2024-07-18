@@ -32,12 +32,13 @@ To use all features, you need to have configuration sections, each referring to 
     },
   },
 
-  "Authentication": {
-    "JwtBearer": { 
-      "Authority": "https://example.com",
-      "Audience": "example",
-      "RequiredScopes": [ "scope1", "scope2" ]
-      "ScopeType": "ClaimTypeOfScopes" // "scope" if empty
+  "AuthN": {
+    "OpenIdConnect": {
+      "Authority": "{AuthorityAdress}",
+      "ClientId": "{ClientId}",
+      "ClientSecret": "{ClientSecret}",
+      "ResponseType": "{type}",
+      "Scope": [ {"ListOfScopes"} ]
     }
   },
 
