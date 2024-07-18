@@ -74,31 +74,44 @@ internal class PropertyReader(
                     : propertyValue!.ToString();
             }
 
+
             if (propertyInfo.PropertyType == typeof(byte[]) && propertyValue is byte[] byteValue)
             {
-                return outputFormat switch
+                if (OutputFormats.ByteArrays.Guid.Equals(outputFormat, StringComparison.OrdinalIgnoreCase))
                 {
-                    OutputFormats.ByteArrays.Guid => new Guid(byteValue).ToString(),
-                    OutputFormats.ByteArrays.SDDL => new SecurityIdentifier(byteValue, 0).ToString(),
-                    _ => Convert.ToBase64String(byteValue)
-                };
+                    return new Guid(byteValue).ToString();
+                }
+                else if (OutputFormats.ByteArrays.SDDL.Equals(outputFormat, StringComparison.OrdinalIgnoreCase))
+                {
+                    return new SecurityIdentifier(byteValue, 0).ToString();
+                }
+                else
+                {
+                    return Convert.ToBase64String(byteValue);
+                }
             }
+
 
             if (propertyInfo.PropertyType == typeof(int) && propertyValue is int intValue)
             {
                 return intValue.ToString(outputFormat ?? "0");
             }
 
+
             if (propertyInfo.PropertyType == typeof(long))
             {
                 var longValue = ConvertIAdsLargeInteger(propertyValue);
 
-                return outputFormat switch
+                if (OutputFormats.Long.FileTime.Equals(outputFormat, StringComparison.OrdinalIgnoreCase))
                 {
-                    OutputFormats.Long.FileTime => DateTimeOffset.FromFileTime(longValue).ToString("O"),
-                    _ => longValue.ToString(outputFormat ?? "0")
-                };
+                    return DateTimeOffset.FromFileTime(longValue).ToString("O");
+                }
+                else 
+                { 
+                    return longValue.ToString(outputFormat ?? "0");
+                }
             }
+
 
             if (propertyInfo.PropertyType == typeof(DateTime) && propertyValue is DateTime dateTimeValue)
             {
