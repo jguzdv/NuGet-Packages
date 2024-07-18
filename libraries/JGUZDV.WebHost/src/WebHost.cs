@@ -51,6 +51,7 @@ public static partial class WebHost
             // Enable MVC controllers and Razor pages
             services.AddControllers();
             services.AddRazorPages();
+            services.AddControllersWithViews();
 
 
             // Add Localization for DE, EN and RequestLocaltization
