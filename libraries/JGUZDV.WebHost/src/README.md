@@ -32,7 +32,7 @@ To use all features, you need to have configuration sections, each referring to 
     },
   },
 
-  "AuthN": {
+  "Authentication": {
     "OpenIdConnect": {
       "Authority": "{AuthorityAdress}",
       "ClientId": "{ClientId}",
