@@ -12,6 +12,11 @@ using Microsoft.Extensions.Logging.Abstractions;
 
 namespace JGUZDV.WebHost;
 
+/// <summary>
+/// The WebHost class is a static class that provides methods for configuring 
+/// and setting up a web host in an ASP.NET Core application. 
+/// It contains two main methods: ConfigureWebHostServices and ConfigureWebHost.
+/// </summary>
 public static partial class WebHost
 {
     internal static class ConfigSections
