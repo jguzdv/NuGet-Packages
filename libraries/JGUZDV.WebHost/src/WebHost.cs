@@ -1,4 +1,6 @@
-﻿using JGUZDV.WebHost.Extensions;
+﻿using System.IdentityModel.Tokens.Jwt;
+
+using JGUZDV.WebHost.Extensions;
 
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -40,6 +42,8 @@ public static partial class WebHost
                this WebApplicationBuilder builder
                )
     {
+        JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
+        
         var services = builder.Services;
         var config = builder.Configuration;
         var environment = builder.Environment;
