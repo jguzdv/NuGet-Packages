@@ -43,6 +43,7 @@ public static partial class WebHost
                )
     {
         JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
+        
         var services = builder.Services;
         var config = builder.Configuration;
         var environment = builder.Environment;
