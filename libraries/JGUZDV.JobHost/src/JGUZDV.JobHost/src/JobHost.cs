@@ -32,6 +32,22 @@ namespace JGUZDV.JobHost
                                     configureQuartz(x);
                                     x.AwaitApplicationStarted = true;
                                 });
+
+                                ctx.Properties["Debugging"] = false;
+                                if (ctx.HostingEnvironment.IsDevelopment())
+                                {
+                                    var allowDebugging = ctx.Configuration.GetValue<bool?>($"{Constants.DefaultConfigSection}:AllowDebugging");
+                                    if (allowDebugging == false)
+                                        return;
+
+                                    Console.WriteLine("Do you want to debug? (y/n)");
+                                    var input = Console.ReadLine();
+
+                                    if ("y".Equals(input, StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        ctx.Properties["Debugging"] = true;
+                                    }
+                                }
                             })
                            .UseJGUZDVLogging()
                            .UseWindowsService(configureWindowsService);

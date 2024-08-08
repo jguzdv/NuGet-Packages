@@ -183,6 +183,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.JobHost.Shared", "li
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.JobHost.Shared.Tests", "libraries\JGUZDV.JobHost\src\JGUZDV.JobHost.Shared\test\JGUZDV.JobHost.Shared.Tests.csproj", "{1F1A4656-CFAA-413B-8C92-1FE5C87067F3}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.JobHost.Sample", "libraries\JGUZDV.JobHost\src\JGUZDV.JobHost\samples\JGUZDV.JobHost.Sample\JGUZDV.JobHost.Sample.csproj", "{7FECAD61-110A-4D99-AB98-ED8AB382A82A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -901,6 +903,18 @@ Global
 		{1F1A4656-CFAA-413B-8C92-1FE5C87067F3}.Release|x64.Build.0 = Release|Any CPU
 		{1F1A4656-CFAA-413B-8C92-1FE5C87067F3}.Release|x86.ActiveCfg = Release|Any CPU
 		{1F1A4656-CFAA-413B-8C92-1FE5C87067F3}.Release|x86.Build.0 = Release|Any CPU
+		{7FECAD61-110A-4D99-AB98-ED8AB382A82A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FECAD61-110A-4D99-AB98-ED8AB382A82A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FECAD61-110A-4D99-AB98-ED8AB382A82A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{7FECAD61-110A-4D99-AB98-ED8AB382A82A}.Debug|x64.Build.0 = Debug|Any CPU
+		{7FECAD61-110A-4D99-AB98-ED8AB382A82A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7FECAD61-110A-4D99-AB98-ED8AB382A82A}.Debug|x86.Build.0 = Debug|Any CPU
+		{7FECAD61-110A-4D99-AB98-ED8AB382A82A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FECAD61-110A-4D99-AB98-ED8AB382A82A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7FECAD61-110A-4D99-AB98-ED8AB382A82A}.Release|x64.ActiveCfg = Release|Any CPU
+		{7FECAD61-110A-4D99-AB98-ED8AB382A82A}.Release|x64.Build.0 = Release|Any CPU
+		{7FECAD61-110A-4D99-AB98-ED8AB382A82A}.Release|x86.ActiveCfg = Release|Any CPU
+		{7FECAD61-110A-4D99-AB98-ED8AB382A82A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -988,10 +1002,11 @@ Global
 		{1D6F11E1-BA12-4656-9491-3F0C6CD590DC} = {B06ACF77-B0EF-42F4-BA33-776F7496E2E6}
 		{EFD3A7C8-30D8-4744-840D-1013730F1CEA} = {B06ACF77-B0EF-42F4-BA33-776F7496E2E6}
 		{1F1A4656-CFAA-413B-8C92-1FE5C87067F3} = {B06ACF77-B0EF-42F4-BA33-776F7496E2E6}
+		{7FECAD61-110A-4D99-AB98-ED8AB382A82A} = {B06ACF77-B0EF-42F4-BA33-776F7496E2E6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		RESX_SortFileContentOnSave = True
-		RESX_NeutralResourcesLanguage = de-DE
 		SolutionGuid = {46ECC226-1874-4539-8589-8B2029909C4A}
+		RESX_NeutralResourcesLanguage = de-DE
+		RESX_SortFileContentOnSave = True
 	EndGlobalSection
 EndGlobal
