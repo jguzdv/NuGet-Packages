@@ -11,9 +11,9 @@
         /// <summary>
         /// Constructor with sensible defaults for keyboard input
         /// </summary>
-        /// <param name="millisecondDelay">The delay in milliseconds</param>
         /// <param name="cancelOnExecute">Flag if previous task is cancelled.</param>
-        public DelayedExecution(int millisecondDelay = 333, bool cancelOnExecute = true)
+        /// <param name="millisecondDelay">The delay in milliseconds</param>
+        public DelayedExecution(bool cancelOnExecute = true, int millisecondDelay = 333)
             : this(TimeSpan.FromMilliseconds(millisecondDelay))
         {
             _cancelOnExecute = cancelOnExecute;
