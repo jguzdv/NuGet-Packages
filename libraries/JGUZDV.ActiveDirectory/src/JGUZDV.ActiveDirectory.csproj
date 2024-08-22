@@ -4,7 +4,13 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <LangVersion>Latest</LangVersion>
+        
+        <PackageId>JGUZDV.ActiveDirectory</PackageId>
+        <IsPackable>true</IsPackable>
+        <Version>1.0.0-beta</Version>
+        <Authors>Thomas Ottenhus</Authors>
+        <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
+        <PackageDescription>Read properties or claims from AD.</PackageDescription>
     </PropertyGroup>
 
     <ItemGroup>

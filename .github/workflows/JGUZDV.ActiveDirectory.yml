@@ -1,4 +1,4 @@
-name: JGUZDV.ActiveDirectory.ClaimProvider
+name: JGUZDV.ActiveDirectory
 
 on:
   workflow_dispatch:
@@ -11,13 +11,13 @@ on:
     branches:
       - main
     paths:
-      - libraries/JGUZDV.ActiveDirectory.ClaimProvider/**
+      - libraries/JGUZDV.ActiveDirectory/**
 
 jobs:
   call_default_build:
     uses: ./.github/workflows/default_build.yml
     with:
-      library-name: JGUZDV.ActiveDirectory.ClaimProvider
+      library-name: JGUZDV.ActiveDirectory
       push-to-nuget: ${{ inputs.push-to-nuget != '' && inputs.push-to-nuget }}
     secrets:
       NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
