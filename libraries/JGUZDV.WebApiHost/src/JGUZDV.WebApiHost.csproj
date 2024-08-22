@@ -12,7 +12,7 @@
 
         <PackageId>JGUZDV.WebApiHost</PackageId>
         <IsPackable>true</IsPackable>
-        <Version>1.0.0-beta</Version>
+        <Version>1.0.0-beta2</Version>
         <Authors>Thomas Ottenhus</Authors>
         <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
         <PackageDescription>Host for WebApi Applications based on our other packages</PackageDescription>
@@ -25,7 +25,7 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="[8.0.0,)" />
         <PackageReference Include="Microsoft.Extensions.Caching.SqlServer" Version="[8.0.0,)" />
-        <PackageReference Include="Microsoft.FeatureManagement.AspNetCore" Version="4.0.0-preview" />
+        <PackageReference Include="Microsoft.FeatureManagement.AspNetCore" Version="4.0.0-preview3" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     </ItemGroup>
 
