@@ -35,6 +35,9 @@ internal class ClaimProvider : IClaimProvider
             .Where(x => claimTypes.Contains(x.ClaimType, StringComparer.OrdinalIgnoreCase))
             .ToList();
 
+        var properties = propertyMaps.Select(x => x.PropertyName).Distinct().ToArray();
+        directoryEntry.RefreshCache(properties);
+
         foreach (var map in propertyMaps)
         {
             var claimValues = _propertyReader.ReadStrings(directoryEntry.Properties, map.PropertyName, map.OutputFormat);
