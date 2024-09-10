@@ -63,7 +63,26 @@ internal class PropertyReader(
         {
             if (propertyValue is string stringValue)
             {
-                return stringValue;
+                if (OutputFormats.ADStrings.CN.Equals(outputFormat, StringComparison.OrdinalIgnoreCase))
+                {
+                    if(!stringValue.StartsWith("CN=", StringComparison.OrdinalIgnoreCase))
+                    {
+                        _logger.LogWarning("Output format {OutputFormat} is not applicable to {PropertyName}", outputFormat, propertyName);
+                        return stringValue;
+                    }
+
+                    return stringValue.Split(',', 2, StringSplitOptions.TrimEntries).First()
+                        .Split('=', 2, StringSplitOptions.TrimEntries).Last()
+                        .ToLowerInvariant();
+                }
+                else if (OutputFormats.ADStrings.LowerString.Equals(outputFormat, StringComparison.OrdinalIgnoreCase))
+                {
+                    return stringValue.ToLowerInvariant();
+                }
+                else
+                {
+                    return stringValue;
+                }
             }
 
             if (!_options.Value.PropertyInfos.TryGetValue(propertyName, out var propertyInfo))

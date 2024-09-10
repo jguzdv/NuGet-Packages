@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace JGUZDV.ActiveDirectory.Configuration;
+﻿namespace JGUZDV.ActiveDirectory.Configuration;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 public static class OutputFormats
 {
+    public static class ADStrings
+    {
+        public const string CN = "cn";
+        public const string LowerString = "toLower";
+    }
+
     public static class ByteArrays
     {
         public const string Base64 = "base64";
