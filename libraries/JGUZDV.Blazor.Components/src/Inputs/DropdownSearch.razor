@@ -31,11 +31,17 @@
     [Parameter]
     public EventCallback<bool> SearchIsOpenChanged { get; set; }
 
+    [Parameter]
+    public string? SearchQuery { get; set; }
+
+    [Parameter]
+    public EventCallback<string?> SearchQueryChanged { get; set; }
+
+
     public DropdownSearch()
     {
         ErrorTemplate = (err) => @<text>err</text>;
     }
-
 
     protected override void OnParametersSet()
     {
@@ -45,6 +51,12 @@
         ArgumentNullException.ThrowIfNull(ItemTemplate);
         ArgumentNullException.ThrowIfNull(SearchHintTemplate);
         ArgumentNullException.ThrowIfNull(NoResultTemplate);
+
+        if (!string.IsNullOrWhiteSpace(SearchQuery) && SearchQuery != _searchQuery)
+        {
+            _searchQuery = SearchQuery;
+            SearchTask = ExecuteDelayedSearch(_searchQuery, _searchInputDebounce.Token);
+        }
     }
 
     private bool _searchIsOpen;
@@ -66,13 +78,15 @@
     private DelayedExecution _blurDebounce = new(250);
 
 
-    public string? SearchQuery
+    public string? InternalSearchQuery
     {
         get => _searchQuery;
         set
         {
             _searchQuery = value;
             InitializeDelayedSearch();
+            SearchQuery = value;
+            SearchQueryChanged.InvokeAsync(value);
         }
     }
 
@@ -104,19 +118,18 @@
         }
 
         SearchTask = ExecuteDelayedSearch(_searchQuery, _searchInputDebounce.Token);
+    }
 
+    private async Task<ResultContext>? ExecuteDelayedSearch(string searchQuery, CancellationToken ct)
+    {
+        return await _searchInputDebounce.ExecuteDelayed(
+            async (ct) =>
+            {
+                var (result, hasMoreResults) = await SearchFunction.Invoke(searchQuery, ct);
 
-        async Task<ResultContext>? ExecuteDelayedSearch(string searchQuery, CancellationToken ct)
-        {
-            return await _searchInputDebounce.ExecuteDelayed(
-                async (ct) =>
-                {
-                    var (result, hasMoreResults) = await SearchFunction.Invoke(searchQuery, ct);
-
-                    return new ResultContext(result, hasMoreResults, searchQuery);
-                },
-                () => new ResultContext(null, false, searchQuery));
-        }
+                return new ResultContext(result, hasMoreResults, searchQuery);
+            },
+            () => new ResultContext(null, false, searchQuery));
     }
 
 
@@ -176,7 +189,7 @@
 <div class="input-group sr-wrapper">
     <span class="input-group-text"><i class="fa fa-fw fa-search"></i></span>
     <input type="text" class="form-control" autocomplete="off"
-           @bind="SearchQuery" @bind:event="oninput"
+           @bind="InternalSearchQuery" @bind:event="oninput"
            @onfocus="() => OnFocus()" @onblur="() => OnBlur()"
            @onkeyup="(e) => HandleKeyPress(e)" />
 
