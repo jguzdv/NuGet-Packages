@@ -66,6 +66,7 @@ public static class Defaults
         new("uid", typeof(string)),
         new("userPrincipalName", typeof(string)),
 
+        new("tokenGroupsGlobalAndUniversal", typeof(byte[])),
         new("msds-tokenGroupNamesGlobalAndUniversal", typeof(string))
     };
 
