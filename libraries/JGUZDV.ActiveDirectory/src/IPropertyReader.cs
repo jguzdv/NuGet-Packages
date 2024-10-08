@@ -1,6 +1,8 @@
 ﻿using System.DirectoryServices;
 using System.Security.Principal;
 
+using JGUZDV.ActiveDirectory.Configuration;
+
 namespace JGUZDV.ActiveDirectory
 {
     /// <summary>
@@ -47,11 +49,22 @@ namespace JGUZDV.ActiveDirectory
         /// Read a string from the property with the given name.
         /// If the property was not string it will be converted to string.
         /// </summary>
-        string? ReadString(PropertyCollection properties, string propertyName, string? outputFormat = null);
+        string? ReadString(PropertyCollection properties, string propertyName, string? outputFormat, Casing casing);
+
+        /// <summary>
+        /// Read a string from the property with the given name.
+        /// If the property was not string it will be converted to string.
+        /// </summary>
+        string? ReadString(PropertyCollection properties, string propertyName) => ReadString(properties, propertyName, null, Casing.Unchanged);
 
         /// <summary>
         /// Read multiple strings from the property with the given name.
         /// </summary>
-        IEnumerable<string> ReadStrings(PropertyCollection properties, string propertyName, string? outputFormat = null);
+        IEnumerable<string> ReadStrings(PropertyCollection properties, string propertyName, string? outputFormat, Casing casing);
+
+        /// <summary>
+        /// Read multiple strings from the property with the given name.
+        /// </summary>
+        IEnumerable<string> ReadStrings(PropertyCollection properties, string propertyName) => ReadStrings(properties, propertyName, null, Casing.Unchanged);
     }
 }

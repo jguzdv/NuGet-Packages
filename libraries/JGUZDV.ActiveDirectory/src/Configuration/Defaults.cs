@@ -66,6 +66,7 @@ public static class Defaults
         new("uid", typeof(string)),
         new("userPrincipalName", typeof(string)),
 
+        new("tokenGroupsGlobalAndUniversal", typeof(byte[])),
         new("msds-tokenGroupNamesGlobalAndUniversal", typeof(string))
     };
 
@@ -74,10 +75,8 @@ public static class Defaults
     /// </summary>
     public static IReadOnlyList<ClaimSource> KnownClaimSources = new List<ClaimSource>()
         {
-            new ("sub", "objectGuid", "Guid"),
             new ("upn", "userPrincipalName"),
             new ("security_identifier", "objectSid", "SDDL"),
-            new ("role", "msds-tokenGroupNamesGlobalAndUniversal", "cn"),
             new ("name", "displayName"),
             new ("email", "mail", "lower"),
             new ("family_name", "sn"),

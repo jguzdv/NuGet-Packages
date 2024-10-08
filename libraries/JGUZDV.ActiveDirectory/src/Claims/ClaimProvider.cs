@@ -40,7 +40,7 @@ internal class ClaimProvider : IClaimProvider
 
         foreach (var map in propertyMaps)
         {
-            var claimValues = _propertyReader.ReadStrings(directoryEntry.Properties, map.PropertyName, map.OutputFormat);
+            var claimValues = _propertyReader.ReadStrings(directoryEntry.Properties, map.PropertyName, map.OutputFormat, map.Casing);
 
             if (map.ClaimValueDenyList?.Any() == true)
             {

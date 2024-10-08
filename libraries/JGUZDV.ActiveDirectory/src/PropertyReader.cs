@@ -24,18 +24,18 @@ internal class PropertyReader(
     /// Reads a value from the property with the given name.
     /// </summary>
     /// <returns>The first element from the property value collection, if it's not string, conversion will occur and the outputFormat will be applied, if possible.</returns>
-    public string? ReadString(PropertyCollection properties, string propertyName, string? outputFormat = null)
+    public string? ReadString(PropertyCollection properties, string propertyName, string? outputFormat, Casing casing)
     {
         var propertyValues = properties[propertyName];
         return propertyValues.Count != 0 
-            ? ReadAsString(propertyValues[0]!, propertyName, outputFormat) 
+            ? ReadAsString(propertyValues[0]!, propertyName, outputFormat, casing) 
             : default;
     }
 
     /// <summary>
     /// Reads an array of values from the property with the given name.
     /// </summary>
-    public IEnumerable<string> ReadStrings(PropertyCollection properties, string propertyName, string? outputFormat = null)
+    public IEnumerable<string> ReadStrings(PropertyCollection properties, string propertyName, string? outputFormat, Casing casing)
     {
         var property = properties[propertyName];
         if (property.Value is null)
@@ -45,22 +45,24 @@ internal class PropertyReader(
         
         if (property.Count == 1)
         {
-            return [ReadAsString(properties[propertyName][0]!, propertyName, outputFormat)!];
+            return [ReadAsString(properties[propertyName][0]!, propertyName, outputFormat, casing)!];
         }
         else
         {
             return ((object[])property.Value!)
-                .Select(x => ReadAsString(x, propertyName, outputFormat))
+                .Select(x => ReadAsString(x, propertyName, outputFormat, casing))
                 .Where(x => x is not null)
                 .ToArray()!;
         }
     }
 
 
-    private string? ReadAsString(object propertyValue, string propertyName, string? outputFormat = null)
+    private string? ReadAsString(object propertyValue, string propertyName, string? outputFormat, Casing casing)
     {
         try
         {
+            string? result = null;
+
             if (propertyValue is string stringValue)
             {
                 if (OutputFormats.ADStrings.CN.Equals(outputFormat, StringComparison.OrdinalIgnoreCase))
@@ -71,78 +73,78 @@ internal class PropertyReader(
                         return stringValue;
                     }
 
-                    return stringValue.Split(',', 2, StringSplitOptions.TrimEntries).First()
-                        .Split('=', 2, StringSplitOptions.TrimEntries).Last()
-                        .ToLowerInvariant();
-                }
-                else if (OutputFormats.ADStrings.LowerString.Equals(outputFormat, StringComparison.OrdinalIgnoreCase))
-                {
-                    return stringValue.ToLowerInvariant();
+                    result = stringValue.Split(',', 2, StringSplitOptions.TrimEntries).First()
+                        .Split('=', 2, StringSplitOptions.TrimEntries).Last();
                 }
                 else
                 {
-                    return stringValue;
+                    result = stringValue;
                 }
             }
 
-            if (!_options.Value.PropertyInfos.TryGetValue(propertyName, out var propertyInfo))
+            else if (!_options.Value.PropertyInfos.TryGetValue(propertyName, out var propertyInfo))
             {
                 _logger.LogDebug("No property info found for {PropertyName}, attempting string.Format() or ToString()", propertyName);
-                return outputFormat != null
+                result = outputFormat != null
                     ? string.Format(outputFormat, propertyValue)
                     : propertyValue!.ToString();
             }
 
 
-            if (propertyInfo.PropertyType == typeof(byte[]) && propertyValue is byte[] byteValue)
+            else if (propertyInfo.PropertyType == typeof(byte[]) && propertyValue is byte[] byteValue)
             {
                 if (OutputFormats.ByteArrays.Guid.Equals(outputFormat, StringComparison.OrdinalIgnoreCase))
                 {
-                    return new Guid(byteValue).ToString();
+                    result = new Guid(byteValue).ToString();
                 }
                 else if (OutputFormats.ByteArrays.SDDL.Equals(outputFormat, StringComparison.OrdinalIgnoreCase))
                 {
-                    return new SecurityIdentifier(byteValue, 0).ToString();
+                    result = new SecurityIdentifier(byteValue, 0).ToString();
                 }
                 else
                 {
-                    return Convert.ToBase64String(byteValue);
+                    result = Convert.ToBase64String(byteValue);
                 }
             }
 
 
-            if (propertyInfo.PropertyType == typeof(int) && propertyValue is int intValue)
+            else if (propertyInfo.PropertyType == typeof(int) && propertyValue is int intValue)
             {
-                return intValue.ToString(outputFormat ?? "0");
+                result = intValue.ToString(outputFormat ?? "0");
             }
 
 
-            if (propertyInfo.PropertyType == typeof(long))
+            else if (propertyInfo.PropertyType == typeof(long))
             {
                 var longValue = ConvertIAdsLargeInteger(propertyValue);
 
                 if (OutputFormats.Long.FileTime.Equals(outputFormat, StringComparison.OrdinalIgnoreCase))
                 {
-                    return DateTimeOffset.FromFileTime(longValue).ToString("O");
+                    result = DateTimeOffset.FromFileTime(longValue).ToString("O");
                 }
                 else 
-                { 
-                    return longValue.ToString(outputFormat ?? "0");
+                {
+                    result = longValue.ToString(outputFormat ?? "0");
                 }
             }
 
-
-            if (propertyInfo.PropertyType == typeof(DateTime) && propertyValue is DateTime dateTimeValue)
+            else if (propertyInfo.PropertyType == typeof(DateTime) && propertyValue is DateTime dateTimeValue)
             {
-                return dateTimeValue.ToString(outputFormat ?? "O");
+                result = dateTimeValue.ToString(outputFormat ?? "O");
             }
+
+            return casing switch
+            {
+                Casing.Lower => result?.ToLowerInvariant(),
+                Casing.Upper => result?.ToUpperInvariant(),
+                _ => result
+            };
         }
         catch (Exception ex)
         {
             _logger.LogWarning(ex, "Failed to convert property {PropertyName} to string", propertyName);
+            return null;
         }
-
-        return null;
     }
 
     /// <summary>
