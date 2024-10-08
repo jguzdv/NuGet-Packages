@@ -6,7 +6,6 @@ public static class OutputFormats
     public static class ADStrings
     {
         public const string CN = "cn";
-        public const string LowerString = "toLower";
     }
 
     public static class ByteArrays
