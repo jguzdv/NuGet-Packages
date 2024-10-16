@@ -63,6 +63,7 @@ namespace JGUZDV.JobHost
                         await item.Execute(hostName, scheduler, context.CancellationToken);
                     }
                 }
+
                 // register execute now polling job
                 var jobDetail = JobBuilder
                 .Create<ExecuteNowJob>()
@@ -81,7 +82,6 @@ namespace JGUZDV.JobHost
             catch (Exception e)
             {
                 _logger.LogError(e, $"Error during host initialization and register work");
-
             }
             finally
             {
@@ -118,6 +118,7 @@ namespace JGUZDV.JobHost
                         await item.Execute(hostName, scheduler, cancellationToken);
                     }
                 }
+
                 // register execute now polling job
                 var jobDetail = JobBuilder
                 .Create<ExecuteNowJob>()
@@ -136,7 +137,6 @@ namespace JGUZDV.JobHost
             catch (Exception e)
             {
                 _logger.LogError(e, $"Error during host initialization and register work");
-
             }
         }
 
