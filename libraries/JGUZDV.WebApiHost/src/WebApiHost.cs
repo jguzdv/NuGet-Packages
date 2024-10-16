@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 
 using JGUZDV.Blazor.WasmServerHost.Extensions;
 using JGUZDV.Extensions.Json;
+using JGUZDV.WebApiHost.Extensions;
 using JGUZDV.WebApiHost.FeatureManagement;
 
 using Microsoft.AspNetCore.Authentication;
@@ -160,7 +161,12 @@ public static partial class WebApiHost
 
                 services.AddAuthorization(opt =>
                 {
-                    var scopes = configSection.GetSection("RequiredScopes").Get<ICollection<string>?>() ?? [];
+                    // RequiredScopes as name was misleading, since it requires one of those scopes to be present,
+                    // to not introduce breaking changes, we will keep the name and add AllowedScopes as well
+                    var scopes = (configSection.GetSection("RequiredScopes").Get<ICollection<string>?>() ?? [])
+                        .Concat(configSection.GetSection("AllowedScopes").Get<ICollection<string>?>() ?? [])
+                        .ToList();
+
                     if (scopes.Count == 0)
                     {
                         Log.NoRequiredScopes(logger);
@@ -169,13 +175,12 @@ public static partial class WebApiHost
                     {
                         var scopeClaimType = configSection["ScopeType"] ?? "scope";
 
-                        opt.AddPolicy("ScopedDefault", p =>
+                        opt.AddPolicy("DefaultWithScopeCheck", p =>
                         {
                             p.RequireAuthenticatedUser();
-                            p.RequireClaim("scope", scopes);
-
+                            p.RequireAnyScope(scopes);
                         });
-                        opt.DefaultPolicy = opt.GetPolicy("ScopedDefault")!;
+                        opt.DefaultPolicy = opt.GetPolicy("DefaultWithScopeCheck")!;
                     }
                 });
             }
@@ -233,8 +238,6 @@ public static partial class WebApiHost
     /// - Adds Swagger
     /// - Adds SwaggerUI
     /// </summary>
-    /// <param name="app"></param>
-    /// <returns></returns>
     public static WebApplication ConfigureWebApiHost(this WebApplication app)
     {
         var conf = app.Configuration;
@@ -277,7 +280,7 @@ public static partial class WebApiHost
         [LoggerMessage(LogLevel.Information, "Could not find config Authentication:JwtBearer:ValidAudiences, audiences will not be considered.")]
         public static partial void NoValidAudiences(ILogger logger);
 
-        [LoggerMessage(LogLevel.Warning, "Could not find config Authentication:JwtBearer:RequiredScopes, consider addings required scopes to validate the token is meant for us.")]
+        [LoggerMessage(LogLevel.Warning, "Could not find config Authentication:JwtBearer:RequiredScopes or Authentication:JwtBearer:AllowedScopes, consider addings required scopes to validate the token is meant for us.")]
         public static partial void NoRequiredScopes(ILogger logger);
     }
 }
