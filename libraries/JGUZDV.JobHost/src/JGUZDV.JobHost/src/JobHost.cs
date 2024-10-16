@@ -32,9 +32,9 @@ namespace JGUZDV.JobHost
                                     configureQuartz(x);
                                     x.AwaitApplicationStarted = true;
                                 });
-#if DEBUG
-                                services.AddHostedService<JobHostDebugService>();
-#endif
+
+                                if (ctx.HostingEnvironment.IsDevelopment())
+                                    services.AddHostedService<JobHostDebugService>();
                             })
                            .UseJGUZDVLogging()
                            .UseWindowsService(configureWindowsService);
