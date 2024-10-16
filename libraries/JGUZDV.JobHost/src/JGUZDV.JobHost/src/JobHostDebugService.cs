@@ -27,9 +27,6 @@ namespace JGUZDV.JobHost
 
         private void OnStarted()
         {
-            if (_environment.IsDevelopment())
-                return;
-
             var scheduler = _schedulerFactory.GetScheduler().Result;
 
             scheduler.PauseJobs(GroupMatcher<JobKey>.AnyGroup());

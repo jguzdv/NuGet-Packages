@@ -32,8 +32,9 @@ namespace JGUZDV.JobHost
                                     configureQuartz(x);
                                     x.AwaitApplicationStarted = true;
                                 });
-
+#if DEBUG
                                 services.AddHostedService<JobHostDebugService>();
+#endif
                             })
                            .UseJGUZDVLogging()
                            .UseWindowsService(configureWindowsService);
