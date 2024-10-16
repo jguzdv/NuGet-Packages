@@ -2,6 +2,7 @@
 
 using JGUZDV.JobHost.Shared;
 
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -13,23 +14,23 @@ namespace JGUZDV.JobHost
 {
     internal class RegisterHost : IJob, IHostedService
     {
-        private readonly IEnumerable<RegisterJob> _jobs;
         private readonly ISchedulerFactory _schedulerFactory;
         private readonly ILogger<RegisterHost> _logger;
         private readonly IJobExecutionManager _reporter;
         private readonly IOptions<JobReportOptions> _options;
+        private readonly IServiceProvider _serviceProvider;
 
         public RegisterHost(IJobExecutionManager reporter,
-            IEnumerable<RegisterJob> jobs,
             ISchedulerFactory schedulerFactory,
             ILogger<RegisterHost> logger,
-            IOptions<JobReportOptions> options)
+            IOptions<JobReportOptions> options,
+            IServiceProvider serviceProvider)
         {
-            _jobs = jobs;
             _reporter = reporter;
             _schedulerFactory = schedulerFactory;
             _logger = logger;
             _options = options;
+            _serviceProvider = serviceProvider;
         }
 
         public async Task Execute(IJobExecutionContext context)
@@ -40,22 +41,27 @@ namespace JGUZDV.JobHost
 
             try
             {
-                await _reporter.RegisterHostAndJobsAsync(new JobHostDescription
+                using (var scope = _serviceProvider.CreateScope())
                 {
-                    HostName = hostName,
-                    MonitoringUrl = (string)context.JobDetail.JobDataMap[Constants.MonitoringUrl],
-                    Jobs = _jobs.Select(x => new JobDescription
-                    {
-                        CronSchedule = x.CronSchedule,
-                        Name = x.JobName,
-                        NextExecutionAt = new CronExpression(x.CronSchedule).GetNextValidTimeAfter(DateTimeOffset.Now) ?? new() //TODO: TimeProvider
-                    }).ToList()
-                }, context.CancellationToken);
+                    var jobs = scope.ServiceProvider.GetServices<RegisterJob>();
 
-                // register quartz jobs
-                foreach (var item in _jobs)
-                {
-                    await item.Execute(hostName, scheduler, context.CancellationToken);
+                    await _reporter.RegisterHostAndJobsAsync(new JobHostDescription
+                    {
+                        HostName = hostName,
+                        MonitoringUrl = (string)context.JobDetail.JobDataMap[Constants.MonitoringUrl],
+                        Jobs = jobs.Select(x => new JobDescription
+                        {
+                            CronSchedule = x.CronSchedule,
+                            Name = x.JobName,
+                            NextExecutionAt = new CronExpression(x.CronSchedule).GetNextValidTimeAfter(DateTimeOffset.Now) ?? new() //TODO: TimeProvider
+                        }).ToList()
+                    }, context.CancellationToken);
+
+                    // register quartz jobs
+                    foreach (var item in jobs)
+                    {
+                        await item.Execute(hostName, scheduler, context.CancellationToken);
+                    }
                 }
 
                 // register execute now polling job
@@ -76,7 +82,6 @@ namespace JGUZDV.JobHost
             catch (Exception e)
             {
                 _logger.LogError(e, $"Error during host initialization and register work");
-               
             }
             finally
             {
@@ -91,22 +96,27 @@ namespace JGUZDV.JobHost
 
             try
             {
-                await _reporter.RegisterHostAndJobsAsync(new JobHostDescription
+                using (var scope = _serviceProvider.CreateScope())
                 {
-                    HostName = hostName,
-                    MonitoringUrl = _options.Value.MonitoringUrl,
-                    Jobs = _jobs.Select(x => new JobDescription
-                    {
-                        CronSchedule = x.CronSchedule,
-                        Name = x.JobName,
-                        NextExecutionAt = new CronExpression(x.CronSchedule).GetNextValidTimeAfter(DateTimeOffset.Now) ?? new() //TODO: TimeProvider
-                    }).ToList()
-                }, cancellationToken);
+                    var jobs = scope.ServiceProvider.GetServices<RegisterJob>();
 
-                // register quartz jobs
-                foreach (var item in _jobs)
-                {
-                    await item.Execute(hostName, scheduler, cancellationToken);
+                    await _reporter.RegisterHostAndJobsAsync(new JobHostDescription
+                    {
+                        HostName = hostName,
+                        MonitoringUrl = _options.Value.MonitoringUrl,
+                        Jobs = jobs.Select(x => new JobDescription
+                        {
+                            CronSchedule = x.CronSchedule,
+                            Name = x.JobName,
+                            NextExecutionAt = new CronExpression(x.CronSchedule).GetNextValidTimeAfter(DateTimeOffset.Now) ?? new() //TODO: TimeProvider
+                        }).ToList()
+                    }, cancellationToken);
+
+                    // register quartz jobs
+                    foreach (var item in jobs)
+                    {
+                        await item.Execute(hostName, scheduler, cancellationToken);
+                    }
                 }
 
                 // register execute now polling job
@@ -127,7 +137,6 @@ namespace JGUZDV.JobHost
             catch (Exception e)
             {
                 _logger.LogError(e, $"Error during host initialization and register work");
-
             }
         }
 
