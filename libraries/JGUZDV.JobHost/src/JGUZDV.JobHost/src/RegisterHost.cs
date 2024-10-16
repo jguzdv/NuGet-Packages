@@ -41,27 +41,28 @@ namespace JGUZDV.JobHost
 
             try
             {
-                var scope = _serviceProvider.CreateScope();
-                var jobs = scope.ServiceProvider.GetServices<RegisterJob>();
-
-                await _reporter.RegisterHostAndJobsAsync(new JobHostDescription
+                using (var scope = _serviceProvider.CreateScope())
                 {
-                    HostName = hostName,
-                    MonitoringUrl = (string)context.JobDetail.JobDataMap[Constants.MonitoringUrl],
-                    Jobs = jobs.Select(x => new JobDescription
+                    var jobs = scope.ServiceProvider.GetServices<RegisterJob>();
+
+                    await _reporter.RegisterHostAndJobsAsync(new JobHostDescription
                     {
-                        CronSchedule = x.CronSchedule,
-                        Name = x.JobName,
-                        NextExecutionAt = new CronExpression(x.CronSchedule).GetNextValidTimeAfter(DateTimeOffset.Now) ?? new() //TODO: TimeProvider
-                    }).ToList()
-                }, context.CancellationToken);
+                        HostName = hostName,
+                        MonitoringUrl = (string)context.JobDetail.JobDataMap[Constants.MonitoringUrl],
+                        Jobs = jobs.Select(x => new JobDescription
+                        {
+                            CronSchedule = x.CronSchedule,
+                            Name = x.JobName,
+                            NextExecutionAt = new CronExpression(x.CronSchedule).GetNextValidTimeAfter(DateTimeOffset.Now) ?? new() //TODO: TimeProvider
+                        }).ToList()
+                    }, context.CancellationToken);
 
-                // register quartz jobs
-                foreach (var item in jobs)
-                {
-                    await item.Execute(hostName, scheduler, context.CancellationToken);
+                    // register quartz jobs
+                    foreach (var item in jobs)
+                    {
+                        await item.Execute(hostName, scheduler, context.CancellationToken);
+                    }
                 }
-
                 // register execute now polling job
                 var jobDetail = JobBuilder
                 .Create<ExecuteNowJob>()
@@ -80,7 +81,7 @@ namespace JGUZDV.JobHost
             catch (Exception e)
             {
                 _logger.LogError(e, $"Error during host initialization and register work");
-               
+
             }
             finally
             {
@@ -95,27 +96,28 @@ namespace JGUZDV.JobHost
 
             try
             {
-                var scope = _serviceProvider.CreateScope();
-                var jobs = scope.ServiceProvider.GetServices<RegisterJob>();
-
-                await _reporter.RegisterHostAndJobsAsync(new JobHostDescription
+                using (var scope = _serviceProvider.CreateScope())
                 {
-                    HostName = hostName,
-                    MonitoringUrl = _options.Value.MonitoringUrl,
-                    Jobs = jobs.Select(x => new JobDescription
+                    var jobs = scope.ServiceProvider.GetServices<RegisterJob>();
+
+                    await _reporter.RegisterHostAndJobsAsync(new JobHostDescription
                     {
-                        CronSchedule = x.CronSchedule,
-                        Name = x.JobName,
-                        NextExecutionAt = new CronExpression(x.CronSchedule).GetNextValidTimeAfter(DateTimeOffset.Now) ?? new() //TODO: TimeProvider
-                    }).ToList()
-                }, cancellationToken);
+                        HostName = hostName,
+                        MonitoringUrl = _options.Value.MonitoringUrl,
+                        Jobs = jobs.Select(x => new JobDescription
+                        {
+                            CronSchedule = x.CronSchedule,
+                            Name = x.JobName,
+                            NextExecutionAt = new CronExpression(x.CronSchedule).GetNextValidTimeAfter(DateTimeOffset.Now) ?? new() //TODO: TimeProvider
+                        }).ToList()
+                    }, cancellationToken);
 
-                // register quartz jobs
-                foreach (var item in jobs)
-                {
-                    await item.Execute(hostName, scheduler, cancellationToken);
+                    // register quartz jobs
+                    foreach (var item in jobs)
+                    {
+                        await item.Execute(hostName, scheduler, cancellationToken);
+                    }
                 }
-
                 // register execute now polling job
                 var jobDetail = JobBuilder
                 .Create<ExecuteNowJob>()
