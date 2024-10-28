@@ -142,19 +142,20 @@ public static partial class WebApiHost
             // Add authentication and authorization
             if (config.HasConfigSection(ConfigSections.Authentication))
             {
-                var configSection = config.GetSection($"{ConfigSections.Authentication}:JwtBearer");
+                var jwtBearerSectionName = $"{ConfigSections.Authentication}:JwtBearer";
+                var bearerConfigSection = config.GetSection(jwtBearerSectionName);
 
                 var authBuilder = services
                     .AddAuthentication(opt => opt.DefaultScheme = JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(opt =>
                     {
-                        var validAudiences = configSection.GetSection("ValidAudiences").Get<ICollection<string>?>() ?? [];
+                        bearerConfigSection.Bind(opt);
+
+                        var validAudiences = bearerConfigSection.GetSection("ValidAudiences").Get<ICollection<string>?>() ?? [];
                         var validateAudience = validAudiences?.Count > 0;
 
                         opt.TokenValidationParameters.ValidateAudience = validateAudience;
                         opt.TokenValidationParameters.ValidAudiences = validAudiences;
-
-                        config.GetSection(ConfigSections.Authentication).Bind(opt);
 
                         if (opt.TokenValidationParameters.ValidAudiences?.Any() != true)
                             Log.NoValidAudiences(logger);
