@@ -38,17 +38,17 @@
     public RenderFragment<Modal<T>> Button { get; set; } = default!;
 
     [Parameter]
-    public RenderFragment<Modal<T>.ModalContext>? ModalChildContent { get; set; }
+    public RenderFragment<ModalContext<T>>? ModalChildContent { get; set; }
 
     [Parameter]
-    public RenderFragment<Modal<T>.ModalContext>? ModalContent { get; set; }
+    public RenderFragment<ModalContext<T>>? ModalContent { get; set; }
 
     [Parameter]
-    public RenderFragment<Modal<T>.ModalContext>? ModalHeader { get; set; }
+    public RenderFragment<ModalContext<T>>? ModalHeader { get; set; }
     [Parameter]
-    public RenderFragment<Modal<T>.ModalContext>? ModalBody { get; set; }
+    public RenderFragment<ModalContext<T>>? ModalBody { get; set; }
     [Parameter]
-    public RenderFragment<Modal<T>.ModalContext>? ModalFooter { get; set; }
+    public RenderFragment<ModalContext<T>>? ModalFooter { get; set; }
 
     [Parameter]
     public string? ModalTitle { get; set; }
@@ -61,6 +61,4 @@
     public string? ModalBodyClasses { get; set; }
     [Parameter]
     public string? ModalFooterClasses { get; set; }
-
-
 }
