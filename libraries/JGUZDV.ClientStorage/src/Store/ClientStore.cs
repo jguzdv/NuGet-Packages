@@ -196,12 +196,12 @@ public class ClientStore : IDisposable
             StoreEntryLoaded?.Invoke(context);
             return new() { Context = context, Entry = item };
         }
-        catch
+        catch (Exception e)
         {
             item = _cache.Get<StoreEntry<T>>(key);
             if (forceLoad && item != null)
             {
-                var ctx = new LoadingContext { Key = key, LoadedFromCache = true };
+                var ctx = new LoadingContext { Key = key, LoadedFromCache = true, Exception = e };
                 StoreEntryLoaded?.Invoke(ctx);
                 return new() { Context = ctx, Entry = item };
             }
@@ -209,7 +209,7 @@ public class ClientStore : IDisposable
             //load persisted data
             item = (await _storage.GetItem<StoreEntry<T>>(key)) ?? throw new InvalidOperationException("Could not fall back to persisted storage");
 
-            var context = new LoadingContext { Key = key, LoadedFromStorage = true };
+            var context = new LoadingContext { Key = key, LoadedFromStorage = true, Exception = e };
             StoreEntryLoaded?.Invoke(context);
             return new() { Context = context, Entry = item };
         }

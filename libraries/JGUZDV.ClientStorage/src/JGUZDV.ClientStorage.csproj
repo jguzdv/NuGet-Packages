@@ -7,7 +7,7 @@
 
         <PackageId>JGUZDV.ClientStorage</PackageId>
         <IsPackable>true</IsPackable>
-        <Version>1.0.2</Version>
+        <Version>1.0.3</Version>
         <Authors>Aaron Puhl</Authors>
         <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
         <PackageDescription>Storage solution for caching and offline support</PackageDescription>
