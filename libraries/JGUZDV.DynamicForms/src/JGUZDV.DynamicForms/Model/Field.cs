@@ -76,7 +76,7 @@ public class Field : IValidatableObject
         }
         else
         {
-            val = ((IList)Activator.CreateInstance(typeof(List<>).MakeGenericType(ValueType.Type))!).OfType<object>().ToList();
+            val = ((IList)Activator.CreateInstance(typeof(List<>).MakeGenericType(ValueType.ClrType))!).OfType<object>().ToList();
             val.Add(Value);
         }
 
