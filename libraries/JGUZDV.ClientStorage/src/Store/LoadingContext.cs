@@ -24,4 +24,9 @@ public class LoadingContext
     /// The key of the loaded entry
     /// </summary>
     public required string Key { get; set; }
+
+    /// <summary>
+    /// Exception that occured during loading
+    /// </summary>
+    public Exception? Exception { get; set; }
 }

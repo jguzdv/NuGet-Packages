@@ -21,21 +21,21 @@
     private readonly string _componentId = Guid.NewGuid().ToString();
     protected TaskCompletionSource<ModalResult> _taskCompletionSource = new();
 
-    private RenderFragment<ModalContext>? _renderFragment;
-    private ModalContext? _context;
+    private RenderFragment<ModalContext<TModel>>? _renderFragment;
+    private ModalContext<TModel>? _context;
 
     [Parameter]
-    public RenderFragment<ModalContext>? ChildContent { get; set; }
+    public RenderFragment<ModalContext<TModel>>? ChildContent { get; set; }
 
     [Parameter]
-    public RenderFragment<ModalContext>? Content { get; set; }
+    public RenderFragment<ModalContext<TModel>>? Content { get; set; }
 
     [Parameter]
-    public RenderFragment<ModalContext>? Header { get; set; }
+    public RenderFragment<ModalContext<TModel>>? Header { get; set; }
     [Parameter]
-    public RenderFragment<ModalContext>? Body { get; set; }
+    public RenderFragment<ModalContext<TModel>>? Body { get; set; }
     [Parameter]
-    public RenderFragment<ModalContext>? Footer { get; set; }
+    public RenderFragment<ModalContext<TModel>>? Footer { get; set; }
 
 
     [Parameter]
@@ -64,7 +64,7 @@
         if (Body != null && Content != null)
             throw new InvalidOperationException($"{nameof(Body)} may not be set, if {nameof(Content)} is set.");
 
-        RenderFragment<ModalContext>? content = Body == null
+        RenderFragment<ModalContext<TModel>>? content = Body == null
             ? Content
             : (ctx) =>
                 @<div class="modal-content">
@@ -108,7 +108,7 @@
 
     public Task<ModalResult> ShowModal(TModel model)
     {
-        _context = new ModalContext(this, model);
+        _context = new ModalContext<TModel>(this, model);
         StateHasChanged();
 
         _ = _jsModule!.InvokeVoidAsync("OpenDialog", _componentId);
@@ -132,17 +132,12 @@
     public void Dismiss()
         => Close(ModalResult.Dismissed);
 
-    public class ModalContext
+    [Obsolete("Use ModalContext<TModel> instead.")]
+    public class ModalContext : ModalContext<TModel>
     {
         [SetsRequiredMembers]
         public ModalContext(Modal<TModel> modal, TModel model)
-        {
-            Modal = modal;
-            Model = model;
-        }
-
-        public Modal<TModel> Modal { get; }
-
-        public TModel Model { get; set; }
+            : base(modal, model)
+        { }
     }
 }
