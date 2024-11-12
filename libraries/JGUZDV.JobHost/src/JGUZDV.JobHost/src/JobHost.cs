@@ -33,9 +33,9 @@ namespace JGUZDV.JobHost
                                     x.AwaitApplicationStarted = true;
                                 });
 
-                                var allowDebugging = ctx.Configuration.GetValue<bool?>($"{Constants.DefaultConfigSection}:AllowDebugging") ?? false;
+                                var disableJobSelection = ctx.Configuration.GetValue<bool?>($"{Constants.DefaultConfigSection}:DisableDevelopmentJobSelection") ?? false;
 
-                                if (ctx.HostingEnvironment.IsDevelopment() && allowDebugging)
+                                if (ctx.HostingEnvironment.IsDevelopment() && !disableJobSelection)
                                     services.AddHostedService<JobHostDebugService>();
                             })
                            .UseJGUZDVLogging()

@@ -43,7 +43,7 @@ namespace JGUZDV.JobHost
             {
                 Console.WriteLine("\nType number of Job you want to Execute");
 
-                if (int.TryParse(Console.ReadLine(), out int selectedJob) && (keys.Count - selectedJob > 0))
+                if (int.TryParse(Console.ReadLine(), out int selectedJob) && selectedJob < keys.Count)
                     job = keys[selectedJob];
 
             } while (job == null);
