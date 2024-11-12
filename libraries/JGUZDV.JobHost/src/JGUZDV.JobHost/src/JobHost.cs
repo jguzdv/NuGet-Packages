@@ -33,7 +33,9 @@ namespace JGUZDV.JobHost
                                     x.AwaitApplicationStarted = true;
                                 });
 
-                                if (ctx.HostingEnvironment.IsDevelopment())
+                                var allowDebugging = ctx.Configuration.GetValue<bool?>($"{Constants.DefaultConfigSection}:AllowDebugging") ?? false;
+
+                                if (ctx.HostingEnvironment.IsDevelopment() && allowDebugging)
                                     services.AddHostedService<JobHostDebugService>();
                             })
                            .UseJGUZDVLogging()
@@ -144,8 +146,8 @@ namespace JGUZDV.JobHost
         {
             if (ctx.Properties.ContainsKey(Constants.UsesDashboard) && ctx.Properties[Constants.UsesDashboard] as bool? == true)
             {
-                services.AddScoped<TJob>();
-                services.AddScoped(x => new RegisterJob(typeof(TJob), cronSchedule));
+                services.AddSingleton<TJob>();
+                services.AddSingleton(x => new RegisterJob(typeof(TJob), cronSchedule));
             }
             else
             {

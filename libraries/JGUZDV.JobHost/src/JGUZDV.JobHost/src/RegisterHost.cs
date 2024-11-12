@@ -20,7 +20,7 @@ namespace JGUZDV.JobHost
         private readonly IOptions<JobReportOptions> _options;
 
         public RegisterHost(IJobExecutionManager reporter,
-            IEnumerable<RegisterJob> jobs, // TODO: RegisterJobs need to be injected in a different way since they are scoped but the RehisterHost is a singleton
+            IEnumerable<RegisterJob> jobs,
             ISchedulerFactory schedulerFactory,
             ILogger<RegisterHost> logger,
             IOptions<JobReportOptions> options)

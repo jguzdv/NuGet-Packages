@@ -30,19 +30,22 @@ namespace JGUZDV.JobHost
             var scheduler = _schedulerFactory.GetScheduler().Result;
 
             scheduler.PauseJobs(GroupMatcher<JobKey>.AnyGroup());
-            var keys = scheduler.GetJobKeys(GroupMatcher<JobKey>.AnyGroup()).Result;
+            var keys = scheduler.GetJobKeys(GroupMatcher<JobKey>.AnyGroup()).Result.ToList();
 
-            Console.WriteLine("Available Jobs:");
-            foreach (var key in keys)
+            Console.WriteLine("Available Jobs:\n");
+            for (var i = 0; i < keys.Count; i++)
             {
-                Console.WriteLine(key.Name);
+                Console.WriteLine($"{i}: {keys[i].Name}");
             }
 
-            JobKey? job;
+            JobKey? job = null;
             do
             {
-                Console.WriteLine("Type name of Job you want to Execute");
-                job = keys.FirstOrDefault(k => k.Name.Equals(Console.ReadLine(), StringComparison.OrdinalIgnoreCase));
+                Console.WriteLine("\nType number of Job you want to Execute");
+
+                if (int.TryParse(Console.ReadLine(), out int selectedJob) && (keys.Count - selectedJob > 0))
+                    job = keys[selectedJob];
+
             } while (job == null);
 
             scheduler.TriggerJob(job);
