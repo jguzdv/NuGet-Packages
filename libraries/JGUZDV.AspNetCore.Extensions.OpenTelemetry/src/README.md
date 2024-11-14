@@ -73,7 +73,7 @@ public class MeterContainer : AbstractJguZdvMeter
             description: "An example counter for your webapp.");
     }
 
-
+    // Call this to send count metrics.
     public void CountExample()
     {
         _exampleCounter.Add(1)
