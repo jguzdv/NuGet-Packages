@@ -27,16 +27,11 @@ public static class JGUZDVAspNetCoreOpenTelemetryExtensions
     /// <exception cref="ArgumentException">If config parameters are not valid</exception>
     public static WebApplicationBuilder AddJGUZDVOpenTelemetry(this WebApplicationBuilder builder)
     {
-        var loggerFactory = LoggerFactory.Create(
-            loggingBuilder => loggingBuilder
-                .AddConfiguration(builder.Configuration)
-                .AddConsole()
-                .AddDebug()
-        );
-
         // Create a logger to give some startup information. As OpenTelemetry and Azure Monitor is very 'quiet', these
         // are the only informations we will get during startup.
-        var logger = loggerFactory.CreateLogger("JGUZDVAspNetCoreOpenTelemetryExtensions");
+        var sp = builder.Services.BuildServiceProvider();
+        var loggerFactory = sp.GetRequiredService<ILoggerFactory>();
+        var logger = loggerFactory.CreateLogger("JGUZDV.AspNetCore.OpenTelemetry.Extensions");
 
         // Get OpenTelemetry section from appsettings.
         var settings = builder.Configuration.GetSection("OpenTelemetry");
@@ -92,7 +87,7 @@ public static class JGUZDVAspNetCoreOpenTelemetryExtensions
             });
 
             logger?.LogInformation("JGUZDV OpenTelemetry: UseMeter active. Initialized a meter with " +
-                "name {ot.meter.name}", otOptions.UseMeter.MeterName);
+                $"name {otOptions.UseMeter.MeterName}");
         }
         else
         {
