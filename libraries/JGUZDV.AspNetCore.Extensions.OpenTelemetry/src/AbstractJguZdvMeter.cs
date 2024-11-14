@@ -22,7 +22,7 @@ namespace JGUZDV.AspNetCore.Extensions.OpenTelemetry
         /// <summary>
         /// The one and only meter instance that must be used to transmit values to Azure Monitor.
         /// </summary>
-        protected readonly Meter _otMeter;
+        protected Meter Meter { get; }
 
 
         /// <summary>
@@ -38,7 +38,13 @@ namespace JGUZDV.AspNetCore.Extensions.OpenTelemetry
                 throw new ArgumentException("Can only be used if UseMeter is completly configured in appsettings.");
             }
 
-            _otMeter = new Meter(_options.Value.UseMeter!.MeterName, options.Value.UseMeter!.MeterVersion);
+            if(string.IsNullOrWhiteSpace(_options.Value.UseMeter.MeterName) 
+                    || string.IsNullOrWhiteSpace(_options.Value.UseMeter.MeterVersion))
+            {
+                throw new ArgumentException("MeterName and MeterVersion must be set to reasonable values.");
+            }
+
+            Meter = new Meter(_options.Value.UseMeter!.MeterName, options.Value.UseMeter!.MeterVersion);
         }
     }
 }
