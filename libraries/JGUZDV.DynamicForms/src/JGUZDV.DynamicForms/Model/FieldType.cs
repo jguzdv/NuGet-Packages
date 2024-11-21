@@ -37,15 +37,7 @@ public abstract class FieldType
         return JsonSerializer.Deserialize<FieldType>(json, options);
     }
 
-    public static JsonPolymorphismOptions JsonPolymorphismOptions =
-        new JsonPolymorphismOptions()
-        {
-            UnknownDerivedTypeHandling = JsonUnknownDerivedTypeHandling.FailSerialization,
-            DerivedTypes =
-            {
-                new JsonDerivedType(typeof(DateOnlyFieldType), nameof(DateOnlyFieldType)),
-            }
-        };
+    private static JsonPolymorphismOptions JsonPolymorphismOptions => BuildJsonPolymorphismOptions();
 
     public static List<FieldType> KnownFieldTypes = new()
     {
@@ -53,20 +45,31 @@ public abstract class FieldType
         new IntFieldType(),
         new StringFieldType(),
     };
+
+    private static JsonPolymorphismOptions BuildJsonPolymorphismOptions()
+    {
+        var options = new JsonPolymorphismOptions
+        {
+            UnknownDerivedTypeHandling = JsonUnknownDerivedTypeHandling.FailSerialization
+        };
+
+        foreach (var fieldType in KnownFieldTypes)
+        {
+            options.DerivedTypes.Add(new JsonDerivedType(fieldType.GetType(), fieldType.GetType().Name));
+        }
+
+        return options;
+    }
 }
 
 public class DateOnlyFieldType : FieldType
 {
     public override Type ClrType => typeof(DateOnly);
-
-
 }
 
 public class IntFieldType : FieldType
 {
     public override Type ClrType => typeof(int);
-
-    
 }
 
 public class StringFieldType : FieldType

@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\JGUZDV.L10n\src\JGUZDV.L10n.csproj" />
+  </ItemGroup>
+
 </Project>

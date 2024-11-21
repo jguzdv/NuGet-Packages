@@ -13,6 +13,12 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.10" />
+    <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="9.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\JGUZDV.Blazor.Components.L10n\src\JGUZDV.Blazor.Components.L10n.csproj" />
+    <ProjectReference Include="..\JGUZDV.DynamicForms\JGUZDV.DynamicForms.csproj" />
   </ItemGroup>
 
 </Project>

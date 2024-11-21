@@ -197,7 +197,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.DynamicForms.Samples
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.DynamicForms.Samples.Client", "libraries\JGUZDV.DynamicForms\samples\JGUZDV.DynamicForms.Samples\JGUZDV.DynamicForms.Samples.Client\JGUZDV.DynamicForms.Samples.Client.csproj", "{75832FE2-0A74-4F72-A1C2-83875643680C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.DynamicForms.Blazor", "libraries\JGUZDV.DynamicForms\src\JGUZDV.DynamicForms.Blazor\JGUZDV.DynamicForms.Blazor.csproj", "{905079DA-5CB7-4A3C-85BD-BFDB2A225669}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.DynamicForms.Blazor", "libraries\JGUZDV.DynamicForms\src\JGUZDV.DynamicForms.Blazor\JGUZDV.DynamicForms.Blazor.csproj", "{905079DA-5CB7-4A3C-85BD-BFDB2A225669}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1086,8 +1086,8 @@ Global
 		{905079DA-5CB7-4A3C-85BD-BFDB2A225669} = {D71AD329-3074-48E8-863E-D1B64A5589D6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		RESX_SortFileContentOnSave = True
-		RESX_NeutralResourcesLanguage = de-DE
 		SolutionGuid = {46ECC226-1874-4539-8589-8B2029909C4A}
+		RESX_NeutralResourcesLanguage = de-DE
+		RESX_SortFileContentOnSave = True
 	EndGlobalSection
 EndGlobal

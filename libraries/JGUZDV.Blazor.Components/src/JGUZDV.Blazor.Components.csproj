@@ -28,6 +28,7 @@
         <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="[7.0.0,)" />
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="[7.0.0,)" />
         <PackageReference Include="Microsoft.Bcl.TimeProvider" Version="[8.0.0,)" />
+        <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.0" />
     </ItemGroup>
 
     <ItemGroup>

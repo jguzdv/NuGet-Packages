@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using JGUZDV.L10n;
 
 namespace JGUZDV.DynamicForms.Model;
 
@@ -10,12 +11,12 @@ public class InputDefinition : IValidatableObject
         Id = Name;
     }
 
-    public string Label { get; set; } = "";
-    //public L10nString Label { get; set; } = new();
+    public L10nString Label { get; set; } = new();
 
     public string Name { get; set; }
     public string Id { get; set; }
-    public string Type { get; set; } = "";
+    public string Type { get; set; } 
+
     public string InputType { get; set; } = "text";
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
@@ -29,8 +30,8 @@ public class InputDefinition : IValidatableObject
 public class ChoiceOption : IValidatableObject
 {
     public string? Value { get; set; }
-    //public L10nString Name { get; set; } = new();
-    public string Name { get; set; } = "new()";
+
+    public L10nString Name { get; set; } = new();
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
@@ -47,8 +48,7 @@ public class FieldDefinition : IValidatableObject
 
     public List<ChoiceOption> ChoiceOptions { get; set; } = new();
 
-    //public L10nString Description { get; set; } = new();
-    public string Description { get; set; } = "";
+    public L10nString Description { get; set; } = new();
 
     public bool IsList { get; set; }
 
@@ -57,29 +57,12 @@ public class FieldDefinition : IValidatableObject
     public List<Constraint> Constraints { get; set; } = new();
     public bool IsRequired { get; set; }
 
-    private bool _isResource;
-    public bool IsResource
-    {
-        get => _isResource;
-        set
-        {
-            _isResource = value;
-            if (_isResource)
-                InputDefinition.Type = typeof(string).Name;
-        }
-    }
-
-    public int? ResourceTypeId { get; set; }
-
     // das muss auch eine resource sein können
     // wir brauchen constraints, typ abhhängig "optional,max,min,default value, validateSet",
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
         var errors = new List<ValidationResult>();
         errors.AddRange(InputDefinition.Validate(validationContext).ToList());
-
-        if (IsResource && !ResourceTypeId.HasValue)
-            errors.Add(new ValidationResult("ResourceType muss gesetzt sein, wenn das Feld eine Ressource definiert", new string[] { nameof(ResourceTypeId) }));
 
         if (SortKey < 0)
             errors = errors.Append(new ValidationResult("SortKey muss positiv sein", new string[] { nameof(SortKey) })).ToList();
