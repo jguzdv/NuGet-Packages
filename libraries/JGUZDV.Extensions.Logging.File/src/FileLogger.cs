@@ -1,4 +1,5 @@
-﻿using System.Runtime.Versioning;
+﻿using System.Runtime.CompilerServices;
+using System.Runtime.Versioning;
 
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -22,7 +23,7 @@ internal sealed class FileLogger : ILogger, IBufferedLogger
         IExternalScopeProvider? scopeProvider,
         FileLoggerOptions options)
     {
-        ThrowHelper.ThrowIfNull(name);
+        ArgumentException.ThrowIfNullOrEmpty(name, nameof(name));
 
         _name = name;
         _queueProcessor = loggerProcessor;
@@ -35,8 +36,7 @@ internal sealed class FileLogger : ILogger, IBufferedLogger
     internal IExternalScopeProvider? ScopeProvider { get; set; }
     internal FileLoggerOptions Options { get; set; }
 
-    [ThreadStatic]
-    private static StringWriter? t_stringWriter;
+    const int DefaultBufferSize = 1024;
 
     /// <inheritdoc />
     public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
@@ -46,52 +46,28 @@ internal sealed class FileLogger : ILogger, IBufferedLogger
             return;
         }
 
-        ThrowHelper.ThrowIfNull(formatter);
+        ArgumentNullException.ThrowIfNull(formatter, nameof(formatter));
 
-        t_stringWriter ??= new StringWriter();
+        var message = new MemoryStream(DefaultBufferSize);
         LogEntry<TState> logEntry = new LogEntry<TState>(logLevel, _name, eventId, state, exception, formatter);
-        Formatter.Write(in logEntry, ScopeProvider, t_stringWriter);
+        Formatter.Write(in logEntry, ScopeProvider, message);
 
-        var sb = t_stringWriter.GetStringBuilder();
-        if (sb.Length == 0)
-        {
-            return;
-        }
-        string computedAnsiString = sb.ToString();
-        sb.Clear();
-        if (sb.Capacity > 1024)
-        {
-            sb.Capacity = 1024;
-        }
-        _queueProcessor.EnqueueMessage(new LogMessageEntry(computedAnsiString, logAsError: logLevel >= Options.LogToStandardErrorThreshold));
+        _queueProcessor.EnqueueMessage(message);
     }
 
     /// <inheritdoc />
     public void LogRecords(IEnumerable<BufferedLogRecord> records)
     {
-        ThrowHelper.ThrowIfNull(records);
+        ArgumentNullException.ThrowIfNull(records, nameof(records));
 
-        StringWriter writer = t_stringWriter ??= new StringWriter();
-
-        var sb = writer.GetStringBuilder();
         foreach (var rec in records)
         {
+            var message = new MemoryStream(DefaultBufferSize);
+
             var logEntry = new LogEntry<BufferedLogRecord>(rec.LogLevel, _name, rec.EventId, rec, null, static (s, _) => s.FormattedMessage ?? string.Empty);
-            Formatter.Write(in logEntry, null, writer);
+            Formatter.Write(in logEntry, null, message);
 
-            if (sb.Length == 0)
-            {
-                continue;
-            }
-
-            string computedAnsiString = sb.ToString();
-            sb.Clear();
-            _queueProcessor.EnqueueMessage(new LogMessageEntry(computedAnsiString, logAsError: rec.LogLevel >= Options.LogToStandardErrorThreshold));
-        }
-
-        if (sb.Capacity > 1024)
-        {
-            sb.Capacity = 1024;
+            _queueProcessor.EnqueueMessage(message);
         }
     }
 
@@ -102,5 +78,6 @@ internal sealed class FileLogger : ILogger, IBufferedLogger
     }
 
     /// <inheritdoc />
-    public IDisposable BeginScope<TState>(TState state) where TState : notnull => ScopeProvider?.Push(state) ?? NullScope.Instance;
+    public IDisposable BeginScope<TState>(TState state) where TState : notnull 
+        => ScopeProvider?.Push(state) ?? NullScope.Instance;
 }

@@ -1,11 +1,8 @@
 ﻿using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Console;
 using Microsoft.Extensions.Options;
 
 namespace JGUZDV.Extensions.Logging.File;
@@ -15,12 +12,12 @@ namespace JGUZDV.Extensions.Logging.File;
 /// </summary>
 [UnsupportedOSPlatform("browser")]
 [ProviderAlias("File")]
-public partial class FileLoggerProvider : ILoggerProvider, ISupportExternalScope
+public class FileLoggerProvider : ILoggerProvider, ISupportExternalScope
 {
     private readonly IOptionsMonitor<FileLoggerOptions> _options;
     private readonly ConcurrentDictionary<string, FileLogger> _loggers;
     private ConcurrentDictionary<string, FileFormatter> _formatters;
-    private readonly FileLoggerProcessor _messageQueue;
+    private readonly FileLoggingProcessor _fileWriter;
 
     private readonly IDisposable? _optionsReloadToken;
     private IExternalScopeProvider _scopeProvider = NullExternalScopeProvider.Instance;
@@ -42,21 +39,9 @@ public partial class FileLoggerProvider : ILoggerProvider, ISupportExternalScope
         _options = options;
         _loggers = new ConcurrentDictionary<string, FileLogger>();
         SetFormatters(formatters);
-        IConsole? console;
-        IConsole? errorConsole;
-        if (DoesConsoleSupportAnsi())
-        {
-            console = new AnsiLogConsole();
-            errorConsole = new AnsiLogConsole(stdErr: true);
-        }
-        else
-        {
-            console = new AnsiParsingLogConsole();
-            errorConsole = new AnsiParsingLogConsole(stdErr: true);
-        }
-        _messageQueue = new ConsoleLoggerProcessor(
-            console,
-            errorConsole,
+        
+        _fileWriter = new FileLoggingProcessor(
+
             options.CurrentValue.QueueFullMode,
             options.CurrentValue.MaxQueueLength);
 
@@ -108,8 +93,8 @@ public partial class FileLoggerProvider : ILoggerProvider, ISupportExternalScope
 #pragma warning restore CS0618
         }
 
-        _messageQueue.FullMode = options.QueueFullMode;
-        _messageQueue.MaxQueueLength = options.MaxQueueLength;
+        _fileWriter.FullMode = options.QueueFullMode;
+        _fileWriter.MaxQueueLength = options.MaxQueueLength;
 
         foreach (KeyValuePair<string, FileLogger> logger in _loggers)
         {
@@ -139,7 +124,7 @@ public partial class FileLoggerProvider : ILoggerProvider, ISupportExternalScope
 
         return _loggers.TryGetValue(name, out FileLogger? logger) ?
             logger :
-            _loggers.GetOrAdd(name, new FileLogger(name, _messageQueue, logFormatter, _scopeProvider, _options.CurrentValue));
+            _loggers.GetOrAdd(name, new FileLogger(name, _fileWriter, logFormatter, _scopeProvider, _options.CurrentValue));
     }
 
 #pragma warning disable CS0618
@@ -173,7 +158,7 @@ public partial class FileLoggerProvider : ILoggerProvider, ISupportExternalScope
     public void Dispose()
     {
         _optionsReloadToken?.Dispose();
-        _messageQueue.Dispose();
+        _fileWriter.Dispose();
     }
 
     /// <inheritdoc />

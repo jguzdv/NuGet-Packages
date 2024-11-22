@@ -32,7 +32,7 @@ public abstract class FileFormatter
     /// </remarks>
     /// <param name="logEntry">The log entry.</param>
     /// <param name="scopeProvider">The provider of scope data.</param>
-    /// <param name="textWriter">The string writer embedding ansi code for colors.</param>
+    /// <param name="targetStream">The stream where we'll buffer bytes to be written.</param>
     /// <typeparam name="TState">The type of the object to be written.</typeparam>
-    public abstract void Write<TState>(in LogEntry<TState> logEntry, IExternalScopeProvider? scopeProvider, TextWriter textWriter);
+    public abstract void Write<TState>(in LogEntry<TState> logEntry, IExternalScopeProvider? scopeProvider, Stream targetStream);
 }
