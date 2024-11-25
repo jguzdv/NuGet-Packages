@@ -5,14 +5,6 @@
 /// </summary>
 public class FileLoggerOptions
 {
-    /// <summary>
-    /// Gets or sets the name of the log message formatter to use.
-    /// </summary>
-    /// <value>
-    /// The default value is <see langword="plain" />.
-    /// </value>
-    public string FormatterName { get; set; } = FileFormatterNames.Plain;
-
     private FileLoggerQueueFullMode _queueFullMode = FileLoggerQueueFullMode.Wait;
     /// <summary>
     /// Gets or sets the desired console logger behavior when the queue becomes full.

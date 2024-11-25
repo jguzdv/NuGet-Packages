@@ -1,5 +1,4 @@
 ﻿using System.Collections.Concurrent;
-using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Versioning;
 
 using Microsoft.Extensions.Logging;
@@ -16,7 +15,7 @@ public class FileLoggerProvider : ILoggerProvider, ISupportExternalScope
 {
     private readonly TimeProvider _timeProvider;
     private readonly IOptionsMonitor<FileLoggerOptions> _options;
-    private FileFormatter _formatter;
+    private readonly FileFormatter _formatter;
 
     private readonly ConcurrentDictionary<string, FileLogger> _loggers;
 
@@ -31,44 +30,19 @@ public class FileLoggerProvider : ILoggerProvider, ISupportExternalScope
     /// </summary>
     /// <param name="timeProvider">The time provider to use for timestamps.</param>
     /// <param name="options">The options to create <see cref="FileLogger"/> instances with.</param>
-    public FileLoggerProvider(TimeProvider timeProvider, IOptionsMonitor<FileLoggerOptions> options)
-        : this(timeProvider, options, null) { }
-
-    /// <summary>
-    /// Creates an instance of <see cref="FileLoggerProvider"/>.
-    /// </summary>
-    /// <param name="timeProvider">The time provider to use for timestamps.</param>
-    /// <param name="options">The options to create <see cref="FileLogger"/> instances with.</param>
     /// <param name="formatter">Log formatter used for <see cref="FileLogger"/> instances.</param>
-    public FileLoggerProvider(TimeProvider timeProvider, IOptionsMonitor<FileLoggerOptions> options, FileFormatter? formatter)
+    public FileLoggerProvider(TimeProvider timeProvider, IOptionsMonitor<FileLoggerOptions> options, FileFormatter formatter)
     {
         _timeProvider = timeProvider;
         _options = options;
         _loggers = new ConcurrentDictionary<string, FileLogger>();
-        
-        SetFormatter(formatter);
-        
+
+        _formatter = formatter;
+
         _fileWriter = new FileLoggingProcessor(options.CurrentValue, _timeProvider, _formatter.Options.FileExtension);
         _optionsReloadToken = _options.OnChange(ReloadLoggerOptions);
     }
 
-
-    [MemberNotNull(nameof(_formatter))]
-    private void SetFormatter(FileFormatter? formatter = null)
-    {
-        if (formatter != null)
-        {
-            _formatter = formatter;
-            return;
-        }
-
-        _formatter = _options.CurrentValue.FormatterName switch
-        {
-            FileFormatterNames.Plain => new PlainTextFileFormatter(new FormatterOptionsMonitor<PlainTextFileFormatterOptions>(new ())),
-            FileFormatterNames.Json => new JsonFileFormatter(new FormatterOptionsMonitor<JsonFileFormatterOptions>(new ())),
-            _ => throw new NotSupportedException($"The formatter '{_options.CurrentValue.FormatterName}' is not supported.")
-        };
-    }
 
     // warning:  ReloadLoggerOptions can be called before the ctor completed,... before registering all of the state used in this method need to be initialized
     private void ReloadLoggerOptions(FileLoggerOptions options)
