@@ -155,6 +155,10 @@ namespace JGUZDV.Extensions.Logging.File
                             (currentFile, rollingNumber, availableSpace) = OpenNextFile(filePath, 0);
                         }
                     }
+                    catch
+                    {
+                        // Do nothing. Prevents throwing an exception that kills the thread.
+                    }
                     finally
                     {
                         message.Dispose();
@@ -179,7 +183,7 @@ namespace JGUZDV.Extensions.Logging.File
                 var fileInfo = new FileInfo(filePath);
                 var fileSize = fileInfo.Exists ? fileInfo.Length : 0L;
 
-                if (fileSize < options.RollingFileSize)
+                if (fileSize >= options.RollingFileSize)
                 {
                     return GetNextRollingFile(options, ++currentRollingFileNumber);
                 }

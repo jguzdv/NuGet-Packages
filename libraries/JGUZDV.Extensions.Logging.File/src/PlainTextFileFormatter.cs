@@ -14,7 +14,7 @@ internal sealed class PlainTextFileFormatter : FileFormatter, IDisposable
     private static readonly string _messagePadding = new string(' ', GetLogLevelString(LogLevel.Information).Length + LoglevelPadding.Length);
     private static readonly string _newLineWithMessagePadding = Environment.NewLine + _messagePadding;
 
-    private static readonly byte[] _newLine = UTF8.GetBytes(Environment.NewLine);
+    private static readonly string _newLine = Environment.NewLine;
 
     private readonly IDisposable? _optionsReloadToken;
 
@@ -62,7 +62,7 @@ internal sealed class PlainTextFileFormatter : FileFormatter, IDisposable
     private void WriteInternal(IExternalScopeProvider? scopeProvider, Stream targetStream, string message, LogLevel logLevel,
         int eventId, string? exception, string category, DateTimeOffset stamp)
     {
-        using var writer = new BinaryWriter(targetStream, UTF8);
+        using var writer = new StreamWriter(targetStream, UTF8, leaveOpen: true);
 
         string ? timestamp = null;
         string? timestampFormat = FormatterOptions.TimestampFormat;
@@ -89,10 +89,10 @@ internal sealed class PlainTextFileFormatter : FileFormatter, IDisposable
         writer.Write(eventId.ToString());
 
         writer.Write("]");
-        targetStream.Write(_newLine);
+        writer.Write(_newLine);
 
         // scope information
-        WriteScopeInformation(targetStream, scopeProvider);
+        WriteScopeInformation(writer, scopeProvider);
         WriteMessage(writer, message);
 
         // Example:
@@ -105,7 +105,7 @@ internal sealed class PlainTextFileFormatter : FileFormatter, IDisposable
         }
     }
 
-    private static void WriteMessage(BinaryWriter writer, string message)
+    private static void WriteMessage(TextWriter writer, string message)
     {
         if (!string.IsNullOrEmpty(message))
         {
@@ -115,10 +115,10 @@ internal sealed class PlainTextFileFormatter : FileFormatter, IDisposable
             writer.Write(_newLine);
         }
 
-        static void WriteReplacing(BinaryWriter writer, string oldValue, string newValue, string message)
+        static void WriteReplacing(TextWriter writer, string oldValue, string newValue, string message)
         {
             string newMessage = message.Replace(oldValue, newValue);
-            writer.Write(_newLine);
+            writer.Write(newMessage);
         }
     }
 
@@ -144,7 +144,7 @@ internal sealed class PlainTextFileFormatter : FileFormatter, IDisposable
         };
     }
 
-    private void WriteScopeInformation(Stream targetStream, IExternalScopeProvider? scopeProvider)
+    private void WriteScopeInformation(TextWriter writer, IExternalScopeProvider? scopeProvider)
     {
         if (FormatterOptions.IncludeScopes && scopeProvider != null)
         {
@@ -154,19 +154,19 @@ internal sealed class PlainTextFileFormatter : FileFormatter, IDisposable
                 if (paddingNeeded)
                 {
                     paddingNeeded = false;
-                    state.Write(UTF8.GetBytes(_messagePadding));
-                    state.Write(UTF8.GetBytes("=> "));
+                    state.Write(_messagePadding);
+                    state.Write("=> ");
                 }
                 else
                 {
-                    state.Write(UTF8.GetBytes(" => "));
+                    state.Write(" => ");
                 }
-                state.Write(UTF8.GetBytes(scope?.ToString() ?? ""));
-            }, targetStream);
+                state.Write(scope?.ToString() ?? "");
+            }, writer);
 
             if (!paddingNeeded)
             {
-                targetStream.Write(_newLine);
+                writer.Write(_newLine);
             }
         }
     }

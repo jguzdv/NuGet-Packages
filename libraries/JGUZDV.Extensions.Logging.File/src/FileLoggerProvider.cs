@@ -40,7 +40,7 @@ public class FileLoggerProvider : ILoggerProvider, ISupportExternalScope
         _formatter = formatter;
 
         _fileWriter = new FileLoggingProcessor(options.CurrentValue, _timeProvider, _formatter.Options.FileExtension);
-        _optionsReloadToken = _options.OnChange(ReloadLoggerOptions);
+        //_optionsReloadToken = _options.OnChange(ReloadLoggerOptions);
     }
 
 
