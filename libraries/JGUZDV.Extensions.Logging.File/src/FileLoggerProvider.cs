@@ -14,9 +14,13 @@ namespace JGUZDV.Extensions.Logging.File;
 [ProviderAlias("File")]
 public class FileLoggerProvider : ILoggerProvider, ISupportExternalScope
 {
+    private readonly TimeProvider _timeProvider;
     private readonly IOptionsMonitor<FileLoggerOptions> _options;
+    private FileFormatter _formatter;
+
     private readonly ConcurrentDictionary<string, FileLogger> _loggers;
-    private ConcurrentDictionary<string, FileFormatter> _formatters;
+
+
     private readonly FileLoggingProcessor _fileWriter;
 
     private readonly IDisposable? _optionsReloadToken;
@@ -25,134 +29,61 @@ public class FileLoggerProvider : ILoggerProvider, ISupportExternalScope
     /// <summary>
     /// Creates an instance of <see cref="FileLoggerProvider"/>.
     /// </summary>
+    /// <param name="timeProvider">The time provider to use for timestamps.</param>
     /// <param name="options">The options to create <see cref="FileLogger"/> instances with.</param>
-    public FileLoggerProvider(IOptionsMonitor<FileLoggerOptions> options)
-        : this(options, Array.Empty<FileFormatter>()) { }
+    public FileLoggerProvider(TimeProvider timeProvider, IOptionsMonitor<FileLoggerOptions> options)
+        : this(timeProvider, options, null) { }
 
     /// <summary>
     /// Creates an instance of <see cref="FileLoggerProvider"/>.
     /// </summary>
+    /// <param name="timeProvider">The time provider to use for timestamps.</param>
     /// <param name="options">The options to create <see cref="FileLogger"/> instances with.</param>
-    /// <param name="formatters">Log formatters added for <see cref="FileLogger"/> instances.</param>
-    public FileLoggerProvider(IOptionsMonitor<FileLoggerOptions> options, IEnumerable<FileFormatter>? formatters)
+    /// <param name="formatter">Log formatter used for <see cref="FileLogger"/> instances.</param>
+    public FileLoggerProvider(TimeProvider timeProvider, IOptionsMonitor<FileLoggerOptions> options, FileFormatter? formatter)
     {
+        _timeProvider = timeProvider;
         _options = options;
         _loggers = new ConcurrentDictionary<string, FileLogger>();
-        SetFormatters(formatters);
         
-        _fileWriter = new FileLoggingProcessor(
-
-            options.CurrentValue.QueueFullMode,
-            options.CurrentValue.MaxQueueLength);
-
-        ReloadLoggerOptions(options.CurrentValue);
+        SetFormatter(formatter);
+        
+        _fileWriter = new FileLoggingProcessor(options.CurrentValue, _timeProvider, _formatter.Options.FileExtension);
         _optionsReloadToken = _options.OnChange(ReloadLoggerOptions);
     }
 
 
-    [MemberNotNull(nameof(_formatters))]
-    private void SetFormatters(IEnumerable<FileFormatter>? formatters = null)
+    [MemberNotNull(nameof(_formatter))]
+    private void SetFormatter(FileFormatter? formatter = null)
     {
-        var cd = new ConcurrentDictionary<string, FileFormatter>(StringComparer.OrdinalIgnoreCase);
-
-        bool added = false;
-        if (formatters != null)
+        if (formatter != null)
         {
-            foreach (FileFormatter formatter in formatters)
-            {
-                cd.TryAdd(formatter.Name, formatter);
-                added = true;
-            }
+            _formatter = formatter;
+            return;
         }
 
-        if (!added)
+        _formatter = _options.CurrentValue.FormatterName switch
         {
-            cd.TryAdd(FileFormatterNames.Plain, new PlainTextFileFormatter(new FormatterOptionsMonitor<PlainTextFileFormatterOptions>(new PlainTextFileFormatterOptions())));
-            cd.TryAdd(FileFormatterNames.Json, new JsonFileFormatter(new FormatterOptionsMonitor<JsonFileFormatterOptions>(new JsonFileFormatterOptions())));
-            //cd.TryAdd(FileFormatterNames.StructuredLog, new SystemdConsoleFormatter(new FormatterOptionsMonitor<ConsoleFormatterOptions>(new ConsoleFormatterOptions())));
-        }
-
-        _formatters = cd;
+            FileFormatterNames.Plain => new PlainTextFileFormatter(new FormatterOptionsMonitor<PlainTextFileFormatterOptions>(new ())),
+            FileFormatterNames.Json => new JsonFileFormatter(new FormatterOptionsMonitor<JsonFileFormatterOptions>(new ())),
+            _ => throw new NotSupportedException($"The formatter '{_options.CurrentValue.FormatterName}' is not supported.")
+        };
     }
 
     // warning:  ReloadLoggerOptions can be called before the ctor completed,... before registering all of the state used in this method need to be initialized
     private void ReloadLoggerOptions(FileLoggerOptions options)
     {
-        if (options.FormatterName == null || !_formatters.TryGetValue(options.FormatterName, out FileFormatter? logFormatter))
-        {
-#pragma warning disable CS0618
-            logFormatter = options.Format switch
-            {
-                FileLoggerFormat.Systemd => _formatters[FileFormatterNames.Systemd],
-                _ => _formatters[FileFormatterNames.Simple],
-            };
-            if (options.FormatterName == null)
-            {
-                UpdateFormatterOptions(logFormatter, options);
-            }
-#pragma warning restore CS0618
-        }
-
-        _fileWriter.FullMode = options.QueueFullMode;
-        _fileWriter.MaxQueueLength = options.MaxQueueLength;
-
-        foreach (KeyValuePair<string, FileLogger> logger in _loggers)
-        {
-            logger.Value.Options = options;
-            logger.Value.Formatter = logFormatter;
-        }
+        _fileWriter.ChangeChannel(options, _formatter.Options.FileExtension);
     }
 
     /// <inheritdoc />
     public ILogger CreateLogger(string name)
     {
-        if (_options.CurrentValue.FormatterName == null || !_formatters.TryGetValue(_options.CurrentValue.FormatterName, out FileFormatter? logFormatter))
-        {
-#pragma warning disable CS0618
-            logFormatter = _options.CurrentValue.Format switch
-            {
-                ConsoleLoggerFormat.Systemd => _formatters[ConsoleFormatterNames.Systemd],
-                _ => _formatters[ConsoleFormatterNames.Simple],
-            };
-#pragma warning restore CS0618
-
-            if (_options.CurrentValue.FormatterName == null)
-            {
-                UpdateFormatterOptions(logFormatter, _options.CurrentValue);
-            }
-        }
-
         return _loggers.TryGetValue(name, out FileLogger? logger) ?
             logger :
-            _loggers.GetOrAdd(name, new FileLogger(name, _fileWriter, logFormatter, _scopeProvider, _options.CurrentValue));
+            _loggers.GetOrAdd(name, new FileLogger(name, _fileWriter, _formatter, _scopeProvider, _options.CurrentValue));
     }
 
-#pragma warning disable CS0618
-    private static void UpdateFormatterOptions(FileFormatter formatter, FileLoggerOptions deprecatedFromOptions)
-    {
-        // kept for deprecated apis:
-        if (formatter is PlainTextFileFormatter defaultFormatter)
-        {
-            defaultFormatter.FormatterOptions = new SimpleConsoleFormatterOptions()
-            {
-                ColorBehavior = deprecatedFromOptions.DisableColors ? LoggerColorBehavior.Disabled : LoggerColorBehavior.Default,
-                IncludeScopes = deprecatedFromOptions.IncludeScopes,
-                TimestampFormat = deprecatedFromOptions.TimestampFormat,
-                UseUtcTimestamp = deprecatedFromOptions.UseUtcTimestamp,
-            };
-        }
-        else
-        if (formatter is SystemdConsoleFormatter systemdFormatter)
-        {
-            systemdFormatter.FormatterOptions = new ConsoleFormatterOptions()
-            {
-                IncludeScopes = deprecatedFromOptions.IncludeScopes,
-                TimestampFormat = deprecatedFromOptions.TimestampFormat,
-                UseUtcTimestamp = deprecatedFromOptions.UseUtcTimestamp,
-            };
-        }
-    }
-#pragma warning restore CS0618
 
     /// <inheritdoc />
     public void Dispose()
@@ -166,7 +97,7 @@ public class FileLoggerProvider : ILoggerProvider, ISupportExternalScope
     {
         _scopeProvider = scopeProvider;
 
-        foreach (System.Collections.Generic.KeyValuePair<string, FileLogger> logger in _loggers)
+        foreach (var logger in _loggers)
         {
             logger.Value.ScopeProvider = _scopeProvider;
         }

@@ -25,14 +25,16 @@ public abstract class FileFormatter
     public string Name { get; }
 
     /// <summary>
-    /// Writes the log message to the specified TextWriter.
+    /// Writes the log message to the specified target stream.
     /// </summary>
-    /// <remarks>
-    /// If the formatter wants to write colors to the console, it can do so by embedding ANSI color codes into the string.
-    /// </remarks>
     /// <param name="logEntry">The log entry.</param>
     /// <param name="scopeProvider">The provider of scope data.</param>
     /// <param name="targetStream">The stream where we'll buffer bytes to be written.</param>
     /// <typeparam name="TState">The type of the object to be written.</typeparam>
     public abstract void Write<TState>(in LogEntry<TState> logEntry, IExternalScopeProvider? scopeProvider, Stream targetStream);
+
+    /// <summary>
+    /// Gets the options associated with the file log formatter.
+    /// </summary>
+    public abstract FileFormatterOptions Options { get; }
 }

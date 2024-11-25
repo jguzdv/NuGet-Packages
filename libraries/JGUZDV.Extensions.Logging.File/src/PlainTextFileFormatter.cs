@@ -36,6 +36,7 @@ internal sealed class PlainTextFileFormatter : FileFormatter, IDisposable
         _optionsReloadToken?.Dispose();
     }
 
+    public override FileFormatterOptions Options => FormatterOptions;
     internal PlainTextFileFormatterOptions FormatterOptions { get; set; }
 
     public override void Write<TState>(in LogEntry<TState> logEntry, IExternalScopeProvider? scopeProvider, Stream targetStream)

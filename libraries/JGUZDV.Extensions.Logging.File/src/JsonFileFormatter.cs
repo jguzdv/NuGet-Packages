@@ -186,6 +186,8 @@ internal sealed class JsonFileFormatter : FileFormatter, IDisposable
 
     private static string? ToInvariantString(object? obj) => Convert.ToString(obj, CultureInfo.InvariantCulture);
 
+    public override FileFormatterOptions Options => FormatterOptions;
+
     internal JsonFileFormatterOptions FormatterOptions { get; set; }
 
     [MemberNotNull(nameof(FormatterOptions))]

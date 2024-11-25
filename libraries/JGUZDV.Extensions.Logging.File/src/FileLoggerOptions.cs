@@ -11,7 +11,7 @@ public class FileLoggerOptions
     /// <value>
     /// The default value is <see langword="plain" />.
     /// </value>
-    public string? FormatterName { get; set; }
+    public string FormatterName { get; set; } = FileFormatterNames.Plain;
 
     private FileLoggerQueueFullMode _queueFullMode = FileLoggerQueueFullMode.Wait;
     /// <summary>
