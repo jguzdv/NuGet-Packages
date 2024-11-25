@@ -12,7 +12,9 @@ public class JsonFileFormatterOptions : FileFormatterOptions
     /// <summary>
     /// Initializes a new instance of the <see cref="JsonFileFormatterOptions"/> class.
     /// </summary>
-    public JsonFileFormatterOptions() { }
+    public JsonFileFormatterOptions() {
+        FileExtension = "log.json";
+    }
 
     /// <summary>
     /// Gets or sets JsonWriterOptions.

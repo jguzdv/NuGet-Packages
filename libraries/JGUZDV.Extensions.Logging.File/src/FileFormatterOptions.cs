@@ -39,5 +39,11 @@ public class FileFormatterOptions
     /// </value>
     public bool UseUtcTimestamp { get; set; }
 
+    /// <summary>
+    /// Gets or sets the file extension to use with this formatter - the default value is 'log' for plain text and 'log.json' for JSON.
+    /// </summary>
+    public virtual string FileExtension { get; set; } = "log";
+
+
     internal virtual void Configure(IConfiguration configuration) => configuration.Bind(this);
 }
