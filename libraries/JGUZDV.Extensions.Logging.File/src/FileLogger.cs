@@ -14,11 +14,11 @@ namespace JGUZDV.Extensions.Logging.File;
 internal sealed class FileLogger : ILogger, IBufferedLogger
 {
     private readonly string _name;
-    private readonly ConsoleLoggerProcessor _queueProcessor;
+    private readonly FileLoggingProcessor _queueProcessor;
 
     internal FileLogger(
         string name,
-        ConsoleLoggerProcessor loggerProcessor,
+        FileLoggingProcessor loggingProcessor,
         FileFormatter formatter,
         IExternalScopeProvider? scopeProvider,
         FileLoggerOptions options)
@@ -26,7 +26,7 @@ internal sealed class FileLogger : ILogger, IBufferedLogger
         ArgumentException.ThrowIfNullOrEmpty(name, nameof(name));
 
         _name = name;
-        _queueProcessor = loggerProcessor;
+        _queueProcessor = loggingProcessor;
         Formatter = formatter;
         ScopeProvider = scopeProvider;
         Options = options;
