@@ -101,9 +101,9 @@ public static class JGUZDVAspNetCoreOpenTelemetryExtensions
             options.ConnectionString = otOptions.AzureMonitor.ConnectionString;
         });
 
-        builder.Services.ConfigureOpenTelemetryTracerProvider((sp, builder) =>
-            builder.ConfigureResource(resourceBuilder => 
-                resourceBuilder.AddAttributes(attributes)));
+        // Configure the ResourceBuilder to add the custom resource attributes to all signals.
+        // Custom resource attributes should be added AFTER AzureMonitor to override the default ResourceDetectors.
+        otBuilder.ConfigureResource(resourceBuilder => resourceBuilder.AddAttributes(attributes));
 
         // Configure OpenTelemetry options for the "outside" world. Validation and defaults are set via postconfig.
         builder.Services.AddOptions<AspNetCoreOpenTelemetryOptions>()
