@@ -15,7 +15,6 @@ internal sealed class JsonFileFormatter : FileFormatter, IDisposable
     private readonly IDisposable? _optionsReloadToken;
 
     public JsonFileFormatter(IOptionsMonitor<JsonFileFormatterOptions> options)
-        : base(FileFormatterNames.Json)
     {
         ReloadLoggerOptions(options.CurrentValue);
         _optionsReloadToken = options.OnChange(ReloadLoggerOptions);

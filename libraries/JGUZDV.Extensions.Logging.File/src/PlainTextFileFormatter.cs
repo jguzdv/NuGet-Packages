@@ -19,7 +19,6 @@ internal sealed class PlainTextFileFormatter : FileFormatter, IDisposable
     private readonly IDisposable? _optionsReloadToken;
 
     public PlainTextFileFormatter(IOptionsMonitor<PlainTextFileFormatterOptions> options)
-        : base(FileFormatterNames.Plain)
     {
         ReloadLoggerOptions(options.CurrentValue);
         _optionsReloadToken = options.OnChange(ReloadLoggerOptions);

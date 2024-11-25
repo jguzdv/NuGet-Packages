@@ -8,22 +8,6 @@ namespace JGUZDV.Extensions.Logging.File;
 /// </summary>
 public abstract class FileFormatter
 {
-    // <summary>
-    /// Initializes a new instance of <see cref="FileFormatter"/>.
-    /// </summary>
-    /// <param name="name"></param>
-    protected FileFormatter(string name)
-    {
-        ArgumentException.ThrowIfNullOrEmpty(name, nameof(name));
-
-        Name = name;
-    }
-
-    /// <summary>
-    /// Gets the name associated with the console log formatter.
-    /// </summary>
-    public string Name { get; }
-
     /// <summary>
     /// Writes the log message to the specified target stream.
     /// </summary>
