@@ -1,9 +1,7 @@
-﻿using System.Runtime.CompilerServices;
-using System.Runtime.Versioning;
+﻿using System.Runtime.Versioning;
 
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.Extensions.Logging.Console;
 
 namespace JGUZDV.Extensions.Logging.File;
 

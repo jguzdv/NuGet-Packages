@@ -204,5 +204,10 @@ namespace JGUZDV.Extensions.Logging.File
         {
             FileChannel.Writer.Complete();
         }
+
+        internal void EnqueueMessage(MemoryStream message)
+        {
+            FileChannel.Writer.TryWrite(message);
+        }
     }
 }
