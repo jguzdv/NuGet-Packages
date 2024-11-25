@@ -62,7 +62,9 @@ internal sealed class PlainTextFileFormatter : FileFormatter, IDisposable
     private void WriteInternal(IExternalScopeProvider? scopeProvider, Stream targetStream, string message, LogLevel logLevel,
         int eventId, string? exception, string category, DateTimeOffset stamp)
     {
-        string? timestamp = null;
+        using var writer = new BinaryWriter(targetStream, UTF8);
+
+        string ? timestamp = null;
         string? timestampFormat = FormatterOptions.TimestampFormat;
         if (timestampFormat != null)
         {
@@ -70,28 +72,28 @@ internal sealed class PlainTextFileFormatter : FileFormatter, IDisposable
         }
         if (timestamp != null)
         {
-            targetStream.Write(UTF8.GetBytes(timestamp));
+            writer.Write(timestamp);
         }
 
-        targetStream.Write(UTF8.GetBytes(GetLogLevelString(logLevel)));
+        writer.Write(GetLogLevelString(logLevel));
 
         // Example:
         // INF: ConsoleApp.Program[10]
         //       Request received
 
         // category and event id
-        targetStream.Write(UTF8.GetBytes(LoglevelPadding));
-        targetStream.Write(UTF8.GetBytes(category));
-        targetStream.Write(UTF8.GetBytes("["));
+        writer.Write(LoglevelPadding);
+        writer.Write(category);
+        writer.Write("[");
 
-        targetStream.Write(UTF8.GetBytes(eventId.ToString()));
+        writer.Write(eventId.ToString());
 
-        targetStream.Write(UTF8.GetBytes("]"));
+        writer.Write("]");
         targetStream.Write(_newLine);
 
         // scope information
         WriteScopeInformation(targetStream, scopeProvider);
-        WriteMessage(targetStream, message);
+        WriteMessage(writer, message);
 
         // Example:
         // System.InvalidOperationException
@@ -99,24 +101,24 @@ internal sealed class PlainTextFileFormatter : FileFormatter, IDisposable
         if (exception != null)
         {
             // exception message
-            WriteMessage(targetStream, exception);
+            WriteMessage(writer, exception);
         }
     }
 
-    private static void WriteMessage(Stream targetStream, string message)
+    private static void WriteMessage(BinaryWriter writer, string message)
     {
         if (!string.IsNullOrEmpty(message))
         {
             
-            targetStream.Write(UTF8.GetBytes(_messagePadding));
-            WriteReplacing(targetStream, Environment.NewLine, _newLineWithMessagePadding, message);
-            targetStream.Write(_newLine);
+            writer.Write(_messagePadding);
+            WriteReplacing(writer, Environment.NewLine, _newLineWithMessagePadding, message);
+            writer.Write(_newLine);
         }
 
-        static void WriteReplacing(Stream targetStream, string oldValue, string newValue, string message)
+        static void WriteReplacing(BinaryWriter writer, string oldValue, string newValue, string message)
         {
             string newMessage = message.Replace(oldValue, newValue);
-            targetStream.Write(_newLine);
+            writer.Write(_newLine);
         }
     }
 
