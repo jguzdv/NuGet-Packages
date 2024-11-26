@@ -20,7 +20,7 @@ public class FileLoggerProvider : ILoggerProvider, ISupportExternalScope
     private readonly ConcurrentDictionary<string, FileLogger> _loggers;
 
 
-    private readonly FileLoggingProcessor _fileWriter;
+    private readonly FileLoggingProcessor _fileLoggingProcessor;
 
     private readonly IDisposable? _optionsReloadToken;
     private IExternalScopeProvider _scopeProvider = NullExternalScopeProvider.Instance;
@@ -39,7 +39,7 @@ public class FileLoggerProvider : ILoggerProvider, ISupportExternalScope
 
         _formatter = formatter;
 
-        _fileWriter = new FileLoggingProcessor(options.CurrentValue, _timeProvider, _formatter.Options.FileExtension);
+        _fileLoggingProcessor = new FileLoggingProcessor(options.CurrentValue, _timeProvider, _formatter.Options.FileExtension);
         //_optionsReloadToken = _options.OnChange(ReloadLoggerOptions);
     }
 
@@ -47,7 +47,7 @@ public class FileLoggerProvider : ILoggerProvider, ISupportExternalScope
     // warning:  ReloadLoggerOptions can be called before the ctor completed,... before registering all of the state used in this method need to be initialized
     private void ReloadLoggerOptions(FileLoggerOptions options)
     {
-        _fileWriter.ChangeChannel(options);
+        _fileLoggingProcessor.OnOptionsReload(options);
     }
 
     /// <inheritdoc />
@@ -55,7 +55,7 @@ public class FileLoggerProvider : ILoggerProvider, ISupportExternalScope
     {
         return _loggers.TryGetValue(name, out FileLogger? logger) ?
             logger :
-            _loggers.GetOrAdd(name, new FileLogger(name, _fileWriter, _formatter, _scopeProvider, _options.CurrentValue));
+            _loggers.GetOrAdd(name, new FileLogger(name, _fileLoggingProcessor, _formatter, _scopeProvider, _options.CurrentValue));
     }
 
 
@@ -63,7 +63,7 @@ public class FileLoggerProvider : ILoggerProvider, ISupportExternalScope
     public void Dispose()
     {
         _optionsReloadToken?.Dispose();
-        _fileWriter.Dispose();
+        _fileLoggingProcessor.Dispose();
     }
 
     /// <inheritdoc />

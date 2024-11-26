@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using IO = System.IO;
 using System.Threading.Channels;
+using System.Timers;
 
 namespace JGUZDV.Extensions.Logging.File;
 
@@ -14,11 +15,16 @@ internal class FileLoggingProcessor : IDisposable
 
     private FileWriter? _currentWriter;
 
+    private FileLoggerOptions _fileLoggerOptions;
+
     [NotNull]
-    private Channel<Stream>? _messageQueue;
+    private Channel<Stream>? _channel;
 
+    [NotNull]
+    private Task _fileProcessorTask;
 
-
+    [NotNull]
+    private System.Timers.Timer _checkProcessorTaskTimer;
     
 
 
@@ -29,13 +35,27 @@ internal class FileLoggingProcessor : IDisposable
 
         _timeProvider = timeProvider;
 
+        _fileLoggerOptions = options;
+
         InitializeChannel(options);
+        InitializeProcessorTask(options);
     }
 
 
-    public void ChangeChannel(FileLoggerOptions options)
-        => InitializeChannel(options);
+    // TODO Currently switched off / not called
+    public void OnOptionsReload(FileLoggerOptions options)
+    {
+        _fileLoggerOptions = options;
 
+        // TODO This won't work as the file that was previously written to is still open
+        InitializeChannel(_fileLoggerOptions);
+    }
+
+    /// <summary>
+    /// Make a first check for the file to write to, and set up the Consumer/Producer channel.
+    /// </summary>
+    /// <param name="options"></param>
+    /// <exception cref="InvalidOperationException"></exception>
     private void InitializeChannel(FileLoggerOptions options)
     {
         var filePath = GetFilePath(options, 0);
@@ -47,10 +67,9 @@ internal class FileLoggingProcessor : IDisposable
             }
         }
 
+        var oldChannel = _channel;
 
-        var oldChannel = _messageQueue;
-
-        _messageQueue = Channel.CreateBounded<Stream>(
+        _channel = Channel.CreateBounded<Stream>(
             new BoundedChannelOptions(options.MaxQueueLength)
         {
             FullMode = options.QueueFullMode switch
@@ -64,7 +83,29 @@ internal class FileLoggingProcessor : IDisposable
         });
 
         oldChannel?.Writer.Complete();
-        _ = ProcessMessagesAsync(_messageQueue, options);
+
+    }
+
+    /// <summary>
+    /// Initialize the processor task and a timer to restart the processor task if it faulted.
+    /// </summary>
+    /// <param name="options"></param>
+    private void InitializeProcessorTask(FileLoggerOptions options)
+    {
+        _fileProcessorTask = ProcessMessagesAsync(_channel, options);
+
+        _checkProcessorTaskTimer = new System.Timers.Timer(TimeSpan.FromMinutes(1));
+        _checkProcessorTaskTimer.Elapsed += OnTimedEvent;
+        _checkProcessorTaskTimer.AutoReset = true;
+        _checkProcessorTaskTimer.Enabled = true;
+    }
+
+    private void OnTimedEvent(Object? source, ElapsedEventArgs e)
+    {
+        if (_fileProcessorTask.IsFaulted)
+        {
+            _fileProcessorTask = ProcessMessagesAsync(_channel, _fileLoggerOptions);
+        }
     }
 
 
@@ -199,12 +240,12 @@ internal class FileLoggingProcessor : IDisposable
 
     public void Dispose()
     {
-        _messageQueue.Writer.Complete();
+        _channel.Writer.Complete();
     }
 
     internal void EnqueueMessage(MemoryStream message)
     {
-        _messageQueue.Writer.TryWrite(message);
+        _channel.Writer.TryWrite(message);
     }
 }
 
