@@ -39,9 +39,12 @@ internal class FileLoggingProcessor : IDisposable
     private void InitializeChannel(FileLoggerOptions options)
     {
         var filePath = GetFilePath(options, 0);
-        if (!FileIsWritable(filePath))
+        if(_currentWriter?.FilePath != filePath)
         {
-            throw new InvalidOperationException($"The file '{filePath}' was not writable.");
+            if (!FileIsWritable(filePath))
+            {
+                throw new InvalidOperationException($"The file '{filePath}' was not writable.");
+            }
         }
 
 
