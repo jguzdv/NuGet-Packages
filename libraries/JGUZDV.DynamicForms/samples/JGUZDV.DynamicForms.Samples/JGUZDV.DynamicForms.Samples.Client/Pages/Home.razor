@@ -1,7 +1,16 @@
 ﻿@page "/"
+@using JGUZDV.DynamicForms.Model
 
 <PageTitle>Home</PageTitle>
 
 <h1>Hello, world!</h1>
 
 Welcome to your new app.
+
+<JGUZDV.DynamicForms.Blazor.EditFieldDefinition FieldDefinition="_fieldDefinition">
+
+</JGUZDV.DynamicForms.Blazor.EditFieldDefinition>
+
+@code{
+    private FieldDefinition _fieldDefinition = new();
+}

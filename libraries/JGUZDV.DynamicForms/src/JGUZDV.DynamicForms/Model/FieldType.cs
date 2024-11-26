@@ -1,6 +1,9 @@
-﻿using System.Text.Json;
+﻿using System.Reflection;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
+
+using JGUZDV.L10n;
 
 namespace JGUZDV.DynamicForms.Model;
 
@@ -9,6 +12,9 @@ public abstract class FieldType
     [JsonIgnore]
     public abstract Type ClrType { get; }
 
+    [JsonIgnore]
+    public abstract L10nString DisplayName { get; }
+
     public virtual string ConvertFromValue(object value)
     {
         return JsonSerializer.Serialize(value);
@@ -16,28 +22,32 @@ public abstract class FieldType
 
     public virtual object ConvertToValue(string stringValue)
     {
-        return JsonSerializer.Deserialize(stringValue, ClrType);
+        return JsonSerializer.Deserialize(stringValue, ClrType) ?? throw new InvalidOperationException($"Could not parse json: {stringValue} into target type: {ClrType.Name}"); ;
     }
 
     public string ToJson()
     {
-        var options = new JsonSerializerOptions();
-        var typeInfo = new JsonSerializerOptions().GetTypeInfo(typeof(FieldType));
-        typeInfo.PolymorphismOptions = JsonPolymorphismOptions;
+        var options = new JsonSerializerOptions()
+        {
+            TypeInfoResolver = new FieldTypeResolver(),
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault
+        };
 
         return System.Text.Json.JsonSerializer.Serialize(this, options);
     }
 
     public FieldType FromJson(string json)
     {
-        var options = new JsonSerializerOptions();
-        var typeInfo = new JsonSerializerOptions().GetTypeInfo(typeof(FieldType));
-        typeInfo.PolymorphismOptions = JsonPolymorphismOptions;
+        var options = new JsonSerializerOptions()
+        {
+            TypeInfoResolver = new FieldTypeResolver(),
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault
+        };
 
-        return JsonSerializer.Deserialize<FieldType>(json, options);
+        return JsonSerializer.Deserialize<FieldType>(json, options) ?? throw new InvalidOperationException($"Could not parse json: {json}");
     }
 
-    private static JsonPolymorphismOptions JsonPolymorphismOptions => BuildJsonPolymorphismOptions();
+
 
     public static List<FieldType> KnownFieldTypes = new()
     {
@@ -60,19 +70,56 @@ public abstract class FieldType
 
         return options;
     }
+
+    private class FieldTypeResolver : DefaultJsonTypeInfoResolver
+    {
+        public override JsonTypeInfo GetTypeInfo(Type type, JsonSerializerOptions options)
+        {
+            var typeInfo = base.GetTypeInfo(type, options);
+
+            if (typeInfo.Type == typeof(FieldType))
+                typeInfo.PolymorphismOptions = BuildJsonPolymorphismOptions();
+
+            if (typeInfo.Type.IsAssignableTo(typeof(FieldType)))
+            {
+                typeInfo.Properties.Remove(typeInfo.Properties.FirstOrDefault(x => x.Name == "ClrType")!);
+            }
+
+            return typeInfo;
+        }
+    }
 }
+
 
 public class DateOnlyFieldType : FieldType
 {
     public override Type ClrType => typeof(DateOnly);
+
+    public override L10nString DisplayName => new L10nString()
+    {
+        ["de"] = "Datum",
+        ["en"] = "Date"
+    };
 }
 
 public class IntFieldType : FieldType
 {
     public override Type ClrType => typeof(int);
+
+    public override L10nString DisplayName => new L10nString()
+    {
+        ["de"] = "Ganzzahl",
+        ["en"] = "Integer"
+    };
 }
 
 public class StringFieldType : FieldType
 {
     public override Type ClrType => typeof(string);
+
+    public override L10nString DisplayName => new L10nString()
+    {
+        ["de"] = "Text",
+        ["en"] = "Text"
+    };
 }

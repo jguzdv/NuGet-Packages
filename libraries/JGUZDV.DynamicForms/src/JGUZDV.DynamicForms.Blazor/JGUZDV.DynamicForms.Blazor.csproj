@@ -21,4 +21,11 @@
     <ProjectReference Include="..\JGUZDV.DynamicForms\JGUZDV.DynamicForms.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\ComponentStrings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ComponentStrings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>

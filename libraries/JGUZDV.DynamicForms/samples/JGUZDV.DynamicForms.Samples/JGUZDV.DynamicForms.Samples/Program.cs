@@ -1,12 +1,16 @@
+using System.Globalization;
+
 using JGUZDV.DynamicForms.Samples.Client.Pages;
 using JGUZDV.DynamicForms.Samples.Components;
+using JGUZDV.Blazor.Components.L10n;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveWebAssemblyComponents();
-
+builder.Services.AddLocalization();
+builder.Services.AddSupportedCultures(["de", "en"]);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -25,6 +29,8 @@ app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 app.UseAntiforgery();
+
+app.UseRequestLocalization("de", "en");
 
 app.MapRazorComponents<App>()
     .AddInteractiveWebAssemblyRenderMode()

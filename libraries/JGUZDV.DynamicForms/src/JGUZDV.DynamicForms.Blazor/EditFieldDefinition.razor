@@ -1,69 +1,71 @@
 ﻿@page "/edit-field-definition"
 @using JGUZDV.Blazor.Components.L10n
+@using JGUZDV.DynamicForms.Blazor.Resources
 @using JGUZDV.DynamicForms.Model
 @using JGUZDV.L10n
 
 @inject NavigationManager Navigation
-@inject IStringLocalizer<EditFieldDefinition> SL
+@inject IStringLocalizer<ComponentStrings> SL
+
 
 <EditForm Model="@FieldDefinition" OnValidSubmit="HandleValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
 
-    <div>
+    <div class="mb-2">
         <label for="identifier">@SL["EditFieldDefinition.Identifier"]</label>
         <InputText id="identifier" @bind-Value="FieldDefinition.Identifier" class="form-control" />
     </div>
 
-    <div>
+    <div class="mb-2">
         <label for="label">@SL["EditFieldDefinition.Label"]</label>
         <L10nEditor L10n="FieldDefinition.InputDefinition.Label" />
     </div>
 
-    <div>
+    <div class="mb-2">
         <label for="name">@SL["EditFieldDefinition.Name"]</label>
         <InputText id="name" @bind-Value="FieldDefinition.InputDefinition.Name" class="form-control" />
     </div>
 
-    <div>
+    <div class="mb-2">
         <label for="type">@SL["EditFieldDefinition.Type"]</label>
         <select id="type" 
             value="@FieldDefinition.InputDefinition.Type" 
             class="form-control">
             @foreach (var type in FieldType.KnownFieldTypes)
             {
-                <option value="@type.ToJson()">@SL[$"EditFieldDefinition.Type.{type.GetType().Name}"]</option>
+                <option value="@type.ToJson()">@type.DisplayName</option>
             }
         </select>
     </div>
 
-    <div>
+    <div class="mb-2">
         <label for="inputType">@SL["EditFieldDefinition.InputType"]</label>
         <InputText id="inputType" @bind-Value="FieldDefinition.InputDefinition.InputType" class="form-control" />
     </div>
 
-    <div>
+    <div class="mb-2">
         <label for="description">@SL["EditFieldDefinition.Description"]</label>
         <L10nEditor L10n="FieldDefinition.Description" />
-    </div>
+    </div class="mb-2">
 
-    <div>
+    <div class="mb-2">
         <label for="isList">@SL["EditFieldDefinition.IsList"]</label>
         <InputCheckbox id="isList" @bind-Value="FieldDefinition.IsList" class="form-check-input" />
     </div>
 
-    <div>
+    <div class="mb-2">
         <label for="sortKey">@SL["EditFieldDefinition.SortKey"]</label>
         <InputNumber id="sortKey" @bind-Value="FieldDefinition.SortKey" class="form-control" />
     </div>
 
-    <div>
+    <div class="mb-2">
         <label for="isRequired">@SL["EditFieldDefinition.IsRequired"]</label>
         <InputCheckbox id="isRequired" @bind-Value="FieldDefinition.IsRequired" class="form-check-input" />
     </div>
 
-
-    <div>
+    @*TODO: Modal for create and edit?*@
+    <div class="mb-2">
         <label>@SL["EditFieldDefinition.ChoiceOptions"]</label>
         @foreach (var choice in FieldDefinition.ChoiceOptions)
         {
