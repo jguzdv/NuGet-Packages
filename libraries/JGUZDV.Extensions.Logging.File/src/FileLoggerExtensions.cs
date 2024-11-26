@@ -96,6 +96,7 @@ public static partial class FileLoggerExtensions
         Action<FileLoggerOptions> configureLogger, 
         Action<PlainTextFileFormatterOptions> configureFormatter)
     {
+        builder.Services.TryAddSingleton<TimeProvider>(sp => TimeProvider.System);
         builder.AddFile(configureLogger);
         builder.AddFileFormatter<PlainTextFileFormatter, PlainTextFileFormatterOptions>(configureFormatter);
         builder.Services.Configure<FileLoggerOptions>(opt => opt.FileExtension ??= ".log");
@@ -146,6 +147,7 @@ public static partial class FileLoggerExtensions
         Action<FileLoggerOptions> configureLogger,
         Action<JsonFileFormatterOptions> configureFormatter)
     {
+        builder.Services.TryAddSingleton<TimeProvider>(sp => TimeProvider.System);
         builder.AddFile(configureLogger);
         builder.AddFileFormatter<JsonFileFormatter, JsonFileFormatterOptions>(configureFormatter);
         builder.Services.Configure<FileLoggerOptions>(opt => opt.FileExtension ??= ".log.json");
