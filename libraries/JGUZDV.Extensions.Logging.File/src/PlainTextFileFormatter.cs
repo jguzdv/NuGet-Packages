@@ -10,8 +10,7 @@ namespace JGUZDV.Extensions.Logging.File;
 
 internal sealed class PlainTextFileFormatter : FileFormatter, IDisposable
 {
-    private const string LoglevelPadding = ": ";
-    private static readonly string _messagePadding = new string(' ', GetLogLevelString(LogLevel.Information).Length + LoglevelPadding.Length);
+    private static readonly string _messagePadding = new string(' ', 5);
     private static readonly string _newLineWithMessagePadding = Environment.NewLine + _messagePadding;
 
     private static readonly string _newLine = Environment.NewLine;
@@ -64,32 +63,21 @@ internal sealed class PlainTextFileFormatter : FileFormatter, IDisposable
     {
         using var writer = new StreamWriter(targetStream, UTF8, leaveOpen: true);
 
-        string ? timestamp = null;
-        string? timestampFormat = FormatterOptions.TimestampFormat;
-        if (timestampFormat != null)
+        string? timestamp = null;
+        if (FormatterOptions.TimestampFormat is not null)
         {
-            timestamp = stamp.ToString(timestampFormat);
+            timestamp = stamp.ToString(FormatterOptions.TimestampFormat);
         }
+
         if (timestamp != null)
         {
             writer.Write(timestamp);
         }
 
-        writer.Write(GetLogLevelString(logLevel));
-
         // Example:
-        // INF: ConsoleApp.Program[10]
+        // 2024-12-12 [INF]: ConsoleApp.Program[10]
         //       Request received
-
-        // category and event id
-        writer.Write(LoglevelPadding);
-        writer.Write(category);
-        writer.Write("[");
-
-        writer.Write(eventId.ToString());
-
-        writer.Write("]");
-        writer.Write(_newLine);
+        writer.WriteLine($"[{GetLogLevelString(logLevel)}]: {category}({eventId:0})");
 
         // scope information
         WriteScopeInformation(writer, scopeProvider);
@@ -109,16 +97,8 @@ internal sealed class PlainTextFileFormatter : FileFormatter, IDisposable
     {
         if (!string.IsNullOrEmpty(message))
         {
-            
             writer.Write(_messagePadding);
-            WriteReplacing(writer, Environment.NewLine, _newLineWithMessagePadding, message);
-            writer.Write(_newLine);
-        }
-
-        static void WriteReplacing(TextWriter writer, string oldValue, string newValue, string message)
-        {
-            string newMessage = message.Replace(oldValue, newValue);
-            writer.Write(newMessage);
+            writer.WriteLine(message.Replace(Environment.NewLine, _newLineWithMessagePadding));
         }
     }
 
@@ -155,18 +135,15 @@ internal sealed class PlainTextFileFormatter : FileFormatter, IDisposable
                 {
                     paddingNeeded = false;
                     state.Write(_messagePadding);
-                    state.Write("=> ");
                 }
-                else
-                {
-                    state.Write(" => ");
-                }
+                
+                state.Write(" => ");
                 state.Write(scope?.ToString() ?? "");
             }, writer);
 
             if (!paddingNeeded)
             {
-                writer.Write(_newLine);
+                writer.WriteLine();
             }
         }
     }

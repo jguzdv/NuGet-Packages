@@ -26,10 +26,10 @@ public class FileFormatterOptions
     /// Gets or sets the format string used to format timestamp in logging messages.
     /// </summary>
     /// <value>
-    /// The default is <see langword="null" />.
+    /// The default is 'yyyy-MM-dd HH:mm:ss.fff'.
     /// </value>
     [StringSyntax(StringSyntaxAttribute.DateTimeFormat)]
-    public string? TimestampFormat { get; set; }
+    public string? TimestampFormat { get; set; } = "yyyy-MM-dd HH:mm:ss.fff";
 
     /// <summary>
     /// Gets or sets a value that indicates whether or not UTC timezone should be used to format timestamps in logging messages.
