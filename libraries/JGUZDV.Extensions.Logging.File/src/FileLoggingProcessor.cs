@@ -49,6 +49,7 @@ internal class FileLoggingProcessor : IDisposable
 
         // TODO This won't work as the file that was previously written to is still open
         InitializeChannel(_fileLoggerOptions);
+        InitializeProcessorTask(_fileLoggerOptions);
     }
 
     /// <summary>
@@ -93,14 +94,10 @@ internal class FileLoggingProcessor : IDisposable
     private void InitializeProcessorTask(FileLoggerOptions options)
     {
         _fileProcessorTask = ProcessMessagesAsync(_channel, options);
-
-        _checkProcessorTaskTimer = new System.Timers.Timer(TimeSpan.FromMinutes(1));
-        _checkProcessorTaskTimer.Elapsed += OnTimedEvent;
-        _checkProcessorTaskTimer.AutoReset = true;
-        _checkProcessorTaskTimer.Enabled = true;
+        _timeProvider.CreateTimer(CheckProcessorTask, this, TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1));
     }
 
-    private void OnTimedEvent(Object? source, ElapsedEventArgs e)
+    private void CheckProcessorTask(Object? state)
     {
         if (_fileProcessorTask.IsFaulted)
         {
