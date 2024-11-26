@@ -47,7 +47,7 @@ public class FileLoggerProvider : ILoggerProvider, ISupportExternalScope
     // warning:  ReloadLoggerOptions can be called before the ctor completed,... before registering all of the state used in this method need to be initialized
     private void ReloadLoggerOptions(FileLoggerOptions options)
     {
-        _fileWriter.ChangeChannel(options, _formatter.Options.FileExtension);
+        _fileWriter.ChangeChannel(options);
     }
 
     /// <inheritdoc />

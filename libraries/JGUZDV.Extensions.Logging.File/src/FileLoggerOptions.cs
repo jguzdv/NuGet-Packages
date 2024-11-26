@@ -101,6 +101,15 @@ public class FileLoggerOptions
     /// </value>
     public long RollingFileSize { get; set; } = 50 * 1000 * 1024;
 
+    private string? _fileExtension;
+    /// <summary>
+    /// The extension to be used when writing files. If this is null the formatter will provide it's preferred extension.
+    /// </summary>
+    public string? FileExtension {
+        get => _fileExtension;
+        set => _fileExtension = value?.StartsWith('.') ?? false ? value : '.' + value;
+    }
+
 
     /// <summary>
     /// Sets the filename pattern used to create the filenames.

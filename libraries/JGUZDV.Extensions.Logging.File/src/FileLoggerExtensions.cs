@@ -98,6 +98,7 @@ public static partial class FileLoggerExtensions
     {
         builder.AddFile(configureLogger);
         builder.AddFileFormatter<PlainTextFileFormatter, PlainTextFileFormatterOptions>(configureFormatter);
+        builder.Services.Configure<FileLoggerOptions>(opt => opt.FileExtension ??= ".log");
 
         return builder;
     }
@@ -147,6 +148,7 @@ public static partial class FileLoggerExtensions
     {
         builder.AddFile(configureLogger);
         builder.AddFileFormatter<JsonFileFormatter, JsonFileFormatterOptions>(configureFormatter);
+        builder.Services.Configure<FileLoggerOptions>(opt => opt.FileExtension ??= ".log.json");
 
         return builder;
     }
