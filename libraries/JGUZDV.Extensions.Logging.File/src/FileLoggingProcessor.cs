@@ -111,6 +111,14 @@ internal class FileLoggingProcessor : IDisposable
         return IO.Path.Combine(outputDirectory ?? ".", fileName);
     }
 
+    /// <summary>
+    /// Compute filename for logfile.
+    /// TODO: May lead to unexpected results, if the file name was changed while the 
+    /// app is running (filenumber will not be reset).
+    /// </summary>
+    /// <param name="options"></param>
+    /// <param name="currentRollingFileNumber"></param>
+    /// <returns></returns>
     private string GetFileNameFromPattern(FileLoggerOptions options, int currentRollingFileNumber)
     {
         var fileNamePattern = options.FilenamePattern
