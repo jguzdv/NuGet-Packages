@@ -26,25 +26,6 @@ public static class JGUZDVHostBuilderLoggingExtensions
     {
         hostBuilder.ConfigureServices((hostContext, services) =>
         {
-            var fileSettings = hostContext.Configuration.GetSection(configSectionName + ":File");
-
-            // Do some checks for the really needed settings
-            if (fileSettings == null)
-            {
-                throw new ArgumentException("No config section Logging:File found. JGUZDV Logging needs at least " +
-                    "the property Logging:File:OutputDirectory to write logfiles.");
-            }
-
-            var outputDirectory = fileSettings.GetValue<string>("OutputDirectory");
-
-            if(outputDirectory == null)
-            {
-                throw new ArgumentException("No property OutputDirectory found in config section Logging:File. " +
-                    "JGUZDV Logging needs a directory to store logfiles.");
-            }
-
-            services.AddOptions<FileLoggerOptions>().Bind(fileSettings);
-
             if (useJsonFormat)
             {
                 hostBuilder.ConfigureLogging((hostBuilderContext, loggingBuilder) =>
@@ -59,6 +40,21 @@ public static class JGUZDVHostBuilderLoggingExtensions
                     loggingBuilder.AddPlainTextFile();
                 });
             }
+
+            services.PostConfigure<FileLoggerOptions>(configureOptions =>
+            {
+                if (string.IsNullOrWhiteSpace(configureOptions.OutputDirectory))
+                {
+                    throw new ArgumentException("No property OutputDirectory found in config section Logging:File. " +
+                            "JGUZDV Logging needs a directory to store logfiles.");
+                }
+
+                // Add the application name to the output directory, so log files for
+                // different apps will be written to different directories.
+                configureOptions.OutputDirectory = Path.Combine(
+                    configureOptions.OutputDirectory, 
+                    hostContext.HostingEnvironment.ApplicationName);
+            });
         });
 
 

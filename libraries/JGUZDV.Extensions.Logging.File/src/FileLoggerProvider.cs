@@ -35,6 +35,13 @@ public class FileLoggerProvider : ILoggerProvider, ISupportExternalScope
     {
         _timeProvider = timeProvider;
         _options = options;
+
+        if(string.IsNullOrWhiteSpace(_options.CurrentValue.OutputDirectory))
+        {
+            throw new ArgumentException("No property OutputDirectory found in config section Logging:File. " +
+                    "JGUZDV Logging needs a directory to store logfiles.");
+        }
+
         _loggers = new ConcurrentDictionary<string, FileLogger>();
 
         _formatter = formatter;
