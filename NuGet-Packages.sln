@@ -195,7 +195,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.ClientStorage.Blazor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.ClientStorage.Blazor.Tests", "libraries\JGUZDV.ClientStorage.Blazor\test\JGUZDV.ClientStorage.Blazor.Tests.csproj", "{293E70B3-9475-4F13-848E-4EEF858D38C0}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JGUZDV.Extensions.Logging.File", "JGUZDV.Extensions.Logging.File", "{288A1DAA-5216-41ED-B96D-9E8FF40E43D6}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JGUZDV.Extensions.Logging", "JGUZDV.Extensions.Logging", "{288A1DAA-5216-41ED-B96D-9E8FF40E43D6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.Extensions.Logging.File", "libraries\JGUZDV.Extensions.Logging.File\src\JGUZDV.Extensions.Logging.File.csproj", "{745F790B-EE5C-47B4-8E06-5F5A784D4271}"
 EndProject
@@ -1089,8 +1089,8 @@ Global
 		{91CC9008-7485-4CBA-B4CE-71693EE63E4C} = {288A1DAA-5216-41ED-B96D-9E8FF40E43D6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		RESX_SortFileContentOnSave = True
-		RESX_NeutralResourcesLanguage = de-DE
 		SolutionGuid = {46ECC226-1874-4539-8589-8B2029909C4A}
+		RESX_NeutralResourcesLanguage = de-DE
+		RESX_SortFileContentOnSave = True
 	EndGlobalSection
 EndGlobal
