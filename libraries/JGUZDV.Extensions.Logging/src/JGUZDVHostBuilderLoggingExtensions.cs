@@ -28,10 +28,19 @@ public static class JGUZDVHostBuilderLoggingExtensions
         {
             var fileSettings = hostContext.Configuration.GetSection(configSectionName + ":File");
 
+            // Do some checks for the really needed settings
             if (fileSettings == null)
             {
                 throw new ArgumentException("No config section Logging:File found. JGUZDV Logging needs at least " +
                     "the property Logging:File:OutputDirectory to write logfiles.");
+            }
+
+            var outputDirectory = fileSettings.GetValue<string>("OutputDirectory");
+
+            if(outputDirectory == null)
+            {
+                throw new ArgumentException("No property OutputDirectory found in config section Logging:File. " +
+                    "JGUZDV Logging needs a directory to store logfiles.");
             }
 
             services.AddOptions<FileLoggerOptions>().Bind(fileSettings);

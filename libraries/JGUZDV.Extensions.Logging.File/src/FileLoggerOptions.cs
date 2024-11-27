@@ -52,7 +52,7 @@ public class FileLoggerOptions
     /// <summary>
     /// Gets or sets the output directory, where log files will be written to.
     /// </summary>
-    public string? OutputDirectory { get; set; }
+    public string OutputDirectory { get; set; } = default!;
 
     /// <summary>
     /// The discriminator may be included in the log-file name to e.g. distinguish between different machines.
