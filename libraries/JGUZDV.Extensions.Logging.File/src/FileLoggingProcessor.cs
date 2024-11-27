@@ -13,14 +13,10 @@ internal class FileLoggingProcessor : IDisposable
     private readonly TimeProvider _timeProvider;
     private readonly string _fileNameExtension;
 
-    private FileWriter? _currentWriter;
-
     private FileLoggerOptions _fileLoggerOptions;
 
-    [NotNull]
-    private Channel<Stream>? _channel;
-
-    [NotNull]
+    private Channel<Stream> _channel;
+    private FileWriter? _currentWriter;
     private Task _fileProcessorTask;
         
 
@@ -54,6 +50,7 @@ internal class FileLoggingProcessor : IDisposable
     /// </summary>
     /// <param name="options"></param>
     /// <exception cref="InvalidOperationException"></exception>
+    [MemberNotNull(nameof(_channel))]
     private void InitializeChannel(FileLoggerOptions options)
     {
         var filePath = GetFilePath(options, 0);
@@ -88,6 +85,7 @@ internal class FileLoggingProcessor : IDisposable
     /// Initialize the processor task and a timer to restart the processor task if it faulted.
     /// </summary>
     /// <param name="options"></param>
+    [MemberNotNull(nameof(_fileProcessorTask))]
     private void InitializeProcessorTask(FileLoggerOptions options)
     {
         _fileProcessorTask = ProcessMessagesAsync(_channel, options);
