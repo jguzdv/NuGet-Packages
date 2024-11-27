@@ -1,26 +1,22 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net6.0</TargetFrameworks>
+		<TargetFrameworks>net8.0</TargetFrameworks>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 
 		<PackageId>JGUZDV.AspNetCore.Logging</PackageId>
 		<IsPackable>true</IsPackable>
-		<Version>1.0.8</Version>
+		<Version>1.1.0</Version>
 		<Authors>Thomas Ottenhus</Authors>
 		<Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
-		<PackageDescription>Opinionated file logging based on SeriLog</PackageDescription>
+		<PackageDescription>Opinionated file logging for the ASP.NET Core WebApplicationBuilder</PackageDescription>
 
 		<AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<PackageReference Include="Serilog.AspNetCore" Version="[6.1.0,)" />
 	</ItemGroup>
 
 	<ItemGroup>

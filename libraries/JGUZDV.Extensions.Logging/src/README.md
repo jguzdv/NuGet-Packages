@@ -1,6 +1,6 @@
 # JGUZDV.Extensions.Logging
 
-This package will configure Serilog from the default Logging section provided with .net templates.
+This package will configure file logging.
 It will also add the ability to log to files.
 Files will append the MachineName and automatically roll over once a day.
 
@@ -9,7 +9,7 @@ Files will append the MachineName and automatically roll over once a day.
 builder.UseJGUZDVLogging();
 ```
 
-**appsettings.json**
+**appsettings.json (minimal file configuration section)**
 ```jsonc
 {
   "Logging": {
@@ -26,12 +26,7 @@ builder.UseJGUZDVLogging();
     }
 
     "File": {
-      "Path": "/my-log-path/",    // Path where the log files should be written to
-      "ApplicationName": "MyApp",     // Will be used if UseIsolatedPath is true
-      "UseIsolatedPath": true,    // If true, resulting logfile will be placed in /my-log-path/MyApp/, default: true
-      
-      "FileName": "LogFile.log",    // Filename of the log, default: `Environment.MachineName + .json`, a date will automatically be added to the filename.
-      "UseJson": true,    // Defaults to true, if filename ends with .json, will change the filename to .json, if true
+      "OutputDirectory": "/my-log-path/",    // Path where the log files should be written to
 
       "LogLevel": {
         "Default": "Warning"
