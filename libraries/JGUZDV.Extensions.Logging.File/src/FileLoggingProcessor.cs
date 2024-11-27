@@ -22,10 +22,7 @@ internal class FileLoggingProcessor : IDisposable
 
     [NotNull]
     private Task _fileProcessorTask;
-
-    [NotNull]
-    private System.Timers.Timer _checkProcessorTaskTimer;
-    
+        
 
 
     public FileLoggingProcessor(FileLoggerOptions options, TimeProvider timeProvider, string fileNameExtension)
