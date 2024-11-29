@@ -1,0 +1,49 @@
+<div class="dropdown">
+    <input type="checkbox" id="dropdown-toggle-@_guid" class="dropdown-toggle d-none" />
+    @DropdownToggle!.Invoke($"dropdown-toggle-{_guid}")
+
+    <div class="dropdown-menu">
+        @DropDownContent
+    </div>
+</div>
+
+@code {
+    private string _guid = Guid.NewGuid().ToString();
+
+    /// <summary>
+    /// When set, this will be used as dropdown toggle. The argument is the id of the checkbox that toggles the dropdown visibility.
+    /// </summary>
+    [Parameter]
+    public RenderFragment<string>? DropdownToggle { get; set; }
+
+    /// <summary>
+    /// If set, this will be used as dropdown toggle content.
+    /// It will be automatically wrapped in a &lt;label&gt; which should toggle the checkbox for dropdown visibility.
+    /// </summary>
+    [Parameter]
+    public RenderFragment? DropdownLabelContent { get; set; }
+
+    /// <summary>
+    /// This is the dropdown containers content. E.g. the dropdown items.
+    /// </summary>
+    [Parameter]
+    public required RenderFragment DropDownContent { get; set; }
+
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+
+        if (DropdownToggle != null && DropdownLabelContent != null)
+            throw new InvalidOperationException($"{nameof(DropdownToggle)} and {nameof(DropdownLabelContent)} may not be set at the same time.");
+
+        if (DropdownLabelContent != null)
+        {
+            DropdownToggle = (labelId) =>
+                @<label for="@labelId" aria-haspopup="true" aria-expanded="false">
+                    @DropdownLabelContent
+                </label>;
+        }
+    }
+}

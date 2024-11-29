@@ -1,0 +1,14 @@
+﻿.dropdown-menu {
+    top: 100%;
+    right: 0;
+    margin-top: 0.5em;
+}
+
+
+.dropdown-menu {
+    display: none;
+}
+
+dropdown-toggle:checked + .dropdown-menu {
+    display: block;
+}
