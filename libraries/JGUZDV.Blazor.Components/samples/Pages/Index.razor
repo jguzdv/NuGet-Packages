@@ -1,10 +1,32 @@
 ﻿@page "/"
 
-<h1>Hello, world!</h1>
+@{
+    var logo = new AppHeader.LogoSpecs
+            {
+                SrcUrl = "https://cdn.zdv.uni-mainz.de/web/assets/logo_uni-mainz_quader.svg",
+                AltText = "Logo der Johannes Gutenberg-Universität Mainz",
+                Href = "https://www.uni-mainz.de/"
+            };
+}
 
-<a href="/dropdown">dropdown</a>
-<a href="/modal">Modal</a>
-<a href="/l10nEdit">L10nEdit</a>
-<a href="/l10nView">L10nView</a>
-<a href="/multi-select">Multiselect</a>
-<a href="/client-storage">client storage</a>
+<div class="container p-0">
+    <div class="jbs-page jbs-grid jbs-container border">
+
+        <AppHeader Title="Meine Coole App" Logo="@logo" HelpUrl="@logo.Href" ShowLanguageSelector="@true" ShowLoginButton="@true">
+            <AdditionalContent>
+                Additional
+            </AdditionalContent>
+        </AppHeader>
+
+        <main class="jbs-main">
+            <h1>Hello, world!</h1>
+
+            <a href="/dropdown">dropdown</a>
+            <a href="/modal">Modal</a>
+            <a href="/l10nEdit">L10nEdit</a>
+            <a href="/l10nView">L10nView</a>
+            <a href="/multi-select">Multiselect</a>
+            <a href="/client-storage">client storage</a>
+        </main>
+    </div>
+</div>

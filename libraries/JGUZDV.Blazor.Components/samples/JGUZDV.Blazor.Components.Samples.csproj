@@ -10,13 +10,13 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.0" PrivateAssets="all" />
     <PackageReference Include="Microsoft.Extensions.Localization" Version="8.0.0" />
-	<PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.0" />
+	<PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.1" />
   </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\..\JGUZDV.Blazor.Components.ClaimRequirements\src\JGUZDV.Blazor.Components.ClaimRequirements.csproj" />
         <ProjectReference Include="..\..\JGUZDV.Blazor.Components.L10n\src\JGUZDV.Blazor.Components.L10n.csproj" />
-        <ProjectReference Include="..\..\JGUZDV.ClientStorage.Blazor\JGUZDV.ClientStorage.Blazor.csproj" />
+        <ProjectReference Include="..\..\JGUZDV.ClientStorage.Blazor\src\JGUZDV.ClientStorage.Blazor.csproj" />
         <ProjectReference Include="..\..\JGUZDV.ClientStorage\src\JGUZDV.ClientStorage.csproj" />
         <ProjectReference Include="..\src\JGUZDV.Blazor.Components.csproj" />
 

@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using JGUZDV.Blazor.Components.Samples;
+using JGUZDV.Blazor.Components;
 using JGUZDV.Blazor.Components.L10n;
+using JGUZDV.Blazor.Components.Samples;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -11,7 +12,7 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 
 builder.Services.AddSupportedCultures(new List<string>() { "de", "en" });
 
-builder.Services.AddLocalization();
+builder.Services.AddLocalization(["de", "en", "fr"]);
 builder.Services.AddBrowserClientStore();
 
 var app = builder.Build();
