@@ -17,7 +17,7 @@ public static class LocalizationExtensions
     /// <summary>
     /// Adds localization services to the application and registeres the <see cref="LanguageService"/> and <see cref="LanguageAwareMessageHandler"/>
     /// </summary>
-    public static IServiceCollection AddLocalization(this IServiceCollection services, string[] languages, Action<LocalizationOptions>? configureLocalization)
+    public static IServiceCollection AddLocalization(this IServiceCollection services, string[] languages, Action<LocalizationOptions>? configureLocalization = null)
     {
         if (languages is not { Length: >= 1 })
             throw new ArgumentException("At least one language needs to be set", nameof(languages));

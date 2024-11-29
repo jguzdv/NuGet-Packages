@@ -1,17 +1,18 @@
 @using JGUZDV.Blazor.Components.Authentication;
+@using JGUZDV.Blazor.Components.Localization;
 
 <header class="@HeaderClass">
-    <div class="row mx-0 my-1 my-sm-0 algin-items-center">
+    <div class="row mx-0 my-1 my-sm-0 align-items-center">
         @if (Logo != null)
         {
-            <div class="col col-auto me-2">
+            <div class="col col-auto">
                 <a href="@Logo.Href">
-                    <img src="@Logo.SrcUrl" alt="@Logo.AltText" />
+                    <img class="app-logo" src="@Logo.SrcUrl" alt="@Logo.AltText" />
                 </a>
             </div>
         }
 
-        <div class="col col-auto">@Title</div>
+        <h1 class="col col-auto">@Title</h1>
 
         @if (AdditionalContent != null)
         {
@@ -30,10 +31,7 @@
                 
                 @if (ShowLanguageSelector)
                 {
-                    @*TODO: Add language selector component*@
-                    <a aria-label="@LR["Help"]" class="jgu_btn btn btn-none" target="_blank" href="https://www.zdv.uni-mainz.de/account/">
-                        @Icons.LanguageSelect(null)
-                    </a>
+                    <LanguageSelect />
                 }
 
                 @if (HelpUrl != null)
