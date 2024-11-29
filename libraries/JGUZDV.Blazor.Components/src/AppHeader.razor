@@ -1,0 +1,89 @@
+@using JGUZDV.Blazor.Components.Authentication;
+
+<header class="@HeaderClass">
+    <div class="row mx-0 my-1 my-sm-0 algin-items-center">
+        @if (Logo != null)
+        {
+            <div class="col col-auto me-2">
+                <a href="@Logo.Href">
+                    <img src="@Logo.SrcUrl" alt="@Logo.AltText" />
+                </a>
+            </div>
+        }
+
+        <div class="col col-auto">@Title</div>
+
+        @if (AdditionalContent != null)
+        {
+            <div class="col">
+                @AdditionalContent
+            </div>
+        }
+
+        @if(ShowButtons)
+        {
+            <div class="col col-auto justify-self-end">
+                @if(ShowLoginButton)
+                {
+                    <LoginButton />
+                }
+                
+                @if (ShowLanguageSelector)
+                {
+                    @*TODO: Add language selector component*@
+                    <a aria-label="@LR["Help"]" class="jgu_btn btn btn-none" target="_blank" href="https://www.zdv.uni-mainz.de/account/">
+                        @Icons.LanguageSelect(null)
+                    </a>
+                }
+
+                @if (HelpUrl != null)
+                {
+                    <a aria-label="@LR["Help"]" class="jgu_btn btn btn-none" target="_blank" href="https://www.zdv.uni-mainz.de/account/">
+                        @Icons.Help(null)
+                    </a>
+                }
+            </div>
+        }
+    </div>
+</header>
+
+@code{
+    [Inject, NotNull]
+    private IStringLocalizer<ComponentStrings>? LR { get; set; }
+
+
+    [Parameter, EditorRequired]
+    public required string Title { get; set; }
+
+    [Parameter]
+    public LogoSpecs? Logo { get; set; }
+
+
+    [Parameter]
+    public RenderFragment? AdditionalContent { get; set; }
+
+
+    [Parameter]
+    public bool ShowLoginButton { get; set; } = true;
+
+    [Parameter]
+    public bool ShowLanguageSelector { get; set; } = true;
+
+    [Parameter]
+    public string? HelpUrl { get; set; }
+
+
+    public bool ShowButtons => ShowLoginButton || ShowLanguageSelector || HelpUrl != null;
+
+
+    [Parameter]
+    public string? HeaderClass { get; set; } = "jbs-header";
+
+
+    public class LogoSpecs
+    {
+        public required string SrcUrl { get; set; }
+        public required string AltText { get; set; }
+        public string? Href { get; set; }
+    }
+}
