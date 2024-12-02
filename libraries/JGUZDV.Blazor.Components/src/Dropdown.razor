@@ -1,9 +1,9 @@
 <div class="dropdown">
-    <input type="checkbox" id="dropdown-toggle-@_guid" class="dropdown-toggle d-none" />
     @DropdownToggle!.Invoke($"dropdown-toggle-{_guid}")
 
+    <input type="checkbox" id="dropdown-toggle-@_guid" class="dropdown-toggle d-non" />
     <div class="dropdown-menu">
-        @DropDownContent
+        @DropdownContent
     </div>
 </div>
 
@@ -27,7 +27,7 @@
     /// This is the dropdown containers content. E.g. the dropdown items.
     /// </summary>
     [Parameter]
-    public required RenderFragment DropDownContent { get; set; }
+    public required RenderFragment DropdownContent { get; set; }
 
 
     protected override void OnParametersSet()
@@ -41,7 +41,7 @@
         if (DropdownLabelContent != null)
         {
             DropdownToggle = (labelId) =>
-                @<label for="@labelId" aria-haspopup="true" aria-expanded="false">
+                @<label for="@labelId" aria-haspopup="true">
                     @DropdownLabelContent
                 </label>;
         }

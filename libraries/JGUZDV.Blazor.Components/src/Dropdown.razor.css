@@ -9,6 +9,6 @@
     display: none;
 }
 
-dropdown-toggle:checked + .dropdown-menu {
+.dropdown-toggle:checked + .dropdown-menu {
     display: block;
 }
