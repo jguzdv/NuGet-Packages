@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 
 namespace JGUZDV.Blazor.Components.Localization;
 
@@ -14,7 +8,7 @@ public class LanguageAwareMessageHandler : DelegatingHandler
 
     private string? _language;
 
-    public LanguageAwareMessageHandler(LanguageService languageService)
+    internal LanguageAwareMessageHandler(LanguageService languageService)
     {
         _languageService = languageService;
     }

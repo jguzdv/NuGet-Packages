@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Globalization;
 
 using JGUZDV.Blazor.Components.Resources;
 
@@ -14,34 +9,36 @@ using Microsoft.JSInterop;
 
 namespace JGUZDV.Blazor.Components.Localization;
 
+/// <summary>
+/// Represents a language selection item for display in a language picker.
+/// </summary>
 public record LanguageSelectItem(string LanguageId, string DisplayName, bool IsSelected);
 
-public class LanguageService
+
+internal class LanguageService
 {
     private readonly IOptions<LanguageOptions> _options;
     private readonly IStringLocalizer<ComponentStrings> _loc;
-    private readonly Task<IJSObjectReference> _jsLanguageService;
+
+    private readonly ILanguagePersistence _persistence;
 
     private string? _currentLanguageId;
-
     public string[] SupportedLanguages => _options.Value.SupportedLanguages;
 
     public LanguageService(
         IOptions<LanguageOptions> options,
-        IStringLocalizer<ComponentStrings> loc,
-        IJSRuntime jsRuntime)
+        ILanguagePersistence persistence,
+        IStringLocalizer<ComponentStrings> loc)
     {
         _options = options;
+        _persistence = persistence;
         _loc = loc;
-        _jsLanguageService = InitializeAsync(jsRuntime);
     }
 
     private async Task<IJSObjectReference> InitializeAsync(IJSRuntime jsRuntime)
     {
-        var module = await jsRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/ZDV.BlazorComponents/js/Language/LanguageService.js");
-        var jsLanguageService = await module.InvokeAsync<IJSObjectReference>("createLanguageService");
-
-        return jsLanguageService;
+        var module = await jsRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/ZDV.BlazorComponents/js/Localization/LanguageUtil.js");
+        return module;
     }
 
     public async Task<string> GetCurrentLanguage()
@@ -50,9 +47,8 @@ public class LanguageService
             return _currentLanguageId;
 
         var options = _options.Value;
-        var js = await _jsLanguageService;
-
-        var currentLanguage = (await js.InvokeAsync<string?>("getLanguage"))
+        
+        var currentLanguage = (await _persistence.GetSelectedLanguageAsync())
             ?? CultureInfo.DefaultThreadCurrentUICulture?.Name;
 
         if (!string.IsNullOrWhiteSpace(currentLanguage) &&
@@ -73,18 +69,17 @@ public class LanguageService
     public async Task SetCurrentLanguage(string? languageId)
     {
         var options = _options.Value;
-        var js = await _jsLanguageService;
 
         if (!string.IsNullOrWhiteSpace(languageId) &&
             _options.Value.SupportedLanguages.Contains(languageId))
         {
             _currentLanguageId = languageId;
-            await js.InvokeVoidAsync("setLanguage", languageId);
+            await _persistence.SaveSelectedLanguageAsync(languageId);
         }
         else
         {
             _currentLanguageId = options.DefaultLanguage;
-            await js.InvokeVoidAsync("setLanguage");
+            await _persistence.ResetSelectedLanguageAsync();
         }
     }
 
