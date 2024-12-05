@@ -1,9 +1,6 @@
-using System.Globalization;
-
-using JGUZDV.DynamicForms.Samples.Client.Pages;
-using JGUZDV.DynamicForms.Samples.Components;
-using JGUZDV.Blazor.Components.L10n;
 using JGUZDV.DynamicForms.Model;
+using JGUZDV.DynamicForms.Samples.Components;
+using JGUZDV.L10n;
 
 var builder = WebApplication.CreateBuilder(args);
 

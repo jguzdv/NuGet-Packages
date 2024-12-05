@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using JGUZDV.Blazor.Components.L10n;
-using System.Resources;
+using JGUZDV.L10n;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.Services.AddSupportedCultures(["de","en"]);
