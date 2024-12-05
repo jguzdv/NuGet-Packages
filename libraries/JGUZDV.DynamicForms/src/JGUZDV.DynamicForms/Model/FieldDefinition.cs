@@ -26,7 +26,7 @@ public class InputDefinition : IValidatableObject
 
         foreach (var lang in service?.GetSupportedCultures() ?? new())
         {
-            if (string.IsNullOrWhiteSpace(Label[lang])) yield return new ValidationResult("Name muss gesetzt sein", new string[] { nameof(Label) });
+            if (string.IsNullOrWhiteSpace(Label[lang])) yield return new ValidationResult("Label muss gesetzt sein", new string[] { nameof(Label) });
         }
 
         //if (string.IsNullOrWhiteSpace(Label["en"]) || string.IsNullOrWhiteSpace(Label["de"])) yield return new ValidationResult("Name muss gesetzt sein", new string[] { nameof(Label) });
@@ -84,7 +84,7 @@ public class FieldDefinition : IValidatableObject
         foreach (var lang in service?.GetSupportedCultures() ?? new())
         {
             if (string.IsNullOrWhiteSpace(Description[lang]))
-                errors.Add(new ValidationResult("Name muss gesetzt sein", new string[] { nameof(Description) }));
+                errors.Add(new ValidationResult("Description muss gesetzt sein", new string[] { nameof(Description) }));
         }
 
         if (SortKey < 0)
