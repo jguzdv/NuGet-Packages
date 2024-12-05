@@ -1,6 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
+using JGUZDV.DynamicForms.Resources;
 using JGUZDV.L10n;
+
+using Microsoft.Extensions.Localization;
 
 namespace JGUZDV.DynamicForms.Model;
 
@@ -22,15 +25,16 @@ public class InputDefinition : IValidatableObject
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
-        var service = validationContext.GetService(typeof(ISupportedCultureService)) as ISupportedCultureService;
+        var service = (ISupportedCultureService)validationContext.GetService(typeof(ISupportedCultureService))!;
+        var SL = (IStringLocalizer<Validations>)validationContext.GetService(typeof(IStringLocalizer<Validations>))!;
 
         foreach (var lang in service?.GetSupportedCultures() ?? new())
         {
-            if (string.IsNullOrWhiteSpace(Label[lang])) yield return new ValidationResult("Label muss gesetzt sein", new string[] { nameof(Label) });
+            if (string.IsNullOrWhiteSpace(Label[lang])) yield return new ValidationResult(SL[$"{nameof(InputDefinition)}.{nameof(Label)}", lang], new string[] { nameof(Label) });
         }
 
         //if (string.IsNullOrWhiteSpace(Label["en"]) || string.IsNullOrWhiteSpace(Label["de"])) yield return new ValidationResult("Name muss gesetzt sein", new string[] { nameof(Label) });
-        if (string.IsNullOrWhiteSpace(Type)) yield return new ValidationResult("Typ muss gesetzt sein", new string[] { nameof(Type) });
+        if (string.IsNullOrWhiteSpace(Type)) yield return new ValidationResult(SL[$"{nameof(InputDefinition)}.{nameof(Type)}"], new string[] { nameof(Type) });
     }
 }
 
@@ -43,15 +47,16 @@ public class ChoiceOption : IValidatableObject
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
-        var service = validationContext.GetService(typeof(ISupportedCultureService)) as ISupportedCultureService;
+        var service = (ISupportedCultureService)validationContext.GetService(typeof(ISupportedCultureService))!;
+        var SL = (IStringLocalizer<Validations>)validationContext.GetService(typeof(IStringLocalizer<Validations>))!;
 
         foreach (var lang in service?.GetSupportedCultures() ?? new())
         {
-            if (string.IsNullOrWhiteSpace(Name[lang])) yield return new ValidationResult("Name muss gesetzt sein", new string[] { nameof(Name) });
+            if (string.IsNullOrWhiteSpace(Name[lang])) yield return new ValidationResult(SL[$"{nameof(ChoiceOption)}.{nameof(Name)}",lang], new string[] { nameof(Name) });
         }
 
 
-        if (string.IsNullOrWhiteSpace(Value)) yield return new ValidationResult("Wert muss gesetzt sein", new string[] { nameof(Value) });
+        if (string.IsNullOrWhiteSpace(Value)) yield return new ValidationResult(SL[$"{nameof(ChoiceOption)}.{nameof(Value)}"], new string[] { nameof(Value) });
     }
 }
 
@@ -79,20 +84,21 @@ public class FieldDefinition : IValidatableObject
         var errors = new List<ValidationResult>();
         errors.AddRange(InputDefinition.Validate(validationContext).ToList());
 
-        var service = validationContext.GetService(typeof(ISupportedCultureService)) as ISupportedCultureService;
+        var service = (ISupportedCultureService)validationContext.GetService(typeof(ISupportedCultureService))!;
+        var SL = (IStringLocalizer<Validations>)validationContext.GetService(typeof(IStringLocalizer<Validations>))!;
 
         foreach (var lang in service?.GetSupportedCultures() ?? new())
         {
             if (string.IsNullOrWhiteSpace(Description[lang]))
-                errors.Add(new ValidationResult("Description muss gesetzt sein", new string[] { nameof(Description) }));
+                errors.Add(new ValidationResult(SL[$"{nameof(FieldDefinition)}.{nameof(Description)}",lang], new string[] { nameof(Description) }));
         }
 
         if (SortKey < 0)
-            errors = errors.Append(new ValidationResult("SortKey muss positiv sein", new string[] { nameof(SortKey) })).ToList();
+            errors = errors.Append(new ValidationResult(SL[$"{nameof(FieldDefinition)}.{nameof(SortKey)}"], new string[] { nameof(SortKey) })).ToList();
 
         if (string.IsNullOrWhiteSpace(Identifier))
         {
-            errors.Add(new($"{nameof(Identifier)} muss gesetzt sein", new string[] { nameof(Identifier) }));
+            errors.Add(new(SL[$"{nameof(FieldDefinition)}.{nameof(Identifier)}"], new string[] { nameof(Identifier) }));
         }
 
         foreach (var choice in ChoiceOptions)
