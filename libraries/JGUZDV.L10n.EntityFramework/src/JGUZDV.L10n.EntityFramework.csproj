@@ -1,20 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
     <PackageId>JGUZDV.L10n.EntityFrameworkCore</PackageId>
     <IsPackable>true</IsPackable>
-    <Version>1.0.0</Version>
+    <Version>2.0.0</Version>
     <Authors>Thomas Ottenhus</Authors>
     <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
     <PackageDescription>EntityFrameworkCore storage extensions for JGUZDV.L10n</PackageDescription>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="[7.0.0,)" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="[8.0.0,)" />
   </ItemGroup>
 
   <ItemGroup>

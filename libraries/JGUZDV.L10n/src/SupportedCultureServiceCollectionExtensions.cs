@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace JGUZDV.Blazor.Components.L10n
+namespace JGUZDV.L10n
 {
     /// <summary>
     /// Handles the method to pass on the supported cultures.
