@@ -1,4 +1,4 @@
-﻿namespace JGUZDV.Blazor.Components.L10n
+﻿namespace JGUZDV.L10n
 {
     /// <summary>
     /// Defines methods and processes regarding the supported cultures.

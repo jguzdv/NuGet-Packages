@@ -12,9 +12,9 @@ public static class JGUZDVLoggingExtensions
     /// </summary>
     public static WebApplicationBuilder UseJGUZDVLogging(this WebApplicationBuilder builder, 
         string configSectionName = JGUZDV.Extensions.Logging.Constants.DefaultSectionName, 
-        bool writeToProviders = true)
+        bool useJsonFormat = true)
     {
-        builder.Host.UseJGUZDVLogging(configSectionName, writeToProviders);
+        builder.Host.UseJGUZDVLogging(configSectionName, useJsonFormat);
         return builder;
     }
 }

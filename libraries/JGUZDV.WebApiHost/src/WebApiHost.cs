@@ -8,6 +8,7 @@ using JGUZDV.WebApiHost.FeatureManagement;
 
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -36,22 +37,24 @@ public static partial class WebApiHost
     }
 
     /// <summary>
-    /// Configures services of the WebApplicationBuilder:
-    /// - Adds JGUZDVLogging
-    /// - Adds ApiExplorer and Swagger
-    /// - Adds ProblemDetails
-    /// - Adds MVC controllers and sets default JsonOptions (minimal API as well as MVC)
-    /// - Adds RequestLocalization ("de", "en" as default)
-    /// - Adds Distributed Cache
-    /// - Adds Data Protection
-    /// - Adds Authentication and Authorization
-    /// - Adds Feature Management
-    /// - Adds Telemetry
-    /// - Adds HealthChecks
+    /// <para>Configures services of the WebApplicationBuilder:</para>
+    /// <para>- Adds JGUZDVLogging</para>
+    /// <para>- Adds ApiExplorer and Swagger</para>
+    /// <para>- Adds ProblemDetails</para>
+    /// <para>- Adds MVC controllers and sets default JsonOptions (minimal API as well as MVC)</para>
+    /// <para>- Adds RequestLocalization ("de", "en" as default)</para>
+    /// <para>- Adds Distributed Cache</para>
+    /// <para>- Adds Data Protection</para>
+    /// <para>- Adds Authentication and Authorization</para>
+    /// <para>- Adds Feature Management</para>
+    /// <para>- Adds Telemetry</para>
+    /// <para>- Adds HealthChecks</para>
     /// </summary>
     public static WebApplicationBuilder ConfigureWebApiHostServices(
         this WebApplicationBuilder builder,
         Action<AuthenticationBuilder>? authenticationBuilderAction = null,
+        Action<JwtBearerOptions>? jwtBearerOptionsAction = null,
+        Action<AuthorizationOptions>? authorizationOptionsAction = null,
         Action<IDataProtectionBuilder>? dataProtectionBuilderAction = null,
         Action<IFeatureManagementBuilder>? featureManagementBuilderAction = null,
         Action<IMvcBuilder>? mvcBuilderAction = null
@@ -139,22 +142,25 @@ public static partial class WebApiHost
             // Add authentication and authorization
             if (config.HasConfigSection(ConfigSections.Authentication))
             {
-                var configSection = config.GetSection($"{ConfigSections.Authentication}:JwtBearer");
+                var jwtBearerSectionName = $"{ConfigSections.Authentication}:JwtBearer";
+                var bearerConfigSection = config.GetSection(jwtBearerSectionName);
 
                 var authBuilder = services
                     .AddAuthentication(opt => opt.DefaultScheme = JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(opt =>
                     {
-                        var validAudiences = configSection.GetSection("ValidAudiences").Get<ICollection<string>?>() ?? [];
+                        bearerConfigSection.Bind(opt);
+
+                        var validAudiences = bearerConfigSection.GetSection("ValidAudiences").Get<ICollection<string>?>() ?? [];
                         var validateAudience = validAudiences?.Count > 0;
 
                         opt.TokenValidationParameters.ValidateAudience = validateAudience;
                         opt.TokenValidationParameters.ValidAudiences = validAudiences;
 
-                        config.GetSection(ConfigSections.Authentication).Bind(opt);
-
                         if (opt.TokenValidationParameters.ValidAudiences?.Any() != true)
                             Log.NoValidAudiences(logger);
+
+                        jwtBearerOptionsAction?.Invoke(opt);
                     });
 
                 authenticationBuilderAction?.Invoke(authBuilder);
@@ -163,8 +169,8 @@ public static partial class WebApiHost
                 {
                     // RequiredScopes as name was misleading, since it requires one of those scopes to be present,
                     // to not introduce breaking changes, we will keep the name and add AllowedScopes as well
-                    var scopes = (configSection.GetSection("RequiredScopes").Get<ICollection<string>?>() ?? [])
-                        .Concat(configSection.GetSection("AllowedScopes").Get<ICollection<string>?>() ?? [])
+                    var scopes = (bearerConfigSection.GetSection("RequiredScopes").Get<ICollection<string>?>() ?? [])
+                        .Concat(bearerConfigSection.GetSection("AllowedScopes").Get<ICollection<string>?>() ?? [])
                         .ToList();
 
                     if (scopes.Count == 0)
@@ -173,7 +179,7 @@ public static partial class WebApiHost
                     }
                     else
                     {
-                        var scopeClaimType = configSection["ScopeType"] ?? "scope";
+                        var scopeClaimType = bearerConfigSection["ScopeType"] ?? "scope";
 
                         opt.AddPolicy("DefaultWithScopeCheck", p =>
                         {
@@ -182,6 +188,8 @@ public static partial class WebApiHost
                         });
                         opt.DefaultPolicy = opt.GetPolicy("DefaultWithScopeCheck")!;
                     }
+
+                    authorizationOptionsAction?.Invoke(opt);
                 });
             }
             else
