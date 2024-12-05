@@ -3,6 +3,7 @@ using System.Globalization;
 using JGUZDV.DynamicForms.Samples.Client.Pages;
 using JGUZDV.DynamicForms.Samples.Components;
 using JGUZDV.Blazor.Components.L10n;
+using JGUZDV.DynamicForms.Model;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +32,11 @@ app.UseStaticFiles();
 app.UseAntiforgery();
 
 app.UseRequestLocalization("de", "en");
+
+app.Map("api/save", (FieldDefinition fieldDefinition) =>
+{
+    Console.WriteLine(fieldDefinition);
+});
 
 app.MapRazorComponents<App>()
     .AddInteractiveWebAssemblyRenderMode()

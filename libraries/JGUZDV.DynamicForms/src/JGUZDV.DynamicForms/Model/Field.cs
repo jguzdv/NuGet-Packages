@@ -33,7 +33,23 @@ public class Field : IValidatableObject
         get => _value;
         set
         {
-            //TODO validate value
+            if (value != null)
+            {
+                var valueType = value.GetType();
+                if (FieldDefinition.IsList)
+                {
+                    if (!typeof(IEnumerable).IsAssignableFrom(valueType) 
+                        || !valueType.IsGenericType 
+                        || valueType.GetGenericArguments()[0] != ValueType.ClrType)
+                    {
+                        throw new InvalidOperationException("Type does not match");
+                    }
+                }
+                else if (value.GetType() != ValueType.ClrType)
+                {
+                    throw new InvalidOperationException("Type does not match");
+                }
+            }
             _value = value;
         }
     }
@@ -42,10 +58,9 @@ public class Field : IValidatableObject
     public List<object>? Values => FieldDefinition.IsList ? Value as List<object> : throw new InvalidOperationException("Only list fields have multiple values");
 
 
-    //TODO FieldType
-    //[JsonIgnore]
-    public FieldType ValueType { get; set; } // => Constants.Types.Get(FieldDefinition.InputDefinition.Type);
-        
+    [JsonIgnore]
+    public FieldType ValueType => FieldType.FromJson(FieldDefinition.InputDefinition.Type); // => Constants.Types.Get(FieldDefinition.InputDefinition.Type);
+
     public bool IsValid(ValidationContext validationContext) => !Validate(validationContext).Any();
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

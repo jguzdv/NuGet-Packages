@@ -7,10 +7,25 @@
 
 Welcome to your new app.
 
-<JGUZDV.DynamicForms.Blazor.EditFieldDefinition FieldDefinition="_fieldDefinition">
+<JGUZDV.DynamicForms.Blazor.EditFieldDefinition @bind-FieldDefinition="_fieldDefinition">
 
 </JGUZDV.DynamicForms.Blazor.EditFieldDefinition>
 
+<button @onclick="Send">send</button>
+
 @code{
     private FieldDefinition _fieldDefinition = new();
+
+    private async Task Send()
+    {
+        var client = new HttpClient();
+        await client.PostAsJsonAsync("https://localhost:7245/api/save", _fieldDefinition);
+        _fieldDefinition = new FieldDefinition();
+    }
+
+    private async Task Load()
+    {
+        var client = new HttpClient();
+        _fieldDefinition = await client.GetFromJsonAsync<FieldDefinition>("https://localhost:5001/api/load");
+    }
 }

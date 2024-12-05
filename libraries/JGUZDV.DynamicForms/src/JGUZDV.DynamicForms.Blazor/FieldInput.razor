@@ -1,0 +1,66 @@
+﻿@using JGUZDV.DynamicForms.Model
+
+@*TODO: Check if EditForm is a good idea HERE to show validation errors*@
+<EditForm Model="Field">
+    <ValidationSummary />
+    <label>@InputDefinition.Label</label>
+
+    @if (Field.FieldDefinition.ChoiceOptions != null)
+    {
+        <select name="@InputDefinition.Name" id="@InputDefinition.Id">
+            @foreach (var option in Field.FieldDefinition.ChoiceOptions)
+            {
+                <option value="@option.Value">@option.Name</option>
+            }
+        </select>
+    }
+    else
+    {
+        <input type="@InputDefinition.InputType" name="@InputDefinition.Name" id="@InputDefinition.Id" />
+    }
+</EditForm>
+
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public required Field Field { get; set; }
+
+    [Parameter]
+    public EventCallback<Field> FieldChanged { get; set; }
+
+    [Inject]
+    public required ValueProvider ValueProvider { get; set; }
+
+    private InputDefinition InputDefinition => Field.FieldDefinition.InputDefinition;
+
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        if (!parameters.TryGetValue(nameof(Field), out Field? field))
+        {
+            await base.SetParametersAsync(parameters);
+            return;
+        }
+
+        if (field != Field)
+        {
+            await base.SetParametersAsync(parameters);
+            return;
+        }
+
+        var values = await ValueProvider.GetValues(Field.ValueType);
+        if (values.HandlesType)
+        {
+            Field.FieldDefinition.ChoiceOptions = values.AllowedValues;
+        }
+
+
+        await base.SetParametersAsync(parameters);
+    }
+
+    protected override Task OnParametersSetAsync()
+    {
+
+        return base.OnParametersSetAsync();
+    }
+}

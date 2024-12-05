@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 
@@ -36,7 +35,7 @@ public abstract class FieldType
         return System.Text.Json.JsonSerializer.Serialize(this, options);
     }
 
-    public FieldType FromJson(string json)
+    public static FieldType FromJson(string json)
     {
         var options = new JsonSerializerOptions()
         {
@@ -46,8 +45,6 @@ public abstract class FieldType
 
         return JsonSerializer.Deserialize<FieldType>(json, options) ?? throw new InvalidOperationException($"Could not parse json: {json}");
     }
-
-
 
     public static List<FieldType> KnownFieldTypes = new()
     {
@@ -90,6 +87,21 @@ public abstract class FieldType
     }
 }
 
+//this should allow to inject at runtime dynamically allowed values e.g. resources in ResourceProvisioning
+public class ValueProvider
+{
+    private readonly Dictionary<FieldType, Func<Task<List<ChoiceOption>>>> _funcs = new();
+
+    public async Task<(bool HandlesType, List<ChoiceOption> AllowedValues)> GetValues(FieldType type)
+    {
+        if (_funcs.TryGetValue(type, out var func))
+        {
+            return (true, await func());
+        }
+
+        return (false, []);
+    }
+}
 
 public class DateOnlyFieldType : FieldType
 {

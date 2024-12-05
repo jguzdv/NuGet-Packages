@@ -30,8 +30,8 @@
     <div class="mb-2">
         <label for="type">@SL["EditFieldDefinition.Type"]</label>
         <select id="type" 
-            value="@FieldDefinition.InputDefinition.Type" 
-            class="form-control">
+            @bind="@FieldDefinition.InputDefinition.Type" 
+            class="form-select">
             @foreach (var type in FieldType.KnownFieldTypes)
             {
                 <option value="@type.ToJson()">@type.DisplayName</option>
@@ -85,9 +85,12 @@
     [Parameter]
     public required FieldDefinition FieldDefinition { get; set; }
 
+    [Parameter]
+    public EventCallback<FieldDefinition> FieldDefinitionChanged { get; set; }
+
     private void HandleValidSubmit()
     {
+        FieldDefinitionChanged.InvokeAsync(FieldDefinition);
         // Handle the form submission, e.g., save the data
-        Navigation.NavigateTo("/");
     }
 }
