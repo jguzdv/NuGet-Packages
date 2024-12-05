@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+
 using JGUZDV.L10n;
 
 namespace JGUZDV.DynamicForms.Model;
@@ -15,12 +16,19 @@ public class InputDefinition : IValidatableObject
 
     public string Name { get; set; }
     public string Id { get; set; }
-    public string Type { get; set; } 
+    public string Type { get; set; }
 
     public string InputType { get; set; } = "text";
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
+        var service = validationContext.GetService(typeof(ISupportedCultureService)) as ISupportedCultureService;
+
+        foreach (var lang in service?.GetSupportedCultures() ?? new())
+        {
+            if (string.IsNullOrWhiteSpace(Label[lang])) yield return new ValidationResult("Name muss gesetzt sein", new string[] { nameof(Label) });
+        }
+
         //if (string.IsNullOrWhiteSpace(Label["en"]) || string.IsNullOrWhiteSpace(Label["de"])) yield return new ValidationResult("Name muss gesetzt sein", new string[] { nameof(Label) });
         if (string.IsNullOrWhiteSpace(Type)) yield return new ValidationResult("Typ muss gesetzt sein", new string[] { nameof(Type) });
     }
@@ -35,7 +43,14 @@ public class ChoiceOption : IValidatableObject
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
-        //if (string.IsNullOrWhiteSpace(Name["de"]) || string.IsNullOrWhiteSpace(Name["en"])) yield return new ValidationResult("Name muss gesetzt sein", new string[] { nameof(Name) });
+        var service = validationContext.GetService(typeof(ISupportedCultureService)) as ISupportedCultureService;
+
+        foreach (var lang in service?.GetSupportedCultures() ?? new())
+        {
+            if (string.IsNullOrWhiteSpace(Name[lang])) yield return new ValidationResult("Name muss gesetzt sein", new string[] { nameof(Name) });
+        }
+
+
         if (string.IsNullOrWhiteSpace(Value)) yield return new ValidationResult("Wert muss gesetzt sein", new string[] { nameof(Value) });
     }
 }
@@ -63,6 +78,14 @@ public class FieldDefinition : IValidatableObject
     {
         var errors = new List<ValidationResult>();
         errors.AddRange(InputDefinition.Validate(validationContext).ToList());
+
+        var service = validationContext.GetService(typeof(ISupportedCultureService)) as ISupportedCultureService;
+
+        foreach (var lang in service?.GetSupportedCultures() ?? new())
+        {
+            if (string.IsNullOrWhiteSpace(Description[lang]))
+                errors.Add(new ValidationResult("Name muss gesetzt sein", new string[] { nameof(Description) }));
+        }
 
         if (SortKey < 0)
             errors = errors.Append(new ValidationResult("SortKey muss positiv sein", new string[] { nameof(SortKey) })).ToList();
