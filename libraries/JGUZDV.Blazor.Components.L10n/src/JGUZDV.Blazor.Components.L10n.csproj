@@ -12,9 +12,6 @@
       <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
       <PackageDescription>Blazor component to handle L10nString</PackageDescription>
 
-      <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
-
-      <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
 
