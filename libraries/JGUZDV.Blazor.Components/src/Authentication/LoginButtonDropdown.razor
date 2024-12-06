@@ -23,19 +23,21 @@
     }
 }
 
-<div class="dropdown">
-    <button class="jgu_btn btn @(HasUserName?"btn-light border":"btn-none")" @onclick="() => ToggleDropdown()">
-        <i class="fas fa-user-circle"></i>
-        @if (HasUserName)
-        {
-            <span class="ms-2">@Username</span>
-        }
-    </button>
-    <div class="dropdown-menu @(IsLogoutDropdownVisible?"show":"") @(AlignLeft ? "end-0" : "")">
+<Dropdown>
+    <DropdownLabelContent>
+        <span class="jgu_btn btn @(HasUserName?"btn-light border":"btn-none")">
+            <i class="fas fa-user-circle"></i>
+            @if (HasUserName)
+            {
+                <span class="ms-2">@Username</span>
+            }
+        </span>
+    </DropdownLabelContent>
+    <DropdownContent>
         <a class="dropdown-item" href="@LogoutUrl">
             <i class="fas fa-sign-out-alt"></i>
             @LR["AuthView.LogoutButton"]
         </a>
         @DropdownItems
-    </div>
-</div>
+    </DropdownContent>
+</Dropdown>

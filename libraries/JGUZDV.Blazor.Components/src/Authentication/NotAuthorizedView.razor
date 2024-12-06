@@ -12,7 +12,7 @@
     public string LoginUrl { get; set; } = "_app/sign-in";
 }
 
-<AwaitTask Task="AuthenticationState">
+<AwaitResult Task="AuthenticationState">
     @if (context.User.Identity?.IsAuthenticated == true)
     {
         <div class="d-flex h-100 flex-column align-items-center justify-content-center">
@@ -37,4 +37,4 @@
             </a>
         </div>
     }
-</AwaitTask>
+</AwaitResult>
