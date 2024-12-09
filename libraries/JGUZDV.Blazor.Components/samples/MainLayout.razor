@@ -1,5 +1,35 @@
 ﻿@inherits LayoutComponentBase
 
-<main>
-    @Body
-</main>
+@{
+    var logo = new AppHeader.LogoSpecs
+            {
+                SrcUrl = "https://cdn.zdv.uni-mainz.de/web/assets/logo_uni-mainz_quader.svg",
+                AltText = "Logo der Johannes Gutenberg-Universität Mainz",
+                Href = "https://www.uni-mainz.de/"
+            };
+}
+
+<div class="container p-0">
+    <div class="jbs-page jbs-grid jbs-container border">
+        <AppHeader Title="Meine Coole App" Logo="@logo" HelpUrl="@logo.Href" ShowLanguageSelector="@true" ShowLoginButton="@true" />
+
+        <div class="jbs-sidebar">
+            @{
+                var aClass = "btn btn-default btn-block";
+            }
+
+            <a class="@aClass" href="/dropdown">Dropdowns</a>
+            <a class="@aClass" href="/modal">Modal</a>
+            <a class="@aClass" href="/l10nEdit">L10nEdit</a>
+            <a class="@aClass" href="/l10nView">L10nView</a>
+            <a class="@aClass" href="/multi-select">Multiselect</a>
+            <a class="@aClass" href="/client-storage">client storage</a>
+        </div>
+
+        <main>
+            @Body
+        </main>
+    </div>
+</div>
+
+

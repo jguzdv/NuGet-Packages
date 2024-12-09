@@ -1,0 +1,88 @@
+@using JGUZDV.Blazor.Components.Authentication;
+@using JGUZDV.Blazor.Components.Localization;
+
+<header class="@HeaderClass">
+    <div class="row mx-0 mt-1 mb-2 align-items-center">
+        <div class="col-12 col-md-auto mb-2 mb-md-0 d-flex align-items-center">
+            @if (Logo != null)
+            {
+                <a class="me-2" href="@Logo.Href">
+                    <img class="app-logo" src="@Logo.SrcUrl" alt="@Logo.AltText" />
+                </a>
+            }
+
+            <h1 class="m-0">@Title</h1>
+        </div>
+
+
+        @if (AdditionalContent != null)
+        {
+            <div class="col-md col-12 mb-2 mb-md-0">
+                @AdditionalContent
+            </div>
+        }
+
+        @if (ShowButtons)
+        {
+            <div class="col-12 col-md-auto justify-self-end d-flex">
+                @if (ShowLoginButton)
+                {
+                    <LoginButton />
+                }
+
+                @if (ShowLanguageSelector)
+                {
+                    <LanguageSelect />
+                }
+
+                @if (HelpUrl != null)
+                {
+                    <a aria-label="@LR["Help"]" class="jgu_btn btn btn-none" target="_blank" href="@HelpUrl">
+                        @Icons.Help(null)
+                    </a>
+                }
+            </div>
+        }
+    </div>
+</header>
+
+@code {
+    [Inject, NotNull]
+    private IStringLocalizer<ComponentStrings>? LR { get; set; }
+
+
+    [Parameter, EditorRequired]
+    public required string Title { get; set; }
+
+    [Parameter]
+    public LogoSpecs? Logo { get; set; }
+
+
+    [Parameter]
+    public RenderFragment? AdditionalContent { get; set; }
+
+
+    [Parameter]
+    public bool ShowLoginButton { get; set; } = true;
+
+    [Parameter]
+    public bool ShowLanguageSelector { get; set; } = true;
+
+    [Parameter]
+    public string? HelpUrl { get; set; }
+
+
+    public bool ShowButtons => ShowLoginButton || ShowLanguageSelector || HelpUrl != null;
+
+
+    [Parameter]
+    public string? HeaderClass { get; set; } = "jbs-header";
+
+
+    public class LogoSpecs
+    {
+        public required string SrcUrl { get; set; }
+        public required string AltText { get; set; }
+        public string? Href { get; set; }
+    }
+}

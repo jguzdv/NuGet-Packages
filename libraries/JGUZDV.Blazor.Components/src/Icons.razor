@@ -12,6 +12,12 @@
 
     public static RenderFragment<string?> Close { get; set; } = classes =>
     @<i class="fas fa-times @classes"></i>;
+    
+    public static RenderFragment<string?> Help { get; set; } = classes =>
+    @<i class="fas fa-question-circle @classes" aria-hidden="true"></i>;
+
+    public static RenderFragment<string?> LanguageSelect { get; set; } = classes =>
+    @<i class="fas fa-globe @classes" aria-hidden="true"></i>;
 
     public static RenderFragment<string?> Collapsed { get; set; } = classes =>
     @<i class="fas fa-chevron-up @classes"></i>;
