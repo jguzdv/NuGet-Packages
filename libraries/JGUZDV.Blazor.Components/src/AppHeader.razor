@@ -2,33 +2,34 @@
 @using JGUZDV.Blazor.Components.Localization;
 
 <header class="@HeaderClass">
-    <div class="row mx-0 my-1 my-sm-0 align-items-center">
-        @if (Logo != null)
-        {
-            <div class="col col-auto">
-                <a href="@Logo.Href">
+    <div class="row mx-0 mt-1 mb-2 align-items-center">
+        <div class="col-12 col-md-auto mb-2 mb-md-0 d-flex align-items-center">
+            @if (Logo != null)
+            {
+                <a class="me-2" href="@Logo.Href">
                     <img class="app-logo" src="@Logo.SrcUrl" alt="@Logo.AltText" />
                 </a>
-            </div>
-        }
+            }
 
-        <h1 class="col col-auto m-0">@Title</h1>
+            <h1 class="m-0">@Title</h1>
+        </div>
+
 
         @if (AdditionalContent != null)
         {
-            <div class="col">
+            <div class="col-md col-12 mb-2 mb-md-0">
                 @AdditionalContent
             </div>
         }
 
-        @if(ShowButtons)
+        @if (ShowButtons)
         {
-            <div class="col col-auto justify-self-end">
-                @if(ShowLoginButton)
+            <div class="col-12 col-md-auto justify-self-end d-flex">
+                @if (ShowLoginButton)
                 {
                     <LoginButton />
                 }
-                
+
                 @if (ShowLanguageSelector)
                 {
                     <LanguageSelect />
@@ -45,7 +46,7 @@
     </div>
 </header>
 
-@code{
+@code {
     [Inject, NotNull]
     private IStringLocalizer<ComponentStrings>? LR { get; set; }
 
