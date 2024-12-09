@@ -117,6 +117,18 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AuthView.Authenticating" xml:space="preserve">
+    <value>L'inscription est vérifiée ...</value>
+  </data>
+  <data name="AuthView.LoginButton" xml:space="preserve">
+    <value>Inscrivez-vous maintenant</value>
+  </data>
+  <data name="AuthView.LogoutButton" xml:space="preserve">
+    <value>Déconnexion</value>
+  </data>
+  <data name="AuthView.Unauthorized" xml:space="preserve">
+    <value>Pas d'accès !</value>
+  </data>
   <data name="LanguagePicker.Header" xml:space="preserve">
     <value>Choisir langue</value>
   </data>
