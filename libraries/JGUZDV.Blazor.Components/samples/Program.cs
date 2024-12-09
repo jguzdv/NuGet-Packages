@@ -3,6 +3,7 @@ using System.Security.Claims;
 using JGUZDV.Blazor.Components;
 using JGUZDV.Blazor.Components.L10n;
 using JGUZDV.Blazor.Components.Samples;
+using JGUZDV.L10n;
 
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
