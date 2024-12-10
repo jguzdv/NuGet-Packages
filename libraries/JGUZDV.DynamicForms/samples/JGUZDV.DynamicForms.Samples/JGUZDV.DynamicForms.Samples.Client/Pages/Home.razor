@@ -1,5 +1,8 @@
 ﻿@page "/"
 @using JGUZDV.DynamicForms.Model
+@using System.Text.Json
+@using JGUZDV.DynamicForms.Serialization
+@using JGUZDV.L10n
 
 <PageTitle>Home</PageTitle>
 
@@ -14,13 +17,19 @@ Welcome to your new app.
 <button @onclick="Send">send</button>
 
 
-@code{
+@code {
     private FieldDefinition _fieldDefinition = new();
 
     private async Task Send()
     {
         var client = new HttpClient();
-        await client.PostAsJsonAsync("https://localhost:7245/api/definitions/save", _fieldDefinition);
+        var options = new JsonSerializerOptions()
+            {
+                TypeInfoResolver = new DefaultResolver(),
+            };
+        options.Converters.Add(new L10nStringJsonConverter());
+
+        await client.PostAsJsonAsync("https://localhost:7245/api/definitions/save", _fieldDefinition, options);
         _fieldDefinition = new FieldDefinition();
     }
 

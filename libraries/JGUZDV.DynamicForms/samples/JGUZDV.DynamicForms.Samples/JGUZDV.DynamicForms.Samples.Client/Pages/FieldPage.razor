@@ -1,5 +1,8 @@
 ﻿@page "/field"
 @using JGUZDV.DynamicForms.Model
+@using System.Text.Json
+@using JGUZDV.DynamicForms.Serialization
+@using JGUZDV.L10n
 
 
 <h1>Field</h1>
@@ -17,7 +20,13 @@
     protected override async Task OnInitializedAsync()
     {
         var client = new HttpClient();
-        _fields = (await client.GetFromJsonAsync<List<FieldDefinition>>("https://localhost:7245/api/definitions"))
+        var options = new JsonSerializerOptions()
+            {
+                TypeInfoResolver = new DefaultResolver(),
+            };
+        options.Converters.Add(new L10nStringJsonConverter());
+
+        _fields = (await client.GetFromJsonAsync<List<FieldDefinition>>("https://localhost:7245/api/definitions", options))
             .Select(x => new Field(x))
             .ToList();
     }
@@ -25,6 +34,11 @@
     private async Task Save()
     {
         var client = new HttpClient();
+        var options = new JsonSerializerOptions()
+            {
+                TypeInfoResolver = new DefaultResolver(),
+            };
+        options.Converters.Add(new L10nStringJsonConverter());
         await client.PostAsJsonAsync("https://localhost:7245/api/documents/save", _fields);
     }
 }

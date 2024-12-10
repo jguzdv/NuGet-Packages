@@ -5,8 +5,9 @@
     <ValidationSummary />
     <label>@InputDefinition.Label</label>
 
-    @if (Field.FieldDefinition.ChoiceOptions != null)
+    @if (Field.FieldDefinition.ChoiceOptions?.Any() == true)
     {
+        <label>@InputDefinition.Label</label>
         <select name="@InputDefinition.Name" id="@InputDefinition.Id">
             @foreach (var option in Field.FieldDefinition.ChoiceOptions)
             {
@@ -16,6 +17,7 @@
     }
     else
     {
+        <label>@InputDefinition.Label</label>
         <input type="@InputDefinition.InputType" name="@InputDefinition.Name" id="@InputDefinition.Id" />
     }
 </EditForm>

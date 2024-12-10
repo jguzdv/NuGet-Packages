@@ -1,6 +1,7 @@
 using JGUZDV.DynamicForms.Model;
 using JGUZDV.DynamicForms.Samples.Components;
 using JGUZDV.DynamicForms.Samples.DataAccess;
+using JGUZDV.DynamicForms.Serialization;
 using JGUZDV.L10n;
 
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,12 @@ builder.Services.AddSupportedCultures(["de", "en"]);
 builder.Services.AddDbContext<TestDbContext>(options =>
 {
     options.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=ZDVDEV_DF_SAMPLE;Trusted_Connection=True");
+});
+
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.TypeInfoResolver = new DefaultResolver();
+    options.SerializerOptions.Converters.Add(new L10nStringJsonConverter());
 });
 
 builder.Services.AddScoped<ValueProvider>();
@@ -46,6 +53,7 @@ app.UseStaticFiles();
 app.UseAntiforgery();
 
 app.UseRequestLocalization("de", "en");
+
 
 app.MapPost("api/definitions/save", async (FieldDefinition fieldDefinition, TestDbContext context) =>
 {

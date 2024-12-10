@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 
 using JGUZDV.DynamicForms.Model;
+using JGUZDV.L10n;
 
 namespace JGUZDV.DynamicForms.Serialization
 {
@@ -18,6 +19,11 @@ namespace JGUZDV.DynamicForms.Serialization
             if (typeInfo.Type.IsAssignableTo(typeof(FieldType)))
             {
                 typeInfo.Properties.Remove(typeInfo.Properties.FirstOrDefault(x => x.Name == "ClrType")!);
+            }
+
+            if(!options.Converters.Any(x => x is L10nStringJsonConverter))
+            {
+                options.Converters.Add(new L10nStringJsonConverter());
             }
 
             return typeInfo;
