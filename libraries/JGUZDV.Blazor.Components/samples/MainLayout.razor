@@ -15,7 +15,7 @@
             <AdditionalContent><span class="jgu_btn btn btn-primary">Some Additional Content</span></AdditionalContent>
         </AppHeader>
 
-        <div class="jbs-sidebar">
+        <Sidebar>
             @{
                 var aClass = "btn btn-default btn-block";
             }
@@ -26,7 +26,7 @@
             <a class="@aClass" href="/l10nView">L10nView</a>
             <a class="@aClass" href="/multi-select">Multiselect</a>
             <a class="@aClass" href="/client-storage">client storage</a>
-        </div>
+        </Sidebar>
 
         <main>
             @Body

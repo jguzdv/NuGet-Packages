@@ -6,55 +6,54 @@ header {
     container: header / inline-size;
     padding-inline: 0.5rem;
     padding-top: 0.125rem;
+}
 
+.header-grid {
+    display: grid;
+    grid-template-areas:
+        "logo controls"
+        "center center";
+    grid-template-columns: auto 1fr;
+    gap: 0.25rem;
+    align-items: center;
+}
 
+.header-logo {
+    grid-area: logo;
+    justify-self: start;
+}
+
+.header-center {
+    grid-area: center;
+    justify-self: start;
+}
+
+.header-controls {
+    grid-area: controls;
+    justify-self: end;
+    display: flex;
+}
+
+.header-app-title {
+    grid-area: title;
+    display: none;
+}
+
+@container (min-width: 700px) {
     .header-grid {
-        display: grid;
-        grid-template-areas:
-            "logo controls"
-            "center center";
-        grid-template-columns: auto 1fr;
-        gap: 0.25rem;
-        align-items: center;
+        grid-template-areas: "logo center controls";
+        grid-template-columns: auto 1fr auto;
     }
+}
 
-    .header-logo {
-        grid-area: logo;
-        justify-self: start;
-    }
-
-    .header-center {
-        grid-area: center;
-        justify-self: start;
-    }
-
-    .header-controls {
-        grid-area: controls;
-        justify-self: end;
-        display: flex;
+@container (min-width: 940px) {
+    .header-grid {
+        grid-template-areas: "logo title center controls";
+        grid-template-columns: auto auto 1fr auto;
     }
 
     .header-app-title {
-        grid-area: title;
-        display: none;
-    }
-
-    @container (min-width: 700px) {
-        .header-grid {
-            grid-template-areas: "logo center controls";
-            grid-template-columns: auto 1fr auto;
-        }
-    }
-
-    @container (min-width: 940px) {
-        .header-grid {
-            grid-template-areas: "logo title center controls";
-            grid-template-columns: auto auto 1fr auto;
-        }
-
-        .header-app-title {
-            display: block;
-            justify-self: start;
-        }
+        display: block;
+        justify-self: start;
     }
 }

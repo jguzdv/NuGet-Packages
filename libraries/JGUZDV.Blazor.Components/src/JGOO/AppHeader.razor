@@ -2,7 +2,7 @@
 @using JGUZDV.Blazor.Components.Authentication;
 @using JGUZDV.Blazor.Components.Localization;
 
-<header class="@HeaderClass">
+<header class="jbs-header @AdditonalClasses">
     <div class="header-grid">
         @if (Logo != null)
         {
@@ -51,9 +51,9 @@
 
                 @if (ShowSidebarToggle)
                 {
-                    <button class="jgu_btn btn btn-none">
+                    <label for="jbs-sidebar-toggle" class="jgu_btn btn btn-none">
                         @Icons.Menu(null)
-                    </button>
+                    </label>
                 }
             </div>
         }
@@ -102,7 +102,7 @@
 
 
     [Parameter]
-    public string? HeaderClass { get; set; } = "jbs-header";
+    public string? AdditonalClasses { get; set; }
 
 
     public class LogoSpecs
