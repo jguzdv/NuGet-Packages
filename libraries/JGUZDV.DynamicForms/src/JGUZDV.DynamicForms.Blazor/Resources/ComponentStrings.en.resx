@@ -117,7 +117,34 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="EditFieldDefinition.ChoiceOptions" xml:space="preserve">
+    <value>Predefined values</value>
+  </data>
+  <data name="EditFieldDefinition.Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="EditFieldDefinition.Identifier" xml:space="preserve">
+    <value>Identifier</value>
+  </data>
+  <data name="EditFieldDefinition.InputType" xml:space="preserve">
+    <value>Input type</value>
+  </data>
+  <data name="EditFieldDefinition.IsList" xml:space="preserve">
+    <value>As list</value>
+  </data>
+  <data name="EditFieldDefinition.IsRequired" xml:space="preserve">
+    <value>Required</value>
+  </data>
   <data name="EditFieldDefinition.Label" xml:space="preserve">
     <value>Label</value>
+  </data>
+  <data name="EditFieldDefinition.Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="EditFieldDefinition.SortKey" xml:space="preserve">
+    <value>Sort key</value>
+  </data>
+  <data name="EditFieldDefinition.Type" xml:space="preserve">
+    <value>Data type</value>
   </data>
 </root>

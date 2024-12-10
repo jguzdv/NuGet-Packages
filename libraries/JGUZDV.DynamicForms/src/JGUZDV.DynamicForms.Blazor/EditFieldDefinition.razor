@@ -47,21 +47,21 @@
     <div class="mb-2">
         <label for="description">@SL["EditFieldDefinition.Description"]</label>
         <L10nEditor L10n="FieldDefinition.Description" />
-    </div class="mb-2">
+    </div>
 
-    <div class="mb-2">
-        <label for="isList">@SL["EditFieldDefinition.IsList"]</label>
+    <div class="mb-2 form-check">
         <InputCheckbox id="isList" @bind-Value="FieldDefinition.IsList" class="form-check-input" />
+        <label class="form-check-label" for="isList">@SL["EditFieldDefinition.IsList"]</label>
+    </div>
+
+    <div class="mb-2 form-check">
+        <InputCheckbox class="form-check-input" id="isRequired" @bind-Value="FieldDefinition.IsRequired" />
+        <label class="form-check-label" for="isRequired">@SL["EditFieldDefinition.IsRequired"]</label>
     </div>
 
     <div class="mb-2">
         <label for="sortKey">@SL["EditFieldDefinition.SortKey"]</label>
         <InputNumber id="sortKey" @bind-Value="FieldDefinition.SortKey" class="form-control" />
-    </div>
-
-    <div class="mb-2">
-        <label for="isRequired">@SL["EditFieldDefinition.IsRequired"]</label>
-        <InputCheckbox id="isRequired" @bind-Value="FieldDefinition.IsRequired" class="form-check-input" />
     </div>
 
     @*TODO: Modal for create and edit?*@
