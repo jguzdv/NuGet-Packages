@@ -1,0 +1,12 @@
+<input aria-hidden="true" type="checkbox" id="jbs-sidebar-toggle" class="d-non" />
+<aside class="jbs-sidebar @AdditionalClasses">
+    @ChildContent
+</aside>
+
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public string AdditionalClasses { get; set; }
+}

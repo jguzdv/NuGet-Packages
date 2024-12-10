@@ -1,0 +1,3 @@
+﻿#jbs-sidebar-toggle:checked + .jbs-sidebar {
+    display: block;
+}
