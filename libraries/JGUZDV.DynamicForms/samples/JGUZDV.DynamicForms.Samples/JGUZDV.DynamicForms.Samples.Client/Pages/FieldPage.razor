@@ -1,0 +1,30 @@
+﻿@page "/field"
+@using JGUZDV.DynamicForms.Model
+
+
+<h1>Field</h1>
+
+@foreach (var field in _fields)
+{
+    <JGUZDV.DynamicForms.Blazor.FieldInput Field="field" />
+}
+
+<button @onclick="Save">Save</button>
+
+@code {
+    private List<Field> _fields = new List<Field>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var client = new HttpClient();
+        _fields = (await client.GetFromJsonAsync<List<FieldDefinition>>("https://localhost:7245/api/definitions"))
+            .Select(x => new Field(x))
+            .ToList();
+    }
+
+    private async Task Save()
+    {
+        var client = new HttpClient();
+        await client.PostAsJsonAsync("https://localhost:7245/api/documents/save", _fields);
+    }
+}
