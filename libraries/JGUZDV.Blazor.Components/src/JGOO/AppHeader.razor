@@ -15,10 +15,10 @@
         
         <h1 class="header-app-title">@Title</h1>
         
-        @if (AdditionalContent != null)
+        @if (ChildContent != null)
         {
-            <div class="header-center">
-                @AdditionalContent
+            <div class="header-content">
+                @ChildContent
             </div>
         }
 
@@ -51,7 +51,7 @@
 
                 @if (ShowSidebarToggle)
                 {
-                    <label for="jbs-sidebar-toggle" class="jgu_btn btn btn-none">
+                    <label for="jbs-sidebar-toggle" class="jgu_btn btn btn-none d-lg-none">
                         @Icons.Menu(null)
                     </label>
                 }
@@ -73,7 +73,7 @@
 
 
     [Parameter]
-    public RenderFragment? AdditionalContent { get; set; }
+    public RenderFragment? ChildContent { get; set; }
 
 
     [Parameter]

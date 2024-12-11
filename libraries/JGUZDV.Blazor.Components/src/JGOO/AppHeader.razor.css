@@ -12,9 +12,10 @@ header {
     display: grid;
     grid-template-areas:
         "logo controls"
-        "center center";
+        ". content";
     grid-template-columns: auto 1fr;
-    gap: 0.25rem;
+    column-gap: 0.5rem;
+    row-gap: 0.25rem;
     align-items: center;
 }
 
@@ -23,8 +24,8 @@ header {
     justify-self: start;
 }
 
-.header-center {
-    grid-area: center;
+.header-content {
+    grid-area: content;
     justify-self: start;
 }
 
@@ -37,18 +38,29 @@ header {
 .header-app-title {
     grid-area: title;
     display: none;
+    text-overflow: ellipsis;
 }
 
-@container (min-width: 700px) {
+@container (min-width: 410px) {
     .header-grid {
-        grid-template-areas: "logo center controls";
+        grid-template-areas: "logo title controls"
+            ". content content";
         grid-template-columns: auto 1fr auto;
+    }
+
+    .header-app-title {
+        display: block;
     }
 }
 
+@container (min-widht: 520px) {
+
+}
+
+
 @container (min-width: 940px) {
     .header-grid {
-        grid-template-areas: "logo title center controls";
+        grid-template-areas: "logo title content controls";
         grid-template-columns: auto auto 1fr auto;
     }
 
