@@ -1,11 +1,17 @@
-﻿using JGUZDV.AspNetCore.Hosting.Extensions;
+﻿using System.Text.Json.Serialization;
+
+using JGUZDV.AspNetCore.Hosting.Extensions;
+using JGUZDV.Extensions.Json;
 using JGUZDV.WebApiHost.FeatureManagement;
 
+using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Components.Server;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
@@ -21,25 +27,13 @@ namespace JGUZDV.AspNetCore.Hosting;
 public static class JGUZDVHostApplicationBuilderExtensions
 {
     /// <summary>
-    /// Adds JGUZDV Feature Management to the WebApplicationBuilder.
-    /// It expects the config section to be named "Features".
-    /// If the configuration section is not found, it will throw an exception.
+    /// Adds JGUZDVLogging to the WebApplicationBuilder.
     /// </summary>
-    public static JGUZDVHostApplicationBuilder AddFeatureManagement(
+    public static JGUZDVHostApplicationBuilder AddLogging(
         this JGUZDVHostApplicationBuilder appBuilder,
-        Action<IFeatureManagementBuilder>? configure = null,
-        string configSection = Constants.ConfigSections.FeatureManagement)
+        Action<ILoggingBuilder>? configure = null)
     {
-        appBuilder.Configuration.ValidateConfigSectionExists(configSection);
-
-        var builder = appBuilder.Services.AddScopedFeatureManagement(
-            appBuilder.Configuration.GetSection(configSection)
-            )
-            .AddFeatureFilter<ClaimRequirementFeatureFilter>();
-
-        configure?.Invoke(builder);
-
-        appBuilder.HasFeatureManagement = true;
+        appBuilder.Builder.UseJGUZDVLogging();
         return appBuilder;
     }
 
@@ -59,7 +53,6 @@ public static class JGUZDVHostApplicationBuilderExtensions
         var builder = appBuilder.Builder.AddJGUZDVDataProtection(configSection);
         configure?.Invoke(builder);
 
-        appBuilder.HasDataProtection = true;
         return appBuilder;
     }
 
@@ -78,7 +71,6 @@ public static class JGUZDVHostApplicationBuilderExtensions
         appBuilder.Services.AddDistributedSqlServerCache(opt => 
             appBuilder.Configuration.GetSection(configSection).Bind(opt));
 
-        appBuilder.HasDistributedCache = true;
         return appBuilder;
     }
 
@@ -129,7 +121,10 @@ public static class JGUZDVHostApplicationBuilderExtensions
     }
 
 
-    public static JGUZDVHostApplicationBuilder AddTelemetry(
+    /// <summary>
+    /// Adds Telemetry to the WebApplicationBuilder.
+    /// </summary>
+    public static JGUZDVHostApplicationBuilder AddOpenTelemetry(
         this JGUZDVHostApplicationBuilder appBuilder,
         string configSection = Constants.ConfigSections.Telemetry)
     {
@@ -137,15 +132,31 @@ public static class JGUZDVHostApplicationBuilderExtensions
         //appBuilder.Services.AddApplicationInsightsTelemetry(
         //    appBuilder.Configuration.GetSection(configSection).Get<string>()!);
 
-        appBuilder.HasTelemetry = true;
+        appBuilder.HasOpenTelemetry = true;
         return appBuilder;
     }
 
 
+    /// <summary>
+    /// Adds Health checks to the WebApplicationBuilder.
+    /// </summary>
+    public static JGUZDVHostApplicationBuilder AddHealthChecks(
+        this JGUZDVHostApplicationBuilder appBuilder)
+    {
+        appBuilder.Services.AddHealthChecks();
+        
+        appBuilder.HasHealthChecks = true;
+        return appBuilder;
+    }
+
+
+    /// <summary>
+    /// Adds OpenApi to the WebApplicationBuilder.
+    /// </summary>
     public static JGUZDVHostApplicationBuilder AddOpenApi(
         this JGUZDVHostApplicationBuilder appBuilder)
     {
-        appBuilder.Builder.AddOpenApi();
+        appBuilder.Services.AddOpenApi();
 
         appBuilder.HasOpenApi = true;
         return appBuilder;
@@ -153,11 +164,118 @@ public static class JGUZDVHostApplicationBuilderExtensions
 
 
     /// <summary>
+    /// Adds JGUZDV Feature Management to the WebApplicationBuilder.
+    /// It expects the config section to be named "Features".
+    /// If the configuration section is not found, it will throw an exception.
+    /// </summary>
+    public static JGUZDVHostApplicationBuilder AddFeatureManagement(
+        this JGUZDVHostApplicationBuilder appBuilder,
+        Action<IFeatureManagementBuilder>? configure = null,
+        string configSection = Constants.ConfigSections.FeatureManagement)
+    {
+        appBuilder.Configuration.ValidateConfigSectionExists(configSection);
+
+        var builder = appBuilder.Services.AddScopedFeatureManagement(
+            appBuilder.Configuration.GetSection(configSection)
+            )
+            .AddFeatureFilter<ClaimRequirementFeatureFilter>();
+
+        configure?.Invoke(builder);
+
+        appBuilder.HasFeatureManagement = true;
+        return appBuilder;
+    }
+
+    #region Frontend Frameworks
+    /// <summary>
+    /// Adds MVC to the WebApplicationBuilder.
+    /// This will also configure the JsonOptions MVC controllers.
+    /// </summary>
+    public static JGUZDVHostApplicationBuilder AddAspNetCoreMvc(
+        this JGUZDVHostApplicationBuilder appBuilder,
+        bool enableViewSupport,
+        Action<IMvcBuilder>? configure = null)
+    {
+        IMvcBuilder mvcBuilder;
+        if (enableViewSupport)
+        {
+            appBuilder.Services.AddAntiforgery();
+            mvcBuilder = appBuilder.Services.AddControllersWithViews();
+
+            appBuilder.HasFrontend = true;
+        }
+        else
+        {
+            mvcBuilder = appBuilder.Services.AddControllers();
+        }
+        
+        mvcBuilder.AddJsonOptions(opt => opt.JsonSerializerOptions.SetJGUZDVDefaults());
+        configure?.Invoke(mvcBuilder);
+
+        appBuilder.HasMVC = true;
+        return appBuilder;
+    }
+
+
+    /// <summary>
+    /// Adds RazorPages to the WebApplicationBuilder.
+    /// </summary>
+    public static JGUZDVHostApplicationBuilder AddRazorPages(
+        this JGUZDVHostApplicationBuilder appBuilder,
+        Action<IMvcBuilder>? configure = null)
+    {
+        appBuilder.Services.AddAntiforgery();
+
+        var builder = appBuilder.Services.AddRazorPages();
+        configure?.Invoke(builder);
+
+        appBuilder.HasRazorPages = true;
+        appBuilder.HasFrontend = true;
+        return appBuilder;
+    }
+
+
+    /// <summary>
+    /// Adds Blazor to the WebApplicationBuilder.
+    /// </summary>
+    public static JGUZDVHostApplicationBuilder AddBlazor(
+        this JGUZDVHostApplicationBuilder appBuilder,
+        bool enableInteractiveComponents = false,
+        Action<IRazorComponentsBuilder>? configure = null,
+        Action<CircuitOptions>? configureCircuit = null)
+    {
+        // Add services to the container.
+        var builder = appBuilder.Services.AddRazorComponents();
+        if (enableInteractiveComponents)
+        {
+            builder.AddInteractiveServerComponents(configureCircuit);
+            appBuilder.HasInteractiveServerComponents = true;
+        }
+
+        configure?.Invoke(builder);
+
+        appBuilder.HasRazorComponents = true;
+        return appBuilder;
+    }
+
+
+    /// <summary>
+    /// Sets JsonOptions for minimal API
+    /// </summary>
+    public static void ApplyJsonOptions(this JsonOptions opt)
+    {
+        opt.SerializerOptions.SetJGUZDVDefaults();
+    }
+    #endregion
+
+
+    #region JwtBearer Authentication
+    /// <summary>
     /// Adds JwtBearer Authentication to the WebApplicationBuilder and adds an authorization check
     /// that ensures one or multiple scopes to be present in the token.
     /// If Authentiation:JwtBearer is not present an error will be thrown
     /// </summary>
-    public static JGUZDVHostApplicationBuilder AddJwtBearerAuthentication(
+    public static JGUZDVHostApplicationBuilder AddDefaultJwtBearerAuthentication(
         this JGUZDVHostApplicationBuilder appBuilder,
         Action<AuthenticationBuilder>? authenticationBuilderAction = null,
         Action<AuthenticationOptions>? configureaAuthentication = null,
@@ -180,19 +298,7 @@ public static class JGUZDVHostApplicationBuilderExtensions
             })
             .AddJwtBearer(opt =>
             {
-                bearerConfigSection.Bind(opt);
-
-                var validAudiences = bearerConfigSection.GetSection("ValidAudiences").Get<ICollection<string>?>() ?? [];
-                var validateAudience = validAudiences?.Count > 0;
-
-                opt.TokenValidationParameters.ValidateAudience = validateAudience;
-                opt.TokenValidationParameters.ValidAudiences = validAudiences;
-
-                if (opt.TokenValidationParameters.ValidAudiences?.Any() != true)
-                    LogMessages.NoValidAudiences(logger);
-
-                opt.MapInboundClaims = false;
-
+                opt.ApplyDefaultBearerAuthenticationConfig(bearerConfigSection, logger);
                 configureJwtBearer?.Invoke(opt);
             });
 
@@ -200,28 +306,65 @@ public static class JGUZDVHostApplicationBuilderExtensions
 
         appBuilder.Services.AddAuthorization(opt =>
         {
-            var scopes = bearerConfigSection.GetSection("AllowedScopes").Get<string[]>() ?? [];
-
-            if (scopes.Length == 0)
-            {
-                LogMessages.NoRequiredScopes(logger);
-            }
-            else
-            {
-                var scopeClaimType = bearerConfigSection["ScopeType"] ?? "scope";
-
-                opt.AddPolicy("DefaultWithScopeCheck", p =>
-                {
-                    p.RequireAuthenticatedUser();
-                    p.RequireAnyScope(scopes);
-                });
-                opt.DefaultPolicy = opt.GetPolicy("DefaultWithScopeCheck")!;
-            }
-
+            ApplyDefaultBearerAuthorizationConfig(opt, bearerConfigSection, logger);
             configureAuthorization?.Invoke(opt);
         });
 
         appBuilder.HasAuthentication = true;
         return appBuilder;
     }
+
+
+    /// <summary>
+    /// Applies the default configuration for Authorization for JwtBearer.<br />
+    /// This is reading AllowedScopes from the config and setting the DefaultPolicy to "DefaultWithScopeCheck".
+    /// </summary>
+    public static void ApplyDefaultBearerAuthorizationConfig(this AuthorizationOptions opt, IConfigurationSection bearerConfigSection, ILogger logger)
+    {
+        var scopes = bearerConfigSection.GetSection("AllowedScopes").Get<string[]>() ?? [];
+
+        if (scopes.Length == 0)
+        {
+            LogMessages.NoRequiredScopes(logger);
+        }
+        else
+        {
+            var scopeClaimType = bearerConfigSection["ScopeType"] ?? "scope";
+
+            opt.AddPolicy("DefaultWithScopeCheck", p =>
+            {
+                p.RequireAuthenticatedUser();
+                p.RequireAnyScope(scopes);
+            });
+            opt.DefaultPolicy = opt.GetPolicy("DefaultWithScopeCheck")!;
+        }
+    }
+
+    /// <summary>
+    /// Applies the default configuration for JwtBearerOptions.<br />
+    /// This is binding the configSection to the options, setting the AudienceValidation via "ValidAudiences" and disabling the mapping of claims.
+    /// </summary>
+    public static void ApplyDefaultBearerAuthenticationConfig(
+        this JwtBearerOptions opt,
+        IConfigurationSection configSection,
+        ILogger logger)
+    {
+        configSection.Bind(opt);
+
+        var validAudiences = configSection.GetSection("ValidAudiences").Get<ICollection<string>?>() ?? [];
+        var validateAudience = validAudiences?.Count > 0;
+
+        opt.TokenValidationParameters.ValidateAudience = validateAudience;
+        opt.TokenValidationParameters.ValidAudiences = validAudiences;
+
+        if (opt.TokenValidationParameters.ValidAudiences?.Any() != true)
+            LogMessages.NoValidAudiences(logger);
+
+        opt.MapInboundClaims = false;
+    }
+    #endregion
+    
+    #region OpenIdConnect Authentication
+
+    #endregion
 }
