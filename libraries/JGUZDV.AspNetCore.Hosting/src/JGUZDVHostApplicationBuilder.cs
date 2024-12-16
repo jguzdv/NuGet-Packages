@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace JGUZDV.AspNetCore.Hosting;
@@ -102,9 +103,14 @@ public class JGUZDVHostApplicationBuilder
     public bool HasRazorComponents { get; internal set; }
 
     /// <summary>
-    /// Gets a value indicating whether the application has interactive server components configured (Blazor Static Server + Interactive Client)
+    /// Gets a value indicating whether the application has interactive server components configured (Blazor Server)
     /// </summary>
     public bool HasInteractiveServerComponents { get; internal set; }
+
+    /// <summary>
+    /// Gets a value indicating whether the application has interactive web assembly components configured (Blazor WebAssembly)
+    /// </summary>
+    public bool HasInteractiveWebAssemblyComponents { get; internal set; }
 
 
     /// <summary>
@@ -168,6 +174,12 @@ public class JGUZDVHostApplicationBuilder
             app.MapStaticAssets();
         }
 
+        // Configure the HTTP request pipeline.
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseWebAssemblyDebugging();
+        }
+
         ConfigureDefaultApp(app);
 
         if (HasRazorComponents)
@@ -178,6 +190,11 @@ public class JGUZDVHostApplicationBuilder
             if (HasInteractiveServerComponents) {
                 b.AddInteractiveServerRenderMode();
             }
+
+            if (HasInteractiveWebAssemblyComponents)
+            {
+                b.AddInteractiveWebAssemblyRenderMode();
+            }
         }
 
         return app;
@@ -187,6 +204,18 @@ public class JGUZDVHostApplicationBuilder
     private WebApplication ConfigureDefaultApp(WebApplication app)
     {
         app.UseStaticFiles();
+
+        if(HasFrontend)
+        {
+            if(!app.Environment.IsDevelopment())
+            {
+                app.UseExceptionHandler("/Error", createScopeForErrors: true);
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
+
+            app.UseHttpsRedirection();
+        }
 
         app.UseRouting();
 
@@ -228,6 +257,11 @@ public class JGUZDVHostApplicationBuilder
         {
             // Maps featue management to /_app/features
             app.MapFeatureManagement();
+        }
+
+        if (HasAuthentication)
+        {
+            app.MapAuthentication();
         }
 
         if (HasMVC)

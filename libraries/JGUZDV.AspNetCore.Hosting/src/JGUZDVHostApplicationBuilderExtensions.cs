@@ -240,19 +240,31 @@ public static class JGUZDVHostApplicationBuilderExtensions
     /// </summary>
     public static JGUZDVHostApplicationBuilder AddBlazor(
         this JGUZDVHostApplicationBuilder appBuilder,
-        bool enableInteractiveComponents = false,
+        bool enableInteractiveWebAssemblyComponents = true,
+        bool enableInteractiveServerComponents = false,
         Action<IRazorComponentsBuilder>? configure = null,
         Action<CircuitOptions>? configureCircuit = null)
     {
         // Add services to the container.
         var builder = appBuilder.Services.AddRazorComponents();
-        if (enableInteractiveComponents)
+        if (enableInteractiveServerComponents)
         {
             builder.AddInteractiveServerComponents(configureCircuit);
             appBuilder.HasInteractiveServerComponents = true;
         }
 
+        if (enableInteractiveWebAssemblyComponents) {
+            builder.AddInteractiveWebAssemblyComponents();
+            appBuilder.HasInteractiveWebAssemblyComponents = true;
+        }
+
         configure?.Invoke(builder);
+
+        if(appBuilder.HasAuthentication)
+        {
+            builder.AddAuthenticationStateSerialization();
+            appBuilder.Services.AddCascadingAuthenticationState();
+        }
 
         appBuilder.HasRazorComponents = true;
         return appBuilder;
