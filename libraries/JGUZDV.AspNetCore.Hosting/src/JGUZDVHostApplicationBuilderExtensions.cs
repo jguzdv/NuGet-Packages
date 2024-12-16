@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System;
+using System.Text.Json.Serialization;
 
 using JGUZDV.AspNetCore.Hosting.Extensions;
 using JGUZDV.Extensions.Json;
@@ -6,7 +7,9 @@ using JGUZDV.WebApiHost.FeatureManagement;
 
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Server;
@@ -262,8 +265,13 @@ public static class JGUZDVHostApplicationBuilderExtensions
 
         if(appBuilder.HasAuthentication)
         {
-            builder.AddAuthenticationStateSerialization();
+            builder.AddAuthenticationStateSerialization(opt => opt.SerializeAllClaims = true);
             appBuilder.Services.AddCascadingAuthenticationState();
+        }
+
+        if (appBuilder.HasRequestLocalization)
+        {
+            builder.AddRequestLanguageSerialization();
         }
 
         appBuilder.HasRazorComponents = true;
@@ -375,8 +383,56 @@ public static class JGUZDVHostApplicationBuilderExtensions
         opt.MapInboundClaims = false;
     }
     #endregion
-    
-    #region OpenIdConnect Authentication
 
+
+    #region OpenIdConnect Authentication
+    /// <summary>
+    /// Adds OpenIdConnect and Cookie Authentication to the WebApplicationBuilder - the cookie is used to persist the login for the user.
+    /// </summary>
+    public static JGUZDVHostApplicationBuilder AddDefaultOpenIdConnectAuthentication(
+        this JGUZDVHostApplicationBuilder appBuilder,
+        string configSection = Constants.ConfigSections.OpenIdConnectAuthentication,
+        string cookieConfigSection = Constants.ConfigSections.CookieAuthentication,
+        ILogger? logger = null)
+    {
+        appBuilder.Configuration.ValidateConfigSectionExists(configSection);
+
+        var authBuilder = appBuilder.Services.AddAuthentication(opt =>
+        {
+            opt.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            opt.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+        })
+                .AddOpenIdConnect(opt =>
+                {
+                    opt.UseTokenLifetime = true;
+                    opt.SaveTokens = true;
+                    opt.GetClaimsFromUserInfoEndpoint = true;
+
+                    var oidcConfig = appBuilder.Configuration.GetSection(configSection);
+                    oidcConfig.Bind(opt);
+
+                    opt.Scope.Clear();
+                    var scopes = oidcConfig.GetSection(nameof(opt.Scope)).GetChildren().Select(element => element.Value).OfType<string>();
+
+                    foreach (var scope in scopes)
+                        opt.Scope.Add(scope);
+                })
+                .AddCookie(opt =>
+                {
+                    opt.Cookie.Name = appBuilder.Environment.ApplicationName;
+                    opt.SlidingExpiration = false;
+
+                    if(appBuilder.Configuration.HasConfigSection(cookieConfigSection))
+                    {
+                        var cookieConfig = appBuilder.Configuration.GetSection(cookieConfigSection);
+                        cookieConfig.Bind(opt);
+                    }
+                })
+                .AddCookieDistributedTicketStore();
+
+        appBuilder.Services.AddAuthorization();
+
+        return appBuilder;
+    }
     #endregion
 }
