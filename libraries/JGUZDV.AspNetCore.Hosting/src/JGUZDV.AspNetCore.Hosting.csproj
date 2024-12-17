@@ -4,13 +4,15 @@
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-
+        <OutputType>Library</OutputType>
+        
         <PackageId>JGUZDV.AspNetCore.Hosting</PackageId>
         <IsPackable>true</IsPackable>
         <Version>1.0.0-beta1</Version>
         <Authors>Thomas Ottenhus</Authors>
         <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
         <PackageDescription>HostBuilders for our default setup.</PackageDescription>
+        <NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile
 
         <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     </PropertyGroup>
