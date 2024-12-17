@@ -12,7 +12,7 @@
         <Authors>Thomas Ottenhus</Authors>
         <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
         <PackageDescription>HostBuilders for our default setup.</PackageDescription>
-        <NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile
+        <NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
 
         <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     </PropertyGroup>
