@@ -66,6 +66,7 @@ public static class JGUZDVWebAssemblyApplicationBuilderExtensions
 
     public static JGUZDVWebAssemblyApplicationBuilder AddLocalization(this JGUZDVWebAssemblyApplicationBuilder appBuilder)
     {
+        // TODO: Add localization services
         appBuilder.Services.AddLocalization();
         return appBuilder;
     }

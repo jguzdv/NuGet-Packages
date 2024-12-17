@@ -129,7 +129,7 @@ public static class JGUZDVHostApplicationBuilderExtensions
     /// </summary>
     public static JGUZDVHostApplicationBuilder AddOpenTelemetry(
         this JGUZDVHostApplicationBuilder appBuilder,
-        string configSection = Constants.ConfigSections.Telemetry)
+        string configSection = Constants.ConfigSections.OpenTelemetry)
     {
         //appBuilder.Configuration.ValidateConfigSectionExists(configSection);
         //appBuilder.Services.AddApplicationInsightsTelemetry(
@@ -239,7 +239,9 @@ public static class JGUZDVHostApplicationBuilderExtensions
 
 
     /// <summary>
-    /// Adds Blazor to the WebApplicationBuilder.
+    /// Adds Blazor to the WebApplicationBuilder.<br />
+    /// It will also add the required services for AuthenticationStateSerialization and RequestLocalizationSerialization
+    /// depending if those services have been added.
     /// </summary>
     public static JGUZDVHostApplicationBuilder AddBlazor(
         this JGUZDVHostApplicationBuilder appBuilder,
@@ -269,10 +271,11 @@ public static class JGUZDVHostApplicationBuilderExtensions
             appBuilder.Services.AddCascadingAuthenticationState();
         }
 
-        if (appBuilder.HasRequestLocalization)
-        {
-            builder.AddRequestLanguageSerialization();
-        }
+        // TODO
+        //if (appBuilder.HasRequestLocalization)
+        //{
+        //    builder.AddRequestLanguageSerialization();
+        //}
 
         appBuilder.HasRazorComponents = true;
         return appBuilder;

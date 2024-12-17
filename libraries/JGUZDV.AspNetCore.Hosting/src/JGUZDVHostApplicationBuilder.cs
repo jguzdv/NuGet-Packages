@@ -1,4 +1,5 @@
-﻿using JGUZDV.AspNetCore.Hosting.FeatureManagement;
+﻿using JGUZDV.AspNetCore.Hosting.Extensions;
+using JGUZDV.AspNetCore.Hosting.FeatureManagement;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -47,6 +48,7 @@ public class JGUZDVHostApplicationBuilder
     /// </summary>
     public ILoggingBuilder Logging => _webApplicationBuilder.Logging;
     #endregion
+
 
 
     #region Configuration flags
@@ -125,6 +127,7 @@ public class JGUZDVHostApplicationBuilder
         _webApplicationBuilder = webAppBuilder;
     }
 
+
     /// <summary>
     /// Creates a new JGUZDVApplicationBuilder, that wraps an WebApplicationBuilder
     /// </summary>
@@ -135,6 +138,91 @@ public class JGUZDVHostApplicationBuilder
             );
     }
 
+
+    public static JGUZDVHostApplicationBuilder CreateWebApi(string[] args)
+    {
+        var builder = Create(args);
+
+        builder.AddLogging();
+
+        using (var sp = builder.Services.BuildServiceProvider())
+        using (var loggerFactory = sp.GetRequiredService<ILoggerFactory>())
+        {
+            var logger = loggerFactory.CreateLogger(nameof(JGUZDVHostApplicationBuilder));
+
+            builder.Services.AddProblemDetails();
+            
+            // TODO: Enable swagger UI?
+            builder.AddOpenApi();
+            builder.AddAspNetCoreMvc(enableViewSupport: false);
+            builder.Services.ConfigureHttpJsonOptions(opt => opt.ApplyJsonOptions());
+
+            builder.AddLocalization(logger: logger);
+
+            var hasDistributedCacheSection = builder.Configuration.HasConfigSection(Constants.ConfigSections.DistributedCache);
+            if (builder.Environment.IsProduction() && hasDistributedCacheSection)
+            {
+                builder.AddDistributedCache();
+            }
+            else
+            {
+                if(!hasDistributedCacheSection)
+                {
+                    //TODO: Log information about missing section
+                }
+
+                builder.Services.AddDistributedMemoryCache();
+            }
+
+            var hasDataProtectionSection = builder.Configuration.HasConfigSection(Constants.ConfigSections.DataProtection);
+            if (builder.Environment.IsProduction() && hasDataProtectionSection)
+            {
+                builder.AddDataProtection();
+            }
+            else
+            {
+                if (!hasDataProtectionSection)
+                {
+                    //TODO: Log information about missing section
+                }
+
+                builder.Services.AddDataProtection();
+            }
+
+            if (builder.Configuration.HasConfigSection(Constants.ConfigSections.JwtBearerAuthentication))
+            {
+                builder.AddDefaultJwtBearerAuthentication(logger: logger);
+            }
+            else
+            {
+                //TODO: Log information about missing section
+            }
+
+
+            if (builder.Configuration.HasConfigSection(Constants.ConfigSections.FeatureManagement))
+            {
+                builder.AddFeatureManagement();
+            }
+            else
+            {
+                //TODO: Log information about missing section
+            }
+
+
+            if (builder.Configuration.HasConfigSection(Constants.ConfigSections.OpenTelemetry))
+            {
+                builder.AddOpenTelemetry();
+            }
+            else
+            {
+                //TODO: Log information about missing section
+            }
+
+            builder.AddHealthChecks();
+        }
+
+        return builder;
+    }
 
 
     /// <summary>
