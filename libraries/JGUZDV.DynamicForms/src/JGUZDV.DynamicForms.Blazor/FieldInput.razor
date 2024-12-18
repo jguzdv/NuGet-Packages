@@ -1,25 +1,93 @@
-﻿@using JGUZDV.DynamicForms.Model
+﻿@using JGUZDV.Blazor.Components.Inputs
+@using JGUZDV.DynamicForms.Model
+@using JGUZDV.Blazor.Components
+@using System.Collections
 
 @*TODO: Check if EditForm is a good idea HERE to show validation errors*@
 <EditForm Model="Field">
     <ValidationSummary />
-    <label>@InputDefinition.Label</label>
 
-    @if (Field.FieldDefinition.ChoiceOptions?.Any() == true)
-    {
-        <label>@InputDefinition.Label</label>
-        <select name="@InputDefinition.Name" id="@InputDefinition.Id">
-            @foreach (var option in Field.FieldDefinition.ChoiceOptions)
+    <div>
+        <label for="@InputDefinition.Id">@InputDefinition.Label</label>
+        @if (Field.FieldDefinition.ChoiceOptions?.Any() == true)
+        {
+            if (Field.FieldDefinition.IsList)
             {
-                <option value="@option.Value">@option.Name</option>
+                <MultiSelect UseSingleSelectionMode="@true"
+                             Items="@Field.FieldDefinition.ChoiceOptions"
+                             ItemName="x => x.Name.ToString()"
+                             ItemKey="x => x.Value"
+                             Title="@InputDefinition.Label.ToString()"
+                             Values="@(Field.Values?.Select(x => GetChoiceOption(x)).ToList())"
+                             ValuesChanged="(value) => SetValue(value.Select(x => ConvertToValue(x.Value)))"
+                             TKey="string"
+                             T="ChoiceOption"></MultiSelect>
             }
-        </select>
-    }
-    else
-    {
-        <label>@InputDefinition.Label</label>
-        <input type="@InputDefinition.InputType" name="@InputDefinition.Name" id="@InputDefinition.Id" />
-    }
+            else
+            {
+                <MultiSelect UseSingleSelectionMode="@true"
+                             Items="@Field.FieldDefinition.ChoiceOptions"
+                             ItemName="x => x.Name.ToString()"
+                             ItemKey="x => x.Value"
+                             Title="@InputDefinition.Label.ToString()"
+                             Value="@GetChoiceOption(Field.Value)"
+                             ValueChanged="(value) => SetValue(ConvertToValue(value.Value))"
+                             TKey="string"
+                             T="ChoiceOption"></MultiSelect>
+            }
+
+            @* <select class="form-select"
+                    name="@InputDefinition.Name" id="@InputDefinition.Id">
+                @foreach (var option in Field.FieldDefinition.ChoiceOptions)
+                {
+                    <option value="@option.Value">@option.Name</option>
+                }
+            </select> *@
+        }
+        else
+        {
+            @if (Field.FieldDefinition.IsList)
+            {
+                <div class="input-group">
+                    <input type="@InputDefinition.InputType"
+                           @bind="_inputValue"
+                           @onkeyup="HandleKeyUp"
+                           class="form-control">
+                    <button class="btn btn-outline-secondary" type="button">@Icons.Add(null)</button>
+                </div>
+
+                @if (Field.Values.Any())
+                {
+                    <div class="my-1 p-2 border">
+                        @foreach (var value in Field.Values!)
+                        {
+                            <span class="d-inline-block border mx-1 p-2">
+                                <span>
+                                    @GetValueString(value)
+                                </span>
+                                <button class="btn btn-sm btn-outline-danger" @onclick="@(() =>
+                                    {
+                                        ((IList)Field.Value!).Remove(value);
+                                        SetValue(Field.Value);
+                                    })">
+                                    @Icons.Remove(null)
+                                </button>
+                            </span>
+                        }
+                    </div>
+                }
+
+            }
+            else
+            {
+                <input class="form-control"
+                       @bind-value="_inputValue"
+                       @onkeyup="HandleKeyUp"
+                       type="@InputDefinition.InputType" name="@InputDefinition.Name" id="@InputDefinition.Id" />
+            }
+        }
+    </div>
+
 </EditForm>
 
 
@@ -35,6 +103,8 @@
     public required ValueProvider ValueProvider { get; set; }
 
     private InputDefinition InputDefinition => Field.FieldDefinition.InputDefinition;
+
+    private string? _inputValue;
 
     public override async Task SetParametersAsync(ParameterView parameters)
     {
@@ -62,7 +132,62 @@
 
     protected override Task OnParametersSetAsync()
     {
-
+        if (!Field.FieldDefinition.IsList)
+        {
+            _inputValue = GetValueString(Field.Value);
+        }
+        
         return base.OnParametersSetAsync();
     }
+
+    private void HandleKeyUp(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            OnInputChanged(_inputValue);
+            _inputValue = null;
+        }
+    }
+
+    private void OnInputChanged(string? value)
+    {
+        if (Field.FieldDefinition.IsList)
+        {
+            var stringValue = ConvertToValue(value?.ToString());
+            ((IList)Field.Value!).Add(stringValue);
+            SetValue(Field.Value);
+        }
+        else
+        {
+            SetValue(ConvertToValue(value?.ToString()));
+        }
+    }
+
+    private void SetValue(object? value)
+    {
+        Field.Value = value;
+
+        FieldChanged.InvokeAsync(Field);
+    }
+
+
+    private string? GetValueString(object? value) => value == null
+        ? null
+        : Field.ValueType.ConvertFromValue(value);
+
+    private ChoiceOption? GetChoiceOption(object? value)
+    {
+        return value == null
+            ? null
+            : Field.FieldDefinition.ChoiceOptions.FirstOrDefault(x => x.Value == Field.ValueType.ConvertFromValue(value));
+    }
+
+    private object? ConvertToValue(string? value)
+    {
+        return value == null
+            ? null
+            : Field.ValueType.ConvertToValue(value);
+    }
+
+
 }

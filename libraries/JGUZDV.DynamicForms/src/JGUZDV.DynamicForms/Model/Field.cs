@@ -15,14 +15,16 @@ public class Field : IValidatableObject
     public Field(FieldDefinition fieldDefinition)
     {
         FieldDefinition = fieldDefinition;
-        _value = null;
+        Value = fieldDefinition.IsList
+            ? Activator.CreateInstance(typeof(List<>).MakeGenericType(ValueType.ClrType))!
+            : null;
     }
 
     [JsonConstructor]
     public Field(FieldDefinition fieldDefinition, object? value)
     {
         FieldDefinition = fieldDefinition;
-        _value = value;
+        Value = value;
     }
 
     public FieldDefinition FieldDefinition { get; set; }
@@ -38,8 +40,8 @@ public class Field : IValidatableObject
                 var valueType = value.GetType();
                 if (FieldDefinition.IsList)
                 {
-                    if (!typeof(IEnumerable).IsAssignableFrom(valueType) 
-                        || !valueType.IsGenericType 
+                    if (!typeof(IEnumerable).IsAssignableFrom(valueType)
+                        || !valueType.IsGenericType
                         || valueType.GetGenericArguments()[0] != ValueType.ClrType)
                     {
                         throw new InvalidOperationException("Type does not match");
@@ -50,13 +52,20 @@ public class Field : IValidatableObject
                     throw new InvalidOperationException("Type does not match");
                 }
             }
+
+            if (value == null && FieldDefinition.IsList)
+            {
+                throw new InvalidOperationException("List fields can not be null");
+            }
+
             _value = value;
         }
     }
 
     [JsonIgnore]
-    public List<object>? Values => FieldDefinition.IsList ? Value as List<object> : throw new InvalidOperationException("Only list fields have multiple values");
-
+    public IReadOnlyList<object> Values => FieldDefinition.IsList
+        ? ((IList)Value!).OfType<object>().ToList()
+        : throw new InvalidOperationException("Only list fields have multiple values");
 
     [JsonIgnore]
     public FieldType ValueType => FieldType.FromJson(FieldDefinition.InputDefinition.Type); // => Constants.Types.Get(FieldDefinition.InputDefinition.Type);
@@ -87,7 +96,7 @@ public class Field : IValidatableObject
                     new("Value can not be null", [nameof(Value)])
                 };
 
-            val = Values!;
+            val = Values.OfType<object>().ToList()!;
         }
         else
         {

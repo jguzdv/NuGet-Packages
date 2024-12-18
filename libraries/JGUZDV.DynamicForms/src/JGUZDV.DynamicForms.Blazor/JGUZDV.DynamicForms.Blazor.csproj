@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\JGUZDV.Blazor.Components.L10n\src\JGUZDV.Blazor.Components.L10n.csproj" />
+    <ProjectReference Include="..\..\..\JGUZDV.Blazor.Components\src\JGUZDV.Blazor.Components.csproj" />
     <ProjectReference Include="..\JGUZDV.DynamicForms\JGUZDV.DynamicForms.csproj" />
   </ItemGroup>
 

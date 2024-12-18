@@ -129,6 +129,16 @@ public class StringFieldType : FieldType
 {
     public override Type ClrType => typeof(string);
 
+    public override string ConvertFromValue(object value)
+    {
+        return (string)value;
+    }
+
+    public override object ConvertToValue(string stringValue)
+    {
+        return stringValue;
+    }
+
     public override L10nString DisplayName => new L10nString()
     {
         ["de"] = "Text",
