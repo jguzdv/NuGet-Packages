@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using JGUZDV.Blazor.Components.Toasts
 @using JGUZDV.DynamicForms.Model
 @using System.Text.Json
 @using JGUZDV.DynamicForms.Serialization
@@ -20,16 +21,32 @@ Welcome to your new app.
 @code {
     private FieldDefinition _fieldDefinition = new();
 
+
+    [Inject]
+    public required IServiceProvider ServiceProvider { get; set; }
+
+    [Inject]
+    public required IToastService Toasts { get; set; }
+
+    [Inject]
+    public required HttpClient Client { get; set; }
+
     private async Task Send()
     {
-        var client = new HttpClient();
+        if (_fieldDefinition.Validate(new(_fieldDefinition, ServiceProvider, null)).Any())
+        {
+            Toasts.Show(ToastLevel.Warning, "Validation failed", "");
+            return;
+        }
+
         var options = new JsonSerializerOptions()
             {
                 TypeInfoResolver = new DefaultResolver(),
+                PropertyNameCaseInsensitive = true
             };
         options.Converters.Add(new L10nStringJsonConverter());
 
-        await client.PostAsJsonAsync("https://localhost:7245/api/definitions/save", _fieldDefinition, options);
+        await Client.PostAsJsonAsync("https://localhost:7245/api/definitions/save", _fieldDefinition, options);
         _fieldDefinition = new FieldDefinition();
     }
 

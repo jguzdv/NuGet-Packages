@@ -1,6 +1,7 @@
 ﻿@page "/field"
 @using JGUZDV.DynamicForms.Model
 @using System.Text.Json
+@using JGUZDV.DynamicForms.Samples.Client.Model
 @using JGUZDV.DynamicForms.Serialization
 @using JGUZDV.L10n
 
@@ -17,18 +18,26 @@
 @code {
     private List<Field> _fields = new List<Field>();
 
+    [Inject]
+    public required HttpClient Client { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
-        var client = new HttpClient();
         var options = new JsonSerializerOptions()
             {
                 TypeInfoResolver = new DefaultResolver(),
+                PropertyNameCaseInsensitive = true
             };
         options.Converters.Add(new L10nStringJsonConverter());
 
-        _fields = (await client.GetFromJsonAsync<List<FieldDefinition>>("https://localhost:7245/api/definitions", options))
+        var definitions = await Client.GetFromJsonAsync<List<DocumentDefinition>>("https://localhost:7245/api/definitions", options);
+        Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(definitions, options));
+        _fields = definitions
+            .SelectMany(x => x.FieldDefinitions)
             .Select(x => new Field(x))
             .ToList();
+
+        Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(_fields.Select(x => x.FieldDefinition), options));
     }
 
     private async Task Save()
@@ -39,6 +48,6 @@
                 TypeInfoResolver = new DefaultResolver(),
             };
         options.Converters.Add(new L10nStringJsonConverter());
-        await client.PostAsJsonAsync("https://localhost:7245/api/documents/save", _fields);
+        await client.PostAsJsonAsync("https://localhost:7245/api/documents/save", _fields, options);
     }
 }

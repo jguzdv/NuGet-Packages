@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\JGUZDV.Blazor.Components\src\JGUZDV.Blazor.Components.csproj" />
     <ProjectReference Include="..\JGUZDV.DynamicForms.Samples.Client\JGUZDV.DynamicForms.Samples.Client.csproj" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.11" />

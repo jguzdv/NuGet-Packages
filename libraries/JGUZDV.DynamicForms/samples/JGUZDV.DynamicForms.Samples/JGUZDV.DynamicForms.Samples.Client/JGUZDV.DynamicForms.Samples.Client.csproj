@@ -12,10 +12,12 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.10" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.0" />
     <PackageReference Include="Microsoft.Extensions.Localization" Version="9.0.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\JGUZDV.Blazor.Components\src\JGUZDV.Blazor.Components.csproj" />
     <ProjectReference Include="..\..\..\src\JGUZDV.DynamicForms.Blazor\JGUZDV.DynamicForms.Blazor.csproj" />
   </ItemGroup>
 

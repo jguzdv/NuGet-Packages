@@ -1,4 +1,6 @@
+using JGUZDV.Blazor.Components;
 using JGUZDV.DynamicForms.Model;
+using JGUZDV.DynamicForms.Samples.Client.Model;
 using JGUZDV.DynamicForms.Samples.Components;
 using JGUZDV.DynamicForms.Samples.DataAccess;
 using JGUZDV.DynamicForms.Serialization;
@@ -19,19 +21,24 @@ builder.Services.AddDbContext<TestDbContext>(options =>
     options.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=ZDVDEV_DF_SAMPLE;Trusted_Connection=True");
 });
 
+builder.Services.AddHttpClient();
+
 builder.Services.ConfigureHttpJsonOptions(options =>
 {
     options.SerializerOptions.TypeInfoResolver = new DefaultResolver();
     options.SerializerOptions.Converters.Add(new L10nStringJsonConverter());
+    options.SerializerOptions.PropertyNameCaseInsensitive = true;
 });
 
 builder.Services.AddScoped<ValueProvider>();
+builder.Services.AddToasts();
 
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<TestDbContext>();
+    //dbContext.Database.EnsureDeleted();
     dbContext.Database.EnsureCreated();
 }
 
