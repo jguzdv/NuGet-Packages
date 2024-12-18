@@ -4,8 +4,10 @@ namespace JGUZDV.AspNetCore.Hosting;
 
 internal partial class LogMessages
 {
-    [LoggerMessage(LogLevel.Information, "Could not find config {configSection}. The corresponding feature will not be added to services or pipeline.")]
-    public static partial void MissingConfig(ILogger logger, string configSection);
+    [LoggerMessage("Could not find config {configSection}. The corresponding feature will not be added to services or pipeline.")]
+    public static partial void MissingConfig(ILogger logger, LogLevel loglevel, string configSection);
+
+
 
     [LoggerMessage(LogLevel.Information, "Could not find config Authentication:JwtBearer:ValidAudiences, audiences will not be considered.")]
     public static partial void NoValidAudiences(ILogger logger);

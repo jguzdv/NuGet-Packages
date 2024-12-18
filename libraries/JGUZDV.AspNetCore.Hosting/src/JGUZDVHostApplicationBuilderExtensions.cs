@@ -4,6 +4,8 @@ using System.Text.Json.Serialization;
 using JGUZDV.AspNetCore.Hosting.Extensions;
 using JGUZDV.Extensions.Json;
 using JGUZDV.WebApiHost.FeatureManagement;
+using JGUZDV.YARP.SimpleReverseProxy;
+using JGUZDV.YARP.SimpleReverseProxy.Configuration;
 
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authentication;
@@ -79,6 +81,22 @@ public static class JGUZDVHostApplicationBuilderExtensions
 
 
     /// <summary>
+    /// Adds ReverseProxy capabilities to the WebApplicationBuilder.
+    /// </summary>
+    public static JGUZDVHostApplicationBuilder AddReverseProxy(
+        this JGUZDVHostApplicationBuilder appBuilder,
+        Action<SimpleReverseProxyOptions>? configure = null)
+    {
+        appBuilder.Configuration.ValidateConfigSectionExists(Constants.ConfigSections.ReverseProxy);
+
+        appBuilder.Services.AddSimpleReverseProxy(Constants.ConfigSections.ReverseProxy, configure, enableAccessTokenManagement: true);
+     
+        appBuilder.HasReverseProxy = true;
+        return appBuilder;
+    }
+
+
+    /// <summary>
     /// Adds RequestLocalization to the WebApplicationBuilder.
     /// It tries to load the supported cultures from the configuration section "RequestLocalization:Cultures".
     /// If the config value does not exists, it'll default to ["de-DE", "en-US"].
@@ -100,7 +118,7 @@ public static class JGUZDVHostApplicationBuilderExtensions
         }
         else
         {
-            // TODO: Add missing optional logging section
+            LogMessages.MissingConfig(logger, appBuilder.Environment.IsProduction() ? LogLevel.Information : LogLevel.Warning, configSection);
         }
 
         appBuilder.Services.AddLocalization(opt =>
@@ -245,20 +263,19 @@ public static class JGUZDVHostApplicationBuilderExtensions
     /// </summary>
     public static JGUZDVHostApplicationBuilder AddBlazor(
         this JGUZDVHostApplicationBuilder appBuilder,
-        bool enableInteractiveWebAssemblyComponents = true,
-        bool enableInteractiveServerComponents = false,
+        BlazorInteractivityModes interactivityModes = BlazorInteractivityModes.WebAssembly,
         Action<IRazorComponentsBuilder>? configure = null,
         Action<CircuitOptions>? configureCircuit = null)
     {
         // Add services to the container.
         var builder = appBuilder.Services.AddRazorComponents();
-        if (enableInteractiveServerComponents)
+        if (interactivityModes.HasFlag(BlazorInteractivityModes.Server))
         {
             builder.AddInteractiveServerComponents(configureCircuit);
             appBuilder.HasInteractiveServerComponents = true;
         }
 
-        if (enableInteractiveWebAssemblyComponents) {
+        if (interactivityModes.HasFlag(BlazorInteractivityModes.WebAssembly)) {
             builder.AddInteractiveWebAssemblyComponents();
             appBuilder.HasInteractiveWebAssemblyComponents = true;
         }

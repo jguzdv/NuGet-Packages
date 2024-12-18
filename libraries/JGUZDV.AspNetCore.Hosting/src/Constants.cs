@@ -56,5 +56,9 @@ public static class Constants
         /// </summary>
         public const string OpenIdConnectAuthentication = "Authentication:OpenIdConnect";
 
+        /// <summary>
+        /// Default Configuration section for ReverseProxy.
+        /// </summary>
+        public const string ReverseProxy = "ReverseProxy";
     }
 }

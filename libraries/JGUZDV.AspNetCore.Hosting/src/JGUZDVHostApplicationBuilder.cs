@@ -1,12 +1,7 @@
-﻿using JGUZDV.AspNetCore.Hosting.Extensions;
+﻿using JGUZDV.AspNetCore.Hosting.Authentication;
+using JGUZDV.AspNetCore.Hosting.Extensions;
 using JGUZDV.AspNetCore.Hosting.FeatureManagement;
-
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using JGUZDV.YARP.SimpleReverseProxy;
 
 namespace JGUZDV.AspNetCore.Hosting;
 
@@ -119,6 +114,12 @@ public class JGUZDVHostApplicationBuilder
     /// Gets a value indicating whether the application has a frontend configured.
     /// </summary>
     public bool HasFrontend { get; internal set; }
+
+
+    /// <summary>
+    /// Gets a value indicating whether the application has a reverse proxy configured.
+    /// </summary>
+    public bool HasReverseProxy { get; internal set; }
     #endregion
 
 
@@ -139,7 +140,25 @@ public class JGUZDVHostApplicationBuilder
     }
 
 
-    public static JGUZDVHostApplicationBuilder CreateWebApi(string[] args)
+    /// <summary>
+    /// Creates a new JGUZDVApplicationBuilder, that is preconfigured as WebApi Host. The following services are configured (* only if found in config):<br />
+    /// - Logging<br />
+    /// - ProblemDetails<br />
+    /// - OpenApi<br />
+    /// - Json-Defaults for Minimal-Api<br />
+    /// - RequestLocalization<br />
+    /// - DistributedCache* when in Production or DistributedInMemoryCache<br />
+    /// - DataProtection* when in Production or ephemeral DataProtection<br />
+    /// - OpenIdConnect Authentication*<br />
+    /// - FeatureManagement*<br />
+    /// - OpenTelemetry*<br />
+    /// - HealthChecks<br />
+    /// - ReverseProxy*<br />
+    /// - MVC (with view support)<br />
+    /// - RazorPages<br />
+    /// - Razor WebComponents (without interactivity aka. Blazor Static Server)<br />
+    /// </summary>
+    public static JGUZDVHostApplicationBuilder CreateWebHost(string[] args, BlazorInteractivityModes interactivityMode = BlazorInteractivityModes.DisableBlazor)
     {
         var builder = Create(args);
 
@@ -149,13 +168,12 @@ public class JGUZDVHostApplicationBuilder
         using (var loggerFactory = sp.GetRequiredService<ILoggerFactory>())
         {
             var logger = loggerFactory.CreateLogger(nameof(JGUZDVHostApplicationBuilder));
+            var missingConfigLogLevel = builder.Environment.IsProduction() ? LogLevel.Information : LogLevel.Warning;
 
             builder.Services.AddProblemDetails();
-            
+
             // TODO: Enable swagger UI?
             builder.AddOpenApi();
-            builder.AddAspNetCoreMvc(enableViewSupport: false);
-            builder.Services.ConfigureHttpJsonOptions(opt => opt.ApplyJsonOptions());
 
             builder.AddLocalization(logger: logger);
 
@@ -166,9 +184,9 @@ public class JGUZDVHostApplicationBuilder
             }
             else
             {
-                if(!hasDistributedCacheSection)
+                if (!hasDistributedCacheSection)
                 {
-                    //TODO: Log information about missing section
+                    LogMessages.MissingConfig(logger, missingConfigLogLevel, Constants.ConfigSections.DistributedCache);
                 }
 
                 builder.Services.AddDistributedMemoryCache();
@@ -183,7 +201,148 @@ public class JGUZDVHostApplicationBuilder
             {
                 if (!hasDataProtectionSection)
                 {
-                    //TODO: Log information about missing section
+                    LogMessages.MissingConfig(logger, missingConfigLogLevel, Constants.ConfigSections.DataProtection);
+                }
+
+                builder.Services.AddDataProtection();
+            }
+
+            if (builder.Configuration.HasConfigSection(Constants.ConfigSections.OpenIdConnectAuthentication))
+            {
+                builder.AddDefaultOpenIdConnectAuthentication(logger: logger);
+            }
+            else
+            {
+                LogMessages.MissingConfig(logger, missingConfigLogLevel, Constants.ConfigSections.OpenIdConnectAuthentication);
+            }
+
+
+            if (builder.Configuration.HasConfigSection(Constants.ConfigSections.FeatureManagement))
+            {
+                builder.AddFeatureManagement();
+            }
+            else
+            {
+                LogMessages.MissingConfig(logger, missingConfigLogLevel, Constants.ConfigSections.FeatureManagement);
+            }
+
+
+            if (builder.Configuration.HasConfigSection(Constants.ConfigSections.OpenTelemetry))
+            {
+                builder.AddOpenTelemetry();
+            }
+            else
+            {
+                LogMessages.MissingConfig(logger, missingConfigLogLevel, Constants.ConfigSections.OpenTelemetry);
+            }
+
+            builder.AddHealthChecks();
+
+            if (builder.Configuration.HasConfigSection(Constants.ConfigSections.ReverseProxy))
+            {
+                builder.AddReverseProxy();
+            }
+            else
+            {
+                LogMessages.MissingConfig(logger, missingConfigLogLevel, Constants.ConfigSections.ReverseProxy);
+            }
+
+            builder.AddAspNetCoreMvc(enableViewSupport: true);
+            builder.AddRazorPages();
+            if (interactivityMode != BlazorInteractivityModes.DisableBlazor)
+            {
+                builder.AddBlazor(interactivityMode);
+            }
+            builder.Services.ConfigureHttpJsonOptions(opt => opt.ApplyJsonOptions());
+        }
+
+        return builder;
+    }
+
+
+    /// <summary>
+    /// Creates a new JGUZDVApplicationBuilder, that is preconfigured as WebApi Host. The following services are configured (* only if found in config):<br />
+    /// - Logging<br />
+    /// - ProblemDetails<br />
+    /// - OpenApi<br />
+    /// - Json-Defaults for Minimal-Api<br />
+    /// - RequestLocalization<br />
+    /// - DistributedCache* when in Production or DistributedInMemoryCache<br />
+    /// - DataProtection* when in Production or ephemeral DataProtection<br />
+    /// - OpenIdConnect Authentication*<br />
+    /// - FeatureManagement*<br />
+    /// - OpenTelemetry*<br />
+    /// - HealthChecks<br />
+    /// - ReverseProxy*<br />
+    /// - MVC (with view support)<br />
+    /// - RazorPages<br />
+    /// - Razor WebComponents (without interactivity aka. Blazor Static Server)<br />
+    /// </summary>
+    public static JGUZDVHostApplicationBuilder CreateStaticWeb(string[] args)
+        => CreateWebHost(args, BlazorInteractivityModes.None);
+
+
+    /// <summary>
+    /// Creates a new JGUZDVApplicationBuilder, that is preconfigured as WebApi Host. The following services are configured (* only if found in config):<br />
+    /// - Logging<br />
+    /// - ProblemDetails<br />
+    /// - OpenApi<br />
+    /// - MVC (without view support)<br />
+    /// - Json-Defaults for Minimal-Api<br />
+    /// - RequestLocalization<br />
+    /// - DistributedCache* when in Production or DistributedInMemoryCache<br />
+    /// - DataProtection* when in Production or ephemeral DataProtection<br />
+    /// - JwtBearerAuthentication*<br />
+    /// - FeatureManagement*<br />
+    /// - OpenTelemetry*<br />
+    /// - HealthChecks<br />
+    /// </summary>
+    public static JGUZDVHostApplicationBuilder CreateWebApi(string[] args)
+    {
+        var builder = Create(args);
+
+        builder.AddLogging();
+
+        using (var sp = builder.Services.BuildServiceProvider())
+        using (var loggerFactory = sp.GetRequiredService<ILoggerFactory>())
+        {
+            var logger = loggerFactory.CreateLogger(nameof(JGUZDVHostApplicationBuilder));
+            var missingConfigLogLevel = builder.Environment.IsProduction() ? LogLevel.Information : LogLevel.Warning;
+
+            builder.Services.AddProblemDetails();
+
+            // TODO: Enable swagger UI?
+            builder.AddOpenApi();
+            builder.AddAspNetCoreMvc(enableViewSupport: false);
+            builder.Services.ConfigureHttpJsonOptions(opt => opt.ApplyJsonOptions());
+
+            builder.AddLocalization(logger: logger);
+
+            var hasDistributedCacheSection = builder.Configuration.HasConfigSection(Constants.ConfigSections.DistributedCache);
+            if (builder.Environment.IsProduction() && hasDistributedCacheSection)
+            {
+                builder.AddDistributedCache();
+            }
+            else
+            {
+                if (!hasDistributedCacheSection)
+                {
+                    LogMessages.MissingConfig(logger, missingConfigLogLevel, Constants.ConfigSections.DistributedCache);
+                }
+
+                builder.Services.AddDistributedMemoryCache();
+            }
+
+            var hasDataProtectionSection = builder.Configuration.HasConfigSection(Constants.ConfigSections.DataProtection);
+            if (builder.Environment.IsProduction() && hasDataProtectionSection)
+            {
+                builder.AddDataProtection();
+            }
+            else
+            {
+                if (!hasDataProtectionSection)
+                {
+                    LogMessages.MissingConfig(logger, missingConfigLogLevel, Constants.ConfigSections.DataProtection);
                 }
 
                 builder.Services.AddDataProtection();
@@ -195,7 +354,7 @@ public class JGUZDVHostApplicationBuilder
             }
             else
             {
-                //TODO: Log information about missing section
+                LogMessages.MissingConfig(logger, missingConfigLogLevel, Constants.ConfigSections.JwtBearerAuthentication);
             }
 
 
@@ -205,7 +364,7 @@ public class JGUZDVHostApplicationBuilder
             }
             else
             {
-                //TODO: Log information about missing section
+                LogMessages.MissingConfig(logger, missingConfigLogLevel, Constants.ConfigSections.FeatureManagement);
             }
 
 
@@ -215,7 +374,7 @@ public class JGUZDVHostApplicationBuilder
             }
             else
             {
-                //TODO: Log information about missing section
+                LogMessages.MissingConfig(logger, missingConfigLogLevel, Constants.ConfigSections.OpenTelemetry);
             }
 
             builder.AddHealthChecks();
@@ -275,13 +434,19 @@ public class JGUZDVHostApplicationBuilder
             var b = app.MapRazorComponents<TRootComponent>();
             b.AddAdditionalAssemblies(additionalBlazorAssemblies);
 
-            if (HasInteractiveServerComponents) {
+            if (HasInteractiveServerComponents)
+            {
                 b.AddInteractiveServerRenderMode();
             }
 
             if (HasInteractiveWebAssemblyComponents)
             {
                 b.AddInteractiveWebAssemblyRenderMode();
+
+                if (HasRequestLocalization)
+                {
+                    app.UseRequestLocalizationSerialization();
+                }
             }
         }
 
@@ -293,9 +458,9 @@ public class JGUZDVHostApplicationBuilder
     {
         app.UseStaticFiles();
 
-        if(HasFrontend)
+        if (HasFrontend)
         {
-            if(!app.Environment.IsDevelopment())
+            if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Error", createScopeForErrors: true);
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
@@ -334,6 +499,17 @@ public class JGUZDVHostApplicationBuilder
         if (HasRequestLocalization)
         {
             app.UseRequestLocalization();
+
+            // In Blazor WebAssembly, we'll use this to serialize the request localization settings to the client.
+            if (HasInteractiveWebAssemblyComponents)
+            {
+                app.UseMiddleware<RequestLocalizationSerializationMiddleware>();
+            }
+        }
+
+        if (HasReverseProxy)
+        {
+            app.MapSimpleReverseProxy();
         }
 
         if (HasFrontend)
