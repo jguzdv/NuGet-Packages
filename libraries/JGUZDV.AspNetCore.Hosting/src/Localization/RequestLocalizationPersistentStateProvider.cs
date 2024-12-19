@@ -1,8 +1,12 @@
-﻿using JGUZDV.AspNetCore.Hosting.Components;
+﻿using System.Globalization;
+
+using JGUZDV.AspNetCore.Hosting.Components;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Options;
+
+using static IdentityModel.ClaimComparer;
 
 namespace JGUZDV.AspNetCore.Hosting.Localization;
 
@@ -24,7 +28,16 @@ public class RequestLocalizationPersistentStateProvider : IPersistentComponentSt
     /// <inheritdoc />
     public Task PersistStateAsync(PersistentComponentState applicationState)
     {
-        applicationState.PersistAsJson(nameof(RequestLocalizationState), RequestLocalizationState.FromOptions(_options.Value));
+        var requestLocalizationState = new RequestLocalizationState
+        {
+            CurrentCulture = CultureInfo.CurrentCulture.ToString(),
+            CurrentUICulture = CultureInfo.CurrentUICulture.ToString(),
+
+            SupportedCultures = [.. _options.Value.SupportedCultures?.Select(c => new LocalizationInfo(c.ToString(), c.NativeName))],
+            SupportedUICultures = [.. _options.Value.SupportedUICultures?.Select(c => new LocalizationInfo(c.ToString(), c.NativeName))]
+        };
+
+        applicationState.PersistAsJson(nameof(RequestLocalizationState), requestLocalizationState);
         return Task.CompletedTask;
     }
 }

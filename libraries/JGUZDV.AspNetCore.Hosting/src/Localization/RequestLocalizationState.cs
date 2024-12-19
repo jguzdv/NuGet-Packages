@@ -1,8 +1,4 @@
 ﻿
-using System.Globalization;
-
-using Microsoft.AspNetCore.Builder;
-
 namespace JGUZDV.AspNetCore.Hosting.Localization;
 
 /// <summary>
@@ -10,17 +6,6 @@ namespace JGUZDV.AspNetCore.Hosting.Localization;
 /// </summary>
 public class RequestLocalizationState
 {
-    internal static RequestLocalizationState FromOptions(RequestLocalizationOptions options)
-        => new RequestLocalizationState
-        {
-            CurrentCulture = CultureInfo.CurrentCulture.ToString(),
-            CurrentUICulture = CultureInfo.CurrentUICulture.ToString(),
-
-            SupportedCultures = [.. options.SupportedCultures?.Select(c => new LocalizationInfo(c.ToString(), c.NativeName))],
-            SupportedUICultures = [.. options.SupportedUICultures?.Select(c => new LocalizationInfo(c.ToString(), c.NativeName))]
-        };
-
-
     /// <summary>
     /// The current culture of the request, e.g. de-DE.
     /// </summary>
