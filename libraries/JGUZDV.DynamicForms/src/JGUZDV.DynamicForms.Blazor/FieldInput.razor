@@ -8,12 +8,12 @@
 @*TODO: Check if EditForm is a good idea HERE to show validation errors*@
 <EditForm Model="Field">
     <ValidationSummary />
-
     @foreach (var item in _validationErrors)
     {
-        @SL[item.ErrorMessage!]
+        <div class="text-danger">
+            @SL[item.ErrorMessage!]
+        </div>
     }
-
     <div>
         <label for="@InputDefinition.Id">@InputDefinition.Label</label>
         @if (Field.FieldDefinition.ChoiceOptions?.Any() == true)
