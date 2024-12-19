@@ -20,6 +20,13 @@ public static class Constants
         /// </summary>
         public const string DataProtection = "JGUZDV:DataProtection";
 
+
+        /// <summary>
+        /// Default Configuration section for ForwardedHeaders.
+        /// </summary>
+        public const string ForwardedHeaders = "ForwardedHeaders";
+
+
         /// <summary>
         /// Default Configuration section for DistributedCache.
         /// </summary>

@@ -78,6 +78,12 @@ public class JGUZDVHostApplicationBuilder
 
 
     /// <summary>
+    /// Gets a value indicating whether the application has forwarded headers configured.
+    /// </summary>
+    public bool HasForwardedHeaders { get; internal set; }
+
+
+    /// <summary>
     /// Gets a value indicating whether the application has health checks configured.
     /// </summary>
     public bool HasHealthChecks { get; internal set; }
@@ -193,7 +199,10 @@ public class JGUZDVHostApplicationBuilder
             builder.AddOpenApi();
 
             builder.AddLocalization(logger: logger);
+            builder.AddHealthChecks();
 
+
+            // Distributed Cache
             var hasDistributedCacheSection = builder.Configuration.HasConfigSection(Constants.ConfigSections.DistributedCache);
             if (builder.Environment.IsProduction() && hasDistributedCacheSection)
             {
@@ -209,6 +218,8 @@ public class JGUZDVHostApplicationBuilder
                 builder.Services.AddDistributedMemoryCache();
             }
 
+
+            // DataProtection
             var hasDataProtectionSection = builder.Configuration.HasConfigSection(Constants.ConfigSections.DataProtection);
             if (builder.Environment.IsProduction() && hasDataProtectionSection)
             {
@@ -224,6 +235,8 @@ public class JGUZDVHostApplicationBuilder
                 builder.Services.AddDataProtection();
             }
 
+
+            // OpenId Connect Authentication
             if (builder.Configuration.HasConfigSection(Constants.ConfigSections.OpenIdConnectAuthentication))
             {
                 builder.AddDefaultOpenIdConnectAuthentication(logger: logger);
@@ -234,6 +247,7 @@ public class JGUZDVHostApplicationBuilder
             }
 
 
+            // Feature Management
             if (builder.Configuration.HasConfigSection(Constants.ConfigSections.FeatureManagement))
             {
                 builder.AddFeatureManagement();
@@ -244,6 +258,7 @@ public class JGUZDVHostApplicationBuilder
             }
 
 
+            // OpenTelemetry
             if (builder.Configuration.HasConfigSection(Constants.ConfigSections.OpenTelemetry))
             {
                 builder.AddOpenTelemetry();
@@ -253,8 +268,8 @@ public class JGUZDVHostApplicationBuilder
                 LogMessages.MissingConfig(logger, missingConfigLogLevel, Constants.ConfigSections.OpenTelemetry);
             }
 
-            builder.AddHealthChecks();
 
+            // Reverse Proxy
             if (builder.Configuration.HasConfigSection(Constants.ConfigSections.ReverseProxy))
             {
                 builder.AddReverseProxy();
@@ -264,13 +279,15 @@ public class JGUZDVHostApplicationBuilder
                 LogMessages.MissingConfig(logger, missingConfigLogLevel, Constants.ConfigSections.ReverseProxy);
             }
 
+
+            // Frontend Frameworks
             builder.AddAspNetCoreMvc(enableViewSupport: true);
             builder.AddRazorPages();
             if (interactivityMode != BlazorInteractivityModes.DisableBlazor)
             {
                 builder.AddBlazor(interactivityMode);
             }
-            builder.Services.ConfigureHttpJsonOptions(opt => opt.ApplyJsonOptions());
+
         }
 
         return builder;
@@ -474,6 +491,11 @@ public class JGUZDVHostApplicationBuilder
     {
         app.UseStaticFiles();
 
+        if(HasForwardedHeaders)
+        {
+            app.UseForwardedHeaders();
+        }
+
         if (HasFrontend)
         {
             if (!app.Environment.IsDevelopment())
@@ -481,6 +503,10 @@ public class JGUZDVHostApplicationBuilder
                 app.UseExceptionHandler("/Error", createScopeForErrors: true);
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
+            }
+            else
+            {
+                app.UseDeveloperExceptionPage();
             }
 
             app.UseHttpsRedirection();

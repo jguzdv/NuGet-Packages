@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 
 using JGUZDV.AspNetCore.Hosting.Components;
 using JGUZDV.AspNetCore.Hosting.Extensions;
+using JGUZDV.AspNetCore.Hosting.ForwardedHeaders;
 using JGUZDV.AspNetCore.Hosting.Localization;
 using JGUZDV.Extensions.Json;
 using JGUZDV.WebApiHost.FeatureManagement;
@@ -211,11 +212,32 @@ public static class JGUZDVHostApplicationBuilderExtensions
         return appBuilder;
     }
 
-    #region Frontend Frameworks
+
     /// <summary>
-    /// Adds MVC to the WebApplicationBuilder.
-    /// This will also configure the JsonOptions MVC controllers.
+    /// Adds ForwardedHeaders to the WebApplicationBuilder.
     /// </summary>
+    public static JGUZDVHostApplicationBuilder AddForwardedHeaders(
+        this JGUZDVHostApplicationBuilder appBuilder,
+        Action<ForwardedHeadersOptions>? configure = null,
+        string configSection = Constants.ConfigSections.ForwardedHeaders)
+    {
+        appBuilder.Configuration.ValidateConfigSectionExists(configSection);
+        appBuilder.Builder.ConfigureForwardedHeaders(opt =>
+        {
+            appBuilder.Configuration.GetSection(configSection).Bind(opt);
+            configure?.Invoke(opt);
+        });
+
+        appBuilder.HasForwardedHeaders = true;
+        return appBuilder;
+    }
+
+
+    #region Frontend Frameworks
+        /// <summary>
+        /// Adds MVC to the WebApplicationBuilder.
+        /// This will also configure the JsonOptions MVC controllers.
+        /// </summary>
     public static JGUZDVHostApplicationBuilder AddAspNetCoreMvc(
         this JGUZDVHostApplicationBuilder appBuilder,
         bool enableViewSupport,
