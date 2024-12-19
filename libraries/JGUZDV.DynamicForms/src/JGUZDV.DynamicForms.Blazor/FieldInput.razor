@@ -43,13 +43,6 @@
                              T="ChoiceOption"></MultiSelect>
             }
 
-            @* <select class="form-select"
-                    name="@InputDefinition.Name" id="@InputDefinition.Id">
-                @foreach (var option in Field.FieldDefinition.ChoiceOptions)
-                {
-                    <option value="@option.Value">@option.Name</option>
-                }
-            </select> *@
         }
         else
         {
@@ -63,9 +56,9 @@
                     <button class="btn btn-outline-secondary" type="button">@Icons.Add(null)</button>
                 </div>
 
-                @if (Field.Values.Any())
-                {
-                    <div class="my-1 p-2 border">
+                <div class="my-1 p-2 border">
+                    @if (Field.Values.Any())
+                    {
                         @foreach (var value in Field.Values!)
                         {
                             <span class="d-inline-block border mx-1 p-2">
@@ -81,14 +74,19 @@
                                 </button>
                             </span>
                         }
-                    </div>
-                }
+                    }
+                    else
+                    {
+                        @SL["FieldInput.NoValues"]
+                    }
+                </div>
 
             }
             else
             {
                 <input class="form-control"
                        @bind-value="_inputValue"
+                       @bind-value:after="() => OnInputChanged(_inputValue)"
                        @onkeyup="HandleKeyUp"
                        type="@InputDefinition.InputType" name="@InputDefinition.Name" id="@InputDefinition.Id" />
             }
