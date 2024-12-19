@@ -5,5 +5,5 @@
     /// </summary>
     /// <param name="Culture">The culture identifier, e.g. de-DE</param>
     /// <param name="DisplayName">The (native) display name of the language.</param>
-    public record LanguageSelectItem(string Culture, string DisplayName);
+    public record LanguageItem(string Culture, string DisplayName);
 }

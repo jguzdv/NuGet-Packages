@@ -5,54 +5,53 @@ using JGUZDV.Blazor.Components.Localization;
 
 using Microsoft.AspNetCore.Components;
 
-namespace JGUZDV.Blazor.Hosting.Localization
+namespace JGUZDV.Blazor.Hosting.Localization;
+
+/// <summary>
+/// This service provides the current language settings from the PersistentComponentState.
+/// </summary>
+public class PersistentStateLanguageService : ILanguageService
 {
+    private readonly PersistentComponentState _applicationState;
+    private RequestLocalizationState? _state;
+
     /// <summary>
-    /// This service provides the current language settings from the PersistentComponentState.
+    /// Creates a new instance of the PersistentStateLanguageService.
     /// </summary>
-    public class PersistentStateLanguageService : ILanguageService
+    public PersistentStateLanguageService(PersistentComponentState applicationState)
     {
-        private readonly PersistentComponentState _applicationState;
-        private RequestLocalizationState? _state;
+        _applicationState = applicationState;
+    }
 
-        /// <summary>
-        /// Creates a new instance of the PersistentStateLanguageService.
-        /// </summary>
-        public PersistentStateLanguageService(PersistentComponentState applicationState)
+    /// <inheritdoc />
+    public string GetCurrentCulture()
+        => _state?.CurrentCulture ?? CultureInfo.CurrentCulture.ToString();
+
+    /// <inheritdoc />
+    public string GetCurrentUICulture() 
+        => _state?.CurrentUICulture ?? CultureInfo.CurrentUICulture.ToString();
+
+
+    /// <inheritdoc />
+    public List<LanguageItem>? GetLanguages()
+    {
+        var currentUICulture = GetCurrentUICulture();
+
+        var result = _state?.SupportedCultures?
+            .Select(c => new LanguageItem(c.Value, c.NativeDisplayName))
+            .ToList();
+
+        return result;
+    }
+
+    /// <inheritdoc />
+    public Task InitializeService()
+    {
+        if(!_applicationState.TryTakeFromJson(nameof(RequestLocalizationState), out _state))
         {
-            _applicationState = applicationState;
+            _state = null;
         }
 
-        /// <inheritdoc />
-        public string GetCurrentCulture()
-            => _state?.CurrentCulture ?? CultureInfo.CurrentCulture.ToString();
-
-        /// <inheritdoc />
-        public string GetCurrentUICulture() 
-            => _state?.CurrentUICulture ?? CultureInfo.CurrentUICulture.ToString();
-
-
-        /// <inheritdoc />
-        public List<LanguageSelectItem>? GetLanguages()
-        {
-            var currentUICulture = GetCurrentUICulture();
-
-            var result = _state?.SupportedCultures?
-                .Select(c => new LanguageSelectItem(c.Value, c.NativeDisplayName))
-                .ToList();
-
-            return result;
-        }
-
-        /// <inheritdoc />
-        public Task InitializeService()
-        {
-            if(!_applicationState.TryTakeFromJson(nameof(RequestLocalizationState), out _state))
-            {
-                _state = null;
-            }
-
-            return Task.CompletedTask;
-        }
+        return Task.CompletedTask;
     }
 }
