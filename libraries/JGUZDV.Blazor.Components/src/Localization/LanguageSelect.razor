@@ -1,4 +1,4 @@
-@inject LanguageService LS
+@inject ILanguageService LS
 @inject IStringLocalizer<ComponentStrings> LR
 @inject NavigationManager _navigation
 
@@ -12,7 +12,7 @@
     {
         var currentLanguage = await LS.GetCurrentLanguage();
 
-        var languages = LS.SupportedLanguages
+        var languages = LS.GetSupportedLanguages
             .Select(lang => new LanguageSelectItem(
                 lang,
                 LR[$"LanguagePicker.NativeName:{lang}"]!,
@@ -50,7 +50,7 @@
         <AwaitResult Task="Languages">
             @foreach (var l in context)
             {
-                <button class="dropdown-item @(l.IsSelected?"active":null)" @onclick="() => SelectLanguage(l.LanguageId)">@l.DisplayName</button>
+                <button class="dropdown-item @(l.IsCurrent?"active":null)" @onclick="() => SelectLanguage(l.Culture)">@l.DisplayName</button>
             }
         </AwaitResult>
     </DropdownContent>
