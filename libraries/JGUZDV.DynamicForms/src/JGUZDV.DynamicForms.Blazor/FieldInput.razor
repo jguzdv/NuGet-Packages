@@ -1,11 +1,18 @@
 ﻿@using JGUZDV.Blazor.Components.Inputs
+@using JGUZDV.DynamicForms.Blazor.Resources
 @using JGUZDV.DynamicForms.Model
 @using JGUZDV.Blazor.Components
 @using System.Collections
+@using System.ComponentModel.DataAnnotations
 
 @*TODO: Check if EditForm is a good idea HERE to show validation errors*@
 <EditForm Model="Field">
     <ValidationSummary />
+
+    @foreach (var item in _validationErrors)
+    {
+        @SL[item.ErrorMessage!]
+    }
 
     <div>
         <label for="@InputDefinition.Id">@InputDefinition.Label</label>
@@ -102,9 +109,13 @@
     [Inject]
     public required ValueProvider ValueProvider { get; set; }
 
+    [Inject]
+    public required IStringLocalizer<ComponentStrings> SL { get; set; }
+
     private InputDefinition InputDefinition => Field.FieldDefinition.InputDefinition;
 
     private string? _inputValue;
+    private List<ValidationResult> _validationErrors = new();
 
     public override async Task SetParametersAsync(ParameterView parameters)
     {
@@ -136,7 +147,7 @@
         {
             _inputValue = GetValueString(Field.Value);
         }
-        
+
         return base.OnParametersSetAsync();
     }
 
@@ -151,15 +162,24 @@
 
     private void OnInputChanged(string? value)
     {
-        if (Field.FieldDefinition.IsList)
+        try
         {
-            var stringValue = ConvertToValue(value?.ToString());
-            ((IList)Field.Value!).Add(stringValue);
-            SetValue(Field.Value);
+            _validationErrors.Clear();
+
+            if (Field.FieldDefinition.IsList)
+            {
+                var stringValue = ConvertToValue(value?.ToString());
+                ((IList)Field.Value!).Add(stringValue);
+                SetValue(Field.Value);
+            }
+            else
+            {
+                SetValue(ConvertToValue(value?.ToString()));
+            }
         }
-        else
+        catch
         {
-            SetValue(ConvertToValue(value?.ToString()));
+            _validationErrors.Add(new ValidationResult($"FieldInput.Validation.Convert"));
         }
     }
 

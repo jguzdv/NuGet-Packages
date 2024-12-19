@@ -23,6 +23,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Resources\ComponentStrings.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ComponentStrings.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Update="Resources\ComponentStrings.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ComponentStrings.Designer.cs</LastGenOutput>

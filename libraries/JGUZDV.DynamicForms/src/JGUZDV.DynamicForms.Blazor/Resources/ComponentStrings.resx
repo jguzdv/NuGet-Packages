@@ -127,4 +127,7 @@
   <data name="EditFieldDefinition.Type" xml:space="preserve">
     <value>Datentyp</value>
   </data>
+  <data name="FieldInput.Validation.Convert" xml:space="preserve">
+    <value>Eingabe konnte nicht in Zieltyp konvertiert werden</value>
+  </data>
 </root>
