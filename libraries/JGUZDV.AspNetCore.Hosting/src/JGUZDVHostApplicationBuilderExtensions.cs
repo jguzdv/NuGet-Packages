@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Text.Json.Serialization;
 
+using JGUZDV.AspNetCore.Hosting.Components;
 using JGUZDV.AspNetCore.Hosting.Extensions;
+using JGUZDV.AspNetCore.Hosting.Localization;
 using JGUZDV.Extensions.Json;
 using JGUZDV.WebApiHost.FeatureManagement;
 using JGUZDV.YARP.SimpleReverseProxy;
@@ -19,6 +21,8 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -288,11 +292,10 @@ public static class JGUZDVHostApplicationBuilderExtensions
             appBuilder.Services.AddCascadingAuthenticationState();
         }
 
-        // TODO
-        //if (appBuilder.HasRequestLocalization)
-        //{
-        //    builder.AddRequestLanguageSerialization();
-        //}
+        if (appBuilder.HasRequestLocalization)
+        {
+            appBuilder.Services.TryAddEnumerable(ServiceDescriptor.Scoped<IPersistentComponentStateProvider, RequestLocalizationPersistentStateProvider>());
+        }
 
         appBuilder.HasRazorComponents = true;
         return appBuilder;

@@ -1,13 +1,26 @@
-﻿using JGUZDV.AspNetCore.Hosting.Authentication;
+﻿using System.Runtime.Versioning;
+
+using JGUZDV.AspNetCore.Hosting.Authentication;
+using JGUZDV.AspNetCore.Hosting.Components;
 using JGUZDV.AspNetCore.Hosting.Extensions;
 using JGUZDV.AspNetCore.Hosting.FeatureManagement;
+using JGUZDV.AspNetCore.Hosting.Localization;
+using JGUZDV.Extensions.Logging.File;
 using JGUZDV.YARP.SimpleReverseProxy;
+
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace JGUZDV.AspNetCore.Hosting;
 
 /// <summary>
 /// Wraps the WebApplicationBuilder for the application.
 /// </summary>
+[UnsupportedOSPlatform("browser")]
 public class JGUZDVHostApplicationBuilder
 {
     private readonly WebApplicationBuilder _webApplicationBuilder;
@@ -162,6 +175,10 @@ public class JGUZDVHostApplicationBuilder
     {
         var builder = Create(args);
 
+        if (builder.Environment.IsDevelopment())
+        {
+            builder.Services.Configure<FileLoggerOptions>(opt => opt.OutputDirectory = Path.Combine(builder.Environment.ContentRootPath, "logs"));
+        }
         builder.AddLogging();
 
         using (var sp = builder.Services.BuildServiceProvider())
@@ -301,6 +318,10 @@ public class JGUZDVHostApplicationBuilder
     {
         var builder = Create(args);
 
+        if(builder.Environment.IsDevelopment())
+        {
+            builder.Services.Configure<FileLoggerOptions>(opt => opt.OutputDirectory = Path.Combine(builder.Environment.ContentRootPath, "logs"));
+        }
         builder.AddLogging();
 
         using (var sp = builder.Services.BuildServiceProvider())
@@ -412,7 +433,7 @@ public class JGUZDVHostApplicationBuilder
     /// </summary>
     /// <typeparam name="TRootComponent">The root component for blazor.</typeparam>
     /// <param name="additionalBlazorAssemblies">Additional assemblies containing pages for blazor.</param>
-    public WebApplication BuilderAndConfigureBlazor<TRootComponent>(params System.Reflection.Assembly[] additionalBlazorAssemblies)
+    public WebApplication BuildAndConfigureBlazor<TRootComponent>(params System.Reflection.Assembly[] additionalBlazorAssemblies)
     {
         var app = _webApplicationBuilder.Build();
 
@@ -442,11 +463,6 @@ public class JGUZDVHostApplicationBuilder
             if (HasInteractiveWebAssemblyComponents)
             {
                 b.AddInteractiveWebAssemblyRenderMode();
-
-                if (HasRequestLocalization)
-                {
-                    app.UseRequestLocalizationSerialization();
-                }
             }
         }
 
@@ -499,12 +515,12 @@ public class JGUZDVHostApplicationBuilder
         if (HasRequestLocalization)
         {
             app.UseRequestLocalization();
+        }
 
-            // In Blazor WebAssembly, we'll use this to serialize the request localization settings to the client.
-            if (HasInteractiveWebAssemblyComponents)
-            {
-                app.UseMiddleware<RequestLocalizationSerializationMiddleware>();
-            }
+        if (HasInteractiveWebAssemblyComponents)
+        {
+            // In Blazor WebAssembly, we'll use this to serialize settings and other application state (e.g. RequestLocalization Options) to the client.
+            app.UseMiddleware<PersistentComponentStateMiddleware>();
         }
 
         if (HasReverseProxy)
@@ -517,16 +533,24 @@ public class JGUZDVHostApplicationBuilder
             app.UseAntiforgery();
         }
 
+        if (HasAuthentication)
+        {
+            // Maps login and logout to /_app/sing-in and /_app/sign-out
+            app.MapAuthentication();
+        }
+
+        if (HasRequestLocalization)
+        {
+            // Maps language select to /_app/localization
+            app.MapLocalization();
+        }
+
         if (HasFeatureManagement)
         {
             // Maps featue management to /_app/features
             app.MapFeatureManagement();
         }
 
-        if (HasAuthentication)
-        {
-            app.MapAuthentication();
-        }
 
         if (HasMVC)
         {

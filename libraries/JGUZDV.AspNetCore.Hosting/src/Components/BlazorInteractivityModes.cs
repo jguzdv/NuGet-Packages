@@ -1,4 +1,4 @@
-﻿namespace JGUZDV.AspNetCore.Hosting;
+﻿namespace JGUZDV.AspNetCore.Hosting.Components;
 
 /// <summary>
 /// Flags for the interactivity modes of Blazor.
