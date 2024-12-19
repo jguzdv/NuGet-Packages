@@ -1,0 +1,9 @@
+﻿@media (max-width: 991.98px) {
+    .jbs-sidebar:not(.toggled) {
+        display: revert-layer;
+    }
+
+    #jbs-sidebar-toggle:checked + .jbs-sidebar {
+        display: none;
+    }
+}

@@ -1,30 +1,30 @@
+@using JGUZDV.Blazor.Components;
 @using JGUZDV.Blazor.Components.Authentication;
 @using JGUZDV.Blazor.Components.Localization;
 
-<header class="@HeaderClass">
-    <div class="row mx-0 mt-1 mb-2 align-items-center">
-        <div class="col-12 col-md-auto mb-2 mb-md-0 d-flex align-items-center">
-            @if (Logo != null)
-            {
-                <a class="me-2" href="@Logo.Href">
+<header class="jbs-header @AdditonalClasses">
+    <div class="header-grid">
+        @if (Logo != null)
+        {
+            <div class="header-logo">
+                <a href="@(Logo.Href ?? "")">
                     <img class="app-logo" src="@Logo.SrcUrl" alt="@Logo.AltText" />
                 </a>
-            }
-
-            <h1 class="m-0">@Title</h1>
-        </div>
-
-
-        @if (AdditionalContent != null)
+            </div>
+        }
+        
+        <h1 class="header-app-title">@Title</h1>
+        
+        @if (ChildContent != null)
         {
-            <div class="col-md col-12 mb-2 mb-md-0">
-                @AdditionalContent
+            <div class="header-content">
+                @ChildContent
             </div>
         }
 
         @if (ShowButtons)
         {
-            <div class="col-12 col-md-auto justify-self-end d-flex">
+            <div class="header-controls">
                 @if (ShowLoginButton)
                 {
                     <LoginButton />
@@ -40,6 +40,20 @@
                     <a aria-label="@LR["Help"]" class="jgu_btn btn btn-none" target="_blank" href="@HelpUrl">
                         @Icons.Help(null)
                     </a>
+                }
+
+                @if (ShowAppSwitch) 
+                {
+                    <button class="jgu_btn btn btn-none">
+                        @Icons.AppSelect(null)
+                    </button>
+                }
+
+                @if (ShowSidebarToggle)
+                {
+                    <label for="jbs-sidebar-toggle" class="jgu_btn btn btn-none d-lg-none">
+                        @Icons.Menu(null)
+                    </label>
                 }
             </div>
         }
@@ -59,7 +73,7 @@
 
 
     [Parameter]
-    public RenderFragment? AdditionalContent { get; set; }
+    public RenderFragment? ChildContent { get; set; }
 
 
     [Parameter]
@@ -67,16 +81,28 @@
 
     [Parameter]
     public bool ShowLanguageSelector { get; set; } = true;
+    
+    [Parameter]
+    public bool ShowAppSwitch { get; set; } = true;
+
+    [Parameter]
+    public bool ShowSidebarToggle { get; set; } = true;
 
     [Parameter]
     public string? HelpUrl { get; set; }
 
 
-    public bool ShowButtons => ShowLoginButton || ShowLanguageSelector || HelpUrl != null;
+    public bool ShowButtons => 
+        ShowLoginButton || 
+        ShowLanguageSelector || 
+        ShowSidebarToggle ||
+        ShowAppSwitch ||
+        HelpUrl != null
+        ;
 
 
     [Parameter]
-    public string? HeaderClass { get; set; } = "jbs-header";
+    public string? AdditonalClasses { get; set; }
 
 
     public class LogoSpecs

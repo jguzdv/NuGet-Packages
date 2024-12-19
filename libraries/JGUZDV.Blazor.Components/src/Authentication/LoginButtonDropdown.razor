@@ -7,6 +7,9 @@
     public string? Username { get; set; }
     public bool HasUserName => !string.IsNullOrWhiteSpace(Username);
 
+    public string? UserInitial =>
+        HasUserName ? Username![0].ToString() : null;
+
     [Parameter, EditorRequired]
     public string? LogoutUrl { get; set; }
 
@@ -25,11 +28,21 @@
 
 <Dropdown>
     <DropdownLabelContent>
-        <span class="jgu_btn btn @(HasUserName?"btn-light border":"btn-none")">
+        <span class="jgu_btn btn @(HasUserName?"btn-light border":"btn-none") d-none d-lg-inline-block">
             <i class="fas fa-user-circle"></i>
             @if (HasUserName)
             {
                 <span class="ms-2">@Username</span>
+            }
+        </span>
+        <span class="jgu_btn btn @(HasUserName?"btn-light border":"btn-none") d-lg-none d-inline-block">
+            @if (HasUserName)
+            {
+                <span>@UserInitial</span>
+            }
+            else
+            {
+                <i class="fas fa-user-circle"></i>
             }
         </span>
     </DropdownLabelContent>
