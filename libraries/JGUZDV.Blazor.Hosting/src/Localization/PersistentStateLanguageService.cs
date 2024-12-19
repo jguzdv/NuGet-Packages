@@ -38,7 +38,7 @@ namespace JGUZDV.Blazor.Hosting.Localization
             var currentUICulture = GetCurrentUICulture();
 
             var result = _state?.SupportedCultures?
-                .Select(c => new LanguageSelectItem(c.Value, c.NativeDisplayName, currentUICulture == c.Value))
+                .Select(c => new LanguageSelectItem(c.Value, c.NativeDisplayName))
                 .ToList();
 
             return result;
