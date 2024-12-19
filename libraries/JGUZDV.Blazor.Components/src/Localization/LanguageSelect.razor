@@ -1,41 +1,10 @@
-@inject LanguageService LS
+@inject ILanguageService LS
 @inject IStringLocalizer<ComponentStrings> LR
 @inject NavigationManager _navigation
 
 @code {
-    protected override void OnInitialized()
-    {
-        Languages = GetSelectItems();
-    }
-
-    private async Task<List<LanguageSelectItem>> GetSelectItems()
-    {
-        var currentLanguage = await LS.GetCurrentLanguage();
-
-        var languages = LS.SupportedLanguages
-            .Select(lang => new LanguageSelectItem(
-                lang,
-                LR[$"LanguagePicker.NativeName:{lang}"]!,
-                currentLanguage.StartsWith(lang, StringComparison.OrdinalIgnoreCase)
-                ))
-            .ToList();
-
-        return languages;
-    }
-
-    public void ToggleLanguageSelection()
-    {
-        IsVisible = !IsVisible;
-    }
-
-    public async Task SelectLanguage(string? languageId)
-    {
-        await LS.SetCurrentLanguage(languageId);
-        _navigation.NavigateTo(_navigation.Uri, forceLoad: true);
-    }
-
-    public Task<List<LanguageSelectItem>>? Languages { get; set; }
-    public bool IsVisible { get; set; }
+    [Parameter]
+    public string LanguageSelectionEndpointFormat { get; set; } = "_app/localization/{0}";
 }
 
 <Dropdown>
@@ -47,11 +16,10 @@
     <DropdownContent>
         <h6 class="dropdown-header">@LR["LanguagePicker.Header"]</h6>
 
-        <AwaitResult Task="Languages">
-            @foreach (var l in context)
-            {
-                <button class="dropdown-item @(l.IsSelected?"active":null)" @onclick="() => SelectLanguage(l.LanguageId)">@l.DisplayName</button>
-            }
-        </AwaitResult>
+        @foreach (var l in LS.GetLanguages() ?? [])
+        {
+            var isSelected = l.Culture == LS.GetCurrentUICulture();
+            <a class="dropdown-item @(isSelected?"active":null)" href="@LanguageSelectionEndpointFormat.Replace("{0}", l.Culture)">@l.DisplayName</a>
+        }
     </DropdownContent>
 </Dropdown>

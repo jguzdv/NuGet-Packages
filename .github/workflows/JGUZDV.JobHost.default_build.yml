@@ -16,7 +16,7 @@ on:
         required: true    
 
 env:
-    dotnet-version: 7.0.x
+    dotnet-version: 8.0.x
     src-proj: ./libraries/JGUZDV.JobHost/src/${{ inputs.library-name }}/src/${{ inputs.library-name }}.csproj
     test-proj: ./libraries/JGUZDV.JobHost/src/${{ inputs.library-name }}/test/${{ inputs.library-name }}.Tests.csproj
     publish-path: ./publish/${{ inputs.library-name }}
@@ -51,7 +51,7 @@ jobs:
         run: dotnet pack ${{ env.src-proj }} --no-build -c Release --output ${{ env.publish-path }}
 
       - name: Upload nupkg
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: NuGetPackage
           path: ${{ env.publish-path }}
