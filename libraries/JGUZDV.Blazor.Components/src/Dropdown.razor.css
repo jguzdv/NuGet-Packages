@@ -1,6 +1,10 @@
-﻿details {
+﻿details.dropdown {
     summary {
         display: block
+    }
+
+    summary::-webkit-details-marker {
+        display: none
     }
 
     &[open] > .dropdown-menu {
