@@ -1,3 +1,11 @@
-﻿.dropdown-toggle:checked + .dropdown-menu {
-    display: block;
+﻿details {
+    summary {
+        display: block
+    }
+
+    &[open] > .dropdown-menu {
+        display: block;
+        right: var(--dropdown-right, unset);
+        )
+    }
 }

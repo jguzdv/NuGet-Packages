@@ -27,7 +27,7 @@
 }
 
 <Dropdown>
-    <DropdownLabelContent>
+    <DropdownToggle>
         <span class="jgu_btn btn @(HasUserName?"btn-light border":"btn-none") d-none d-lg-inline-block">
             <i class="fas fa-user-circle"></i>
             @if (HasUserName)
@@ -45,7 +45,7 @@
                 <i class="fas fa-user-circle"></i>
             }
         </span>
-    </DropdownLabelContent>
+    </DropdownToggle>
     <DropdownContent>
         <a class="dropdown-item" href="@LogoutUrl">
             <i class="fas fa-sign-out-alt"></i>
