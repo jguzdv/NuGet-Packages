@@ -335,7 +335,8 @@ public class JGUZDVHostApplicationBuilder
     {
         var builder = Create(args);
 
-        if(builder.Environment.IsDevelopment())
+        var hasFileLoggingSection = builder.Configuration.HasConfigSection(Constants.ConfigSections.FileLogging);
+        if (!hasFileLoggingSection)
         {
             builder.Services.Configure<FileLoggerOptions>(opt => opt.OutputDirectory = Path.Combine(builder.Environment.ContentRootPath, "logs"));
         }

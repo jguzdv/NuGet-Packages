@@ -67,5 +67,11 @@ public static class Constants
         /// Default Configuration section for ReverseProxy.
         /// </summary>
         public const string ReverseProxy = "ReverseProxy";
+
+
+        /// <summary>
+        /// Default Configuration section for Logging.
+        /// </summary>
+        public const string FileLogging = "Logging:File";
     }
 }

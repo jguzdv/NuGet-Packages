@@ -17,7 +17,7 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 
 builder.Services.AddSupportedCultures(new List<string>() { "de", "en" });
 
-builder.Services.AddLocalization(["de", "en", "fr"]);
+builder.Services.AddLocalization();
 builder.Services.AddBrowserClientStore();
 
 builder.Services.AddSingleton<AuthenticationStateProvider, SampleAuthenticationStateProvider>();

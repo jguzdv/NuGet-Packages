@@ -10,7 +10,6 @@ using JGUZDV.WebApiHost.FeatureManagement;
 using JGUZDV.YARP.SimpleReverseProxy;
 using JGUZDV.YARP.SimpleReverseProxy.Configuration;
 
-using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
