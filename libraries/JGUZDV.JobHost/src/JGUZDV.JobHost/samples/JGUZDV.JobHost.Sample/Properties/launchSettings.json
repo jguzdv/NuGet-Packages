@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "JGUZDV.JobHost.Sample": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
