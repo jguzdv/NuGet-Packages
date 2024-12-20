@@ -13,7 +13,7 @@ namespace JGUZDV.AspNetCore.Hosting.Authentication;
 public static class AuthenticationEndpointsExtensions
 {
     /// <summary>
-    /// Maps sign-in and sing-out endpoints to the route.
+    /// Maps sign-in and sign-out endpoints to the route.
     /// </summary>
     /// <param name="route"></param>
     /// <param name="routePrefix"></param>
