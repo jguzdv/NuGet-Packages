@@ -132,13 +132,4 @@
   <data name="LanguagePicker.Header" xml:space="preserve">
     <value>Sprache auswählen</value>
   </data>
-  <data name="LanguagePicker.NativeName:de" xml:space="preserve">
-    <value>Deutsch</value>
-  </data>
-  <data name="LanguagePicker.NativeName:en" xml:space="preserve">
-    <value>English</value>
-  </data>
-  <data name="LanguagePicker.NativeName:fr" xml:space="preserve">
-    <value>Francais</value>
-  </data>
 </root>
