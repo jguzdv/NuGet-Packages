@@ -72,6 +72,12 @@ public class JGUZDVHostApplicationBuilder
 
 
     /// <summary>
+    /// Gets a value indicating whether the application has session configured.
+    /// </summary>
+    public bool HasSession { get; internal set; }
+
+
+    /// <summary>
     /// Gets a value indicating whether the application has feature management configured.
     /// </summary>
     public bool HasFeatureManagement { get; internal set; }
@@ -170,6 +176,7 @@ public class JGUZDVHostApplicationBuilder
     /// - DataProtection* when in Production or ephemeral DataProtection<br />
     /// - OpenIdConnect Authentication*<br />
     /// - FeatureManagement*<br />
+    /// - ForwarededHeaders*<br />
     /// - OpenTelemetry*<br />
     /// - HealthChecks<br />
     /// - ReverseProxy*<br />
@@ -258,6 +265,17 @@ public class JGUZDVHostApplicationBuilder
             }
 
 
+            // Forwarded Headers
+            if (builder.Configuration.HasConfigSection(Constants.ConfigSections.ForwardedHeaders))
+            {
+                builder.AddForwardedHeaders();
+            }
+            else
+            {
+                LogMessages.MissingConfig(logger, missingConfigLogLevel, Constants.ConfigSections.ForwardedHeaders);
+            }
+
+
             // OpenTelemetry
             if (builder.Configuration.HasConfigSection(Constants.ConfigSections.OpenTelemetry))
             {
@@ -305,6 +323,7 @@ public class JGUZDVHostApplicationBuilder
     /// - DataProtection* when in Production or ephemeral DataProtection<br />
     /// - OpenIdConnect Authentication*<br />
     /// - FeatureManagement*<br />
+    /// - ForwardedHeaders*<br />
     /// - OpenTelemetry*<br />
     /// - HealthChecks<br />
     /// - ReverseProxy*<br />
@@ -407,6 +426,17 @@ public class JGUZDVHostApplicationBuilder
             }
 
 
+            // Forwarded Headers
+            if (builder.Configuration.HasConfigSection(Constants.ConfigSections.ForwardedHeaders))
+            {
+                builder.AddForwardedHeaders();
+            }
+            else
+            {
+                LogMessages.MissingConfig(logger, missingConfigLogLevel, Constants.ConfigSections.ForwardedHeaders);
+            }
+
+
             if (builder.Configuration.HasConfigSection(Constants.ConfigSections.OpenTelemetry))
             {
                 builder.AddOpenTelemetry();
@@ -488,11 +518,35 @@ public class JGUZDVHostApplicationBuilder
     }
 
 
+    /// <summary>
+    /// Configures the application and maps routes as configured*, for frontend only+:<br />
+    /// - StaticFiles<br />
+    /// - Forwarded Headers*<br />
+    /// - Error Handling*+<br />
+    /// - Https Redirection*+<br />
+    /// - Session*<br />
+    /// - Routing<br />
+    /// - OpenApi*<br />
+    /// - Health Checks*<br />
+    /// - Open Telemetry*<br />
+    /// - Authentication and Authorization*<br />
+    /// - Request Localization*<br />
+    /// - PersistentComponentState Middleware*<br />
+    /// - Reverse Proxy*<br />
+    /// - Anti Forgery*+<br />
+    /// - Authentication Endpoints*+<br />
+    /// - Language Selection Endpoints*+<br />
+    /// - Feature Management Endpoints*<br />
+    /// - Mvc Controllers*<br />
+    /// - Razor Pages*<br />
+    /// </summary>
+    /// <param name="app"></param>
+    /// <returns></returns>
     private WebApplication ConfigureDefaultApp(WebApplication app)
     {
         app.UseStaticFiles();
 
-        if(HasForwardedHeaders)
+        if (HasForwardedHeaders)
         {
             app.UseForwardedHeaders();
         }
@@ -511,6 +565,11 @@ public class JGUZDVHostApplicationBuilder
             }
 
             app.UseHttpsRedirection();
+        }
+
+        if (HasSession)
+        {
+            app.UseSession();
         }
 
         app.UseRouting();
@@ -558,12 +617,12 @@ public class JGUZDVHostApplicationBuilder
         if (HasFrontend)
         {
             app.UseAntiforgery();
-        }
 
-        if (HasAuthentication)
-        {
-            // Maps login and logout to /_app/sing-in and /_app/sign-out
-            app.MapAuthentication();
+            if (HasAuthentication)
+            {
+                // Maps login and logout to /_app/sing-in and /_app/sign-out
+                app.MapAuthentication();
+            }
         }
 
         if (HasRequestLocalization)

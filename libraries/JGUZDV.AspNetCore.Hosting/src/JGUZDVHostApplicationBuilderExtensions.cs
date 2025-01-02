@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Server;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http.Json;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -232,31 +233,48 @@ public static class JGUZDVHostApplicationBuilderExtensions
     }
 
 
+    /// <summary>
+    /// Add Session support to the WebApplicationBuilder.
+    /// </summary>
+    public static JGUZDVHostApplicationBuilder AddSession(
+        this JGUZDVHostApplicationBuilder appBuilder,
+        Action<SessionOptions>? configure = null)
+    {
+        appBuilder.Services.AddSession(opt =>
+        {
+            configure?.Invoke(opt);
+        });
+
+        appBuilder.HasSession = true;
+        return appBuilder;
+    }
+
     #region Frontend Frameworks
         /// <summary>
-        /// Adds MVC to the WebApplicationBuilder.
+        /// Adds MVC to the WebApplicationBuilder.<br/>
         /// This will also configure the JsonOptions MVC controllers.
         /// </summary>
     public static JGUZDVHostApplicationBuilder AddAspNetCoreMvc(
         this JGUZDVHostApplicationBuilder appBuilder,
         bool enableViewSupport,
-        Action<IMvcBuilder>? configure = null)
+        Action<IMvcBuilder>? configureBuilder = null,
+        Action<MvcOptions>? configureOptions = null)
     {
         IMvcBuilder mvcBuilder;
         if (enableViewSupport)
         {
             appBuilder.Services.AddAntiforgery();
-            mvcBuilder = appBuilder.Services.AddControllersWithViews();
+            mvcBuilder = appBuilder.Services.AddControllersWithViews(configureOptions);
 
             appBuilder.HasFrontend = true;
         }
         else
         {
-            mvcBuilder = appBuilder.Services.AddControllers();
+            mvcBuilder = appBuilder.Services.AddControllers(configureOptions);
         }
         
         mvcBuilder.AddJsonOptions(opt => opt.JsonSerializerOptions.SetJGUZDVDefaults());
-        configure?.Invoke(mvcBuilder);
+        configureBuilder?.Invoke(mvcBuilder);
 
         appBuilder.HasMVC = true;
         return appBuilder;
@@ -326,7 +344,7 @@ public static class JGUZDVHostApplicationBuilderExtensions
     /// <summary>
     /// Sets JsonOptions for minimal API
     /// </summary>
-    public static void ApplyJsonOptions(this JsonOptions opt)
+    public static void ApplyJsonOptions(this Microsoft.AspNetCore.Http.Json.JsonOptions opt)
     {
         opt.SerializerOptions.SetJGUZDVDefaults();
     }
@@ -342,7 +360,7 @@ public static class JGUZDVHostApplicationBuilderExtensions
     public static JGUZDVHostApplicationBuilder AddDefaultJwtBearerAuthentication(
         this JGUZDVHostApplicationBuilder appBuilder,
         Action<AuthenticationBuilder>? authenticationBuilderAction = null,
-        Action<AuthenticationOptions>? configureaAuthentication = null,
+        Action<AuthenticationOptions>? configureAuthentication = null,
         Action<JwtBearerOptions>? configureJwtBearer = null,
         Action<AuthorizationOptions>? configureAuthorization = null,
         string configSection = Constants.ConfigSections.JwtBearerAuthentication,
@@ -358,7 +376,7 @@ public static class JGUZDVHostApplicationBuilderExtensions
             .AddAuthentication(opt => {
                 opt.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 
-                configureaAuthentication?.Invoke(opt);
+                configureAuthentication?.Invoke(opt);
             })
             .AddJwtBearer(opt =>
             {
