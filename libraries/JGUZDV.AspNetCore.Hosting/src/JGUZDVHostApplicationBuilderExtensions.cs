@@ -233,6 +233,9 @@ public static class JGUZDVHostApplicationBuilderExtensions
     }
 
 
+    /// <summary>
+    /// Add Session support to the WebApplicationBuilder.
+    /// </summary>
     public static JGUZDVHostApplicationBuilder AddSession(
         this JGUZDVHostApplicationBuilder appBuilder,
         Action<SessionOptions>? configure = null)
@@ -244,7 +247,7 @@ public static class JGUZDVHostApplicationBuilderExtensions
 
         appBuilder.HasSession = true;
         return appBuilder;
-
+    }
 
     #region Frontend Frameworks
         /// <summary>
