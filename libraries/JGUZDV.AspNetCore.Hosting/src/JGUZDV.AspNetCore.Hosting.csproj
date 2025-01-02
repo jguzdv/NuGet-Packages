@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <OutputType>Library</OutputType>
+
+        <PackageId>JGUZDV.AspNetCore.Hosting</PackageId>
+        <IsPackable>true</IsPackable>
+        <Version>1.0.0-beta1</Version>
+        <Authors>Thomas Ottenhus</Authors>
+        <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
+        <PackageDescription>HostBuilders for our default setup.</PackageDescription>
+        <NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
+
+        <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\JGUZDV.AspNetCore.Authentication.Cookies\src\JGUZDV.AspNetCore.Authentication.Cookies.csproj" />
+        <ProjectReference Include="..\..\JGUZDV.AspNetCore.DataProtection\src\JGUZDV.AspNetCore.DataProtection.csproj" />
+        <ProjectReference Include="..\..\JGUZDV.AspNetCore.Logging\src\JGUZDV.AspNetCore.Logging.csproj" />
+        <ProjectReference Include="..\..\JGUZDV.Extensions.Authorization\src\JGUZDV.Extensions.Authorization.csproj" />
+        <ProjectReference Include="..\..\JGUZDV.Extensions.Json\src\JGUZDV.Extensions.Json.csproj" />
+        <ProjectReference Include="..\..\JGUZDV.YARP.SimpleReverseProxy\src\JGUZDV.YARP.SimpleReverseProxy.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="[9.0.0, )" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="[9.0.0, )" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="[9.0.0, )" PrivateAssets="All" />
+        <PackageReference Include="Microsoft.Extensions.Caching.SqlServer" Version="[9.0.0, )" />
+        <PackageReference Include="Microsoft.Extensions.Configuration" Version="[9.0.0, )" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="[9.0.0, )" />
+        <PackageReference Include="Microsoft.FeatureManagement.AspNetCore" Version="[4.0.0, )" />
+    </ItemGroup>
+</Project>

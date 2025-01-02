@@ -15,42 +15,19 @@ namespace JGUZDV.Blazor.Components;
 public static class LocalizationExtensions
 {
     /// <summary>
-    /// Adds localization services to the application and registeres the <see cref="LanguageService"/> and <see cref="LanguageAwareMessageHandler"/>
-    /// </summary>
-    public static IServiceCollection AddLocalization(this IServiceCollection services, 
-        string[] languages, 
-        
-        Action<LocalizationOptions>? configureLocalization = null)
-    {
-        if (languages is not { Length: >= 1 })
-            throw new ArgumentException("At least one language needs to be set", nameof(languages));
-
-        services.AddLocalization(configureLocalization ?? (_ => {}));
-        services.AddOptions<LanguageOptions>()
-            .Configure(opt => {
-                opt.DefaultLanguage = languages[0];
-                opt.SupportedLanguages = languages;
-            });
-
-        services.AddOptions<CookieLanguageOptions>();
-        services.TryAddSingleton<ILanguagePersistence, CookieLanguagePersistence>();
-        services.TryAddSingleton<LanguageService>();
-
-        services.TryAddScoped<LanguageAwareMessageHandler>();
-
-        return services;
-    }
-
-    /// <summary>
     /// Initializes the language for the application. This sould be called upon startup to set the correct culture for the application
     /// </summary>
     public static async Task InitializeLanguageAsync(this WebAssemblyHost host)
     {
-        var ls = host.Services.GetRequiredService<LanguageService>();
-        var langId = await ls.GetCurrentLanguage();
-        var culture = new CultureInfo(langId);
+        var ls = host.Services.GetRequiredService<ILanguageService>();
+        await ls.InitializeService();
 
+        var uiCulture = new CultureInfo(ls.GetCurrentUICulture());
+        var culture = new CultureInfo(ls.GetCurrentUICulture());
+
+        CultureInfo.CurrentCulture = culture;
+        CultureInfo.CurrentUICulture = uiCulture;
         CultureInfo.DefaultThreadCurrentCulture = culture;
-        CultureInfo.DefaultThreadCurrentUICulture = culture;
+        CultureInfo.DefaultThreadCurrentUICulture = uiCulture;
     }
 }
