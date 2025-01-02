@@ -233,11 +233,24 @@ public static class JGUZDVHostApplicationBuilderExtensions
     }
 
 
+    public static JGUZDVHostApplicationBuilder AddSession(
+        this JGUZDVHostApplicationBuilder appBuilder,
+        Action<SessionOptions>? configure = null)
+    {
+        appBuilder.Services.AddSession(opt =>
+        {
+            configure?.Invoke(opt);
+        });
+
+        appBuilder.HasSession = true;
+        return appBuilder;
+
+
     #region Frontend Frameworks
-    /// <summary>
-    /// Adds MVC to the WebApplicationBuilder.<br/>
-    /// This will also configure the JsonOptions MVC controllers.
-    /// </summary>
+        /// <summary>
+        /// Adds MVC to the WebApplicationBuilder.<br/>
+        /// This will also configure the JsonOptions MVC controllers.
+        /// </summary>
     public static JGUZDVHostApplicationBuilder AddAspNetCoreMvc(
         this JGUZDVHostApplicationBuilder appBuilder,
         bool enableViewSupport,
