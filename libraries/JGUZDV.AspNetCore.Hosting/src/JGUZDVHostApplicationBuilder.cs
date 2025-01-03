@@ -318,7 +318,6 @@ public class JGUZDVHostApplicationBuilder
             {
                 this.AddBlazor(interactivityMode);
             }
-
         }
     }
 
@@ -379,17 +378,21 @@ public class JGUZDVHostApplicationBuilder
     public void AddWebApiServices()
     {
         var hasFileLoggingSection = Configuration.HasConfigSection(Constants.ConfigSections.FileLogging);
-        if (!hasFileLoggingSection)
+        if (hasFileLoggingSection)
         {
-            Services.Configure<FileLoggerOptions>(opt => opt.OutputDirectory = Path.Combine(Environment.ContentRootPath, "logs"));
+            this.AddLogging();
         }
-        this.AddLogging();
 
         using (var sp = Services.BuildServiceProvider())
         using (var loggerFactory = sp.GetRequiredService<ILoggerFactory>())
         {
             var logger = loggerFactory.CreateLogger(nameof(JGUZDVHostApplicationBuilder));
             var missingConfigLogLevel = Environment.IsProduction() ? LogLevel.Information : LogLevel.Warning;
+
+            if(!hasFileLoggingSection)
+            {
+                LogMessages.MissingConfig(logger, missingConfigLogLevel, Constants.ConfigSections.FileLogging);
+            }
 
             Services.AddProblemDetails();
 
