@@ -201,7 +201,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.Extensions.Logging.F
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.Extensions.Logging.File.Tests", "libraries\JGUZDV.Extensions.Logging.File\test\JGUZDV.Extensions.Logging.File.Tests.csproj", "{91CC9008-7485-4CBA-B4CE-71693EE63E4C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JGUZDV.AspNetCore", "JGUZDV.AspNetCore", "{DF6EFF4B-B841-4DF9-8FD2-FFE6B017B6E7}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JGUZDV.AspNetCore.Hosting", "JGUZDV.AspNetCore.Hosting", "{DF6EFF4B-B841-4DF9-8FD2-FFE6B017B6E7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.AspNetCore.Hosting", "libraries\JGUZDV.AspNetCore.Hosting\src\JGUZDV.AspNetCore.Hosting.csproj", "{34E5A202-C482-458F-96CC-1D89135C8216}"
 EndProject
