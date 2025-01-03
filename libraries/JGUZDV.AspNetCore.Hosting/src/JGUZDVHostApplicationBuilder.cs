@@ -57,8 +57,6 @@ public class JGUZDVHostApplicationBuilder
     public ILoggingBuilder Logging => _webApplicationBuilder.Logging;
     #endregion
 
-
-
     #region Configuration flags
     /// <summary>
     /// Gets a value indicating whether the application has authentication configured.
@@ -184,10 +182,23 @@ public class JGUZDVHostApplicationBuilder
     /// - RazorPages<br />
     /// - Razor WebComponents (without interactivity aka. Blazor Static Server)<br />
     /// </summary>
-    public static JGUZDVHostApplicationBuilder CreateWebHost(string[] args, BlazorInteractivityModes interactivityMode = BlazorInteractivityModes.DisableBlazor)
+    public static JGUZDVHostApplicationBuilder CreateWebHost(string[] args, 
+        BlazorInteractivityModes interactivityMode = BlazorInteractivityModes.DisableBlazor,
+        Action<ConfigurationManager>? configureConfiguration = null)
     {
         var builder = Create(args);
+        configureConfiguration?.Invoke(builder.Configuration);
 
+        return AddWebHostServices(interactivityMode, builder);
+    }
+
+
+    /// <summary>
+    /// Adds the services for a Web Host.<br />
+    /// See <see cref="CreateWebHost"/> for further details.
+    /// </summary>
+    public static JGUZDVHostApplicationBuilder AddWebHostServices(BlazorInteractivityModes interactivityMode, JGUZDVHostApplicationBuilder builder)
+    {
         if (builder.Environment.IsDevelopment())
         {
             builder.Services.Configure<FileLoggerOptions>(opt => opt.OutputDirectory = Path.Combine(builder.Environment.ContentRootPath, "logs"));
@@ -331,8 +342,8 @@ public class JGUZDVHostApplicationBuilder
     /// - RazorPages<br />
     /// - Razor WebComponents (without interactivity aka. Blazor Static Server)<br />
     /// </summary>
-    public static JGUZDVHostApplicationBuilder CreateStaticWeb(string[] args)
-        => CreateWebHost(args, BlazorInteractivityModes.None);
+    public static JGUZDVHostApplicationBuilder CreateStaticWeb(string[] args, Action<ConfigurationManager>? configureConfiguration = null)
+        => CreateWebHost(args, BlazorInteractivityModes.None, configureConfiguration);
 
 
     /// <summary>
@@ -350,10 +361,21 @@ public class JGUZDVHostApplicationBuilder
     /// - OpenTelemetry*<br />
     /// - HealthChecks<br />
     /// </summary>
-    public static JGUZDVHostApplicationBuilder CreateWebApi(string[] args)
+    public static JGUZDVHostApplicationBuilder CreateWebApi(string[] args,
+        Action<ConfigurationManager>? configureConfiguration = null)
     {
         var builder = Create(args);
+        configureConfiguration?.Invoke(builder.Configuration);
 
+        return AddWebApiServices(builder);
+    }
+
+    /// <summary>
+    /// Adds the services for a WebApi Host.<br />
+    /// See <see cref="CreateWebApi"/> for further details.
+    /// </summary>
+    public static JGUZDVHostApplicationBuilder AddWebApiServices(JGUZDVHostApplicationBuilder builder)
+    {
         var hasFileLoggingSection = builder.Configuration.HasConfigSection(Constants.ConfigSections.FileLogging);
         if (!hasFileLoggingSection)
         {
