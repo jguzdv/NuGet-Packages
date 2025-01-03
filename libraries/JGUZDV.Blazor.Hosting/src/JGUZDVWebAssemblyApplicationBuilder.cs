@@ -68,9 +68,11 @@ public class JGUZDVWebAssemblyApplicationBuilder
     /// - Authorization<br />
     /// - Localization
     /// </summary>
-    public static JGUZDVWebAssemblyApplicationBuilder CreateDefault(string[]? args = null)
+    public static JGUZDVWebAssemblyApplicationBuilder CreateDefault(string[]? args = null,
+        Action<WebAssemblyHostConfiguration>? configureConfiguration = null)
     {
         var builder = new JGUZDVWebAssemblyApplicationBuilder(WebAssemblyHostBuilder.CreateDefault(args));
+        configureConfiguration?.Invoke(builder.Configuration);
 
         builder.AddAuthoriztion();
         builder.AddLocalization();

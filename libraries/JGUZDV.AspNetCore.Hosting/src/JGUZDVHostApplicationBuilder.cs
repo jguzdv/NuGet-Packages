@@ -57,8 +57,6 @@ public class JGUZDVHostApplicationBuilder
     public ILoggingBuilder Logging => _webApplicationBuilder.Logging;
     #endregion
 
-
-
     #region Configuration flags
     /// <summary>
     /// Gets a value indicating whether the application has authentication configured.
@@ -184,9 +182,12 @@ public class JGUZDVHostApplicationBuilder
     /// - RazorPages<br />
     /// - Razor WebComponents (without interactivity aka. Blazor Static Server)<br />
     /// </summary>
-    public static JGUZDVHostApplicationBuilder CreateWebHost(string[] args, BlazorInteractivityModes interactivityMode = BlazorInteractivityModes.DisableBlazor)
+    public static JGUZDVHostApplicationBuilder CreateWebHost(string[] args, 
+        BlazorInteractivityModes interactivityMode = BlazorInteractivityModes.DisableBlazor,
+        Action<ConfigurationManager>? configureConfiguration = null)
     {
         var builder = Create(args);
+        configureConfiguration?.Invoke(builder.Configuration);
 
         return AddWebHostServices(interactivityMode, builder);
     }
@@ -341,8 +342,8 @@ public class JGUZDVHostApplicationBuilder
     /// - RazorPages<br />
     /// - Razor WebComponents (without interactivity aka. Blazor Static Server)<br />
     /// </summary>
-    public static JGUZDVHostApplicationBuilder CreateStaticWeb(string[] args)
-        => CreateWebHost(args, BlazorInteractivityModes.None);
+    public static JGUZDVHostApplicationBuilder CreateStaticWeb(string[] args, Action<ConfigurationManager>? configureConfiguration = null)
+        => CreateWebHost(args, BlazorInteractivityModes.None, configureConfiguration);
 
 
     /// <summary>
@@ -360,9 +361,11 @@ public class JGUZDVHostApplicationBuilder
     /// - OpenTelemetry*<br />
     /// - HealthChecks<br />
     /// </summary>
-    public static JGUZDVHostApplicationBuilder CreateWebApi(string[] args)
+    public static JGUZDVHostApplicationBuilder CreateWebApi(string[] args,
+        Action<ConfigurationManager>? configureConfiguration = null)
     {
         var builder = Create(args);
+        configureConfiguration?.Invoke(builder.Configuration);
 
         return AddWebApiServices(builder);
     }
