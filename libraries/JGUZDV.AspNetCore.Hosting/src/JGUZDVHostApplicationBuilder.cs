@@ -188,6 +188,16 @@ public class JGUZDVHostApplicationBuilder
     {
         var builder = Create(args);
 
+        return AddWebHostServices(interactivityMode, builder);
+    }
+
+
+    /// <summary>
+    /// Adds the services for a Web Host.<br />
+    /// See <see cref="CreateWebHost"/> for further details.
+    /// </summary>
+    public static JGUZDVHostApplicationBuilder AddWebHostServices(BlazorInteractivityModes interactivityMode, JGUZDVHostApplicationBuilder builder)
+    {
         if (builder.Environment.IsDevelopment())
         {
             builder.Services.Configure<FileLoggerOptions>(opt => opt.OutputDirectory = Path.Combine(builder.Environment.ContentRootPath, "logs"));
@@ -354,6 +364,15 @@ public class JGUZDVHostApplicationBuilder
     {
         var builder = Create(args);
 
+        return AddWebApiServices(builder);
+    }
+
+    /// <summary>
+    /// Adds the services for a WebApi Host.<br />
+    /// See <see cref="CreateWebApi"/> for further details.
+    /// </summary>
+    public static JGUZDVHostApplicationBuilder AddWebApiServices(JGUZDVHostApplicationBuilder builder)
+    {
         var hasFileLoggingSection = builder.Configuration.HasConfigSection(Constants.ConfigSections.FileLogging);
         if (!hasFileLoggingSection)
         {
