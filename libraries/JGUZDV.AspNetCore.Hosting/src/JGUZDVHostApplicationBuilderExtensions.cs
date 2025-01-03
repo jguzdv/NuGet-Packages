@@ -494,6 +494,7 @@ public static class JGUZDVHostApplicationBuilderExtensions
 
         appBuilder.Services.AddAuthorization();
 
+        appBuilder.HasAuthentication = true;
         return appBuilder;
     }
     #endregion
