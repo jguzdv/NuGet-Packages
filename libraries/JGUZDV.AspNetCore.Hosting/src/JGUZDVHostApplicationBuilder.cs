@@ -184,12 +184,14 @@ public class JGUZDVHostApplicationBuilder
     /// </summary>
     public static JGUZDVHostApplicationBuilder CreateWebHost(string[] args, 
         BlazorInteractivityModes interactivityMode = BlazorInteractivityModes.DisableBlazor,
-        Action<ConfigurationManager>? configureConfiguration = null)
+        Action<JGUZDVHostApplicationBuilder>? configureConfiguration = null)
     {
         var builder = Create(args);
-        configureConfiguration?.Invoke(builder.Configuration);
+        configureConfiguration?.Invoke(builder);
 
-        return AddWebHostServices(interactivityMode, builder);
+        builder.AddWebHostServices(interactivityMode);
+
+        return builder;
     }
 
 
@@ -197,34 +199,34 @@ public class JGUZDVHostApplicationBuilder
     /// Adds the services for a Web Host.<br />
     /// See <see cref="CreateWebHost"/> for further details.
     /// </summary>
-    public static JGUZDVHostApplicationBuilder AddWebHostServices(BlazorInteractivityModes interactivityMode, JGUZDVHostApplicationBuilder builder)
+    public void AddWebHostServices(BlazorInteractivityModes interactivityMode)
     {
-        if (builder.Environment.IsDevelopment())
+        if (Environment.IsDevelopment())
         {
-            builder.Services.Configure<FileLoggerOptions>(opt => opt.OutputDirectory = Path.Combine(builder.Environment.ContentRootPath, "logs"));
+            Services.Configure<FileLoggerOptions>(opt => opt.OutputDirectory = Path.Combine(Environment.ContentRootPath, "logs"));
         }
-        builder.AddLogging();
+        this.AddLogging();
 
-        using (var sp = builder.Services.BuildServiceProvider())
+        using (var sp = Services.BuildServiceProvider())
         using (var loggerFactory = sp.GetRequiredService<ILoggerFactory>())
         {
             var logger = loggerFactory.CreateLogger(nameof(JGUZDVHostApplicationBuilder));
-            var missingConfigLogLevel = builder.Environment.IsProduction() ? LogLevel.Information : LogLevel.Warning;
+            var missingConfigLogLevel = Environment.IsProduction() ? LogLevel.Information : LogLevel.Warning;
 
-            builder.Services.AddProblemDetails();
+            Services.AddProblemDetails();
 
             // TODO: Enable swagger UI?
-            builder.AddOpenApi();
+            this.AddOpenApi();
 
-            builder.AddLocalization(logger: logger);
-            builder.AddHealthChecks();
+            this.AddLocalization(logger: logger);
+            this.AddHealthChecks();
 
 
             // Distributed Cache
-            var hasDistributedCacheSection = builder.Configuration.HasConfigSection(Constants.ConfigSections.DistributedCache);
-            if (builder.Environment.IsProduction() && hasDistributedCacheSection)
+            var hasDistributedCacheSection = Configuration.HasConfigSection(Constants.ConfigSections.DistributedCache);
+            if (Environment.IsProduction() && hasDistributedCacheSection)
             {
-                builder.AddDistributedCache();
+                this.AddDistributedCache();
             }
             else
             {
@@ -233,15 +235,15 @@ public class JGUZDVHostApplicationBuilder
                     LogMessages.MissingConfig(logger, missingConfigLogLevel, Constants.ConfigSections.DistributedCache);
                 }
 
-                builder.Services.AddDistributedMemoryCache();
+                Services.AddDistributedMemoryCache();
             }
 
 
             // DataProtection
-            var hasDataProtectionSection = builder.Configuration.HasConfigSection(Constants.ConfigSections.DataProtection);
-            if (builder.Environment.IsProduction() && hasDataProtectionSection)
+            var hasDataProtectionSection = Configuration.HasConfigSection(Constants.ConfigSections.DataProtection);
+            if (Environment.IsProduction() && hasDataProtectionSection)
             {
-                builder.AddDataProtection();
+                this.AddDataProtection();
             }
             else
             {
@@ -250,14 +252,14 @@ public class JGUZDVHostApplicationBuilder
                     LogMessages.MissingConfig(logger, missingConfigLogLevel, Constants.ConfigSections.DataProtection);
                 }
 
-                builder.Services.AddDataProtection();
+                Services.AddDataProtection();
             }
 
 
             // OpenId Connect Authentication
-            if (builder.Configuration.HasConfigSection(Constants.ConfigSections.OpenIdConnectAuthentication))
+            if (Configuration.HasConfigSection(Constants.ConfigSections.OpenIdConnectAuthentication))
             {
-                builder.AddDefaultOpenIdConnectAuthentication(logger: logger);
+                this.AddDefaultOpenIdConnectAuthentication(logger: logger);
             }
             else
             {
@@ -266,9 +268,9 @@ public class JGUZDVHostApplicationBuilder
 
 
             // Feature Management
-            if (builder.Configuration.HasConfigSection(Constants.ConfigSections.FeatureManagement))
+            if (Configuration.HasConfigSection(Constants.ConfigSections.FeatureManagement))
             {
-                builder.AddFeatureManagement();
+                this.AddFeatureManagement();
             }
             else
             {
@@ -277,9 +279,9 @@ public class JGUZDVHostApplicationBuilder
 
 
             // Forwarded Headers
-            if (builder.Configuration.HasConfigSection(Constants.ConfigSections.ForwardedHeaders))
+            if (Configuration.HasConfigSection(Constants.ConfigSections.ForwardedHeaders))
             {
-                builder.AddForwardedHeaders();
+                this.AddForwardedHeaders();
             }
             else
             {
@@ -288,9 +290,9 @@ public class JGUZDVHostApplicationBuilder
 
 
             // OpenTelemetry
-            if (builder.Configuration.HasConfigSection(Constants.ConfigSections.OpenTelemetry))
+            if (Configuration.HasConfigSection(Constants.ConfigSections.OpenTelemetry))
             {
-                builder.AddOpenTelemetry();
+                this.AddOpenTelemetry();
             }
             else
             {
@@ -299,9 +301,9 @@ public class JGUZDVHostApplicationBuilder
 
 
             // Reverse Proxy
-            if (builder.Configuration.HasConfigSection(Constants.ConfigSections.ReverseProxy))
+            if (Configuration.HasConfigSection(Constants.ConfigSections.ReverseProxy))
             {
-                builder.AddReverseProxy();
+                this.AddReverseProxy();
             }
             else
             {
@@ -310,16 +312,14 @@ public class JGUZDVHostApplicationBuilder
 
 
             // Frontend Frameworks
-            builder.AddAspNetCoreMvc(enableViewSupport: true);
-            builder.AddRazorPages();
+            this.AddAspNetCoreMvc(enableViewSupport: true);
+            this.AddRazorPages();
             if (interactivityMode != BlazorInteractivityModes.DisableBlazor)
             {
-                builder.AddBlazor(interactivityMode);
+                this.AddBlazor(interactivityMode);
             }
 
         }
-
-        return builder;
     }
 
 
@@ -342,7 +342,7 @@ public class JGUZDVHostApplicationBuilder
     /// - RazorPages<br />
     /// - Razor WebComponents (without interactivity aka. Blazor Static Server)<br />
     /// </summary>
-    public static JGUZDVHostApplicationBuilder CreateStaticWeb(string[] args, Action<ConfigurationManager>? configureConfiguration = null)
+    public static JGUZDVHostApplicationBuilder CreateStaticWeb(string[] args, Action<JGUZDVHostApplicationBuilder>? configureConfiguration = null)
         => CreateWebHost(args, BlazorInteractivityModes.None, configureConfiguration);
 
 
@@ -362,46 +362,48 @@ public class JGUZDVHostApplicationBuilder
     /// - HealthChecks<br />
     /// </summary>
     public static JGUZDVHostApplicationBuilder CreateWebApi(string[] args,
-        Action<ConfigurationManager>? configureConfiguration = null)
+       Action<JGUZDVHostApplicationBuilder>? configureConfiguration = null)
     {
         var builder = Create(args);
-        configureConfiguration?.Invoke(builder.Configuration);
+        configureConfiguration?.Invoke(builder);
 
-        return AddWebApiServices(builder);
+        builder.AddWebApiServices();
+
+        return builder;
     }
 
     /// <summary>
     /// Adds the services for a WebApi Host.<br />
     /// See <see cref="CreateWebApi"/> for further details.
     /// </summary>
-    public static JGUZDVHostApplicationBuilder AddWebApiServices(JGUZDVHostApplicationBuilder builder)
+    public void AddWebApiServices()
     {
-        var hasFileLoggingSection = builder.Configuration.HasConfigSection(Constants.ConfigSections.FileLogging);
+        var hasFileLoggingSection = Configuration.HasConfigSection(Constants.ConfigSections.FileLogging);
         if (!hasFileLoggingSection)
         {
-            builder.Services.Configure<FileLoggerOptions>(opt => opt.OutputDirectory = Path.Combine(builder.Environment.ContentRootPath, "logs"));
+            Services.Configure<FileLoggerOptions>(opt => opt.OutputDirectory = Path.Combine(Environment.ContentRootPath, "logs"));
         }
-        builder.AddLogging();
+        this.AddLogging();
 
-        using (var sp = builder.Services.BuildServiceProvider())
+        using (var sp = Services.BuildServiceProvider())
         using (var loggerFactory = sp.GetRequiredService<ILoggerFactory>())
         {
             var logger = loggerFactory.CreateLogger(nameof(JGUZDVHostApplicationBuilder));
-            var missingConfigLogLevel = builder.Environment.IsProduction() ? LogLevel.Information : LogLevel.Warning;
+            var missingConfigLogLevel = Environment.IsProduction() ? LogLevel.Information : LogLevel.Warning;
 
-            builder.Services.AddProblemDetails();
+            Services.AddProblemDetails();
 
             // TODO: Enable swagger UI?
-            builder.AddOpenApi();
-            builder.AddAspNetCoreMvc(enableViewSupport: false);
-            builder.Services.ConfigureHttpJsonOptions(opt => opt.ApplyJsonOptions());
+            this.AddOpenApi();
+            this.AddAspNetCoreMvc(enableViewSupport: false);
+            Services.ConfigureHttpJsonOptions(opt => opt.ApplyJsonOptions());
 
-            builder.AddLocalization(logger: logger);
+            this.AddLocalization(logger: logger);
 
-            var hasDistributedCacheSection = builder.Configuration.HasConfigSection(Constants.ConfigSections.DistributedCache);
-            if (builder.Environment.IsProduction() && hasDistributedCacheSection)
+            var hasDistributedCacheSection = Configuration.HasConfigSection(Constants.ConfigSections.DistributedCache);
+            if (Environment.IsProduction() && hasDistributedCacheSection)
             {
-                builder.AddDistributedCache();
+                this.AddDistributedCache();
             }
             else
             {
@@ -410,13 +412,13 @@ public class JGUZDVHostApplicationBuilder
                     LogMessages.MissingConfig(logger, missingConfigLogLevel, Constants.ConfigSections.DistributedCache);
                 }
 
-                builder.Services.AddDistributedMemoryCache();
+                Services.AddDistributedMemoryCache();
             }
 
-            var hasDataProtectionSection = builder.Configuration.HasConfigSection(Constants.ConfigSections.DataProtection);
-            if (builder.Environment.IsProduction() && hasDataProtectionSection)
+            var hasDataProtectionSection = Configuration.HasConfigSection(Constants.ConfigSections.DataProtection);
+            if (Environment.IsProduction() && hasDataProtectionSection)
             {
-                builder.AddDataProtection();
+                this.AddDataProtection();
             }
             else
             {
@@ -425,12 +427,12 @@ public class JGUZDVHostApplicationBuilder
                     LogMessages.MissingConfig(logger, missingConfigLogLevel, Constants.ConfigSections.DataProtection);
                 }
 
-                builder.Services.AddDataProtection();
+                Services.AddDataProtection();
             }
 
-            if (builder.Configuration.HasConfigSection(Constants.ConfigSections.JwtBearerAuthentication))
+            if (Configuration.HasConfigSection(Constants.ConfigSections.JwtBearerAuthentication))
             {
-                builder.AddDefaultJwtBearerAuthentication(logger: logger);
+                this.AddDefaultJwtBearerAuthentication(logger: logger);
             }
             else
             {
@@ -438,9 +440,9 @@ public class JGUZDVHostApplicationBuilder
             }
 
 
-            if (builder.Configuration.HasConfigSection(Constants.ConfigSections.FeatureManagement))
+            if (Configuration.HasConfigSection(Constants.ConfigSections.FeatureManagement))
             {
-                builder.AddFeatureManagement();
+                this.AddFeatureManagement();
             }
             else
             {
@@ -449,9 +451,9 @@ public class JGUZDVHostApplicationBuilder
 
 
             // Forwarded Headers
-            if (builder.Configuration.HasConfigSection(Constants.ConfigSections.ForwardedHeaders))
+            if (Configuration.HasConfigSection(Constants.ConfigSections.ForwardedHeaders))
             {
-                builder.AddForwardedHeaders();
+                this.AddForwardedHeaders();
             }
             else
             {
@@ -459,19 +461,17 @@ public class JGUZDVHostApplicationBuilder
             }
 
 
-            if (builder.Configuration.HasConfigSection(Constants.ConfigSections.OpenTelemetry))
+            if (Configuration.HasConfigSection(Constants.ConfigSections.OpenTelemetry))
             {
-                builder.AddOpenTelemetry();
+                this.AddOpenTelemetry();
             }
             else
             {
                 LogMessages.MissingConfig(logger, missingConfigLogLevel, Constants.ConfigSections.OpenTelemetry);
             }
 
-            builder.AddHealthChecks();
+            this.AddHealthChecks();
         }
-
-        return builder;
     }
 
 
