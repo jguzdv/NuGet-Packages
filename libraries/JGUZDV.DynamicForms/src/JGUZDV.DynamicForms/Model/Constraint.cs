@@ -129,7 +129,7 @@ public class SizeConstraint : Constraint
 
     public override IEnumerable<ValidationResult> ValidateConstraint(List<object> values, ValidationContext context)
     {
-        throw new NotImplementedException();
+        return ValidateConstraint(values, context);
     }
 }
 

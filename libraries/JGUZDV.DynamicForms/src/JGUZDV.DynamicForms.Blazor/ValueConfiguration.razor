@@ -1,0 +1,76 @@
+﻿@using JGUZDV.Blazor.Components.Modals
+@using JGUZDV.DynamicForms.Model
+
+<JGUZDV.Blazor.Components.Modals.Modal TModel="FieldDefinition" @ref=_valueModal>
+    <Body>
+        <div class="small pb-1"><i class="fas fa-info-circle"></i> @SL["Info"]</div>
+
+        <div class="d-flex btn-group pb-3" role="group">
+            <button type="button" class="col-6 btn @(!_isChoiceOptionMode ? "btn-primary" : "btn-outline-primary")" @onclick="() => HandleValueSwitch(context.Model)">
+                @SL["Werte einschränken"]
+            </button>
+            <button type="button" class="col-6 btn @(_isChoiceOptionMode ? "btn-primary" : "btn-outline-primary")" @onclick="() => HandleValueSwitch(context.Model)">
+                @SL["Werte vorgeben"]
+            </button>
+        </div>
+
+       @*  @if (!isChoiceOptionMode)
+        {
+            <h3 class="h5">@SL["Einschränkung hinzufügen"]</h3>
+            <EditConstraints @bind-Field="context.Model"></EditConstraints>
+        }
+        else  *@
+        {
+        <EditChoiceOptions @bind-Field="context.Model"></EditChoiceOptions>
+        }
+    </Body>
+</JGUZDV.Blazor.Components.Modals.Modal>
+
+<ModalConfirmation @ref="@_confirmationModal"></ModalConfirmation>
+
+@code {
+    private string _valueMode = string.Empty;
+    private bool _isChoiceOptionMode = true;
+
+    private Modal<FieldDefinition>? _valueModal;
+    private ModalConfirmation? _confirmationModal;
+
+    [Inject]
+    public StringLocalizer<Resources.ComponentStrings> SL { get; set; }
+
+    private async Task ShowValuesModal(FieldDefinition field)
+    {
+        if (!field.ChoiceOptions.Any() && !field.Constraints.Any())
+        {
+            _valueMode = string.Empty;
+        }
+        else if (field.ChoiceOptions.Any())
+        {
+            _valueMode = "ChoiceOption";
+        }
+        else if (field.Constraints.Any())
+        {
+            _valueMode = "Constraint";
+        }
+        await _valueModal!.ShowModal(field);
+    }
+
+    private async Task HandleValueSwitch(FieldDefinition field)
+    {
+        var modal = await _confirmationModal!.ShowModal("u Sure about that");//todo
+
+        if (modal != ModalResult.Accepted)
+            return;
+
+        if (_isChoiceOptionMode)
+        {
+            field.ChoiceOptions.Clear();
+        }
+        else
+        {
+            field.Constraints.Clear();
+        }
+
+        _isChoiceOptionMode = !_isChoiceOptionMode;
+    }
+}
