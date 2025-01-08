@@ -145,21 +145,21 @@ public class StringLengthConstraint : Constraint
         }
     }
 
-    public IEnumerable<ValidationResult> ValidateConstraint(IEnumerable[] values, ValidationContext context)
+    public IEnumerable<ValidationResult> ValidateConstraint(string[] values, ValidationContext context)
     {
         var fields = new List<string?> { (context.ObjectInstance as FieldDefinition)?.InputDefinition.Name }.Where(x => x != null).ToList();
 
-        return values.Where(value => value.OfType<object>().Count() > MaxLength).Select(x => new ValidationResult("Constraint.Validation.Length", fields!));
+        return values.Where(value => value.Count() > MaxLength).Select(x => new ValidationResult("Constraint.Validation.Length", fields!));
     }
 
     public override IEnumerable<ValidationResult> ValidateConstraint(List<object> values, ValidationContext context)
     {
-        if (values.Any(x => x as IEnumerable == null))
+        if (values.Any(x => x as string == null))
         {
             return [new ValidationResult($"{nameof(values)} are no {nameof(IEnumerable)}")];
         }
 
-        var stringValues = values.Cast<IEnumerable>().ToArray();
+        var stringValues = values.Cast<string>().ToArray();
         return ValidateConstraint(stringValues, context);
     }
 }

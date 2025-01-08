@@ -1,7 +1,21 @@
 ﻿@using JGUZDV.DynamicForms.Model
 
-@code {
+<div>
+    <label for="length@_id">Regex</label>
+    <input id="length@_id" class="form-control"
+        @bind=_constraint.MaxLength
+        @bind:after="ConstraintChanged.InvokeAsync" 
+        type="text" />
+</div>
 
+
+@code {
     [Parameter]
     public required Constraint Constraint { get; set; }
+
+    [Parameter]
+    public required EventCallback<Constraint> ConstraintChanged { get; set; }
+
+    private StringLengthConstraint _constraint => (StringLengthConstraint)Constraint!;
+    private Guid _id = Guid.NewGuid();
 }
