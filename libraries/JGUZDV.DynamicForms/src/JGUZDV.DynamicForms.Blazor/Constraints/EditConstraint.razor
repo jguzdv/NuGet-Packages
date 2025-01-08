@@ -1,11 +1,31 @@
 ﻿@using JGUZDV.DynamicForms.Model
 
-
-
-<DynamicComponent Type="Constraint.GetType()"></DynamicComponent>
+<EditForm Model="Constraint">
+    <ValidationSummary></ValidationSummary>
+    <DynamicComponent Type="ConstraintViewTypeFactory.GetViewType(Constraint)" Parameters="_params"></DynamicComponent>
+</EditForm>
 
 @code {
     [Parameter]
-    public Constraint Constraint { get; set; }
+    public required Constraint Constraint { get; set; }
 
+    [Parameter]
+    public required EventCallback<Constraint> ConstraintChanged { get; set; }
+
+    [Parameter]
+    public required FieldDefinition FieldDefinition { get; set; }
+
+    private Dictionary<string, object> _params = new();
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        _params = new Dictionary<string, object>
+        {
+            { nameof(Constraint), Constraint },
+            { nameof(ConstraintChanged), ConstraintChanged },
+            { nameof(FieldDefinition), FieldDefinition }
+        };
+    }
 }

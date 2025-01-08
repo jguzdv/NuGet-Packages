@@ -133,7 +133,7 @@ public class SizeConstraint : Constraint
     }
 }
 
-public class LengthConstraint : Constraint
+public class StringLengthConstraint : Constraint
 {
     public int MaxLength { get; set; }
 

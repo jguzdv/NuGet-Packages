@@ -1,5 +1,50 @@
-﻿<h3>RangeConstraintEdit</h3>
+﻿@using JGUZDV.DynamicForms.Blazor.Resources
+@using JGUZDV.DynamicForms.Model
+
+<div class="mb-2">
+    <label for="MinValue">@SL["Minimaler Wert"]</label>
+    <input id="MinValue" name="MinValue" class="form-control" value="@_constraint!.MinValue"
+           type="text"
+           @onchange="HandleMinChange" />
+</div>
+
+<div class="mb-2">
+    <label for="MinValue">@SL["Maximaler Wert"]</label>
+    <input id="MinValue" name="MinValue" class="form-control" value="@_constraint!.MaxValue"
+           type="text"
+           @onchange="HandleMaxChange" />
+</div>
+
 
 @code {
+    [Parameter]
+    public required Constraint Constraint { get; set; }
 
+    [Parameter]
+    public required EventCallback<Constraint> ConstraintChanged { get; set; }
+
+    [Parameter]
+    public required FieldDefinition FieldDefinition { get; set; }
+
+    [Inject]
+    public required StringLocalizer<ComponentStrings> SL { get; set; }
+
+    private RangeConstraint _constraint => (RangeConstraint)Constraint!;
+    private Guid _id = Guid.NewGuid();
+
+    private void HandleMaxChange(ChangeEventArgs e)
+    {
+        try
+        {
+            var type = FieldType.FromJson(FieldDefinition.InputDefinition.Type);
+            var value = type.ConvertToValue(e.Value.ToString());
+
+            _constraint.MaxValue = (IComparable)value;
+        }
+        catch
+        {
+            // overwrite invalid input with default value
+            _constraint.MaxValue = null;
+        }
+    }
 }
