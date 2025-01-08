@@ -1,18 +1,19 @@
 ﻿@using JGUZDV.DynamicForms.Blazor.Resources
 @using JGUZDV.DynamicForms.Model
+@using System.ComponentModel.DataAnnotations
 
 <div class="mb-2">
     <label for="MinValue">@SL["Minimaler Wert"]</label>
     <input id="MinValue" name="MinValue" class="form-control" value="@_constraint!.MinValue"
-           type="text"
-           @onchange="HandleMinChange" />
+    type="text"
+    @onchange="(e) => HandleChange(e, x => _constraint.MinValue = x)" />
 </div>
 
 <div class="mb-2">
     <label for="MinValue">@SL["Maximaler Wert"]</label>
     <input id="MinValue" name="MinValue" class="form-control" value="@_constraint!.MaxValue"
-           type="text"
-           @onchange="HandleMaxChange" />
+    type="text"
+    @onchange="(e) => HandleChange(e, x => _constraint.MaxValue = x)" />
 </div>
 
 
@@ -26,24 +27,29 @@
     [Parameter]
     public required FieldDefinition FieldDefinition { get; set; }
 
+    [Parameter]
+    public required EventCallback<List<ValidationResult>> OnValidation { get; set; }
+
     [Inject]
     public required StringLocalizer<ComponentStrings> SL { get; set; }
 
     private RangeConstraint _constraint => (RangeConstraint)Constraint!;
     private Guid _id = Guid.NewGuid();
 
-    private void HandleMaxChange(ChangeEventArgs e)
+    private void HandleChange(ChangeEventArgs e, Action<IComparable> setValue)
     {
         try
         {
             var type = FieldType.FromJson(FieldDefinition.InputDefinition.Type);
-            var value = type.ConvertToValue(e.Value.ToString());
+            var value = type.ConvertToValue(e.Value!.ToString()!);
 
-            _constraint.MaxValue = (IComparable)value;
+            setValue((IComparable)value);
+            OnValidation.InvokeAsync([]);
         }
         catch
         {
             // overwrite invalid input with default value
+            OnValidation.InvokeAsync([new("RangeConstraint.Error.Conversion")]);
             _constraint.MaxValue = null;
         }
     }

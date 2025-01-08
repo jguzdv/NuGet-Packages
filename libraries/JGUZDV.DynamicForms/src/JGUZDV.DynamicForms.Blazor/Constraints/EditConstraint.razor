@@ -1,4 +1,5 @@
 ﻿@using JGUZDV.DynamicForms.Model
+@using System.ComponentModel.DataAnnotations
 
 <EditForm Model="Constraint">
     <ValidationSummary></ValidationSummary>
@@ -6,26 +7,42 @@
 </EditForm>
 
 @code {
+    /// <summary>
+    /// The <see cref="Constraint"/> to edit
+    /// </summary>
     [Parameter]
     public required Constraint Constraint { get; set; }
 
+    /// <summary>
+    /// Change event for the <see cref="EditConstraint.Constraint"/>
+    /// </summary>
     [Parameter]
     public required EventCallback<Constraint> ConstraintChanged { get; set; }
 
+    /// <summary>
+    /// The <see cref="FieldDefinition" /> of the constraint
+    /// </summary>
     [Parameter]
     public required FieldDefinition FieldDefinition { get; set; }
+
+    /// <summary>
+    /// fires if errors are catched before input is written into the constraint and hence constraint validation can not run
+    /// empty list if no errors
+    /// </summary>
+    [Parameter]
+    public required EventCallback<List<ValidationResult>> OnValidation { get; set; }
 
     private Dictionary<string, object> _params = new();
 
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
-
         _params = new Dictionary<string, object>
         {
             { nameof(Constraint), Constraint },
             { nameof(ConstraintChanged), ConstraintChanged },
-            { nameof(FieldDefinition), FieldDefinition }
+            { nameof(FieldDefinition), FieldDefinition },
+            { nameof(OnValidation), OnValidation }
         };
     }
 }
