@@ -1,0 +1,114 @@
+@using JGUZDV.Blazor.Components;
+@using JGUZDV.Blazor.Components.Authentication;
+@using JGUZDV.Blazor.Components.Localization;
+
+<header class="jbs-header @AdditonalClasses">
+    <div class="header-grid">
+        @if (Logo != null)
+        {
+            <div class="header-logo">
+                <a href="@(Logo.Href ?? "")">
+                    <img class="app-logo" src="@Logo.SrcUrl" alt="@Logo.AltText" />
+                </a>
+            </div>
+        }
+        
+        <h1 class="header-app-title">@Title</h1>
+        
+        @if (ChildContent != null)
+        {
+            <div class="header-content">
+                @ChildContent
+            </div>
+        }
+
+        @if (ShowButtons)
+        {
+            <div class="header-controls">
+                @if (ShowLoginButton)
+                {
+                    <LoginButton />
+                }
+
+                @if (ShowLanguageSelector)
+                {
+                    <LanguageSelect />
+                }
+
+                @if (HelpUrl != null)
+                {
+                    <a aria-label="@LR["Help"]" class="jgu_btn btn btn-none" target="_blank" href="@HelpUrl">
+                        @Icons.Help(null)
+                    </a>
+                }
+
+                @if (ShowAppSwitch) 
+                {
+                    <button class="jgu_btn btn btn-none">
+                        @Icons.AppSelect(null)
+                    </button>
+                }
+
+                @if (ShowSidebarToggle)
+                {
+                    <label for="jbs-sidebar-toggle" class="jgu_btn btn btn-none d-lg-none">
+                        @Icons.Menu(null)
+                    </label>
+                }
+            </div>
+        }
+    </div>
+</header>
+
+@code {
+    [Inject, NotNull]
+    private IStringLocalizer<ComponentStrings>? LR { get; set; }
+
+
+    [Parameter, EditorRequired]
+    public required string Title { get; set; }
+
+    [Parameter]
+    public LogoSpecs? Logo { get; set; }
+
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+
+    [Parameter]
+    public bool ShowLoginButton { get; set; } = true;
+
+    [Parameter]
+    public bool ShowLanguageSelector { get; set; } = true;
+    
+    [Parameter]
+    public bool ShowAppSwitch { get; set; } = true;
+
+    [Parameter]
+    public bool ShowSidebarToggle { get; set; } = true;
+
+    [Parameter]
+    public string? HelpUrl { get; set; }
+
+
+    public bool ShowButtons => 
+        ShowLoginButton || 
+        ShowLanguageSelector || 
+        ShowSidebarToggle ||
+        ShowAppSwitch ||
+        HelpUrl != null
+        ;
+
+
+    [Parameter]
+    public string? AdditonalClasses { get; set; }
+
+
+    public class LogoSpecs
+    {
+        public required string SrcUrl { get; set; }
+        public required string AltText { get; set; }
+        public string? Href { get; set; }
+    }
+}

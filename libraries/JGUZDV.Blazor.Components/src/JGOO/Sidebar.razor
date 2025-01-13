@@ -1,0 +1,19 @@
+<input aria-hidden="true" type="checkbox" id="jbs-sidebar-toggle" class="d-none" checked="checked" />
+<aside class="jbs-sidebar @AdditionalClasses">
+    @if (Title != null)
+    {
+        <h1 class="h3 d-md-none">@Title</h1>
+    }
+    @ChildContent
+</aside>
+
+@code {
+    [Parameter]
+    public string? Title { get; set; }
+
+    [Parameter, EditorRequired]
+    public required RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public string? AdditionalClasses { get; set; }
+}

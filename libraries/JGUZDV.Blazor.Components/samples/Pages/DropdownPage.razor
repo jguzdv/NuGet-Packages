@@ -3,6 +3,18 @@
 
 <h3>DropdownPage</h3>
 
+<Dropdown>
+    <DropdownLabelContent>
+        This is a dropdown
+    </DropdownLabelContent>
+    <DropdownContent>
+        <h6 class="dropdown-header">A Header</h6>
+
+        <button class="dropdown-item">And Item</button>
+    </DropdownContent>
+</Dropdown>
+
+
 <label>suche</label>
 <DropdownSearch SearchFunction="Function" @bind-SearchQuery=@query>
     <ItemTemplate><i class="fa fa-fw fa-user"></i> @context</ItemTemplate>

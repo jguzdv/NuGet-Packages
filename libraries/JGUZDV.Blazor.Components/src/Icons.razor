@@ -12,6 +12,12 @@
 
     public static RenderFragment<string?> Close { get; set; } = classes =>
     @<i class="fas fa-times @classes"></i>;
+    
+    public static RenderFragment<string?> Help { get; set; } = classes =>
+    @<i class="fas fa-question-circle @classes" aria-hidden="true"></i>;
+
+    public static RenderFragment<string?> LanguageSelect { get; set; } = classes =>
+    @<i class="fas fa-globe @classes" aria-hidden="true"></i>;
 
     public static RenderFragment<string?> Collapsed { get; set; } = classes =>
     @<i class="fas fa-chevron-up @classes"></i>;
@@ -57,4 +63,10 @@
 
     public static RenderFragment<string?> SortDown { get; set; } = classes =>
     @<i class="fas fa-sort-down @classes"></i>;
+
+    public static RenderFragment<string?> Menu { get; set; } = classes =>
+    @<i class="fas fa-bars @classes"></i>;
+
+    public static RenderFragment<string?> AppSelect { get; set; } = classes =>
+    @<i class="fas fa-square @classes"></i>;
 }

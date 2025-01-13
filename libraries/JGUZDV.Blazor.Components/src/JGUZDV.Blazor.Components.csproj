@@ -1,13 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk.Razor">
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
 
         <PackageId>JGUZDV.Blazor.Components</PackageId>
         <IsPackable>true</IsPackable>
-        <Version>1.5.0</Version>
+        <Version>1.6.0</Version>
         <Authors>Thomas Ottenhus, Aylin Siebel, Aaron Puhl</Authors>
         <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
         <PackageDescription>Blazor component library - build for Bootstrap 5</PackageDescription>
@@ -16,23 +16,21 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Content Remove="Authentication\*.razor" />
-        <Content Remove="Authentication\*.razor.css" />
-        <None Include="Authentication\*.razor" />
-        <None Include="Authentication\*.razor.css" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="[7.0.14,)" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="[7.0.14,)" />
-        <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="[7.0.0,)" />
-        <PackageReference Include="Microsoft.Extensions.Hosting" Version="[7.0.0,)" />
-        <PackageReference Include="Microsoft.Bcl.TimeProvider" Version="[8.0.0,)" />
-        <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="[8.0.0,)" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="[8.0.0,)" />
+        <PackageReference Include="Microsoft.Extensions.Http" Version="[8.0.0,)" />
+        <PackageReference Include="Microsoft.Extensions.Localization" Version="[8.0.0,)" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="[8.0.0,)" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\..\JGUZDV.Extensions.Json\src\JGUZDV.Extensions.Json.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Update="Resources\ComponentStrings.resx">
+        <Generator></Generator>
+      </EmbeddedResource>
     </ItemGroup>
 
 </Project>
