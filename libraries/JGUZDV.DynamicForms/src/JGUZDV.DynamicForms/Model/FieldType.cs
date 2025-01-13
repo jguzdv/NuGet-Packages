@@ -6,7 +6,7 @@ using JGUZDV.L10n;
 
 namespace JGUZDV.DynamicForms.Model;
 
-public abstract class FieldType
+public abstract record FieldType
 {
     [JsonIgnore]
     public abstract Type ClrType { get; }
@@ -46,12 +46,7 @@ public abstract class FieldType
         return JsonSerializer.Deserialize<FieldType>(json, options) ?? throw new InvalidOperationException($"Could not parse json: {json}");
     }
 
-    public static List<FieldType> KnownFieldTypes = new()
-    {
-        new DateOnlyFieldType(),
-        new IntFieldType(),
-        new StringFieldType(),
-    };
+    
 
     private static JsonPolymorphismOptions BuildJsonPolymorphismOptions()
     {
@@ -60,7 +55,7 @@ public abstract class FieldType
             UnknownDerivedTypeHandling = JsonUnknownDerivedTypeHandling.FailSerialization
         };
 
-        foreach (var fieldType in KnownFieldTypes)
+        foreach (var fieldType in DynamicFormsConfiguration.KnownFieldTypes)
         {
             options.DerivedTypes.Add(new JsonDerivedType(fieldType.GetType(), fieldType.GetType().Name));
         }
@@ -103,7 +98,7 @@ public class ValueProvider
     }
 }
 
-public class DateOnlyFieldType : FieldType
+public record DateOnlyFieldType : FieldType
 {
     public override Type ClrType => typeof(DateOnly);
 
@@ -114,7 +109,7 @@ public class DateOnlyFieldType : FieldType
     };
 }
 
-public class IntFieldType : FieldType
+public record IntFieldType : FieldType
 {
     public override Type ClrType => typeof(int);
 
@@ -125,7 +120,7 @@ public class IntFieldType : FieldType
     };
 }
 
-public class StringFieldType : FieldType
+public record StringFieldType : FieldType
 {
     public override Type ClrType => typeof(string);
 

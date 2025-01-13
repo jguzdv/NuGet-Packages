@@ -1,0 +1,30 @@
+﻿@using JGUZDV.DynamicForms.Model
+@using System.ComponentModel.DataAnnotations
+
+@*Select for new constraints*@
+@foreach (var constraintType in DynamicFormsConfiguration.GetConstraintTypes(FieldDefinition))
+{
+
+}
+
+@*Current constraints*@
+@foreach (var constraint in FieldDefinition.Constraints)
+{
+    <ConstraintInput Constraint="constraint" OnValidation="HandleValidation"></ConstraintInput>
+}
+
+@code {
+    /// <summary>
+    /// The <see cref="Model.FieldDefinition" /> of the constraints
+    /// </summary>
+    [Parameter]
+    public required FieldDefinition FieldDefinition { get; set; }
+
+    [Parameter]
+    public EventCallback<FieldDefinition> FieldDefinitionChanged { get; set; }
+
+    private void HandleValidation(List<ValidationResult> validationResults)
+    {
+
+    }
+}

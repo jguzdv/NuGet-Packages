@@ -1,4 +1,5 @@
 ﻿@using JGUZDV.Blazor.Components.Modals
+@using JGUZDV.DynamicForms.Blazor.Constraints
 @using JGUZDV.DynamicForms.Model
 
 <JGUZDV.Blazor.Components.Modals.Modal TModel="FieldDefinition" @ref=_valueModal>
@@ -14,12 +15,12 @@
             </button>
         </div>
 
-       @*  @if (!isChoiceOptionMode)
+        @if (!_isChoiceOptionMode)
         {
             <h3 class="h5">@SL["Einschränkung hinzufügen"]</h3>
             <EditConstraints @bind-Field="context.Model"></EditConstraints>
         }
-        else  *@
+        else
         {
         <EditChoiceOptions @bind-Field="context.Model"></EditChoiceOptions>
         }
