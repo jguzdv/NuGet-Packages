@@ -1,4 +1,5 @@
 ﻿@using JGUZDV.DynamicForms.Model
+@using System.ComponentModel.DataAnnotations
 
 <div>
     <label for="Regex@_id">Regex</label>
@@ -12,6 +13,12 @@
 
     [Parameter]
     public required EventCallback<Constraint> ConstraintChanged { get; set; }
+
+    [Parameter]
+    public required FieldDefinition FieldDefinition { get; set; }
+
+    [Parameter]
+    public required EventCallback<List<ValidationResult>> OnValidation { get; set; }
 
     private RegexConstraint _constraint => (RegexConstraint)Constraint!;
     private Guid _id = Guid.NewGuid();

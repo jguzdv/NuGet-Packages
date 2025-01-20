@@ -38,7 +38,7 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<TestDbContext>();
-    dbContext.Database.EnsureDeleted();
+    //dbContext.Database.EnsureDeleted();
     dbContext.Database.EnsureCreated();
 }
 

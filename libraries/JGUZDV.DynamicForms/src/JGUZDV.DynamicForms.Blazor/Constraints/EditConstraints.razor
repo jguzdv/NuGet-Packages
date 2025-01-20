@@ -2,16 +2,37 @@
 @using System.ComponentModel.DataAnnotations
 
 @*Select for new constraints*@
-@foreach (var constraintType in DynamicFormsConfiguration.GetConstraintTypes(FieldDefinition))
-{
+<select class="form-control" @bind="_newConstraintString">
+    @if (string.IsNullOrWhiteSpace(_newConstraintString))
+    {
+        <option> select constraint type </option>
+    }
+    @foreach (var constraintType in DynamicFormsConfiguration.GetConstraintTypes(FieldDefinition))
+    {
+        <option value="@constraintType.Name">
+            @DynamicFormsConfiguration.GetConstraintName(constraintType)
+        </option>
+    }
+</select>
 
-}
+<button class="btn btn-primary my"
+        type="button"
+        @onclick="AddNewConstraint"
+        disabled="@string.IsNullOrWhiteSpace(_newConstraintString)">
+    add new Constraint
+</button>
 
 @*Current constraints*@
-@foreach (var constraint in FieldDefinition.Constraints)
-{
-    <ConstraintInput Constraint="constraint" OnValidation="HandleValidation"></ConstraintInput>
-}
+<div class="p-2">
+    @foreach (var constraint in FieldDefinition.Constraints)
+    {
+        <ConstraintInput Constraint="constraint"
+                         ConstraintChanged="() => FieldDefinitionChanged.InvokeAsync(FieldDefinition)"
+                         FieldDefinition="FieldDefinition">
+        </ConstraintInput>
+        <hr />
+    }
+</div>
 
 @code {
     /// <summary>
@@ -23,8 +44,13 @@
     [Parameter]
     public EventCallback<FieldDefinition> FieldDefinitionChanged { get; set; }
 
-    private void HandleValidation(List<ValidationResult> validationResults)
-    {
 
+    private string? _newConstraintString;
+
+
+    private void AddNewConstraint()
+    {
+        var constraint = DynamicFormsConfiguration.Create(_newConstraintString!);
+        FieldDefinition.Constraints.Add(constraint);
     }
 }

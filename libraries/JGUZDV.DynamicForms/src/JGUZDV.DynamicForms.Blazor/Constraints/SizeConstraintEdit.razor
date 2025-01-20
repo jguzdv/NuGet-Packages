@@ -1,5 +1,6 @@
 ﻿@using JGUZDV.DynamicForms.Blazor.Resources
 @using JGUZDV.DynamicForms.Model
+@using System.ComponentModel.DataAnnotations
 
 <div class="mb-2">
     <label for="MinCount@_id">@SL["Minimale Anzahl"]</label>
@@ -17,6 +18,12 @@
 
     [Parameter]
     public required EventCallback<Constraint> ConstraintChanged { get; set; }
+
+    [Parameter]
+    public required FieldDefinition FieldDefinition { get; set; }
+
+    [Parameter]
+    public required EventCallback<List<ValidationResult>> OnValidation { get; set; }
 
     [Inject]
     public required StringLocalizer<ComponentStrings> SL { get; set; }

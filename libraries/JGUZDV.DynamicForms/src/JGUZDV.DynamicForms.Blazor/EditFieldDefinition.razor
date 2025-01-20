@@ -32,7 +32,7 @@
         <select id="type" 
             @bind="@FieldDefinition.InputDefinition.Type" 
             class="form-select">
-            @foreach (var type in FieldType.KnownFieldTypes)
+            @foreach (var type in DynamicFormsConfiguration.KnownFieldTypes)
             {
                 <option value="@type.ToJson()">@type.DisplayName</option>
             }
@@ -65,17 +65,9 @@
     </div>
 
     @*TODO: Modal for create and edit?*@
-    <div class="mb-2">
+    <div class="mb-2 p-3 boder-1 border">
         <label>@SL["EditFieldDefinition.ChoiceOptions"]</label>
-        @foreach (var choice in FieldDefinition.ChoiceOptions)
-        {
-            <div class="mb-2">
-                <label for="choiceValue">@SL["EditFieldDefinition.ChoiceValue"]</label>
-                <InputText id="choiceValue" @bind-Value="choice.Value" class="form-control" />
-                <label for="choiceName">@SL["EditFieldDefinition.ChoiceName"]</label>
-                <L10nEditor L10n="choice.Name" />
-            </div>
-        }
+        <ValueConfiguration @bind-FieldDefinition="FieldDefinition"></ValueConfiguration>
     </div>
 
     <button type="submit" class="btn btn-primary">@SL["EditFieldDefinition.Save"]</button>

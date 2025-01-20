@@ -106,6 +106,11 @@ public class FieldDefinition : IValidatableObject
             errors.AddRange(choice.Validate(validationContext));
         }
 
+        foreach(var constraint in Constraints)
+        {
+            errors.AddRange(constraint.Validate(validationContext));
+        }
+
         return errors;
     }
 }

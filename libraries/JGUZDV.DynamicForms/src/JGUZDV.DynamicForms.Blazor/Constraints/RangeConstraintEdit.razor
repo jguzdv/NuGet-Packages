@@ -2,18 +2,28 @@
 @using JGUZDV.DynamicForms.Model
 @using System.ComponentModel.DataAnnotations
 
+@if (!string.IsNullOrWhiteSpace(_error))
+{
+    <div class="text-danger">
+        @_error
+    </div>
+}
 <div class="mb-2">
     <label for="MinValue">@SL["Minimaler Wert"]</label>
-    <input id="MinValue" name="MinValue" class="form-control" value="@_constraint!.MinValue"
-    type="text"
-    @onchange="(e) => HandleChange(e, x => _constraint.MinValue = x)" />
+    <input id="MinValue" name="MinValue"
+           class="form-control @(!string.IsNullOrWhiteSpace(_error) ? "border-danger" : "")"
+           value="@_constraint!.MinValue"
+           type="text"
+           @onchange="async (e) => await HandleChange(e, x => _constraint.MinValue = x)" />
 </div>
 
 <div class="mb-2">
     <label for="MinValue">@SL["Maximaler Wert"]</label>
-    <input id="MinValue" name="MinValue" class="form-control" value="@_constraint!.MaxValue"
-    type="text"
-    @onchange="(e) => HandleChange(e, x => _constraint.MaxValue = x)" />
+    <input id="MinValue" name="MinValue"
+           class="form-control @(!string.IsNullOrWhiteSpace(_error) ? "border-danger" : "")"
+           value="@_constraint!.MaxValue"
+           type="text"
+           @onchange="async (e) => await HandleChange(e, x => _constraint.MaxValue = x)" />
 </div>
 
 
@@ -27,30 +37,35 @@
     [Parameter]
     public required FieldDefinition FieldDefinition { get; set; }
 
-    [Parameter]
-    public required EventCallback<List<ValidationResult>> OnValidation { get; set; }
-
     [Inject]
-    public required StringLocalizer<ComponentStrings> SL { get; set; }
+    public required IStringLocalizer<ComponentStrings> SL { get; set; }
 
     private RangeConstraint _constraint => (RangeConstraint)Constraint!;
     private Guid _id = Guid.NewGuid();
 
-    private void HandleChange(ChangeEventArgs e, Action<IComparable> setValue)
+    private string _error = "";
+
+    private async Task HandleChange(ChangeEventArgs e, Action<IComparable> setValue)
     {
         try
         {
+            _error = "";
             var type = FieldType.FromJson(FieldDefinition.InputDefinition.Type);
             var value = type.ConvertToValue(e.Value!.ToString()!);
 
             setValue((IComparable)value);
-            OnValidation.InvokeAsync([]);
         }
         catch
         {
-            // overwrite invalid input with default value
-            OnValidation.InvokeAsync([new("RangeConstraint.Error.Conversion")]);
+            _error = "Invalid Input";
+            _constraint.MaxValue = 0;
+            _constraint.MinValue = 0;
+            await InvokeAsync(StateHasChanged);
+
+            await Task.Delay(1);
             _constraint.MaxValue = null;
+            _constraint.MinValue = null;
+            await InvokeAsync(StateHasChanged);
         }
     }
 }

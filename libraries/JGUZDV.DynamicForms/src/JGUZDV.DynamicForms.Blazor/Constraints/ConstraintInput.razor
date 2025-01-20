@@ -22,12 +22,6 @@
     [Parameter]
     public required FieldDefinition FieldDefinition { get; set; }
 
-    /// <summary>
-    /// fires if errors are catched before input is written into the constraint and hence constraint validation can not run
-    /// empty list if no errors
-    /// </summary>
-    [Parameter]
-    public required EventCallback<List<ValidationResult>> OnValidation { get; set; }
 
     private Dictionary<string, object> _params = new();
 
@@ -38,8 +32,7 @@
         {
             { nameof(Constraint), Constraint },
             { nameof(ConstraintChanged), ConstraintChanged },
-            { nameof(FieldDefinition), FieldDefinition },
-            { nameof(OnValidation), OnValidation }
+            { nameof(FieldDefinition), FieldDefinition }
         };
     }
 }

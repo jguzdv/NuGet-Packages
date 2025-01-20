@@ -36,7 +36,7 @@ namespace JGUZDV.DynamicForms.Serialization
                 UnknownDerivedTypeHandling = JsonUnknownDerivedTypeHandling.FailSerialization
             };
 
-            foreach (var fieldType in FieldType.KnownFieldTypes)
+            foreach (var fieldType in DynamicFormsConfiguration.KnownFieldTypes)
             {
                 options.DerivedTypes.Add(new JsonDerivedType(fieldType.GetType(), fieldType.GetType().Name));
             }

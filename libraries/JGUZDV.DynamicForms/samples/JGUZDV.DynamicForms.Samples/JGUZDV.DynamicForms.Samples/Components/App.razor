@@ -13,12 +13,12 @@
     <link href="https://cdn.zdv.uni-mainz.de/web/fontawesome/5-free/css/all.min.css" rel="stylesheet" />
 
     <link rel="icon" type="image/png" href="favicon.png" />
-    <HeadOutlet @rendermode="InteractiveWebAssembly" />
+    <HeadOutlet @rendermode="new InteractiveWebAssemblyRenderMode(false)" />
 </head>
 
 <body>
-    <Routes @rendermode="InteractiveWebAssembly" />
-    <JGUZDV.Blazor.Components.Toasts.ToastView @rendermode="InteractiveWebAssembly" />
+    <Routes @rendermode="new InteractiveWebAssemblyRenderMode(false)" />
+    <JGUZDV.Blazor.Components.Toasts.ToastView @rendermode="new InteractiveWebAssemblyRenderMode(false)" />
     <script src="_framework/blazor.web.js"></script>
 </body>
 
