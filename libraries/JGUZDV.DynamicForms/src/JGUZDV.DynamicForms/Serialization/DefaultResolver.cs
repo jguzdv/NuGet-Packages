@@ -21,11 +21,6 @@ namespace JGUZDV.DynamicForms.Serialization
                 typeInfo.Properties.Remove(typeInfo.Properties.FirstOrDefault(x => x.Name == "ClrType")!);
             }
 
-            if(!options.Converters.Any(x => x is L10nStringJsonConverter))
-            {
-                options.Converters.Add(new L10nStringJsonConverter());
-            }
-
             return typeInfo;
         }
 

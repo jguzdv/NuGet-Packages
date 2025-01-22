@@ -223,6 +223,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.DynamicForms.Samples
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.DynamicForms.Blazor", "libraries\JGUZDV.DynamicForms\src\JGUZDV.DynamicForms.Blazor\JGUZDV.DynamicForms.Blazor.csproj", "{905079DA-5CB7-4A3C-85BD-BFDB2A225669}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.DynamicForms.Tests", "libraries\JGUZDV.DynamicForms\test\JGUZDV.DynamicForms.Tests.csproj", "{584D487C-F294-4203-9E22-E10DFAF23BFD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1109,6 +1111,18 @@ Global
 		{905079DA-5CB7-4A3C-85BD-BFDB2A225669}.Release|x64.Build.0 = Release|Any CPU
 		{905079DA-5CB7-4A3C-85BD-BFDB2A225669}.Release|x86.ActiveCfg = Release|Any CPU
 		{905079DA-5CB7-4A3C-85BD-BFDB2A225669}.Release|x86.Build.0 = Release|Any CPU
+		{584D487C-F294-4203-9E22-E10DFAF23BFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{584D487C-F294-4203-9E22-E10DFAF23BFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{584D487C-F294-4203-9E22-E10DFAF23BFD}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{584D487C-F294-4203-9E22-E10DFAF23BFD}.Debug|x64.Build.0 = Debug|Any CPU
+		{584D487C-F294-4203-9E22-E10DFAF23BFD}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{584D487C-F294-4203-9E22-E10DFAF23BFD}.Debug|x86.Build.0 = Debug|Any CPU
+		{584D487C-F294-4203-9E22-E10DFAF23BFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{584D487C-F294-4203-9E22-E10DFAF23BFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{584D487C-F294-4203-9E22-E10DFAF23BFD}.Release|x64.ActiveCfg = Release|Any CPU
+		{584D487C-F294-4203-9E22-E10DFAF23BFD}.Release|x64.Build.0 = Release|Any CPU
+		{584D487C-F294-4203-9E22-E10DFAF23BFD}.Release|x86.ActiveCfg = Release|Any CPU
+		{584D487C-F294-4203-9E22-E10DFAF23BFD}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1216,10 +1230,11 @@ Global
 		{F192F132-E3C3-4A9F-B27E-EBA7FF7C4A91} = {D71AD329-3074-48E8-863E-D1B64A5589D6}
 		{75832FE2-0A74-4F72-A1C2-83875643680C} = {D71AD329-3074-48E8-863E-D1B64A5589D6}
 		{905079DA-5CB7-4A3C-85BD-BFDB2A225669} = {D71AD329-3074-48E8-863E-D1B64A5589D6}
+		{584D487C-F294-4203-9E22-E10DFAF23BFD} = {D71AD329-3074-48E8-863E-D1B64A5589D6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {46ECC226-1874-4539-8589-8B2029909C4A}
-		RESX_NeutralResourcesLanguage = de-DE
 		RESX_SortFileContentOnSave = True
+		RESX_NeutralResourcesLanguage = de-DE
+		SolutionGuid = {46ECC226-1874-4539-8589-8B2029909C4A}
 	EndGlobalSection
 EndGlobal
