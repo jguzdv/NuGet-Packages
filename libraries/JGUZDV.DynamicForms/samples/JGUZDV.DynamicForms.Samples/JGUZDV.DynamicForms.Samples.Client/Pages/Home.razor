@@ -1,5 +1,7 @@
 ﻿@page "/"
+@using JGUZDV.Blazor.Components.Modals
 @using JGUZDV.Blazor.Components.Toasts
+@using JGUZDV.DynamicForms.Blazor
 @using JGUZDV.DynamicForms.Model
 @using System.Text.Json
 @using JGUZDV.DynamicForms.Serialization
@@ -11,16 +13,65 @@
 
 Welcome to your new app.
 
-<JGUZDV.DynamicForms.Blazor.EditFieldDefinition @bind-FieldDefinition="_fieldDefinition">
 
-</JGUZDV.DynamicForms.Blazor.EditFieldDefinition>
+<ModalButton T="FieldDefinition">
+    <Button>
+        <div class="btn btn-primary " @onclick="() => context.ShowModal(new FieldDefinition())">
+            new field def
+        </div>
+    </Button>
+    <ModalBody>
+        <FieldDefinitionForm @bind-FieldDefinition="context.Model"
+                             @bind-FieldDefinition:after="() => {
+                                _fieldDefinitions.Add(context.Model);
+                                context.Modal.Accept();}
+        ">
+        </FieldDefinitionForm>
+    </ModalBody>
+
+</ModalButton>
 
 
-<button @onclick="Send">send</button>
+<Modal @ref="_editModal" TModel="FieldDefinition">
+    <Body>
+        <FieldDefinitionForm @bind-FieldDefinition="context.Model"
+                             @bind-FieldDefinition:after="context.Modal.Accept">
+        </FieldDefinitionForm>
+    </Body>
+</Modal>
+
+<Modal @ref="_valueConfigModal" TModel="FieldDefinition">
+    <Body>
+        <label>"EditFieldDefinition.ChoiceOptions</label>
+        <ValueConfigurationForm @bind-FieldDefinition="context.Model"
+                                @bind-FieldDefinition:after="context.Modal.Accept">
+        </ValueConfigurationForm>
+    </Body>
+</Modal>
+
+@foreach (var item in _fieldDefinitions)
+{
+    <div class="my-2">
+        <div>
+            <button class="btn btn-outline-secondary" @onclick="() => _editModal.ShowModal(item)">
+                edit
+            </button>
+            <button class="btn btn-outline-secondary" @onclick="() => _valueConfigModal.ShowModal(item)">
+                config values
+            </button>
+        </div>
+        <span>
+            @item.InputDefinition.Name (@FieldType.FromJson(item.InputDefinition.Type).DisplayName)
+        </span>
+    </div>
+    <hr />
+}
+
+<button class="my-2 btn btn-primary" @onclick="Send">
+    save
+</button>
 
 @code {
-    private FieldDefinition _fieldDefinition = new();
-
 
     [Inject]
     public required IServiceProvider ServiceProvider { get; set; }
@@ -31,14 +82,12 @@ Welcome to your new app.
     [Inject]
     public required HttpClient Client { get; set; }
 
+    private List<FieldDefinition> _fieldDefinitions = new();
+    private Modal<FieldDefinition>? _editModal;
+    private Modal<FieldDefinition>? _valueConfigModal;
+
     private async Task Send()
     {
-        if (_fieldDefinition.Validate(new(_fieldDefinition, ServiceProvider, null)).Any())
-        {
-            Toasts.Show(ToastLevel.Warning, "Validation failed", "");
-            return;
-        }
-
         var options = new JsonSerializerOptions()
             {
                 TypeInfoResolver = new DefaultResolver(),
@@ -46,8 +95,7 @@ Welcome to your new app.
             };
         options.Converters.Add(new L10nStringJsonConverter());
 
-        await Client.PostAsJsonAsync("https://localhost:7245/api/definitions/save", _fieldDefinition, options);
-        _fieldDefinition = new FieldDefinition();
+        await Client.PostAsJsonAsync("https://localhost:7245/api/definitions/save", _fieldDefinitions, options);
     }
 
 }

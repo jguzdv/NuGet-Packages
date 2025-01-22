@@ -62,12 +62,10 @@ app.UseAntiforgery();
 app.UseRequestLocalization("de", "en");
 
 
-app.MapPost("api/definitions/save", async (FieldDefinition fieldDefinition, TestDbContext context) =>
+app.MapPost("api/definitions/save", async (List<FieldDefinition> fieldDefinitions, TestDbContext context) =>
 {
-    Console.WriteLine(fieldDefinition);
-
     var doc = new DocumentDefinition();
-    doc.FieldDefinitions.Add(fieldDefinition);
+    doc.FieldDefinitions.AddRange(fieldDefinitions);
 
     context.DocumentDefinitions.Add(doc);
     await context.SaveChangesAsync();

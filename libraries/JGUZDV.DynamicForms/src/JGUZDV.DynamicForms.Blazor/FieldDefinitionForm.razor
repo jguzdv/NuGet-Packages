@@ -29,9 +29,9 @@
 
     <div class="mb-2">
         <label for="type">@SL["EditFieldDefinition.Type"]</label>
-        <select id="type" 
-            @bind="@FieldDefinition.InputDefinition.Type" 
-            class="form-select">
+        <select id="type"
+                @bind="@FieldDefinition.InputDefinition.Type"
+                class="form-select">
             @foreach (var type in DynamicFormsConfiguration.KnownFieldTypes)
             {
                 <option value="@type.ToJson()">@type.DisplayName</option>
@@ -64,13 +64,10 @@
         <InputNumber id="sortKey" @bind-Value="FieldDefinition.SortKey" class="form-control" />
     </div>
 
-    @*TODO: Modal for create and edit?*@
-    <div class="mb-2 p-3 boder-1 border">
-        <label>@SL["EditFieldDefinition.ChoiceOptions"]</label>
-        <ValueConfiguration @bind-FieldDefinition="FieldDefinition"></ValueConfiguration>
-    </div>
-
-    <button type="submit" class="btn btn-primary">@SL["EditFieldDefinition.Save"]</button>
+    <button type="submit"
+            class="btn btn-primary">
+        @SL["EditFieldDefinition.Save"]
+    </button>
 </EditForm>
 
 @code {

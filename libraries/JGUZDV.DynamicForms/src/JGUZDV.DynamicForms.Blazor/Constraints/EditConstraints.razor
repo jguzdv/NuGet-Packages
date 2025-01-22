@@ -16,9 +16,9 @@
 </select>
 
 <button class="btn btn-primary my-2"
-type="button"
-@onclick="AddNewConstraint"
-disabled="@string.IsNullOrWhiteSpace(_newConstraintString)">
+        type="button"
+        @onclick="AddNewConstraint"
+        disabled="@string.IsNullOrWhiteSpace(_newConstraintString)">
     add new Constraint
 </button>
 
@@ -36,14 +36,16 @@ disabled="@string.IsNullOrWhiteSpace(_newConstraintString)">
                 <span>
                     @DynamicFormsConfiguration.GetConstraintName(constraint.GetType())
                 </span>
-                <button class="btn btn-outline-danger btn-sm ms-2">
+                <button type="button"
+                        @onclick="() => FieldDefinition.Constraints.Remove(constraint)"
+                        class="btn btn-outline-danger btn-sm ms-2">
                     <i class="fa fa-trash"></i>
                 </button>
             </div>
             <div class="flex-grow-1">
                 <ConstraintInput Constraint="constraint"
-                ConstraintChanged="() => FieldDefinitionChanged.InvokeAsync(FieldDefinition)"
-                FieldDefinition="FieldDefinition">
+                                 ConstraintChanged="() => FieldDefinitionChanged.InvokeAsync(FieldDefinition)"
+                                 FieldDefinition="FieldDefinition">
                 </ConstraintInput>
             </div>
 
