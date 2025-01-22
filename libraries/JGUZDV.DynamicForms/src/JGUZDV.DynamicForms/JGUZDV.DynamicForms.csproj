@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\JGUZDV.Extensions.Json\src\JGUZDV.Extensions.Json.csproj" />
     <ProjectReference Include="..\..\..\JGUZDV.L10n\src\JGUZDV.L10n.csproj" />
   </ItemGroup>
 

@@ -15,24 +15,43 @@
     }
 </select>
 
-<button class="btn btn-primary my"
-        type="button"
-        @onclick="AddNewConstraint"
-        disabled="@string.IsNullOrWhiteSpace(_newConstraintString)">
+<button class="btn btn-primary my-2"
+type="button"
+@onclick="AddNewConstraint"
+disabled="@string.IsNullOrWhiteSpace(_newConstraintString)">
     add new Constraint
 </button>
 
 @*Current constraints*@
-<div class="p-2">
-    @foreach (var constraint in FieldDefinition.Constraints)
-    {
-        <ConstraintInput Constraint="constraint"
-                         ConstraintChanged="() => FieldDefinitionChanged.InvokeAsync(FieldDefinition)"
-                         FieldDefinition="FieldDefinition">
-        </ConstraintInput>
-        <hr />
-    }
-</div>
+@if (FieldDefinition.Constraints.Any())
+{
+    <hr />
+    <div class="fw-bold">
+        @SL["EditConstraints.Constraints"]
+    </div>
+    <div class="p-2">
+        @foreach (var constraint in FieldDefinition.Constraints)
+        {
+            <div>
+                <span>
+                    @DynamicFormsConfiguration.GetConstraintName(constraint.GetType())
+                </span>
+                <button class="btn btn-outline-danger btn-sm ms-2">
+                    <i class="fa fa-trash"></i>
+                </button>
+            </div>
+            <div class="flex-grow-1">
+                <ConstraintInput Constraint="constraint"
+                ConstraintChanged="() => FieldDefinitionChanged.InvokeAsync(FieldDefinition)"
+                FieldDefinition="FieldDefinition">
+                </ConstraintInput>
+            </div>
+
+            <hr />
+        }
+    </div>
+}
+
 
 @code {
     /// <summary>
@@ -44,6 +63,8 @@
     [Parameter]
     public EventCallback<FieldDefinition> FieldDefinitionChanged { get; set; }
 
+    [Inject]
+    public required IStringLocalizer<Resources.ComponentStrings> SL { get; set; }
 
     private string? _newConstraintString;
 
@@ -51,6 +72,7 @@
     private void AddNewConstraint()
     {
         var constraint = DynamicFormsConfiguration.Create(_newConstraintString!);
-        FieldDefinition.Constraints.Add(constraint);
+        FieldDefinition.Constraints = FieldDefinition.Constraints.Prepend(constraint).ToList();
+        FieldDefinitionChanged.InvokeAsync(FieldDefinition);
     }
 }

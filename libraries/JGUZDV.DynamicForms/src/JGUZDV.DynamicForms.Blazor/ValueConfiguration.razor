@@ -43,7 +43,7 @@ else
     private ModalConfirmation? _confirmationModal;
 
     [Parameter]
-    public FieldDefinition FieldDefinition { get; set; }
+    public required FieldDefinition FieldDefinition { get; set; }
 
     [Parameter]
     public EventCallback<FieldDefinition> FieldDefinitionChanged { get; set; }

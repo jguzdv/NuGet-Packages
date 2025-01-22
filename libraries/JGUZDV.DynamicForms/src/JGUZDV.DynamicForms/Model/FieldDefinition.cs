@@ -52,7 +52,7 @@ public class ChoiceOption : IValidatableObject
 
         foreach (var lang in service?.GetSupportedCultures() ?? new())
         {
-            if (string.IsNullOrWhiteSpace(Name[lang])) yield return new ValidationResult(SL[$"{nameof(ChoiceOption)}.{nameof(Name)}",lang], new string[] { nameof(Name) });
+            if (string.IsNullOrWhiteSpace(Name[lang])) yield return new ValidationResult(SL[$"{nameof(ChoiceOption)}.{nameof(Name)}", lang], new string[] { nameof(Name) });
         }
 
 
@@ -90,7 +90,7 @@ public class FieldDefinition : IValidatableObject
         foreach (var lang in service?.GetSupportedCultures() ?? new())
         {
             if (string.IsNullOrWhiteSpace(Description[lang]))
-                errors.Add(new ValidationResult(SL[$"{nameof(FieldDefinition)}.{nameof(Description)}",lang], new string[] { nameof(Description) }));
+                errors.Add(new ValidationResult(SL[$"{nameof(FieldDefinition)}.{nameof(Description)}", lang], new string[] { nameof(Description) }));
         }
 
         if (SortKey < 0)
@@ -106,7 +106,7 @@ public class FieldDefinition : IValidatableObject
             errors.AddRange(choice.Validate(validationContext));
         }
 
-        foreach(var constraint in Constraints)
+        foreach (var constraint in Constraints)
         {
             errors.AddRange(constraint.Validate(validationContext));
         }

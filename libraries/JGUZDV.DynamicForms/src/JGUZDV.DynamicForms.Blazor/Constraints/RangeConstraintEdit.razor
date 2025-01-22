@@ -10,10 +10,10 @@
 }
 <div class="mb-2">
     <label for="MinValue">@SL["Minimaler Wert"]</label>
-    <input id="MinValue" name="MinValue"
+    <input id="MinValue"
            class="form-control @(!string.IsNullOrWhiteSpace(_error) ? "border-danger" : "")"
-           value="@_constraint!.MinValue"
-           type="text"
+           value="@GetMinValue()"
+           type="@FieldDefinition.InputDefinition.InputType"
            @onchange="async (e) => await HandleChange(e, x => _constraint.MinValue = x)" />
 </div>
 
@@ -21,8 +21,8 @@
     <label for="MinValue">@SL["Maximaler Wert"]</label>
     <input id="MinValue" name="MinValue"
            class="form-control @(!string.IsNullOrWhiteSpace(_error) ? "border-danger" : "")"
-           value="@_constraint!.MaxValue"
-           type="text"
+           value="@GetMaxValue()"
+           type="@FieldDefinition.InputDefinition.InputType"
            @onchange="async (e) => await HandleChange(e, x => _constraint.MaxValue = x)" />
 </div>
 
@@ -51,11 +51,12 @@
         {
             _error = "";
             var type = FieldType.FromJson(FieldDefinition.InputDefinition.Type);
-            var value = type.ConvertToValue(e.Value!.ToString()!);
+            var value = type.ConvertToValue($"\"{e.Value!.ToString()!}\"");
 
             setValue((IComparable)value);
+
         }
-        catch
+        catch (Exception ex)
         {
             _error = "Invalid Input";
             _constraint.MaxValue = 0;
@@ -67,5 +68,40 @@
             _constraint.MinValue = null;
             await InvokeAsync(StateHasChanged);
         }
+    }
+
+
+    //TODO: Should the Type-Input Mapping be abstracted into FieldType?
+    private string? GetMinValue()
+    {
+        if (_constraint.MinValue == null)
+        {
+            return null;
+        }
+
+        var type = FieldType.FromJson(FieldDefinition.InputDefinition.Type);
+
+        if (typeof(DateOnlyFieldType).IsAssignableFrom(type.GetType())
+            && FieldDefinition.InputDefinition.InputType == "date")
+        {
+            return ((DateOnly?)_constraint.MinValue)?.ToString("yyyy-MM-dd");
+        }
+
+        return type.ConvertFromValue(_constraint.MinValue);
+    }
+
+    private string? GetMaxValue()
+    {
+        if (_constraint.MaxValue == null)
+        {
+            return "";
+        }
+        var type = FieldType.FromJson(FieldDefinition.InputDefinition.Type);
+        if (typeof(DateOnlyFieldType).IsAssignableFrom(type.GetType())
+            && FieldDefinition.InputDefinition.InputType == "date")
+        {
+            return ((DateOnly?)_constraint.MaxValue)?.ToString("yyyy-MM-dd");
+        }
+        return type.ConvertFromValue(_constraint.MaxValue);
     }
 }
