@@ -2,13 +2,17 @@ using System.Collections;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+
 using JGUZDV.DynamicForms.Model;
 using JGUZDV.DynamicForms.Resources;
 using JGUZDV.DynamicForms.Serialization;
 using JGUZDV.L10n;
+
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
+
 using Moq;
+
 using Xunit;
 
 namespace JGUZDV.DynamicForms.Tests
@@ -116,50 +120,46 @@ namespace JGUZDV.DynamicForms.Tests
         [Fact]
         public void Field_ShouldSerializeAndDeserializeCorrectly()
         {
-            //TODO: FieldConverter
+            //Arrange
+            var fieldDefinition = new FieldDefinition
+            {
+                InputDefinition = new InputDefinition
+                {
+                    Type = GetFieldType("StringFieldType").ToJson(),
+                    Label = new L10nString { ["en"] = "Test Label" }
+                },
+                Description = new L10nString { ["en"] = "Test Description" },
+                IsList = false,
+                SortKey = 1,
+                IsRequired = true
+            };
 
-            // Arrange
-            //var fieldDefinition = new FieldDefinition
-            //{
-            //    InputDefinition = new InputDefinition
-            //    {
-            //        Type = GetFieldType("StringFieldType").ToJson(),
-            //        Label = new L10nString { ["en"] = "Test Label" }
-            //    },
-            //    Description = new L10nString { ["en"] = "Test Description" },
-            //    IsList = false,
-            //    SortKey = 1,
-            //    IsRequired = true
-            //};
+            var field = new Field(fieldDefinition)
+            {
+                Value = "Test"
+            };
 
-            //var field = new Field(fieldDefinition)
-            //{
-            //    Value = "Test"
-            //};
+            var options = new JsonSerializerOptions
+            {
+                TypeInfoResolver = new DefaultResolver(),
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault
+            };
 
-            //var options = new JsonSerializerOptions
-            //{
-            //    TypeInfoResolver = new DefaultResolver(),
-            //    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault
-            //};
+            options.Converters.Add(new FieldConverter());
 
-            //// Act
-            //var json = JsonSerializer.Serialize(field, options);
-            //var deserializedField = JsonSerializer.Deserialize<Field>(json, new JsonSerializerOptions
-            //{
-            //    TypeInfoResolver = new DefaultResolver(),
-            //    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault
-            //});
+            // Act
+            var json = JsonSerializer.Serialize(field, options);
+            var deserializedField = JsonSerializer.Deserialize<Field>(json, options);
 
-            //// Assert
-            //Assert.NotNull(deserializedField);
-            //Assert.Equal(field.Value, deserializedField.Value);
-            //Assert.Equal(field.FieldDefinition.InputDefinition.Type, deserializedField.FieldDefinition.InputDefinition.Type);
-            //Assert.Equal(field.FieldDefinition.InputDefinition.Label["en"], deserializedField.FieldDefinition.InputDefinition.Label["en"]);
-            //Assert.Equal(field.FieldDefinition.Description["en"], deserializedField.FieldDefinition.Description["en"]);
-            //Assert.Equal(field.FieldDefinition.IsList, deserializedField.FieldDefinition.IsList);
-            //Assert.Equal(field.FieldDefinition.SortKey, deserializedField.FieldDefinition.SortKey);
-            //Assert.Equal(field.FieldDefinition.IsRequired, deserializedField.FieldDefinition.IsRequired);
+            // Assert
+            Assert.NotNull(deserializedField);
+            Assert.Equal(field.Value, deserializedField.Value);
+            Assert.Equal(field.FieldDefinition.InputDefinition.Type, deserializedField.FieldDefinition.InputDefinition.Type);
+            Assert.Equal(field.FieldDefinition.InputDefinition.Label["en"], deserializedField.FieldDefinition.InputDefinition.Label["en"]);
+            Assert.Equal(field.FieldDefinition.Description["en"], deserializedField.FieldDefinition.Description["en"]);
+            Assert.Equal(field.FieldDefinition.IsList, deserializedField.FieldDefinition.IsList);
+            Assert.Equal(field.FieldDefinition.SortKey, deserializedField.FieldDefinition.SortKey);
+            Assert.Equal(field.FieldDefinition.IsRequired, deserializedField.FieldDefinition.IsRequired);
         }
     }
 }
