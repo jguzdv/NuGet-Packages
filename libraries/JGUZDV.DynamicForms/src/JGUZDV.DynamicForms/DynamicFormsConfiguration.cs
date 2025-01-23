@@ -27,6 +27,7 @@ namespace JGUZDV.DynamicForms
             { new DateOnlyFieldType(), [typeof(RangeConstraint)] },
             { new IntFieldType(), [typeof(RangeConstraint)] }
             };
+
         public static void SetConstraintTypes(FieldType fieldType, List<Type> constraintTypes)
         {
             if (constraintTypes.Any(constraintTypes => !typeof(Constraint).IsAssignableFrom(constraintTypes)))
@@ -36,6 +37,7 @@ namespace JGUZDV.DynamicForms
 
             _fieldConstraints[fieldType] = constraintTypes;
         }
+        
         public static List<Type> GetConstraintTypes(FieldDefinition fieldDefinition)
         {
             if (string.IsNullOrWhiteSpace(fieldDefinition.InputDefinition.Type))
@@ -51,6 +53,12 @@ namespace JGUZDV.DynamicForms
             }
 
             return result;
+        }
+
+        public static List<Type> GetConstraintTypes()
+        {
+            var types = _fieldConstraints.Values.SelectMany(x => x).Distinct().ToList();
+            return types;
         }
 
         private static Dictionary<Type, L10nString> _constraintNames = new()

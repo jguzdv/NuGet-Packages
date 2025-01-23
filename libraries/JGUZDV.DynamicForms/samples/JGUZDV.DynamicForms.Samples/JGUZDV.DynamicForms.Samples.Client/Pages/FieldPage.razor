@@ -30,6 +30,7 @@
                 PropertyNameCaseInsensitive = true
             };
         options.Converters.Add(new L10nStringJsonConverter());
+        options.Converters.Add(new FieldConverter());
 
         var definitions = await Client.GetFromJsonAsync<List<DocumentDefinition>>("https://localhost:7245/api/definitions", options);
         Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(definitions, options));
@@ -49,6 +50,8 @@
                 TypeInfoResolver = new DefaultResolver(),
             };
         options.Converters.Add(new L10nStringJsonConverter());
+        options.Converters.Add(new FieldConverter());
+
         await client.PostAsJsonAsync("https://localhost:7245/api/documents/save", _fields, options);
     }
 }

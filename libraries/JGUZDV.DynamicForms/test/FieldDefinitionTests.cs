@@ -120,7 +120,12 @@ namespace JGUZDV.DynamicForms.Tests
                 Description = new L10nString { ["en"] = "Test Description" },
                 IsList = false,
                 SortKey = 1,
-                IsRequired = true
+                IsRequired = true,
+                Constraints = new List<Constraint>
+                    {
+                        new StringLengthConstraint { MaxLength = 5 },
+                        new RegexConstraint { Regex = @"^\d+$" }
+                    }
             };
 
             var options = new JsonSerializerOptions
@@ -145,6 +150,9 @@ namespace JGUZDV.DynamicForms.Tests
             Assert.Equal(fieldDefinition.IsList, deserializedFieldDefinition.IsList);
             Assert.Equal(fieldDefinition.SortKey, deserializedFieldDefinition.SortKey);
             Assert.Equal(fieldDefinition.IsRequired, deserializedFieldDefinition.IsRequired);
+            Assert.Equal(fieldDefinition.Constraints.Count, deserializedFieldDefinition.Constraints.Count);
+            Assert.IsType<StringLengthConstraint>(deserializedFieldDefinition.Constraints[0]);
+            Assert.IsType<RegexConstraint>(deserializedFieldDefinition.Constraints[1]);
         }
     }
 }

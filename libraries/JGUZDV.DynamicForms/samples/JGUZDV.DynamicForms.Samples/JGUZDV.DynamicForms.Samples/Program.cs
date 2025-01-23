@@ -27,6 +27,7 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 {
     options.SerializerOptions.TypeInfoResolver = new DefaultResolver();
     options.SerializerOptions.Converters.Add(new L10nStringJsonConverter());
+    options.SerializerOptions.Converters.Add(new FieldConverter());
     options.SerializerOptions.PropertyNameCaseInsensitive = true;
 });
 

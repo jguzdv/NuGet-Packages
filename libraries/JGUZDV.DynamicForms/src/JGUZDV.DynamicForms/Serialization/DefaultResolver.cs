@@ -14,7 +14,10 @@ namespace JGUZDV.DynamicForms.Serialization
             var typeInfo = base.GetTypeInfo(type, options);
 
             if (typeInfo.Type == typeof(FieldType))
-                typeInfo.PolymorphismOptions = BuildJsonPolymorphismOptions();
+                typeInfo.PolymorphismOptions = BuildFieldTypeJsonPolymorphismOptions();
+
+            if (typeInfo.Type == typeof(Constraint))
+                typeInfo.PolymorphismOptions = BuildConstraintJsonPolymorphismOptions();
 
             if (typeInfo.Type.IsAssignableTo(typeof(FieldType)))
             {
@@ -24,7 +27,7 @@ namespace JGUZDV.DynamicForms.Serialization
             return typeInfo;
         }
 
-        private static JsonPolymorphismOptions BuildJsonPolymorphismOptions()
+        private static JsonPolymorphismOptions BuildFieldTypeJsonPolymorphismOptions()
         {
             var options = new JsonPolymorphismOptions
             {
@@ -34,6 +37,21 @@ namespace JGUZDV.DynamicForms.Serialization
             foreach (var fieldType in DynamicFormsConfiguration.KnownFieldTypes)
             {
                 options.DerivedTypes.Add(new JsonDerivedType(fieldType.GetType(), fieldType.GetType().Name));
+            }
+
+            return options;
+        }
+
+        private static JsonPolymorphismOptions BuildConstraintJsonPolymorphismOptions()
+        {
+            var options = new JsonPolymorphismOptions
+            {
+                UnknownDerivedTypeHandling = JsonUnknownDerivedTypeHandling.FailSerialization
+            };
+
+            foreach (var constraintType in DynamicFormsConfiguration.GetConstraintTypes())
+            {
+                options.DerivedTypes.Add(new JsonDerivedType(constraintType, constraintType.Name));
             }
 
             return options;
