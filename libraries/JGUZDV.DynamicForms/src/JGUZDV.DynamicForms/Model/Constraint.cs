@@ -1,16 +1,21 @@
 ﻿using System.Collections;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
+
+using JGUZDV.DynamicForms.Serialization;
 namespace JGUZDV.DynamicForms.Model;
 
 
+[JsonConverter(typeof(ConstraintConverter))]
 public abstract class Constraint : IValidatableObject
 {
     public abstract IEnumerable<ValidationResult> ValidateConstraint(List<object> values, ValidationContext context);
 
     public abstract IEnumerable<ValidationResult> Validate(ValidationContext validationContext);
 
+    public FieldType? FieldType { get; set; }
 }
 
 
@@ -47,6 +52,7 @@ public class RegexConstraint : Constraint
     }
 }
 
+[JsonConverter(typeof(RangeConstraintConverter))]
 public class RangeConstraint : Constraint
 {
     private IComparable? _maxValue;
@@ -60,6 +66,7 @@ public class RangeConstraint : Constraint
             _maxValue = value;
         }
     }
+
     public IComparable? MinValue
     {
         get => _minValue;
@@ -104,6 +111,7 @@ public class RangeConstraint : Constraint
         if (MaxValue == null && MinValue == null)
             yield return new ValidationResult("Min or Max must be set");
     }
+
 }
 
 public class SizeConstraint : Constraint

@@ -111,14 +111,18 @@ namespace JGUZDV.DynamicForms
 
         //TODO: should we use a ConstraintInfo class with one instance per constraint type
         //      that carries the needed meta information so we dont need to handle the raw Type
-        public static Constraint Create(string typeName)
+        public static Constraint Create(string typeName, FieldType fieldType)
         {
             var constraintType = _fieldConstraints.Values
                 .SelectMany(x => x)
                 .Distinct()
                 .First(x => x.Name == typeName);
 
-            return (Constraint)Activator.CreateInstance(constraintType)!;
+            //TODO: check fieldType is allowed for constraint
+
+            var constraint = (Constraint)Activator.CreateInstance(constraintType)!;
+            constraint.FieldType = fieldType;
+            return constraint;
         }
     }
 }

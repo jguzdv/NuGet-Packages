@@ -6,6 +6,7 @@ using JGUZDV.L10n;
 
 namespace JGUZDV.DynamicForms.Model;
 
+[JsonConverter(typeof(FieldTypeConverter))]
 public abstract record FieldType
 {
     [JsonIgnore]
@@ -28,7 +29,6 @@ public abstract record FieldType
     {
         var options = new JsonSerializerOptions()
         {
-            TypeInfoResolver = new DefaultResolver(),
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault
         };
 
@@ -39,13 +39,11 @@ public abstract record FieldType
     {
         var options = new JsonSerializerOptions()
         {
-            TypeInfoResolver = new DefaultResolver(),
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault
         };
-
         return JsonSerializer.Deserialize<FieldType>(json, options) ?? throw new InvalidOperationException($"Could not parse json: {json}");
     }
-       
+
 }
 
 //this should allow to inject at runtime dynamically allowed values e.g. resources in ResourceProvisioning
@@ -66,6 +64,7 @@ public class ValueProvider
 
 public record DateOnlyFieldType : FieldType
 {
+    [JsonIgnore]
     public override Type ClrType => typeof(DateOnly);
 
     public override L10nString DisplayName => new L10nString()
@@ -73,10 +72,29 @@ public record DateOnlyFieldType : FieldType
         ["de"] = "Datum",
         ["en"] = "Date"
     };
+
+    public override string ConvertFromValue(object value)
+    {
+        if (value is DateOnly dateOnly)
+        {
+            return dateOnly.ToString("O");
+        }
+        throw new InvalidOperationException($"Invalid value type: {value.GetType().Name}. Expected DateOnly.");
+    }
+
+    public override object ConvertToValue(string stringValue)
+    {
+        if (DateOnly.TryParse(stringValue, out var dateOnly))
+        {
+            return dateOnly;
+        }
+        throw new InvalidOperationException($"Could not parse string: {stringValue} into DateOnly.");
+    }
 }
 
 public record IntFieldType : FieldType
 {
+    [JsonIgnore]
     public override Type ClrType => typeof(int);
 
     public override L10nString DisplayName => new L10nString()
@@ -88,6 +106,7 @@ public record IntFieldType : FieldType
 
 public record StringFieldType : FieldType
 {
+    [JsonIgnore]
     public override Type ClrType => typeof(string);
 
     public override string ConvertFromValue(object value)

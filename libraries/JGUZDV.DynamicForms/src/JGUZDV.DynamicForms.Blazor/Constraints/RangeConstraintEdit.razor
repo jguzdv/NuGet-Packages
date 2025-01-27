@@ -52,19 +52,8 @@
             _error = "";
             var type = FieldType.FromJson(FieldDefinition.InputDefinition.Type);
 
-            //TODO: fix this hack
-            if (typeof(DateOnlyFieldType).IsAssignableFrom(type.GetType())
-            && FieldDefinition.InputDefinition.InputType == "date")
-            {
-                var value = type.ConvertToValue($"\"{e.Value!.ToString()!}\"");
-                setValue((IComparable)value);
-            }
-            else
-            {
-                var value = type.ConvertToValue($"{e.Value!.ToString()!}");
-                setValue((IComparable)value);
-            }
-
+            var value = type.ConvertToValue($"{e.Value!.ToString()!}");
+            setValue((IComparable)value);
         }
         catch (Exception ex)
         {

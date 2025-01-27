@@ -54,7 +54,6 @@
     </div>
 }
 
-
 @code {
     /// <summary>
     /// The <see cref="Model.FieldDefinition" /> of the constraints
@@ -70,10 +69,12 @@
 
     private string? _newConstraintString;
 
+    private List<ValidationResult> _fieldDefinitionValidation = new();
+
 
     private void AddNewConstraint()
     {
-        var constraint = DynamicFormsConfiguration.Create(_newConstraintString!);
+        var constraint = DynamicFormsConfiguration.Create(_newConstraintString!, FieldType.FromJson(FieldDefinition.InputDefinition.Type));
         FieldDefinition.Constraints = FieldDefinition.Constraints.Prepend(constraint).ToList();
         FieldDefinitionChanged.InvokeAsync(FieldDefinition);
     }

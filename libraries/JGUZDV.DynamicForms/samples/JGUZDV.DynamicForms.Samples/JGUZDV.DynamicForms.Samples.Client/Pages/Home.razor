@@ -90,10 +90,8 @@ Welcome to your new app.
     {
         var options = new JsonSerializerOptions()
             {
-                TypeInfoResolver = new DefaultResolver(),
                 PropertyNameCaseInsensitive = true
             };
-        options.Converters.Add(new L10nStringJsonConverter());
 
         await Client.PostAsJsonAsync("https://localhost:7245/api/definitions/save", _fieldDefinitions, options);
     }
