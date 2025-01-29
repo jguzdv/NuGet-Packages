@@ -141,7 +141,6 @@ namespace JGUZDV.DynamicForms.Tests
 
             var options = new JsonSerializerOptions
             {
-                TypeInfoResolver = new DefaultResolver(),
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault
             };
 
@@ -160,6 +159,61 @@ namespace JGUZDV.DynamicForms.Tests
             Assert.Equal(field.FieldDefinition.IsList, deserializedField.FieldDefinition.IsList);
             Assert.Equal(field.FieldDefinition.SortKey, deserializedField.FieldDefinition.SortKey);
             Assert.Equal(field.FieldDefinition.IsRequired, deserializedField.FieldDefinition.IsRequired);
+        }
+
+        [Fact]
+        public void Field_WithDateOnlyAndRangeConstraint_ShouldSerializeAndDeserializeCorrectly()
+        {
+            // Arrange
+            var fieldDefinition = new FieldDefinition
+            {
+                InputDefinition = new InputDefinition
+                {
+                    Type = GetFieldType("DateOnlyFieldType").ToJson(),
+                    Label = new L10nString { ["en"] = "Test Date Label" }
+                },
+                Description = new L10nString { ["en"] = "Test Date Description" },
+                IsList = false,
+                SortKey = 2,
+                IsRequired = true,
+                Constraints = new List<Constraint>
+                    {
+                        new RangeConstraint
+                        {
+                            MinValue = new DateOnly(2020, 1, 1),
+                            MaxValue = new DateOnly(2025, 12, 31),
+                            FieldType = new DateOnlyFieldType()
+                        }
+                    }
+            };
+
+            var field = new Field(fieldDefinition)
+            {
+                Value = new DateOnly(2023, 6, 15)
+            };
+
+            var options = new JsonSerializerOptions
+            {
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault
+            };
+
+            options.Converters.Add(new FieldConverter());
+
+            // Act
+            var json = JsonSerializer.Serialize(field, options);
+            var deserializedField = JsonSerializer.Deserialize<Field>(json, options);
+
+            // Assert
+            Assert.NotNull(deserializedField);
+            Assert.Equal(field.Value, deserializedField.Value);
+            Assert.Equal(field.FieldDefinition.InputDefinition.Type, deserializedField.FieldDefinition.InputDefinition.Type);
+            Assert.Equal(field.FieldDefinition.InputDefinition.Label["en"], deserializedField.FieldDefinition.InputDefinition.Label["en"]);
+            Assert.Equal(field.FieldDefinition.Description["en"], deserializedField.FieldDefinition.Description["en"]);
+            Assert.Equal(field.FieldDefinition.IsList, deserializedField.FieldDefinition.IsList);
+            Assert.Equal(field.FieldDefinition.SortKey, deserializedField.FieldDefinition.SortKey);
+            Assert.Equal(field.FieldDefinition.IsRequired, deserializedField.FieldDefinition.IsRequired);
+            Assert.Equal(((RangeConstraint)field.FieldDefinition.Constraints.First()).MinValue, ((RangeConstraint)deserializedField.FieldDefinition.Constraints.First()).MinValue);
+            Assert.Equal(((RangeConstraint)field.FieldDefinition.Constraints.First()).MaxValue, ((RangeConstraint)deserializedField.FieldDefinition.Constraints.First()).MaxValue);
         }
     }
 }

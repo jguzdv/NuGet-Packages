@@ -130,7 +130,6 @@ namespace JGUZDV.DynamicForms.Tests
 
             var options = new JsonSerializerOptions
             {
-                TypeInfoResolver = new DefaultResolver(),
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault
             };
 
@@ -138,7 +137,6 @@ namespace JGUZDV.DynamicForms.Tests
             var json = JsonSerializer.Serialize(fieldDefinition, options);
             var deserializedFieldDefinition = JsonSerializer.Deserialize<FieldDefinition>(json, new JsonSerializerOptions
             {
-                TypeInfoResolver = new DefaultResolver(),
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault
             });
 
