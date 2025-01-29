@@ -97,6 +97,25 @@ namespace JGUZDV.DynamicForms.Tests
         }
 
         [Fact]
+        public void RangeConstraint_WithDateOnly_ShouldValidateCorrectly()
+        {
+            // Arrange
+            var rangeConstraint = new RangeConstraint
+            {
+                MinValue = new DateOnly(2020, 1, 1),
+                MaxValue = new DateOnly(2025, 12, 31)
+            };
+            var values = new List<object> { new DateOnly(2023, 6, 15), new DateOnly(2024, 7, 20) };
+            var context = new ValidationContext(new FieldDefinition());
+
+            // Act
+            var results = rangeConstraint.ValidateConstraint(values, context).ToList();
+
+            // Assert
+            Assert.Empty(results);
+        }
+
+        [Fact]
         public void StringLengthConstraint_ShouldValidateCorrectly()
         {
             // Arrange

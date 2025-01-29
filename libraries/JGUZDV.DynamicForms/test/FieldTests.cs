@@ -209,6 +209,91 @@ namespace JGUZDV.DynamicForms.Tests
             Assert.Equal(((RangeConstraint)field.FieldDefinition.Constraints.First()).MinValue, ((RangeConstraint)deserializedField.FieldDefinition.Constraints.First()).MinValue);
             Assert.Equal(((RangeConstraint)field.FieldDefinition.Constraints.First()).MaxValue, ((RangeConstraint)deserializedField.FieldDefinition.Constraints.First()).MaxValue);
         }
+        [Fact]
+        public void Field_WithRegexConstraint_ShouldValidateCorrectly()
+        {
+            // Arrange
+            var fieldDefinition = new FieldDefinition
+            {
+                InputDefinition = new InputDefinition
+                {
+                    Label = new L10nString { ["en"] = "Test Label" }
+                },
+                Type = GetFieldType("StringFieldType"),
+                Description = new L10nString { ["en"] = "Test Description" },
+                IsList = false,
+                SortKey = 1,
+                IsRequired = true,
+                Constraints = new List<Constraint> { new RegexConstraint { Regex = @"^\d+$" } }
+            };
+
+            var field = new Field(fieldDefinition)
+            {
+                Value = "12345"
+            };
+
+            var mockSupportedCultureService = new Mock<ISupportedCultureService>();
+            mockSupportedCultureService.Setup(s => s.GetSupportedCultures()).Returns(new List<string> { "en" });
+
+            var mockStringLocalizer = new Mock<IStringLocalizer<Validations>>();
+            mockStringLocalizer.Setup(l => l[It.IsAny<string>(), It.IsAny<object[]>()]).Returns((string key, object[] args) => new LocalizedString(key, key));
+
+            var serviceProvider = new ServiceCollection()
+                .AddSingleton(mockSupportedCultureService.Object)
+                .AddSingleton(mockStringLocalizer.Object)
+                .BuildServiceProvider();
+
+            var context = new ValidationContext(field, serviceProvider, null);
+
+            // Act
+            var results = field.Validate(context).ToList();
+
+            // Assert
+            Assert.Empty(results);
+        }
+
+        [Fact]
+        public void Field_WithSizeConstraint_ShouldValidateCorrectly()
+        {
+            // Arrange
+            var fieldDefinition = new FieldDefinition
+            {
+                InputDefinition = new InputDefinition
+                {
+                    Label = new L10nString { ["en"] = "Test Label" }
+                },
+                Type = GetFieldType("StringFieldType"),
+                Description = new L10nString { ["en"] = "Test Description" },
+                IsList = true,
+                SortKey = 1,
+                IsRequired = true,
+                Constraints = new List<Constraint> { new SizeConstraint { MinCount = 1, MaxCount = 3 } }
+            };
+
+            var field = new Field(fieldDefinition)
+            {
+                Value = new List<string> { "a", "b" }
+            };
+
+            var mockSupportedCultureService = new Mock<ISupportedCultureService>();
+            mockSupportedCultureService.Setup(s => s.GetSupportedCultures()).Returns(new List<string> { "en" });
+
+            var mockStringLocalizer = new Mock<IStringLocalizer<Validations>>();
+            mockStringLocalizer.Setup(l => l[It.IsAny<string>(), It.IsAny<object[]>()]).Returns((string key, object[] args) => new LocalizedString(key, key));
+
+            var serviceProvider = new ServiceCollection()
+                .AddSingleton(mockSupportedCultureService.Object)
+                .AddSingleton(mockStringLocalizer.Object)
+                .BuildServiceProvider();
+
+            var context = new ValidationContext(field, serviceProvider, null);
+
+            // Act
+            var results = field.Validate(context).ToList();
+
+            // Assert
+            Assert.Empty(results);
+        }
     }
 }
 

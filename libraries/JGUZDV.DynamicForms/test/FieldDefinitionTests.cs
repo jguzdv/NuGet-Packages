@@ -149,5 +149,88 @@ namespace JGUZDV.DynamicForms.Tests
             Assert.IsType<StringLengthConstraint>(deserializedFieldDefinition.Constraints[0]);
             Assert.IsType<RegexConstraint>(deserializedFieldDefinition.Constraints[1]);
         }
+        [Fact]
+        public void FieldDefinition_WithChoiceOptions_ShouldValidateCorrectly()
+        {
+            // Arrange
+            var fieldDefinition = new FieldDefinition
+            {
+                InputDefinition = new InputDefinition
+                {
+                    Label = new L10nString { ["en"] = "Test Label" }
+                },
+                Type = GetFieldType("StringFieldType"),
+                Description = new L10nString { ["en"] = "Test Description" },
+                IsList = false,
+                SortKey = 1,
+                IsRequired = true,
+                ChoiceOptions = new List<ChoiceOption>
+                {
+                    new ChoiceOption { Value = "Option1", Name = new L10nString { ["en"] = "Option 1" } },
+                    new ChoiceOption { Value = "Option2", Name = new L10nString { ["en"] = "Option 2" } }
+                }
+            };
+
+            var mockSupportedCultureService = new Mock<ISupportedCultureService>();
+            mockSupportedCultureService.Setup(s => s.GetSupportedCultures()).Returns(new List<string> { "en" });
+
+            var mockStringLocalizer = new Mock<IStringLocalizer<Validations>>();
+            mockStringLocalizer.Setup(l => l[It.IsAny<string>(), It.IsAny<object[]>()]).Returns((string key, object[] args) => new LocalizedString(key, key));
+
+            var serviceProvider = new ServiceCollection()
+                .AddSingleton(mockSupportedCultureService.Object)
+                .AddSingleton(mockStringLocalizer.Object)
+                .BuildServiceProvider();
+
+            var context = new ValidationContext(fieldDefinition, serviceProvider, null);
+
+            // Act
+            var results = fieldDefinition.Validate(context).ToList();
+
+            // Assert
+            Assert.Empty(results);
+        }
+
+        [Fact]
+        public void FieldDefinition_WithMultipleConstraints_ShouldValidateCorrectly()
+        {
+            // Arrange
+            var fieldDefinition = new FieldDefinition
+            {
+                InputDefinition = new InputDefinition
+                {
+                    Label = new L10nString { ["en"] = "Test Label" }
+                },
+                Type = GetFieldType("StringFieldType"),
+                Description = new L10nString { ["en"] = "Test Description" },
+                IsList = false,
+                SortKey = 1,
+                IsRequired = true,
+                Constraints = new List<Constraint>
+                {
+                    new StringLengthConstraint { MaxLength = 5 },
+                    new RegexConstraint { Regex = @"^\d+$" }
+                }
+            };
+
+            var mockSupportedCultureService = new Mock<ISupportedCultureService>();
+            mockSupportedCultureService.Setup(s => s.GetSupportedCultures()).Returns(new List<string> { "en" });
+
+            var mockStringLocalizer = new Mock<IStringLocalizer<Validations>>();
+            mockStringLocalizer.Setup(l => l[It.IsAny<string>(), It.IsAny<object[]>()]).Returns((string key, object[] args) => new LocalizedString(key, key));
+
+            var serviceProvider = new ServiceCollection()
+                .AddSingleton(mockSupportedCultureService.Object)
+                .AddSingleton(mockStringLocalizer.Object)
+                .BuildServiceProvider();
+
+            var context = new ValidationContext(fieldDefinition, serviceProvider, null);
+
+            // Act
+            var results = fieldDefinition.Validate(context).ToList();
+
+            // Assert
+            Assert.Empty(results);
+        }
     }
 }
