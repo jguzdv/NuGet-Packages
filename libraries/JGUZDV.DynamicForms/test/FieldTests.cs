@@ -144,7 +144,6 @@ namespace JGUZDV.DynamicForms.Tests
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault
             };
 
-            options.Converters.Add(new FieldConverter());
 
             // Act
             var json = JsonSerializer.Serialize(field, options);
@@ -197,7 +196,6 @@ namespace JGUZDV.DynamicForms.Tests
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault
             };
 
-            options.Converters.Add(new FieldConverter());
 
             // Act
             var json = JsonSerializer.Serialize(field, options);

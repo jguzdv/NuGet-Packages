@@ -1,9 +1,10 @@
-﻿using JGUZDV.DynamicForms.Model;
+﻿using System.Text.Json;
+
+using JGUZDV.DynamicForms.Model;
 using JGUZDV.DynamicForms.Samples.Client.Model;
 
 using Microsoft.EntityFrameworkCore;
 
-using Newtonsoft.Json;
 
 namespace JGUZDV.DynamicForms.Samples.DataAccess;
 /// <summary>
@@ -24,20 +25,21 @@ public class TestDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
+        var options = new JsonSerializerOptions();
         modelBuilder
             .Entity<Document>()
             .Property(x => x.Fields)
             .HasConversion(
-                v => JsonConvert.SerializeObject(v, new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All }),
-                v => JsonConvert.DeserializeObject<List<Field>>(v, new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All }) ?? new()
+                v => JsonSerializer.Serialize(v, options),
+                v => JsonSerializer.Deserialize<List<Field>>(v, options) ?? new()
             );
 
         modelBuilder
            .Entity<DocumentDefinition>()
            .Property(x => x.FieldDefinitions)
            .HasConversion(
-               v => JsonConvert.SerializeObject(v, new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All }),
-               v => JsonConvert.DeserializeObject<List<FieldDefinition>>(v, new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All }) ?? new()
+                v => JsonSerializer.Serialize(v, options),
+                v => JsonSerializer.Deserialize<List<FieldDefinition>>(v, options) ?? new()
            );
     }
 

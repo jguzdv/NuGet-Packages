@@ -10,6 +10,7 @@ public class FieldCollection
     public required List<Field> Fields { get; set; }
 }
 
+[JsonConverter(typeof(FieldConverter))]
 public class Field : IValidatableObject
 {
     public Field(FieldDefinition fieldDefinition)
@@ -20,7 +21,6 @@ public class Field : IValidatableObject
             : null;
     }
 
-    [JsonConstructor]
     public Field(FieldDefinition fieldDefinition, object? value)
     {
         FieldDefinition = fieldDefinition;
