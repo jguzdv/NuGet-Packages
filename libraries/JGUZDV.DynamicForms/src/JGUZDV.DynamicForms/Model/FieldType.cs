@@ -15,6 +15,9 @@ public abstract record FieldType
     [JsonIgnore]
     public abstract L10nString DisplayName { get; }
 
+    [JsonIgnore]
+    public virtual string InputType { get; } = "text";
+
     public virtual string ConvertFromValue(object value)
     {
         return JsonSerializer.Serialize(value);
@@ -66,6 +69,9 @@ public record DateOnlyFieldType : FieldType
 {
     [JsonIgnore]
     public override Type ClrType => typeof(DateOnly);
+
+    [JsonIgnore]
+    public override string InputType => "date";
 
     public override L10nString DisplayName => new L10nString()
     {

@@ -30,18 +30,18 @@
     <div class="mb-2">
         <label for="type">@SL["EditFieldDefinition.Type"]</label>
         <select id="type"
-                @bind="@FieldDefinition.InputDefinition.Type"
+                value="@FieldDefinition.Type?.ToJson()"
+                @onchange="e => FieldDefinition.Type = FieldType.FromJson(e.Value!.ToString()!)"
                 class="form-select">
+            @if (FieldDefinition.Type == null)
+            {
+                <option value="" selected>@SL["EditFieldDefinition.SelectType"]</option>
+            }
             @foreach (var type in DynamicFormsConfiguration.KnownFieldTypes)
             {
                 <option value="@type.ToJson()">@type.DisplayName</option>
             }
         </select>
-    </div>
-
-    <div class="mb-2">
-        <label for="inputType">@SL["EditFieldDefinition.InputType"]</label>
-        <InputText id="inputType" @bind-Value="FieldDefinition.InputDefinition.InputType" class="form-control" />
     </div>
 
     <div class="mb-2">

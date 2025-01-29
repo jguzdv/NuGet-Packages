@@ -40,12 +40,12 @@ namespace JGUZDV.DynamicForms
         
         public static List<Type> GetConstraintTypes(FieldDefinition fieldDefinition)
         {
-            if (string.IsNullOrWhiteSpace(fieldDefinition.InputDefinition.Type))
+            if (null == fieldDefinition.Type)
             {
                 return [];
             }
 
-            var result = _fieldConstraints[FieldType.FromJson(fieldDefinition.InputDefinition.Type)].ToList();
+            var result = _fieldConstraints[fieldDefinition.Type].ToList();
 
             if (fieldDefinition.IsList)
             {

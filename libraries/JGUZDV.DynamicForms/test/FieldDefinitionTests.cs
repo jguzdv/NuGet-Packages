@@ -4,15 +4,12 @@ using System.Text.Json.Serialization;
 
 using JGUZDV.DynamicForms.Model;
 using JGUZDV.DynamicForms.Resources;
-using JGUZDV.DynamicForms.Serialization;
 using JGUZDV.L10n;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 
 using Moq;
-
-using Xunit;
 
 namespace JGUZDV.DynamicForms.Tests
 {
@@ -37,9 +34,9 @@ namespace JGUZDV.DynamicForms.Tests
             {
                 InputDefinition = new InputDefinition
                 {
-                    Type = GetFieldType("StringFieldType").ToJson(),
                     Label = new L10nString { ["en"] = "Test Label" }
                 },
+                Type = GetFieldType("StringFieldType"),
                 Description = new L10nString { ["en"] = "Test Description" },
                 IsList = false,
                 SortKey = 1,
@@ -74,9 +71,9 @@ namespace JGUZDV.DynamicForms.Tests
             {
                 InputDefinition = new InputDefinition
                 {
-                    Type = "",
                     Label = new L10nString { ["en"] = "" }
                 },
+                Type = null,
                 Description = new L10nString { ["en"] = "" },
                 IsList = false,
                 SortKey = -1,
@@ -101,7 +98,7 @@ namespace JGUZDV.DynamicForms.Tests
 
             // Assert
             Assert.NotEmpty(results);
-            Assert.Contains(results, r => r.MemberNames.Contains(nameof(FieldDefinition.InputDefinition.Type)));
+            Assert.Contains(results, r => r.MemberNames.Contains(nameof(FieldDefinition.Type)));
             Assert.Contains(results, r => r.MemberNames.Contains(nameof(FieldDefinition.Description)));
             Assert.Contains(results, r => r.MemberNames.Contains(nameof(FieldDefinition.SortKey)));
         }
@@ -114,18 +111,18 @@ namespace JGUZDV.DynamicForms.Tests
             {
                 InputDefinition = new InputDefinition
                 {
-                    Type = GetFieldType("StringFieldType").ToJson(),
                     Label = new L10nString { ["en"] = "Test Label" }
                 },
+                Type = GetFieldType("StringFieldType"),
                 Description = new L10nString { ["en"] = "Test Description" },
                 IsList = false,
                 SortKey = 1,
                 IsRequired = true,
                 Constraints = new List<Constraint>
-                    {
-                        new StringLengthConstraint { MaxLength = 5 },
-                        new RegexConstraint { Regex = @"^\d+$" }
-                    }
+                        {
+                            new StringLengthConstraint { MaxLength = 5 },
+                            new RegexConstraint { Regex = @"^\d+$" }
+                        }
             };
 
             var options = new JsonSerializerOptions
@@ -142,7 +139,7 @@ namespace JGUZDV.DynamicForms.Tests
 
             // Assert
             Assert.NotNull(deserializedFieldDefinition);
-            Assert.Equal(fieldDefinition.InputDefinition.Type, deserializedFieldDefinition.InputDefinition.Type);
+            Assert.Equal(fieldDefinition.Type.ToJson(), deserializedFieldDefinition.Type.ToJson());
             Assert.Equal(fieldDefinition.InputDefinition.Label["en"], deserializedFieldDefinition.InputDefinition.Label["en"]);
             Assert.Equal(fieldDefinition.Description["en"], deserializedFieldDefinition.Description["en"]);
             Assert.Equal(fieldDefinition.IsList, deserializedFieldDefinition.IsList);

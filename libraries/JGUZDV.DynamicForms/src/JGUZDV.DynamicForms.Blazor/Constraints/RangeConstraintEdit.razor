@@ -13,7 +13,7 @@
     <input id="MinValue"
            class="form-control @(!string.IsNullOrWhiteSpace(_error) ? "border-danger" : "")"
            value="@GetMinValue()"
-           type="@FieldDefinition.InputDefinition.InputType"
+           type="@FieldDefinition.Type.InputType"
            @onchange="async (e) => await HandleChange(e, x => _constraint.MinValue = x)" />
 </div>
 
@@ -22,35 +22,48 @@
     <input id="MinValue" name="MinValue"
            class="form-control @(!string.IsNullOrWhiteSpace(_error) ? "border-danger" : "")"
            value="@GetMaxValue()"
-           type="@FieldDefinition.InputDefinition.InputType"
+           type="@FieldDefinition.Type.InputType"
            @onchange="async (e) => await HandleChange(e, x => _constraint.MaxValue = x)" />
 </div>
 
 
 @code {
     [Parameter]
+    [EditorRequired]
     public required Constraint Constraint { get; set; }
 
     [Parameter]
     public required EventCallback<Constraint> ConstraintChanged { get; set; }
 
     [Parameter]
+    [EditorRequired]
     public required FieldDefinition FieldDefinition { get; set; }
 
     [Inject]
     public required IStringLocalizer<ComponentStrings> SL { get; set; }
+
+    [Inject]
+    public required IServiceProvider ServiceProvider { get; set; }
 
     private RangeConstraint _constraint => (RangeConstraint)Constraint!;
     private Guid _id = Guid.NewGuid();
 
     private string _error = "";
 
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        if (FieldDefinition.ValidateBase(new ValidationContext(FieldDefinition, ServiceProvider, null)).Any())
+            throw new InvalidOperationException($"Invalid {FieldDefinition}");
+    }
+
     private async Task HandleChange(ChangeEventArgs e, Action<IComparable> setValue)
     {
         try
         {
             _error = "";
-            var type = FieldType.FromJson(FieldDefinition.InputDefinition.Type);
+            var type = FieldDefinition.Type;
 
             var value = type.ConvertToValue($"{e.Value!.ToString()!}");
             setValue((IComparable)value);
@@ -69,7 +82,6 @@
         }
     }
 
-
     //TODO: Should the Type-Input Mapping be abstracted into FieldType?
     private string? GetMinValue()
     {
@@ -78,29 +90,16 @@
             return null;
         }
 
-        var type = FieldType.FromJson(FieldDefinition.InputDefinition.Type);
-
-        if (typeof(DateOnlyFieldType).IsAssignableFrom(type.GetType())
-            && FieldDefinition.InputDefinition.InputType == "date")
-        {
-            return ((DateOnly?)_constraint.MinValue)?.ToString("yyyy-MM-dd");
-        }
-
-        return type.ConvertFromValue(_constraint.MinValue);
+        return FieldDefinition.Type!.ConvertFromValue(_constraint.MinValue);
     }
 
     private string? GetMaxValue()
     {
         if (_constraint.MaxValue == null)
         {
-            return "";
+            return null;
         }
-        var type = FieldType.FromJson(FieldDefinition.InputDefinition.Type);
-        if (typeof(DateOnlyFieldType).IsAssignableFrom(type.GetType())
-            && FieldDefinition.InputDefinition.InputType == "date")
-        {
-            return ((DateOnly?)_constraint.MaxValue)?.ToString("yyyy-MM-dd");
-        }
-        return type.ConvertFromValue(_constraint.MaxValue);
+
+        return FieldDefinition.Type!.ConvertFromValue(_constraint.MaxValue);
     }
 }

@@ -141,6 +141,9 @@
   <data name="EditFieldDefinition.Name" xml:space="preserve">
     <value>Name</value>
   </data>
+  <data name="EditFieldDefinition.SelectType" xml:space="preserve">
+    <value>please select</value>
+  </data>
   <data name="EditFieldDefinition.SortKey" xml:space="preserve">
     <value>Sort key</value>
   </data>

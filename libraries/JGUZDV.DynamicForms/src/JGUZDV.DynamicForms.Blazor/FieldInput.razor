@@ -49,7 +49,7 @@
             @if (Field.FieldDefinition.IsList)
             {
                 <div class="input-group">
-                    <input type="@InputDefinition.InputType"
+                    <input type="@Field.FieldDefinition.Type!.InputType"
                            @bind="_inputValue"
                            @onkeyup="HandleKeyUp"
                            class="form-control">
@@ -88,7 +88,7 @@
                        @bind-value="_inputValue"
                        @bind-value:after="() => OnInputChanged(_inputValue)"
                        @onkeyup="HandleKeyUp"
-                       type="@InputDefinition.InputType" name="@InputDefinition.Name" id="@InputDefinition.Id" />
+                       type="@Field.FieldDefinition.Type!.InputType" name="@InputDefinition.Name" id="@InputDefinition.Id" />
             }
         }
     </div>

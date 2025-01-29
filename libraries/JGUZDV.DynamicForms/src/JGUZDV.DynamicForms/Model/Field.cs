@@ -68,7 +68,7 @@ public class Field : IValidatableObject
         : throw new InvalidOperationException("Only list fields have multiple values");
 
     [JsonIgnore]
-    public FieldType ValueType => FieldType.FromJson(FieldDefinition.InputDefinition.Type); // => Constants.Types.Get(FieldDefinition.InputDefinition.Type);
+    public FieldType ValueType => FieldDefinition.Type;
 
     public bool IsValid(ValidationContext validationContext) => !Validate(validationContext).Any();
 

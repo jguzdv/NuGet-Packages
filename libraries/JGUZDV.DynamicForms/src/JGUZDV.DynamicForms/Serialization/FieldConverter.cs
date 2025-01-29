@@ -33,7 +33,7 @@ public class FieldConverter : JsonConverter<Field>
                     if (fieldDefinition == null)
                         throw new JsonException("FieldDefinition must be read before Value");
 
-                    var fieldType = FieldType.FromJson(fieldDefinition.InputDefinition.Type);
+                    var fieldType = fieldDefinition.Type ?? throw new InvalidOperationException("FieldType must be set");
                     value = fieldType.ConvertToValue(reader.GetString()!);
                     break;
             }
@@ -53,7 +53,7 @@ public class FieldConverter : JsonConverter<Field>
         JsonSerializer.Serialize(writer, value.FieldDefinition, options);
 
         writer.WritePropertyName(nameof(Field.Value));
-        var fieldType = FieldType.FromJson(value.FieldDefinition.InputDefinition.Type);
+        var fieldType = value.FieldDefinition.Type ?? throw new InvalidOperationException("FieldType must be set");
         writer.WriteStringValue(fieldType.ConvertFromValue(value.Value!));
 
         writer.WriteEndObject();

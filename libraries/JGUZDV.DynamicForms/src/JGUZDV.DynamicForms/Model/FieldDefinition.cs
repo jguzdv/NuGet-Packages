@@ -19,9 +19,7 @@ public class InputDefinition : IValidatableObject
 
     public string Name { get; set; }
     public string Id { get; set; }
-    public string Type { get; set; }
 
-    public string InputType { get; set; } = "text";
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
@@ -34,7 +32,7 @@ public class InputDefinition : IValidatableObject
         }
 
         //if (string.IsNullOrWhiteSpace(Label["en"]) || string.IsNullOrWhiteSpace(Label["de"])) yield return new ValidationResult("Name muss gesetzt sein", new string[] { nameof(Label) });
-        if (string.IsNullOrWhiteSpace(Type)) yield return new ValidationResult(SL[$"{nameof(InputDefinition)}.{nameof(Type)}"], new string[] { nameof(Type) });
+
     }
 }
 
@@ -76,12 +74,17 @@ public class FieldDefinition : IValidatableObject
 
     public List<Constraint> Constraints { get; set; } = new();
     public bool IsRequired { get; set; }
+    public FieldType? Type { get; set; }
 
-    // das muss auch eine resource sein können
-    // wir brauchen constraints, typ abhhängig "optional,max,min,default value, validateSet",
-    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    /// <summary>
+    /// Validates without checking the optional <see cref="Constraints"/> and <see cref="ChoiceOptions"/>
+    /// </summary>
+    /// <param name="validationContext"></param>
+    /// <returns></returns>
+    public IEnumerable<ValidationResult> ValidateBase(ValidationContext validationContext)
     {
         var errors = new List<ValidationResult>();
+
         errors.AddRange(InputDefinition.Validate(validationContext).ToList());
 
         var service = (ISupportedCultureService)validationContext.GetService(typeof(ISupportedCultureService))!;
@@ -100,6 +103,18 @@ public class FieldDefinition : IValidatableObject
         {
             errors.Add(new(SL[$"{nameof(FieldDefinition)}.{nameof(Identifier)}"], new string[] { nameof(Identifier) }));
         }
+
+        if (null == Type)
+            errors.Add(new ValidationResult(SL[$"{nameof(FieldDefinition)}.{nameof(Type)}"], new string[] { nameof(Type) }));
+
+        return errors;
+    }
+
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        var errors = new List<ValidationResult>();
+        
+        errors.AddRange(ValidateBase(validationContext));
 
         foreach (var choice in ChoiceOptions)
         {

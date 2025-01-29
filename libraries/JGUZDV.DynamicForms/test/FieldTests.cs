@@ -1,19 +1,15 @@
-using System.Collections;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
 using JGUZDV.DynamicForms.Model;
 using JGUZDV.DynamicForms.Resources;
-using JGUZDV.DynamicForms.Serialization;
 using JGUZDV.L10n;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 
 using Moq;
-
-using Xunit;
 
 namespace JGUZDV.DynamicForms.Tests
 {
@@ -38,9 +34,9 @@ namespace JGUZDV.DynamicForms.Tests
             {
                 InputDefinition = new InputDefinition
                 {
-                    Type = GetFieldType("StringFieldType").ToJson(),
                     Label = new L10nString { ["en"] = "Test Label" }
                 },
+                Type = GetFieldType("StringFieldType"),
                 Description = new L10nString { ["en"] = "Test Description" },
                 IsList = false,
                 SortKey = 1,
@@ -81,9 +77,9 @@ namespace JGUZDV.DynamicForms.Tests
             {
                 InputDefinition = new InputDefinition
                 {
-                    Type = GetFieldType("StringFieldType").ToJson(),
                     Label = new L10nString { ["en"] = "Test Label" }
                 },
+                Type = GetFieldType("StringFieldType"),
                 Description = new L10nString { ["en"] = "Test Description" },
                 IsList = false,
                 SortKey = 1,
@@ -125,9 +121,9 @@ namespace JGUZDV.DynamicForms.Tests
             {
                 InputDefinition = new InputDefinition
                 {
-                    Type = GetFieldType("StringFieldType").ToJson(),
                     Label = new L10nString { ["en"] = "Test Label" }
                 },
+                Type = GetFieldType("StringFieldType"),
                 Description = new L10nString { ["en"] = "Test Description" },
                 IsList = false,
                 SortKey = 1,
@@ -152,7 +148,7 @@ namespace JGUZDV.DynamicForms.Tests
             // Assert
             Assert.NotNull(deserializedField);
             Assert.Equal(field.Value, deserializedField.Value);
-            Assert.Equal(field.FieldDefinition.InputDefinition.Type, deserializedField.FieldDefinition.InputDefinition.Type);
+            Assert.Equal(field.FieldDefinition.Type.ToJson(), deserializedField.FieldDefinition.Type.ToJson());
             Assert.Equal(field.FieldDefinition.InputDefinition.Label["en"], deserializedField.FieldDefinition.InputDefinition.Label["en"]);
             Assert.Equal(field.FieldDefinition.Description["en"], deserializedField.FieldDefinition.Description["en"]);
             Assert.Equal(field.FieldDefinition.IsList, deserializedField.FieldDefinition.IsList);
@@ -168,22 +164,22 @@ namespace JGUZDV.DynamicForms.Tests
             {
                 InputDefinition = new InputDefinition
                 {
-                    Type = GetFieldType("DateOnlyFieldType").ToJson(),
                     Label = new L10nString { ["en"] = "Test Date Label" }
                 },
+                Type = GetFieldType("DateOnlyFieldType"),
                 Description = new L10nString { ["en"] = "Test Date Description" },
                 IsList = false,
                 SortKey = 2,
                 IsRequired = true,
                 Constraints = new List<Constraint>
-                    {
-                        new RangeConstraint
                         {
-                            MinValue = new DateOnly(2020, 1, 1),
-                            MaxValue = new DateOnly(2025, 12, 31),
-                            FieldType = new DateOnlyFieldType()
+                            new RangeConstraint
+                            {
+                                MinValue = new DateOnly(2020, 1, 1),
+                                MaxValue = new DateOnly(2025, 12, 31),
+                                FieldType = new DateOnlyFieldType()
+                            }
                         }
-                    }
             };
 
             var field = new Field(fieldDefinition)
@@ -204,7 +200,7 @@ namespace JGUZDV.DynamicForms.Tests
             // Assert
             Assert.NotNull(deserializedField);
             Assert.Equal(field.Value, deserializedField.Value);
-            Assert.Equal(field.FieldDefinition.InputDefinition.Type, deserializedField.FieldDefinition.InputDefinition.Type);
+            Assert.Equal(field.FieldDefinition.Type.ToJson(), deserializedField.FieldDefinition.Type.ToJson());
             Assert.Equal(field.FieldDefinition.InputDefinition.Label["en"], deserializedField.FieldDefinition.InputDefinition.Label["en"]);
             Assert.Equal(field.FieldDefinition.Description["en"], deserializedField.FieldDefinition.Description["en"]);
             Assert.Equal(field.FieldDefinition.IsList, deserializedField.FieldDefinition.IsList);
