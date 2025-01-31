@@ -6,7 +6,7 @@
 @using JGUZDV.L10n
 
 
-<h1>Field</h1>
+<h1>New Fields</h1>
 
 @foreach (var field in _fields)
 {
@@ -14,10 +14,29 @@
     <hr />
 }
 
+<h1>
+    Saved Documents
+</h1>
+<div>
+    @foreach (var oldField in _documents)
+    {
+        @foreach (var x in oldField.Fields)
+        {
+            <div>
+                @x.FieldDefinition.InputDefinition.Label: @x.Value
+            </div>
+        }
+    }
+</div>
+
+
+
 <button @onclick="Save">Save</button>
 
 @code {
     private List<Field> _fields = new List<Field>();
+
+    private List<Document> _documents = new List<Document>();
 
     [Inject]
     public required HttpClient Client { get; set; }
@@ -36,7 +55,7 @@
             .Select(x => new Field(x))
             .ToList();
 
-        Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(_fields.Select(x => x.FieldDefinition), options));
+        _documents = await Client.GetFromJsonAsync<List<Document>>("https://localhost:7245/api/documents", options);
     }
 
     private async Task Save()
@@ -47,5 +66,7 @@
         };
 
         await client.PostAsJsonAsync("https://localhost:7245/api/documents/save", _fields, options);
+
+        _documents = await client.GetFromJsonAsync<List<Document>>("https://localhost:7245/api/documents");
     }
 }
