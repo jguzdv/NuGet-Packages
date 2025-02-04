@@ -5,15 +5,17 @@ using JGUZDV.DynamicForms.Model;
 
 namespace JGUZDV.DynamicForms.Serialization;
 
-internal class FieldTypeConverter : JsonConverter<FieldType>
+/// <inheritdoc />
+public class FieldTypeConverter : JsonConverter<FieldType>
 {
+    /// <inheritdoc />
     public override FieldType? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         using (JsonDocument doc = JsonDocument.ParseValue(ref reader))
         {
             if (doc.RootElement.TryGetProperty("$Type", out JsonElement typeElement))
             {
-                string typeName = typeElement.GetString();
+                string typeName = typeElement.GetString()!;
                 Type? fieldType = Type.GetType(typeName);
 
                 if (fieldType == null || !typeof(FieldType).IsAssignableFrom(fieldType))
@@ -28,6 +30,7 @@ internal class FieldTypeConverter : JsonConverter<FieldType>
         throw new JsonException("Unable to determine the type of the field type.");
     }
 
+    /// <inheritdoc />
     public override void Write(Utf8JsonWriter writer, FieldType value, JsonSerializerOptions options)
     {
         writer.WriteStartObject();

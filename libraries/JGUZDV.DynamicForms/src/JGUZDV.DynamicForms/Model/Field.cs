@@ -5,14 +5,27 @@ using System.Text.Json.Serialization;
 namespace JGUZDV.DynamicForms.Model;
 
 
+/// <summary>
+/// Represents a collection of fields.
+/// </summary>
 public class FieldCollection
 {
+    /// <summary>
+    /// Gets or sets the list of fields.
+    /// </summary>
     public required List<Field> Fields { get; set; }
 }
 
+/// <summary>
+/// Represents a form field and provides validation functionality.
+/// </summary>
 [JsonConverter(typeof(FieldConverter))]
 public class Field : IValidatableObject
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Field"/> class with the specified field definition.
+    /// </summary>
+    /// <param name="fieldDefinition">The definition of the field.</param>
     public Field(FieldDefinition fieldDefinition)
     {
         FieldDefinition = fieldDefinition;
@@ -21,15 +34,28 @@ public class Field : IValidatableObject
             : null;
     }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Field"/> class with the specified field definition and value.
+    /// </summary>
+    /// <param name="fieldDefinition">The definition of the field.</param>
+    /// <param name="value">The value of the field.</param>
     public Field(FieldDefinition fieldDefinition, object? value)
     {
         FieldDefinition = fieldDefinition;
         Value = value;
     }
 
-    public FieldDefinition FieldDefinition { get; set; }
+    /// <summary>
+    /// Gets or sets the field definition.
+    /// </summary>
+    public FieldDefinition FieldDefinition { get; }
 
     private object? _value;
+
+    /// <summary>
+    /// Gets or sets the value of the field.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">Thrown when the value type does not match the field definition.</exception>
     public object? Value
     {
         get => _value;
@@ -62,23 +88,40 @@ public class Field : IValidatableObject
         }
     }
 
+    /// <summary>
+    /// Gets the list of values if the field is a list.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">Thrown when the field is not a list.</exception>
     [JsonIgnore]
     public IReadOnlyList<object> Values => FieldDefinition.IsList
         ? ((IList)Value!).OfType<object>().ToList()
         : throw new InvalidOperationException("Only list fields have multiple values");
 
+    /// <summary>
+    /// Gets the type of the field.
+    /// </summary>
     [JsonIgnore]
-    public FieldType ValueType => FieldDefinition.Type;
+    public FieldType ValueType => FieldDefinition.Type ?? throw new InvalidOperationException("Invalid FieldDefinition");
 
+    /// <summary>
+    /// Determines whether the field is valid.
+    /// </summary>
+    /// <param name="validationContext">The validation context.</param>
+    /// <returns>True if the field is valid; otherwise, false.</returns>
     public bool IsValid(ValidationContext validationContext) => !Validate(validationContext).Any();
 
+    /// <summary>
+    /// Validates the field value based on the field definition and constraints.
+    /// </summary>
+    /// <param name="validationContext">The validation context.</param>
+    /// <returns>A collection of validation results.</returns>
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
         if (Value == null)
         {
             if (FieldDefinition.IsRequired)
             {
-                return new List<ValidationResult>() { new("Required field can not be null", new string[] { FieldDefinition.InputDefinition.Label.ToString() }) };
+                return new List<ValidationResult>() { new("Required field can not be null", new string[] { FieldDefinition.InputDefinition.Label.ToString()! }) };
             }
             else
             {

@@ -13,7 +13,7 @@
     <input id="MinValue"
            class="form-control @(!string.IsNullOrWhiteSpace(_error) ? "border-danger" : "")"
            value="@GetMinValue()"
-           type="@FieldDefinition.Type.InputType"
+           type="@FieldDefinition.Type!.InputType"
            @onchange="async (e) => await HandleChange(e, x => _constraint.MinValue = x)" />
 </div>
 
@@ -63,12 +63,12 @@
         try
         {
             _error = "";
-            var type = FieldDefinition.Type;
+            var type = FieldDefinition.Type!;
 
             var value = type.ConvertToValue($"{e.Value!.ToString()!}");
             setValue((IComparable)value);
         }
-        catch (Exception ex)
+        catch
         {
             _error = "Invalid Input";
             _constraint.MaxValue = 0;

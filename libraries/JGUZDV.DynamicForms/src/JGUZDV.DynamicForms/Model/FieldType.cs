@@ -6,28 +6,54 @@ using JGUZDV.L10n;
 
 namespace JGUZDV.DynamicForms.Model;
 
+/// <summary>
+/// Represents the base class for field types.
+/// </summary>
 [JsonConverter(typeof(FieldTypeConverter))]
 public abstract record FieldType
 {
+    /// <summary>
+    /// Gets the CLR type of the field.
+    /// </summary>
     [JsonIgnore]
     public abstract Type ClrType { get; }
 
+    /// <summary>
+    /// Gets the display name of the field type.
+    /// </summary>
     [JsonIgnore]
     public abstract L10nString DisplayName { get; }
 
+    /// <summary>
+    /// Gets the input type of the field.
+    /// </summary>
     [JsonIgnore]
     public virtual string InputType { get; } = "text";
 
+    /// <summary>
+    /// Converts the specified value to a JSON string.
+    /// </summary>
+    /// <param name="value">The value to convert.</param>
+    /// <returns>A JSON string representation of the value.</returns>
     public virtual string ConvertFromValue(object value)
     {
         return JsonSerializer.Serialize(value);
     }
 
+    /// <summary>
+    /// Converts the specified JSON string to an object of the CLR type.
+    /// </summary>
+    /// <param name="stringValue">The JSON string to convert.</param>
+    /// <returns>An object of the CLR type.</returns>
     public virtual object ConvertToValue(string stringValue)
     {
-        return JsonSerializer.Deserialize(stringValue, ClrType) ?? throw new InvalidOperationException($"Could not parse json: {stringValue} into target type: {ClrType.Name}"); ;
+        return JsonSerializer.Deserialize(stringValue, ClrType) ?? throw new InvalidOperationException($"Could not parse json: {stringValue} into target type: {ClrType.Name}");
     }
 
+    /// <summary>
+    /// Converts the field type to a JSON string.
+    /// </summary>
+    /// <returns>A JSON string representation of the field type.</returns>
     public string ToJson()
     {
         var options = new JsonSerializerOptions()
@@ -38,6 +64,11 @@ public abstract record FieldType
         return System.Text.Json.JsonSerializer.Serialize(this, options);
     }
 
+    /// <summary>
+    /// Creates a field type from the specified JSON string.
+    /// </summary>
+    /// <param name="json">The JSON string to parse.</param>
+    /// <returns>A field type object.</returns>
     public static FieldType FromJson(string json)
     {
         var options = new JsonSerializerOptions()
@@ -46,14 +77,20 @@ public abstract record FieldType
         };
         return JsonSerializer.Deserialize<FieldType>(json, options) ?? throw new InvalidOperationException($"Could not parse json: {json}");
     }
-
 }
 
-//this should allow to inject at runtime dynamically allowed values e.g. resources in ResourceProvisioning
+/// <summary>
+/// Provides the values for a field type at runtime. E.g. if allowed values are loaded from a database.
+/// </summary>
 public class ValueProvider
 {
     private readonly Dictionary<FieldType, Func<Task<List<ChoiceOption>>>> _funcs = new();
 
+    /// <summary>
+    /// Gets the allowed values for the specified field type.
+    /// </summary>
+    /// <param name="type">The field type.</param>
+    /// <returns>A tuple indicating whether the type is handled and the list of allowed values.</returns>
     public async Task<(bool HandlesType, List<ChoiceOption> AllowedValues)> GetValues(FieldType type)
     {
         if (_funcs.TryGetValue(type, out var func))
@@ -61,24 +98,42 @@ public class ValueProvider
             return (true, await func());
         }
 
-        return (false, []);
+        return (false, new List<ChoiceOption>());
     }
 }
 
+/// <summary>
+/// Represents a field type for DateOnly values.
+/// </summary>
 public record DateOnlyFieldType : FieldType
 {
+    /// <summary>
+    /// Gets the CLR type of the field.
+    /// </summary>
     [JsonIgnore]
     public override Type ClrType => typeof(DateOnly);
 
+    /// <summary>
+    /// Gets the input type of the field.
+    /// </summary>
     [JsonIgnore]
     public override string InputType => "date";
 
+    /// <summary>
+    /// Gets the display name of the field type.
+    /// </summary>
     public override L10nString DisplayName => new L10nString()
     {
         ["de"] = "Datum",
         ["en"] = "Date"
     };
 
+    /// <summary>
+    /// Converts the specified value to a JSON string.
+    /// </summary>
+    /// <param name="value">The value to convert.</param>
+    /// <returns>A JSON string representation of the value.</returns>
+    /// <exception cref="InvalidOperationException">Thrown when the value type is invalid.</exception>
     public override string ConvertFromValue(object value)
     {
         if (value is DateOnly dateOnly)
@@ -88,6 +143,12 @@ public record DateOnlyFieldType : FieldType
         throw new InvalidOperationException($"Invalid value type: {value.GetType().Name}. Expected DateOnly.");
     }
 
+    /// <summary>
+    /// Converts the specified JSON string to a DateOnly object.
+    /// </summary>
+    /// <param name="stringValue">The JSON string to convert.</param>
+    /// <returns>A DateOnly object.</returns>
+    /// <exception cref="InvalidOperationException">Thrown when the string cannot be parsed.</exception>
     public override object ConvertToValue(string stringValue)
     {
         if (DateOnly.TryParse(stringValue, out var dateOnly))
@@ -98,11 +159,20 @@ public record DateOnlyFieldType : FieldType
     }
 }
 
+/// <summary>
+/// Represents a field type for integer values.
+/// </summary>
 public record IntFieldType : FieldType
 {
+    /// <summary>
+    /// Gets the CLR type of the field.
+    /// </summary>
     [JsonIgnore]
     public override Type ClrType => typeof(int);
 
+    /// <summary>
+    /// Gets the display name of the field type.
+    /// </summary>
     public override L10nString DisplayName => new L10nString()
     {
         ["de"] = "Ganzzahl",
@@ -110,21 +180,40 @@ public record IntFieldType : FieldType
     };
 }
 
+/// <summary>
+/// Represents a field type for string values.
+/// </summary>
 public record StringFieldType : FieldType
 {
+    /// <summary>
+    /// Gets the CLR type of the field.
+    /// </summary>
     [JsonIgnore]
     public override Type ClrType => typeof(string);
 
+    /// <summary>
+    /// Converts the specified value to a string.
+    /// </summary>
+    /// <param name="value">The value to convert.</param>
+    /// <returns>A string representation of the value.</returns>
     public override string ConvertFromValue(object value)
     {
         return (string)value;
     }
 
+    /// <summary>
+    /// Converts the specified string to a string object.
+    /// </summary>
+    /// <param name="stringValue">The string to convert.</param>
+    /// <returns>A string object.</returns>
     public override object ConvertToValue(string stringValue)
     {
         return stringValue;
     }
 
+    /// <summary>
+    /// Gets the display name of the field type.
+    /// </summary>
     public override L10nString DisplayName => new L10nString()
     {
         ["de"] = "Text",

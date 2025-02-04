@@ -5,8 +5,10 @@ using JGUZDV.DynamicForms.Model;
 
 namespace JGUZDV.DynamicForms.Serialization;
 
+/// <inheritdoc />
 public class RangeConstraintConverter : JsonConverter<RangeConstraint>
 {
+    /// <inheritdoc />
     public override RangeConstraint Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.TokenType != JsonTokenType.StartObject)
@@ -47,6 +49,7 @@ public class RangeConstraintConverter : JsonConverter<RangeConstraint>
         return rangeConstraint;
     }
 
+    /// <inheritdoc />
     public override void Write(Utf8JsonWriter writer, RangeConstraint value, JsonSerializerOptions options)
     {
         if (value.FieldType == null)
@@ -72,8 +75,4 @@ public class RangeConstraintConverter : JsonConverter<RangeConstraint>
         writer.WriteEndObject();
     }
 
-    public override bool CanConvert(Type typeToConvert)
-    {
-        return typeof(RangeConstraint).IsAssignableFrom(typeToConvert);
-    }
 }

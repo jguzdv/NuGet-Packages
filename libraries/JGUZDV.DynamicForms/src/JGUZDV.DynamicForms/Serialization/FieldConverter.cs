@@ -3,8 +3,10 @@ using System.Text.Json.Serialization;
 
 using JGUZDV.DynamicForms.Model;
 
+/// <inheritdoc />
 public class FieldConverter : JsonConverter<Field>
 {
+    /// <inheritdoc />
     public override Field? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.TokenType != JsonTokenType.StartObject)
@@ -45,6 +47,7 @@ public class FieldConverter : JsonConverter<Field>
         return new Field(fieldDefinition, value);
     }
 
+    /// <inheritdoc />
     public override void Write(Utf8JsonWriter writer, Field value, JsonSerializerOptions options)
     {
         writer.WriteStartObject();

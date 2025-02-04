@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace JGUZDV.DynamicForms.Blazor.Resources
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class ComponentStrings
     {
     }
