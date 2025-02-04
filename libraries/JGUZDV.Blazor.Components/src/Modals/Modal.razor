@@ -50,10 +50,19 @@
     [Parameter]
     public string? ModalFooterClasses { get; set; }
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if(firstRender)
+        {
+            _jsModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/JGUZDV.Blazor.Components/Modals/Modal.razor.js");
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
     protected override async Task OnParametersSetAsync()
     {
         await base.OnParametersSetAsync();
-        _jsModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/JGUZDV.Blazor.Components/js/Modal.js").AsTask();
 
         if (Title != null && Header != null)
             throw new InvalidOperationException($"{nameof(Title)} cannot be set, if {nameof(Header)} is set.");
