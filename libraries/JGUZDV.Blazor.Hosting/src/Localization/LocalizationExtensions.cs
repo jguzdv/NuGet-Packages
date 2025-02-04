@@ -4,10 +4,8 @@ using JGUZDV.Blazor.Components.Localization;
 
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Localization;
 
-namespace JGUZDV.Blazor.Components;
+namespace JGUZDV.Blazor.Hosting.Localization;
 
 /// <summary>
 /// Extensions for localization services

@@ -9,7 +9,6 @@ namespace JGUZDV.AspNetCore.Hosting;
 /// <summary>
 /// A builder for configuring a WebAssembly application (aka Blazor client).
 /// </summary>
-[SupportedOSPlatform("browser")]
 public class JGUZDVWebAssemblyApplicationBuilder
 {
     private readonly WebAssemblyHostBuilder _webAssemblyHostBuilder;
