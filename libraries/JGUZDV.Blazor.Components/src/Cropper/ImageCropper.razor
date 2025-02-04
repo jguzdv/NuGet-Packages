@@ -1,5 +1,8 @@
 @using Microsoft.Extensions.Logging
 @using Microsoft.JSInterop
+
+@implements IAsyncDisposable
+
 @{
     var showCropper = !string.IsNullOrWhiteSpace(Base64Image) && IsInitialized;
 }
@@ -9,44 +12,44 @@
         @if (showCropper)
         {
             <img @ref="HtmlSourceImage"
-                 class="source-image"
-                 src="@ImageDataUrl"
-                 style="@SourceImageStyle"
-                 @onload="() => OnSourceImageLoad()"
-                 @onerror="() => OnImageLoadError()" />
+            class="source-image"
+            src="@ImageDataUrl"
+            style="@SourceImageStyle"
+            @onload="() => OnSourceImageLoad()"
+            @onerror="() => OnImageLoadError()" />
 
             @if (IsImageVisible)
             {
                 <div class="overlay" style="@OverlayStyle"></div>
 
                 <div class="cropper" style="@CropperStyle"
-                     @onkeydown="(e) => OnKeyDown(e)" tabindex="0">
+                @onkeydown="(e) => OnKeyDown(e)" tabindex="0">
 
                     <div @onmousedown="(e) => StartDrag(e, MoveType.Move)"
-                         @ontouchstart="(e) => StartDrag(e, MoveType.Move)"
-                         class="move">
+                    @ontouchstart="(e) => StartDrag(e, MoveType.Move)"
+                    class="move">
                     </div>
 
                     @if (!Settings.HideResizeSquares)
                     {
                         <span class="resize topleft"
-                              @onmousedown="(e) => StartDrag(e, MoveType.Resize, DragDirections.UpLeft)"
-                              @ontouchstart="(e) => StartDrag(e, MoveType.Resize, DragDirections.UpLeft)">
+                        @onmousedown="(e) => StartDrag(e, MoveType.Resize, DragDirections.UpLeft)"
+                        @ontouchstart="(e) => StartDrag(e, MoveType.Resize, DragDirections.UpLeft)">
                             <span class="square"></span>
                         </span>
                         <span class="resize topright"
-                              @onmousedown="(e) => StartDrag(e, MoveType.Resize, DragDirections.UpRight)"
-                              @ontouchstart="(e) => StartDrag(e, MoveType.Resize, DragDirections.UpRight)">
+                        @onmousedown="(e) => StartDrag(e, MoveType.Resize, DragDirections.UpRight)"
+                        @ontouchstart="(e) => StartDrag(e, MoveType.Resize, DragDirections.UpRight)">
                             <span class="square"></span>
                         </span>
                         <span class="resize bottomright"
-                              @onmousedown="(e) => StartDrag(e, MoveType.Resize, DragDirections.DownRight)"
-                              @ontouchstart="(e) => StartDrag(e, MoveType.Resize, DragDirections.DownRight)">
+                        @onmousedown="(e) => StartDrag(e, MoveType.Resize, DragDirections.DownRight)"
+                        @ontouchstart="(e) => StartDrag(e, MoveType.Resize, DragDirections.DownRight)">
                             <span class="square"></span>
                         </span>
                         <span class="resize bottomleft"
-                              @onmousedown="(e) => StartDrag(e, MoveType.Resize, DragDirections.DownLeft)"
-                              @ontouchstart="(e) => StartDrag(e, MoveType.Resize, DragDirections.DownLeft)">
+                        @onmousedown="(e) => StartDrag(e, MoveType.Resize, DragDirections.DownLeft)"
+                        @ontouchstart="(e) => StartDrag(e, MoveType.Resize, DragDirections.DownLeft)">
                             <span class="square"></span>
                         </span>
 
@@ -66,20 +69,20 @@
                             </span>
 
                             <span class="resize-bar top"
-                                  @onmousedown="(e) => StartDrag(e, MoveType.Resize, DragDirections.Up)"
-                                  @ontouchstart="(e) => StartDrag(e, MoveType.Resize, DragDirections.Up)">
+                            @onmousedown="(e) => StartDrag(e, MoveType.Resize, DragDirections.Up)"
+                            @ontouchstart="(e) => StartDrag(e, MoveType.Resize, DragDirections.Up)">
                             </span>
                             <span class="resize-bar right"
-                                  @onmousedown="(e) => StartDrag(e, MoveType.Resize, DragDirections.Right)"
-                                  @ontouchstart="(e) => StartDrag(e, MoveType.Resize, DragDirections.Right)">
+                            @onmousedown="(e) => StartDrag(e, MoveType.Resize, DragDirections.Right)"
+                            @ontouchstart="(e) => StartDrag(e, MoveType.Resize, DragDirections.Right)">
                             </span>
                             <span class="resize-bar bottom"
-                                  @onmousedown="(e) => StartDrag(e, MoveType.Resize, DragDirections.Down)"
-                                  @ontouchstart="(e) => StartDrag(e, MoveType.Resize, DragDirections.Down)">
+                            @onmousedown="(e) => StartDrag(e, MoveType.Resize, DragDirections.Down)"
+                            @ontouchstart="(e) => StartDrag(e, MoveType.Resize, DragDirections.Down)">
                             </span>
                             <span class="resize-bar left"
-                                  @onmousedown="(e) => StartDrag(e, MoveType.Resize, DragDirections.Left)"
-                                  @ontouchstart="(e) => StartDrag(e, MoveType.Resize, DragDirections.Left)">
+                            @onmousedown="(e) => StartDrag(e, MoveType.Resize, DragDirections.Left)"
+                            @ontouchstart="(e) => StartDrag(e, MoveType.Resize, DragDirections.Left)">
                             </span>
                         }
                     }
@@ -117,26 +120,8 @@
     public CropperSettings Settings { get; set; } = null!;
 
     [Parameter]
-    public string? Base64Image
-    {
-        get => _base64Image;
-        set
-        {
-            if (_base64Image == value)
-                return;
+    public string? Base64Image { get; set; }
 
-            if (string.IsNullOrWhiteSpace(value))
-                _base64Image = null;
-            else
-                _base64Image = value;
-
-            ResetImageAndCropper();
-
-            if (_base64Image != null)
-                LoadImage();
-        }
-    }
-    private string? _base64Image;
 
     [Parameter]
     public EventCallback<CropResult> OnCrop { get; set; }
@@ -157,10 +142,10 @@
     private RenderFragment DefaultError =>
     new RenderFragment(b =>
     {
-    b.OpenElement(0, "div");
-    b.AddAttribute(0, "class", "alert alert-danger");
-    b.AddContent(0, LR["Cropper.DefaultError"]);
-    b.CloseElement();
+        b.OpenElement(0, "div");
+        b.AddAttribute(0, "class", "alert alert-danger");
+        b.AddContent(0, LR["Cropper.DefaultError"]);
+        b.CloseElement();
     });
 
     public string? WrapperStyle =>
@@ -216,12 +201,25 @@
         IsInitialized = true;
     }
 
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        ResetImageAndCropper();
+
+        if (Base64Image != null) {
+            LoadImage();
+        }
+    }
+
+
     public async ValueTask DisposeAsync()
     {
         await _cropperInstance.InvokeVoidAsync("Dispose");
 
         _dotNetObjectRef.Dispose();
     }
+
 
     private void ResetImageAndCropper()
     {
