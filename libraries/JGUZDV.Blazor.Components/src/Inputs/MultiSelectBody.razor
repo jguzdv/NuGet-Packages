@@ -57,30 +57,32 @@
 </div>
 @code {
 
-    [Parameter]
-    [EditorRequired]
+    [Parameter, EditorRequired]
     public List<T> Items { get; set; } = default!;
 
-    [Parameter]
-    [EditorRequired]
+
+    [Parameter, EditorRequired]
     public RenderFragment<T> ItemTemplate { get; set; } = default!;
 
-    [Parameter]
-    [EditorRequired]
+    [Parameter, EditorRequired]
     public Func<T?, TKey> ItemKey { get; set; } = default!;
 
+    
     [Parameter]
-    [EditorRequired]
+    public T? Value { get; set; } = default!;
+
+    [Parameter, EditorRequired]
     public List<T> Values { get; set; } = default!;
+
+
+    [Parameter]
+    public EventCallback<T> ValueChanged { get; set; }
 
     [Parameter]
     public EventCallback<List<T>> ValuesChanged { get; set; }
 
-    [Parameter]
-    public T? Value { get; set; } = default!;
-
-    [Parameter]
-    public EventCallback<T> ValueChanged { get; set; }
+    
+    
 
     [Parameter]
     public string? AllOptionLabel { get; set; }
@@ -102,6 +104,7 @@
 
     private string? _filter;
 
+
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
@@ -115,6 +118,7 @@
         if (FilterLabel != null && Filter == null)
             throw new InvalidOperationException($"{nameof(Filter)} must be set to use filtering");
     }
+
 
     private async Task HandleItemClicked(T item)
     {
@@ -136,6 +140,7 @@
             await ValuesChanged.InvokeAsync(Values);
         }
     }
+
 
     private async Task ToggleAll()
     {
