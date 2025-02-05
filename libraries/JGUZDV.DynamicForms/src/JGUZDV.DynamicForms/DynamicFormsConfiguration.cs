@@ -15,6 +15,7 @@ namespace JGUZDV.DynamicForms
                 new DateOnlyFieldType(),
                 new IntFieldType(),
                 new StringFieldType(),
+                new FileFieldType()
             };
 
         /// <summary>
@@ -35,9 +36,10 @@ namespace JGUZDV.DynamicForms
 
         private static Dictionary<FieldType, List<Type>> _fieldConstraints = new()
             {
-                { new StringFieldType(), new List<Type> { typeof(RegexConstraint), typeof(StringLengthConstraint), typeof(RangeConstraint) } },
-                { new DateOnlyFieldType(), new List<Type> { typeof(RangeConstraint) } },
-                { new IntFieldType(), new List<Type> { typeof(RangeConstraint) } }
+                { new StringFieldType(), [ typeof(RegexConstraint), typeof(StringLengthConstraint), typeof(RangeConstraint) ] },
+                { new DateOnlyFieldType(), [ typeof(RangeConstraint) ] },
+                { new IntFieldType(), [typeof(RangeConstraint)] },
+                { new FileFieldType(), []}
             };
 
         /// <summary>

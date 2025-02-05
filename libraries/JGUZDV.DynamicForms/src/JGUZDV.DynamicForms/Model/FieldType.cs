@@ -220,3 +220,30 @@ public record StringFieldType : FieldType
         ["en"] = "Text"
     };
 }
+
+
+public record FileFieldType : FieldType
+{
+    /// <summary>
+    /// Gets the CLR type of the field.
+    /// </summary>
+    [JsonIgnore]
+    public override Type ClrType => typeof(FileType);
+
+    /// <summary>
+    /// Gets the display name of the field type.
+    /// </summary>
+    public override L10nString DisplayName => new L10nString()
+    {
+        ["de"] = "Datei",
+        ["en"] = "File"
+    };
+
+    public record FileType
+    {
+        public required string Identifier { get; set; }
+    }
+
+    //TODO: config
+    public static string UploadURL { get; set; } = "api/upload";
+}

@@ -1,0 +1,26 @@
+﻿@using JGUZDV.DynamicForms.Model
+@using System.ComponentModel.DataAnnotations
+
+<DynamicComponent Type="FieldViewFactory.GetViewType(Field)" Parameters="_params"></DynamicComponent>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public required Field Field { get; set; }
+
+    [Parameter]
+    public EventCallback<Field> FieldChanged { get; set; }
+
+
+    private Dictionary<string, object> _params = new();
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        _params = new Dictionary<string, object>
+        {
+            { nameof(Field), Field },
+            { nameof(FieldChanged), FieldChanged },
+        };
+    }
+}

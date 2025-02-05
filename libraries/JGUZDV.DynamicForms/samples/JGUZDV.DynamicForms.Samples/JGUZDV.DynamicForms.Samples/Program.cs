@@ -76,6 +76,14 @@ app.MapGet("api/definitions", async (TestDbContext context) =>
 
 app.MapPost("api/documents/save", async (List<Field> fields, TestDbContext context) =>
 {
+    var fileFields = fields
+        .Where(x => x.FieldDefinition.Type is FileFieldType)
+        .ToList();
+
+    fileFields.Select(x => x.Value)
+        .OfType<FileFieldType.FileType>()
+        .Select(x => x.Identifier);
+
     var document = new Document();
     document.Fields.AddRange(fields);
     Console.WriteLine(document);
@@ -87,6 +95,29 @@ app.MapPost("api/documents/save", async (List<Field> fields, TestDbContext conte
 app.MapGet("api/documents", async (TestDbContext context) =>
 {
     return await context.Documents.ToListAsync();
+});
+
+app.MapPost("/api/upload", async (HttpRequest request, IWebHostEnvironment env, string identifier, string filename) =>
+{
+    if (string.IsNullOrEmpty(identifier) || string.IsNullOrEmpty(filename))
+    {
+        return Results.BadRequest("Invalid identifier or filename.");
+    }
+
+    var identifierFolder = Path.Combine(env.WebRootPath, "uploads", identifier);
+    if (!Directory.Exists(identifierFolder))
+    {
+        Directory.CreateDirectory(identifierFolder);
+    }
+
+    var filePath = Path.Combine(identifierFolder, filename);
+
+    using (var fileStream = new FileStream(filePath, FileMode.Create))
+    {
+        await request.Body.CopyToAsync(fileStream);
+    }
+
+    return Results.Ok(new { Message = "File uploaded successfully.", FilePath = filePath });
 });
 
 app.MapRazorComponents<App>()

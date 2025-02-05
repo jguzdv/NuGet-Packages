@@ -1,7 +1,6 @@
-﻿using JGUZDV.DynamicForms.Blazor.Constraints;
-using JGUZDV.DynamicForms.Model;
+﻿using JGUZDV.DynamicForms.Model;
 
-namespace JGUZDV.DynamicForms.Blazor
+namespace JGUZDV.DynamicForms.Blazor.Constraints
 {
     /// <summary>
     /// Provides a factory for mapping constraints to their corresponding view types.

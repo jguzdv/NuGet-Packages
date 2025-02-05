@@ -1,0 +1,63 @@
+﻿@using JGUZDV.DynamicForms.Model
+@inject HttpClient Http
+@inject NavigationManager Navigation
+
+<h3>FileFieldInput</h3>
+
+<EditForm Model="Field" OnValidSubmit="UploadFiles">
+    <div class="mb-3">
+        <label for="fileIdentifier" class="form-label">File Identifier</label>
+        <InputText class="form-control" id="fileIdentifier" @bind-Value="fileIdentifier" />
+    </div>
+
+    <div class="mb-3">
+        <label for="fileUpload" class="form-label">Upload Files</label>
+        <InputFile class="form-control" id="fileUpload" OnChange="OnFilesSelected" multiple="@Field.FieldDefinition.IsList" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Upload</button>
+</EditForm>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public required Field Field { get; set; }
+
+    [Parameter]
+    public EventCallback<Field> FieldChanged { get; set; }
+
+    private string fileIdentifier = string.Empty;
+    private List<IBrowserFile> selectedFiles = new();
+
+    private void OnFilesSelected(InputFileChangeEventArgs e)
+    {
+        selectedFiles = e.GetMultipleFiles().ToList();
+    }
+
+    private async Task UploadFiles()
+    {
+        if (!selectedFiles.Any())
+        {
+            return;
+        }
+
+        try
+        {
+            foreach (var file in selectedFiles)
+            {
+                var streamContent = new StreamContent(file.OpenReadStream());
+                var response = await Http.PostAsync($"{Navigation.BaseUri}{FileFieldType.UploadURL}?identifier={fileIdentifier}&filename={file.Name}", streamContent);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    Field.Value = new FileFieldType.FileType { Identifier = fileIdentifier };
+                    await FieldChanged.InvokeAsync(Field);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            // Handle exception
+        }
+    }
+}
