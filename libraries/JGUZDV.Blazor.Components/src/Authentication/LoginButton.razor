@@ -11,7 +11,7 @@
 @code {
     private const string AutoLoginKey = "LoginButton.AutoLoginRan";
 
-    [CascadingParameter, NotNull] 
+    [CascadingParameter, NotNull]
     Task<AuthenticationState>? AuthenticationStateTask { get; set; }
 
     [Parameter]
@@ -42,9 +42,10 @@
 
         var authenticationState = await AuthenticationStateTask;
 
-        if (authenticationState.User.Identity?.IsAuthenticated != true)
+
+        if (UseAutoLogin)
         {
-            if (UseAutoLogin)
+            if (authenticationState.User.Identity?.IsAuthenticated != true)
             {
                 var hasLoginBeenTried = await JSRuntime.InvokeAsync<string>("localStorage.getItem", AutoLoginKey);
                 if (hasLoginBeenTried != "true")
@@ -55,10 +56,10 @@
                     _navigation.NavigateTo(uri.ToString(), true);
                 }
             }
-        } 
-        else
-        {
-            _ = JSRuntime.InvokeVoidAsync("localStorage.setItem", AutoLoginKey, false);
+            else
+            {
+                _ = JSRuntime.InvokeVoidAsync("localStorage.setItem", AutoLoginKey, false);
+            }
         }
     }
 }
@@ -76,7 +77,7 @@
                 <i class="fas fa-sign-in-alt"></i>
                 <span class="d-none d-lg-inline">@LR["AuthView.LoginButton"]</span>
             </a>
-        } 
+        }
         else
         {
             <LoginButtonDropdown DropdownItems="@DropdownItems" UserName="@context.User.Identity?.Name" LogoutUrl="@LogoutUrl" />
