@@ -2,6 +2,7 @@
 @using Microsoft.JSInterop
 
 @implements IAsyncDisposable
+@rendermode @(new InteractiveWebAssemblyRenderMode(prerender: false))
 
 @{
     var showCropper = !string.IsNullOrWhiteSpace(Base64Image) && IsInitialized;
@@ -192,14 +193,19 @@
     }
 
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        _jsModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/ZDV.BlazorComponents/js/Cropper/Cropper.js").AsTask();
-        _cropperInstance = await _jsModule.InvokeAsync<IJSObjectReference>("createCropper", _dotNetObjectRef, HtmlWrapper);
+        await base.OnAfterRenderAsync(firstRender);
 
-        await base.OnInitializedAsync();
-        IsInitialized = true;
+        if (firstRender)
+        {
+            _jsModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/JGUZDV.Blazor.Components/Cropper/ImageCropper.razor.js");
+            _cropperInstance = await _jsModule.InvokeAsync<IJSObjectReference>("createCropper", _dotNetObjectRef, HtmlWrapper);
+
+            IsInitialized = true;
+        }
     }
+
 
     protected override void OnParametersSet()
     {
