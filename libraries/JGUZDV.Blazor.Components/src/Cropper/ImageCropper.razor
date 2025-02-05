@@ -1,0 +1,560 @@
+@using Microsoft.Extensions.Logging
+@using Microsoft.JSInterop
+
+@implements IAsyncDisposable
+@rendermode @(new InteractiveWebAssemblyRenderMode(prerender: false))
+
+@{
+    var showCropper = !string.IsNullOrWhiteSpace(Base64Image) && IsInitialized;
+}
+
+<div class="cropper-root @(!showCropper?"d-none":"")" @ref="HtmlWrapper">
+    <div style="@WrapperStyle">
+        @if (showCropper)
+        {
+            <img @ref="HtmlSourceImage"
+            class="source-image"
+            src="@ImageDataUrl"
+            style="@SourceImageStyle"
+            @onload="() => OnSourceImageLoad()"
+            @onerror="() => OnImageLoadError()" />
+
+            @if (IsImageVisible)
+            {
+                <div class="overlay" style="@OverlayStyle"></div>
+
+                <div class="cropper" style="@CropperStyle"
+                @onkeydown="(e) => OnKeyDown(e)" tabindex="0">
+
+                    <div @onmousedown="(e) => StartDrag(e, MoveType.Move)"
+                    @ontouchstart="(e) => StartDrag(e, MoveType.Move)"
+                    class="move">
+                    </div>
+
+                    @if (!Settings.HideResizeSquares)
+                    {
+                        <span class="resize topleft"
+                        @onmousedown="(e) => StartDrag(e, MoveType.Resize, DragDirections.UpLeft)"
+                        @ontouchstart="(e) => StartDrag(e, MoveType.Resize, DragDirections.UpLeft)">
+                            <span class="square"></span>
+                        </span>
+                        <span class="resize topright"
+                        @onmousedown="(e) => StartDrag(e, MoveType.Resize, DragDirections.UpRight)"
+                        @ontouchstart="(e) => StartDrag(e, MoveType.Resize, DragDirections.UpRight)">
+                            <span class="square"></span>
+                        </span>
+                        <span class="resize bottomright"
+                        @onmousedown="(e) => StartDrag(e, MoveType.Resize, DragDirections.DownRight)"
+                        @ontouchstart="(e) => StartDrag(e, MoveType.Resize, DragDirections.DownRight)">
+                            <span class="square"></span>
+                        </span>
+                        <span class="resize bottomleft"
+                        @onmousedown="(e) => StartDrag(e, MoveType.Resize, DragDirections.DownLeft)"
+                        @ontouchstart="(e) => StartDrag(e, MoveType.Resize, DragDirections.DownLeft)">
+                            <span class="square"></span>
+                        </span>
+
+                        @if (!Settings.EnsureAspectRatio)
+                        {
+                            <span class="resize top">
+                                <span class="square"></span>
+                            </span>
+                            <span class="resize right">
+                                <span class="square"></span>
+                            </span>
+                            <span class="resize bottom">
+                                <span class="square"></span>
+                            </span>
+                            <span class="resize left">
+                                <span class="square"></span>
+                            </span>
+
+                            <span class="resize-bar top"
+                            @onmousedown="(e) => StartDrag(e, MoveType.Resize, DragDirections.Up)"
+                            @ontouchstart="(e) => StartDrag(e, MoveType.Resize, DragDirections.Up)">
+                            </span>
+                            <span class="resize-bar right"
+                            @onmousedown="(e) => StartDrag(e, MoveType.Resize, DragDirections.Right)"
+                            @ontouchstart="(e) => StartDrag(e, MoveType.Resize, DragDirections.Right)">
+                            </span>
+                            <span class="resize-bar bottom"
+                            @onmousedown="(e) => StartDrag(e, MoveType.Resize, DragDirections.Down)"
+                            @ontouchstart="(e) => StartDrag(e, MoveType.Resize, DragDirections.Down)">
+                            </span>
+                            <span class="resize-bar left"
+                            @onmousedown="(e) => StartDrag(e, MoveType.Resize, DragDirections.Left)"
+                            @ontouchstart="(e) => StartDrag(e, MoveType.Resize, DragDirections.Left)">
+                            </span>
+                        }
+                    }
+                </div>
+            }
+            else if (HasError)
+            {
+                @DefaultError
+            }
+            else
+            {
+                <ActivityIndicator />
+            }
+        }
+    </div>
+</div>
+
+@code {
+    [Inject, NotNull] IJSRuntime? JSRuntime { get; set; }
+    [Inject, NotNull] ILogger<ImageCropper>? _logger { get; set; }
+    [Inject, NotNull] IStringLocalizer<ComponentStrings>? LR { get; set; }
+
+    private IJSObjectReference _jsModule = null!;
+    private IJSObjectReference _cropperInstance = null!;
+
+    private DotNetObjectReference<ImageCropper> _dotNetObjectRef;
+
+    private ElementReference HtmlWrapper { get; set; }
+    private ElementReference HtmlSourceImage { get; set; }
+
+    private CropperImage? SourceImage { get; set; }
+
+
+    [Parameter]
+    public CropperSettings Settings { get; set; } = null!;
+
+    [Parameter]
+    public string? Base64Image { get; set; }
+
+
+    [Parameter]
+    public EventCallback<CropResult> OnCrop { get; set; }
+
+    public bool IsInitialized { get; private set; }
+    public bool IsImageVisible
+    {
+        get => _isImageVisible;
+        private set
+        {
+            _logger.LogDebug($"IsImageVisible: {value}");
+            _isImageVisible = value;
+        }
+    }
+    public string? ImageDataUrl { get; private set; }
+
+    public bool HasError { get; set; }
+    private RenderFragment DefaultError =>
+    new RenderFragment(b =>
+    {
+        b.OpenElement(0, "div");
+        b.AddAttribute(0, "class", "alert alert-danger");
+        b.AddContent(0, LR["Cropper.DefaultError"]);
+        b.CloseElement();
+    });
+
+    public string? WrapperStyle =>
+    IsImageVisible ? $"background: {Settings.BackgroundColor}" : null;
+
+    private string MarginLeft =>
+    FormattableString.Invariant($"calc(50% - {SourceImage?.RenderSize.Width / 2}px)");
+
+    public string? OverlayStyle =>
+    FormattableString.Invariant($"width: {SourceImage?.RenderSize.Width:0.##}px;") +
+    FormattableString.Invariant($"height: {SourceImage?.RenderSize.Height:0.##}px;") +
+    FormattableString.Invariant($"margin-left: {MarginLeft};");
+
+    public string? CropperStyle =>
+    FormattableString.Invariant($"top: {Cropper.Y1:0.##}px;") +
+    FormattableString.Invariant($"left: {Cropper.X1:0.##}px;") +
+    FormattableString.Invariant($"width: {Cropper.W:0.##}px;") +
+    FormattableString.Invariant($"height: {Cropper.H:0.##}px;") +
+    FormattableString.Invariant($"margin-left: {MarginLeft};") +
+    FormattableString.Invariant($"visibility: {(IsImageVisible ? "visible" : "hidden")};");
+
+    public string? SourceImageStyle =>
+    $"visibility: {(IsImageVisible ? "visible" : "hidden")};" +
+    $"transform: {TransformStyle}";
+
+    public string TransformStyle =>
+    FormattableString.Invariant($"scaleX({Transformation.Scale * (Transformation.FlipHorizontal ? -1 : 1):0.##}) ") +
+    FormattableString.Invariant($"scaleY({Transformation.Scale * (Transformation.FlipVertical ? -1 : 1):0.##}) ") +
+    FormattableString.Invariant($"rotate({Transformation.Rotate}deg)");
+
+
+    private ImageTransformation Transformation { get; set; } = new();
+
+    private DragInfo? DragInfo { get; set; }
+    private Rect Cropper { get; set; }
+
+    private int StepSize { get; set; } = 3;
+
+
+    public ImageCropper()
+    {
+        _dotNetObjectRef = DotNetObjectReference.Create(this);
+        Cropper = new(0, 0, 1000, 1000);
+    }
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (firstRender)
+        {
+            _jsModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/JGUZDV.Blazor.Components/Cropper/ImageCropper.razor.js");
+            _cropperInstance = await _jsModule.InvokeAsync<IJSObjectReference>("createCropper", _dotNetObjectRef, HtmlWrapper);
+
+            IsInitialized = true;
+        }
+    }
+
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        ResetImageAndCropper();
+
+        if (Base64Image != null) {
+            LoadImage();
+        }
+    }
+
+
+    public async ValueTask DisposeAsync()
+    {
+        await _cropperInstance.InvokeVoidAsync("Dispose");
+
+        _dotNetObjectRef.Dispose();
+    }
+
+
+    private void ResetImageAndCropper()
+    {
+        IsImageVisible = false;
+        HasError = false;
+
+        ImageDataUrl = null;
+        SourceImage = null;
+
+        DragInfo = null;
+        Cropper = new(0, 0, 10000, 10000);
+
+        StepSize = 3;
+    }
+
+
+
+    private void LoadImage()
+    {
+        _logger.LogDebug($"Load image has been called - replace ImageDataUrl. (HasContent: {Base64Image?.Any()})");
+        if (string.IsNullOrWhiteSpace(Base64Image))
+            return;
+
+        ImageDataUrl = "data:;base64," + Base64Image;
+    }
+
+
+    internal async Task OnSourceImageLoad()
+    {
+        _logger.LogDebug($"SourceImage has loaded");
+
+        //var jsModule = await _jsModule;
+        var jsDimensions = await _cropperInstance.InvokeAsync<HtmlImageSize>("getDimensions", HtmlSourceImage);
+
+        _logger.LogDebug($"SourceImage Dimensions: {jsDimensions}");
+        SourceImage = new CropperImage(
+            new(jsDimensions.Height, jsDimensions.Width),
+            new(jsDimensions.RenderHeight, jsDimensions.RenderWidth)
+        );
+
+        ResetCropperPosition();
+        IsImageVisible = true;
+        StateHasChanged();
+
+        await CropImage();
+    }
+
+    internal void OnImageLoadError()
+    {
+        HasError = true;
+    }
+
+
+    [JSInvokable]
+    public void SetRenderSize(Size renderSize)
+    {
+        if (SourceImage == null)
+            return;
+
+        var oldScale = SourceImage.Scale;
+        SourceImage.RenderSize = renderSize;
+
+        RescaleCropper(oldScale, SourceImage.Scale);
+        CheckCropper(false);
+        StateHasChanged();
+    }
+
+
+    private HashSet<string> keyboardArrows = new() { "ArrowUp", "ArrowDown", "ArrowRight", "ArrowLeft" };
+    private bool _isImageVisible;
+
+    public async Task OnKeyDown(KeyboardEventArgs e)
+    {
+        if (char.IsDigit(e.Key, 0))
+            if (int.TryParse(e.Key[..1], out var stepSize))
+                StepSize = stepSize;
+
+        if (!keyboardArrows.Contains(e.Key))
+            return;
+
+        var moveType = e.ShiftKey ? MoveType.Resize : MoveType.Move;
+        var direction = Enum.Parse<DragDirections>(e.Key[5..]);
+
+        await StartDrag(new Vector(0, 0), moveType, direction);
+        Dragging(Vector.FromDirection(direction, StepSize));
+        await StopDrag();
+        StateHasChanged();
+    }
+
+
+    public Task StartDrag(EventArgs e, MoveType type, DragDirections direction = default)
+    => StartDrag(Vector.FromEvent(e), type, direction);
+
+    public async Task StartDrag(Vector origin, MoveType type, DragDirections direction = default)
+    {
+        if (DragInfo != null)
+            return;
+
+        //var jsModule = await _jsModule;
+        await _cropperInstance.InvokeVoidAsync("AddDragListeners");
+
+        DragInfo = new(origin, Cropper, type, direction);
+    }
+
+    [JSInvokable]
+    public async Task StopDrag()
+    {
+        if (DragInfo == null)
+            return;
+
+        CheckCropper(true);
+        DragInfo = null;
+        await CropImage();
+    }
+
+    [JSInvokable]
+    public void Dragging(Vector v)
+    {
+        if (DragInfo == null)
+            return;
+
+        if (DragInfo.MoveType == MoveType.Move)
+            MoveCropper(v);
+
+        if (DragInfo.MoveType == MoveType.Resize)
+            ResizeCropper(v);
+
+        CheckCropper(DragInfo.MoveType == MoveType.Move);
+        //StateHasChanged();
+    }
+
+
+    public void ResetCropperPosition()
+    {
+        if (SourceImage == null)
+            return;
+
+        _logger.LogDebug($"Resetting cropper position");
+
+        var thirdW = SourceImage.RenderSize.Width / 3.0;
+        var thirdH = SourceImage.RenderSize.Height / 3.0;
+
+        Cropper = new(thirdW, thirdH, thirdW * 2, thirdH * 2);
+        CheckCropper(false);
+    }
+
+    private void RescaleCropper(Size oldScale, Size newScale)
+    {
+        if (SourceImage == null)
+            return;
+
+        Cropper = new Rect(
+            Cropper.X1 / oldScale.Width * newScale.Width,
+            Cropper.Y1 / oldScale.Height * newScale.Height,
+            Cropper.X2 / oldScale.Width * newScale.Width,
+            Cropper.Y1 / oldScale.Height * newScale.Height
+            );
+    }
+
+
+    public void MoveCropper(Vector cPos)
+    {
+        if (DragInfo == null)
+            return;
+
+        var diffX = cPos.X - DragInfo.Origin.X;
+        var diffY = cPos.Y - DragInfo.Origin.Y;
+
+        Cropper = new(
+            DragInfo.Cropper.X1 + diffX, DragInfo.Cropper.Y1 + diffY,
+            DragInfo.Cropper.X2 + diffX, DragInfo.Cropper.Y2 + diffY
+        );
+    }
+
+    public void ResizeCropper(Vector cPos)
+    {
+        if (DragInfo == null)
+            return;
+
+        var diffX = cPos.X - DragInfo.Origin.X;
+        var diffY = cPos.Y - DragInfo.Origin.Y;
+
+        var dragDir = DragInfo.Direction;
+        if (Settings.EnsureAspectRatio)
+        {
+            var sign =
+                (dragDir.HasFlag(DragDirections.Down) && dragDir.HasFlag(DragDirections.Right)) ||
+                (dragDir.HasFlag(DragDirections.Up) && dragDir.HasFlag(DragDirections.Left))
+                ? 1 : -1;
+
+            if (Math.Abs(diffX) > Math.Abs(diffY))
+                diffY = diffX / Settings.AspectRatio * sign;
+            else
+                diffX = diffY * Settings.AspectRatio * sign;
+        }
+
+        if (dragDir.HasFlag(DragDirections.Up))
+        {
+            Cropper = Cropper with
+                {
+                    Y1 = DragInfo.Cropper.Y1 + diffY
+                };
+        }
+
+        if (dragDir.HasFlag(DragDirections.Down))
+        {
+            Cropper = Cropper with
+                {
+                    Y2 = DragInfo.Cropper.Y2 + diffY
+                };
+        }
+
+        if (dragDir.HasFlag(DragDirections.Left))
+        {
+            Cropper = Cropper with
+                {
+                    X1 = DragInfo.Cropper.X1 + diffX
+                };
+        }
+
+        if (dragDir.HasFlag(DragDirections.Right))
+        {
+            Cropper = Cropper with
+                {
+                    X2 = DragInfo.Cropper.X2 + diffX
+                };
+        }
+    }
+
+
+    public void CheckCropper(bool keepSize)
+    {
+        if (Settings.EnsureAspectRatio)
+            CheckCropperAspectRatio();
+
+        CheckCropperPosition(keepSize);
+        StateHasChanged();
+    }
+
+    public void CheckCropperPosition(bool keepSize)
+    {
+        if (SourceImage == null)
+            return;
+
+        if (Cropper.X1 < 0)
+            Cropper = Cropper with
+                {
+                    X1 = 0,
+                    X2 = Math.Clamp(Cropper.X2 - (keepSize ? Cropper.X1 : 0), 0, SourceImage.RenderSize.Width)
+                };
+
+        if (Cropper.Y1 < 0)
+            Cropper = Cropper with
+                {
+                    Y1 = 0,
+                    Y2 = Math.Clamp(Cropper.Y2 - (keepSize ? Cropper.Y1 : 0), 0, SourceImage.RenderSize.Width)
+                };
+
+        if (Cropper.X2 > SourceImage.RenderSize.Width)
+            Cropper = Cropper with
+                {
+                    X1 = Math.Clamp(Cropper.X1 - (keepSize ? (Cropper.X2 - SourceImage.RenderSize.Width) : 0), 0, SourceImage.RenderSize.Width),
+                    X2 = SourceImage.RenderSize.Width
+                };
+
+        if (Cropper.Y2 > SourceImage.RenderSize.Height)
+            Cropper = Cropper with
+                {
+                    Y1 = Math.Clamp(Cropper.Y1 - (keepSize ? (Cropper.Y2 - SourceImage.RenderSize.Height) : 0), 0, SourceImage.RenderSize.Width),
+                    Y2 = SourceImage.RenderSize.Height
+                };
+    }
+
+    public void CheckCropperAspectRatio()
+    {
+        var expectedH = Cropper.W / Settings.AspectRatio;
+        if (expectedH != Cropper.H)
+            Cropper = Cropper with
+                {
+                    Y2 = Cropper.Y1 + expectedH
+                };
+    }
+
+
+    public async Task CropImage()
+    {
+        if (SourceImage == null)
+            return;
+
+        var scale = SourceImage.Scale;
+
+        var nativeCropper = new Rect(
+            Cropper.X1 / scale.Width,
+            Cropper.Y1 / scale.Height,
+            Cropper.X2 / scale.Width,
+            Cropper.Y2 / scale.Height
+        );
+
+        //var jsModule = await _jsModule;
+        var cropResult = await _cropperInstance.InvokeAsync<string?>("crop", HtmlSourceImage, Settings, nativeCropper);
+
+        if (cropResult == null)
+            return;
+
+        var parts = cropResult.Split(new[] { ':', ';', ',' }, 4);
+        await OnCrop.InvokeAsync(new(
+            Settings.ResizeTo,
+            parts[1],
+            parts.Last()
+        ));
+    }
+
+    public class HtmlImageSize
+    {
+        public double Width { get; set; }
+        public double Height { get; set; }
+
+        public double RenderWidth { get; set; }
+        public double RenderHeight { get; set; }
+    }
+
+    public record CropperImage (
+        Size Size,
+        Size RenderSize
+    ) {
+        public Size RenderSize { get; set; } = RenderSize;
+
+        public Size Scale => new(
+            RenderSize.Height / Size.Height,
+            RenderSize.Width / Size.Width);
+    }
+}
