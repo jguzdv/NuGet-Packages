@@ -1,0 +1,33 @@
+<CascadingValue Value="@_busyStateObserver">
+    <CascadingValue Value="@_busyState">
+        @ChildContent
+    </CascadingValue>
+</CascadingValue>
+
+@code {
+    private BusyStateObserver _busyStateObserver = new();
+    private BusyState _busyState = BusyState.Unknown;
+
+    [Parameter] 
+    public required RenderFragment ChildContent { get; set; }
+
+    protected override void OnInitialized()
+    {
+        _busyStateObserver.BusyStateChanged = EventCallback.Factory.Create(this, (BusyState b) =>
+        {
+            _busyState = b;
+            _ = InvokeAsync(StateHasChanged);
+            return Task.CompletedTask;
+        });
+    }
+
+    public void ObserveTasks(params Task[] tasks) 
+    {
+        foreach (var task in tasks)
+        {
+            _busyStateObserver.AddTask(task);
+        }
+
+        _ = InvokeAsync(StateHasChanged);
+    }
+}
