@@ -1,0 +1,40 @@
+﻿@page "/editor-buttons"
+@using JGUZDV.Blazor.Components.Forms
+
+<h3>EditorButtons</h3>
+
+<EditorButtons OnSave="DoSomeManualWork" OnDiscard="DoSomeManualWork" BusyState="RunningTask.GetBusyState()" />
+
+<CascadingBusyState @ref="BusyObserver">
+    <EditorButtons OnSave="DoSomeWork" OnDiscard="DoSomeWork" />
+
+    <EditForm Model="Model" OnValidSubmit="DoSomeFormWork">
+        <EditorButtons />
+    </EditForm>
+</CascadingBusyState>
+
+@code {
+    private object Model { get; set; } = new();
+    private CascadingBusyState? BusyObserver { get; set; }
+
+    private Task? RunningTask { get; set; }
+
+    private async Task DoSomeManualWork()
+    {
+        RunningTask = DoSomeWork();
+        _ = InvokeAsync(StateHasChanged);
+
+        await RunningTask;
+        _ = InvokeAsync(StateHasChanged);
+    }
+
+    private void DoSomeFormWork() {
+        var formTask = DoSomeWork();
+        BusyObserver?.ObserveTasks(formTask);
+    }
+
+    private async Task DoSomeWork()
+    {
+        await Task.Delay(Random.Shared.Next(1000,5000));
+    }
+}
