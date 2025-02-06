@@ -1,3 +1,4 @@
+@using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components.Web;
 @using Microsoft.Extensions.Localization;
 @using JGUZDV.Blazor.Components.Resources;
@@ -25,12 +26,19 @@
     [Parameter] public bool IsSaveDisabled { get; set; }
     [Parameter] public bool IsDisabled { get; set; }
 
+    /// <summary>
+    /// Manually set the busy state, if there's no CascadingBusyState.
+    /// </summary>
+    [Parameter] public BusyState? BusyState { get; set; }
+
     [CascadingParameter]
     public BusyState? CurrentBusyState { get; set; }
     [CascadingParameter]
     public BusyStateObserver? BusyStateObserver { get; set; }
 
-    public bool IsBusy => CurrentBusyState == BusyState.Busy;
+    public bool IsBusy => 
+        CurrentBusyState == Components.BusyState.Busy || 
+        BusyState == Components.BusyState.Busy;
 
 
     protected override void OnParametersSet()
