@@ -3,55 +3,6 @@
 namespace JGUZDV.Blazor.Components;
 
 /// <summary>
-/// Represents the state of a task.
-/// </summary>
-public enum BusyState
-{
-    /// <summary>
-    /// The state is unknown.
-    /// </summary>
-    Unknown,
-
-    /// <summary>
-    /// The task is busy. E.g. it is running.
-    /// </summary>
-    Busy,
-
-    /// <summary>
-    /// The task has finished successfully.
-    /// </summary>
-    Finished,
-
-    /// <summary>
-    /// The task has failed.
-    /// </summary>
-    Failed
-};
-
-/// <summary>
-/// Provides extension methods for the <see cref="Task"/> class.
-/// </summary>
-public static class TaskExtensions
-{
-    /// <summary>
-    /// Gets the busy state of the task.
-    /// </summary>
-    public static BusyState GetBusyState(this Task? task)
-    {
-        if (task == null)
-            return BusyState.Unknown;
-
-        if (task.IsCompletedSuccessfully)
-            return BusyState.Finished;
-
-        if (task.IsCompleted)
-            return BusyState.Failed;
-
-        return BusyState.Busy;
-    }
-}
-
-/// <summary>
 /// Observes the busy state of tasks and raises an event when the state changes.
 /// </summary>
 public class BusyStateObserver
