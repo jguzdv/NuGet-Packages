@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace JGUZDV.AspNetCore.Logging.Test;
 
@@ -18,7 +19,7 @@ public class Tests
             .AddEnvironmentVariables()
             .Build();
 
-        builder.UseJGUZDVLogging();
+        builder.UseJGUZDVLogging(NullLogger.Instance);
 
 
         var app = builder.Build();
