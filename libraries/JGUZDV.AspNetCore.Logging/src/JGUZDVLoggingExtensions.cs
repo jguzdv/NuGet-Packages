@@ -18,7 +18,7 @@ public static class JGUZDVLoggingExtensions
     /// <summary>
     /// Configures the web host to use the default logging configuration.
     /// </summary>
-    public static WebApplicationBuilder UseJGUZDVLogging(this WebApplicationBuilder builder, ILogger logger)
+    public static WebApplicationBuilder UseJGUZDVLogging(this WebApplicationBuilder builder, ILogger? logger = null)
     {
         // TODO: Add HttpRequest logging?
         AddFileLogging(builder, logger);
@@ -26,7 +26,7 @@ public static class JGUZDVLoggingExtensions
         return builder;
     }
 
-    private static void AddFileLogging(WebApplicationBuilder builder, ILogger logger)
+    private static void AddFileLogging(WebApplicationBuilder builder, ILogger? logger)
     {
         var isProduction = builder.Environment.IsProduction();
         var hasFileSection = builder.Configuration.GetSection(FileLoggerSectionName).Exists();
@@ -34,7 +34,7 @@ public static class JGUZDVLoggingExtensions
         // We'll log a missing log file as an error in production.
         if (isProduction && !hasFileSection)
         {
-            logger.LogError(FileLoggerSectionName + " section is missing in the configuration. " +
+            logger?.LogError(FileLoggerSectionName + " section is missing in the configuration. " +
                 "JGUZDV Logging requires a file logging section in production.");
         }
 
