@@ -12,13 +12,12 @@ public class Tests
     [Fact]
     public void TestLoggingConfig()
     {
-        
         var builder = WebApplication.CreateBuilder();
         builder.Configuration
             .AddJsonFile("appsettings.test.json", optional: false)
-            .AddEnvironmentVariables()
-            .Build();
+            .AddEnvironmentVariables();
 
+        builder.Configuration["Logging:File:OutputDirectory"] = Path.GetTempPath();
         builder.UseJGUZDVLogging(NullLogger.Instance);
 
 
