@@ -1,43 +1,42 @@
 ﻿using JGUZDV.DynamicForms.Model;
 
-namespace JGUZDV.DynamicForms.Blazor.Fields
+namespace JGUZDV.DynamicForms.Blazor.Fields;
+
+//TODO: Check if Interface + DI has benefit for the factories
+/// <summary>
+/// Provides a factory for mapping fields to their corresponding view types.
+/// </summary>
+public static class FieldViewFactory
 {
-    //TODO: Check if Interface + DI has benefit for the factories
+    private static readonly Dictionary<Type, Type> _viewTypes = new()
+        {
+            { typeof(FileFieldType), typeof(FileFieldInput) },
+        };
+
     /// <summary>
-    /// Provides a factory for mapping fields to their corresponding view types.
+    /// Gets the view type associated with the specified field.
     /// </summary>
-    public static class FieldViewFactory
+    /// <param name="field">The field to get the view type for.</param>
+    /// <returns>The view type associated with the specified field.</returns>
+    /// <exception cref="InvalidOperationException">Thrown when the field type is unknown.</exception>
+    public static Type GetViewType(Field field)
     {
-        private static readonly Dictionary<Type, Type> _viewTypes = new()
-            {
-                { typeof(FileFieldType), typeof(FileFieldInput) },
-            };
+        return _viewTypes.GetValueOrDefault(field.FieldDefinition.Type?.GetType())
+            ?? typeof(DefaultFieldInput);
+    }
 
-        /// <summary>
-        /// Gets the view type associated with the specified field.
-        /// </summary>
-        /// <param name="field">The field to get the view type for.</param>
-        /// <returns>The view type associated with the specified field.</returns>
-        /// <exception cref="InvalidOperationException">Thrown when the field type is unknown.</exception>
-        public static Type GetViewType(Field field)
+    /// <summary>
+    /// Sets the view type for the specified field.
+    /// </summary>
+    /// <param name="field">The field definition to set the view type for.</param>
+    /// <param name="viewType">The view type to associate with the field definition.</param>
+    public static void SetViewType(Field field, Type viewType)
+    {
+        if (field.FieldDefinition.Type == null)
         {
-            return _viewTypes.GetValueOrDefault(field.FieldDefinition.Type?.GetType())
-                ?? typeof(DefaultFieldInput);
+            throw new InvalidOperationException("FieldDefinition Type cannot be null");
         }
 
-        /// <summary>
-        /// Sets the view type for the specified field.
-        /// </summary>
-        /// <param name="field">The field definition to set the view type for.</param>
-        /// <param name="viewType">The view type to associate with the field definition.</param>
-        public static void SetViewType(Field field, Type viewType)
-        {
-            if (field.FieldDefinition.Type == null)
-            {
-                throw new InvalidOperationException("FieldDefinition Type cannot be null");
-            }
-
-            _viewTypes[field.FieldDefinition.Type.GetType()] = viewType;
-        }
+        _viewTypes[field.FieldDefinition.Type.GetType()] = viewType;
     }
 }

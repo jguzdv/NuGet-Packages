@@ -232,5 +232,43 @@ namespace JGUZDV.DynamicForms.Tests
             // Assert
             Assert.Empty(results);
         }
+
+        [Fact]
+        public void FieldDefinition_WithFileSizeConstraint_ShouldValidateCorrectly()
+        {
+            // Arrange
+            var fieldDefinition = new FieldDefinition
+            {
+                InputDefinition = new InputDefinition
+                {
+                    Label = new L10nString { ["en"] = "Test File Label" }
+                },
+                Type = new FileFieldType(),
+                Description = new L10nString { ["en"] = "Test File Description" },
+                IsList = false,
+                SortKey = 1,
+                IsRequired = true,
+                Constraints = new List<Constraint> { new FileSizeConstraint { MaxFileSize = 1024 } }
+            };
+
+            var mockSupportedCultureService = new Mock<ISupportedCultureService>();
+            mockSupportedCultureService.Setup(s => s.GetSupportedCultures()).Returns(new List<string> { "en" });
+
+            var mockStringLocalizer = new Mock<IStringLocalizer<Validations>>();
+            mockStringLocalizer.Setup(l => l[It.IsAny<string>(), It.IsAny<object[]>()]).Returns((string key, object[] args) => new LocalizedString(key, key));
+
+            var serviceProvider = new ServiceCollection()
+                .AddSingleton(mockSupportedCultureService.Object)
+                .AddSingleton(mockStringLocalizer.Object)
+                .BuildServiceProvider();
+
+            var context = new ValidationContext(fieldDefinition, serviceProvider, null);
+
+            // Act
+            var results = fieldDefinition.Validate(context).ToList();
+
+            // Assert
+            Assert.Empty(results);
+        }
     }
 }

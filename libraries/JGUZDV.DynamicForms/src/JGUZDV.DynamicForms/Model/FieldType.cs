@@ -241,9 +241,7 @@ public record FileFieldType : FieldType
 
     public record FileType
     {
-        public required string Identifier { get; set; }
+        public string FileName { get; set; }
+        public long FileSize { get; set; }
     }
-
-    //TODO: config
-    public static string UploadURL { get; set; } = "api/upload";
 }

@@ -82,7 +82,7 @@ app.MapPost("api/documents/save", async (List<Field> fields, TestDbContext conte
 
     fileFields.Select(x => x.Value)
         .OfType<FileFieldType.FileType>()
-        .Select(x => x.Identifier);
+        .Select(x => x);
 
     var document = new Document();
     document.Fields.AddRange(fields);

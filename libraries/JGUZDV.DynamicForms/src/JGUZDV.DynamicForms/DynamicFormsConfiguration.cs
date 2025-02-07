@@ -11,12 +11,12 @@ namespace JGUZDV.DynamicForms
     public static class DynamicFormsConfiguration
     {
         private static HashSet<FieldType> _knownFieldTypes = new()
-            {
-                new DateOnlyFieldType(),
-                new IntFieldType(),
-                new StringFieldType(),
-                new FileFieldType()
-            };
+                {
+                    new DateOnlyFieldType(),
+                    new IntFieldType(),
+                    new StringFieldType(),
+                    new FileFieldType()
+                };
 
         /// <summary>
         /// Adds a new FieldType to the known field types and sets the allowed constraints for it.
@@ -35,12 +35,12 @@ namespace JGUZDV.DynamicForms
         public static List<FieldType> KnownFieldTypes => _knownFieldTypes.ToList();
 
         private static Dictionary<FieldType, List<Type>> _fieldConstraints = new()
-            {
-                { new StringFieldType(), [ typeof(RegexConstraint), typeof(StringLengthConstraint), typeof(RangeConstraint) ] },
-                { new DateOnlyFieldType(), [ typeof(RangeConstraint) ] },
-                { new IntFieldType(), [typeof(RangeConstraint)] },
-                { new FileFieldType(), []}
-            };
+                {
+                    { new StringFieldType(), [ typeof(RegexConstraint), typeof(StringLengthConstraint), typeof(RangeConstraint) ] },
+                    { new DateOnlyFieldType(), [ typeof(RangeConstraint) ] },
+                    { new IntFieldType(), [typeof(RangeConstraint)] },
+                    { new FileFieldType(), [typeof(FileSizeConstraint)] } // Added FileSizeConstraint
+                };
 
         /// <summary>
         /// Sets the allowed constraint types for a given FieldType.
@@ -91,12 +91,13 @@ namespace JGUZDV.DynamicForms
         }
 
         private static Dictionary<Type, L10nString> _constraintNames = new()
-            {
-                { typeof(RegexConstraint), new L10nString { ["de"] = "Regex", ["en"] = "Regex" } },
-                { typeof(StringLengthConstraint), new L10nString { ["de"] = "Textlänge", ["en"] = "Text Length" } },
-                { typeof(RangeConstraint), new L10nString { ["de"] = "Intervall", ["en"] = "Range" } },
-                { typeof(SizeConstraint), new L10nString { ["de"] = "Listenlänge", ["en"] = "List Length" } }
-            };
+                {
+                    { typeof(RegexConstraint), new L10nString { ["de"] = "Regex", ["en"] = "Regex" } },
+                    { typeof(StringLengthConstraint), new L10nString { ["de"] = "Textlänge", ["en"] = "Text Length" } },
+                    { typeof(RangeConstraint), new L10nString { ["de"] = "Intervall", ["en"] = "Range" } },
+                    { typeof(SizeConstraint), new L10nString { ["de"] = "Listenlänge", ["en"] = "List Length" } },
+                    { typeof(FileSizeConstraint), new L10nString { ["de"] = "Dateigröße", ["en"] = "File Size" } } // Added FileSizeConstraint
+                };
 
         /// <summary>
         /// Gets the localized name of a given constraint type.

@@ -13,6 +13,7 @@ namespace JGUZDV.DynamicForms.Blazor.Constraints
                 { typeof(RangeConstraint), typeof(RangeConstraintEdit) },
                 { typeof(SizeConstraint), typeof(SizeConstraintEdit) },
                 { typeof(StringLengthConstraint), typeof(LengthConstraintEdit) },
+                { typeof(FileSizeConstraint), typeof(FileSizeConstraintEdit) } // Added new constraint
             };
 
         /// <summary>
