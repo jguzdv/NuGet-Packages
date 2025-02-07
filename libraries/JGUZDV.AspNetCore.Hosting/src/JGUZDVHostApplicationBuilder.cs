@@ -201,11 +201,11 @@ public class JGUZDVHostApplicationBuilder
     /// </summary>
     public void AddWebHostServices(BlazorInteractivityModes interactivityMode)
     {
-        if (Environment.IsDevelopment())
+        var hasFileLoggingSection = Configuration.HasConfigSection(Constants.ConfigSections.FileLogging);
+        if (Environment.IsProduction() || hasFileLoggingSection)
         {
-            Services.Configure<FileLoggerOptions>(opt => opt.OutputDirectory = Path.Combine(Environment.ContentRootPath, "logs"));
+            this.AddLogging();
         }
-        this.AddLogging();
 
         using (var sp = Services.BuildServiceProvider())
         using (var loggerFactory = sp.GetRequiredService<ILoggerFactory>())
