@@ -1,22 +1,23 @@
 ﻿@using JGUZDV.DynamicForms.Model
 @using JGUZDV.DynamicForms.Blazor.Services
 @using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.Extensions.Logging
 @inject HttpClient Http
 @inject NavigationManager Navigation
 
 
 <EditForm Model="Field">
-    <div class="mb-3">
-        <label for="fileUpload" class="form-label">Upload Files</label>
-        <InputFile class="form-control" id="fileUpload" OnChange="OnFilesSelected" multiple="@Field.FieldDefinition.IsList" />
+    <div class="">
+        <label for="fileUpload" class="form-label">@Field.FieldDefinition.InputDefinition.Label</label>
+        <InputFile class="form-control" id="@Field.FieldDefinition.InputDefinition.Id" OnChange="OnFilesSelected" multiple="@Field.FieldDefinition.IsList" />
     </div>
 
-    @if (_failedUploads.Any())
+    @if (_errors.Any())
     {
         <div class="text-danger" role="alert">
-            <p>Failed to upload the following files:</p>
+            <p>@SL["FileFieldInput.ValidationResults"]</p>
             <ul>
-                @foreach (var file in _failedUploads)
+                @foreach (var file in _errors)
                 {
                     <li>@file</li>
                 }
@@ -37,10 +38,19 @@
     [Inject]
     public required IFileService FileService { get; set; }
 
+    [Inject]
+    public required IServiceProvider ServiceProvider { get; set; }
+
+    [Inject]
+    public required IStringLocalizer SL { get; set; }
+
+    [Inject]
+    public required ILogger<FileFieldInput> Logger { get; set; }
+
     private string fileIdentifier = string.Empty;
     private List<IBrowserFile> selectedFiles = new();
 
-    private List<string> _failedUploads = [];
+    private List<string> _errors = [];
 
     private async Task OnFilesSelected(InputFileChangeEventArgs e)
     {
@@ -53,7 +63,7 @@
 
     private async Task UploadFiles()
     {
-        _failedUploads.Clear();
+        _errors.Clear();
 
         var valueList = new List<FileFieldType.FileType>();
 
@@ -62,13 +72,32 @@
             return;
         }
 
+        List<object> vals = [
+            selectedFiles.Select(x => new FileFieldType.FileType
+                {
+                    FileName = x.Name,
+                    FileSize = x.Size
+                })
+        ];
+        _errors = Field.FieldDefinition.Constraints
+                .SelectMany(x =>
+                    x.ValidateConstraint(vals,
+                    new(Field, ServiceProvider, null)))
+                .Select(x => x.ErrorMessage!)
+                .ToList();
+
+        if (_errors.Any())
+        {
+            return;
+        }
+
         foreach (var file in selectedFiles)
         {
             var val = new FileFieldType.FileType()
-            {
-                FileName = file.Name,
-                FileSize = file.Size,
-            };
+                {
+                    FileName = file.Name,
+                    FileSize = file.Size,
+                };
 
             valueList.Add(val);
 
@@ -79,7 +108,8 @@
             }
             catch (Exception e)
             {
-                _failedUploads.Add(file.Name);
+                Logger.LogError(e, SL["FileFieldInput.UploadError", file.Name]);
+                _errors.Add(SL["FileFieldInput.UploadError", file.Name]);
             }
         }
 

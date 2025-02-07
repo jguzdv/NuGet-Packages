@@ -104,20 +104,22 @@ app.MapPost("/api/upload", async (HttpRequest request, IWebHostEnvironment env, 
         return Results.BadRequest("Invalid identifier or filename.");
     }
 
-    var identifierFolder = Path.Combine(env.WebRootPath, "uploads", identifier);
-    if (!Directory.Exists(identifierFolder))
-    {
-        Directory.CreateDirectory(identifierFolder);
-    }
+    return Results.Ok();
 
-    var filePath = Path.Combine(identifierFolder, filename);
+    //var identifierFolder = Path.Combine(env.WebRootPath, "uploads", identifier);
+    //if (!Directory.Exists(identifierFolder))
+    //{
+    //    Directory.CreateDirectory(identifierFolder);
+    //}
 
-    using (var fileStream = new FileStream(filePath, FileMode.Create))
-    {
-        await request.Body.CopyToAsync(fileStream);
-    }
+    //var filePath = Path.Combine(identifierFolder, filename);
 
-    return Results.Ok(new { Message = "File uploaded successfully.", FilePath = filePath });
+    //using (var fileStream = new FileStream(filePath, FileMode.Create))
+    //{
+    //    await request.Body.CopyToAsync(fileStream);
+    //}
+
+    //return Results.Ok();
 });
 
 app.MapRazorComponents<App>()
