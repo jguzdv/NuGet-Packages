@@ -31,23 +31,28 @@ public static class JGUZDVLoggingExtensions
         var isProduction = builder.Environment.IsProduction();
         var hasFileSection = builder.Configuration.GetSection(FileLoggerSectionName).Exists();
 
+        // We'll log a missing log file as an error in production.
         if (isProduction && !hasFileSection)
         {
             logger.LogError(FileLoggerSectionName + " section is missing in the configuration. " +
                 "JGUZDV Logging requires a file logging section in production.");
         }
 
+        // In Production we'll blindly add the JSON file logger.
         if (isProduction)
         {
             builder.Logging.AddJsonFile();
         }
         else
         {
+            // In Development we'll add the plain text file logger if the file logger section is present.
+            // Else it's pretty annoying to have a file logger in development.
             if (hasFileSection)
             {
                 builder.Logging.AddPlainTextFile();
             }
         }
+
 
         builder.Services.PostConfigure<FileLoggerOptions>(configureOptions =>
         {
