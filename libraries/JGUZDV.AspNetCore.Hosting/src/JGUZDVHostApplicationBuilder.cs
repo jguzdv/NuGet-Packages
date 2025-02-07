@@ -201,12 +201,9 @@ public class JGUZDVHostApplicationBuilder
     /// </summary>
     public void AddWebHostServices(BlazorInteractivityModes interactivityMode)
     {
-        if (Environment.IsDevelopment())
-        {
-            Services.Configure<FileLoggerOptions>(opt => opt.OutputDirectory = Path.Combine(Environment.ContentRootPath, "logs"));
-        }
-        this.AddLogging();
+        AddLogging();
 
+        // We're rebuilding the service provider to enable logging during log setup including the log created just before.
         using (var sp = Services.BuildServiceProvider())
         using (var loggerFactory = sp.GetRequiredService<ILoggerFactory>())
         {
@@ -377,11 +374,7 @@ public class JGUZDVHostApplicationBuilder
     /// </summary>
     public void AddWebApiServices()
     {
-        var hasFileLoggingSection = Configuration.HasConfigSection(Constants.ConfigSections.FileLogging);
-        if (hasFileLoggingSection)
-        {
-            this.AddLogging();
-        }
+        AddLogging();
 
         using (var sp = Services.BuildServiceProvider())
         using (var loggerFactory = sp.GetRequiredService<ILoggerFactory>())
@@ -389,7 +382,7 @@ public class JGUZDVHostApplicationBuilder
             var logger = loggerFactory.CreateLogger(nameof(JGUZDVHostApplicationBuilder));
             var missingConfigLogLevel = Environment.IsProduction() ? LogLevel.Information : LogLevel.Warning;
 
-            if(!hasFileLoggingSection)
+            if (!Configuration.HasConfigSection(Constants.ConfigSections.FileLogging))
             {
                 LogMessages.MissingConfig(logger, missingConfigLogLevel, Constants.ConfigSections.FileLogging);
             }
@@ -474,6 +467,19 @@ public class JGUZDVHostApplicationBuilder
             }
 
             this.AddHealthChecks();
+        }
+    }
+
+    private void AddLogging()
+    {
+        // Were building the service provider to enable logging during log setup.
+        // While this seems counterintuitive, it is necessary to log missing configurations.
+        // At this point, AspNetCore will already have setup logging to console, EventLog and Debug.
+        using (var sp = Services.BuildServiceProvider())
+        using (var loggerFactory = sp.GetRequiredService<ILoggerFactory>())
+        {
+            var logger = loggerFactory.CreateLogger(nameof(JGUZDVHostApplicationBuilder));
+            this.AddLogging(logger);
         }
     }
 

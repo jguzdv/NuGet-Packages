@@ -1,5 +1,4 @@
-﻿using JGUZDV.Extensions.Logging;
-using JGUZDV.Extensions.Logging.File;
+﻿using JGUZDV.Extensions.Logging.File;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -17,12 +16,12 @@ public static class JGUZDVHostBuilderLoggingExtensions
     /// Configures the host builder to use the default logging configuration.
     /// </summary>
     public static IHostBuilder UseJGUZDVLogging(this IHostBuilder hostBuilder)
-        => hostBuilder.UseJGUZDVLogging(Constants.DefaultSectionName);
+        => hostBuilder.UseJGUZDVLogging();
 
     /// <summary>
     /// Configures the host builder to use the specified logging configuration.
     /// </summary>
-    public static IHostBuilder UseJGUZDVLogging(this IHostBuilder hostBuilder, string configSectionName, bool useJsonFormat = true)
+    public static IHostBuilder UseJGUZDVLogging(this IHostBuilder hostBuilder, bool useJsonFormat = true)
     {
         hostBuilder.ConfigureServices((hostContext, services) =>
         {

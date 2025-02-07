@@ -41,9 +41,10 @@ public static class JGUZDVHostApplicationBuilderExtensions
     /// </summary>
     public static JGUZDVHostApplicationBuilder AddLogging(
         this JGUZDVHostApplicationBuilder appBuilder,
+        ILogger logger,
         Action<ILoggingBuilder>? configure = null)
     {
-        appBuilder.Builder.UseJGUZDVLogging();
+        appBuilder.Builder.UseJGUZDVLogging(logger);
         return appBuilder;
     }
 
