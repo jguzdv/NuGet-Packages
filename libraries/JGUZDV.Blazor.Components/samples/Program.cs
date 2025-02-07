@@ -1,7 +1,6 @@
 using System.Security.Claims;
 
-using JGUZDV.Blazor.Components;
-using JGUZDV.Blazor.Components.L10n;
+using JGUZDV.Blazor.Components.Localization;
 using JGUZDV.Blazor.Components.Samples;
 using JGUZDV.L10n;
 
@@ -21,6 +20,7 @@ builder.Services.AddLocalization();
 builder.Services.AddBrowserClientStore();
 
 builder.Services.AddSingleton<AuthenticationStateProvider, SampleAuthenticationStateProvider>();
+builder.Services.AddSingleton<ILanguageService, SampleLanguageService>();
 
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddAuthorizationCore();
@@ -45,5 +45,31 @@ internal class SampleAuthenticationStateProvider : AuthenticationStateProvider
                 )
             )
         );
+    }
+}
+
+internal class SampleLanguageService : ILanguageService
+{
+    public string GetCurrentCulture()
+    {
+        return "de";
+    }
+
+    public string GetCurrentUICulture()
+    {
+        return "de";
+    }
+
+    public List<LanguageItem>? GetLanguages()
+    {
+        return [
+            new LanguageItem("de", "Deutsch"),
+            new LanguageItem("en", "English")
+        ];
+    }
+
+    public Task InitializeService()
+    {
+        throw new NotImplementedException();
     }
 }

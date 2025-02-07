@@ -1,0 +1,30 @@
+﻿.is-busy::after {
+    content: '';
+    display: block;
+    position: absolute;
+    background-color: #23373c;
+    opacity: 0.75;
+    height: 100%;
+    top: 0;
+    animation: running-progress 3s cubic-bezier(0.4, 0, 0.4, 1) infinite;
+}
+
+@keyframes running-progress {
+    0% {
+        margin-left: 0;
+        margin-right: 100%;
+        width: 0;
+    }
+
+    50% {
+        margin-left: 0;
+        margin-right: 0;
+        width: 100%;
+    }
+
+    100% {
+        margin-left: 100%;
+        margin-right: 0;
+        width: 0;
+    }
+}

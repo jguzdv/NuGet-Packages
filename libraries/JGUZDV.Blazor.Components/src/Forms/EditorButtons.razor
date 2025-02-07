@@ -1,0 +1,97 @@
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Web;
+@using Microsoft.Extensions.Localization;
+@using JGUZDV.Blazor.Components.Resources;
+
+@inject IStringLocalizer<ComponentStrings> LR
+
+<div class="btn-group @(IsBusy?"is-busy":null)">
+    <button type="submit" class="btn btn-success" disabled="@(IsBusy || IsDisabled || IsSaveDisabled)"
+    @onclick="(m) => InvokeSave(m)" @onkeydown="(k) => InvokeSave(k)">
+        <i class="fa fa-fw fa-save me-1"></i> @SaveLabel
+    </button>
+    <button class="btn btn-secondary" disabled="@(IsBusy || IsDisabled)"
+    @onclick="(m) => InvokeDiscard(m)" @onkeydown="(k) => InvokeDiscard(k)">
+        <i class="fa fa-fw fa-times me-1"></i> @DiscardLabel
+    </button>
+</div>
+
+@code {
+    [Parameter] public EventCallback OnSave { get; set; }
+    [Parameter] public EventCallback OnDiscard { get; set; }
+
+    [Parameter] public string? SaveLabel { get; set; }
+    [Parameter] public string? DiscardLabel { get; set; }
+
+    [Parameter] public bool IsSaveDisabled { get; set; }
+    [Parameter] public bool IsDisabled { get; set; }
+
+    /// <summary>
+    /// Manually set the busy state, if there's no CascadingBusyState.
+    /// </summary>
+    [Parameter] public BusyState? BusyState { get; set; }
+
+    [CascadingParameter]
+    public BusyState? CurrentBusyState { get; set; }
+    [CascadingParameter]
+    public BusyStateObserver? BusyStateObserver { get; set; }
+
+    public bool IsBusy => 
+        CurrentBusyState == Components.BusyState.Busy || 
+        BusyState == Components.BusyState.Busy;
+
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        if (SaveLabel == null)
+            SaveLabel = LR["EditorButtons:DefaultSave"];
+        if (DiscardLabel == null)
+            DiscardLabel = LR["EditorButtons:DefaultDiscard"];
+    }
+
+
+    private void InvokeDiscard(object args)
+    {
+        if (!ShouldExecuteButton(args, Button.Discard)) {
+            return;
+        }
+
+        var task = OnDiscard.InvokeAsync();
+        BusyStateObserver?.AddTask(task);
+    }
+
+    private void InvokeSave(object args)
+    {
+        if (!ShouldExecuteButton(args, Button.Save))
+        {
+            return;
+        }
+
+        var task = OnSave.InvokeAsync();
+        BusyStateObserver?.AddTask(task);
+    }
+
+
+    private bool ShouldExecuteButton(object args, Button button)
+    {
+        if (IsBusy || IsDisabled || (button == Button.Save && IsSaveDisabled))
+            return false;
+
+        if (args is KeyboardEventArgs k)
+        {
+            if (k.Code != "Enter" && k.Code != "NumpadEnter")
+                return false;
+        }
+
+        return true;
+    }
+
+    private enum Button
+    {
+        Save,
+        Discard
+    }
+}
+
