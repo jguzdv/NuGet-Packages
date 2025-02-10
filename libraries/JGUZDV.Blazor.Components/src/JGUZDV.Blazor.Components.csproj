@@ -7,7 +7,7 @@
 
         <PackageId>JGUZDV.Blazor.Components</PackageId>
         <IsPackable>true</IsPackable>
-        <Version>1.7.2</Version>
+        <Version>1.7.3</Version>
         <Authors>Thomas Ottenhus, Aylin Siebel, Aaron Puhl</Authors>
         <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
         <PackageDescription>Blazor component library - build for Bootstrap 5</PackageDescription>
@@ -16,7 +16,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Content Remove="tsconfig.json" />
+        <Content Update="tsconfig.json">
+            <Pack>false</Pack>
+        </Content>
     </ItemGroup>
 
     <ItemGroup>
