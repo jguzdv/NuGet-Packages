@@ -136,4 +136,10 @@
   <data name="FieldInput.Validation.Convert" xml:space="preserve">
     <value>Eingabe konnte nicht in Zieltyp konvertiert werden</value>
   </data>
+  <data name="FileFieldInput.UploadError" xml:space="preserve">
+    <value>Datei konnte nicht hochgeladen werden: {0}</value>
+  </data>
+  <data name="FileFieldInput.ValidationResults" xml:space="preserve">
+    <value>Fehler</value>
+  </data>
 </root>

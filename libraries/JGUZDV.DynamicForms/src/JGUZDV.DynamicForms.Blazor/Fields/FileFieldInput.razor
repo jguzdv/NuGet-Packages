@@ -1,21 +1,22 @@
-﻿@using JGUZDV.DynamicForms.Model
+﻿@using JGUZDV.DynamicForms.Blazor.Resources
+@using JGUZDV.DynamicForms.Model
 @using JGUZDV.DynamicForms.Blazor.Services
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.Extensions.Logging
-@inject HttpClient Http
-@inject NavigationManager Navigation
-
 
 <EditForm Model="Field">
     <div class="">
         <label for="fileUpload" class="form-label">@Field.FieldDefinition.InputDefinition.Label</label>
-        <InputFile class="form-control" id="@Field.FieldDefinition.InputDefinition.Id" OnChange="OnFilesSelected" multiple="@Field.FieldDefinition.IsList" />
+        <InputFile class="form-control"
+        id="@Field.FieldDefinition.InputDefinition.Id"
+        OnChange="OnFilesSelected"
+        multiple="@Field.FieldDefinition.IsList" />
     </div>
 
     @if (_errors.Any())
     {
-        <div class="text-danger" role="alert">
-            <p>@SL["FileFieldInput.ValidationResults"]</p>
+        <div class="text-danger mt-2" role="alert">
+            <span>@SL["FileFieldInput.ValidationResults"]</span>
             <ul>
                 @foreach (var file in _errors)
                 {
@@ -42,14 +43,12 @@
     public required IServiceProvider ServiceProvider { get; set; }
 
     [Inject]
-    public required IStringLocalizer SL { get; set; }
+    public required IStringLocalizer<ComponentStrings> SL { get; set; }
 
     [Inject]
     public required ILogger<FileFieldInput> Logger { get; set; }
 
-    private string fileIdentifier = string.Empty;
     private List<IBrowserFile> selectedFiles = new();
-
     private List<string> _errors = [];
 
     private async Task OnFilesSelected(InputFileChangeEventArgs e)
