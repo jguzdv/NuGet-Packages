@@ -36,6 +36,7 @@ public static class ServiceCollectionExtensions
     {
         services.Configure<ForwardedHeadersOptions>(opt =>
         {
+            opt.ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.All;
             configSection.Bind(opt);
 
             var knownNetworks = configSection.GetSection("KnownNetworks").Get<string[]>();
