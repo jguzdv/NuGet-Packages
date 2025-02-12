@@ -2,6 +2,7 @@
 
 using JGUZDV.AspNetCore.Hosting.Authentication;
 using JGUZDV.AspNetCore.Hosting.Components;
+using JGUZDV.AspNetCore.Hosting.Configuration;
 using JGUZDV.AspNetCore.Hosting.Extensions;
 using JGUZDV.AspNetCore.Hosting.FeatureManagement;
 using JGUZDV.AspNetCore.Hosting.Localization;
@@ -703,11 +704,12 @@ public class JGUZDVHostApplicationBuilder
             var machineConfigFile = Configuration["MachineConfig"];
             if (!string.IsNullOrWhiteSpace(machineConfigFile))
             {
-                Configuration.AddJsonFile(machineConfigFile, optional: true, reloadOnChange: true);
+                Configuration.AddJsonFileBeforeOthers(machineConfigFile, optional: true, reloadOnChange: true);
             }
             else
             {
-                LogMessages.MissingConfig(loggerFactory.CreateLogger(nameof(JGUZDVHostApplicationBuilder)), LogLevel.Information, "MachineConfig");
+                var logger = loggerFactory.CreateLogger(nameof(JGUZDVHostApplicationBuilder));
+                LogMessages.MissingConfig(logger, LogLevel.Information, "MachineConfig");
             }
         }
     }
