@@ -2,10 +2,10 @@
 
 using JGUZDV.AspNetCore.Hosting.Authentication;
 using JGUZDV.AspNetCore.Hosting.Components;
+using JGUZDV.AspNetCore.Hosting.Configuration;
 using JGUZDV.AspNetCore.Hosting.Extensions;
 using JGUZDV.AspNetCore.Hosting.FeatureManagement;
 using JGUZDV.AspNetCore.Hosting.Localization;
-using JGUZDV.Extensions.Logging.File;
 using JGUZDV.YARP.SimpleReverseProxy;
 
 using Microsoft.AspNetCore.Builder;
@@ -182,7 +182,7 @@ public class JGUZDVHostApplicationBuilder
     /// - RazorPages<br />
     /// - Razor WebComponents (without interactivity aka. Blazor Static Server)<br />
     /// </summary>
-    public static JGUZDVHostApplicationBuilder CreateWebHost(string[] args, 
+    public static JGUZDVHostApplicationBuilder CreateWebHost(string[] args,
         BlazorInteractivityModes interactivityMode = BlazorInteractivityModes.DisableBlazor,
         Action<JGUZDVHostApplicationBuilder>? configureConfiguration = null)
     {
@@ -201,6 +201,7 @@ public class JGUZDVHostApplicationBuilder
     /// </summary>
     public void AddWebHostServices(BlazorInteractivityModes interactivityMode)
     {
+        AddMachineConfig();
         AddLogging();
 
         // We're rebuilding the service provider to enable logging during log setup including the log created just before.
@@ -374,6 +375,7 @@ public class JGUZDVHostApplicationBuilder
     /// </summary>
     public void AddWebApiServices()
     {
+        AddMachineConfig();
         AddLogging();
 
         using (var sp = Services.BuildServiceProvider())
@@ -470,18 +472,7 @@ public class JGUZDVHostApplicationBuilder
         }
     }
 
-    private void AddLogging()
-    {
-        // Were building the service provider to enable logging during log setup.
-        // While this seems counterintuitive, it is necessary to log missing configurations.
-        // At this point, AspNetCore will already have setup logging to console, EventLog and Debug.
-        using (var sp = Services.BuildServiceProvider())
-        using (var loggerFactory = sp.GetRequiredService<ILoggerFactory>())
-        {
-            var logger = loggerFactory.CreateLogger(nameof(JGUZDVHostApplicationBuilder));
-            this.AddLogging(logger);
-        }
-    }
+
 
 
     /// <summary>
@@ -680,5 +671,46 @@ public class JGUZDVHostApplicationBuilder
         }
 
         return app;
+    }
+
+
+    /// <summary>
+    /// Adds default logging services to the application.
+    /// This will build the service provider and dispose it afterwards, so we can log the logging builder.
+    /// </summary>
+    private void AddLogging()
+    {
+        // Were building the service provider to enable logging during log setup.
+        // While this seems counterintuitive, it is necessary to log missing configurations.
+        // At this point, AspNetCore will already have setup logging to console, EventLog and Debug.
+        using (var sp = Services.BuildServiceProvider())
+        using (var loggerFactory = sp.GetRequiredService<ILoggerFactory>())
+        {
+            var logger = loggerFactory.CreateLogger(nameof(JGUZDVHostApplicationBuilder));
+            this.AddLogging(logger);
+        }
+    }
+
+
+    private void AddMachineConfig()
+    {
+        // Were building the service provider to enable logging during log setup.
+        // While this seems counterintuitive, it is necessary to log missing configurations.
+        // At this point, AspNetCore will already have setup logging to console, EventLog and Debug.
+        using (var sp = Services.BuildServiceProvider())
+        using (var loggerFactory = sp.GetRequiredService<ILoggerFactory>())
+        {
+
+            var machineConfigFile = Configuration["MachineConfig"];
+            if (!string.IsNullOrWhiteSpace(machineConfigFile))
+            {
+                Configuration.AddJsonFileBeforeOthers(machineConfigFile, optional: true, reloadOnChange: true);
+            }
+            else
+            {
+                var logger = loggerFactory.CreateLogger(nameof(JGUZDVHostApplicationBuilder));
+                LogMessages.MissingConfig(logger, LogLevel.Information, "MachineConfig");
+            }
+        }
     }
 }
