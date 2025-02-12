@@ -77,6 +77,12 @@ public abstract record FieldType
         };
         return JsonSerializer.Deserialize<FieldType>(json, options) ?? throw new InvalidOperationException($"Could not parse json: {json}");
     }
+
+    public virtual void AddToContent(Field field, MultipartFormDataContent content)
+    {
+        var json = this.ConvertFromValue(field.Value);
+        content.Add(new StringContent(json), field.FieldDefinition.Identifier);
+    }
 }
 
 /// <summary>
@@ -239,9 +245,18 @@ public record FileFieldType : FieldType
         ["en"] = "File"
     };
 
+    public override void AddToContent(Field field, MultipartFormDataContent content)
+    {
+        var value = field.Value as FileFieldType.FileType;
+
+        var file = new StreamContent(value!.Stream);
+        content.Add(file, field.FieldDefinition.Identifier, value.FileName);
+    }
+
     public record FileType
     {
         public string FileName { get; set; }
         public long FileSize { get; set; }
+        public Stream? Stream { get; set; }
     }
 }

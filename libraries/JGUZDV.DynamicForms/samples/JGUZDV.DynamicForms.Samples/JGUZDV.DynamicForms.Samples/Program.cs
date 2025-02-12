@@ -7,6 +7,7 @@ using JGUZDV.DynamicForms.Serialization;
 using JGUZDV.L10n;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -97,29 +98,57 @@ app.MapGet("api/documents", async (TestDbContext context) =>
     return await context.Documents.ToListAsync();
 });
 
-app.MapPost("/api/upload", async (HttpRequest request, IWebHostEnvironment env, string identifier, string filename) =>
+
+app.MapPost("/api/upload", async (HttpRequest request) =>
 {
-    if (string.IsNullOrEmpty(identifier) || string.IsNullOrEmpty(filename))
+    // Value is string or FileFieldType.FileType
+    // 
+    async Task<(
+            List<(string FieldIdentifier, FileFieldType.FileType Value)> Files,
+            List<(string FieldIdentifier, string Value)> Json
+        )>
+        FieldsFromRequest(HttpRequest request)
     {
-        return Results.BadRequest("Invalid identifier or filename.");
+        var form = await request.ReadFormAsync();
+
+        List<(string identifier, FileFieldType.FileType value)> files = new();
+        foreach (var file in form.Files)
+        {
+            var identifier = file.Name;
+            var stream = file.OpenReadStream();
+            var filename = file.FileName;
+            var size = stream.Length;
+
+            files.Add((identifier, new FileFieldType.FileType
+            {
+                FileName = filename,
+                FileSize = size,
+                Stream = stream
+            }));
+        }
+
+        List<(string identifier, string value)> jsons = new();
+        foreach (var formField in form)
+        {
+            if (form.Files.Any(x => x.Name == formField.Key))
+            {
+                continue;
+            }
+
+            jsons.Add((formField.Key, formField.Value.ToString()));
+        }
+
+        return (files, jsons);
     }
+
+    var (files, fields) = await FieldsFromRequest(request);
+
+    //load field definitions from db
+    //validate field values
+    //SaveToDb;
 
     return Results.Ok();
 
-    //var identifierFolder = Path.Combine(env.WebRootPath, "uploads", identifier);
-    //if (!Directory.Exists(identifierFolder))
-    //{
-    //    Directory.CreateDirectory(identifierFolder);
-    //}
-
-    //var filePath = Path.Combine(identifierFolder, filename);
-
-    //using (var fileStream = new FileStream(filePath, FileMode.Create))
-    //{
-    //    await request.Body.CopyToAsync(fileStream);
-    //}
-
-    //return Results.Ok();
 });
 
 app.MapRazorComponents<App>()

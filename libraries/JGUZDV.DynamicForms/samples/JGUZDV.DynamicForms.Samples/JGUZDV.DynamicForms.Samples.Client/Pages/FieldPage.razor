@@ -62,11 +62,15 @@
     private async Task Save()
     {
         var client = new HttpClient();
-        var options = new JsonSerializerOptions()
-        {
-        };
 
-        await client.PostAsJsonAsync("https://localhost:7245/api/documents/save", _fields, options);
+        var x = new MultipartFormDataContent();
+
+        foreach (var item in _fields)
+        {
+            item.ValueType.AddToContent(item, x);
+        }
+
+        await client.PostAsync("https://localhost:7245/api/documents/save", x);
 
         _documents = await client.GetFromJsonAsync<List<Document>>("https://localhost:7245/api/documents");
     }
