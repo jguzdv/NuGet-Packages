@@ -17,6 +17,7 @@
     [Inject, NotNull]
     private IJSRuntime? JSRuntime { get; set; }
     private IJSObjectReference? _jsModule;
+    private IJSObjectReference? _jsModalObject;
 
     private readonly string _componentId = Guid.NewGuid().ToString();
     protected TaskCompletionSource<ModalResult> _taskCompletionSource = new();
@@ -112,33 +113,46 @@
             : (ctx) =>
                 @<div class="modal-dialog @ModalDialogClasses" @onclick:stopPropagation="true">
                     @content.Invoke(ctx)
-                </div>;
+                </div>
+    ;
     }
 
-    public Task<ModalResult> ShowModal(TModel model)
+    public async Task<ModalResult> ShowModal(TModel model)
     {
         _context = new ModalContext<TModel>(this, model);
         StateHasChanged();
 
-        _ = _jsModule!.InvokeVoidAsync("OpenDialog", _componentId);
+        _jsModalObject = await _jsModule!.InvokeAsync<IJSObjectReference>("createModal", _componentId, DotNetObjectReference.Create(this));
+        await _jsModalObject.InvokeVoidAsync("openDialog");
 
         _taskCompletionSource = new();
-        return _taskCompletionSource.Task;
+        return await _taskCompletionSource.Task;
     }
 
-    public void Close(ModalResult result)
+    public async Task Close(ModalResult result)
     {
-        _ = _jsModule!.InvokeVoidAsync("CloseDialog", _componentId);
+        await _jsModalObject!.InvokeVoidAsync("closeDialog");
+        await _jsModalObject!.DisposeAsync();
+
         _taskCompletionSource.SetResult(result);
     }
 
-    public void Close()
+    /// <summary>
+    /// This will be called, if the user closes the modal by pressing ESC or clicking outside the modal.
+    /// </summary>
+    [JSInvokable]
+    public void OnClose()
+    {
+        _taskCompletionSource.SetResult(ModalResult.Undefined);
+    }
+
+    public Task Close()
         => Close(ModalResult.Undefined);
 
-    public void Accept()
+    public Task Accept()
         => Close(ModalResult.Accepted);
 
-    public void Dismiss()
+    public Task Dismiss()
         => Close(ModalResult.Dismissed);
 
     [Obsolete("Use ModalContext<TModel> instead.")]
