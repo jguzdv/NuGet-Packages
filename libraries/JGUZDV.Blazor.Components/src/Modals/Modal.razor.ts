@@ -26,6 +26,6 @@ class Modal {
     }
 }
 
-export function CreateModal(guid: string, dotnetref: any) {
+export function createModal(guid: string, dotnetref: any) {
     return new Modal(guid, dotnetref);
 };

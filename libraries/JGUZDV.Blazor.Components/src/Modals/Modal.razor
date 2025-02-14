@@ -129,9 +129,11 @@
         return await _taskCompletionSource.Task;
     }
 
-    public void Close(ModalResult result)
+    public async Task Close(ModalResult result)
     {
-        _ = _jsModalObject!.InvokeVoidAsync("closeDialog");
+        await _jsModalObject!.InvokeVoidAsync("closeDialog");
+        await _jsModalObject!.DisposeAsync();
+
         _taskCompletionSource.SetResult(result);
     }
 
@@ -144,13 +146,13 @@
         _taskCompletionSource.SetResult(ModalResult.Undefined);
     }
 
-    public void Close()
+    public Task Close()
         => Close(ModalResult.Undefined);
 
-    public void Accept()
+    public Task Accept()
         => Close(ModalResult.Accepted);
 
-    public void Dismiss()
+    public Task Dismiss()
         => Close(ModalResult.Dismissed);
 
     [Obsolete("Use ModalContext<TModel> instead.")]
