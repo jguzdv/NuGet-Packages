@@ -1,9 +1,31 @@
-export function OpenDialog(guid: string) {
-    var dialog = document.getElementById(guid) as HTMLDialogElement;
-    dialog?.showModal();
-};
+class Modal {
+    constructor(
+        private _dialogId: string,
+        private _dotnetModal: any
+    )
+    { }
 
-export function CloseDialog(guid: string) {
-    var dialog = document.getElementById(guid) as HTMLDialogElement;
-    dialog?.close();
+    public openDialog() {
+        const dialogElement = document.getElementById(this._dialogId) as HTMLDialogElement;
+        dialogElement.showModal();
+        dialogElement.addEventListener("close", this.onClose);
+    }
+
+    public closeDialog() {
+        const dialogElement = document.getElementById(this._dialogId) as HTMLDialogElement;
+        dialogElement.removeEventListener("close", this.onClose);
+
+        dialogElement.close();
+    }
+
+    private onClose = () => {
+        const dialogElement = document.getElementById(this._dialogId) as HTMLDialogElement;
+        dialogElement.removeEventListener("close", this.onClose);
+
+        this._dotnetModal.invokeMethodAsync("OnClose");
+    }
+}
+
+export function CreateModal(guid: string, dotnetref: any) {
+    return new Modal(guid, dotnetref);
 };
