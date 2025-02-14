@@ -1,0 +1,33 @@
+﻿@using JGUZDV.DynamicForms.Blazor.Resources
+@using JGUZDV.DynamicForms.Model
+@using System.ComponentModel.DataAnnotations
+
+<div class="mb-2">
+    <label for="MinCount@_id">@SL["Minimale Anzahl"]</label>
+    <input id="MinCount@_id" name="MinCount" class="form-control" @bind-value="_constraint.MinCount" type="number" />
+</div>
+<div class="mb-2">
+    <label for="MaxCount@_id">@SL["Maximale Anzahl"]</label>
+    <input id="MaxCount@_id" name="MaxCount" class="form-control" @bind-value="_constraint.MaxCount" type="number" />
+</div>
+
+
+@code {
+    [Parameter]
+    public required Constraint Constraint { get; set; }
+
+    [Parameter]
+    public required EventCallback<Constraint> ConstraintChanged { get; set; }
+
+    [Parameter]
+    public required FieldDefinition FieldDefinition { get; set; }
+
+    [Parameter]
+    public required EventCallback<List<ValidationResult>> OnValidation { get; set; }
+
+    [Inject]
+    public required StringLocalizer<ComponentStrings> SL { get; set; }
+
+    private SizeConstraint _constraint => (SizeConstraint)Constraint!;
+    private Guid _id = Guid.NewGuid();
+}

@@ -1,0 +1,99 @@
+﻿@page "/"
+@using JGUZDV.Blazor.Components.Modals
+@using JGUZDV.Blazor.Components.Toasts
+@using JGUZDV.DynamicForms.Blazor
+@using JGUZDV.DynamicForms.Model
+@using System.Text.Json
+@using JGUZDV.DynamicForms.Serialization
+@using JGUZDV.L10n
+
+<PageTitle>Home</PageTitle>
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+
+<ModalButton T="FieldDefinition">
+    <Button>
+        <div class="btn btn-primary " @onclick="() => context.ShowModal(new FieldDefinition())">
+            new field def
+        </div>
+    </Button>
+    <ModalBody>
+        <FieldDefinitionForm @bind-FieldDefinition="context.Model"
+                             @bind-FieldDefinition:after="() => {
+                                _fieldDefinitions.Add(context.Model);
+                                context.Modal.Accept();}
+        ">
+        </FieldDefinitionForm>
+    </ModalBody>
+
+</ModalButton>
+
+
+<Modal @ref="_editModal" TModel="FieldDefinition">
+    <Body>
+        <FieldDefinitionForm @bind-FieldDefinition="context.Model"
+                             @bind-FieldDefinition:after="context.Modal.Accept">
+        </FieldDefinitionForm>
+    </Body>
+</Modal>
+
+<Modal @ref="_valueConfigModal" TModel="FieldDefinition">
+    <Body>
+        <label>"EditFieldDefinition.ChoiceOptions</label>
+        <ValueConfigurationForm @bind-FieldDefinition="context.Model"
+                                @bind-FieldDefinition:after="context.Modal.Accept">
+        </ValueConfigurationForm>
+    </Body>
+</Modal>
+
+@foreach (var item in _fieldDefinitions)
+{
+    <div class="my-2">
+        <div>
+            <button class="btn btn-outline-secondary" @onclick="() => _editModal.ShowModal(item)">
+                edit
+            </button>
+            <button class="btn btn-outline-secondary" @onclick="() => _valueConfigModal.ShowModal(item)">
+                config values
+            </button>
+        </div>
+        <span>
+            @item.InputDefinition.Name (@item.Type!.DisplayName)
+        </span>
+    </div>
+    <hr />
+}
+
+<button class="my-2 btn btn-primary" @onclick="Send">
+    save
+</button>
+
+@code {
+
+    [Inject]
+    public required IServiceProvider ServiceProvider { get; set; }
+
+    [Inject]
+    public required IToastService Toasts { get; set; }
+
+    [Inject]
+    public required HttpClient Client { get; set; }
+
+    private List<FieldDefinition> _fieldDefinitions = new();
+    private Modal<FieldDefinition>? _editModal;
+    private Modal<FieldDefinition>? _valueConfigModal;
+
+    private async Task Send()
+    {
+        var options = new JsonSerializerOptions()
+            {
+                PropertyNameCaseInsensitive = true
+            };
+
+        await Client.PostAsJsonAsync("https://localhost:7245/api/definitions/save", _fieldDefinitions, options);
+    }
+
+}

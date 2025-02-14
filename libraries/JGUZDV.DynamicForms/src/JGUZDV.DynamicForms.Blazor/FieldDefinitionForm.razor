@@ -1,0 +1,84 @@
+﻿@page "/edit-field-definition"
+@using JGUZDV.Blazor.Components.L10n
+@using JGUZDV.DynamicForms.Blazor.Resources
+@using JGUZDV.DynamicForms.Model
+@using JGUZDV.L10n
+
+@inject NavigationManager Navigation
+@inject IStringLocalizer<ComponentStrings> SL
+
+
+<EditForm Model="@FieldDefinition" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-2">
+        <label for="identifier">@SL["EditFieldDefinition.Identifier"]</label>
+        <InputText id="identifier" @bind-Value="FieldDefinition.Identifier" class="form-control" />
+    </div>
+
+    <div class="mb-2">
+        <label for="label">@SL["EditFieldDefinition.Label"]</label>
+        <L10nEditor L10n="FieldDefinition.InputDefinition.Label" />
+    </div>
+
+    <div class="mb-2">
+        <label for="name">@SL["EditFieldDefinition.Name"]</label>
+        <InputText id="name" @bind-Value="FieldDefinition.InputDefinition.Name" class="form-control" />
+    </div>
+
+    <div class="mb-2">
+        <label for="type">@SL["EditFieldDefinition.Type"]</label>
+        <select id="type"
+                value="@FieldDefinition.Type?.ToJson()"
+                @onchange="e => FieldDefinition.Type = FieldType.FromJson(e.Value!.ToString()!)"
+                class="form-select">
+            @if (FieldDefinition.Type == null)
+            {
+                <option value="" selected>@SL["EditFieldDefinition.SelectType"]</option>
+            }
+            @foreach (var type in DynamicFormsConfiguration.KnownFieldTypes)
+            {
+                <option value="@type.ToJson()">@type.DisplayName</option>
+            }
+        </select>
+    </div>
+
+    <div class="mb-2">
+        <label for="description">@SL["EditFieldDefinition.Description"]</label>
+        <L10nEditor L10n="FieldDefinition.Description" />
+    </div>
+
+    <div class="mb-2 form-check">
+        <InputCheckbox id="isList" @bind-Value="FieldDefinition.IsList" class="form-check-input" />
+        <label class="form-check-label" for="isList">@SL["EditFieldDefinition.IsList"]</label>
+    </div>
+
+    <div class="mb-2 form-check">
+        <InputCheckbox class="form-check-input" id="isRequired" @bind-Value="FieldDefinition.IsRequired" />
+        <label class="form-check-label" for="isRequired">@SL["EditFieldDefinition.IsRequired"]</label>
+    </div>
+
+    <div class="mb-2">
+        <label for="sortKey">@SL["EditFieldDefinition.SortKey"]</label>
+        <InputNumber id="sortKey" @bind-Value="FieldDefinition.SortKey" class="form-control" />
+    </div>
+
+    <button type="submit"
+            class="btn btn-primary">
+        @SL["EditFieldDefinition.Save"]
+    </button>
+</EditForm>
+
+@code {
+    [Parameter]
+    public required FieldDefinition FieldDefinition { get; set; }
+
+    [Parameter]
+    public EventCallback<FieldDefinition> FieldDefinitionChanged { get; set; }
+
+    private void HandleValidSubmit()
+    {
+        FieldDefinitionChanged.InvokeAsync(FieldDefinition);
+    }
+}

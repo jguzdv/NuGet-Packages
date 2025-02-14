@@ -1,0 +1,25 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/" />
+    <link rel="stylesheet" href="bootstrap/bootstrap.min.css" />
+    <link rel="stylesheet" href="app.css" />
+    <link rel="stylesheet" href="JGUZDV.DynamicForms.Samples.styles.css" />
+
+    <link href="https://cdn.zdv.uni-mainz.de/web/jg-ootstrap/jg-ootstrap.css" rel="stylesheet" />
+    <link href="https://cdn.zdv.uni-mainz.de/web/fontawesome/5-free/css/all.min.css" rel="stylesheet" />
+
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <HeadOutlet @rendermode="new InteractiveWebAssemblyRenderMode(false)" />
+</head>
+
+<body>
+    <Routes @rendermode="new InteractiveWebAssemblyRenderMode(false)" />
+    <JGUZDV.Blazor.Components.Toasts.ToastView @rendermode="new InteractiveWebAssemblyRenderMode(false)" />
+    <script src="_framework/blazor.web.js"></script>
+</body>
+
+</html>
