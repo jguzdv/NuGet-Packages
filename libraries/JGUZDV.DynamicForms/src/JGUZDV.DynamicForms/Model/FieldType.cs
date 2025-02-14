@@ -258,7 +258,7 @@ public record FileFieldType : FieldType
             : [(FileType)field.Value];
 
         name = string.IsNullOrWhiteSpace(name)
-            ? field.FieldDefinition.Identifier
+            ? $"{DynamicFormsConfiguration.FormFieldPrefix}{field.FieldDefinition.Identifier}"
             : name;
 
         foreach (var value in files)

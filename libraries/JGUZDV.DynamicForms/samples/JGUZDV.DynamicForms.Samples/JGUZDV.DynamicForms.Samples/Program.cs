@@ -93,10 +93,10 @@ app.MapPost("api/documents/save", async (HttpRequest request, TestDbContext cont
             .Where(x => x.Name.StartsWith(DynamicFormsConfiguration.FormFieldPrefix))
             .GroupBy(x => x.Name))
         {
-            files[group.First().Name] = new List<FileFieldType.FileType>();
+            var identifier = group.First().Name.Replace(DynamicFormsConfiguration.FormFieldPrefix, "");
+            files[identifier] = new List<FileFieldType.FileType>();
             foreach (var file in group)
             {
-                var identifier = file.Name;
                 var stream = file.OpenReadStream();
                 var filename = file.FileName;
                 var size = stream.Length;
@@ -119,7 +119,7 @@ app.MapPost("api/documents/save", async (HttpRequest request, TestDbContext cont
                 continue;
             }
 
-            jsons.Add((formField.Key, formField.Value.ToString()));
+            jsons.Add((formField.Key.Replace(DynamicFormsConfiguration.FormFieldPrefix, ""), formField.Value.ToString()));
         }
 
         return (files, jsons);
@@ -130,11 +130,6 @@ app.MapPost("api/documents/save", async (HttpRequest request, TestDbContext cont
     var docDefId = form["DocumentDefinitionId"].First();
     var documentDefinition = await context.DocumentDefinitions
         .FirstOrDefaultAsync(x => x.Id.ToString() == docDefId);
-
-    if (documentDefinition == null)
-    {
-        throw new InvalidOperationException("Document definition not found.");
-    }
 
     var document = new Document();
     foreach (var formField in fields)
@@ -170,7 +165,10 @@ app.MapPost("api/documents/save", async (HttpRequest request, TestDbContext cont
         }
 
         var field = new Field(def);
-        field.Value = def.Type!.ConvertFromValue(fileGroup.Value);
+        
+        field.Value = def.IsList
+            ? fileGroup.Value
+            : fileGroup.Value.First();
 
         var validationResults = field.Validate(new ValidationContext(field));
         if (validationResults.Any())
