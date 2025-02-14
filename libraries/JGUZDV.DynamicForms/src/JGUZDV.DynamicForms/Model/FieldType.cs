@@ -37,7 +37,7 @@ public abstract record FieldType
     /// <returns>A JSON string representation of the value.</returns>
     public virtual string ConvertFromValue(object value)
     {
-        return JsonSerializer.Serialize(value);
+        return JsonSerializer.Serialize(value, DynamicFormsConfiguration.JsonSerializerOptions);
     }
 
     /// <summary>
@@ -47,7 +47,7 @@ public abstract record FieldType
     /// <returns>An object of the CLR type.</returns>
     public virtual object ConvertToValue(string stringValue)
     {
-        return JsonSerializer.Deserialize(stringValue, ClrType) ?? throw new InvalidOperationException($"Could not parse json: {stringValue} into target type: {ClrType.Name}");
+        return JsonSerializer.Deserialize(stringValue, ClrType, DynamicFormsConfiguration.JsonSerializerOptions) ?? throw new InvalidOperationException($"Could not parse json: {stringValue} into target type: {ClrType.Name}");
     }
 
     /// <summary>
@@ -56,12 +56,7 @@ public abstract record FieldType
     /// <returns>A JSON string representation of the field type.</returns>
     public string ToJson()
     {
-        var options = new JsonSerializerOptions()
-        {
-            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault
-        };
-
-        return System.Text.Json.JsonSerializer.Serialize(this, options);
+        return System.Text.Json.JsonSerializer.Serialize(this, DynamicFormsConfiguration.JsonSerializerOptions);
     }
 
     /// <summary>
@@ -78,10 +73,15 @@ public abstract record FieldType
         return JsonSerializer.Deserialize<FieldType>(json, options) ?? throw new InvalidOperationException($"Could not parse json: {json}");
     }
 
-    public virtual void AddToContent(Field field, MultipartFormDataContent content)
+    public virtual void AddToContent(Field field, MultipartFormDataContent content, string name = "")
     {
-        var json = this.ConvertFromValue(field.Value);
-        content.Add(new StringContent(json), field.FieldDefinition.Identifier);
+        var json = JsonSerializer.Serialize(field.Value, DynamicFormsConfiguration.JsonSerializerOptions);
+
+        name = string.IsNullOrWhiteSpace(json)
+            ? $"{DynamicFormsConfiguration.FormFieldPrefix}{field.FieldDefinition.Identifier}"
+            : name;
+
+        content.Add(new StringContent(json), name);
     }
 }
 
@@ -245,18 +245,49 @@ public record FileFieldType : FieldType
         ["en"] = "File"
     };
 
-    public override void AddToContent(Field field, MultipartFormDataContent content)
+    public override void AddToContent(Field field, MultipartFormDataContent content, string name = "")
     {
-        var value = field.Value as FileFieldType.FileType;
+        //skip null values
+        if (field.Value == null)
+        {
+            return;
+        }
 
-        var file = new StreamContent(value!.Stream);
-        content.Add(file, field.FieldDefinition.Identifier, value.FileName);
+        List<FileType> files = field.FieldDefinition.IsList
+            ? field.Values.OfType<FileType>().ToList()
+            : [(FileType)field.Value];
+
+        name = string.IsNullOrWhiteSpace(name)
+            ? field.FieldDefinition.Identifier
+            : name;
+
+        foreach (var value in files)
+        {
+            if (value.Stream == null)
+            {
+                throw new InvalidOperationException("File stream is null.");
+            }
+
+            var fileStreamContent = new StreamContent(value.Stream!);
+            content.Add(fileStreamContent, name, value.FileName);
+        }
     }
 
-    public record FileType
+
+    public record FileType : IDisposable
     {
         public string FileName { get; set; }
         public long FileSize { get; set; }
+
+        [JsonConverter(typeof(StreamConverter))]
         public Stream? Stream { get; set; }
+
+        /// <summary>
+        /// <inheritdoc />
+        /// </summary>
+        public void Dispose()
+        {
+            Stream?.Dispose();
+        }
     }
 }

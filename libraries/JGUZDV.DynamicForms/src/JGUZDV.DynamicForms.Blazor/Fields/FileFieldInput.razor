@@ -8,9 +8,9 @@
     <div class="">
         <label for="fileUpload" class="form-label">@Field.FieldDefinition.InputDefinition.Label</label>
         <InputFile class="form-control"
-        id="@Field.FieldDefinition.InputDefinition.Id"
-        OnChange="OnFilesSelected"
-        multiple="@Field.FieldDefinition.IsList" />
+                   id="@Field.FieldDefinition.InputDefinition.Id"
+                   OnChange="OnFilesSelected"
+                   multiple="@Field.FieldDefinition.IsList" />
     </div>
 
     @if (_errors.Any())
@@ -51,6 +51,7 @@
     private List<IBrowserFile> selectedFiles = new();
     private List<string> _errors = [];
 
+
     private async Task OnFilesSelected(InputFileChangeEventArgs e)
     {
         selectedFiles = Field.FieldDefinition.IsList
@@ -64,20 +65,38 @@
     {
         _errors.Clear();
 
-        var valueList = new List<FileFieldType.FileType>();
+        List<FileFieldType.FileType?> valueList = Field.FieldDefinition.IsList
+            ? Field.Value as List<FileFieldType.FileType?> ?? new()
+            : [Field.Value as FileFieldType.FileType];
+
+        foreach (var file in valueList)
+        {
+            file?.Stream?.Dispose();
+        }
+        valueList.Clear();
 
         if (!selectedFiles.Any())
         {
+            Field.Value = Field.FieldDefinition.IsList
+                ? new List<FileFieldType.FileType>()
+                : null;
+
+            _ = FieldChanged.InvokeAsync(Field);
+
             return;
         }
 
-        List<object> vals = [
-            selectedFiles.Select(x => new FileFieldType.FileType
+        valueList = selectedFiles
+            .Select(x => new FileFieldType.FileType
                 {
                     FileName = x.Name,
-                    FileSize = x.Size
+                    FileSize = x.Size,
+                    Stream = x.OpenReadStream(x.Size)
                 })
-        ];
+            .ToList();
+
+        var vals = valueList.Cast<object>().ToList();
+
         _errors = Field.FieldDefinition.Constraints
                 .SelectMany(x =>
                     x.ValidateConstraint(vals,
@@ -88,28 +107,6 @@
         if (_errors.Any())
         {
             return;
-        }
-
-        foreach (var file in selectedFiles)
-        {
-            var val = new FileFieldType.FileType()
-                {
-                    FileName = file.Name,
-                    FileSize = file.Size,
-                };
-
-            valueList.Add(val);
-
-            try
-            {
-                var stream = file.OpenReadStream(file.Size);
-                await FileService.UploadFile(stream, file.Name, Field.FieldDefinition.Identifier);
-            }
-            catch (Exception e)
-            {
-                Logger.LogError(e, SL["FileFieldInput.UploadError", file.Name]);
-                _errors.Add(SL["FileFieldInput.UploadError", file.Name]);
-            }
         }
 
         // Update the field value

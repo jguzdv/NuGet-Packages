@@ -1,4 +1,7 @@
+using System.ComponentModel.DataAnnotations;
+
 using JGUZDV.Blazor.Components;
+using JGUZDV.DynamicForms;
 using JGUZDV.DynamicForms.Model;
 using JGUZDV.DynamicForms.Samples.Client.Model;
 using JGUZDV.DynamicForms.Samples.Components;
@@ -75,60 +78,41 @@ app.MapGet("api/definitions", async (TestDbContext context) =>
     return await context.DocumentDefinitions.ToListAsync();
 });
 
-app.MapPost("api/documents/save", async (List<Field> fields, TestDbContext context) =>
+app.MapPost("api/documents/save", async (HttpRequest request, TestDbContext context) =>
 {
-    var fileFields = fields
-        .Where(x => x.FieldDefinition.Type is FileFieldType)
-        .ToList();
+    var form = await request.ReadFormAsync();
 
-    fileFields.Select(x => x.Value)
-        .OfType<FileFieldType.FileType>()
-        .Select(x => x);
-
-    var document = new Document();
-    document.Fields.AddRange(fields);
-    Console.WriteLine(document);
-
-    context.Documents.Add(document);
-    await context.SaveChangesAsync();
-});
-
-app.MapGet("api/documents", async (TestDbContext context) =>
-{
-    return await context.Documents.ToListAsync();
-});
-
-
-app.MapPost("/api/upload", async (HttpRequest request) =>
-{
-    // Value is string or FileFieldType.FileType
-    // 
     async Task<(
-            List<(string FieldIdentifier, FileFieldType.FileType Value)> Files,
-            List<(string FieldIdentifier, string Value)> Json
+            Dictionary<string, List<FileFieldType.FileType>> Files,
+            List<(string FieldIdentifier, string Json)> Json
         )>
-        FieldsFromRequest(HttpRequest request)
+        FieldsFromRequest(IFormCollection form)
     {
-        var form = await request.ReadFormAsync();
-
-        List<(string identifier, FileFieldType.FileType value)> files = new();
-        foreach (var file in form.Files)
+        Dictionary<string, List<FileFieldType.FileType>> files = new();
+        foreach (var group in form.Files
+            .Where(x => x.Name.StartsWith(DynamicFormsConfiguration.FormFieldPrefix))
+            .GroupBy(x => x.Name))
         {
-            var identifier = file.Name;
-            var stream = file.OpenReadStream();
-            var filename = file.FileName;
-            var size = stream.Length;
-
-            files.Add((identifier, new FileFieldType.FileType
+            files[group.First().Name] = new List<FileFieldType.FileType>();
+            foreach (var file in group)
             {
-                FileName = filename,
-                FileSize = size,
-                Stream = stream
-            }));
+                var identifier = file.Name;
+                var stream = file.OpenReadStream();
+                var filename = file.FileName;
+                var size = stream.Length;
+
+                files[identifier].Add(new FileFieldType.FileType
+                {
+                    FileName = filename,
+                    FileSize = size,
+                    Stream = stream
+                });
+            }
         }
 
         List<(string identifier, string value)> jsons = new();
-        foreach (var formField in form)
+        foreach (var formField in form
+            .Where(x => x.Key.StartsWith(DynamicFormsConfiguration.FormFieldPrefix)))
         {
             if (form.Files.Any(x => x.Name == formField.Key))
             {
@@ -141,15 +125,71 @@ app.MapPost("/api/upload", async (HttpRequest request) =>
         return (files, jsons);
     }
 
-    var (files, fields) = await FieldsFromRequest(request);
+    var (files, fields) = await FieldsFromRequest(form);
 
-    //load field definitions from db
-    //validate field values
-    //SaveToDb;
+    var docDefId = form["DocumentDefinitionId"].First();
+    var documentDefinition = await context.DocumentDefinitions
+        .FirstOrDefaultAsync(x => x.Id.ToString() == docDefId);
 
-    return Results.Ok();
+    if (documentDefinition == null)
+    {
+        throw new InvalidOperationException("Document definition not found.");
+    }
 
+    var document = new Document();
+    foreach (var formField in fields)
+    {
+        var def = documentDefinition.FieldDefinitions
+            .FirstOrDefault(x => x.Identifier == formField.FieldIdentifier);
+
+        if (def == null)
+        {
+            throw new InvalidOperationException($"Field definition not found for identifier {formField.FieldIdentifier}.");
+        }
+
+        var field = new Field(def);
+        field.Value = def.Type!.ConvertToValue(formField.Json);
+
+        var validationResults = field.Validate(new ValidationContext(field));
+        if (validationResults.Any())
+        {
+            throw new ValidationException($"Validation failed for field {formField.FieldIdentifier}: {string.Join(", ", validationResults.Select(r => r.ErrorMessage))}");
+        }
+
+        document.Fields.Add(field);
+    }
+
+    foreach (var fileGroup in files)
+    {
+        var def = documentDefinition.FieldDefinitions
+            .FirstOrDefault(x => x.Identifier == fileGroup.Key);
+
+        if (def == null)
+        {
+            throw new InvalidOperationException($"Field definition not found for identifier {fileGroup.Key}.");
+        }
+
+        var field = new Field(def);
+        field.Value = def.Type!.ConvertFromValue(fileGroup.Value);
+
+        var validationResults = field.Validate(new ValidationContext(field));
+        if (validationResults.Any())
+        {
+            throw new ValidationException($"Validation failed for field {fileGroup.Key}: {string.Join(", ", validationResults.Select(r => r.ErrorMessage))}");
+        }
+
+        document.Fields.Add(field);
+    }
+
+    context.Documents.Add(document);
+    await context.SaveChangesAsync();
 });
+
+app.MapGet("api/documents", async (TestDbContext context) =>
+{
+    return await context.Documents.ToListAsync();
+});
+
 
 app.MapRazorComponents<App>()
     .AddInteractiveWebAssemblyRenderMode()

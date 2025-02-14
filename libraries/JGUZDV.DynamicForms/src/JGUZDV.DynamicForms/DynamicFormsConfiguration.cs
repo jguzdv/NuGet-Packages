@@ -1,4 +1,6 @@
-﻿using JGUZDV.DynamicForms.Model;
+﻿using System.Text.Json;
+
+using JGUZDV.DynamicForms.Model;
 using JGUZDV.L10n;
 
 namespace JGUZDV.DynamicForms
@@ -150,5 +152,9 @@ namespace JGUZDV.DynamicForms
             constraint.FieldType = fieldType;
             return constraint;
         }
+
+        public static JsonSerializerOptions JsonSerializerOptions { get; } = new();
+
+        public static string FormFieldPrefix { get; set; } = "form_field_";
     }
 }
