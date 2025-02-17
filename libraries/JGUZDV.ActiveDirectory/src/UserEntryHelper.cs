@@ -1,6 +1,7 @@
 ﻿using System.DirectoryServices;
 using System.Runtime.Versioning;
 using System.Security.Principal;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace JGUZDV.ActiveDirectory;
@@ -20,15 +21,24 @@ public partial class UserEntryHelper
 
     private static string CreateLdapPath(string? ldapServer, string? pathOrBind)
     {
-        var hasServer = !string.IsNullOrWhiteSpace(ldapServer);
-
-        if (!hasServer && string.IsNullOrWhiteSpace(pathOrBind))
+        if(string.IsNullOrWhiteSpace(ldapServer) && string.IsNullOrWhiteSpace(pathOrBind))
             throw new ArgumentException("Both parameters (ldapServer, pathOrBind) are null or empty");
 
-        if (!hasServer)
-            return $"LDAP://{pathOrBind}";
+        var ldapUrlBuilder = new StringBuilder();
+        if(ldapServer?.Contains("://") != true)
+            ldapUrlBuilder.Append("LDAP://");
 
-        return $"LDAP://{ldapServer}/{pathOrBind}";
+        if (!string.IsNullOrWhiteSpace(ldapServer))
+        {
+            ldapUrlBuilder.Append(ldapServer);
+        }
+
+        if (!string.IsNullOrWhiteSpace(pathOrBind))
+        {
+            ldapUrlBuilder.Append(pathOrBind);
+        }
+
+        return ldapUrlBuilder.ToString();
     }
 
     /// <summary>
