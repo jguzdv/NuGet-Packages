@@ -35,7 +35,7 @@ public partial class UserEntryHelper
 
         if (!string.IsNullOrWhiteSpace(pathOrBind))
         {
-            if(!pathOrBind.StartsWith('/'))
+            if(!pathOrBind.StartsWith('/') && ldapServer?.EndsWith('/') != true)
             {
                 ldapUrlBuilder.Append('/');
             }
