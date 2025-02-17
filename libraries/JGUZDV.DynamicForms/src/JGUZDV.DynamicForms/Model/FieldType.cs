@@ -80,7 +80,7 @@ public abstract record FieldType
     {
         var json = JsonSerializer.Serialize(field.Value, DynamicFormsConfiguration.JsonSerializerOptions);
 
-        name = string.IsNullOrWhiteSpace(json)
+        name = string.IsNullOrWhiteSpace(name)
             ? $"{DynamicFormsConfiguration.FormFieldPrefix}{field.FieldDefinition.Identifier}"
             : name;
 
