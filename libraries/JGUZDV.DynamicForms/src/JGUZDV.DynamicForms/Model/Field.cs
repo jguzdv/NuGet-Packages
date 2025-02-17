@@ -183,6 +183,9 @@ public class Field : IValidatableObject, IDisposable, IAsyncDisposable
         }
     }
 
+    /// <summary>
+    /// <inheritdoc />
+    /// </summary>
     public async ValueTask DisposeAsync()
     {
         if (FieldDefinition.Type!.ClrType is not IAsyncDisposable)

@@ -21,7 +21,12 @@ public static class FieldViewFactory
     /// <exception cref="InvalidOperationException">Thrown when the field type is unknown.</exception>
     public static Type GetViewType(Field field)
     {
-        return _viewTypes.GetValueOrDefault(field.FieldDefinition.Type?.GetType())
+        if (field.FieldDefinition.Type == null)
+        {
+            throw new InvalidOperationException("FieldDefinition Type cannot be null");
+        }
+
+        return _viewTypes.GetValueOrDefault(field.FieldDefinition.Type!.GetType())
             ?? typeof(DefaultFieldInput);
     }
 

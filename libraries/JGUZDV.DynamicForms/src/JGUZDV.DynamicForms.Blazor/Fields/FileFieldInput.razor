@@ -48,16 +48,16 @@
     private List<string> _errors = [];
 
 
-    private async Task OnFilesSelected(InputFileChangeEventArgs e)
+    private void OnFilesSelected(InputFileChangeEventArgs e)
     {
         selectedFiles = Field.FieldDefinition.IsList
             ? e.GetMultipleFiles().ToList()
             : [e.File];
 
-        await UploadFiles();
+        UploadFiles();
     }
 
-    private async Task UploadFiles()
+    private void UploadFiles()
     {
         _errors.Clear();
 
@@ -89,6 +89,7 @@
                     FileSize = x.Size,
                     Stream = x.OpenReadStream(x.Size)
                 })
+            .OfType<FileFieldType.FileType?>()
             .ToList();
 
         var vals = valueList.Cast<object>().ToList();

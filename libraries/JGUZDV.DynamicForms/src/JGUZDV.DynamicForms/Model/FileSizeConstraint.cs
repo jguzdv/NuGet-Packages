@@ -42,7 +42,7 @@ public class FileSizeConstraint : Constraint
         {
             if (value is FileFieldType.FileType file && file.FileSize > MaxFileSize)
             {
-                results.Add(new ValidationResult($"File size exceeds the maximum allowed size of {MaxFileSize} bytes.", new[] { context.MemberName }));
+                results.Add(new ValidationResult($"File size exceeds the maximum allowed size of {MaxFileSize} bytes.", [nameof(FileFieldType.FileType.FileSize)]));
             }
         }
 

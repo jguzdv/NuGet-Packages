@@ -153,8 +153,14 @@ namespace JGUZDV.DynamicForms
             return constraint;
         }
 
+        /// <summary>
+        /// Gets the JSON serializer options for the dynamic forms library.
+        /// </summary>
         public static JsonSerializerOptions JsonSerializerOptions { get; } = new();
 
+        /// <summary>
+        /// Gets or sets the prefix for form field names.
+        /// </summary>
         public static string FormFieldPrefix { get; set; } = "form_field_";
     }
 }

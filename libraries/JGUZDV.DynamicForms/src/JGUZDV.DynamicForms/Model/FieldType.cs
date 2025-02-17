@@ -73,6 +73,9 @@ public abstract record FieldType
         return JsonSerializer.Deserialize<FieldType>(json, options) ?? throw new InvalidOperationException($"Could not parse json: {json}");
     }
 
+    /// <summary>
+    /// Adds the field value to the content.
+    /// </summary>
     public virtual void AddToContent(Field field, MultipartFormDataContent content, string name = "")
     {
         var json = JsonSerializer.Serialize(field.Value, DynamicFormsConfiguration.JsonSerializerOptions);
@@ -227,7 +230,9 @@ public record StringFieldType : FieldType
     };
 }
 
-
+/// <summary>
+/// Represents a field type for file values.
+/// </summary>
 public record FileFieldType : FieldType
 {
     /// <summary>
@@ -245,6 +250,10 @@ public record FileFieldType : FieldType
         ["en"] = "File"
     };
 
+    /// <summary>
+    /// <inheritdoc />
+    /// </summary>
+    /// <exception cref="InvalidOperationException"></exception>
     public override void AddToContent(Field field, MultipartFormDataContent content, string name = "")
     {
         //skip null values
@@ -273,12 +282,24 @@ public record FileFieldType : FieldType
         }
     }
 
-
+    /// <summary>
+    /// CLR type for the <see cref="FileFieldType"/>
+    /// </summary>
     public record FileType : IDisposable
     {
-        public string FileName { get; set; }
+        /// <summary>
+        /// Gets or sets the name of the file.
+        /// </summary>
+        public required string FileName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the size of the file.
+        /// </summary>
         public long FileSize { get; set; }
 
+        /// <summary>
+        /// Gets or sets the stream of the file.
+        /// </summary>
         [JsonConverter(typeof(StreamConverter))]
         public Stream? Stream { get; set; }
 
