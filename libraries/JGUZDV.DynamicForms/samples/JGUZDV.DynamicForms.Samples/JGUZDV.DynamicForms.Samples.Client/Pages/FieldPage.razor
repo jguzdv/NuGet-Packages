@@ -6,6 +6,7 @@
 @using JGUZDV.DynamicForms.Serialization
 @using JGUZDV.L10n
 
+
 <h1>New Fields</h1>
 
 @foreach (var kvp in _fieldsByDocumentDefinition)
@@ -14,8 +15,8 @@
     @foreach (var field in kvp.Value)
     {
         <FieldInput Field="field" />
-        <hr />
-    }
+    <hr />
+}
 }
 
 <h1>Saved Documents</h1>
@@ -31,6 +32,8 @@
     }
 </div>
 
+
+
 <button @onclick="Save">Save</button>
 
 @code {
@@ -43,9 +46,9 @@
     protected override async Task OnInitializedAsync()
     {
         var options = new JsonSerializerOptions()
-        {
-            PropertyNameCaseInsensitive = true
-        };
+            {
+                PropertyNameCaseInsensitive = true
+            };
 
         var definitions = await Client.GetFromJsonAsync<List<DocumentDefinition>>("https://localhost:7245/api/definitions", options);
         Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(definitions, options));
@@ -70,7 +73,7 @@
             var content = new MultipartFormDataContent();
 
             foreach (var field in fields)
-            {
+        {
                 field.AddToContent(content);
             }
 

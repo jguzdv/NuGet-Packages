@@ -41,6 +41,9 @@ jobs:
         run: dotnet build ${{ env.test-proj }} --no-restore -c Release
       
       - name: Run tests
+        env:
+          DOTNET_ENVIRONMENT: 'test'
+          ASPNETCORE_ENVIRONMENT: 'test'
         run: dotnet test ${{ env.test-proj }} --no-build -c Release --verbosity normal
 
       - name: Pack library project

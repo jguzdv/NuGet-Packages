@@ -10,7 +10,7 @@ namespace JGUZDV.Extensions.Logging.File;
 /// A provider of <see cref="FileLogger"/> instances.
 /// </summary>
 [UnsupportedOSPlatform("browser")]
-[ProviderAlias("File")]
+[ProviderAlias(Constants.FileProviderAlias)]
 public class FileLoggerProvider : ILoggerProvider, ISupportExternalScope
 {
     private readonly TimeProvider _timeProvider;

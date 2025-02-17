@@ -7,7 +7,7 @@
 
         <PackageId>JGUZDV.Blazor.Components</PackageId>
         <IsPackable>true</IsPackable>
-        <Version>1.7.0</Version>
+        <Version>1.8.0</Version>
         <Authors>Thomas Ottenhus, Aylin Siebel, Aaron Puhl</Authors>
         <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
         <PackageDescription>Blazor component library - build for Bootstrap 5</PackageDescription>
@@ -16,11 +16,27 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Content Update="tsconfig.json">
+            <Pack>false</Pack>
+        </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="tsconfig.json">
+        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="[8.0.0,)" />
         <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="[8.0.0,)" />
         <PackageReference Include="Microsoft.Extensions.Http" Version="[8.0.0,)" />
         <PackageReference Include="Microsoft.Extensions.Localization" Version="[8.0.0,)" />
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="[8.0.0,)" />
+        <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="5.7.1">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
     </ItemGroup>
 
     <ItemGroup>

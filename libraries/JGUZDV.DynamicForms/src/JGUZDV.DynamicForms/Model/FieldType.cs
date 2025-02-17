@@ -85,7 +85,7 @@ public abstract record FieldType
             : name;
 
         content.Add(new StringContent(json), name);
-    }
+}
 }
 
 /// <summary>

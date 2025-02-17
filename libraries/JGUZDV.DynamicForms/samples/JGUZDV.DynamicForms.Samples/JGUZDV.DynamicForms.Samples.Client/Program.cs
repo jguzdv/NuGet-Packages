@@ -9,6 +9,7 @@ builder.Services.AddSupportedCultures(["de","en"]);
 builder.Services.AddLocalization();
 builder.Services.AddScoped<ValueProvider>();
 builder.Services.AddToasts();
+
 builder.Services.AddHttpClient();
 
 await builder.Build().RunAsync();
