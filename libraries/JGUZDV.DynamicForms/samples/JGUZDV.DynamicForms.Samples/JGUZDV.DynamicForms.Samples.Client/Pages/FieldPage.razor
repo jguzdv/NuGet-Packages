@@ -1,0 +1,72 @@
+﻿@page "/field"
+@using JGUZDV.DynamicForms.Model
+@using System.Text.Json
+@using JGUZDV.DynamicForms.Samples.Client.Model
+@using JGUZDV.DynamicForms.Serialization
+@using JGUZDV.L10n
+
+
+<h1>New Fields</h1>
+
+@foreach (var field in _fields)
+{
+    <JGUZDV.DynamicForms.Blazor.FieldInput Field="field" />
+    <hr />
+}
+
+<h1>
+    Saved Documents
+</h1>
+<div>
+    @foreach (var oldField in _documents)
+    {
+        @foreach (var x in oldField.Fields)
+        {
+            <div>
+                @x.FieldDefinition.InputDefinition.Label: @x.Value
+            </div>
+        }
+    }
+</div>
+
+
+
+<button @onclick="Save">Save</button>
+
+@code {
+    private List<Field> _fields = new List<Field>();
+
+    private List<Document> _documents = new List<Document>();
+
+    [Inject]
+    public required HttpClient Client { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var options = new JsonSerializerOptions()
+            {
+                PropertyNameCaseInsensitive = true
+            };
+
+        var definitions = await Client.GetFromJsonAsync<List<DocumentDefinition>>("https://localhost:7245/api/definitions", options);
+        Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(definitions, options));
+        _fields = definitions
+            .SelectMany(x => x.FieldDefinitions)
+            .Select(x => new Field(x))
+            .ToList();
+
+        _documents = await Client.GetFromJsonAsync<List<Document>>("https://localhost:7245/api/documents", options);
+    }
+
+    private async Task Save()
+    {
+        var client = new HttpClient();
+        var options = new JsonSerializerOptions()
+        {
+        };
+
+        await client.PostAsJsonAsync("https://localhost:7245/api/documents/save", _fields, options);
+
+        _documents = await client.GetFromJsonAsync<List<Document>>("https://localhost:7245/api/documents");
+    }
+}

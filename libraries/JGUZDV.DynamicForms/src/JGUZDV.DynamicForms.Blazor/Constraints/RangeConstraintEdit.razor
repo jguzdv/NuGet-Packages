@@ -1,0 +1,105 @@
+﻿@using JGUZDV.DynamicForms.Blazor.Resources
+@using JGUZDV.DynamicForms.Model
+@using System.ComponentModel.DataAnnotations
+
+@if (!string.IsNullOrWhiteSpace(_error))
+{
+    <div class="text-danger">
+        @_error
+    </div>
+}
+<div class="mb-2">
+    <label for="MinValue">@SL["Minimaler Wert"]</label>
+    <input id="MinValue"
+           class="form-control @(!string.IsNullOrWhiteSpace(_error) ? "border-danger" : "")"
+           value="@GetMinValue()"
+           type="@FieldDefinition.Type!.InputType"
+           @onchange="async (e) => await HandleChange(e, x => _constraint.MinValue = x)" />
+</div>
+
+<div class="mb-2">
+    <label for="MinValue">@SL["Maximaler Wert"]</label>
+    <input id="MinValue" name="MinValue"
+           class="form-control @(!string.IsNullOrWhiteSpace(_error) ? "border-danger" : "")"
+           value="@GetMaxValue()"
+           type="@FieldDefinition.Type.InputType"
+           @onchange="async (e) => await HandleChange(e, x => _constraint.MaxValue = x)" />
+</div>
+
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public required Constraint Constraint { get; set; }
+
+    [Parameter]
+    public required EventCallback<Constraint> ConstraintChanged { get; set; }
+
+    [Parameter]
+    [EditorRequired]
+    public required FieldDefinition FieldDefinition { get; set; }
+
+    [Inject]
+    public required IStringLocalizer<ComponentStrings> SL { get; set; }
+
+    [Inject]
+    public required IServiceProvider ServiceProvider { get; set; }
+
+    private RangeConstraint _constraint => (RangeConstraint)Constraint!;
+    private Guid _id = Guid.NewGuid();
+
+    private string _error = "";
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        if (FieldDefinition.ValidateBase(new ValidationContext(FieldDefinition, ServiceProvider, null)).Any())
+            throw new InvalidOperationException($"Invalid {FieldDefinition}");
+    }
+
+    private async Task HandleChange(ChangeEventArgs e, Action<IComparable> setValue)
+    {
+        try
+        {
+            _error = "";
+            var type = FieldDefinition.Type!;
+
+            var value = type.ConvertToValue($"{e.Value!.ToString()!}");
+            setValue((IComparable)value);
+        }
+        catch
+        {
+            _error = "Invalid Input";
+            _constraint.MaxValue = 0;
+            _constraint.MinValue = 0;
+            await InvokeAsync(StateHasChanged);
+
+            await Task.Delay(1);
+            _constraint.MaxValue = null;
+            _constraint.MinValue = null;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    //TODO: Should the Type-Input Mapping be abstracted into FieldType?
+    private string? GetMinValue()
+    {
+        if (_constraint.MinValue == null)
+        {
+            return null;
+        }
+
+        return FieldDefinition.Type!.ConvertFromValue(_constraint.MinValue);
+    }
+
+    private string? GetMaxValue()
+    {
+        if (_constraint.MaxValue == null)
+        {
+            return null;
+        }
+
+        return FieldDefinition.Type!.ConvertFromValue(_constraint.MaxValue);
+    }
+}
