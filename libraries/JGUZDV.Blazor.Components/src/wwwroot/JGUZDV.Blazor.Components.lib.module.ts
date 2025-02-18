@@ -114,7 +114,36 @@ class PrerenderAppLoader extends HTMLElement {
 }
 
 
+export const beforeWebStart = () => {
+    console.debug('Running beforeWebStart')
+
+    handleBeforeStart();
+}
+
+export const afterWebStart = () => {
+    console.debug('Running afterWebStart')
+
+    handleAfterStarted();
+}
+
 export const beforeWebAssemblyStart = (options: any, extensions: any) => {
+    console.debug('Running beforeWebAssemblyStart')
+
+    handleBeforeStart();
+};
+
+
+export const afterWebAssemblyStarted = (blazor: any) => {
+    console.debug('Running afterWebAssemblyStart')
+
+    handleAfterStarted();
+}
+
+const handleBeforeStart = () => {
+    if (customElements.get('app-loader')) {
+        return;
+    }
+
     const useLoader = !document.documentElement.getAttribute("no-loader");
     const useFullscreenLoader = document.documentElement.getAttribute("loader-type") == 'fullscreen'
         ? true : false;
@@ -134,9 +163,9 @@ export const beforeWebAssemblyStart = (options: any, extensions: any) => {
         appLoader.setAttribute('data-fullscreen', 'true')
         appLoader.getElementsByTagName('dialog')[0].showModal()
     }
-};
+}
 
-export const afterWebAssemblyStarted = (blazor: any) => {
+const handleAfterStarted = () => {
     const appLoader = document.getElementById('__app-loader');
     if (appLoader) {
         if (!!appLoader.getAttribute('data-fullscreen')) {
