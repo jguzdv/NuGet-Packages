@@ -707,7 +707,7 @@ public class JGUZDVHostApplicationBuilder
             var machineConfigFile = Configuration["JGUZDV:MachineConfig"] ?? Configuration["MachineConfig"];
             if (!string.IsNullOrWhiteSpace(machineConfigFile))
             {
-                Configuration.AddJsonFileBeforeOthers(machineConfigFile, optional: true, reloadOnChange: true);
+                Configuration.AddAsFirstJsonFile(machineConfigFile, optional: true, reloadOnChange: true);
                 LogMessages.MachineConfigurationFileAdded(logger, machineConfigFile);
             }
             else
