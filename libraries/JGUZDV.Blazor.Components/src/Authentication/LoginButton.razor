@@ -52,7 +52,7 @@
                 {
                     await JSRuntime.InvokeVoidAsync("localStorage.setItem", AutoLoginKey, true);
 
-                    var uri = _navigation.ToAbsoluteUri($"{LoginUrl}?nextUrl={RedirectUrl}");
+                    var uri = _navigation.ToAbsoluteUri($"{LoginUrl}?redirectUri={RedirectUrl}");
                     _navigation.NavigateTo(uri.ToString(), true);
                 }
             }

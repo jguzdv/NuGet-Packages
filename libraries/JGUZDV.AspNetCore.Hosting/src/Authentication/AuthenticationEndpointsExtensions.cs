@@ -23,12 +23,12 @@ public static class AuthenticationEndpointsExtensions
         var authN = route.MapGroup(routePrefix);
 
         authN.MapGet("sign-in",
-            (ClaimsPrincipal currentUser, string redirectUri) => currentUser.Identity?.IsAuthenticated != true
+            (ClaimsPrincipal currentUser, string redirectUri = "/") => currentUser.Identity?.IsAuthenticated != true
                 ? Results.Challenge(new AuthenticationProperties { RedirectUri = redirectUri })
                 : Results.LocalRedirect(redirectUri));
 
         authN.MapGet("sign-out",
-            (ClaimsPrincipal currentUser, string redirectUri) => currentUser.Identity?.IsAuthenticated == true
+            (ClaimsPrincipal currentUser, string redirectUri = "/") => currentUser.Identity?.IsAuthenticated == true
                 ? Results.SignOut(new AuthenticationProperties { RedirectUri = redirectUri })
                 : Results.LocalRedirect(redirectUri));
 
