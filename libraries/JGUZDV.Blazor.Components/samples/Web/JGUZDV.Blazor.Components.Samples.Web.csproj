@@ -12,7 +12,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\..\JGUZDV.AspNetCore.Hosting\src\JGUZDV.AspNetCore.Hosting.csproj" />
-        <ProjectReference Include="..\Shared\JGUZDV.Blazor.Components.Samples.csproj" />
+        <ProjectReference Include="..\Web.Client\JGUZDV.Blazor.Components.Samples.Web.Client.csproj" />
     </ItemGroup>
 
 </Project>
