@@ -1,0 +1,18 @@
+﻿@using Microsoft.AspNetCore.Components.Authorization
+<Router AppAssembly="@typeof(Program).Assembly" AdditionalAssemblies="[typeof(JGUZDV.Blazor.Components.Samples._Imports).Assembly]">
+    <Found Context="routeData">
+        <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+            <Authorizing>
+                <JGUZDV.Blazor.Components.Authentication.AuthorizingView />
+            </Authorizing>
+            <NotAuthorized>
+                <JGUZDV.Blazor.Components.Authentication.NotAuthorizedView />
+            </NotAuthorized>
+        </AuthorizeRouteView>
+    </Found>
+    <NotFound>
+        <LayoutView Layout="@typeof(MainLayout)">
+            <p>Sorry, there's nothing at this address.</p>
+        </LayoutView>
+    </NotFound>
+</Router>

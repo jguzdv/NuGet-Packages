@@ -1,6 +1,8 @@
-var builder = WebApplication.CreateBuilder(args);
-var app = builder.Build();
+using JGUZDV.AspNetCore.Hosting;
+using JGUZDV.Blazor.Components.Samples.Web.Components;
 
-app.MapGet("/", () => "Hello World!");
+var builder = JGUZDVHostApplicationBuilder.CreateWebHost(args, JGUZDV.AspNetCore.Hosting.Components.BlazorInteractivityModes.WebAssembly);
+
+var app = builder.BuildAndConfigureBlazor<App>(typeof(JGUZDV.Blazor.Components.Samples._Imports).Assembly);
 
 app.Run();

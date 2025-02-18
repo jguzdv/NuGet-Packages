@@ -1,33 +1,28 @@
 using System.Security.Claims;
 
 using JGUZDV.Blazor.Components.Localization;
-using JGUZDV.Blazor.Components.Samples;
 using JGUZDV.L10n;
 
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
-builder.RootComponents.Add<App>("#app");
-builder.RootComponents.Add<HeadOutlet>("head::after");
 
-builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+//builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
-builder.Services.AddSupportedCultures(new List<string>() { "de", "en" });
+//builder.Services.AddSupportedCultures(new List<string>() { "de", "en" });
 
-builder.Services.AddLocalization();
-builder.Services.AddBrowserClientStore();
+//builder.Services.AddLocalization();
+//builder.Services.AddBrowserClientStore();
 
-builder.Services.AddSingleton<AuthenticationStateProvider, SampleAuthenticationStateProvider>();
-builder.Services.AddSingleton<ILanguageService, SampleLanguageService>();
+//builder.Services.AddSingleton<AuthenticationStateProvider, SampleAuthenticationStateProvider>();
+//builder.Services.AddSingleton<ILanguageService, SampleLanguageService>();
 
-builder.Services.AddCascadingAuthenticationState();
-builder.Services.AddAuthorizationCore();
+//builder.Services.AddCascadingAuthenticationState();
+//builder.Services.AddAuthorizationCore();
 
-var app = builder.Build();
 
-await app.RunAsync();
+await builder.Build().RunAsync();
 
 
 internal class SampleAuthenticationStateProvider : AuthenticationStateProvider
