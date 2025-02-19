@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        
+        <OutputType>Library</OutputType>
+
+        <PackageId>JGUZDV.DynamicForms.Extensions</PackageId>
+        <IsPackable>true</IsPackable>
+        <Version>1.0.0-beta1</Version>
+        <Authors>Aaron Puhl</Authors>
+        <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
+        <PackageDescription></PackageDescription>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\JGUZDV.DynamicForms\JGUZDV.DynamicForms.csproj" />
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "JGUZDV.DynamicForms.Extensions": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:53952;http://localhost:53953"
+    }
+  }
+}
