@@ -1,5 +1,4 @@
-﻿
-namespace JGUZDV.AspNetCore.Hosting.Localization;
+﻿namespace JGUZDV.AspNetCore.Components.Localization;
 
 /// <summary>
 /// Represents the state of the request localization.
@@ -20,10 +19,10 @@ public class RequestLocalizationState
     /// <summary>
     /// The supported cultures of the application.
     /// </summary>
-    public required LocalizationInfo[] SupportedCultures { get; init; }
+    public required LanguageItem[] SupportedCultures { get; init; }
 
     /// <summary>
     /// The supported UI cultures of the application.
     /// </summary>
-    public required LocalizationInfo[] SupportedUICultures { get; init; }
+    public required LanguageItem[] SupportedUICultures { get; init; }
 }
