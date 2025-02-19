@@ -10,7 +10,6 @@ namespace JGUZDV.Blazor.Hosting;
 /// <summary>
 /// Extension methods for the JGUZDVWebAssemblyApplicationBuilder.
 /// </summary>
-[SupportedOSPlatform("browser")]
 public static class JGUZDVWebAssemblyApplicationBuilderExtensions
 {
     /// <summary>
