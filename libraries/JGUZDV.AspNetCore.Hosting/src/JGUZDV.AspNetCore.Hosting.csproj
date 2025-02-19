@@ -7,7 +7,7 @@
 
         <PackageId>JGUZDV.AspNetCore.Hosting</PackageId>
         <IsPackable>true</IsPackable>
-        <Version>1.2.1</Version>
+        <Version>1.3.0</Version>
         <Authors>Thomas Ottenhus</Authors>
         <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
         <PackageDescription>HostBuilders for our default setup.</PackageDescription>
@@ -18,6 +18,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\JGUZDV.AspNetCore.Authentication.Cookies\src\JGUZDV.AspNetCore.Authentication.Cookies.csproj" />
+        <ProjectReference Include="..\..\JGUZDV.AspNetCore.Components.Localization\src\JGUZDV.AspNetCore.Components.Localization.csproj" />
         <ProjectReference Include="..\..\JGUZDV.AspNetCore.DataProtection\src\JGUZDV.AspNetCore.DataProtection.csproj" />
         <ProjectReference Include="..\..\JGUZDV.AspNetCore.Logging\src\JGUZDV.AspNetCore.Logging.csproj" />
         <ProjectReference Include="..\..\JGUZDV.Extensions.Authorization\src\JGUZDV.Extensions.Authorization.csproj" />
