@@ -322,19 +322,23 @@ public static class JGUZDVHostApplicationBuilderExtensions
         if (interactivityModes.HasFlag(BlazorInteractivityModes.WebAssembly)) {
             builder.AddInteractiveWebAssemblyComponents();
             appBuilder.HasInteractiveWebAssemblyComponents = true;
+
+            if (appBuilder.HasAuthentication)
+            {
+                builder.AddAuthenticationStateSerialization(opt => opt.SerializeAllClaims = true);
+            }
+
+            if (appBuilder.HasRequestLocalization)
+            {
+                appBuilder.Services.TryAddEnumerable(ServiceDescriptor.Scoped<IPersistentComponentStateProvider, RequestLocalizationPersistentStateProvider>());
+            }
         }
 
         configure?.Invoke(builder);
 
-        if(appBuilder.HasAuthentication)
+        if (appBuilder.HasAuthentication)
         {
-            builder.AddAuthenticationStateSerialization(opt => opt.SerializeAllClaims = true);
             appBuilder.Services.AddCascadingAuthenticationState();
-        }
-
-        if (appBuilder.HasRequestLocalization)
-        {
-            appBuilder.Services.TryAddEnumerable(ServiceDescriptor.Scoped<IPersistentComponentStateProvider, RequestLocalizationPersistentStateProvider>());
         }
 
         appBuilder.HasRazorComponents = true;
