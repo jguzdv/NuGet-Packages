@@ -6,6 +6,10 @@ using JGUZDV.Blazor.Components.Samples.Web.Components;
 var builder = JGUZDVHostApplicationBuilder.CreateWebHost(args, JGUZDV.AspNetCore.Hosting.Components.BlazorInteractivityModes.WebAssembly);
 builder.Services.AddScoped<ILanguageService, BlazorLanguageService>();
 
-var app = builder.BuildAndConfigureBlazor<App>(typeof(JGUZDV.Blazor.Components.Samples._Imports).Assembly);
+var app = builder.BuildAndConfigureBlazor<App>(
+    additionalBlazorAssemblies: [
+        typeof(JGUZDV.Blazor.Components.Samples.Web.Client.Pages.Index).Assembly,
+        typeof(JGUZDV.Blazor.Components.Samples.MainLayout).Assembly,
+    ]);
 
 app.Run();
