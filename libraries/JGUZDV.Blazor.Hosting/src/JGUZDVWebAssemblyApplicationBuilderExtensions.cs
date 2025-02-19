@@ -5,7 +5,7 @@ using JGUZDV.Blazor.Hosting.Localization;
 
 using Microsoft.Extensions.DependencyInjection;
 
-namespace JGUZDV.AspNetCore.Hosting;
+namespace JGUZDV.Blazor.Hosting;
 
 /// <summary>
 /// Extension methods for the JGUZDVWebAssemblyApplicationBuilder.
