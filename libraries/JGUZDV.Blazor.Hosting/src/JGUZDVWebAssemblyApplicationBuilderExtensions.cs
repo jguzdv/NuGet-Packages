@@ -32,6 +32,7 @@ public static class JGUZDVWebAssemblyApplicationBuilderExtensions
     /// </summary>
     public static JGUZDVWebAssemblyApplicationBuilder AddLocalization(this JGUZDVWebAssemblyApplicationBuilder appBuilder)
     {
+        appBuilder.Services.AddLocalization();
         appBuilder.Services.AddScoped<ILanguageService, PersistentStateLanguageService>();
 
         return appBuilder;
