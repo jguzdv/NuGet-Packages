@@ -14,6 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\..\JGUZDV.Blazor.Hosting\src\JGUZDV.Blazor.Hosting.csproj" />
         <ProjectReference Include="..\Shared\JGUZDV.Blazor.Components.Samples.csproj" />
 
     </ItemGroup>

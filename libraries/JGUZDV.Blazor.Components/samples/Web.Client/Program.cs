@@ -1,12 +1,11 @@
 using System.Security.Claims;
 
 using JGUZDV.Blazor.Components.Localization;
-using JGUZDV.L10n;
+using JGUZDV.Blazor.Hosting;
 
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
-var builder = WebAssemblyHostBuilder.CreateDefault(args);
+var builder = JGUZDVWebAssemblyApplicationBuilder.CreateDefault(args);
 
 //builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
