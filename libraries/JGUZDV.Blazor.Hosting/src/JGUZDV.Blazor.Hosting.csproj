@@ -10,7 +10,7 @@
 
         <PackageId>JGUZDV.Blazor.Hosting</PackageId>
         <IsPackable>true</IsPackable>
-        <Version>1.0.0-beta5</Version>
+        <Version>1.0.0-beta7</Version>
         <Authors>Thomas Ottenhus</Authors>
         <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
         <PackageDescription>HostBuilders for our default setup.</PackageDescription>

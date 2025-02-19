@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace JGUZDV.AspNetCore.Hosting;
+namespace JGUZDV.Blazor.Hosting;
 
 /// <summary>
 /// A builder for configuring a WebAssembly application (aka Blazor client).
