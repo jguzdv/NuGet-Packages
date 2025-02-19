@@ -1,6 +1,4 @@
-﻿using System.Runtime.Versioning;
-
-using JGUZDV.AspNetCore.Components.Localization;
+﻿using JGUZDV.AspNetCore.Components.Localization;
 using JGUZDV.Blazor.Hosting.Localization;
 
 using Microsoft.Extensions.DependencyInjection;
