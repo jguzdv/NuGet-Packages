@@ -1,6 +1,6 @@
 ﻿<!DOCTYPE html>
 @inject IWebHostEnvironment _env;
-<html lang="@System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName">
+<html lang="@System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName" blazor-culture="@System.Globalization.CultureInfo.CurrentUICulture.ToString()">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -17,23 +17,24 @@
     <link href="@Assets["JGUZDV.Blazor.Components.Samples.Web.styles.css"]" rel="stylesheet">
 
     <ImportMap />
-    <HeadOutlet @rendermode="@(new InteractiveWebAssemblyRenderMode(prerender: false))" />
+    <HeadOutlet />
 </head>
 
 <body>
-    @if (_env.IsDevelopment())
-    {
-        <div style="position: fixed; bottom: 0; right: 0; background-color: darkred; color: white;">
-            <div class="d-block d-sm-none">XS</div>
-            <div class="d-none d-sm-block d-md-none">SM</div>
-            <div class="d-none d-md-block d-lg-none">MD</div>
-            <div class="d-none d-lg-block d-xl-none">LG</div>
-            <div class="d-none d-xl-block d-xxl-none">XL</div>
-            <div class="d-none d-xxl-block">XXL</div>
-        </div>
-    }
+    <div style="position: fixed; bottom: 0; right: 0; background-color: darkred; color: white;">
+        <div class="d-block d-sm-none">XS</div>
+        <div class="d-none d-sm-block d-md-none">SM</div>
+        <div class="d-none d-md-block d-lg-none">MD</div>
+        <div class="d-none d-lg-block d-xl-none">LG</div>
+        <div class="d-none d-xl-block d-xxl-none">XL</div>
+        <div class="d-none d-xxl-block">XXL</div>
+    </div>
+    <div style="position: fixed; bottom: 0; left: 0; background-color: orange; color: white;">
+        <div>Application: @this.GetType().Assembly.GetName().Name</div>
+    </div>
 
-    <Routes @rendermode="@(new InteractiveWebAssemblyRenderMode(prerender: false))" />
-    <script src="_framework/blazor.web.js"></script>
+    <Routes />
+    <script defer src="_framework/blazor.web.js" autostart="false"></script>
+    <script defer src="@Assets["blazorStartup.js"]"></script>
 </body>
 </html>

@@ -6,8 +6,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Options;
 
-using static IdentityModel.ClaimComparer;
-
 namespace JGUZDV.AspNetCore.Hosting.Localization;
 
 /// <summary>

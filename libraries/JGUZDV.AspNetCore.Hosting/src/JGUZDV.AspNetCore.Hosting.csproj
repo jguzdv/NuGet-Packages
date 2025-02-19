@@ -23,6 +23,10 @@
         <ProjectReference Include="..\..\JGUZDV.Extensions.Authorization\src\JGUZDV.Extensions.Authorization.csproj" />
         <ProjectReference Include="..\..\JGUZDV.Extensions.Json\src\JGUZDV.Extensions.Json.csproj" />
         <ProjectReference Include="..\..\JGUZDV.YARP.SimpleReverseProxy\src\JGUZDV.YARP.SimpleReverseProxy.csproj" />
+
+        <ProjectReference Include="..\..\JGUZDV.Blazor.Components\src\JGUZDV.Blazor.Components.csproj">
+            <PrivateAssets>all</PrivateAssets>
+        </ProjectReference>
     </ItemGroup>
 
     <ItemGroup>
