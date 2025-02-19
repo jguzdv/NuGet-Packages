@@ -28,11 +28,11 @@
 
                 width: var(--blazor-load-percentage, 0%);
                 transition: width 0.2s ease-in-out;
-                margin: 0 0 0 auto;
+                margin: 0 auto 0 0;
 
                 color: #FFF;
                 content: var(--blazor-load-percentage-text, "");
-                text-align: center;
+                text-align: left;
                 font-weight: bold;
                 text-shadow: 1px 1px 0 #23373c, -1px 1px 0 #23373c, 1px -1px 0 #23373c, -1px -1px 0 #23373c;
             }
