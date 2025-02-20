@@ -7,10 +7,11 @@
 
         <PackageId>JGUZDV.DynamicForms.Blazor</PackageId>
         <IsPackable>true</IsPackable>
-        <Version>1.0.0-beta2</Version>
+        <Version>1.0.0-beta1</Version>
         <Authors>Aaron Puhl</Authors>
         <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
         <PackageDescription></PackageDescription>
+        <OutputType>Library</OutputType>
     </PropertyGroup>
 
 

@@ -13,6 +13,7 @@
         <Authors>Aaron Puhl</Authors>
         <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
         <PackageDescription></PackageDescription>
+        <OutputType>Library</OutputType>
     </PropertyGroup>
 
     <ItemGroup>
