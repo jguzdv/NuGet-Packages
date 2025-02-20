@@ -1,4 +1,8 @@
+using System.ComponentModel.DataAnnotations;
+
 using JGUZDV.Blazor.Components;
+using JGUZDV.DynamicForms;
+using JGUZDV.DynamicForms.Extensions;
 using JGUZDV.DynamicForms.Model;
 using JGUZDV.DynamicForms.Samples.Client.Model;
 using JGUZDV.DynamicForms.Samples.Components;
@@ -7,6 +11,7 @@ using JGUZDV.DynamicForms.Serialization;
 using JGUZDV.L10n;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -74,11 +79,63 @@ app.MapGet("api/definitions", async (TestDbContext context) =>
     return await context.DocumentDefinitions.ToListAsync();
 });
 
-app.MapPost("api/documents/save", async (List<Field> fields, TestDbContext context) =>
+app.MapPost("api/documents/save", async (HttpRequest request, TestDbContext context) =>
 {
+    var form = await request.ReadFormAsync();
+
+    var formFields = form.ExtractFields();
+
+    var docDefId = form["DocumentDefinitionId"].First();
+    var documentDefinition = await context.DocumentDefinitions
+        .FirstOrDefaultAsync(x => x.Id.ToString() == docDefId);
+
     var document = new Document();
-    document.Fields.AddRange(fields);
-    Console.WriteLine(document);
+    foreach (var formField in formFields.Fields)
+    {
+        var def = documentDefinition.FieldDefinitions
+            .FirstOrDefault(x => x.Identifier == formField.FieldIdentifier);
+
+        if (def == null)
+        {
+            throw new InvalidOperationException($"Field definition not found for identifier {formField.FieldIdentifier}.");
+        }
+
+        var field = new Field(def);
+        field.Value = def.Type!.ConvertToValue(formField.Json);
+
+        var validationResults = field.Validate(new ValidationContext(field));
+        if (validationResults.Any())
+        {
+            throw new ValidationException($"Validation failed for field {formField.FieldIdentifier}: {string.Join(", ", validationResults.Select(r => r.ErrorMessage))}");
+        }
+
+        document.Fields.Add(field);
+    }
+
+    foreach (var fileGroup in formFields.FileFields)
+    {
+        var def = documentDefinition.FieldDefinitions
+            .FirstOrDefault(x => x.Identifier == fileGroup.FieldIdentifier);
+
+        if (def == null)
+        {
+            throw new InvalidOperationException($"Field definition not found for identifier {fileGroup.FieldIdentifier}.");
+        }
+
+        var field = new Field(def);
+        
+        field.Value = def.IsList
+            ? fileGroup.Files
+            : fileGroup.Files.First();
+
+        var validationResults = field.Validate(new ValidationContext(field));
+        if (validationResults.Any())
+        {
+            throw new ValidationException($"Validation failed for field {fileGroup.FieldIdentifier}: {string.Join(", ", validationResults.Select(r => r.ErrorMessage))}");
+        }
+
+        document.Fields.Add(field);
+    }
 
     context.Documents.Add(document);
     await context.SaveChangesAsync();
@@ -88,6 +145,7 @@ app.MapGet("api/documents", async (TestDbContext context) =>
 {
     return await context.Documents.ToListAsync();
 });
+
 
 app.MapRazorComponents<App>()
     .AddInteractiveWebAssemblyRenderMode()

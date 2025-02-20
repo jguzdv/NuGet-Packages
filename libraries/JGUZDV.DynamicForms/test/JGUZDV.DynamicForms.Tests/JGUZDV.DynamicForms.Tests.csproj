@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\JGUZDV.DynamicForms\JGUZDV.DynamicForms.csproj" />
+    <ProjectReference Include="..\..\src\JGUZDV.DynamicForms\JGUZDV.DynamicForms.csproj" />
   </ItemGroup>
 
   <ItemGroup>

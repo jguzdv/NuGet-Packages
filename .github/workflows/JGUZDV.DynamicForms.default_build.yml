@@ -1,0 +1,59 @@
+on:
+  workflow_call:
+    inputs:
+      library-name:
+        required: true
+        type: string
+      push-to-nuget:
+        required: false
+        type: boolean
+        default: false
+      run-tests:
+        type: boolean
+        default: true
+    secrets:
+      NUGET_API_KEY:
+        required: true    
+
+env:
+    dotnet-version: 9.0.x
+    src-proj: ./libraries/JGUZDV.DynamicForms/src/${{ inputs.library-name }}/${{ inputs.library-name }}.csproj
+    test-proj: ./libraries/JGUZDV.DynamicForms/test/${{ inputs.library-name }}.Tests/${{ inputs.library-name }}.Tests.csproj
+    publish-path: ./publish/${{ inputs.library-name }}
+
+jobs:
+  build_test_pack:
+    name: Build and Test ${{ inputs.library-name }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET Core SDK ${{ env.dotnet-version }}
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ env.dotnet-version }}
+
+      - name: Restore library project
+        run: dotnet restore ${{ env.src-proj }}
+      - name: Restore test project
+        run: dotnet restore ${{ env.test-proj }}
+
+      - name: Build library project
+        run: dotnet build ${{ env.src-proj }} --no-restore -c Release
+      - name: Build test project
+        run: dotnet build ${{ env.test-proj }} --no-restore -c Release
+      
+      - name: Run tests
+        if: ${{ inputs.run-tests }}
+        run: dotnet test ${{ env.test-proj }} --no-build -c Release --verbosity normal
+
+      - name: Pack library project
+        run: dotnet pack ${{ env.src-proj }} --no-build -c Release --output ${{ env.publish-path }}
+
+      - name: Upload nupkg
+        uses: actions/upload-artifact@v4
+        with:
+          name: NuGetPackage-${{ inputs.library-name }}
+          path: ${{ env.publish-path }}
+          retention-days: 7
+

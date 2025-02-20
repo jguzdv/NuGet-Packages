@@ -36,6 +36,7 @@ public class FieldConverter : JsonConverter<Field>
                         throw new JsonException("FieldDefinition must be read before Value");
 
                     var fieldType = fieldDefinition.Type ?? throw new InvalidOperationException("FieldType must be set");
+
                     value = fieldType.ConvertToValue(reader.GetString()!);
                     break;
             }

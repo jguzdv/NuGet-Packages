@@ -21,7 +21,8 @@ public class ClaimProviderTest
     {
         var services = new ServiceCollection();
         services.AddSingleton(typeof(ILogger<>), typeof(NullLogger<>));
-        services.AddPropertyReader(o => {
+        services.AddPropertyReader(o =>
+        {
             o.PropertyInfos.Add("test-string", new("test-string", typeof(string)));
             o.PropertyInfos.Add("test-dn", new("test-dn", typeof(string)));
             o.PropertyInfos.Add("test-int", new("test-int", typeof(int)));
@@ -56,7 +57,7 @@ public class ClaimProviderTest
         directoryEntry.Properties["test-int"].Value = 42;
         directoryEntry.Properties["test-byte"].Value = new byte[] { 0x01, 0x02, 0x03 };
         directoryEntry.Properties["test-guid"].Value = new Guid("00000000-0000-0000-0000-000000000042").ToByteArray();
-        
+
         var sid = new SecurityIdentifier("S-1-5-21-3623811015-3361044348-30300820-1013");
         var sidBytes = new byte[sid.BinaryLength];
         sid.GetBinaryForm(sidBytes, 0);

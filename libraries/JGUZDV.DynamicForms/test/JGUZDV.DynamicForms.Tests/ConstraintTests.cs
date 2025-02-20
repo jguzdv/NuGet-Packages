@@ -144,5 +144,42 @@ namespace JGUZDV.DynamicForms.Tests
             // Assert
             Assert.Equal(2, results.Count);
         }
+
+        [Fact]
+        public void FileSizeConstraint_ShouldValidateCorrectly()
+        {
+            // Arrange
+            var fileSizeConstraint = new FileSizeConstraint { MaxFileSize = 1024 };
+            var values = new List<object>
+            {
+                new FileFieldType.FileType { FileName = "file1.txt", FileSize = 512 },
+                new FileFieldType.FileType { FileName = "file2.txt", FileSize = 1024 }
+            };
+            var context = new ValidationContext(new FieldDefinition());
+
+            // Act
+            var results = fileSizeConstraint.ValidateConstraint(values, context).ToList();
+
+            // Assert
+            Assert.Empty(results);
+        }
+
+        [Fact]
+        public void FileSizeConstraint_ShouldFailValidation()
+        {
+            // Arrange
+            var fileSizeConstraint = new FileSizeConstraint { MaxFileSize = 1024 };
+            var values = new List<object>
+            {
+                new FileFieldType.FileType { FileName = "file1.txt", FileSize = 2048 }
+            };
+            var context = new ValidationContext(new FieldDefinition());
+
+            // Act
+            var results = fileSizeConstraint.ValidateConstraint(values, context).ToList();
+
+            // Assert
+            Assert.Single(results);
+        }
     }
 }
