@@ -10,7 +10,7 @@
 
         <PackageId>JGUZDV.Blazor.Hosting</PackageId>
         <IsPackable>true</IsPackable>
-        <Version>1.0.0-beta5</Version>
+        <Version>1.0.0-beta9</Version>
         <Authors>Thomas Ottenhus</Authors>
         <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
         <PackageDescription>HostBuilders for our default setup.</PackageDescription>
@@ -18,18 +18,14 @@
 
         <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     </PropertyGroup>
-    
-    <ItemGroup>
-      <Compile Include="..\..\JGUZDV.AspNetCore.Hosting\src\Localization\LocalizationInfo.cs" Link="Localization\LocalizationInfo.cs" />
-      <Compile Include="..\..\JGUZDV.AspNetCore.Hosting\src\Localization\RequestLocalizationState.cs" Link="Localization\RequestLocalizationState.cs" />
-    </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="[9.0.0, )" PrivateAssets="All" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="[9.0.0, )" PrivateAssets="All" />
+        <PackageReference Include="Microsoft.Extensions.Localization" Version="[9.0.0,)" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\JGUZDV.Blazor.Components\src\JGUZDV.Blazor.Components.csproj" />
+      <ProjectReference Include="..\..\JGUZDV.AspNetCore.Components.Localization\src\JGUZDV.AspNetCore.Components.Localization.csproj" />
     </ItemGroup>
 </Project>

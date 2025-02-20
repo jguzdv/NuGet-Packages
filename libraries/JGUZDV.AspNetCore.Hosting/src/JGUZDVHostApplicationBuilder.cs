@@ -678,7 +678,7 @@ public class JGUZDVHostApplicationBuilder
     /// Adds default logging services to the application.
     /// This will build the service provider and dispose it afterwards, so we can log the logging builder.
     /// </summary>
-    private void AddLogging()
+    public void AddLogging()
     {
         // Were building the service provider to enable logging during log setup.
         // While this seems counterintuitive, it is necessary to log missing configurations.
@@ -691,8 +691,10 @@ public class JGUZDVHostApplicationBuilder
         }
     }
 
-
-    private void AddMachineConfig()
+    /// <summary>
+    /// Adds a global configuration file to the config, that's either named "MachineConfig" or "JGUZDV:MachineConfig".
+    /// </summary>
+    public void AddMachineConfig()
     {
         // Were building the service provider to enable logging during log setup.
         // While this seems counterintuitive, it is necessary to log missing configurations.
@@ -700,15 +702,16 @@ public class JGUZDVHostApplicationBuilder
         using (var sp = Services.BuildServiceProvider())
         using (var loggerFactory = sp.GetRequiredService<ILoggerFactory>())
         {
+            var logger = loggerFactory.CreateLogger(nameof(JGUZDVHostApplicationBuilder));
 
-            var machineConfigFile = Configuration["MachineConfig"];
+            var machineConfigFile = Configuration["JGUZDV:MachineConfig"] ?? Configuration["MachineConfig"];
             if (!string.IsNullOrWhiteSpace(machineConfigFile))
             {
-                Configuration.AddJsonFileBeforeOthers(machineConfigFile, optional: true, reloadOnChange: true);
+                Configuration.AddAsFirstJsonFile(machineConfigFile, optional: true, reloadOnChange: true);
+                LogMessages.MachineConfigurationFileAdded(logger, machineConfigFile);
             }
             else
             {
-                var logger = loggerFactory.CreateLogger(nameof(JGUZDVHostApplicationBuilder));
                 LogMessages.MissingConfig(logger, LogLevel.Information, "MachineConfig");
             }
         }

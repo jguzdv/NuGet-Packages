@@ -1,16 +1,13 @@
-﻿using System.Runtime.Versioning;
-
-using JGUZDV.Blazor.Components.Localization;
+﻿using JGUZDV.AspNetCore.Components.Localization;
 using JGUZDV.Blazor.Hosting.Localization;
 
 using Microsoft.Extensions.DependencyInjection;
 
-namespace JGUZDV.AspNetCore.Hosting;
+namespace JGUZDV.Blazor.Hosting;
 
 /// <summary>
 /// Extension methods for the JGUZDVWebAssemblyApplicationBuilder.
 /// </summary>
-[SupportedOSPlatform("browser")]
 public static class JGUZDVWebAssemblyApplicationBuilderExtensions
 {
     /// <summary>

@@ -1,7 +1,6 @@
 ﻿using System.Globalization;
 
-using JGUZDV.AspNetCore.Hosting.Localization;
-using JGUZDV.Blazor.Components.Localization;
+using JGUZDV.AspNetCore.Components.Localization;
 
 using Microsoft.AspNetCore.Components;
 
@@ -33,16 +32,8 @@ public class PersistentStateLanguageService : ILanguageService
 
 
     /// <inheritdoc />
-    public List<LanguageItem>? GetLanguages()
-    {
-        var currentUICulture = GetCurrentUICulture();
-
-        var result = _state?.SupportedCultures?
-            .Select(c => new LanguageItem(c.Value, c.NativeDisplayName))
-            .ToList();
-
-        return result;
-    }
+    public IEnumerable<LanguageItem>? GetLanguages()
+        => _state?.SupportedCultures;
 
     /// <inheritdoc />
     public Task InitializeService()
