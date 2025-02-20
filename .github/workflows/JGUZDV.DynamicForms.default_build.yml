@@ -18,7 +18,7 @@ on:
 env:
     dotnet-version: 9.0.x
     src-proj: ./libraries/JGUZDV.DynamicForms/src/${{ inputs.library-name }}/${{ inputs.library-name }}.csproj
-    test-proj: ./libraries/JGUZDV.DynamicForms/test/${{ inputs.library-name }}/${{ inputs.library-name }}.Tests.csproj
+    test-proj: ./libraries/JGUZDV.DynamicForms/test/${{ inputs.library-name }}.Tests/${{ inputs.library-name }}.Tests.csproj
     publish-path: ./publish/${{ inputs.library-name }}
 
 jobs:
