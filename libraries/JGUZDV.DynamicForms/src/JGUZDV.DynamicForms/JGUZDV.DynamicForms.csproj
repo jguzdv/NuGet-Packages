@@ -10,7 +10,7 @@
         <Version>1.0.0-beta1</Version>
         <Authors>Aaron Puhl</Authors>
         <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
-        <PackageDescription></PackageDescription>
+        <PackageDescription>Library to create dynamic forms at runtime.</PackageDescription>
         <OutputType>Library</OutputType>
 
         <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>

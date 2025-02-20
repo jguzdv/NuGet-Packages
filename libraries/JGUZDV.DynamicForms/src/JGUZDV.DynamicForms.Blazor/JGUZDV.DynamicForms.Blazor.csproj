@@ -10,7 +10,7 @@
         <Version>1.0.0-beta1</Version>
         <Authors>Aaron Puhl</Authors>
         <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
-        <PackageDescription></PackageDescription>
+        <PackageDescription>Blazor component library for DynamicForms.</PackageDescription>
         <OutputType>Library</OutputType>
     </PropertyGroup>
 
