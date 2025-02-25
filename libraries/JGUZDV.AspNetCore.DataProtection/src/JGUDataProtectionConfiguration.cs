@@ -8,8 +8,7 @@ internal class JGUDataProtectionConfiguration : IValidatableObject
     
     public bool DisableAutomaticKeyGeneration { get; set; }
 
-    public bool UsePersistence { get; set; } = true;
-    public Persistence? Persistence { get; set; }
+    public Persistence Persistence { get; set; } = new();
 
     public bool UseProtection { get; set; } = true;
     public Protection? Protection { get; set; }
@@ -19,14 +18,9 @@ internal class JGUDataProtectionConfiguration : IValidatableObject
         if (string.IsNullOrWhiteSpace(ApplicationDiscriminator))
             yield return new ValidationResult("ApplicationName must be set", new[] { nameof(ApplicationDiscriminator) });
 
-        if (UsePersistence && Persistence == null)
-            yield return new ValidationResult("Persistence must be set", new[] { nameof(UsePersistence), nameof(Persistence) });
-
-        if (UsePersistence && Persistence?.UseFileSystem == true)
-        {
-            if (string.IsNullOrWhiteSpace(Persistence?.FileSystem?.Path))
-                yield return new ValidationResult("Persistence:FileSystem:Path must be set", new[] { nameof(Persistence.UseFileSystem), nameof(Persistence.FileSystem) });
-        }
+        
+        if (string.IsNullOrWhiteSpace(Persistence?.FileSystem?.Path))
+            yield return new ValidationResult("Persistence:FileSystem:Path must be set", new[] { nameof(Persistence.FileSystem) });
 
         if (UseProtection && Protection == null)
             yield return new ValidationResult("Protection must be set", new[] { nameof(UseProtection), nameof(Protection) });
@@ -43,8 +37,7 @@ internal class JGUDataProtectionConfiguration : IValidatableObject
 
 internal class Persistence
 {
-    public bool UseFileSystem { get; set; }
-    public FileSystemPersistence? FileSystem { get; set; }
+    public FileSystemPersistence? FileSystem { get; set; } = new();
 }
 
 
