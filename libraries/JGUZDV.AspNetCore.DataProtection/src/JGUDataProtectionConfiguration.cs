@@ -2,10 +2,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace JGUZDV.AspNetCore.DataProtection;
 
-internal class Configuration : IValidatableObject
+internal class JGUDataProtectionConfiguration : IValidatableObject
 {
-    public string? ApplicationName { get; set; }
-    public bool SetApplicationName { get; set; }
+    public string? ApplicationDiscriminator { get; set; }
+    
     public bool DisableAutomaticKeyGeneration { get; set; }
 
     public bool UsePersistence { get; set; } = true;
@@ -16,8 +16,8 @@ internal class Configuration : IValidatableObject
 
     public IEnumerable<ValidationResult> Validate(ValidationContext? validationContext)
     {
-        if (SetApplicationName && string.IsNullOrWhiteSpace(ApplicationName))
-            yield return new ValidationResult("ApplicationName must be set", new[] { nameof(ApplicationName), nameof(SetApplicationName) });
+        if (string.IsNullOrWhiteSpace(ApplicationDiscriminator))
+            yield return new ValidationResult("ApplicationName must be set", new[] { nameof(ApplicationDiscriminator) });
 
         if (UsePersistence && Persistence == null)
             yield return new ValidationResult("Persistence must be set", new[] { nameof(UsePersistence), nameof(Persistence) });
@@ -26,9 +26,6 @@ internal class Configuration : IValidatableObject
         {
             if (string.IsNullOrWhiteSpace(Persistence?.FileSystem?.Path))
                 yield return new ValidationResult("Persistence:FileSystem:Path must be set", new[] { nameof(Persistence.UseFileSystem), nameof(Persistence.FileSystem) });
-    
-            if (Persistence?.FileSystem?.UseIsolatedPath == true && string.IsNullOrWhiteSpace(ApplicationName))
-                yield return new ValidationResult("ApplicationName must be set", new[] { nameof(ApplicationName), nameof(Persistence.FileSystem.UseIsolatedPath) });
         }
 
         if (UseProtection && Protection == null)
@@ -50,6 +47,16 @@ internal class Persistence
     public FileSystemPersistence? FileSystem { get; set; }
 }
 
+
+internal class FileSystemPersistence
+{
+    public string? Path { get; set; }
+
+    public string? IsolatedPathDiscriminator { get; set; }
+}
+
+
+
 internal class Protection
 {
     public bool UseCertificate { get; set; }
@@ -64,10 +71,4 @@ internal class Certificate
     public string? Thumbprint { get; set; }
     public string? FileName { get; set; }
     public string? Password { get; set; }
-}
-
-internal class FileSystemPersistence
-{
-    public bool UseIsolatedPath { get; set; } = true;
-    public string? Path { get; set; }
 }
