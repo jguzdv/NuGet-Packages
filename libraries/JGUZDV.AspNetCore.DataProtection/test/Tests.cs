@@ -11,7 +11,7 @@ public class Tests
     [Fact]
     public void TestDataProtectionConfig()
     {
-        var builder = WebApplication.CreateBuilder(new WebApplicationOptions { EnvironmentName = "Test" });
+        var builder = WebApplication.CreateBuilder(new WebApplicationOptions { EnvironmentName = "test" });
 
         builder.AddJGUZDVDataProtection();
 
