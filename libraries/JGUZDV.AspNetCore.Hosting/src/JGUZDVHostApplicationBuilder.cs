@@ -250,6 +250,11 @@ public class JGUZDVHostApplicationBuilder
                     LogMessages.MissingConfig(logger, missingConfigLogLevel, Constants.ConfigSections.DataProtection);
                 }
 
+                if (string.IsNullOrWhiteSpace(Configuration[$"{Constants.ConfigSections.DataProtection}:ApplicationDiscriminator"]))
+                {
+                    LogMessages.ApplicationDiscriminatorNotSet(logger, $"{Constants.ConfigSections.DataProtection}:ApplicationDiscriminator");
+                }
+
                 Services.AddDataProtection();
             }
 

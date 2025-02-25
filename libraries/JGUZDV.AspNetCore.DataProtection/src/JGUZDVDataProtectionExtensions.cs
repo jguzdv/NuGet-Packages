@@ -14,14 +14,14 @@ public static class JGUZDVDataProtectionExtensions
     /// <summary>
     /// Adds data protection to the application using the specified configuration.
     /// </summary>
-    public static IDataProtectionBuilder AddJGUZDVDataProtection(this IServiceCollection services, IConfigurationSection configurationSection, IWebHostEnvironment? environment = null) 
+    public static IDataProtectionBuilder AddJGUZDVDataProtection(this IServiceCollection services, IConfigurationSection configurationSection, IWebHostEnvironment environment) 
         => services.AddDataProtection().UseDataProtectionConfig(configurationSection, environment);
 
 
     /// <summary>
     /// Adds data protection to the application using the specified configuration.
     /// </summary>
-    public static IDataProtectionBuilder AddJGUZDVDataProtection(this IServiceCollection services, IConfiguration config, IWebHostEnvironment? environment = null) 
+    public static IDataProtectionBuilder AddJGUZDVDataProtection(this IServiceCollection services, IConfiguration config, IWebHostEnvironment environment) 
         => services.AddJGUZDVDataProtection(config.GetSection(Constants.DefaultSectionName), environment);
 
 
