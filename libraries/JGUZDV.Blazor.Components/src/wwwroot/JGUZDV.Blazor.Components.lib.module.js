@@ -43,7 +43,8 @@ class FullScreenAppLoader extends HTMLElement {
         `;
     };
 }
-class PrerenderAppLoader extends HTMLElement {
+
+class AppLoader extends HTMLElement {
     constructor() {
         super();
     }
@@ -64,45 +65,45 @@ class PrerenderAppLoader extends HTMLElement {
                 initial-value: 0%;
             }
 
-            .preloaded-loader-progress {
-                  --percentage: var(--blazor-load-percentage);
-                  animation: progress 2s 0.5s forwards;
-                  width: 64px;
-                  aspect-ratio: 1;
-                  border-radius: 50%;
-                  position: absolute;
-                  bottom: 16px;
-                  right: 16px;
-                  overflow: hidden;
-                  display: grid;
-                  place-items: center;
-            }
+            app-loader {
+                .loader-progress {
+                      --percentage: var(--blazor-load-percentage);
+                      animation: progress 2s 0.5s forwards;
+                      width: 100%;
+                      aspect-ratio: 1;
+                      border-radius: 50%;
+                      overflow: hidden;
+                      display: grid;
+                      place-items: center;
+                }
 
-            .preloaded-loader-progress::before {
-                  content: "";
-                  position: absolute;
-                  width: 100%;
-                  height: 100%;
-                  background: conic-gradient(#c10b25 var(--percentage), #23373c 0);
-            }
+                .loader-progress::before {
+                      content: "";
+                      position: absolute;
+                      width: 100%;
+                      height: 100%;
+                      background: conic-gradient(#c10b25 var(--percentage), #23373c 0);
+                }
 
-            .preloaded-loader-progress::after {
-                content: var(--blazor-load-percentage-text, "");
-                position: absolute;
+                .loader-progress::after {
+                    content: var(--blazor-load-percentage-text, "");
+                    position: absolute;
 
-                color: #FFF;
-                text-align: center;
-                font-weight: bold;
-                text-shadow: 1px 1px 0 #23373c, -1px 1px 0 #23373c, 1px -1px 0 #23373c, -1px -1px 0 #23373c;
+                    color: #FFF;
+                    text-align: center;
+                    font-weight: bold;
+                    text-shadow: 1px 1px 0 #23373c, -1px 1px 0 #23373c, 1px -1px 0 #23373c, -1px -1px 0 #23373c;
 
-                width: 75%;
-                background: #FFF;
-                aspect-ratio: 1;
-                align-content: center;
-                border-radius: 50%
+                    width: 75%;
+                    background: #FFF;
+                    aspect-ratio: 1;
+                    align-content: center;
+                    border-radius: 50%
+                }
             }
             </style>
-            <div role="progressbar" class="preloaded-loader-progress">
+
+            <div role="progressbar" class="loader-progress">
             </div>
         `;
     };
