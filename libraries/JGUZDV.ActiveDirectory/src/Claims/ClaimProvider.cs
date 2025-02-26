@@ -69,7 +69,13 @@ internal class ClaimProvider : IClaimProvider
 
 
     public IEnumerable<string> GetProvidedClaimTypes(params string[] claimTypes)
-        => _options.Value.ClaimSources.Select(x => x.ClaimType)
+        => _options.Value.ClaimSources
+            .Select(x => x.ClaimType)
             .Intersect(claimTypes, StringComparer.OrdinalIgnoreCase)
+            .ToList();
+
+    public IEnumerable<string> GetProvidedClaimTypes()
+        => _options.Value.ClaimSources
+            .Select(x => x.ClaimType)
             .ToList();
 }

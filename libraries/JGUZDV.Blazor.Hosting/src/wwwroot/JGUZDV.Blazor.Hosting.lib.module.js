@@ -1,12 +1,10 @@
-class FullScreenAppLoader extends HTMLElement {
+﻿class FullScreenAppLoader extends HTMLElement {
     constructor() {
         super();
     }
-
     connectedCallback() {
         this.render();
     }
-
     render = () => {
         this.innerHTML = `
             <style>
@@ -43,18 +41,15 @@ class FullScreenAppLoader extends HTMLElement {
                 <div class="loading-progress"></div>
             </dialog> 
         `;
-    }
+    };
 }
-
 class PrerenderAppLoader extends HTMLElement {
     constructor() {
         super();
     }
-
     connectedCallback() {
         this.render();
     }
-
     render = () => {
         this.innerHTML = `
             <style>
@@ -110,68 +105,62 @@ class PrerenderAppLoader extends HTMLElement {
             <div role="progressbar" class="preloaded-loader-progress">
             </div>
         `;
-    }
+    };
 }
-
 
 export const beforeWebStart = () => {
-    console.debug('Running beforeWebStart')
+    console.debug('Running beforeWebStart');
 
-    handleBeforeStart();
-}
-
-export const afterWebStart = () => {
-    console.debug('Running afterWebStart')
-
-    handleAfterStarted();
-}
-
-export const beforeWebAssemblyStart = (options: any, extensions: any) => {
-    console.debug('Running beforeWebAssemblyStart')
-
-    handleBeforeStart();
+    registerLoader();
+};
+export const afterWebStarted = () => {
+    console.debug('Running afterWebStart');
 };
 
+export const beforeWebAssemblyStart = (options, extensions) => {
+    console.debug('Running beforeWebAssemblyStart');
 
-export const afterWebAssemblyStarted = (blazor: any) => {
-    console.debug('Running afterWebAssemblyStart')
+    setApplicaitonLanguage(options);
 
-    handleAfterStarted();
+    showLoader();
+};
+export const afterWebAssemblyStarted = (blazor) => {
+    console.debug('Running afterWebAssemblyStart');
+    hideLoader();
+};
+
+const setApplicaitonLanguage = (opt) => {
+    opt.applicationCulture = document.documentElement.getAttribute('blazor-culture') || 'de-DE';
 }
 
-const handleBeforeStart = () => {
+const registerLoader = () => {
     if (customElements.get('app-loader')) {
         return;
     }
 
-    const useLoader = !document.documentElement.getAttribute("no-loader");
     const useFullscreenLoader = document.documentElement.getAttribute("loader-type") == 'fullscreen'
         ? true : false;
-
-    if (!useLoader) {
-        return;
-    }
-
     customElements.define('app-loader', useFullscreenLoader ? FullScreenAppLoader : PrerenderAppLoader);
-
-    const appLoader = document.createElement('app-loader');
-    appLoader.setAttribute('id', '__app-loader');
-
-    document.documentElement.appendChild(appLoader);
-
-    if (useFullscreenLoader) {
-        appLoader.setAttribute('data-fullscreen', 'true')
-        appLoader.getElementsByTagName('dialog')[0].showModal()
-    }
 }
 
-const handleAfterStarted = () => {
+const showLoader = () => {
+    const useLoader = !document.documentElement.getAttribute("no-loader");
+    
+    const appLoader = document.createElement('app-loader');
+    appLoader.setAttribute('id', '__app-loader');
+    appLoader.classList.add(document.documentElement.getAttribute("loader-type"));
+    document.documentElement.appendChild(appLoader);
+    if (document.documentElement.getAttribute("loader-type") == 'fullscreen') {
+        appLoader.setAttribute('data-fullscreen', 'true');
+        appLoader.getElementsByTagName('dialog')[0].showModal();
+    }
+};
+const hideLoader = () => {
     const appLoader = document.getElementById('__app-loader');
     if (appLoader) {
         if (!!appLoader.getAttribute('data-fullscreen')) {
             appLoader.getElementsByTagName('dialog')[0].close();
         }
-
         document.documentElement.removeChild(appLoader);
     }
-}
+};

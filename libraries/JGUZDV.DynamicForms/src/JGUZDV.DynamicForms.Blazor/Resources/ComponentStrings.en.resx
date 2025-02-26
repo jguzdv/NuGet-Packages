@@ -156,4 +156,10 @@
   <data name="FieldInput.Validation.Convert" xml:space="preserve">
     <value>Could not convert input to target type</value>
   </data>
+  <data name="FileFieldInput.UploadError" xml:space="preserve">
+    <value>Could not upload file: {0}</value>
+  </data>
+  <data name="FileFieldInput.ValidationResults" xml:space="preserve">
+    <value>Errors</value>
+  </data>
 </root>

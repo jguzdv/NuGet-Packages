@@ -269,12 +269,13 @@ internal class FileWriter : IDisposable
     }
 
 
-    public Task WriteAsync(Stream message)
+    public async Task WriteAsync(Stream message)
     {
         message.Position = 0;
         _fileSize += message.Length;
         
-        return message.CopyToAsync(_fileStream);
+        await message.CopyToAsync(_fileStream);
+        await _fileStream.FlushAsync();
     }
 
 

@@ -1,4 +1,6 @@
-﻿using JGUZDV.DynamicForms.Model;
+﻿using System.Text.Json;
+
+using JGUZDV.DynamicForms.Model;
 using JGUZDV.L10n;
 
 namespace JGUZDV.DynamicForms
@@ -15,6 +17,7 @@ namespace JGUZDV.DynamicForms
                 new DateOnlyFieldType(),
                 new IntFieldType(),
                 new StringFieldType(),
+                    new FileFieldType()
             };
 
         /// <summary>
@@ -35,9 +38,10 @@ namespace JGUZDV.DynamicForms
 
         private static Dictionary<FieldType, List<Type>> _fieldConstraints = new()
             {
-                { new StringFieldType(), new List<Type> { typeof(RegexConstraint), typeof(StringLengthConstraint), typeof(RangeConstraint) } },
-                { new DateOnlyFieldType(), new List<Type> { typeof(RangeConstraint) } },
-                { new IntFieldType(), new List<Type> { typeof(RangeConstraint) } }
+                    { new StringFieldType(), [ typeof(RegexConstraint), typeof(StringLengthConstraint), typeof(RangeConstraint) ] },
+                    { new DateOnlyFieldType(), [ typeof(RangeConstraint) ] },
+                    { new IntFieldType(), [typeof(RangeConstraint)] },
+                    { new FileFieldType(), [typeof(FileSizeConstraint)] } // Added FileSizeConstraint
             };
 
         /// <summary>
@@ -93,7 +97,8 @@ namespace JGUZDV.DynamicForms
                 { typeof(RegexConstraint), new L10nString { ["de"] = "Regex", ["en"] = "Regex" } },
                 { typeof(StringLengthConstraint), new L10nString { ["de"] = "Textlänge", ["en"] = "Text Length" } },
                 { typeof(RangeConstraint), new L10nString { ["de"] = "Intervall", ["en"] = "Range" } },
-                { typeof(SizeConstraint), new L10nString { ["de"] = "Listenlänge", ["en"] = "List Length" } }
+                    { typeof(SizeConstraint), new L10nString { ["de"] = "Listenlänge", ["en"] = "List Length" } },
+                    { typeof(FileSizeConstraint), new L10nString { ["de"] = "Dateigröße", ["en"] = "File Size" } } // Added FileSizeConstraint
             };
 
         /// <summary>
@@ -147,5 +152,15 @@ namespace JGUZDV.DynamicForms
             constraint.FieldType = fieldType;
             return constraint;
         }
+
+        /// <summary>
+        /// Gets the JSON serializer options for the dynamic forms library.
+        /// </summary>
+        public static JsonSerializerOptions JsonSerializerOptions { get; } = new();
+
+        /// <summary>
+        /// Gets or sets the prefix for form field names.
+        /// </summary>
+        public static string FormFieldPrefix { get; set; } = "form_field_";
     }
 }

@@ -1,4 +1,5 @@
 ﻿@page "/field"
+@using JGUZDV.DynamicForms.Blazor.Fields
 @using JGUZDV.DynamicForms.Model
 @using System.Text.Json
 @using JGUZDV.DynamicForms.Samples.Client.Model
@@ -8,15 +9,17 @@
 
 <h1>New Fields</h1>
 
-@foreach (var field in _fields)
+@foreach (var kvp in _fieldsByDocumentDefinition)
 {
-    <JGUZDV.DynamicForms.Blazor.FieldInput Field="field" />
+    <h2>Document Definition ID: @kvp.Key</h2>
+    @foreach (var field in kvp.Value)
+    {
+        <FieldInput Field="field" />
     <hr />
 }
+}
 
-<h1>
-    Saved Documents
-</h1>
+<h1>Saved Documents</h1>
 <div>
     @foreach (var oldField in _documents)
     {
@@ -34,8 +37,7 @@
 <button @onclick="Save">Save</button>
 
 @code {
-    private List<Field> _fields = new List<Field>();
-
+    private Dictionary<int, List<Field>> _fieldsByDocumentDefinition = new();
     private List<Document> _documents = new List<Document>();
 
     [Inject]
@@ -50,10 +52,11 @@
 
         var definitions = await Client.GetFromJsonAsync<List<DocumentDefinition>>("https://localhost:7245/api/definitions", options);
         Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(definitions, options));
-        _fields = definitions
-            .SelectMany(x => x.FieldDefinitions)
-            .Select(x => new Field(x))
-            .ToList();
+
+        _fieldsByDocumentDefinition = definitions.ToDictionary(
+            def => def.Id,
+            def => def.FieldDefinitions.Select(fd => new Field(fd)).ToList()
+        );
 
         _documents = await Client.GetFromJsonAsync<List<Document>>("https://localhost:7245/api/documents", options);
     }
@@ -61,11 +64,29 @@
     private async Task Save()
     {
         var client = new HttpClient();
-        var options = new JsonSerializerOptions()
-        {
-        };
 
-        await client.PostAsJsonAsync("https://localhost:7245/api/documents/save", _fields, options);
+        foreach (var kvp in _fieldsByDocumentDefinition)
+        {
+            var documentDefinitionId = kvp.Key;
+            var fields = kvp.Value;
+
+            var content = new MultipartFormDataContent();
+
+            foreach (var field in fields)
+        {
+                field.AddToContent(content);
+            }
+
+            // Add DocumentDefinitionId to the form data
+            content.Add(new StringContent(documentDefinitionId.ToString()), "DocumentDefinitionId");
+
+            await client.PostAsync("https://localhost:7245/api/documents/save", content);
+
+            foreach (var field in fields)
+            {
+                field.Dispose();
+            }
+        }
 
         _documents = await client.GetFromJsonAsync<List<Document>>("https://localhost:7245/api/documents");
     }

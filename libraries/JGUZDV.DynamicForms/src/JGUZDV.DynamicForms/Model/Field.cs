@@ -20,7 +20,7 @@ public class FieldCollection
 /// Represents a form field and provides validation functionality.
 /// </summary>
 [JsonConverter(typeof(FieldConverter))]
-public class Field : IValidatableObject
+public class Field : IValidatableObject, IDisposable, IAsyncDisposable
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="Field"/> class with the specified field definition.
@@ -104,6 +104,14 @@ public class Field : IValidatableObject
     public FieldType ValueType => FieldDefinition.Type ?? throw new InvalidOperationException("Invalid FieldDefinition");
 
     /// <summary>
+    /// Adds the <see cref="Value"/> of the field to the content with <see cref="FieldDefinition.Identifier"/> as default name.
+    /// </summary>
+    /// <param name="content">The content to add the field value to.</param>
+    /// <param name="name">The name of the form field. Defaults to <see cref="FieldDefinition.Identifier"/></param>
+    public virtual void AddToContent(MultipartFormDataContent content, string name = "")
+        => ValueType.AddToContent(this, content, name);
+
+    /// <summary>
     /// Determines whether the field is valid.
     /// </summary>
     /// <param name="validationContext">The validation context.</param>
@@ -150,5 +158,56 @@ public class Field : IValidatableObject
         var errors = FieldDefinition.Constraints.SelectMany(x => x.ValidateConstraint(val, validationContext));
 
         return errors;
+    }
+
+    /// <summary>
+    /// <inheritdoc />
+    /// </summary>
+    public void Dispose()
+    {
+        if (FieldDefinition.Type!.ClrType is not IDisposable)
+        {
+            return;
+        }
+
+        if (FieldDefinition.IsList)
+        {
+            foreach (var item in Values)
+            {
+                ((IDisposable)item).Dispose();
+            }
+        }
+        else
+        {
+            ((IDisposable?)Value)?.Dispose();
+        }
+    }
+
+    /// <summary>
+    /// <inheritdoc />
+    /// </summary>
+    public async ValueTask DisposeAsync()
+    {
+        if (FieldDefinition.Type!.ClrType is not IAsyncDisposable)
+        {
+            return;
+        }
+
+        if (Value == null)
+        {
+            return;
+        }
+
+        if (FieldDefinition.IsList)
+        {
+            foreach (var item in Values)
+            {
+                await ((IAsyncDisposable)item).DisposeAsync();
+            }
+        }
+        else
+        {
+            await ((IAsyncDisposable)Value).DisposeAsync();
+        }
     }
 }

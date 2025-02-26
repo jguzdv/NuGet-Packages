@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net9.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
 
@@ -10,7 +10,8 @@
         <Version>1.0.0-beta1</Version>
         <Authors>Aaron Puhl</Authors>
         <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
-        <PackageDescription></PackageDescription>
+        <PackageDescription>Blazor component library for DynamicForms.</PackageDescription>
+        <OutputType>Library</OutputType>
     </PropertyGroup>
 
 
@@ -27,13 +28,6 @@
         <ProjectReference Include="..\..\..\JGUZDV.Blazor.Components.L10n\src\JGUZDV.Blazor.Components.L10n.csproj" />
         <ProjectReference Include="..\..\..\JGUZDV.Blazor.Components\src\JGUZDV.Blazor.Components.csproj" />
         <ProjectReference Include="..\JGUZDV.DynamicForms\JGUZDV.DynamicForms.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <EmbeddedResource Update="Resources\ComponentStrings.resx">
-            <Generator>ResXFileCodeGenerator</Generator>
-            <LastGenOutput>ComponentStrings.Designer.cs</LastGenOutput>
-        </EmbeddedResource>
     </ItemGroup>
 
 </Project>

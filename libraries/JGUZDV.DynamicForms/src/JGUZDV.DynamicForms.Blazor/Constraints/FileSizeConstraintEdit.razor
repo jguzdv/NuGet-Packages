@@ -1,0 +1,27 @@
+﻿@using JGUZDV.DynamicForms.Model
+@using System.ComponentModel.DataAnnotations
+
+<div>
+    <label for="maxFileSize@_id">Max File Size (bytes)</label>
+    <input id="maxFileSize@_id" class="form-control"
+           @bind=_constraint.MaxFileSize
+           @bind:after="ConstraintChanged.InvokeAsync"
+           type="number" />
+</div>
+
+@code {
+    [Parameter]
+    public required Constraint Constraint { get; set; }
+
+    [Parameter]
+    public required EventCallback<Constraint> ConstraintChanged { get; set; }
+
+    [Parameter]
+    public required FieldDefinition FieldDefinition { get; set; }
+
+    [Parameter]
+    public required EventCallback<List<ValidationResult>> OnValidation { get; set; }
+
+    private FileSizeConstraint _constraint => (FileSizeConstraint)Constraint!;
+    private Guid _id = Guid.NewGuid();
+}

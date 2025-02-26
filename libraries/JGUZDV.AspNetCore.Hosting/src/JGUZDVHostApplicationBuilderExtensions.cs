@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text.Json.Serialization;
 
+using JGUZDV.AspNetCore.Components.Localization;
 using JGUZDV.AspNetCore.Hosting.Components;
 using JGUZDV.AspNetCore.Hosting.Extensions;
 using JGUZDV.AspNetCore.Hosting.ForwardedHeaders;
@@ -339,6 +340,11 @@ public static class JGUZDVHostApplicationBuilderExtensions
         if (appBuilder.HasAuthentication)
         {
             appBuilder.Services.AddCascadingAuthenticationState();
+        }
+
+        if (appBuilder.HasRequestLocalization)
+        {
+            appBuilder.Services.AddScoped<ILanguageService, LanguageService>();
         }
 
         appBuilder.HasRazorComponents = true;

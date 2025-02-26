@@ -37,7 +37,7 @@ public abstract record FieldType
     /// <returns>A JSON string representation of the value.</returns>
     public virtual string ConvertFromValue(object value)
     {
-        return JsonSerializer.Serialize(value);
+        return JsonSerializer.Serialize(value, DynamicFormsConfiguration.JsonSerializerOptions);
     }
 
     /// <summary>
@@ -47,7 +47,7 @@ public abstract record FieldType
     /// <returns>An object of the CLR type.</returns>
     public virtual object ConvertToValue(string stringValue)
     {
-        return JsonSerializer.Deserialize(stringValue, ClrType) ?? throw new InvalidOperationException($"Could not parse json: {stringValue} into target type: {ClrType.Name}");
+        return JsonSerializer.Deserialize(stringValue, ClrType, DynamicFormsConfiguration.JsonSerializerOptions) ?? throw new InvalidOperationException($"Could not parse json: {stringValue} into target type: {ClrType.Name}");
     }
 
     /// <summary>
@@ -56,12 +56,7 @@ public abstract record FieldType
     /// <returns>A JSON string representation of the field type.</returns>
     public string ToJson()
     {
-        var options = new JsonSerializerOptions()
-        {
-            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault
-        };
-
-        return System.Text.Json.JsonSerializer.Serialize(this, options);
+        return System.Text.Json.JsonSerializer.Serialize(this, DynamicFormsConfiguration.JsonSerializerOptions);
     }
 
     /// <summary>
@@ -77,6 +72,20 @@ public abstract record FieldType
         };
         return JsonSerializer.Deserialize<FieldType>(json, options) ?? throw new InvalidOperationException($"Could not parse json: {json}");
     }
+
+    /// <summary>
+    /// Adds the field value to the content.
+    /// </summary>
+    public virtual void AddToContent(Field field, MultipartFormDataContent content, string name = "")
+    {
+        var json = JsonSerializer.Serialize(field.Value, DynamicFormsConfiguration.JsonSerializerOptions);
+
+        name = string.IsNullOrWhiteSpace(name)
+            ? $"{DynamicFormsConfiguration.FormFieldPrefix}{field.FieldDefinition.Identifier}"
+            : name;
+
+        content.Add(new StringContent(json), name);
+}
 }
 
 /// <summary>
@@ -219,4 +228,87 @@ public record StringFieldType : FieldType
         ["de"] = "Text",
         ["en"] = "Text"
     };
+}
+
+/// <summary>
+/// Represents a field type for file values.
+/// </summary>
+public record FileFieldType : FieldType
+{
+    /// <summary>
+    /// Gets the CLR type of the field.
+    /// </summary>
+    [JsonIgnore]
+    public override Type ClrType => typeof(FileType);
+
+    /// <summary>
+    /// Gets the display name of the field type.
+    /// </summary>
+    public override L10nString DisplayName => new L10nString()
+    {
+        ["de"] = "Datei",
+        ["en"] = "File"
+    };
+
+    /// <summary>
+    /// <inheritdoc />
+    /// </summary>
+    /// <exception cref="InvalidOperationException"></exception>
+    public override void AddToContent(Field field, MultipartFormDataContent content, string name = "")
+    {
+        //skip null values
+        if (field.Value == null)
+        {
+            return;
+        }
+
+        List<FileType> files = field.FieldDefinition.IsList
+            ? field.Values.OfType<FileType>().ToList()
+            : [(FileType)field.Value];
+
+        name = string.IsNullOrWhiteSpace(name)
+            ? $"{DynamicFormsConfiguration.FormFieldPrefix}{field.FieldDefinition.Identifier}"
+            : name;
+
+        foreach (var value in files)
+        {
+            if (value.Stream == null)
+            {
+                throw new InvalidOperationException("File stream is null.");
+            }
+
+            var fileStreamContent = new StreamContent(value.Stream!);
+            content.Add(fileStreamContent, name, value.FileName);
+        }
+    }
+
+    /// <summary>
+    /// CLR type for the <see cref="FileFieldType"/>
+    /// </summary>
+    public record FileType : IDisposable
+    {
+        /// <summary>
+        /// Gets or sets the name of the file.
+        /// </summary>
+        public required string FileName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the size of the file.
+        /// </summary>
+        public long FileSize { get; set; }
+
+        /// <summary>
+        /// Gets or sets the stream of the file.
+        /// </summary>
+        [JsonConverter(typeof(StreamConverter))]
+        public Stream? Stream { get; set; }
+
+        /// <summary>
+        /// <inheritdoc />
+        /// </summary>
+        public void Dispose()
+        {
+            Stream?.Dispose();
+        }
+    }
 }

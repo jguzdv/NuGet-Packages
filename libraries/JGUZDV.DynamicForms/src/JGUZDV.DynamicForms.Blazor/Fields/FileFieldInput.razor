@@ -1,0 +1,116 @@
+﻿@using JGUZDV.DynamicForms.Blazor.Resources
+@using JGUZDV.DynamicForms.Model
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.Extensions.Logging
+
+<EditForm Model="Field">
+    <div class="">
+        <label for="fileUpload" class="form-label">@Field.FieldDefinition.InputDefinition.Label</label>
+        <InputFile class="form-control"
+                   id="@Field.FieldDefinition.InputDefinition.Id"
+                   OnChange="OnFilesSelected"
+                   multiple="@Field.FieldDefinition.IsList" />
+    </div>
+
+    @if (_errors.Any())
+    {
+        <div class="text-danger mt-2" role="alert">
+            <span>@SL["FileFieldInput.ValidationResults"]</span>
+            <ul>
+                @foreach (var file in _errors)
+                {
+                    <li>@file</li>
+                }
+            </ul>
+        </div>
+    }
+
+</EditForm>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public required Field Field { get; set; }
+
+    [Parameter]
+    public EventCallback<Field> FieldChanged { get; set; }
+
+    [Inject]
+    public required IServiceProvider ServiceProvider { get; set; }
+
+    [Inject]
+    public required IStringLocalizer<ComponentStrings> SL { get; set; }
+
+    [Inject]
+    public required ILogger<FileFieldInput> Logger { get; set; }
+
+    private List<IBrowserFile> selectedFiles = new();
+    private List<string> _errors = [];
+
+
+    private void OnFilesSelected(InputFileChangeEventArgs e)
+    {
+        selectedFiles = Field.FieldDefinition.IsList
+            ? e.GetMultipleFiles().ToList()
+            : [e.File];
+
+        UploadFiles();
+    }
+
+    private void UploadFiles()
+    {
+        _errors.Clear();
+
+        List<FileFieldType.FileType?> valueList = Field.FieldDefinition.IsList
+            ? Field.Value as List<FileFieldType.FileType?> ?? new()
+            : [Field.Value as FileFieldType.FileType];
+
+        foreach (var file in valueList)
+        {
+            file?.Stream?.Dispose();
+        }
+        valueList.Clear();
+
+        if (!selectedFiles.Any())
+        {
+            Field.Value = Field.FieldDefinition.IsList
+                ? new List<FileFieldType.FileType>()
+                : null;
+
+            _ = FieldChanged.InvokeAsync(Field);
+
+            return;
+        }
+
+        valueList = selectedFiles
+            .Select(x => new FileFieldType.FileType
+                {
+                    FileName = x.Name,
+                    FileSize = x.Size,
+                    Stream = x.OpenReadStream(x.Size)
+                })
+            .OfType<FileFieldType.FileType?>()
+            .ToList();
+
+        var vals = valueList.Cast<object>().ToList();
+
+        _errors = Field.FieldDefinition.Constraints
+                .SelectMany(x =>
+                    x.ValidateConstraint(vals,
+                    new(Field, ServiceProvider, null)))
+                .Select(x => x.ErrorMessage!)
+                .ToList();
+
+        if (_errors.Any())
+        {
+            return;
+        }
+
+        // Update the field value
+        Field.Value = Field.FieldDefinition.IsList
+            ? valueList
+            : valueList.First();
+
+        _ = FieldChanged.InvokeAsync(Field);
+    }
+}
