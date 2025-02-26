@@ -20,8 +20,10 @@
             }
 
             app-loader {
+                z-index: 2147483645;
+
                 &.fullscreen {
-                    --width: min(80dvw, 80dvh);
+                    --width: min(38.2dvw, 38.2dvh);
                     width: var(--width);
                     margin-left: calc(-0.5 * var(--width));
 
@@ -67,7 +69,7 @@
                     font-weight: bold;
                     color: #23373c;
 
-                    width: 80%;
+                    width: calc(100% - 15px);
                     background: #FFF;
                     aspect-ratio: 1;
                     align-content: center;
