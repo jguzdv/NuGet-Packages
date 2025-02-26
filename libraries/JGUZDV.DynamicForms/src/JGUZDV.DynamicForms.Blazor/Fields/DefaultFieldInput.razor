@@ -105,7 +105,7 @@
     public EventCallback<Field> FieldChanged { get; set; }
 
     [Inject]
-    public required ValueProvider ValueProvider { get; set; }
+    public required IValueProvider ValueProvider { get; set; }
 
     [Inject]
     public required IStringLocalizer<ComponentStrings> SL { get; set; }
@@ -177,6 +177,7 @@
         }
         catch
         {
+            SetValue(null);
             _validationErrors.Add(new ValidationResult($"FieldInput.Validation.Convert"));
         }
     }

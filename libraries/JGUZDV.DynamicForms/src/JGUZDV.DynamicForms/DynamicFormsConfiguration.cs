@@ -17,8 +17,17 @@ namespace JGUZDV.DynamicForms
                 new DateOnlyFieldType(),
                 new IntFieldType(),
                 new StringFieldType(),
-                    new FileFieldType()
+                new FileFieldType()
             };
+
+        /// <summary>
+        /// Removes a FieldType from the known field types.
+        /// </summary>
+        /// <param name="type">The FieldType to remove</param>
+        public static void RemoveFieldType(FieldType type)
+        {
+            _knownFieldTypes.Remove(type);
+        }
 
         /// <summary>
         /// Adds a new FieldType to the known field types and sets the allowed constraints for it.

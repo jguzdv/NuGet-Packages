@@ -105,7 +105,7 @@
     public EventCallback<Field> FieldChanged { get; set; }
 
     [Inject]
-    public required ValueProvider ValueProvider { get; set; }
+    public required IFieldValueProvider ValueProvider { get; set; }
 
     [Inject]
     public required IStringLocalizer<ComponentStrings> SL { get; set; }
@@ -129,7 +129,7 @@
             return;
         }
 
-        var values = await ValueProvider.GetValues(Field.ValueType);
+        var values = await ValueProvider.TryGetValues(Field.ValueType);
         if (values.HandlesType)
         {
             Field.FieldDefinition.ChoiceOptions = values.AllowedValues;

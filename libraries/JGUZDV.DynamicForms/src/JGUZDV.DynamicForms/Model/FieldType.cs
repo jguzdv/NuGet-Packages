@@ -85,24 +85,54 @@ public abstract record FieldType
             : name;
 
         content.Add(new StringContent(json), name);
-}
+    }
 }
 
 /// <summary>
 /// Provides the values for a field type at runtime. E.g. if allowed values are loaded from a database.
 /// </summary>
-public class ValueProvider
+public interface IFieldValueProvider
 {
-    private readonly Dictionary<FieldType, Func<Task<List<ChoiceOption>>>> _funcs = new();
+    public Task<(bool HandlesType, List<ChoiceOption> AllowedValues)> TryGetValues(FieldType type);
+
+    public Task<List<ChoiceOption>> GetValues(FieldType type);
+}
+
+/// <summary>
+/// Provides the values for a field type at runtime. E.g. if allowed values are loaded from a database.
+/// </summary>
+public class SimpleFieldValueProvider : IFieldValueProvider
+{
+    /// <summary>
+    /// Gets the functions to retrieve the allowed values for the field types.
+    /// </summary>
+    public readonly Dictionary<FieldType, Func<Task<List<ChoiceOption>>>> Funcs = new();
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="InvalidOperationException"></exception>
+    public async Task<List<ChoiceOption>> GetValues(FieldType type)
+    {
+        var (x, y) = await TryGetValues(type);
+
+        if (!x)
+        {
+            throw new InvalidOperationException($"Type {type.GetType().Name} is not handled by this provider.");
+        }
+
+        return y;
+    }
 
     /// <summary>
     /// Gets the allowed values for the specified field type.
     /// </summary>
     /// <param name="type">The field type.</param>
     /// <returns>A tuple indicating whether the type is handled and the list of allowed values.</returns>
-    public async Task<(bool HandlesType, List<ChoiceOption> AllowedValues)> GetValues(FieldType type)
+    public async Task<(bool HandlesType, List<ChoiceOption> AllowedValues)> TryGetValues(FieldType type)
     {
-        if (_funcs.TryGetValue(type, out var func))
+        if (Funcs.TryGetValue(type, out var func))
         {
             return (true, await func());
         }
