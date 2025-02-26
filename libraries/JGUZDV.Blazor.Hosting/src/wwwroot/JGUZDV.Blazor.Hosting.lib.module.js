@@ -140,7 +140,7 @@ const registerLoader = () => {
 
     const useFullscreenLoader = document.documentElement.getAttribute("loader-type") == 'fullscreen'
         ? true : false;
-    customElements.define('app-loader', useFullscreenLoader ? FullScreenAppLoader : PrerenderAppLoader);
+    customElements.define('app-loader', AppLoader);
 }
 
 const showLoader = () => {
