@@ -1,49 +1,4 @@
-﻿class FullScreenAppLoader extends HTMLElement {
-    constructor() {
-        super();
-    }
-    connectedCallback() {
-        this.render();
-    }
-    render = () => {
-        this.innerHTML = `
-            <style>
-            .loading {
-                width: 80dvw;
-                background-color: #FFF;
-                padding: 0.5rem;
-                border: none
-            }
-            .loading::backdrop {
-                background-color: rgba(35, 55, 60, 0.5);
-                backdrop-filter: blur(4px);
-            }
-
-            .loading-progress:after {
-                padding: 0.25rem;
-
-                display: block;
-                overflow: visible;
-                background-color: #c10b25;
-
-                width: var(--blazor-load-percentage, 0%);
-                transition: width 0.2s ease-in-out;
-                margin: 0 0 0 auto;
-
-                color: #FFF;
-                content: var(--blazor-load-percentage-text, "");
-                text-align: center;
-                font-weight: bold;
-                text-shadow: 1px 1px 0 #23373c, -1px 1px 0 #23373c, 1px -1px 0 #23373c, -1px -1px 0 #23373c;
-            }
-            </style>
-            <dialog class="loading">
-                <div class="loading-progress"></div>
-            </dialog> 
-        `;
-    };
-}
-class PrerenderAppLoader extends HTMLElement {
+﻿class AppLoader extends HTMLElement {
     constructor() {
         super();
     }
@@ -64,45 +19,64 @@ class PrerenderAppLoader extends HTMLElement {
                 initial-value: 0%;
             }
 
-            .preloaded-loader-progress {
-                  --percentage: var(--blazor-load-percentage);
-                  animation: progress 2s 0.5s forwards;
-                  width: 64px;
-                  aspect-ratio: 1;
-                  border-radius: 50%;
-                  position: absolute;
-                  bottom: 16px;
-                  right: 16px;
-                  overflow: hidden;
-                  display: grid;
-                  place-items: center;
-            }
+            app-loader {
+                &.fullscreen {
+                    --width: min(80dvw, 80dvh);
+                    width: var(--width);
+                    margin-left: calc(-0.5 * var(--width));
 
-            .preloaded-loader-progress::before {
-                  content: "";
-                  position: absolute;
-                  width: 100%;
-                  height: 100%;
-                  background: conic-gradient(#c10b25 var(--percentage), #23373c 0);
-            }
+                    position: absolute;
+                    top: 10dvh;
+                    left: 50%;
+                }
 
-            .preloaded-loader-progress::after {
-                content: var(--blazor-load-percentage-text, "");
-                position: absolute;
+                &.on-content {
+                    width: 64px;
 
-                color: #FFF;
-                text-align: center;
-                font-weight: bold;
-                text-shadow: 1px 1px 0 #23373c, -1px 1px 0 #23373c, 1px -1px 0 #23373c, -1px -1px 0 #23373c;
+                    position: absolute;
+                    right: 16px; 
+                    bottom: 16px;
+                }
 
-                width: 75%;
-                background: #FFF;
-                aspect-ratio: 1;
-                align-content: center;
-                border-radius: 50%
+                .loader-progress {
+                    --percentage: var(--blazor-load-percentage);
+                    position: relative;
+                    animation: progress 2s 0.5s forwards;
+                    width: 100%;
+                    aspect-ratio: 1;
+                    overflow: hidden;
+                    display: grid;
+                    place-items: center;
+                }
+
+                .loader-progress::before {
+                    content: '';
+                    position: absolute;
+                    border-radius: 50%;
+                    width: 100%;
+                    aspect-ratio: 1;
+                    background: conic-gradient(#c10b25 var(--percentage), #23373c 0);
+                }
+
+                .loader-progress::after {
+                    content: var(--blazor-load-percentage-text, "");
+                    position: absolute;
+
+                    color: #FFF;
+                    text-align: center;
+                    font-weight: bold;
+                    color: #23373c;
+
+                    width: 80%;
+                    background: #FFF;
+                    aspect-ratio: 1;
+                    align-content: center;
+                    border-radius: 50%
+                }
             }
             </style>
-            <div role="progressbar" class="preloaded-loader-progress">
+
+            <div role="progressbar" class="loader-progress">
             </div>
         `;
     };
@@ -118,7 +92,7 @@ export const afterWebStarted = () => {
 };
 
 export const beforeWebAssemblyStart = (options, extensions) => {
-    console.debug('Running beforeWebAssemblyStart');
+    console.debug('Running beforeWebAssemblyStart', options, extensions);
 
     setApplicaitonLanguage(options);
 
@@ -140,27 +114,25 @@ const registerLoader = () => {
 
     const useFullscreenLoader = document.documentElement.getAttribute("loader-type") == 'fullscreen'
         ? true : false;
-    customElements.define('app-loader', AppLoader);
+    customElements.define('app-loader', AppLoader); 
 }
 
 const showLoader = () => {
     const useLoader = !document.documentElement.getAttribute("no-loader");
-    
+    if (!useLoader) {
+        return;
+    }
+
     const appLoader = document.createElement('app-loader');
     appLoader.setAttribute('id', '__app-loader');
-    appLoader.classList.add(document.documentElement.getAttribute("loader-type"));
-    document.documentElement.appendChild(appLoader);
-    if (document.documentElement.getAttribute("loader-type") == 'fullscreen') {
-        appLoader.setAttribute('data-fullscreen', 'true');
-        appLoader.getElementsByTagName('dialog')[0].showModal();
-    }
+    appLoader.classList.add(document.documentElement.getAttribute("loader-type") || 'on-content');
+
+    document.body.appendChild(appLoader);
 };
+
 const hideLoader = () => {
     const appLoader = document.getElementById('__app-loader');
     if (appLoader) {
-        if (!!appLoader.getAttribute('data-fullscreen')) {
-            appLoader.getElementsByTagName('dialog')[0].close();
-        }
-        document.documentElement.removeChild(appLoader);
+        document.body.removeChild(appLoader);
     }
 };
