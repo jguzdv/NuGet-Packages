@@ -1,5 +1,6 @@
 using System.Security.Claims;
 
+using JGUZDV.AspNetCore.Components.Localization;
 using JGUZDV.Blazor.Components.Localization;
 using JGUZDV.Blazor.Hosting;
 
@@ -54,7 +55,7 @@ internal class SampleLanguageService : ILanguageService
         return "de";
     }
 
-    public List<LanguageItem>? GetLanguages()
+    public IEnumerable<LanguageItem>? GetLanguages()
     {
         return [
             new LanguageItem("de", "Deutsch"),

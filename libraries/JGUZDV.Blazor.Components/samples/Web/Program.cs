@@ -4,7 +4,6 @@ using JGUZDV.Blazor.Components.Localization;
 using JGUZDV.Blazor.Components.Samples.Web.Components;
 
 var builder = JGUZDVHostApplicationBuilder.CreateWebHost(args, JGUZDV.AspNetCore.Hosting.Components.BlazorInteractivityModes.WebAssembly);
-builder.Services.AddScoped<ILanguageService, BlazorLanguageService>();
 
 var app = builder.BuildAndConfigureBlazor<App>(
     additionalBlazorAssemblies: [
