@@ -42,29 +42,3 @@ internal class SampleAuthenticationStateProvider : AuthenticationStateProvider
         );
     }
 }
-
-internal class SampleLanguageService : ILanguageService
-{
-    public string GetCurrentCulture()
-    {
-        return "de";
-    }
-
-    public string GetCurrentUICulture()
-    {
-        return "de";
-    }
-
-    public IEnumerable<LanguageItem>? GetLanguages()
-    {
-        return [
-            new LanguageItem("de", "Deutsch"),
-            new LanguageItem("en", "English")
-        ];
-    }
-
-    public Task InitializeService()
-    {
-        throw new NotImplementedException();
-    }
-}
