@@ -37,45 +37,35 @@ public static class ConfigurationExtensions
     /// <summary>
     /// Adds a Json configuration source to the configuration builder before a specific json file.
     /// </summary>
-    public static ConfigurationManager AddJsonBeforeJsonFile(this ConfigurationManager configuration, string path, string otherPath, bool asFirstIfOtherNotExists = true, bool optional = false, bool reloadOnChange = false)
+    public static bool TryAddJsonBeforeJsonFile(this ConfigurationManager configuration, string path, string otherPath, bool optional = false, bool reloadOnChange = false)
     {
         var otherJson = configuration.Sources.OfType<JsonConfigurationSource>().FirstOrDefault(x => x.Path == otherPath);
         if (otherJson == null)
         {
-            if (!asFirstIfOtherNotExists)
-            {
-                throw new InvalidOperationException($"Could not find json file with path '{otherPath}'");
-            }
-
-            return AddAsFirstJsonFile(configuration, path, optional, reloadOnChange);
+            return false;
         }
 
         var index = configuration.Sources.IndexOf(otherJson);
         InsertJsonFile(configuration, path, optional, reloadOnChange, index);
         
-        return configuration;
+        return true;
     }
 
     /// <summary>
     /// Adds a Json configuration source to the configuration builder after a specific json file.
     /// </summary>
-    public static ConfigurationManager AddJsonAfterJsonFile(this ConfigurationManager configuration, string path, string otherPath, bool asLastIfOtherNotExists = true, bool optional = false, bool reloadOnChange = false)
+    public static bool TryAddJsonAfterJsonFile(this ConfigurationManager configuration, string path, string otherPath, bool optional = false, bool reloadOnChange = false)
     {
         var otherJson = configuration.Sources.OfType<JsonConfigurationSource>().FirstOrDefault(x => x.Path == otherPath);
         if (otherJson == null)
         {
-            if (!asLastIfOtherNotExists)
-            {
-                throw new InvalidOperationException($"Could not find json file with path '{otherPath}'");
-            }
-
-            return AddAsLastJsonFile(configuration, path, optional, reloadOnChange);
+            return false;
         }
 
         var index = configuration.Sources.IndexOf(otherJson) + 1;
         InsertJsonFile(configuration, path, optional, reloadOnChange, index);
 
-        return configuration;
+        return true;
     }
 
     private static void InsertJsonFile(ConfigurationManager configuration, string path, bool optional, bool reloadOnChange, int index)
