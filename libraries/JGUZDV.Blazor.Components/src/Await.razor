@@ -2,6 +2,8 @@
 @using Microsoft.Extensions.DependencyInjection;
 @using Microsoft.Extensions.Localization;
 
+@attribute [StreamRendering]
+
 @code {
     [Inject, NotNull] 
     private IStringLocalizer<ComponentStrings>? LR { get; set; }
@@ -77,13 +79,17 @@
     {
         await base.OnParametersSetAsync();
 
-        if (Task?.IsCompleted != true)
-        {
-            _ = Task?.ContinueWith(t =>
-            {
-                InvokeAsync(StateHasChanged);
-            });
+        if(Task != null) {
+            await Task;
         }
+
+        // if (Task?.IsCompleted != true)
+        // {
+        //     _ = Task?.ContinueWith(t =>
+        //     {
+        //         InvokeAsync(StateHasChanged);
+        //     });
+        // }
     }
 }
 

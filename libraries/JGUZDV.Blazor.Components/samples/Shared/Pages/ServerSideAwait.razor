@@ -1,0 +1,20 @@
+@page "/server-await"
+
+<Await Task="Task">
+    <Running>
+        <p>Task running...</p>
+    </Running>
+    <Finished>
+        <p>Task completed</p>
+    </Finished>
+</Await>
+@code {
+    private Task? Task { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+
+        Task = Task.Delay(5000);
+    }
+}
