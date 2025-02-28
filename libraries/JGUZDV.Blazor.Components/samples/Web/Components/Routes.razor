@@ -2,7 +2,7 @@
 <Router AppAssembly="@typeof(Program).Assembly" 
         AdditionalAssemblies="[
             typeof(JGUZDV.Blazor.Components.Samples.Web.Client.Pages.Index).Assembly,
-            typeof(JGUZDV.Blazor.Components.Samples.MainLayout).Assembly,
+            typeof(JGUZDV.Blazor.Components.Samples.Pages.ClientSideAwait).Assembly,
         ]">
     <Found Context="routeData">
         <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">

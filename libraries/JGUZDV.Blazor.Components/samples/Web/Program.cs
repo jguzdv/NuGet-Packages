@@ -6,7 +6,7 @@ var builder = JGUZDVHostApplicationBuilder.CreateWebHost(args, JGUZDV.AspNetCore
 var app = builder.BuildAndConfigureBlazor<App>(
     additionalBlazorAssemblies: [
         typeof(JGUZDV.Blazor.Components.Samples.Web.Client.Pages.Index).Assembly,
-        typeof(JGUZDV.Blazor.Components.Samples.MainLayout).Assembly,
+        typeof(JGUZDV.Blazor.Components.Samples._Imports).Assembly,
     ]);
 
 app.Run();
