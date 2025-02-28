@@ -1,0 +1,47 @@
+﻿@using JGUZDV.Blazor.Components.JGOO
+@inherits LayoutComponentBase
+
+<div class="container p-0">
+    <div class="jbs-page jbs-grid jbs-container">
+        <AppHeader Title="@Title" Logo="@Logo" HelpUrl="@Logo.Href" ShowLanguageSelector="@true" ShowLoginButton="@true">
+        </AppHeader>
+
+        <Sidebar Title="@Title">
+            <div class="d-flex flex-column">
+                @{
+                    var aClass = "btn btn-default btn-block";
+                }
+
+                <a class="@aClass" href="dropdown">Dropdowns</a>
+                <a class="@aClass" href="modal">Modal</a>
+                <a class="@aClass" href="l10nEdit">L10nEdit</a>
+                <a class="@aClass" href="l10nView">L10nView</a>
+                <a class="@aClass" href="multi-select">Multiselect</a>
+                <a class="@aClass" href="client-storage">client storage</a>
+                <a class="@aClass" href="editor-buttons">Editor Buttons</a>
+                
+                <a class="@aClass" href="counter">Counter</a>
+                <a class="@aClass" href="client-await">Wait on client</a>
+                <a class="@aClass" href="server-await">Wait on server</a>
+            </div>
+        </Sidebar>
+
+        <main>
+            <div class="p-2">
+                @Body
+            </div>
+        </main>
+    </div>
+</div>
+
+@code {
+    private AppHeader.LogoSpecs Logo { get; } = new()
+        {
+            SrcUrl = "https://cdn.zdv.uni-mainz.de/web/assets/logo_uni-mainz_quader.svg",
+            AltText = "Logo der Johannes Gutenberg-Universität Mainz",
+            Href = "https://www.uni-mainz.de/"
+        };
+
+    private string Title { get; } = "JGU Blazor Components";
+}
+
