@@ -24,6 +24,7 @@
 
                 &.fullscreen {
                     --width: min(38.2dvw, 38.2dvh);
+                    --border-radius: 0;
                     width: var(--width);
                     margin-left: calc(-0.5 * var(--width));
 
@@ -34,6 +35,7 @@
 
                 &.on-content {
                     width: 64px;
+                    --border-radius: 50%;
 
                     position: absolute;
                     right: 16px; 
@@ -41,7 +43,7 @@
                 }
 
                 .loader-progress {
-                    --percentage: var(--blazor-load-percentage);
+                    --percentage: 0%;
                     position: relative;
                     animation: progress 2s 0.5s forwards;
                     width: 100%;
@@ -54,7 +56,7 @@
                 .loader-progress::before {
                     content: '';
                     position: absolute;
-                    border-radius: 50%;
+                    border-radius: var(--border-radius, 0);
                     width: 100%;
                     aspect-ratio: 1;
                     background: conic-gradient(#c10b25 var(--percentage), #23373c 0);
@@ -73,7 +75,7 @@
                     background: #FFF;
                     aspect-ratio: 1;
                     align-content: center;
-                    border-radius: 50%
+                    border-radius: var(--border-radius, 0);
                 }
             }
             </style>
