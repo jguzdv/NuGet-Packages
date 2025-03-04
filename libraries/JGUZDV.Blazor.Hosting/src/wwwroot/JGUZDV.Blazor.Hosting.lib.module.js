@@ -98,18 +98,12 @@ export const afterWebStarted = () => {
 export const beforeWebAssemblyStart = (options, extensions) => {
     console.debug('Running beforeWebAssemblyStart', options, extensions);
 
-    setApplicaitonLanguage(options);
-
     showLoader();
 };
 export const afterWebAssemblyStarted = (blazor) => {
     console.debug('Running afterWebAssemblyStart');
     hideLoader();
 };
-
-const setApplicaitonLanguage = (opt) => {
-    opt.applicationCulture = document.documentElement.getAttribute('blazor-culture') || 'de-DE';
-}
 
 const registerLoader = () => {
     if (customElements.get('app-loader')) {
