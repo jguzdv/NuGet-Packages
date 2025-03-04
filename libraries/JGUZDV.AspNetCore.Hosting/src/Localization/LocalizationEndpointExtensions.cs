@@ -31,7 +31,8 @@ public static class LocalizationEndpointExtensions
                     new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
                 );
 
-                return Results.LocalRedirect(returnUrl ?? "");
+                var actualReturnUrl = string.IsNullOrWhiteSpace(returnUrl) ? "/" : returnUrl;
+                return Results.LocalRedirect(actualReturnUrl);
             });
 
         return route;

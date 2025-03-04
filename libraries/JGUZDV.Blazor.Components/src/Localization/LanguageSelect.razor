@@ -8,19 +8,27 @@
     public string LanguageSelectionEndpointFormat { get; set; } = "_app/localization/{0}";
 }
 
-<Dropdown>
-    <DropdownLabelContent>
-        <span class="btn btn-none" aria-haspopup="true" aria-expanded="false" aria-label="@LR["LanguagePicker.Header"]">
-            @Icons.LanguageSelect(null)
-        </span>
-    </DropdownLabelContent>
-    <DropdownContent>
-        <h6 class="dropdown-header">@LR["LanguagePicker.Header"]</h6>
+@if (LS.GetLanguages()?.Any() == true) {
+    <Dropdown>
+        <DropdownLabelContent>
+            <span class="btn btn-none" aria-haspopup="true" aria-expanded="false" aria-label="@LR["LanguagePicker.Header"]">
+                @Icons.LanguageSelect(null)
+            </span>
+        </DropdownLabelContent>
+        <DropdownContent>
+            @{
+                var returnUrl = Uri.EscapeDataString(_navigation.ToAbsoluteUri(_navigation.Uri).PathAndQuery);
+            }
 
-        @foreach (var l in LS.GetLanguages() ?? [])
-        {
-            var isSelected = l.Culture == LS.GetCurrentUICulture();
-            <a class="dropdown-item @(isSelected?"active":null)" href="@LanguageSelectionEndpointFormat.Replace("{0}", l.Culture)">@l.DisplayName</a>
-        }
-    </DropdownContent>
-</Dropdown>
+            <h6 class="dropdown-header">@LR["LanguagePicker.Header"]</h6>
+
+            @foreach (var l in LS.GetLanguages() ?? [])
+            {
+                var isSelected = l.Culture == LS.GetCurrentUICulture();
+                var href = string.Format(LanguageSelectionEndpointFormat, l.Culture) + "?returnUrl=" + returnUrl;
+
+                <a class="dropdown-item @(isSelected?"active":null)" href="@href">@l.DisplayName</a>
+            }
+        </DropdownContent>
+    </Dropdown>
+}

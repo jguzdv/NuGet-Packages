@@ -7,6 +7,7 @@
         </AppHeader>
 
         <Sidebar Title="@Title">
+            Lang: @System.Threading.Thread.CurrentThread.CurrentUICulture.Name
             <div class="d-flex flex-column">
                 @{
                     var aClass = "btn btn-default btn-block";
