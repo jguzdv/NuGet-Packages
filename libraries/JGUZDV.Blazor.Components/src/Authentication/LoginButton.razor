@@ -32,13 +32,14 @@
     {
         await base.OnParametersSetAsync();
 
-        if (RedirectUrl == null)
+        var redirectUri = RedirectUrl;
+        if (redirectUri == null)
         {
-            RedirectUrl = _navigation.ToBaseRelativePath(_navigation.Uri);
+            redirectUri = Uri.EscapeDataString(_navigation.ToAbsoluteUri(_navigation.Uri).PathAndQuery);
         }
 
-        if (!RedirectUrl.StartsWith("/"))
-            RedirectUrl = "/" + RedirectUrl;
+        if (!redirectUri.StartsWith("/"))
+            redirectUri = "/" + redirectUri;
 
         var authenticationState = await AuthenticationStateTask;
 
@@ -52,7 +53,7 @@
                 {
                     await JSRuntime.InvokeVoidAsync("localStorage.setItem", AutoLoginKey, true);
 
-                    var uri = _navigation.ToAbsoluteUri($"{LoginUrl}?redirectUri={RedirectUrl}");
+                    var uri = _navigation.ToAbsoluteUri($"{LoginUrl}?redirectUri={redirectUri}");
                     _navigation.NavigateTo(uri.ToString(), true);
                 }
             }

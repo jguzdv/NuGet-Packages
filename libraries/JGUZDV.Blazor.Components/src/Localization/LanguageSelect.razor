@@ -4,9 +4,6 @@
 @inject NavigationManager _navigation
 
 @code {
-    [Inject, NotNull]
-    private NavigationManager? Navigation { get; set; }
-
     [Parameter]
     public string LanguageSelectionEndpointFormat { get; set; } = "_app/localization/{0}";
 }
@@ -20,7 +17,7 @@
         </DropdownLabelContent>
         <DropdownContent>
             @{
-                var returnUrl = Uri.EscapeDataString(Navigation.ToAbsoluteUri(Navigation.Uri).PathAndQuery);
+                var returnUrl = Uri.EscapeDataString(_navigation.ToAbsoluteUri(_navigation.Uri).PathAndQuery);
             }
 
             <h6 class="dropdown-header">@LR["LanguagePicker.Header"]</h6>
