@@ -105,7 +105,7 @@
     public EventCallback<Field> FieldChanged { get; set; }
 
     [Inject]
-    public required IFieldValueProvider ValueProvider { get; set; }
+    public required IFieldTypeValueProvider ValueProvider { get; set; }
 
     [Inject]
     public required IStringLocalizer<ComponentStrings> SL { get; set; }
