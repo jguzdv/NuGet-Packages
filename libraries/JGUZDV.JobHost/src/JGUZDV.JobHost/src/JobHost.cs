@@ -146,7 +146,6 @@ namespace JGUZDV.JobHost
         {
             if (ctx.Properties.ContainsKey(Constants.UsesDashboard) && ctx.Properties[Constants.UsesDashboard] as bool? == true)
             {
-                services.AddSingleton<TJob>();
                 services.AddSingleton(x => new RegisterJob(typeof(TJob), cronSchedule));
             }
             else
