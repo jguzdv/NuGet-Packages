@@ -11,8 +11,6 @@ public class Tests
     [Fact]
     public void TestLoggingConfig()
     {
-        /* TODO Check this test. Leads to exception Collection was modified; enumeration operation may not execute.
-        
         var builder = Host.CreateDefaultBuilder();
         builder.ConfigureAppConfiguration(c => c
             .AddJsonFile("appsettings.test.json", optional: false)
@@ -27,6 +25,5 @@ public class Tests
         var logger = app.Services.GetRequiredService<ILogger<Tests>>();
         logger.LogWarning("Warning!");
         logger.LogError("Error!");
-        */
     }
 }
