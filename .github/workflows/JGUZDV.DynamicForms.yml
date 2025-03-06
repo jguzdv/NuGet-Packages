@@ -1,0 +1,64 @@
+name: JGUZDV.DynamicForms
+
+on:
+  workflow_dispatch:
+    inputs:
+      push-to-nuget:
+        description: Push package to NuGet
+        type: boolean
+
+  pull_request:
+    branches:
+      - main
+    paths:
+      - libraries/JGUZDV.DynamicForms/**
+
+jobs:
+  build_df:
+    uses: ./.github/workflows/JGUZDV.DynamicForms.default_build.yml
+    with:
+      library-name: JGUZDV.DynamicForms
+      push-to-nuget: ${{ inputs.push-to-nuget != '' && inputs.push-to-nuget }}
+    secrets:
+      NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+
+  build_df_extensions:
+    needs: build_df
+    uses: ./.github/workflows/JGUZDV.DynamicForms.default_build.yml
+    with:
+      run-tests: false
+      library-name: JGUZDV.DynamicForms.Extensions
+      push-to-nuget: ${{ inputs.push-to-nuget != '' && inputs.push-to-nuget }}
+    secrets:
+      NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+
+  build_df_blazor:
+    needs: build_df
+    uses: ./.github/workflows/JGUZDV.DynamicForms.default_build.yml
+    with:
+      run-tests: false
+      library-name: JGUZDV.DynamicForms.Blazor
+      push-to-nuget: ${{ inputs.push-to-nuget != '' && inputs.push-to-nuget }}
+    secrets:
+      NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+
+  push_to_nuget:
+    needs: [build_df, build_df_blazor, build_df_extensions]
+    if: github.repository == 'jguzdv/NuGet-Packages' && github.ref == 'refs/heads/main' && inputs.push-to-nuget
+    name: Push ${{ inputs.library-name }}
+    runs-on: ubuntu-latest
+
+    env:
+      dotnet-version: 9.0.x
+
+    steps:
+      - name: Download nupkg
+        uses: actions/download-artifact@v4
+        with:
+          pattern: NuGetPackage-*
+          merge-multiple: true
+          path: package
+
+      - name: Push library
+        run: dotnet nuget push package/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }}
+      

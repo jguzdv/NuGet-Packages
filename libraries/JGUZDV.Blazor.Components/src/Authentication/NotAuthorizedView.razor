@@ -12,7 +12,7 @@
     public string LoginUrl { get; set; } = "_app/sign-in";
 }
 
-<AwaitTask Task="AuthenticationState">
+<AwaitResult Task="AuthenticationState">
     @if (context.User.Identity?.IsAuthenticated == true)
     {
         <div class="d-flex h-100 flex-column align-items-center justify-content-center">
@@ -31,10 +31,10 @@
             nextUrl = "/" + nextUrl;
 
         <div class="d-flex h-100 flex-column align-items-center justify-content-center">
-            <a href="@LoginUrl?nextUrl=@nextUrl" class="btn btn-secondary fa-2x btn-rounded">
+            <a href="@LoginUrl?redirectUri=@nextUrl" class="btn btn-secondary fa-2x btn-rounded">
                 <i class="fa fa-sign-in-alt"></i>
                 @LR["AuthView.LoginButton"]
             </a>
         </div>
     }
-</AwaitTask>
+</AwaitResult>

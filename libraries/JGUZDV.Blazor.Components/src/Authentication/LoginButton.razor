@@ -11,7 +11,7 @@
 @code {
     private const string AutoLoginKey = "LoginButton.AutoLoginRan";
 
-    [CascadingParameter, NotNull] 
+    [CascadingParameter, NotNull]
     Task<AuthenticationState>? AuthenticationStateTask { get; set; }
 
     [Parameter]
@@ -32,38 +32,40 @@
     {
         await base.OnParametersSetAsync();
 
-        if (RedirectUrl == null)
+        var redirectUri = RedirectUrl;
+        if (redirectUri == null)
         {
-            RedirectUrl = _navigation.ToBaseRelativePath(_navigation.Uri);
+            redirectUri = Uri.EscapeDataString(_navigation.ToAbsoluteUri(_navigation.Uri).PathAndQuery);
         }
 
-        if (!RedirectUrl.StartsWith("/"))
-            RedirectUrl = "/" + RedirectUrl;
+        if (!redirectUri.StartsWith("/"))
+            redirectUri = "/" + redirectUri;
 
         var authenticationState = await AuthenticationStateTask;
 
-        if (authenticationState.User.Identity?.IsAuthenticated != true)
+
+        if (UseAutoLogin)
         {
-            if (UseAutoLogin)
+            if (authenticationState.User.Identity?.IsAuthenticated != true)
             {
                 var hasLoginBeenTried = await JSRuntime.InvokeAsync<string>("localStorage.getItem", AutoLoginKey);
                 if (hasLoginBeenTried != "true")
                 {
                     await JSRuntime.InvokeVoidAsync("localStorage.setItem", AutoLoginKey, true);
 
-                    var uri = _navigation.ToAbsoluteUri($"{LoginUrl}?nextUrl={RedirectUrl}");
+                    var uri = _navigation.ToAbsoluteUri($"{LoginUrl}?redirectUri={redirectUri}");
                     _navigation.NavigateTo(uri.ToString(), true);
                 }
             }
-        } 
-        else
-        {
-            _ = JSRuntime.InvokeVoidAsync("localStorage.setItem", AutoLoginKey, false);
+            else
+            {
+                _ = JSRuntime.InvokeVoidAsync("localStorage.setItem", AutoLoginKey, false);
+            }
         }
     }
 }
 
-<AwaitTask Task="AuthenticationStateTask">
+<AwaitResult Task="AuthenticationStateTask">
     <Running>
         <button class="jgu_btn btn btn-none">
             <i class="fas fa-spinner fa-pulse"></i>
@@ -74,12 +76,12 @@
         {
             <a class="btn btn-light border login-button" href="@LoginUrl?nextUrl=@RedirectUrl">
                 <i class="fas fa-sign-in-alt"></i>
-                @LR["AuthView.LoginButton"]
+                <span class="d-none d-lg-inline">@LR["AuthView.LoginButton"]</span>
             </a>
-        } 
+        }
         else
         {
-            <LoginButtonDropdown DropdownItems="@DropdownItems"  UserName="@context.User.Identity?.Name" LogoutUrl="@LogoutUrl" />
+            <LoginButtonDropdown DropdownItems="@DropdownItems" UserName="@context.User.Identity?.Name" LogoutUrl="@LogoutUrl" />
         }
     </Finished>
-</AwaitTask>
+</AwaitResult>

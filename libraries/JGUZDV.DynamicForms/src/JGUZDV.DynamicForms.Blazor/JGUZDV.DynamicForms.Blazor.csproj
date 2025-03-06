@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+
+        <PackageId>JGUZDV.DynamicForms.Blazor</PackageId>
+        <IsPackable>true</IsPackable>
+        <Version>1.0.0-beta1</Version>
+        <Authors>Aaron Puhl</Authors>
+        <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
+        <PackageDescription>Blazor component library for DynamicForms.</PackageDescription>
+        <OutputType>Library</OutputType>
+    </PropertyGroup>
+
+
+    <ItemGroup>
+        <SupportedPlatform Include="browser" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.10" />
+        <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="9.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\JGUZDV.Blazor.Components.L10n\src\JGUZDV.Blazor.Components.L10n.csproj" />
+        <ProjectReference Include="..\..\..\JGUZDV.Blazor.Components\src\JGUZDV.Blazor.Components.csproj" />
+        <ProjectReference Include="..\JGUZDV.DynamicForms\JGUZDV.DynamicForms.csproj" />
+    </ItemGroup>
+
+</Project>

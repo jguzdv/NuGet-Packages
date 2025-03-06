@@ -1,0 +1,38 @@
+﻿@using JGUZDV.DynamicForms.Model
+@using System.ComponentModel.DataAnnotations
+
+<DynamicComponent Type="ConstraintViewTypeFactory.GetViewType(Constraint)" Parameters="_params"></DynamicComponent>
+
+@code {
+    /// <summary>
+    /// The <see cref="JGUZDV.DynamicForms.Model.Constraint"/> to edit
+    /// </summary>
+    [Parameter]
+    public required Constraint Constraint { get; set; }
+
+    /// <summary>
+    /// Change event for the <see cref="ConstraintInput.Constraint"/>
+    /// </summary>
+    [Parameter]
+    public required EventCallback<Constraint> ConstraintChanged { get; set; }
+
+    /// <summary>
+    /// The <see cref="Model.FieldDefinition" /> of the constraint
+    /// </summary>
+    [Parameter]
+    public required FieldDefinition FieldDefinition { get; set; }
+
+
+    private Dictionary<string, object> _params = new();
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        _params = new Dictionary<string, object>
+        {
+            { nameof(Constraint), Constraint },
+            { nameof(ConstraintChanged), ConstraintChanged },
+            { nameof(FieldDefinition), FieldDefinition }
+        };
+    }
+}

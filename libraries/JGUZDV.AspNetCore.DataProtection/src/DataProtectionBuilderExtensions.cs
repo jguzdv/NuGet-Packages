@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
+
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
@@ -15,27 +17,21 @@ public static class DataProtectionBuilderExtensions
     /// <summary>
     /// Configures the data protection system with the specified configuration.
     /// </summary>
-    public static IDataProtectionBuilder UseDataProtectionConfig(this IDataProtectionBuilder builder, IConfigurationSection configuration, IWebHostEnvironment? environment)
+    public static IDataProtectionBuilder UseDataProtectionConfig(this IDataProtectionBuilder builder, IConfigurationSection configuration, IHostEnvironment environment)
     {
-        var config = new Configuration();
+        var config = new JGUDataProtectionConfiguration();
         configuration.Bind(config);
 
-        config.ApplicationName ??= environment?.ApplicationName;
-        
         var validation = config.Validate(null);
         if (validation.Any())
             throw new ValidationException(validation.First(), null, null);
 
-        if (config.SetApplicationName)
-            builder.SetApplicationName(config.ApplicationName!);
+        builder.SetApplicationName(config.ApplicationDiscriminator!);
 
         if(config.DisableAutomaticKeyGeneration)
             builder.DisableAutomaticKeyGeneration();
 
-        if (!config.UsePersistence)
-            return builder;
-
-        PersistKeys(builder, config);
+        PersistKeys(builder, config, environment);
 
         if (config.UseProtection)
             ProtectKeys(builder, config);
@@ -43,16 +39,17 @@ public static class DataProtectionBuilderExtensions
         return builder;
     }
 
-    private static void PersistKeys(IDataProtectionBuilder builder, Configuration config)
+    private static void PersistKeys(IDataProtectionBuilder builder, JGUDataProtectionConfiguration config, IHostEnvironment environment)
     {
-        var directoryInfo = config.Persistence!.FileSystem!.UseIsolatedPath
-            ? new DirectoryInfo(Path.Combine(config.Persistence.FileSystem.Path!, config.ApplicationName!))
-            : new DirectoryInfo(config.Persistence.FileSystem.Path!);
+        var fsPersistence = config.Persistence!.FileSystem!;
+        var pathDiscriminator = fsPersistence.IsolatedPathDiscriminator ?? environment.ApplicationName;
+
+        var directoryInfo = new DirectoryInfo(Path.Combine(fsPersistence.Path!, pathDiscriminator));
 
         builder.PersistKeysToFileSystem(directoryInfo);
     }
 
-    private static bool ProtectKeys(IDataProtectionBuilder builder, Configuration config)
+    private static bool ProtectKeys(IDataProtectionBuilder builder, JGUDataProtectionConfiguration config)
     {
         if (config.Protection!.UseCertificate)
         {

@@ -1,6 +1,9 @@
-﻿using JGUZDV.Extensions.Logging;
+﻿using JGUZDV.Extensions.Logging.File;
+
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Serilog;
+using Microsoft.Extensions.Logging;
+
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -13,11 +16,48 @@ public static class JGUZDVHostBuilderLoggingExtensions
     /// Configures the host builder to use the default logging configuration.
     /// </summary>
     public static IHostBuilder UseJGUZDVLogging(this IHostBuilder hostBuilder)
-        => hostBuilder.UseJGUZDVLogging(Constants.DefaultSectionName);
+        => hostBuilder.UseJGUZDVLogging();
 
     /// <summary>
     /// Configures the host builder to use the specified logging configuration.
     /// </summary>
-    public static IHostBuilder UseJGUZDVLogging(this IHostBuilder hostBuilder, string configSectionName, bool writeToProviders = true)
-        => hostBuilder.UseSerilog((ctx, logger) => logger.BuildSerilogLogger(ctx.HostingEnvironment, ctx.Configuration, configSectionName), writeToProviders: writeToProviders);
+    public static IHostBuilder UseJGUZDVLogging(this IHostBuilder hostBuilder, bool useJsonFormat = true)
+    {
+        hostBuilder.ConfigureServices((hostContext, services) =>
+        {
+            if (useJsonFormat)
+            {
+                hostBuilder.ConfigureLogging((hostBuilderContext, loggingBuilder) =>
+                {
+                    loggingBuilder.AddJsonFile();
+                });
+            }
+            else
+            {
+                hostBuilder.ConfigureLogging((hostBuilderContext, loggingBuilder) =>
+                {
+                    loggingBuilder.AddPlainTextFile();
+                });
+            }
+
+            services.PostConfigure<FileLoggerOptions>(configureOptions =>
+            {
+                if (string.IsNullOrWhiteSpace(configureOptions.OutputDirectory))
+                {
+                    throw new ArgumentException("No property OutputDirectory found in config section Logging:File. " +
+                            "JGUZDV Logging needs a directory to store logfiles.");
+                }
+
+                // Add the application name to the output directory, so log files for
+                // different apps will be written to different directories.
+                configureOptions.OutputDirectory = Path.Combine(
+                    configureOptions.OutputDirectory, 
+                    hostContext.HostingEnvironment.ApplicationName);
+            });
+        });
+
+
+        return hostBuilder;
+    }
+
 }

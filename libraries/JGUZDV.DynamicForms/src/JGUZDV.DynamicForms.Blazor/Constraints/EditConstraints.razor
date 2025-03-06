@@ -1,0 +1,91 @@
+﻿@using JGUZDV.DynamicForms.Model
+@using System.ComponentModel.DataAnnotations
+
+@*Select for new constraints*@
+<select class="form-control" @bind="_newConstraintString">
+    @if (string.IsNullOrWhiteSpace(_newConstraintString))
+    {
+        <option> select constraint type </option>
+    }
+    @foreach (var constraintType in DynamicFormsConfiguration.GetConstraintTypes(FieldDefinition))
+    {
+        <option value="@constraintType.Name">
+            @DynamicFormsConfiguration.GetConstraintName(constraintType)
+        </option>
+    }
+</select>
+
+<button class="btn btn-primary my-2"
+        type="button"
+        @onclick="AddNewConstraint"
+        disabled="@string.IsNullOrWhiteSpace(_newConstraintString)">
+    add new Constraint
+</button>
+
+@*Current constraints*@
+@if (FieldDefinition.Constraints.Any())
+{
+    <hr />
+    <div class="fw-bold">
+        @SL["EditConstraints.Constraints"]
+    </div>
+    <div class="p-2">
+        @foreach (var constraint in FieldDefinition.Constraints)
+        {
+            <div>
+                <span>
+                    @DynamicFormsConfiguration.GetConstraintName(constraint.GetType())
+                </span>
+                <button type="button"
+                        @onclick="() => FieldDefinition.Constraints.Remove(constraint)"
+                        class="btn btn-outline-danger btn-sm ms-2">
+                    <i class="fa fa-trash"></i>
+                </button>
+            </div>
+            <div class="flex-grow-1">
+                <ConstraintInput Constraint="constraint"
+                                 ConstraintChanged="() => FieldDefinitionChanged.InvokeAsync(FieldDefinition)"
+                                 FieldDefinition="FieldDefinition">
+                </ConstraintInput>
+            </div>
+
+            <hr />
+        }
+    </div>
+}
+
+@code {
+    /// <summary>
+    /// The <see cref="Model.FieldDefinition" /> of the constraints
+    /// </summary>
+    [Parameter]
+    [EditorRequired]
+    public required FieldDefinition FieldDefinition { get; set; }
+
+    [Parameter]
+    public EventCallback<FieldDefinition> FieldDefinitionChanged { get; set; }
+
+    [Inject]
+    public required IStringLocalizer<Resources.ComponentStrings> SL { get; set; }
+
+    [Inject]
+    public required IServiceProvider ServiceProvider { get; set; }
+
+    private string? _newConstraintString;
+
+    private List<ValidationResult> _fieldDefinitionValidation = new();
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        if (FieldDefinition.ValidateBase(new ValidationContext(FieldDefinition, ServiceProvider, null)).Any())
+            throw new InvalidOperationException($"Invalid {FieldDefinition}");
+    }
+
+    private void AddNewConstraint()
+    {
+        var constraint = DynamicFormsConfiguration.Create(_newConstraintString!, FieldDefinition.Type!);
+        FieldDefinition.Constraints = FieldDefinition.Constraints.Prepend(constraint).ToList();
+        FieldDefinitionChanged.InvokeAsync(FieldDefinition);
+    }
+}

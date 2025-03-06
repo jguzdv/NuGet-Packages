@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using JGUZDV.Blazor.Components.Toasts;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace JGUZDV.Blazor.Components
 {
@@ -7,7 +8,7 @@ namespace JGUZDV.Blazor.Components
     {
         public static IServiceCollection AddToasts(this IServiceCollection services)
         {
-            services.AddSingleton<IToastService, ToastService>();
+            services.TryAddSingleton<IToastService, ToastService>();
 
             return services;
         }

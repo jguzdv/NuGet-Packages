@@ -1,7 +1,7 @@
-﻿@using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-@using Microsoft.Extensions.DependencyInjection;
+﻿@using Microsoft.Extensions.DependencyInjection;
 @using Microsoft.Extensions.Localization;
 
+@attribute [StreamRendering]
 @typeparam TResult
 
 @code {
@@ -79,13 +79,19 @@
     {
         await base.OnParametersSetAsync();
 
-        if (Task?.IsCompleted != true)
+
+        if (Task != null)
         {
-            _ = Task?.ContinueWith(t =>
-            {
-                InvokeAsync(StateHasChanged);
-            });
+            await Task;
         }
+
+        // if (Task?.IsCompleted != true)
+        // {
+        //     _ = Task?.ContinueWith(t =>
+        //     {
+        //         InvokeAsync(StateHasChanged);
+        //     });
+        // }
     }
 }
 

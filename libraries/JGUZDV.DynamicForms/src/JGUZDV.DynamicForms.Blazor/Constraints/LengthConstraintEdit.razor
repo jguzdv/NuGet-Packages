@@ -1,0 +1,28 @@
+﻿@using JGUZDV.DynamicForms.Model
+@using System.ComponentModel.DataAnnotations
+
+<div>
+    <label for="length@_id">Textlänge</label>
+    <input id="length@_id" class="form-control"
+        @bind=_constraint.MaxLength
+        @bind:after="ConstraintChanged.InvokeAsync" 
+        type="text" />
+</div>
+
+
+@code {
+    [Parameter]
+    public required Constraint Constraint { get; set; }
+
+    [Parameter]
+    public required EventCallback<Constraint> ConstraintChanged { get; set; }
+
+    [Parameter]
+    public required FieldDefinition FieldDefinition { get; set; }
+
+    [Parameter]
+    public required EventCallback<List<ValidationResult>> OnValidation { get; set; }
+
+    private StringLengthConstraint _constraint => (StringLengthConstraint)Constraint!;
+    private Guid _id = Guid.NewGuid();
+}

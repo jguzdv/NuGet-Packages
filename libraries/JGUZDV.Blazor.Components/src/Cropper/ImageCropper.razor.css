@@ -1,0 +1,199 @@
+﻿.cropper-root {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    text-align: center;
+}
+
+    .cropper-root > div {
+        width: 100%;
+        height: 100%;
+        position: relative;
+    }
+
+        .cropper-root > div img.source-image {
+            max-width: 100%;
+            height: auto;
+            max-height: 100%;
+            object-fit: contain;
+            transform-origin: center;
+        }
+
+.overlay {
+    position: absolute;
+    pointer-events: none;
+    touch-action: none;
+    outline: var(--cropper-overlay-color, white) solid 100vw;
+    top: 0;
+    left: 0;
+}
+
+.cropper {
+    position: absolute;
+    display: flex;
+    color: #53535C;
+    background: transparent;
+    outline: rgba(255, 255, 255, 0.3) solid 100vw;
+    outline: var(--cropper-outline-color, rgba(255, 255, 255, 0.3)) solid 100vw;
+    touch-action: none;
+}
+
+@media (orientation: portrait) {
+    .cropper {
+        outline-width: 100vh;
+    }
+}
+
+.cropper:after {
+    position: absolute;
+    content: "";
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    pointer-events: none;
+    border: dashed 1px;
+    opacity: 0.75;
+    color: inherit;
+    z-index: 1;
+}
+
+.cropper .move {
+    width: 100%;
+    cursor: move;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.cropper:focus .move {
+    border-color: dodgerblue;
+    border-width: 2px;
+}
+
+.cropper .resize {
+    position: absolute;
+    display: inline-block;
+    line-height: 6px;
+    padding: 8px;
+    opacity: 0.85;
+    z-index: 1;
+}
+
+    .cropper .resize .square {
+        display: inline-block;
+        background: #53535C;
+        width: 6px;
+        height: 6px;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        box-sizing: content-box;
+    }
+
+    .cropper .resize.topleft {
+        top: -12px;
+        left: -12px;
+        cursor: nwse-resize;
+    }
+
+    .cropper .resize.top {
+        top: -12px;
+        left: calc(50% - 12px);
+        cursor: ns-resize;
+    }
+
+    .cropper .resize.topright {
+        top: -12px;
+        right: -12px;
+        cursor: nesw-resize;
+    }
+
+    .cropper .resize.right {
+        top: calc(50% - 12px);
+        right: -12px;
+        cursor: ew-resize;
+    }
+
+    .cropper .resize.bottomright {
+        bottom: -12px;
+        right: -12px;
+        cursor: nwse-resize;
+    }
+
+    .cropper .resize.bottom {
+        bottom: -12px;
+        left: calc(50% - 12px);
+        cursor: ns-resize;
+    }
+
+    .cropper .resize.bottomleft {
+        bottom: -12px;
+        left: -12px;
+        cursor: nesw-resize;
+    }
+
+    .cropper .resize.left {
+        top: calc(50% - 12px);
+        left: -12px;
+        cursor: ew-resize;
+    }
+
+.cropper .resize-bar {
+    position: absolute;
+    z-index: 1;
+}
+
+    .cropper .resize-bar.top {
+        top: -11px;
+        left: 11px;
+        width: calc(100% - 22px);
+        height: 22px;
+        cursor: ns-resize;
+    }
+
+    .cropper .resize-bar.right {
+        top: 11px;
+        right: -11px;
+        height: calc(100% - 22px);
+        width: 22px;
+        cursor: ew-resize;
+    }
+
+    .cropper .resize-bar.bottom {
+        bottom: -11px;
+        left: 11px;
+        width: calc(100% - 22px);
+        height: 22px;
+        cursor: ns-resize;
+    }
+
+    .cropper .resize-bar.left {
+        top: 11px;
+        left: -11px;
+        height: calc(100% - 22px);
+        width: 22px;
+        cursor: ew-resize;
+    }
+
+.cropper.rounded {
+    outline-color: transparent;
+}
+
+    .cropper.rounded:after {
+        border-radius: 100%;
+        box-shadow: 0 0 0 100vw rgba(255, 255, 255, 0.3);
+        box-shadow: 0 0 0 100vw var(--cropper-outline-color, rgba(255, 255, 255, 0.3));
+    }
+
+@media (orientation: portrait) {
+    .cropper.rounded:after {
+        box-shadow: 0 0 0 100vh rgba(255, 255, 255, 0.3);
+        box-shadow: 0 0 0 100vh var(--cropper-outline-color, rgba(255, 255, 255, 0.3));
+    }
+}
+
+.cropper.rounded .move {
+    border-radius: 100%;
+}
+
+.cropper-root.disabled .cropper .resize, .cropper-root.disabled .cropper .resize-bar, .cropper-root.disabled .cropper .move {
+    display: none;
+}
