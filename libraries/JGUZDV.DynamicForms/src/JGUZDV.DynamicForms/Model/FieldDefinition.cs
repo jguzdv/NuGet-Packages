@@ -116,6 +116,11 @@ public class FieldDefinition : IValidatableObject
     public L10nString Description { get; set; } = new();
 
     /// <summary>
+    /// Gets or sets the metadata.
+    /// </summary>
+    public string? Metadata { get; set; }
+
+    /// <summary>
     /// Gets or sets a value indicating whether the field is a list.
     /// </summary>
     public bool IsList { get; set; }

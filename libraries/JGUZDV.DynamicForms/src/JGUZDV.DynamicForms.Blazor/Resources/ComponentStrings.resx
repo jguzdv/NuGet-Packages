@@ -142,4 +142,7 @@
   <data name="FileFieldInput.ValidationResults" xml:space="preserve">
     <value>Fehler</value>
   </data>
+  <data name="EditFieldDefinition.InvalidMetadata" xml:space="preserve">
+    <value>{0} ist ungültig</value>
+  </data>
 </root>

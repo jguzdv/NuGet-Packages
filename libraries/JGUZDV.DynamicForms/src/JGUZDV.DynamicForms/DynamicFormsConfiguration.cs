@@ -17,8 +17,18 @@ namespace JGUZDV.DynamicForms
                 new DateOnlyFieldType(),
                 new IntFieldType(),
                 new StringFieldType(),
-                    new FileFieldType()
+                new FileFieldType()
             };
+
+        /// <summary>
+        /// Removes a FieldType from the known field types.
+        /// </summary>
+        /// <param name="type">The FieldType to remove</param>
+        public static void RemoveFieldType<TFieldType>()
+            where TFieldType : FieldType
+        {
+            _knownFieldTypes.RemoveWhere(x => x.GetType() == typeof(TFieldType));
+        }
 
         /// <summary>
         /// Adds a new FieldType to the known field types and sets the allowed constraints for it.
@@ -97,8 +107,8 @@ namespace JGUZDV.DynamicForms
                 { typeof(RegexConstraint), new L10nString { ["de"] = "Regex", ["en"] = "Regex" } },
                 { typeof(StringLengthConstraint), new L10nString { ["de"] = "Textlänge", ["en"] = "Text Length" } },
                 { typeof(RangeConstraint), new L10nString { ["de"] = "Intervall", ["en"] = "Range" } },
-                    { typeof(SizeConstraint), new L10nString { ["de"] = "Listenlänge", ["en"] = "List Length" } },
-                    { typeof(FileSizeConstraint), new L10nString { ["de"] = "Dateigröße", ["en"] = "File Size" } } // Added FileSizeConstraint
+                { typeof(SizeConstraint), new L10nString { ["de"] = "Listenlänge", ["en"] = "List Length" } },
+                { typeof(FileSizeConstraint), new L10nString { ["de"] = "Dateigröße", ["en"] = "File Size" } }
             };
 
         /// <summary>
