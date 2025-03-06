@@ -53,7 +53,7 @@ jobs:
       - name: Upload nupkg
         uses: actions/upload-artifact@v4
         with:
-          name: NuGetPackage
+          name: NuGetPackage-${{ inputs.library-name }}
           path: ${{ env.publish-path }}
           retention-days: 7
 
