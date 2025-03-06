@@ -13,33 +13,27 @@ namespace Microsoft.Extensions.DependencyInjection;
 public static class JGUZDVHostBuilderLoggingExtensions
 {
     /// <summary>
-    /// Configures the host builder to use the default logging configuration.
-    /// </summary>
-    public static IHostBuilder UseJGUZDVLogging(this IHostBuilder hostBuilder)
-        => hostBuilder.UseJGUZDVLogging();
-
-    /// <summary>
     /// Configures the host builder to use the specified logging configuration.
     /// </summary>
     public static IHostBuilder UseJGUZDVLogging(this IHostBuilder hostBuilder, bool useJsonFormat = true)
     {
+        if (useJsonFormat)
+        {
+            hostBuilder.ConfigureLogging((hostBuilderContext, loggingBuilder) =>
+            {
+                loggingBuilder.AddJsonFile();
+            });
+        }
+        else
+        {
+            hostBuilder.ConfigureLogging((hostBuilderContext, loggingBuilder) =>
+            {
+                loggingBuilder.AddPlainTextFile();
+            });
+        }
+
         hostBuilder.ConfigureServices((hostContext, services) =>
         {
-            if (useJsonFormat)
-            {
-                hostBuilder.ConfigureLogging((hostBuilderContext, loggingBuilder) =>
-                {
-                    loggingBuilder.AddJsonFile();
-                });
-            }
-            else
-            {
-                hostBuilder.ConfigureLogging((hostBuilderContext, loggingBuilder) =>
-                {
-                    loggingBuilder.AddPlainTextFile();
-                });
-            }
-
             services.PostConfigure<FileLoggerOptions>(configureOptions =>
             {
                 if (string.IsNullOrWhiteSpace(configureOptions.OutputDirectory))
@@ -51,7 +45,7 @@ public static class JGUZDVHostBuilderLoggingExtensions
                 // Add the application name to the output directory, so log files for
                 // different apps will be written to different directories.
                 configureOptions.OutputDirectory = Path.Combine(
-                    configureOptions.OutputDirectory, 
+                    configureOptions.OutputDirectory,
                     hostContext.HostingEnvironment.ApplicationName);
             });
         });
