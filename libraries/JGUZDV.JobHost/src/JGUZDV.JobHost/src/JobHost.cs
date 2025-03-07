@@ -32,6 +32,11 @@ namespace JGUZDV.JobHost
                                     configureQuartz(x);
                                     x.AwaitApplicationStarted = true;
                                 });
+
+                                var disableJobSelection = ctx.Configuration.GetValue<bool?>($"{Constants.DefaultConfigSection}:DisableDevelopmentJobSelection") ?? false;
+
+                                if (ctx.HostingEnvironment.IsDevelopment() && !disableJobSelection)
+                                    services.AddHostedService<JobHostDebugService>();
                             })
                            .UseJGUZDVLogging()
                            .UseWindowsService(configureWindowsService);
@@ -141,8 +146,7 @@ namespace JGUZDV.JobHost
         {
             if (ctx.Properties.ContainsKey(Constants.UsesDashboard) && ctx.Properties[Constants.UsesDashboard] as bool? == true)
             {
-                services.AddScoped<TJob>();
-                services.AddScoped(x => new RegisterJob(typeof(TJob), cronSchedule));
+                services.AddSingleton(x => new RegisterJob(typeof(TJob), cronSchedule));
             }
             else
             {

@@ -74,13 +74,14 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      dotnet-version: 8.0.x
+      dotnet-version: 9.0.x
 
     steps:
       - name: Download nupkg
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
-          name: NuGetPackage
+          pattern: NuGetPackage-*
+          merge-multiple: true
           path: package
 
       - name: Push library

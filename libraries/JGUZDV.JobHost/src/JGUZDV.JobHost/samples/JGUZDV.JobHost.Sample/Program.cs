@@ -7,8 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-Console.WriteLine("Hello, World!");
-
 var builder = JobHost.CreateJobHostBuilder(args, configureWindowsService => configureWindowsService.ServiceName = "Sample",
                 quartzHostedServiceOptions => quartzHostedServiceOptions.WaitForJobsToComplete = true);
 
@@ -19,7 +17,8 @@ builder.UseJobReporting<JobHostContextReporter>();
 builder.AddHostedJob<SampleJob>();
 
 var host = builder.Build();
-using(var scope =  host.Services.CreateScope()){
+using (var scope = host.Services.CreateScope())
+{
     var context = scope.ServiceProvider.GetRequiredService<JobHostContext>();
     context.Database.EnsureDeleted();
     context.Database.EnsureCreated();
