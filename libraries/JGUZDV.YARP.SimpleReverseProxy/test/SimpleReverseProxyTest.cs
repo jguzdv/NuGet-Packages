@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 using System.Net;
@@ -19,9 +20,18 @@ public class SimpleReverseProxyTest
 #if DEBUG
             .ConfigureLogging(log => { log.AddDebug(); })
 #endif
+            .ConfigureServices(services =>
+            {
+                services.AddRouting();
+            })
             .Configure(app =>
             {
-                app.Map("/app", hw => hw.Run((ctx) => ctx.Response.WriteAsync("Hello World!")));
+                app.UseRouting();
+                app.UseEndpoints(ep => {
+
+                    ep.MapGet("/app", (ctx) => ctx.Response.WriteAsync("Hello World!"));
+                    ep.MapGet("/accept-language", (ctx) => ctx.Response.WriteAsync(ctx.Request.Headers.AcceptLanguage.FirstOrDefault()?.ToString() ?? ""));
+                });
             })
             .Build();
 
@@ -37,6 +47,8 @@ public class SimpleReverseProxyTest
 #endif
             .ConfigureServices((ctx, services) =>
             {
+                services.AddRequestLocalization(x => x.SetDefaultCulture("thl-XK"));
+
                 services.AddSimpleReverseProxy(null,
                     bff =>
                     {
@@ -45,10 +57,17 @@ public class SimpleReverseProxyTest
                                 "/proxy/path",
                                 "http://localhost:12100/app"
                             ));
+                        
+                        bff.Proxies.Add(
+                            new Configuration.SimpleProxyDefinition(
+                                "/proxy/lng",
+                                "http://localhost:12100/accept-language"
+                            ));
                     });
             })
             .Configure(app =>
             {
+                app.UseRequestLocalization();
                 app.UseRouting();
                 app.UseEndpoints(e => e.MapSimpleReverseProxy());
             })
@@ -56,11 +75,17 @@ public class SimpleReverseProxyTest
 
         await proxyHost.StartAsync();
 
-        var response = await proxyHost.GetTestServer().CreateClient().GetAsync("/proxy/path");
-        var result = await response.Content.ReadAsStringAsync();
+        var helloWorldResponse = await proxyHost.GetTestServer().CreateClient().GetAsync("/proxy/path");
+        var helloWorld = await helloWorldResponse.Content.ReadAsStringAsync();
+        
+        var acceptLanguageResponse = await proxyHost.GetTestServer().CreateClient().GetAsync("/proxy/lng");
+        var acceptLanguage = await acceptLanguageResponse.Content.ReadAsStringAsync();
 
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        Assert.Equal("Hello World!", result);
+        Assert.Equal(HttpStatusCode.OK, helloWorldResponse.StatusCode);
+        Assert.Equal("Hello World!", helloWorld);
+        
+        Assert.Equal(HttpStatusCode.OK, acceptLanguageResponse.StatusCode);
+        Assert.Equal("thl-XK; q=1.0", acceptLanguage);
     }
 
 
