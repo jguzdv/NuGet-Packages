@@ -7,7 +7,7 @@
 
         <PackageId>JGUZDV.Extensions.Logging.File</PackageId>
         <IsPackable>true</IsPackable>
-        <Version>1.2.5</Version>
+        <Version>1.2.7</Version>
         <Authors>Tobias Beckhoff, Thomas Ottenhus</Authors>
         <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
         <PackageDescription>Provides a file logging provider.</PackageDescription>

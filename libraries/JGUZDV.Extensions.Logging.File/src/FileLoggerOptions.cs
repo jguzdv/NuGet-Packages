@@ -5,7 +5,12 @@
 /// </summary>
 public class FileLoggerOptions
 {
+    private string? _fileExtension;
+    private string? _discriminator;
+    
     private FileLoggerQueueFullMode _queueFullMode = FileLoggerQueueFullMode.Wait;
+    
+    
     /// <summary>
     /// Gets or sets the desired console logger behavior when the queue becomes full.
     /// </summary>
@@ -57,7 +62,15 @@ public class FileLoggerOptions
     /// <summary>
     /// The discriminator may be included in the log-file name to e.g. distinguish between different machines.
     /// </summary>
-    public string Discriminator { get; set; } = Environment.MachineName;
+    public string Discriminator { 
+        get => $"{_discriminator}{(AppendMachineName ? Environment.MachineName : "")}"; 
+        set => _discriminator = value; 
+    }
+
+    /// <summary>
+    /// If true, the MachineName will always be added to the Discriminator.
+    /// </summary>
+    public bool AppendMachineName { get; set; } = true;
 
     /// <summary>
     /// The date format used in the log-file name. If you add hours or minutes here, the file will roll-over on every change.
@@ -101,7 +114,7 @@ public class FileLoggerOptions
     /// </value>
     public long RollingFileSize { get; set; } = 50 * 1000 * 1024;
 
-    private string? _fileExtension;
+    
     /// <summary>
     /// The extension to be used when writing files. If this is null the formatter will provide it's preferred extension.
     /// </summary>
