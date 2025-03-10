@@ -6,7 +6,6 @@
 public class FileLoggerOptions
 {
     private string? _fileExtension;
-    private string? _discriminator;
     
     private FileLoggerQueueFullMode _queueFullMode = FileLoggerQueueFullMode.Wait;
     
@@ -62,10 +61,7 @@ public class FileLoggerOptions
     /// <summary>
     /// The discriminator may be included in the log-file name to e.g. distinguish between different machines.
     /// </summary>
-    public string Discriminator { 
-        get => $"{_discriminator}{(AppendMachineName ? Environment.MachineName : "")}"; 
-        set => _discriminator = value; 
-    }
+    public string Discriminator { get; set; }
 
     /// <summary>
     /// If true, the MachineName will always be added to the Discriminator.
@@ -131,5 +127,5 @@ public class FileLoggerOptions
     /// Use {Date} {Discriminator} and {Rolling} to include the date, discriminator and rolling number in the filename.
     /// Do not append the File-Extension as it will be appended automatically.
     /// </remarks>
-    public string FilenamePattern { get; set; } = "{Date}_{Discriminator}{Rolling}";
+    public string FilenamePattern { get; set; } = "{Date}_{Discriminator}{MachineName}{Rolling}";
 }
