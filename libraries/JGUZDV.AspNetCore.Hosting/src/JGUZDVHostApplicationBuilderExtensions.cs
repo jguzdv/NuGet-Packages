@@ -477,6 +477,7 @@ public static class JGUZDVHostApplicationBuilderExtensions
         })
                 .AddOpenIdConnect(opt =>
                 {
+                    opt.MapInboundClaims = false;
                     opt.UseTokenLifetime = true;
                     opt.SaveTokens = true;
                     opt.GetClaimsFromUserInfoEndpoint = true;
