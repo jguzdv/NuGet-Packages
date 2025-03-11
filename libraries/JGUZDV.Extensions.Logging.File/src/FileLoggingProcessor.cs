@@ -122,7 +122,8 @@ internal class FileLoggingProcessor : IDisposable
         var fileNamePattern = options.FilenamePattern
             .Replace("{Date}", "{0}")
             .Replace("{Discriminator}", "{1}")
-            .Replace("{Rolling}", "{2}");
+            .Replace("{MachineName}", "{2}")
+            .Replace("{Rolling}", "{3}");
 
         var refDate = options.PreferLocalTime
             ? _timeProvider.GetLocalNow()
@@ -132,10 +133,15 @@ internal class FileLoggingProcessor : IDisposable
             ? currentRollingFileNumber.ToString(options.RollingFileFormat)
             : string.Empty;
 
+        var machineName = options.AppendMachineName
+            ? Environment.MachineName
+            : string.Empty;
+
         var fileName = string.Format(
                 fileNamePattern,
                 _timeProvider.GetUtcNow().ToString(options.DateFormat),
                 options.Discriminator,
+                machineName,
                 rolling
             )
             + options.FileExtension;
