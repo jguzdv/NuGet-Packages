@@ -8,6 +8,52 @@
 @inject IStringLocalizer<Resources.ComponentStrings> LR
 @inject IJSRuntime JSRuntime
 
+@{
+    var redirectUri = Uri.EscapeDataString(RedirectUrl ?? _navigation.ToAbsoluteUri(_navigation.Uri).PathAndQuery);
+    var logoutRedirectUri = Uri.EscapeDataString(PostLogoutRedirectUrl ?? RedirectUrl ?? _navigation.ToAbsoluteUri(_navigation.Uri).PathAndQuery);
+
+    if (!redirectUri.StartsWith("%2f", StringComparison.OrdinalIgnoreCase))
+        redirectUri = "%2f" + redirectUri;
+
+    if (!logoutRedirectUri.StartsWith("%2f", StringComparison.OrdinalIgnoreCase))
+        logoutRedirectUri = "%2f" + logoutRedirectUri;
+}
+
+<AuthorizeView Context="context">
+    <NotAuthorized>
+        <a class="btn btn-light border login-button" href="@LoginUrl?redirectUri=@redirectUri">
+            <i class="fas fa-sign-in-alt"></i>
+            <span class="d-none d-lg-inline">@LR["AuthView.LoginButton"]</span>
+        </a>
+    </NotAuthorized>
+    <Authorized>
+        @{
+            var displayName = context.User.FindFirst("name")?.Value
+                ?? context.User.FindFirst("zdv_upn")?.Value
+                ?? context.User.FindFirst("sub")?.Value
+                ?? context.User.Identity?.Name;
+
+            var userInitial = displayName?.Substring(0,1) ?? "#";
+        }
+        <Dropdown DropDownMenuClass="dropdown-menu-end">
+            <DropdownLabelContent>
+                <span class="jgu_btn btn btn-light border">
+                    <i class="fas fa-user-circle"></i>
+                    <span class="d-none d-lg-inline-block ms-2">@displayName</span>
+                </span>
+            </DropdownLabelContent>
+            <DropdownContent>
+                <h6 class="dropdown-header d-lg-none">@displayName</h6>
+                <a class="dropdown-item" href="@LogoutUrl?redirectUri=@logoutRedirectUri">
+                    <i class="fas fa-sign-out-alt"></i>
+                    @LR["AuthView.LogoutButton"]
+                </a>
+                @DropdownItems
+            </DropdownContent>
+        </Dropdown>
+    </Authorized>
+</AuthorizeView>
+
 @code {
     private const string AutoLoginKey = "LoginButton.AutoLoginRan";
 
@@ -23,28 +69,24 @@
     public string? RedirectUrl { get; set; }
 
     [Parameter]
+    public string? PostLogoutRedirectUrl { get; set; }
+
+    [Parameter]
     public bool UseAutoLogin { get; set; }
 
     [Parameter]
     public RenderFragment? DropdownItems { get; set; }
 
-    protected override async Task OnParametersSetAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        await base.OnParametersSetAsync();
-
-        var redirectUri = RedirectUrl;
-        if (redirectUri == null)
-        {
-            redirectUri = Uri.EscapeDataString(_navigation.ToAbsoluteUri(_navigation.Uri).PathAndQuery);
-        }
+        var redirectUri = Uri.EscapeDataString(RedirectUrl ?? _navigation.ToAbsoluteUri(_navigation.Uri).PathAndQuery);
 
         if (!redirectUri.StartsWith("/"))
             redirectUri = "/" + redirectUri;
 
         var authenticationState = await AuthenticationStateTask;
 
-
-        if (UseAutoLogin)
+        if (UseAutoLogin && firstRender)
         {
             if (authenticationState.User.Identity?.IsAuthenticated != true)
             {
@@ -64,29 +106,3 @@
         }
     }
 }
-
-<AwaitResult Task="AuthenticationStateTask">
-    <Running>
-        <button class="jgu_btn btn btn-none">
-            <i class="fas fa-spinner fa-pulse"></i>
-        </button>
-    </Running>
-    <Finished>
-        @if (context.User.Identity?.IsAuthenticated != true)
-        {
-            <a class="btn btn-light border login-button" href="@LoginUrl?nextUrl=@RedirectUrl">
-                <i class="fas fa-sign-in-alt"></i>
-                <span class="d-none d-lg-inline">@LR["AuthView.LoginButton"]</span>
-            </a>
-        }
-        else
-        {
-            var displayName = context.User.FindFirst("name")?.Value 
-                ?? context.User.FindFirst("zdv_upn")?.Value 
-                ?? context.User.FindFirst("sub")?.Value 
-                ?? context.User.Identity.Name;
-
-            <LoginButtonDropdown DropdownItems="@DropdownItems" UserName="@displayName" LogoutUrl="@LogoutUrl" />
-        }
-    </Finished>
-</AwaitResult>
