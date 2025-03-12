@@ -18,6 +18,10 @@ internal partial class LogMessages
     [LoggerMessage(LogLevel.Warning, "Could not find config Authentication:JwtBearer:RequiredScopes or Authentication:JwtBearer:AllowedScopes, consider addings required scopes to validate the token is meant for us.")]
     public static partial void NoRequiredScopes(ILogger logger);
 
+
     [LoggerMessage(LogLevel.Critical, "Could not read DataProtection application discriminator from {configKey}. This is neccessary for production deploys.")]
     public static partial void ApplicationDiscriminatorNotSet(ILogger logger, string configKey);
+
+    [LoggerMessage(LogLevel.Critical, "A missing distributed cache config will lead to problems, when the software is running in a farm environment.")]
+    public static partial void DistributedCacheMissing(ILogger logger);
 }
