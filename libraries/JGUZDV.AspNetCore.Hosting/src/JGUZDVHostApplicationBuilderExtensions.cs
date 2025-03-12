@@ -1,4 +1,4 @@
-using JGUZDV.AspNetCore.Components.Localization;
+﻿using JGUZDV.AspNetCore.Components.Localization;
 using JGUZDV.AspNetCore.Hosting.Components;
 using JGUZDV.AspNetCore.Hosting.Extensions;
 using JGUZDV.AspNetCore.Hosting.ForwardedHeaders;
@@ -472,34 +472,36 @@ public static class JGUZDVHostApplicationBuilderExtensions
             opt.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             opt.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
         })
-                .AddOpenIdConnect(opt =>
+            .AddOpenIdConnect(opt =>
+            {
+                opt.MapInboundClaims = false;
+                opt.UseTokenLifetime = true;
+                opt.SaveTokens = true;
+
+                opt.ResponseType = OpenIdConnectResponseType.Code;
+                opt.GetClaimsFromUserInfoEndpoint = false;
+
+                var oidcConfig = appBuilder.Configuration.GetSection(configSection);
+                oidcConfig.Bind(opt);
+
+                opt.Scope.Clear();
+                var scopes = oidcConfig.GetSection(nameof(opt.Scope)).GetChildren().Select(element => element.Value).OfType<string>();
+
+                foreach (var scope in scopes)
+                    opt.Scope.Add(scope);
+            })
+            .AddCookie(opt =>
+            {
+                opt.Cookie.Name = appBuilder.Environment.ApplicationName;
+                opt.SlidingExpiration = false;
+
+                if(appBuilder.Configuration.HasConfigSection(cookieConfigSection))
                 {
-                    opt.MapInboundClaims = false;
-                    opt.UseTokenLifetime = true;
-                    opt.SaveTokens = true;
-                    opt.GetClaimsFromUserInfoEndpoint = true;
-
-                    var oidcConfig = appBuilder.Configuration.GetSection(configSection);
-                    oidcConfig.Bind(opt);
-
-                    opt.Scope.Clear();
-                    var scopes = oidcConfig.GetSection(nameof(opt.Scope)).GetChildren().Select(element => element.Value).OfType<string>();
-
-                    foreach (var scope in scopes)
-                        opt.Scope.Add(scope);
-                })
-                .AddCookie(opt =>
-                {
-                    opt.Cookie.Name = appBuilder.Environment.ApplicationName;
-                    opt.SlidingExpiration = false;
-
-                    if(appBuilder.Configuration.HasConfigSection(cookieConfigSection))
-                    {
-                        var cookieConfig = appBuilder.Configuration.GetSection(cookieConfigSection);
-                        cookieConfig.Bind(opt);
-                    }
-                })
-                .AddCookieDistributedTicketStore();
+                    var cookieConfig = appBuilder.Configuration.GetSection(cookieConfigSection);
+                    cookieConfig.Bind(opt);
+                }
+            })
+            .AddCookieDistributedTicketStore();
 
         appBuilder.Services.AddAuthorization();
 
