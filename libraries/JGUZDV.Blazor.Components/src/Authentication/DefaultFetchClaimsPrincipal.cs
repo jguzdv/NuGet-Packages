@@ -6,6 +6,7 @@ using JGUZDV.Extensions.Json.Converters;
 
 namespace JGUZDV.Blazor.Components.Authentication
 {
+    [Obsolete("Migrate to Components.Web and use PersistentAuthenticationStateProvider")]
     public class DefaultFetchClaimsPrincipal : IFetchAuthenticationState
     {
         private readonly HttpClient _httpClient;

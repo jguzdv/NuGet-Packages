@@ -5,6 +5,7 @@ namespace JGUZDV.Blazor.Components.Authentication;
 
 public static class DelegatedAuthenticationStateProviderExtensions
 {
+    [Obsolete("Migrate to Components.Web and use PersistentAuthenticationStateProvider")]
     public static IServiceCollection AddAuthenticationStateProvider<TFetchAuthenticationState>(
         this IServiceCollection services)
         where TFetchAuthenticationState : class, IFetchAuthenticationState
@@ -17,6 +18,7 @@ public static class DelegatedAuthenticationStateProviderExtensions
         return services;
     }
 
+    [Obsolete("Migrate to Components.Web and use PersistentAuthenticationStateProvider")]
     public static IServiceCollection AddDefaultAuthenticationStateProvider(this IServiceCollection services)
     {
         services.AddAuthenticationStateProvider<DefaultFetchClaimsPrincipal>();

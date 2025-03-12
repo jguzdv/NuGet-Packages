@@ -20,7 +20,8 @@ public static class AuthenticationEndpointsExtensions
     /// <returns></returns>
     public static IEndpointRouteBuilder MapAuthentication(this IEndpointRouteBuilder route, string routePrefix = "_app")
     {
-        var authN = route.MapGroup(routePrefix);
+        var authN = route.MapGroup(routePrefix)
+            .ExcludeFromDescription();
 
         authN.MapGet("sign-in",
             (ClaimsPrincipal currentUser, string redirectUri = "/") => currentUser.Identity?.IsAuthenticated != true
