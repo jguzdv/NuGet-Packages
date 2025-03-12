@@ -1,3 +1,7 @@
 ﻿.dropdown-toggle:checked + .dropdown-menu {
     display: block;
 }
+
+.dropdown-menu-end {
+    inset: calc(100% + 0.25rem) 0 auto auto;
+}
