@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace JGUZDV.Blazor.Components.Authentication;
 
+[Obsolete("Migrate to Components.Web and use PersistentAuthenticationStateProvider")]
 public class DelegatedAuthenticationStateProvider : AuthenticationStateProvider
 {
     private static readonly AuthenticationState UnauthorizedUser = new(new (new ClaimsIdentity()));
