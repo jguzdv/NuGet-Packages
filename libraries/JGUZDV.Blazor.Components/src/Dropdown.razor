@@ -2,7 +2,7 @@
     @DropdownToggle!.Invoke($"dropdown-toggle-{_guid}")
 
     <input type="checkbox" id="dropdown-toggle-@_guid" class="dropdown-toggle d-none" />
-    <div class="dropdown-menu">
+    <div class="dropdown-menu @DropDownMenuClass">
         @DropdownContent
     </div>
 </div>
@@ -28,6 +28,10 @@
     /// </summary>
     [Parameter]
     public required RenderFragment DropdownContent { get; set; }
+
+
+    [Parameter]
+    public string? DropDownMenuClass { get; set; }
 
 
     protected override void OnParametersSet()
