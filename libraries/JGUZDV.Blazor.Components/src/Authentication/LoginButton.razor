@@ -81,7 +81,12 @@
         }
         else
         {
-            <LoginButtonDropdown DropdownItems="@DropdownItems" UserName="@context.User.Identity?.Name" LogoutUrl="@LogoutUrl" />
+            var displayName = context.User.FindFirst("name")?.Value 
+                ?? context.User.FindFirst("zdv_upn")?.Value 
+                ?? context.User.FindFirst("sub")?.Value 
+                ?? context.User.Identity.Name;
+
+            <LoginButtonDropdown DropdownItems="@DropdownItems" UserName="@displayName" LogoutUrl="@LogoutUrl" />
         }
     </Finished>
 </AwaitResult>

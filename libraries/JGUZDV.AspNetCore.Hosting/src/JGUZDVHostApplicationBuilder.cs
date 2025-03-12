@@ -230,7 +230,7 @@ public class JGUZDVHostApplicationBuilder
             {
                 if (!hasDistributedCacheSection)
                 {
-                    LogMessages.MissingConfig(logger, missingConfigLogLevel, Constants.ConfigSections.DistributedCache);
+                    LogMessages.DistributedCacheMissing(logger);
                 }
 
                 Services.AddDistributedMemoryCache();
