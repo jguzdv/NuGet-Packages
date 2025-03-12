@@ -1,6 +1,3 @@
-﻿using System;
-using System.Text.Json.Serialization;
-
 using JGUZDV.AspNetCore.Components.Localization;
 using JGUZDV.AspNetCore.Hosting.Components;
 using JGUZDV.AspNetCore.Hosting.Extensions;
@@ -19,7 +16,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Server;
 using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,6 +25,7 @@ using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.FeatureManagement;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 namespace JGUZDV.AspNetCore.Hosting;
 
