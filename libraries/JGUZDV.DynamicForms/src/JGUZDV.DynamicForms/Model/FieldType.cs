@@ -31,19 +31,19 @@ public abstract record FieldType
     public virtual string InputType { get; } = "text";
 
     /// <summary>
-    /// Converts the specified value to a JSON string.
+    /// Converts the specified value to a string.
     /// </summary>
     /// <param name="value">The value to convert.</param>
-    /// <returns>A JSON string representation of the value.</returns>
+    /// <returns>A string representation of the value.</returns>
     public virtual string ConvertFromValue(object value)
     {
         return JsonSerializer.Serialize(value, DynamicFormsConfiguration.JsonSerializerOptions);
     }
 
     /// <summary>
-    /// Converts the specified JSON string to an object of the CLR type.
+    /// Converts the specified string to an object of the CLR type.
     /// </summary>
-    /// <param name="stringValue">The JSON string to convert.</param>
+    /// <param name="stringValue">The string to convert.</param>
     /// <returns>An object of the CLR type.</returns>
     public virtual object ConvertToValue(string stringValue)
     {
@@ -85,31 +85,27 @@ public abstract record FieldType
             : name;
 
         content.Add(new StringContent(json), name);
-}
+    }
 }
 
 /// <summary>
 /// Provides the values for a field type at runtime. E.g. if allowed values are loaded from a database.
 /// </summary>
-public class ValueProvider
+public interface IFieldTypeValueProvider
 {
-    private readonly Dictionary<FieldType, Func<Task<List<ChoiceOption>>>> _funcs = new();
+    public Task<(bool HandlesType, List<ChoiceOption> AllowedValues)> TryGetValues(FieldType type, string? metadata = null);
 
-    /// <summary>
-    /// Gets the allowed values for the specified field type.
-    /// </summary>
-    /// <param name="type">The field type.</param>
-    /// <returns>A tuple indicating whether the type is handled and the list of allowed values.</returns>
-    public async Task<(bool HandlesType, List<ChoiceOption> AllowedValues)> GetValues(FieldType type)
-    {
-        if (_funcs.TryGetValue(type, out var func))
-        {
-            return (true, await func());
-        }
-
-        return (false, new List<ChoiceOption>());
-    }
+    public Task<List<ChoiceOption>> GetValues(FieldType type, string? metadata = null);
 }
+
+public interface IFieldTypeMetadataProvider
+{
+    L10nString GetMetadataDisplayName(FieldType type);
+
+    public Task<(bool HandlesType, List<ChoiceOption> AllowedValues)> TryGetValues(FieldType type);
+    public Task<List<ChoiceOption>> GetValues(FieldType type);
+}
+
 
 /// <summary>
 /// Represents a field type for DateOnly values.
@@ -138,10 +134,10 @@ public record DateOnlyFieldType : FieldType
     };
 
     /// <summary>
-    /// Converts the specified value to a JSON string.
+    /// Converts the specified value to a string.
     /// </summary>
     /// <param name="value">The value to convert.</param>
-    /// <returns>A JSON string representation of the value.</returns>
+    /// <returns>A string representation of the value.</returns>
     /// <exception cref="InvalidOperationException">Thrown when the value type is invalid.</exception>
     public override string ConvertFromValue(object value)
     {
@@ -153,9 +149,9 @@ public record DateOnlyFieldType : FieldType
     }
 
     /// <summary>
-    /// Converts the specified JSON string to a DateOnly object.
+    /// Converts the specified string to a DateOnly object.
     /// </summary>
-    /// <param name="stringValue">The JSON string to convert.</param>
+    /// <param name="stringValue">The string to convert.</param>
     /// <returns>A DateOnly object.</returns>
     /// <exception cref="InvalidOperationException">Thrown when the string cannot be parsed.</exception>
     public override object ConvertToValue(string stringValue)

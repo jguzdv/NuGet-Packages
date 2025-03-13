@@ -30,10 +30,15 @@ namespace JGUZDV.DynamicForms.Blazor
         /// <summary>
         /// Sets the view type for the specified constraint.
         /// </summary>
-        /// <param name="constraint">The constraint to set the view type for.</param>
+        /// <param name="constraint">The constraint type to set the view type for.</param>
         /// <param name="viewType">The view type to associate with the constraint.</param>
-        public static void SetViewType(Constraint constraint, Type viewType)
+        public static void SetViewType(Type constraint, Type viewType)
         {
+            if(!typeof(Constraint).IsAssignableFrom(constraint))
+            {
+                throw new InvalidOperationException("Type must be a Constraint");
+            }
+
             _viewTypes[constraint.GetType()] = viewType;
         }
     }

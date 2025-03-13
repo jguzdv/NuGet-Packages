@@ -35,7 +35,7 @@ public class FieldTypeConverter : JsonConverter<FieldType>
     {
         writer.WriteStartObject();
 
-        writer.WriteString("$Type", value.GetType().FullName);
+        writer.WriteString("$Type", value.GetType().AssemblyQualifiedName);
 
         writer.WritePropertyName("$Value");
         JsonSerializer.Serialize(writer, value, value.GetType(), options);

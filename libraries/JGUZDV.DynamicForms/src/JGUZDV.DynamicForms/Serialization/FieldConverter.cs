@@ -37,7 +37,10 @@ public class FieldConverter : JsonConverter<Field>
 
                     var fieldType = fieldDefinition.Type ?? throw new InvalidOperationException("FieldType must be set");
 
-                    value = fieldType.ConvertToValue(reader.GetString()!);
+                    var jsonValue = reader.GetString();
+                    value = jsonValue != null
+                        ? fieldType.ConvertToValue(jsonValue)
+                        : null;
                     break;
             }
         }
@@ -58,7 +61,15 @@ public class FieldConverter : JsonConverter<Field>
 
         writer.WritePropertyName(nameof(Field.Value));
         var fieldType = value.FieldDefinition.Type ?? throw new InvalidOperationException("FieldType must be set");
-        writer.WriteStringValue(fieldType.ConvertFromValue(value.Value!));
+
+        if (value.Value == null)
+        {
+            writer.WriteNullValue();
+        }
+        else
+        {
+            writer.WriteStringValue(fieldType.ConvertFromValue(value.Value!));
+        }
 
         writer.WriteEndObject();
     }
