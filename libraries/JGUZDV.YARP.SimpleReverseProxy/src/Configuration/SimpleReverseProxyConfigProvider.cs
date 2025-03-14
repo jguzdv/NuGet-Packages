@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 using Yarp.ReverseProxy.Configuration;
 using Yarp.ReverseProxy.Transforms;
@@ -8,11 +9,13 @@ namespace JGUZDV.YARP.SimpleReverseProxy.Configuration;
 public class SimpleReverseProxyConfigProvider : IProxyConfigProvider
 {
     private readonly IOptionsMonitor<SimpleReverseProxyOptions> _options;
+    private readonly ILogger<SimpleReverseProxyConfigProvider> _logger;
     private ReverseProxyInMemoryConfig? _proxyConfig;
 
-    public SimpleReverseProxyConfigProvider(IOptionsMonitor<SimpleReverseProxyOptions> options)
+    public SimpleReverseProxyConfigProvider(IOptionsMonitor<SimpleReverseProxyOptions> options, ILogger<SimpleReverseProxyConfigProvider> logger)
     {
         _options = options;
+        _logger = logger;
         UpdateConfig(_options.CurrentValue);
 
         _options.OnChange(UpdateConfig);
@@ -27,9 +30,9 @@ public class SimpleReverseProxyConfigProvider : IProxyConfigProvider
             _proxyConfig = GetConfigFromOptions(options);
             oldConfig?.SignalChange();
         }
-        catch
+        catch (Exception ex)
         {
-            //TODO: Logging
+            _logger.LogError(ex, "Failed to update Reverse Proxy Config.");
         }
     }
 
