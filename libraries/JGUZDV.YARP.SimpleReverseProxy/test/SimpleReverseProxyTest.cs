@@ -1,129 +1,49 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.Logging;
-
 using System.Net;
+
+using Microsoft.AspNetCore.TestHost;
 
 namespace JGUZDV.YARP.SimpleReverseProxy.Tests;
 
-public class SimpleReverseProxyTest
+public class SimpleReverseProxyTest :
+    IClassFixture<ReverseProxyWebApplicationFactory>
 {
-    [Fact]
-    public async Task SimpleProxy()
+    private readonly ReverseProxyWebApplicationFactory _webFactory;
+
+    public SimpleReverseProxyTest(ReverseProxyWebApplicationFactory webFactory)
     {
-        using var host = new WebHostBuilder()
-            .UseUrls("http://localhost:12100")
-            .UseKestrel()
-#if DEBUG
-            .ConfigureLogging(log => { log.AddDebug(); })
-#endif
-            .Configure(app =>
-            {
-                app.Map("/app", hw => hw.Run((ctx) => ctx.Response.WriteAsync("Hello World!")));
-            })
-            .Build();
-
-        await host.StartAsync();
-
-        using var proxyHost = new WebHostBuilder()
-            .UseTestServer(opt =>
-            {
-                opt.BaseAddress = new Uri("http://localhost:12200");
-            })
-#if DEBUG
-            .ConfigureLogging(log => { log.AddDebug(); })
-#endif
-            .ConfigureServices((ctx, services) =>
-            {
-                services.AddSimpleReverseProxy(null,
-                    bff =>
-                    {
-                        bff.Proxies.Add(
-                            new Configuration.SimpleProxyDefinition(
-                                "/proxy/path",
-                                "http://localhost:12100/app"
-                            ));
-                    });
-            })
-            .Configure(app =>
-            {
-                app.UseRouting();
-                app.UseEndpoints(e => e.MapSimpleReverseProxy());
-            })
-            .Build();
-
-        await proxyHost.StartAsync();
-
-        var response = await proxyHost.GetTestServer().CreateClient().GetAsync("/proxy/path");
-        var result = await response.Content.ReadAsStringAsync();
-
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        Assert.Equal("Hello World!", result);
+        _webFactory = webFactory;
     }
 
-
     [Fact]
-    public async Task PrefixRequestsWillBeProxied()
+    public async Task Simple_Gets_are_Proxied()
     {
-        using var host = new WebHostBuilder()
-            .UseUrls("http://localhost:12101")
-            .UseKestrel()
-#if DEBUG
-            .ConfigureLogging(log =>
-            {
-                log.AddDebug();
-            })
-#endif
-            .ConfigureServices(services =>
-            {
-            })
-            .Configure(app =>
-            {
-                app.Map("/app/app-path", hw => hw.Run((ctx) => ctx.Response.WriteAsync("Hello World!")));
-            })
-            .Build();
+        var client = _webFactory.ReverseProxyServer.GetTestClient();
 
-        await host.StartAsync();
+        var helloWorldResponse = await client.GetAsync("/proxy/path/subpath/something");
+        var helloWorld = await helloWorldResponse.Content.ReadAsStringAsync();
 
-        using var proxyHost = new WebHostBuilder()
-            .UseTestServer(opt =>
-            {
-                opt.BaseAddress = new Uri("http://localhost:12201");
-            })
-#if DEBUG
-            .ConfigureLogging(log => log.AddDebug())
-#endif
-            .ConfigureServices((ctx, services) =>
-            {
-                services.AddSimpleReverseProxy(null,
-                    bff =>
-                    {
-                        bff.Proxies.Add(
-                            new Configuration.SimpleProxyDefinition
-                            (
-                                "/proxy/path/subpath/{**catch-all}",
-                                "http://localhost:12101/app"
-                            )
-                            {
-                                PathPrefix = "/proxy/path/subpath",
-                            });
-                    });
-            })
-            .Configure(app =>
-            {
-                app.UseRouting();
-                app.UseEndpoints(e => e.MapSimpleReverseProxy());
-            })
-            .Build();
+        Assert.Equal(HttpStatusCode.OK, helloWorldResponse.StatusCode);
+        Assert.Equal("Hello World!", helloWorld);
+    }
 
-        await proxyHost.StartAsync();
+    [Theory, 
+        InlineData("en-US", "en-US"),
+        InlineData("de-DE", "de-DE"),
+        InlineData("fr-FR", "fr-FR"),
+        InlineData("pt-PT", "de-DE")]
+    public async Task Language_Is_Proxied(string culture, string expectedResponse)
+    {
+        var client = _webFactory.ReverseProxyServer.GetTestClient();
 
-        var response = await proxyHost.GetTestServer().CreateClient().GetAsync("/proxy/path/subpath/app-path");
-        var result = await response.Content.ReadAsStringAsync();
+        var uri = new Uri("/proxy/path/subpath/culture", UriKind.Relative);
+        var acceptLanguageRequest = new HttpRequestMessage(HttpMethod.Get, uri);
+        acceptLanguageRequest.Headers.AcceptLanguage.Clear();
+        acceptLanguageRequest.Headers.AcceptLanguage.Add(new(culture));
 
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        Assert.Equal("Hello World!", result);
+        var acceptLanguageResponse = await client.SendAsync(acceptLanguageRequest);
+        var responseText = await acceptLanguageResponse.Content.ReadAsStringAsync();
+
+        Assert.Equal(HttpStatusCode.OK, acceptLanguageResponse.StatusCode);
+        Assert.Equal(expectedResponse, responseText);
     }
 }

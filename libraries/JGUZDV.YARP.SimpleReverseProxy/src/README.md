@@ -3,7 +3,7 @@
 This is a simplification of YARPs configuration build for "BFFs" (Backend for Frontend).
 It facilitates [YARP]() and [IdentityModel.AspNetCore]() to forward requests to a backend system,
 that uses Bearer Tokens for authentication and will automatically include those tokens in requests 
-to the aforementioned.
+to the aforementioned. Also if there's a request language feature, it will prepend the accept-language headers accordingly.
 
 ## Usage
 
