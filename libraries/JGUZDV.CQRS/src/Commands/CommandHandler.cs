@@ -28,9 +28,10 @@ public abstract partial class CommandHandler<TCommand, TContext> : ICommandHandl
 
     public async Task<HandlerResult> ExecuteAsync(TCommand command, ClaimsPrincipal? principal, CancellationToken ct)
     {
+        TContext? context = default;
         try
         {
-            var context = await InitializeAsync(command, principal, ct);
+            context = await InitializeAsync(command, principal, ct);
             if (ct.IsCancellationRequested)
             {
                 Log.StepCancelled(Logger, nameof(InitializeAsync));
@@ -87,6 +88,13 @@ public abstract partial class CommandHandler<TCommand, TContext> : ICommandHandl
         {
             Log.ExecutionError(Logger, ex);
             return HandlerResult.Fail("GenericError");
+        }
+        finally
+        {
+            if(context is IDisposable disposable)
+            {
+                disposable.Dispose();
+            }
         }
     }
 
