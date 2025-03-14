@@ -80,10 +80,10 @@ public static class SimpleReverseProxyExtensions
         var languages = ctx.ProxyRequest.Headers.AcceptLanguage.ToList();
         languages.Insert(0, new(requestCultureFeature.RequestCulture.UICulture.Name, 1));
 
-        languageHeader.Clear();
+        ctx.ProxyRequest.Headers.AcceptLanguage.Clear();
         foreach(var headerValue in languages)
         {
-            languageHeader.Add(headerValue);
+            ctx.ProxyRequest.Headers.AcceptLanguage.Add(headerValue);
         }
 
         return ValueTask.CompletedTask;

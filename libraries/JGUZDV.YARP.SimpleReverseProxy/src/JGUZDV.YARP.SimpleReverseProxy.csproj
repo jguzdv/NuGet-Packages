@@ -12,7 +12,7 @@
 
         <PackageId>JGUZDV.YARP.SimpleReverseProxy</PackageId>
         <IsPackable>true</IsPackable>
-        <Version>1.1.0</Version>
+        <Version>1.2.0</Version>
         <Authors>Thomas Ottenhus</Authors>
         <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
         <PackageDescription>Configuration Provider for simple mappings using YARP as ReverseProxy</PackageDescription>
@@ -23,7 +23,7 @@
     <ItemGroup>
         <FrameworkReference Include="Microsoft.AspNetCore.App" />
         <PackageReference Include="Duende.AccessTokenManagement.OpenIdConnect" Version="3.2.0" />
-        <PackageReference Include="Yarp.ReverseProxy" Version="2.1.0" />
+        <PackageReference Include="Yarp.ReverseProxy" Version="2.3.0" />
     </ItemGroup>
 
 </Project>
