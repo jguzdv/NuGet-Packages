@@ -4,6 +4,7 @@
 @using JGUZDV.Blazor.Components
 @using System.Collections
 @using System.ComponentModel.DataAnnotations
+@using Microsoft.Extensions.DependencyInjection
 
 @*TODO: Check if EditForm is a good idea HERE to show validation errors*@
 <EditForm Model="Field">
@@ -16,81 +17,83 @@
     }
     <div>
         <label for="@InputDefinition.Id">@InputDefinition.Label</label>
-        @if (Field.FieldDefinition.ChoiceOptions?.Any() == true)
-        {
-            if (Field.FieldDefinition.IsList)
+        <Await Task="_initTask">
+            @if (Field.FieldDefinition.ChoiceOptions?.Any() == true)
             {
-                <MultiSelect UseSingleSelectionMode="@true"
-                             Items="@Field.FieldDefinition.ChoiceOptions"
-                             ItemName="x => x.Name.ToString()"
-                             ItemKey="x => x.Value"
-                             Title="@InputDefinition.Label.ToString()"
-                             Values="@(Field.Values?.Select(x => GetChoiceOption(x)).ToList())"
-                             ValuesChanged="(value) => SetValue(value.Select(x => ConvertToValue(x.Value)))"
-                             TKey="string"
-                             T="ChoiceOption"></MultiSelect>
+                if (Field.FieldDefinition.IsList)
+                {
+                    <MultiSelect UseSingleSelectionMode="@false"
+                                 Items="@Field.FieldDefinition.ChoiceOptions"
+                                 ItemName="x => x.Name.ToString()"
+                                 ItemKey="x => x.Value"
+                                 Title="@InputDefinition.Label.ToString()"
+                                 Values="@(Field.Values?.Select(x => GetChoiceOption(x)).ToList())"
+                                 ValuesChanged="(value) => SetValue(value.Select(x => ConvertToValue(x.Value)))"
+                                 TKey="string"
+                                 T="ChoiceOption"></MultiSelect>
+                }
+                else
+                {
+                    <MultiSelect UseSingleSelectionMode="@true"
+                                 Items="@Field.FieldDefinition.ChoiceOptions"
+                                 ItemName="x => x.Name.ToString()"
+                                 ItemKey="x => x?.Value"
+                                 Title="@InputDefinition.Label.ToString()"
+                                 Value="@GetChoiceOption(Field.Value)"
+                                 ValueChanged="(value) => SetValue(ConvertToValue(value.Value))"
+                                 TKey="string"
+                                 T="ChoiceOption"></MultiSelect>
+                }
+
             }
             else
             {
-                <MultiSelect UseSingleSelectionMode="@true"
-                             Items="@Field.FieldDefinition.ChoiceOptions"
-                             ItemName="x => x.Name.ToString()"
-                             ItemKey="x => x.Value"
-                             Title="@InputDefinition.Label.ToString()"
-                             Value="@GetChoiceOption(Field.Value)"
-                             ValueChanged="(value) => SetValue(ConvertToValue(value.Value))"
-                             TKey="string"
-                             T="ChoiceOption"></MultiSelect>
-            }
+                @if (Field.FieldDefinition.IsList)
+                {
+                    <div class="input-group">
+                        <input type="@Field.FieldDefinition.Type!.InputType"
+                               @bind="_inputValue"
+                               @onkeyup="HandleKeyUp"
+                               class="form-control">
+                        <button class="btn btn-outline-secondary" type="button">@Icons.Add(null)</button>
+                    </div>
 
-        }
-        else
-        {
-            @if (Field.FieldDefinition.IsList)
-            {
-                <div class="input-group">
-                    <input type="@Field.FieldDefinition.Type!.InputType"
-                           @bind="_inputValue"
-                           @onkeyup="HandleKeyUp"
-                           class="form-control">
-                    <button class="btn btn-outline-secondary" type="button">@Icons.Add(null)</button>
-                </div>
-
-                <div class="my-1 p-2 border">
-                    @if (Field.Values.Any())
-                    {
-                        @foreach (var value in Field.Values!)
+                    <div class="my-1 p-2 border">
+                        @if (Field.Values.Any())
                         {
-                            <span class="d-inline-block border mx-1 p-2">
-                                <span>
-                                    @GetValueString(value)
-                                </span>
-                                <button class="btn btn-sm btn-outline-danger" @onclick="@(() =>
+                            @foreach (var value in Field.Values!)
+                            {
+                                <span class="d-inline-block border mx-1 p-2">
+                                    <span>
+                                        @GetValueString(value)
+                                    </span>
+                                    <button class="btn btn-sm btn-outline-danger" @onclick="@(() =>
                                     {
                                         ((IList)Field.Value!).Remove(value);
                                         SetValue(Field.Value);
                                     })">
-                                    @Icons.Remove(null)
-                                </button>
-                            </span>
+                                        @Icons.Remove(null)
+                                    </button>
+                                </span>
+                            }
                         }
-                    }
-                    else
-                    {
-                        @SL["FieldInput.NoValues"]
-                    }
-                </div>
+                        else
+                        {
+                            @SL["FieldInput.NoValues"]
+                        }
+                    </div>
 
+                }
+                else
+                {
+                    <input class="form-control"
+                           @bind-value="_inputValue"
+                           @bind-value:after="() => OnInputChanged(_inputValue)"
+                           @onkeyup="HandleKeyUp"
+                           type="@Field.FieldDefinition.Type!.InputType" name="@InputDefinition.Name" id="@InputDefinition.Id" />
+                }
             }
-            else
-            {
-                <input class="form-control"
-                       @bind-value="_inputValue"
-                       @bind-value:after="() => OnInputChanged(_inputValue)"
-                       @onkeyup="HandleKeyUp"
-                       type="@Field.FieldDefinition.Type!.InputType" name="@InputDefinition.Name" id="@InputDefinition.Id" />
-            }
-        }
+        </Await>
     </div>
 
 </EditForm>
@@ -105,7 +108,7 @@
     public EventCallback<Field> FieldChanged { get; set; }
 
     [Inject]
-    public required ValueProvider ValueProvider { get; set; }
+    public required IServiceProvider ServiceProvider { get; set; }
 
     [Inject]
     public required IStringLocalizer<ComponentStrings> SL { get; set; }
@@ -115,39 +118,50 @@
     private string? _inputValue;
     private List<ValidationResult> _validationErrors = new();
 
-    public override async Task SetParametersAsync(ParameterView parameters)
+    private Task? _initTask;
+
+    protected override Task OnInitializedAsync()
     {
-        if (!parameters.TryGetValue(nameof(Field), out Field? field))
-        {
-            await base.SetParametersAsync(parameters);
-            return;
-        }
-
-        if (field != Field)
-        {
-            await base.SetParametersAsync(parameters);
-            return;
-        }
-
-        var values = await ValueProvider.GetValues(Field.ValueType);
-        if (values.HandlesType)
-        {
-            Field.FieldDefinition.ChoiceOptions = values.AllowedValues;
-        }
-
-
-        await base.SetParametersAsync(parameters);
+        return base.OnInitializedAsync();
     }
 
-    protected override Task OnParametersSetAsync()
+
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        if (parameters.TryGetValue(nameof(Field), out Field? field))
+        {
+            if (field == Field)
+            {
+                return;
+            }
+            else
+            {
+                await base.SetParametersAsync(parameters);
+                _initTask = Init();
+            }
+        }
+    }
+
+    private async Task Init()
+    {
+        var valueProvider = ServiceProvider.GetKeyedService<IFieldTypeValueProvider>(Field.ValueType!.GetType().Name);
+        if (valueProvider is not null)
+        {
+            var values = await valueProvider.GetValues(Field.ValueType, Field.FieldDefinition.Metadata);
+            Field.FieldDefinition.ChoiceOptions = values;
+        }
+    }
+
+    protected override async Task OnParametersSetAsync()
     {
         if (!Field.FieldDefinition.IsList)
         {
             _inputValue = GetValueString(Field.Value);
         }
 
-        return base.OnParametersSetAsync();
+        await base.OnParametersSetAsync();
     }
+
 
     private void HandleKeyUp(KeyboardEventArgs e)
     {
@@ -177,6 +191,7 @@
         }
         catch
         {
+            SetValue(null);
             _validationErrors.Add(new ValidationResult($"FieldInput.Validation.Convert"));
         }
     }
