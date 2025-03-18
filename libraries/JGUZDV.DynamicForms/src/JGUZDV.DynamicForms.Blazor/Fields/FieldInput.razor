@@ -1,7 +1,7 @@
 ﻿@using JGUZDV.DynamicForms.Model
 @using System.ComponentModel.DataAnnotations
 
-<DynamicComponent Type="FieldViewFactory.GetViewType(Field)" Parameters="_params"></DynamicComponent>
+<DynamicComponent Type="FieldInputFactory.GetViewType(Field.ValueType)" Parameters="_params"></DynamicComponent>
 
 @code {
     [Parameter]

@@ -162,4 +162,7 @@
   <data name="FileFieldInput.ValidationResults" xml:space="preserve">
     <value>Errors</value>
   </data>
+  <data name="EditFieldDefinition.InvalidMetadata" xml:space="preserve">
+    <value>{0} is invalid</value>
+  </data>
 </root>
