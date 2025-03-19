@@ -10,7 +10,7 @@ namespace JGUZDV.AspNetCore.Hosting.FeatureManagement
     public class RemoteFeatureDefinitionProvider : IFeatureDefinitionProvider
     {
         private readonly HttpClient _httpClient;
-        private static Task<FeatureList?>? _cachedFeatures;
+        private Task<FeatureList?>? _cachedFeatures;
 
         /// <summary>
         /// Initializes a new instance of <see cref="RemoteFeatureDefinitionProvider"/>.
