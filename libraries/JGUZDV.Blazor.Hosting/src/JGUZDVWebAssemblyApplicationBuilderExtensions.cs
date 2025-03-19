@@ -1,7 +1,9 @@
 ﻿using JGUZDV.AspNetCore.Components.Localization;
+using JGUZDV.Blazor.Hosting.FeatureManagement;
 using JGUZDV.Blazor.Hosting.Localization;
 
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.FeatureManagement;
 
 namespace JGUZDV.Blazor.Hosting;
 
@@ -33,6 +35,17 @@ public static class JGUZDVWebAssemblyApplicationBuilderExtensions
         appBuilder.Services.AddLocalization();
         appBuilder.Services.AddScoped<ILanguageService, PersistentStateLanguageService>();
 
+        return appBuilder;
+    }
+
+    /// <summary>
+    /// Adds the required services for feature management.
+    /// The feature states will be read from the the PersistentComponentState.
+    /// </summary>
+    public static JGUZDVWebAssemblyApplicationBuilder AddPersistedFeatureManagement(this JGUZDVWebAssemblyApplicationBuilder appBuilder)
+    {
+        appBuilder.Services.AddFeatureManagement();
+        appBuilder.Services.AddScoped<IFeatureDefinitionProvider, PersistentStateFeatureDefinitionProvider>();
         return appBuilder;
     }
 }

@@ -442,9 +442,21 @@ public class JGUZDVHostApplicationBuilder
                 LogMessages.MissingConfig(logger, missingConfigLogLevel, Constants.ConfigSections.JwtBearerAuthentication);
             }
 
-
+            // Feature management
             if (Configuration.HasConfigSection(Constants.ConfigSections.FeatureManagement))
             {
+                if (Configuration[Constants.ConfigSections.FeatureManagement]?.StartsWith("http", StringComparison.OrdinalIgnoreCase) == true)
+                {
+                    this.AddRemoteFeatureManagement(httpClient =>
+                    {
+                        httpClient.BaseAddress = new Uri(Configuration[Constants.ConfigSections.FeatureManagement]!);
+                    });
+                }
+                else
+                {
+                    this.AddFeatureManagement();
+                }
+
                 this.AddFeatureManagement();
             }
             else
