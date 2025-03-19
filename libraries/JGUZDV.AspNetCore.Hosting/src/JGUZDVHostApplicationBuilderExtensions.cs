@@ -123,7 +123,7 @@ public static class JGUZDVHostApplicationBuilderExtensions
         }
         else
         {
-            LogMessages.MissingConfig(logger, appBuilder.Environment.IsProduction() ? LogLevel.Information : LogLevel.Warning, configSection);
+            LogMessages.MissingConfig(logger, appBuilder.Environment.IsProduction() ? LogLevel.Information : LogLevel.Warning, "RequestLocalization", configSection);
         }
 
         appBuilder.Services.AddLocalization(opt =>
@@ -326,33 +326,44 @@ public static class JGUZDVHostApplicationBuilderExtensions
         this JGUZDVHostApplicationBuilder appBuilder,
         BlazorInteractivityModes interactivityModes = BlazorInteractivityModes.WebAssembly,
         Action<IRazorComponentsBuilder>? configure = null,
-        Action<CircuitOptions>? configureCircuit = null)
+        Action<CircuitOptions>? configureCircuit = null,
+        ILogger? logger = null)
     {
+        if (logger == null)
+        {
+            logger = NullLogger.Instance;
+        }
+
         // Add services to the container.
         var builder = appBuilder.Services.AddRazorComponents();
         if (interactivityModes.HasFlag(BlazorInteractivityModes.Server))
         {
             builder.AddInteractiveServerComponents(configureCircuit);
             appBuilder.HasInteractiveServerComponents = true;
+            LogMessages.FeatureAdded(logger, "InteractiveServerComponents");
         }
 
         if (interactivityModes.HasFlag(BlazorInteractivityModes.WebAssembly)) {
             builder.AddInteractiveWebAssemblyComponents();
             appBuilder.HasInteractiveWebAssemblyComponents = true;
+            LogMessages.FeatureAdded(logger, "InteractiveWebAssemblyComponents");
 
             if (appBuilder.HasAuthentication)
             {
                 builder.AddAuthenticationStateSerialization(opt => opt.SerializeAllClaims = true);
+                LogMessages.FeatureAdded(logger, "AuthenticationStateSerialization");
             }
 
             if (appBuilder.HasRequestLocalization)
             {
                 appBuilder.Services.TryAddEnumerable(ServiceDescriptor.Scoped<IPersistentComponentStateProvider, RequestLocalizationPersistentStateProvider>());
+                LogMessages.FeatureAdded(logger, "RequestLocalizationPersistentStateProvider");
             }
 
             if (appBuilder.HasFeatureManagement)
             {
                 appBuilder.Services.TryAddEnumerable(ServiceDescriptor.Scoped<IPersistentComponentStateProvider, FeatureDefinitionComponentStateProvider>());
+                LogMessages.FeatureAdded(logger, "FeatureDefinitionComponentStateProvider");
             }
         }
 
@@ -361,11 +372,13 @@ public static class JGUZDVHostApplicationBuilderExtensions
         if (appBuilder.HasAuthentication)
         {
             appBuilder.Services.AddCascadingAuthenticationState();
+            LogMessages.FeatureAdded(logger, "CascadingAuthenticationState");
         }
 
         if (appBuilder.HasRequestLocalization)
         {
             appBuilder.Services.AddScoped<ILanguageService, LanguageService>();
+            LogMessages.FeatureAdded(logger, "LanguageService");
         }
 
         appBuilder.HasRazorComponents = true;
