@@ -4,11 +4,19 @@ namespace JGUZDV.AspNetCore.Hosting;
 
 internal partial class LogMessages
 {
+    [LoggerMessage(LogLevel.Debug, "Added {feature} without specific configuration.")]
+    public static partial void FeatureAdded(ILogger logger, string feature);
+
+    [LoggerMessage(LogLevel.Debug, "Added {feature} with configuration from {configSection}")]
+    public static partial void FeatureConfigured(ILogger logger, string feature, string configSection);
+
+    [LoggerMessage("Could not find config {configSection}. {feature} will not be added to services or pipeline.")]
+    public static partial void MissingConfig(ILogger logger, LogLevel loglevel, string feature, string configSection);
+
+
     [LoggerMessage("Configuration file {configFile} has been added as first json file to be loaded.", Level = LogLevel.Information)]
     public static partial void MachineConfigurationFileAdded(ILogger logger, string configFile);
 
-    [LoggerMessage("Could not find config {configSection}. The corresponding feature will not be added to services or pipeline.")]
-    public static partial void MissingConfig(ILogger logger, LogLevel loglevel, string configSection);
 
 
 
