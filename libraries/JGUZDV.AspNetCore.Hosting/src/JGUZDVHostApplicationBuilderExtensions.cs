@@ -1,6 +1,7 @@
 ﻿using JGUZDV.AspNetCore.Components.Localization;
 using JGUZDV.AspNetCore.Hosting.Components;
 using JGUZDV.AspNetCore.Hosting.Extensions;
+using JGUZDV.AspNetCore.Hosting.FeatureManagement;
 using JGUZDV.AspNetCore.Hosting.ForwardedHeaders;
 using JGUZDV.AspNetCore.Hosting.Localization;
 using JGUZDV.Extensions.Json;
@@ -211,6 +212,24 @@ public static class JGUZDVHostApplicationBuilderExtensions
         return appBuilder;
     }
 
+    /// <summary>
+    /// Adds feature management to the WebApplicationBuilder using a remote source.
+    /// The remote source is expected to use the <see cref="FeatureList"/> model.
+    /// If your backend uses AddFeatureManagement from here, it's published at _app/feature
+    /// </summary>
+    public static JGUZDVHostApplicationBuilder AddRemoteFeatureManagement(
+        this JGUZDVHostApplicationBuilder appBuilder,
+        Action<HttpClient> configureClient,
+        Action<IFeatureManagementBuilder>? configure = null
+    )
+    {
+        appBuilder.Services.AddScopedFeatureManagement();
+        appBuilder.Services.AddHttpClient<IFeatureDefinitionProvider, RemoteFeatureDefinitionProvider>(configureClient);
+
+        appBuilder.HasFeatureManagement = true;
+        return appBuilder;
+    }
+
 
     /// <summary>
     /// Adds ForwardedHeaders to the WebApplicationBuilder.
@@ -329,6 +348,11 @@ public static class JGUZDVHostApplicationBuilderExtensions
             if (appBuilder.HasRequestLocalization)
             {
                 appBuilder.Services.TryAddEnumerable(ServiceDescriptor.Scoped<IPersistentComponentStateProvider, RequestLocalizationPersistentStateProvider>());
+            }
+
+            if (appBuilder.HasFeatureManagement)
+            {
+                appBuilder.Services.TryAddEnumerable(ServiceDescriptor.Scoped<IPersistentComponentStateProvider, FeatureDefinitionComponentStateProvider>());
             }
         }
 
