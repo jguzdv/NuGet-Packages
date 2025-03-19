@@ -456,8 +456,6 @@ public class JGUZDVHostApplicationBuilder
                 {
                     this.AddFeatureManagement();
                 }
-
-                this.AddFeatureManagement();
             }
             else
             {
