@@ -224,7 +224,8 @@ public static class JGUZDVHostApplicationBuilderExtensions
     )
     {
         appBuilder.Services.AddScopedFeatureManagement();
-        appBuilder.Services.AddHttpClient<IFeatureDefinitionProvider, RemoteFeatureDefinitionProvider>(configureClient);
+        appBuilder.Services.AddHttpClient<IFeatureDefinitionProvider, RemoteFeatureDefinitionProvider>(configureClient)
+            .AddUserAccessTokenHandler();
 
         appBuilder.HasFeatureManagement = true;
         return appBuilder;
