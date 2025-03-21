@@ -8,7 +8,7 @@ namespace JGUZDV.Blazor.Components
     {
         public static IServiceCollection AddToasts(this IServiceCollection services)
         {
-            services.TryAddSingleton<IToastService, ToastService>();
+            services.TryAddScoped<IToastService, ToastService>();
 
             return services;
         }

@@ -2,6 +2,7 @@ using System.Security.Claims;
 
 using JGUZDV.AspNetCore.Hosting;
 using JGUZDV.Blazor.Components.Samples.Web.Components;
+using JGUZDV.Blazor.Components;
 
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -12,9 +13,11 @@ builder.Services
     .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(x => x.ExpireTimeSpan = TimeSpan.FromMinutes(2));
 
+builder.Services.AddToasts();
+
 var app = builder.BuildAndConfigureBlazor<App>(
     additionalBlazorAssemblies: [
-        typeof(JGUZDV.Blazor.Components.Samples.Web.Client.Pages.Index).Assembly,
+        typeof(JGUZDV.Blazor.Components.Samples.Web.Client.Pages._Imports).Assembly,
         typeof(JGUZDV.Blazor.Components.Samples._Imports).Assembly,
     ]);
 
