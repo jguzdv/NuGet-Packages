@@ -129,22 +129,25 @@
         return await _taskCompletionSource.Task;
     }
 
-    public async Task Close(ModalResult result)
+    public async Task Close(ModalResult result, bool closeHtmlDialog = true)
     {
-        await _jsModalObject!.InvokeVoidAsync("closeDialog");
+        if (closeHtmlDialog)
+        {
+            await _jsModalObject!.InvokeVoidAsync("closeDialog");
+        }
+
         await _jsModalObject!.DisposeAsync();
 
         _taskCompletionSource.SetResult(result);
+        _context = null;
     }
 
     /// <summary>
     /// This will be called, if the user closes the modal by pressing ESC or clicking outside the modal.
     /// </summary>
     [JSInvokable]
-    public void OnClose()
-    {
-        _taskCompletionSource.SetResult(ModalResult.Undefined);
-    }
+    public Task OnClose()
+        => Close(ModalResult.Undefined, false);
 
     public Task Close()
         => Close(ModalResult.Undefined);
