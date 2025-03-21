@@ -17,7 +17,10 @@ public abstract partial class CommandHandler<TCommand, TContext> : ICommandHandl
         => command;
 
     protected virtual Task<bool> AuthorizeAsync(TCommand command, TContext context, ClaimsPrincipal? principal, CancellationToken ct)
-        => Task.FromResult(false);
+    {
+        Log.AuthorizeNotImplemented(Logger);
+        return Task.FromResult(false);
+    }
 
     protected virtual Task<List<ValidationResult>> ValidateAsync(TCommand command, TContext context, ClaimsPrincipal? principal, CancellationToken ct)
         => Task.FromResult(new List<ValidationResult>());
@@ -119,7 +122,10 @@ public abstract partial class CommandHandler<TCommand, TContext> : ICommandHandl
 
         [LoggerMessage(4030, LogLevel.Information, "Command authorization result was: {authorized}", EventName = "CommandAuthorization")]
         internal static partial void AuthorizationResult(ILogger logger, bool authorized);
-        
+
+        [LoggerMessage(4031, LogLevel.Warning, "Command authorization failed due to method not being overriden.", EventName = "CommandAuthorization")]
+        internal static partial void AuthorizeNotImplemented(ILogger logger);
+
         [LoggerMessage(4040, LogLevel.Information, "Command did not find an object to act on (NotFound).", EventName = "CommandExecution")]
         internal static partial void NotFound(ILogger logger);
 

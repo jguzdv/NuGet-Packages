@@ -19,23 +19,53 @@ namespace JGUZDV.CQRS.Queries
     public abstract partial class QueryHandler<TQuery, TValue> : IQueryHandler<TQuery>
         where TQuery : IQuery<TValue>
     {
+        /// <summary>
+        /// Logger für den QueryHandler
+        /// </summary>
         public abstract ILogger Logger { get; }
 
+        /// <summary>
+        /// Normalisiert den Query, bevor er ausgeführt wird.
+        /// </summary>
         protected virtual TQuery NormalizeQuery(TQuery query, ClaimsPrincipal? principal)
             => query;
 
+        /// <summary>
+        /// Authorisiert den Query vor der Ausführung.
+        /// </summary>
         protected virtual Task<bool> AuthorizeExecuteAsync(TQuery query, ClaimsPrincipal? principal, CancellationToken ct)
             => Task.FromResult(true);
+
+        /// <summary>
+        /// Authorisiert das Query-Ergebnis.
+        /// </summary>
         protected virtual Task<bool> AuthorizeValueAsync(TQuery query, TValue value, ClaimsPrincipal? principal, CancellationToken ct)
             => Task.FromResult(true);
 
+        /// <summary>
+        /// Validiert den Query.
+        /// </summary>
         protected virtual Task<List<ValidationResult>> ValidateAsync(TQuery query, ClaimsPrincipal? principal, CancellationToken ct)
             => Task.FromResult(new List<ValidationResult>());
 
-
+        /// <summary>
+        /// Führt den Query aus.
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="principal"></param>
+        /// <param name="ct"></param>
+        /// <returns></returns>
         protected abstract Task<QueryResult<TValue>> ExecuteInternalAsync(TQuery query, ClaimsPrincipal? principal, CancellationToken ct);
 
-
+        /// <summary>
+        /// Standard-Query-Pipeline:
+        /// - Normalisierung
+        /// - Authorisierung
+        /// - Validierung
+        /// - Ausführung
+        /// - Authorisierung des Ergebnisses
+        /// - Rückgabe des Ergebnisses
+        /// </summary>
         public async Task ExecuteAsync(TQuery query, ClaimsPrincipal? principal, CancellationToken ct)
         {
             try
