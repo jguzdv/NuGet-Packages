@@ -8,11 +8,12 @@
 		
 		<PackageId>JGUZDV.CQRS</PackageId>
 		<IsPackable>true</IsPackable>
-		<Version>2.3.1</Version>
+		<Version>2.3.2</Version>
 		<Authors>Thomas Ottenhus</Authors>
 		<Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
 		<PackageDescription>Base classes that drive our CQRS-style business logic implementation</PackageDescription>
 
+    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);_AddAnalyzersToOutput</TargetsForTfmSpecificContentInPackage>
 		<AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
 	</PropertyGroup>
 
@@ -21,4 +22,18 @@
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="[6.0.0,)" />
 		<PackageReference Include="Scrutor" Version="4.2.0" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\analyzer\JGUZDV.CQRS.Analyzer\JGUZDV.CQRS.Analyzer.csproj" PrivateAssets="All" />
+	  <ProjectReference Include="..\analyzer\JGUZDV.CQRS.Analyzer.CodeFix\JGUZDV.CQRS.Analyzer.CodeFix.csproj" PrivateAssets="All" />
+	</ItemGroup>
+
+  <Target Name="_AddAnalyzersToOutput">
+    <ItemGroup>
+      <TfmSpecificPackageFile Include="$(OutputPath)\JGUZDV.CQRS.Analyzer.dll" PackagePath="analyzers/dotnet/cs" />
+      <TfmSpecificPackageFile Include="$(OutputPath)\JGUZDV.CQRS.Analyzer.xml" PackagePath="analyzers/dotnet/cs" />
+      <TfmSpecificPackageFile Include="$(OutputPath)\JGUZDV.CQRS.Analyzer.CodeFix.dll" PackagePath="analyzers/dotnet/cs" />
+      <TfmSpecificPackageFile Include="$(OutputPath)\JGUZDV.CQRS.Analyzer.CodeFix.xml" PackagePath="analyzers/dotnet/cs" />
+    </ItemGroup>
+  </Target>
 </Project>

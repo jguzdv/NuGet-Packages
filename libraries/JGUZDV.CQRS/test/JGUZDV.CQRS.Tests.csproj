@@ -9,8 +9,14 @@
 
         <GenerateDocumentationFile>false</GenerateDocumentationFile>
     </PropertyGroup>
+    <ItemGroup>
+      <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Analyzer.Testing" Version="1.1.2" />
+      <PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeFix.Testing" Version="1.1.2" />
+    </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\analyzer\JGUZDV.CQRS.Analyzer.CodeFix\JGUZDV.CQRS.Analyzer.CodeFix.csproj" />
+        <ProjectReference Include="..\analyzer\JGUZDV.CQRS.Analyzer\JGUZDV.CQRS.Analyzer.csproj" />
         <ProjectReference Include="..\src\JGUZDV.CQRS.csproj" />
     </ItemGroup>
 
