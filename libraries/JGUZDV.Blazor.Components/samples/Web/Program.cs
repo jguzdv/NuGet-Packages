@@ -14,7 +14,7 @@ builder.Services
 
 var app = builder.BuildAndConfigureBlazor<App>(
     additionalBlazorAssemblies: [
-        typeof(JGUZDV.Blazor.Components.Samples.Web.Client.Pages.Index).Assembly,
+        typeof(JGUZDV.Blazor.Components.Samples.Web.Client.Pages._Imports).Assembly,
         typeof(JGUZDV.Blazor.Components.Samples._Imports).Assembly,
     ]);
 

@@ -3,6 +3,8 @@
 @code {
     [Parameter] public ToastMessage? Toast { get; set; }
 
+    [Parameter] public EventCallback OnDismiss { get; set; }
+
     private string? ToastIcon { get; set; }
     private string? ContextClass { get; set; }
     private string Time { get; } = DateTime.Now.ToString("HH:mm:ss");
@@ -33,8 +35,10 @@
         };
     }
 
-    private void HideToast()
-        => Toast?.Hide();
+    private void HideToast() {
+        _ = OnDismiss.InvokeAsync();
+        Toast?.Hide();
+    }
 }
 
 @if (Toast != null)

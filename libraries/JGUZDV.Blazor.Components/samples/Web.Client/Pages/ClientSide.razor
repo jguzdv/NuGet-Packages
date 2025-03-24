@@ -1,7 +1,7 @@
 ﻿@page "/counter"
+@using JGUZDV.Blazor.Components.Toasts
 @rendermode InteractiveWebAssembly
 
-<PageTitle>Counter</PageTitle>
 
 <h1>Counter</h1>
 
@@ -9,11 +9,22 @@
 
 <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
 
+<button class="btn btn-secondary" @onclick="ToastCount">Show Toast</button>
+
+<ToastMessages @ref="Toasts" />
+
 @code {
+    private ToastMessages Toasts { get; set; } = default!;
+
     private int currentCount = 0;
 
     private void IncrementCount()
     {
         currentCount++;
+    }
+
+    private void ToastCount()
+    {
+        Toasts.Show(new ToastMessage(ToastLevel.Info, "Counter", $"Current count: {currentCount}"));
     }
 }

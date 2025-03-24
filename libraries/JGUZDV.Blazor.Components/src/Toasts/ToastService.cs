@@ -33,17 +33,11 @@
         {
             if (_toasts.Remove(toast))
             {
-                toast.Dispose();
                 RaiseToastsChanged();
             }
         }
 
         public void HideAll() {
-            foreach(var toast in _toasts)
-            {
-                toast.Dispose();
-            }
-
             _toasts.Clear();
             RaiseToastsChanged();
         }

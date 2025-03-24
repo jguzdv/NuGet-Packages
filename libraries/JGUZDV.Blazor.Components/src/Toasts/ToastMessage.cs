@@ -1,13 +1,10 @@
-﻿using System;
-using System.Threading;
-
-namespace JGUZDV.Blazor.Components.Toasts
+﻿namespace JGUZDV.Blazor.Components.Toasts
 {
-    public class ToastMessage : IDisposable
+    public class ToastMessage
     {
         private readonly IToastService _toastService;
-        private readonly Timer? _timer;
 
+        [Obsolete("Timeouts will not be supported anymore.")]
         public ToastMessage(ToastLevel toastLevel, string message, string? title, TimeSpan? timeout, IToastService toastService)
         {
             ToastLevel = toastLevel;
@@ -15,25 +12,23 @@ namespace JGUZDV.Blazor.Components.Toasts
             Title = title;
 
             _toastService = toastService;
+        }
 
-            if(timeout != null)
-            {
-                _timer = new Timer((_) => Hide(), null, timeout.Value, Timeout.InfiniteTimeSpan);
-            }
+        
+        public ToastMessage(ToastLevel toastLevel, string message, string? title)
+        {
+            ToastLevel = toastLevel;
+            Message = message;
+            Title = title;
         }
 
         public ToastLevel ToastLevel { get; }
         public string Message { get; }
         public string? Title { get; }
 
-        public void Dispose()
-        {
-            _timer?.Dispose();
-        }
-
         public void Hide()
         {
-            _toastService.Hide(this);
+            _toastService?.Hide(this);
         }
     }
 }
