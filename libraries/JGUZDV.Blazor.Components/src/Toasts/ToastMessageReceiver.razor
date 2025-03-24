@@ -5,4 +5,22 @@
 
 @code {
     public ToastMessages Messages { get; set; } = default!;
+
+    /// <summary>
+    /// Dissmisses the toast message.
+    /// </summary>
+    public async Task DismissToast(ToastMessage toast)
+        => Messages.DismissToast(toast);
+
+    /// <summary>
+    /// Creates and shows a new toast message from the parameters
+    /// </summary>
+    public async Task Show(ToastLevel toastLevel, string message, string? title)
+        => Messages.Show(new ToastMessage(toastLevel, message, title));
+
+    /// <summary>
+    /// Shows the given toast message.
+    /// </summary>
+    public async Task Show(ToastMessage toast)
+        => Messages.Show(toast);
 }
