@@ -36,7 +36,10 @@ namespace JGUZDV.CQRS.Analyzer
 
         private const string Category = "CQRSAnalysisDesign";
 
-        private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(
+        /// <summary>
+        /// Diagnostic descriptor of the diagnostic reported by this analyzer
+        /// </summary>
+        public static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(
             DiagnosticId,
             Title,
             Messsage,
@@ -69,16 +72,16 @@ namespace JGUZDV.CQRS.Analyzer
         /// <param name="context">The analysis context.</param>
         private void AnalyzeQuerys(SyntaxNodeAnalysisContext context)
         {
-            var classDeclaration = context.Node as RecordDeclarationSyntax;
+            var recordDeclaration = context.Node as RecordDeclarationSyntax;
 
-            if (classDeclaration.BaseList == null)
+            if (recordDeclaration.BaseList == null)
                 return;
 
-            if (classDeclaration.BaseList.Types.First() is SimpleBaseTypeSyntax baseClass
+            if (recordDeclaration.BaseList.Types.First() is SimpleBaseTypeSyntax baseClass
                 && baseClass.Type is GenericNameSyntax name
                 && name.Identifier.Text.Equals("IQuery"))
             {
-                if (classDeclaration.Members
+                if (recordDeclaration.Members
                     .OfType<PropertyDeclarationSyntax>()
                     .Any(pds =>
                         (pds.Type is NullableTypeSyntax npType
