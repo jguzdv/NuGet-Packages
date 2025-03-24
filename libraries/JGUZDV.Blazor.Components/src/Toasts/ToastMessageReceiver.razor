@@ -4,6 +4,9 @@
 <ToastMessages @ref="Messages" />
 
 @code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
     public ToastMessages Messages { get; set; } = default!;
 
     /// <summary>
