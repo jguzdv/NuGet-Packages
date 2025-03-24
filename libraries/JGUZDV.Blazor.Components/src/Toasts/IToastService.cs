@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace JGUZDV.Blazor.Components.Toasts;
 
-namespace JGUZDV.Blazor.Components.Toasts;
-
+[Obsolete("Use ToastMessages component as a ref with .Show() instead.")]
 public interface IToastService
 {
     IEnumerable<ToastMessage> GetToasts();

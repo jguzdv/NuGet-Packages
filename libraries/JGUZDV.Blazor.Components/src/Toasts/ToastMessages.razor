@@ -1,0 +1,48 @@
+<div id="@EffectiveComponentId" popover="manual" class="toast-container position-fixed bottom-0 end-0 p-3">
+    @foreach (var toast in Toasts)
+    {
+        <ToastMessageView Toast="@toast" OnDismiss="() => DismissToast(toast)" />
+    }
+</div>
+
+@inject IJSRuntime JSRuntime
+
+@code {
+    private IList<ToastMessage> Toasts { get; set; } = [];
+    private IJSObjectReference _jsModule;
+
+    [Parameter]
+    public string? ComponentId { get; set; }
+
+    private string EffectiveComponentId => ComponentId ?? "JGUZDV.Blazor.Components.ToastMessages";
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (firstRender)
+        {
+            _jsModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/JGUZDV.Blazor.Components/Toasts/ToastMessages.razor.js");
+        }
+    }
+
+    public async Task DismissToast(ToastMessage toast)
+    {
+        Toasts.Remove(toast);
+        if (Toasts.Count == 0)
+        {
+            await _jsModule.InvokeVoidAsync("hideToastContainer", EffectiveComponentId);
+        }
+        StateHasChanged();
+    }
+
+    public async Task Show(ToastLevel toastLevel, string message, string? title)
+        => Show(new ToastMessage(toastLevel, message, title));
+
+    public async Task Show(ToastMessage toast)
+    {
+        Toasts.Add(toast);
+        await _jsModule.InvokeVoidAsync("showToastContainer", EffectiveComponentId);
+        StateHasChanged();
+    }
+}
