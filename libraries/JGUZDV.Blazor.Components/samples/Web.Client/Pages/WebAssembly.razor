@@ -5,20 +5,4 @@
 
 <h3>WebAssembly</h3>
 
-@if (RendererInfo.IsInteractive)
-{
-    <button @onclick="OnClick">A toast!</button>
-}
-
 <p>@AssignedRenderMode?.GetType().Name</p>
-
-@inject Toasts.IToastService ToastService
-
-@code {
-    public Task OnClick()
-    {
-        ToastService.Show(Toasts.ToastLevel.Success, "Hello from WebAssembly!", "Toast!");
-        StateHasChanged();
-        return Task.CompletedTask;
-    }
-}
