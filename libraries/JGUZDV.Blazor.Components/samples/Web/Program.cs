@@ -2,7 +2,6 @@ using System.Security.Claims;
 
 using JGUZDV.AspNetCore.Hosting;
 using JGUZDV.Blazor.Components.Samples.Web.Components;
-using JGUZDV.Blazor.Components;
 
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
