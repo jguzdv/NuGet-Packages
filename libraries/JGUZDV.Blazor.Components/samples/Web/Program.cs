@@ -13,8 +13,6 @@ builder.Services
     .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(x => x.ExpireTimeSpan = TimeSpan.FromMinutes(2));
 
-builder.Services.AddToasts();
-
 var app = builder.BuildAndConfigureBlazor<App>(
     additionalBlazorAssemblies: [
         typeof(JGUZDV.Blazor.Components.Samples.Web.Client.Pages._Imports).Assembly,
