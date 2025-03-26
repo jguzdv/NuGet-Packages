@@ -1,5 +1,4 @@
 ﻿using JGUZDV.CQRS.Queries;
-using Xunit;
 
 namespace JGUZDV.CQRS.Tests
 {

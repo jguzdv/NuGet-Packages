@@ -83,5 +83,7 @@ namespace JGUZDV.CQRS
         public static NotFoundResult NotFound() => new();
 
         public static CanceledResult Canceled(CancellationToken ct = default) => new(ct);
+
+        public static HandlerResult Indeterminate() => new GenericErrorResult("Handler has not run and result is indeterminate.");
     }
 }

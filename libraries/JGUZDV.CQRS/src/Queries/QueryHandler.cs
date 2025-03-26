@@ -14,8 +14,7 @@ namespace JGUZDV.CQRS.Queries
     /// Gibt Query-Ergebnis zurück.
     /// </summary>
     /// <typeparam name="TQuery">Query-Beschreibungstyp</typeparam>
-    /// <typeparam name="TResult">Rückgabetyp</typeparam>
-    /// <exception cref="UnauthorizedQueryException">Wird geworfen wenn ein Authorisierungsschritt fehlschlägt.</exception>
+    /// <typeparam name="TValue">Rückgabetyp</typeparam>
     public abstract partial class QueryHandler<TQuery, TValue> : IQueryHandler<TQuery>
         where TQuery : IQuery<TValue>
     {
