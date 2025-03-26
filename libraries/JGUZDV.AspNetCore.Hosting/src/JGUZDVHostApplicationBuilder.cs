@@ -201,7 +201,7 @@ public class JGUZDVHostApplicationBuilder
     /// </summary>
     public void AddWebHostServices(BlazorInteractivityModes interactivityMode)
     {
-        AddMachineConfig();
+        AddMachineConfigIfExists();
         AddLogging();
 
         // We're rebuilding the service provider to enable logging during log setup including the log created just before.
@@ -210,6 +210,12 @@ public class JGUZDVHostApplicationBuilder
         {
             var logger = loggerFactory.CreateLogger(nameof(JGUZDVHostApplicationBuilder));
             var missingConfigLogLevel = Environment.IsProduction() ? LogLevel.Information : LogLevel.Warning;
+
+            TryAddForwardedHeaders(logger);
+            TryAddDataProtection(logger);
+            TryAddDistributedCache(logger);
+            TryAddFeatureManagement(logger);
+
 
             Services.AddProblemDetails();
             LogMessages.FeatureAdded(logger, "ProblemDetails");
@@ -225,48 +231,6 @@ public class JGUZDVHostApplicationBuilder
             LogMessages.FeatureAdded(logger, "HealthChecks");
 
 
-            // Distributed Cache
-            var hasDistributedCacheSection = Configuration.HasConfigSection(Constants.ConfigSections.DistributedCache);
-            if (Environment.IsProduction() && hasDistributedCacheSection)
-            {
-                this.AddDistributedCache();
-                LogMessages.FeatureConfigured(logger, "DistributedCache", Constants.ConfigSections.DistributedCache);
-            }
-            else
-            {
-                if (!hasDistributedCacheSection)
-                {
-                    LogMessages.DistributedCacheMissing(logger);
-                }
-
-                Services.AddDistributedMemoryCache();
-                LogMessages.FeatureAdded(logger, "DistributedMemoryCache");
-            }
-
-
-            // DataProtection
-            var hasDataProtectionSection = Configuration.HasConfigSection(Constants.ConfigSections.DataProtection);
-            if (Environment.IsProduction() && hasDataProtectionSection)
-            {
-                this.AddDataProtection();
-                LogMessages.FeatureConfigured(logger, "DataProtection", Constants.ConfigSections.DataProtection);
-            }
-            else
-            {
-                if (!hasDataProtectionSection)
-                {
-                    LogMessages.MissingConfig(logger, missingConfigLogLevel, "DataProtection", Constants.ConfigSections.DataProtection);
-                }
-
-                if (string.IsNullOrWhiteSpace(Configuration[$"{Constants.ConfigSections.DataProtection}:ApplicationDiscriminator"]))
-                {
-                    LogMessages.ApplicationDiscriminatorNotSet(logger, $"{Constants.ConfigSections.DataProtection}:ApplicationDiscriminator");
-                }
-
-                Services.AddDataProtection();
-                LogMessages.FeatureAdded(logger, "EphemeralDataProtection");
-            }
-
 
             // OpenId Connect Authentication
             if (Configuration.HasConfigSection(Constants.ConfigSections.OpenIdConnectAuthentication))
@@ -276,44 +240,11 @@ public class JGUZDVHostApplicationBuilder
             }
             else
             {
-                LogMessages.MissingConfig(logger, missingConfigLogLevel, "OpenIdConnectAuthentication", Constants.ConfigSections.OpenIdConnectAuthentication);
+                LogMessages.MissingOptionalConfig(logger, "OpenIdConnectAuthentication", Constants.ConfigSections.OpenIdConnectAuthentication);
             }
 
 
-            // Feature Management
-            if (Configuration.HasConfigSection(Constants.ConfigSections.FeatureManagement))
-            {
-                if (Configuration[Constants.ConfigSections.FeatureManagement]?.StartsWith("http", StringComparison.OrdinalIgnoreCase) == true)
-                {
-                    this.AddRemoteFeatureManagement(httpClient =>
-                    {
-                        httpClient.BaseAddress = new Uri(Configuration[Constants.ConfigSections.FeatureManagement]!);
-                    });
-                    LogMessages.FeatureConfigured(logger, "RemoteFeatureManagement", Constants.ConfigSections.FeatureManagement);
-                }
-                else
-                {
-                    this.AddFeatureManagement();
-                    LogMessages.FeatureConfigured(logger, "FeatureManagement", Constants.ConfigSections.FeatureManagement);
-                }
-            }
-            else
-            {
-                LogMessages.MissingConfig(logger, missingConfigLogLevel, "FeatureManagement", Constants.ConfigSections.FeatureManagement);
-            }
-
-
-            // Forwarded Headers
-            if (Configuration.HasConfigSection(Constants.ConfigSections.ForwardedHeaders))
-            {
-                this.AddForwardedHeaders();
-                LogMessages.FeatureConfigured(logger, "ForwardedHeaders", Constants.ConfigSections.ForwardedHeaders);
-            }
-            else
-            {
-                LogMessages.MissingConfig(logger, missingConfigLogLevel, "ForwarededHeaders", Constants.ConfigSections.ForwardedHeaders);
-            }
-
+            
 
             // OpenTelemetry
             if (Configuration.HasConfigSection(Constants.ConfigSections.OpenTelemetry))
@@ -323,7 +254,7 @@ public class JGUZDVHostApplicationBuilder
             }
             else
             {
-                LogMessages.MissingConfig(logger, missingConfigLogLevel, "OpenTelementry", Constants.ConfigSections.OpenTelemetry);
+                LogMessages.MissingOptionalConfig(logger, "OpenTelementry", Constants.ConfigSections.OpenTelemetry);
             }
 
 
@@ -335,7 +266,7 @@ public class JGUZDVHostApplicationBuilder
             }
             else
             {
-                LogMessages.MissingConfig(logger, missingConfigLogLevel, "ReverseProxy", Constants.ConfigSections.ReverseProxy);
+                LogMessages.MissingOptionalConfig(logger, "ReverseProxy", Constants.ConfigSections.ReverseProxy);
             }
 
 
@@ -409,7 +340,7 @@ public class JGUZDVHostApplicationBuilder
     /// </summary>
     public void AddWebApiServices()
     {
-        AddMachineConfig();
+        AddMachineConfigIfExists();
         AddLogging();
 
         using (var sp = Services.BuildServiceProvider())
@@ -417,6 +348,13 @@ public class JGUZDVHostApplicationBuilder
         {
             var logger = loggerFactory.CreateLogger(nameof(JGUZDVHostApplicationBuilder));
             var missingConfigLogLevel = Environment.IsProduction() ? LogLevel.Information : LogLevel.Warning;
+
+            
+            TryAddForwardedHeaders(logger);
+            TryAddDataProtection(logger);
+            TryAddDistributedCache(logger);
+            TryAddFeatureManagement(logger);
+
 
             Services.AddProblemDetails();
             LogMessages.FeatureAdded(logger, "ProblemDetails");
@@ -432,39 +370,10 @@ public class JGUZDVHostApplicationBuilder
             this.AddLocalization(logger: logger);
             LogMessages.FeatureAdded(logger, "RequestLocalization");
 
-            var hasDistributedCacheSection = Configuration.HasConfigSection(Constants.ConfigSections.DistributedCache);
-            if (Environment.IsProduction() && hasDistributedCacheSection)
-            {
-                this.AddDistributedCache();
-                LogMessages.FeatureConfigured(logger, "DistributedCache", Constants.ConfigSections.DistributedCache);
-            }
-            else
-            {
-                if (!hasDistributedCacheSection)
-                {
-                    LogMessages.MissingConfig(logger, missingConfigLogLevel, "DistibutedCache", Constants.ConfigSections.DistributedCache);
-                }
 
-                Services.AddDistributedMemoryCache();
-                LogMessages.FeatureAdded(logger, "DistributedMemoryCache");
-            }
+            
 
-            var hasDataProtectionSection = Configuration.HasConfigSection(Constants.ConfigSections.DataProtection);
-            if (Environment.IsProduction() && hasDataProtectionSection)
-            {
-                this.AddDataProtection();
-                LogMessages.FeatureConfigured(logger, "DataProtection", Constants.ConfigSections.DataProtection);
-            }
-            else
-            {
-                if (!hasDataProtectionSection)
-                {
-                    LogMessages.MissingConfig(logger, missingConfigLogLevel, "DataProtection", Constants.ConfigSections.DataProtection);
-                }
-
-                Services.AddDataProtection();
-                LogMessages.FeatureAdded(logger, "EphemeralDataProtection");
-            }
+            
 
             if (Configuration.HasConfigSection(Constants.ConfigSections.JwtBearerAuthentication))
             {
@@ -473,42 +382,11 @@ public class JGUZDVHostApplicationBuilder
             }
             else
             {
-                LogMessages.MissingConfig(logger, missingConfigLogLevel, "JwtBearerAuthentication", Constants.ConfigSections.JwtBearerAuthentication);
-            }
-
-            // Feature management
-            if (Configuration.HasConfigSection(Constants.ConfigSections.FeatureManagement))
-            {
-                if (Configuration[Constants.ConfigSections.FeatureManagement]?.StartsWith("http", StringComparison.OrdinalIgnoreCase) == true)
-                {
-                    this.AddRemoteFeatureManagement(httpClient =>
-                    {
-                        httpClient.BaseAddress = new Uri(Configuration[Constants.ConfigSections.FeatureManagement]!);
-                    });
-                    LogMessages.FeatureConfigured(logger, "RemoteFeatureManagement", Constants.ConfigSections.FeatureManagement);
-                }
-                else
-                {
-                    this.AddFeatureManagement();
-                    LogMessages.FeatureConfigured(logger, "FeatureManagement", Constants.ConfigSections.FeatureManagement);
-                }
-            }
-            else
-            {
-                LogMessages.MissingConfig(logger, missingConfigLogLevel, "FeatureManagement", Constants.ConfigSections.FeatureManagement);
+                LogMessages.MissingOptionalConfig(logger, "JwtBearerAuthentication", Constants.ConfigSections.JwtBearerAuthentication);
             }
 
 
-            // Forwarded Headers
-            if (Configuration.HasConfigSection(Constants.ConfigSections.ForwardedHeaders))
-            {
-                this.AddForwardedHeaders();
-                LogMessages.FeatureConfigured(logger, "ForwardedHeaders", Constants.ConfigSections.ForwardedHeaders);
-            }
-            else
-            {
-                LogMessages.MissingConfig(logger, missingConfigLogLevel, "ForwardedHeaders", Constants.ConfigSections.ForwardedHeaders);
-            }
+
 
 
             if (Configuration.HasConfigSection(Constants.ConfigSections.OpenTelemetry))
@@ -518,13 +396,15 @@ public class JGUZDVHostApplicationBuilder
             }
             else
             {
-                LogMessages.MissingConfig(logger, missingConfigLogLevel, "OpenTelemetry", Constants.ConfigSections.OpenTelemetry);
+                LogMessages.MissingOptionalConfig(logger, "OpenTelemetry", Constants.ConfigSections.OpenTelemetry);
             }
 
             this.AddHealthChecks();
             LogMessages.FeatureAdded(logger, "HealthChecks");
         }
     }
+
+    
 
 
 
@@ -748,7 +628,7 @@ public class JGUZDVHostApplicationBuilder
     /// <summary>
     /// Adds a global configuration file to the config, that's either named "MachineConfig" or "JGUZDV:MachineConfig".
     /// </summary>
-    public void AddMachineConfig()
+    public void AddMachineConfigIfExists()
     {
         // Were building the service provider to enable logging during log setup.
         // While this seems counterintuitive, it is necessary to log missing configurations.
@@ -766,8 +646,110 @@ public class JGUZDVHostApplicationBuilder
             }
             else
             {
-                LogMessages.MissingConfig(logger, LogLevel.Information, "MachineConfig", "MachineConfig");
+                LogMessages.MissingOptionalConfig(logger, "MachineConfig", "MachineConfig");
             }
         }
+    }
+
+
+    /// <summary>
+    /// Adds ForwardedHeaders services from config section 'ForwardedHeaders' to the application, if the section exists.
+    /// </summary>
+    public void TryAddForwardedHeaders(ILogger logger)
+    {
+        if (Configuration.HasConfigSection(Constants.ConfigSections.ForwardedHeaders))
+        {
+            this.AddForwardedHeaders();
+            LogMessages.FeatureConfigured(logger, "ForwardedHeaders", Constants.ConfigSections.ForwardedHeaders);
+        }
+        else
+        {
+            LogMessages.ForwardedHeadersMissing(logger, Constants.ConfigSections.ForwardedHeaders);
+        }
+    }
+
+
+    /// <summary>
+    /// Adds DataProtection services from config section 'JGUZDV:DataProtection' to the application, if the section exists.<br />
+    /// In development, the application will use ephemeral data protection.<br />
+    /// This will log a critical message if the application discriminator is not set.
+    /// </summary>
+    public void TryAddDataProtection(ILogger logger)
+    {
+        var hasDataProtectionSection = Configuration.HasConfigSection(Constants.ConfigSections.DataProtection);
+        if (Environment.IsProduction() && hasDataProtectionSection)
+        {
+            this.AddDataProtection();
+            LogMessages.FeatureConfigured(logger, "DataProtection", Constants.ConfigSections.DataProtection);
+        }
+        else
+        {
+            if (!hasDataProtectionSection)
+            {
+                LogMessages.DataProtectionMissing(logger, Constants.ConfigSections.DataProtection);
+            }
+
+            if (string.IsNullOrWhiteSpace(Configuration[$"{Constants.ConfigSections.DataProtection}:ApplicationDiscriminator"]))
+            {
+                LogMessages.ApplicationDiscriminatorNotSet(logger, $"{Constants.ConfigSections.DataProtection}:ApplicationDiscriminator");
+            }
+
+            Services.AddDataProtection();
+            LogMessages.FeatureAdded(logger, "EphemeralDataProtection");
+        }
+    }
+
+    /// <summary>
+    /// Adds DistributedCache services from config section 'DistributedCache' to the application, if the section exists.<br />
+    /// In development, the application will use DistributedMemoryCache.<br />
+    /// </summary>
+    public void TryAddDistributedCache(ILogger logger)
+    {
+        var hasDistributedCacheSection = Configuration.HasConfigSection(Constants.ConfigSections.DistributedCache);
+        if (Environment.IsProduction() && hasDistributedCacheSection)
+        {
+            this.AddDistributedCache();
+            LogMessages.FeatureConfigured(logger, "DistributedCache", Constants.ConfigSections.DistributedCache);
+        }
+        else
+        {
+            if (!hasDistributedCacheSection)
+            {
+                LogMessages.DistributedCacheMissing(logger, Constants.ConfigSections.DistributedCache);
+            }
+
+            Services.AddDistributedMemoryCache();
+            LogMessages.FeatureAdded(logger, "DistributedMemoryCache");
+        }
+    }
+
+
+    /// <summary>
+    /// Adds FeatureManagement services from config section 'Features' to the application, if the section exists.
+    /// </summary>
+    public void TryAddFeatureManagement(ILogger logger)
+    {
+        // Feature Management
+        if (Configuration.HasConfigSection(Constants.ConfigSections.FeatureManagement))
+        {
+            if (Configuration[Constants.ConfigSections.FeatureManagement]?.StartsWith("http", StringComparison.OrdinalIgnoreCase) == true)
+            {
+                this.AddRemoteFeatureManagement(httpClient =>
+                {
+                    httpClient.BaseAddress = new Uri(Configuration[Constants.ConfigSections.FeatureManagement]!);
+                });
+                LogMessages.FeatureConfigured(logger, "RemoteFeatureManagement", Constants.ConfigSections.FeatureManagement);
+            }
+            else
+            {
+                this.AddFeatureManagement();
+                LogMessages.FeatureConfigured(logger, "FeatureManagement", Constants.ConfigSections.FeatureManagement);
+            }
+        }
+        else
+        {
+            LogMessages.MissingOptionalConfig(logger, "FeatureManagement", Constants.ConfigSections.FeatureManagement);
+        }
+
     }
 }
