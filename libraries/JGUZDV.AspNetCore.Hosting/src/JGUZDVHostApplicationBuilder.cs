@@ -215,6 +215,7 @@ public class JGUZDVHostApplicationBuilder
             TryAddDataProtection(logger);
             TryAddDistributedCache(logger);
             TryAddFeatureManagement(logger);
+            TryAddOpenTelemetry(logger);
 
 
             Services.AddProblemDetails();
@@ -245,17 +246,6 @@ public class JGUZDVHostApplicationBuilder
 
 
             
-
-            // OpenTelemetry
-            if (Configuration.HasConfigSection(Constants.ConfigSections.OpenTelemetry))
-            {
-                this.AddOpenTelemetry();
-                LogMessages.FeatureConfigured(logger, "OpenTelemetry", Constants.ConfigSections.OpenTelemetry);
-            }
-            else
-            {
-                LogMessages.MissingOptionalConfig(logger, "OpenTelementry", Constants.ConfigSections.OpenTelemetry);
-            }
 
 
             // Reverse Proxy
@@ -349,11 +339,12 @@ public class JGUZDVHostApplicationBuilder
             var logger = loggerFactory.CreateLogger(nameof(JGUZDVHostApplicationBuilder));
             var missingConfigLogLevel = Environment.IsProduction() ? LogLevel.Information : LogLevel.Warning;
 
-            
+
             TryAddForwardedHeaders(logger);
             TryAddDataProtection(logger);
             TryAddDistributedCache(logger);
             TryAddFeatureManagement(logger);
+            TryAddOpenTelemetry(logger);
 
 
             Services.AddProblemDetails();
@@ -371,9 +362,9 @@ public class JGUZDVHostApplicationBuilder
             LogMessages.FeatureAdded(logger, "RequestLocalization");
 
 
-            
 
-            
+
+
 
             if (Configuration.HasConfigSection(Constants.ConfigSections.JwtBearerAuthentication))
             {
@@ -386,25 +377,10 @@ public class JGUZDVHostApplicationBuilder
             }
 
 
-
-
-
-            if (Configuration.HasConfigSection(Constants.ConfigSections.OpenTelemetry))
-            {
-                this.AddOpenTelemetry();
-                LogMessages.FeatureConfigured(logger, "OpenTelemetry", Constants.ConfigSections.OpenTelemetry);
-            }
-            else
-            {
-                LogMessages.MissingOptionalConfig(logger, "OpenTelemetry", Constants.ConfigSections.OpenTelemetry);
-            }
-
             this.AddHealthChecks();
             LogMessages.FeatureAdded(logger, "HealthChecks");
         }
     }
-
-    
 
 
 
@@ -751,5 +727,21 @@ public class JGUZDVHostApplicationBuilder
             LogMessages.MissingOptionalConfig(logger, "FeatureManagement", Constants.ConfigSections.FeatureManagement);
         }
 
+    }
+
+    /// <summary>
+    /// Adds OpenTelemetry services from config section 'OpenTelemetry' to the application, if the section exists.
+    /// </summary>
+    public void TryAddOpenTelemetry(ILogger logger)
+    {
+        if (Configuration.HasConfigSection(Constants.ConfigSections.OpenTelemetry))
+        {
+            this.AddOpenTelemetry();
+            LogMessages.FeatureConfigured(logger, "OpenTelemetry", Constants.ConfigSections.OpenTelemetry);
+        }
+        else
+        {
+            LogMessages.MissingOptionalConfig(logger, "OpenTelemetry", Constants.ConfigSections.OpenTelemetry);
+        }
     }
 }
