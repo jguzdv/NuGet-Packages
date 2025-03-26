@@ -34,6 +34,13 @@
     </div>
 
     <Routes />
-    <script src="_framework/blazor.web.js"></script>
+    <script src="_framework/blazor.web.js" autostart="false"></script>
+    <script>
+        Blazor.start({
+          webAssembly: {
+            applicationCulture: document.documentElement.lang || "de-DE"
+          }
+        });
+    </script>
 </body>
 </html>
