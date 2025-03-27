@@ -25,13 +25,19 @@ namespace JGUZDV.JobHost
             return Task.CompletedTask;
         }
 
-        private void OnStarted()
+        private async void OnStarted()
         {
-            var scheduler = _schedulerFactory.GetScheduler().Result;
+            var scheduler = await _schedulerFactory.GetScheduler();
+            await scheduler.PauseJobs(GroupMatcher<JobKey>.AnyGroup());
 
-            scheduler.PauseJobs(GroupMatcher<JobKey>.AnyGroup());
+            scheduler.ListenerManager.AddJobListener(new DevelopmentJobListener("DevelopmentJobListener", JobSelection), GroupMatcher<JobKey>.AnyGroup());
+
             var keys = scheduler.GetJobKeys(GroupMatcher<JobKey>.AnyGroup()).Result.ToList();
+            await JobSelection(scheduler, keys);
+        }
 
+        private async Task JobSelection(IScheduler scheduler, List<JobKey> keys)
+        {
             Console.WriteLine("Available Jobs:\n");
             for (var i = 0; i < keys.Count; i++)
             {
@@ -48,8 +54,8 @@ namespace JGUZDV.JobHost
 
             } while (job == null);
 
-            scheduler.TriggerJob(job);
-            scheduler.ResumeJob(job);
+            await scheduler.TriggerJob(job);
+            await scheduler.ResumeJob(job);
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
