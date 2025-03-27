@@ -5,7 +5,7 @@
 @rendermode @(new InteractiveWebAssemblyRenderMode(prerender: false))
 
 @{
-    var showCropper = !string.IsNullOrWhiteSpace(Base64Image) && IsInitialized;
+    var showCropper = !string.IsNullOrWhiteSpace(_base64Image) && IsInitialized;
 }
 
 <div class="cropper-root @(!showCropper?"d-none":"")" @ref="HtmlWrapper">
@@ -96,6 +96,7 @@
             else
             {
                 <ActivityIndicator />
+                <p>Waiting for the imge to be loaded</p>
             }
         }
     </div>
@@ -108,6 +109,8 @@
 
     private IJSObjectReference _jsModule = null!;
     private IJSObjectReference _cropperInstance = null!;
+
+    private string? _base64Image;
 
     private DotNetObjectReference<ImageCropper> _dotNetObjectRef;
 
@@ -211,9 +214,13 @@
     {
         base.OnParametersSet();
 
-        ResetImageAndCropper();
+        if(_base64Image != Base64Image) {
+            _base64Image = Base64Image;
+            ResetImageAndCropper();
+        }
 
-        if (Base64Image != null) {
+        if (_base64Image != null)
+        {
             LoadImage();
         }
     }
@@ -245,11 +252,11 @@
 
     private void LoadImage()
     {
-        _logger.LogDebug($"Load image has been called - replace ImageDataUrl. (HasContent: {Base64Image?.Any()})");
-        if (string.IsNullOrWhiteSpace(Base64Image))
+        _logger.LogDebug($"Load image has been called - replace ImageDataUrl. (HasContent: {_base64Image?.Any()})");
+        if (string.IsNullOrWhiteSpace(_base64Image))
             return;
 
-        ImageDataUrl = "data:;base64," + Base64Image;
+        ImageDataUrl = "data:;base64," + _base64Image;
     }
 
 

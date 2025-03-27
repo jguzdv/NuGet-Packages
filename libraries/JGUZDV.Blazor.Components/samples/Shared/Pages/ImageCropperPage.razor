@@ -1,0 +1,118 @@
+@rendermode @(new InteractiveWebAssemblyRenderMode(false))
+
+@page "/image-cropper"
+
+@using System.Diagnostics.CodeAnalysis;
+@using JGUZDV.Blazor.Components.Cropper;
+@using JGUZDV.Blazor.Components.Forms
+@using JGUZDV.Blazor.Components.Modals;
+
+<div class="portrait-grid">
+
+    <InputFile type="file" OnChange="@LoadFile" id="input-portrait" hidden="true" aria-describedby="input-portrait-helptext" accept="image/*" />
+
+    <div class="buttons mb-1 @(ImageBase64 == null?"d-none":null)">
+        <div>
+            <label tabindex="0" role="button" for="input-portrait" @onkeypress="HandleLabelKeyPress" class="btn btn-secondary">
+                <i class="fas fa-fw fa-upload"></i> Choose Picture
+            </label>
+        </div>
+
+        <EditorButtons SaveLabel="Save Image" DiscardLabel="Discard" OnDiscard="() => Discard()" OnSave="() => SavePortait()" />
+    </div>
+    <div class="main @(ImageBase64 != null?"d-none":"d-flex") justify-content-center align-items-center">
+        <div role="button" tabindex="0" @onkeypress="HandleLabelKeyPress">
+            <label for="input-portrait" class="btn btn-secondary btn-initial-upload d-flex justify-content-center align-items-center" title="Choose Picture">
+                <i class="fas fa-fw fa-upload fa-4x"></i>
+            </label>
+        </div>
+    </div>
+    <div class="main @(ImageBase64 == null?"d-none":null)">
+        <ImageCropper Base64Image="@ImageBase64"
+        Settings="@Settings" OnCrop="(c) => SetCroppedImage(c)" />
+    </div>
+</div>
+@if (RendererInfo.IsInteractive)
+{
+    <Modal @ref="PortraitUploadModal" TModel="CropResult" Title="Looks good?">
+        <Body>
+            <div class="text-center">
+                <img class="mw-100" src="@($"data:{context.Model.ContentType};base64,{context.Model.Base64Content}")" />
+            </div>
+        </Body>
+        <Footer>
+            <div>
+                <button class="btn btn-danger" @onclick="() => context.Modal.Close()">
+                    <i class="fas fa-fw fa-times"></i> Discard
+                </button>
+                <button class="btn btn-success" @onclick="() => context.Modal.Accept()">
+                    <i class="fas fa-fw fa-check"></i> Save
+                </button>
+            </div>
+        </Footer>
+    </Modal>
+}
+
+<JGUZDV.Blazor.Components.Toasts.ToastMessages @ref="ToastMessages" />
+
+@code {
+    public CropperSettings Settings = new(new(200, 200));
+
+    private JGUZDV.Blazor.Components.Toasts.ToastMessages ToastMessages { get; set; } = default!;
+    private Modal<CropResult> PortraitUploadModal { get; set; } = default!;
+
+    public string? ImageBase64 { get; set; }
+    public CropResult? CropResult { get; set; }
+
+    [Inject]
+    public IJSRuntime _jsruntime { get; set; } = default!;
+
+
+
+
+    private void HandleLabelKeyPress(KeyboardEventArgs keyArgs)
+    {
+        if (keyArgs.Code == "Enter")
+        {
+            ((IJSInProcessRuntime)_jsruntime).InvokeVoid("blazor.triggerClickById", "input-portrait");
+        }
+    }
+
+    private async Task LoadFile(InputFileChangeEventArgs e)
+    {
+        try
+        {
+            using var ms = new System.IO.MemoryStream();
+            var bs = e.File.OpenReadStream(10 * 1024 * 1024);
+            await bs.CopyToAsync(ms);
+
+            ImageBase64 = Convert.ToBase64String(ms.ToArray());
+        }
+        catch
+        {
+
+        }
+    }
+
+    private void SetCroppedImage(CropResult cr)
+    {
+        CropResult = cr;
+    }
+
+    private async Task SavePortait()
+    {
+        if (CropResult == null)
+            return;
+
+        var modalResult = await PortraitUploadModal.ShowModal(CropResult);
+        if (modalResult != ModalResult.Accepted)
+            return;
+
+        _ = ToastMessages.Show(Toasts.ToastLevel.Success, "Yay! Your portrait has been saved.", null);
+    }
+
+    private void Discard()
+    {
+        Navigation.NavigateTo("");
+    }
+}
