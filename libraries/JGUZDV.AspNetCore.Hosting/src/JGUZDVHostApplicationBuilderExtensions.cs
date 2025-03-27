@@ -123,7 +123,7 @@ public static class JGUZDVHostApplicationBuilderExtensions
         }
         else
         {
-            LogMessages.MissingConfig(logger, appBuilder.Environment.IsProduction() ? LogLevel.Information : LogLevel.Warning, "RequestLocalization", configSection);
+            LogMessages.DefaultRequestLocalizationConfig(logger, configSection);
         }
 
         appBuilder.Services.AddLocalization(opt =>
