@@ -1,8 +1,10 @@
-﻿using System.Runtime.Versioning;
+﻿using System.Globalization;
+using System.Net;
 
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.JSInterop;
 
 namespace JGUZDV.Blazor.Hosting;
 
@@ -18,11 +20,6 @@ public class JGUZDVWebAssemblyApplicationBuilder
     /// The WebAssemblyHostBuilder for the application.
     /// </summary>
     public WebAssemblyHostBuilder Builder => _webAssemblyHostBuilder;
-
-    /// <summary>
-    /// Builds the WebAssemblyHost. <see cref="WebAssemblyHostBuilder.Build" />
-    /// </summary>
-    public WebAssemblyHost Build() => _webAssemblyHostBuilder.Build();
 
     /// <summary>
     /// The Configuration for the application. <see cref="WebAssemblyHostBuilder.Configuration" />
@@ -77,5 +74,69 @@ public class JGUZDVWebAssemblyApplicationBuilder
         builder.AddLocalization();
 
         return builder;
+    }
+
+
+    /// <summary>
+    /// Builds the WebAssemblyHost. <see cref="WebAssemblyHostBuilder.Build" />
+    /// Additionally it will set the current culture to the documents lang.
+    /// </summary>
+    public async Task<WebAssemblyHost> BuildAsync()
+    {
+        var host = _webAssemblyHostBuilder.Build();
+
+        await ReadAndSetCultureFromHtmlTag(host);
+
+        return host;
+    }
+
+    /// <summary>
+    /// Reads the culture from the html tag and sets it as the current culture.
+    /// </summary>
+    public async Task ReadAndSetCultureFromHtmlTag(WebAssemblyHost host, string defaultCulture = "de-DE")
+    {
+        var js = host.Services.GetRequiredService<IJSRuntime>();
+        var cultureName = defaultCulture;
+        var uiCultureName = defaultCulture;
+        try
+        {
+            var allCookies = await js.InvokeAsync<string>("document.getCookies");
+            var cookies = WebUtility.UrlDecode(allCookies);
+
+            var cultureCookieValue = cookies.Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                .Select(c => c.Split('=', 2, StringSplitOptions.TrimEntries))
+                // from all cookies take the last matching
+                .LastOrDefault(c => c[0] == ".AspNetCore.Culture")?
+                // and take the value
+                .LastOrDefault();
+
+            if (cultureCookieValue != null)
+            {
+                var cultures = cultureCookieValue.Split('|', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+                foreach(var c in cultures)
+                {
+                    if(c.Split('=', 2, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries) is [string name, string value])
+                    {
+                        if(name == "c")
+                        {
+                            cultureName = value;
+                        }
+                        else if (name == "uic")
+                        {
+                            uiCultureName = value;
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Failed to read culture from cookie: " + ex.Message);
+        }
+
+        
+        CultureInfo.DefaultThreadCurrentCulture = CultureInfo.GetCultureInfo(cultureName);
+        CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.GetCultureInfo(uiCultureName);
     }
 }

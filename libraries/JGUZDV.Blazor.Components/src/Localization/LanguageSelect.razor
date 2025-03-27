@@ -27,7 +27,7 @@
                 var isSelected = l.Culture == LS.GetCurrentUICulture();
                 var href = string.Format(LanguageSelectionEndpointFormat, l.Culture) + "?returnUrl=" + returnUrl;
 
-                <a class="dropdown-item @(isSelected?"active":null)" href="@href">@l.DisplayName</a>
+                <a class="dropdown-item @(isSelected?"active":null)" href="@href" data-enhance-nav="false">@l.DisplayName</a>
             }
         </DropdownContent>
     </Dropdown>

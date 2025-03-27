@@ -3,4 +3,5 @@ using JGUZDV.Blazor.Components;
 
 var builder = JGUZDVWebAssemblyApplicationBuilder.CreateDefault(args);
 
-await builder.Build().RunAsync();
+var host = await builder.BuildAsync();
+await host.RunAsync();
