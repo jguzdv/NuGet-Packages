@@ -22,7 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\..\JGUZDV.Extensions.Logging\src\JGUZDV.Extensions.Logging.csproj" />
+      <ProjectReference Include="..\..\..\..\JGUZDV.Extensions.Logging.File\src\JGUZDV.Extensions.Logging.File.csproj" />
       <ProjectReference Include="..\..\JGUZDV.JobHost.Shared\src\JGUZDV.JobHost.Shared.csproj" />
     </ItemGroup>
 
