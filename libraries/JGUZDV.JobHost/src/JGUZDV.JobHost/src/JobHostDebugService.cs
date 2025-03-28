@@ -38,21 +38,32 @@ namespace JGUZDV.JobHost
 
         private async Task JobSelection(IScheduler scheduler, List<JobKey> keys)
         {
-            Console.WriteLine("Available Jobs:\n");
+            Console.WriteLine(
+                """
+
+                ------- JobHost Debugging CLI -------
+                Please select one of the registered Jobs by typing the corresponding number.
+
+                Resgistered Jobs:
+
+                """);
             for (var i = 0; i < keys.Count; i++)
             {
-                Console.WriteLine($"{i}: {keys[i].Name}");
+                Console.WriteLine("{0,3}:\t{1}", i + 9, keys[i].Name);
             }
 
             JobKey? job = null;
             do
             {
-                Console.WriteLine("\nType number of Job you want to Execute");
+                Console.Write("\nSelect a job to execute: ");
 
                 if (int.TryParse(Console.ReadLine(), out int selectedJob) && selectedJob < keys.Count)
                     job = keys[selectedJob];
+                else
+                    Console.WriteLine("Invalid input! Please try again or stop debugging by pressing Ctrl + C.");
 
             } while (job == null);
+            Console.WriteLine("\nStarting execution of {0}...", job.Name);
 
             await scheduler.TriggerJob(job);
             await scheduler.ResumeJob(job);
