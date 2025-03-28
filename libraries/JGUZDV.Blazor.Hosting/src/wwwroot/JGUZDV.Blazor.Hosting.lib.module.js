@@ -98,6 +98,7 @@ export const afterWebStarted = () => {
 export const beforeWebAssemblyStart = (options, extensions) => {
     console.debug('Running beforeWebAssemblyStart', options, extensions);
 
+    document.getCookies = () => document.cookie;
     showLoader();
 };
 export const afterWebAssemblyStarted = (blazor) => {
