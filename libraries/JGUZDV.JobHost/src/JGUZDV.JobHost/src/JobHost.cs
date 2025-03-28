@@ -64,7 +64,7 @@ namespace JGUZDV.JobHost
         /// <param name="section">Configuration section containing dashboard settings (default is <see cref="Constants.DefaultDashboardConfigSection"/>).</param>
         /// <returns>The extended host builder.</returns>
         /// <exception cref="InvalidOperationException"></exception>
-        public static HostApplicationBuilder UseJobReporting<T>(this IHostApplicationBuilder builder,
+        public static HostApplicationBuilder UseJobReporting<T>(this HostApplicationBuilder builder,
           string section = Constants.DefaultDashboardConfigSection) where T : class, IJobExecutionManager
         {
             builder.ConfigureReporting<T>(x =>
@@ -72,7 +72,7 @@ namespace JGUZDV.JobHost
                 builder.Configuration.GetSection(section).Bind(x);
             });
 
-            return (HostApplicationBuilder)builder;
+            return builder;
         }
 
         private static void ConfigureReporting<T>(this IHostApplicationBuilder builder, Action<JobReportOptions> configureOptions) where T : class, IJobExecutionManager
@@ -101,17 +101,17 @@ namespace JGUZDV.JobHost
         /// <param name="builder">The host builder to extend.</param>
         /// <param name="configureOptions">Action that configures the <see cref="JobReportOptions"/></param>
         /// <returns>The extended host builder.</returns>
-        public static HostApplicationBuilder UseJobReporting<T>(this IHostApplicationBuilder builder,
+        public static HostApplicationBuilder UseJobReporting<T>(this HostApplicationBuilder builder,
             Action<JobReportOptions> configureOptions) where T : class, IJobExecutionManager
         {
             builder.ConfigureReporting<T>(configureOptions);
-            return (HostApplicationBuilder)builder;
+            return builder;
         }
 
         /// <summary>
         /// Adds a hosted job to the host environment based on whether a dashboard is being used or not.
         /// </summary>
-        public static HostApplicationBuilder AddHostedJob<TJob>(this IHostApplicationBuilder builder)
+        public static HostApplicationBuilder AddHostedJob<TJob>(this HostApplicationBuilder builder)
             where TJob : class, IJob
         {
 
@@ -119,12 +119,12 @@ namespace JGUZDV.JobHost
                 ?? throw new InvalidOperationException($"'{Constants.DefaultConfigSection}:{typeof(TJob).Name}' could not be read from configuration.");
             if (schedule == "false")
             {
-                return (HostApplicationBuilder)builder;
+                return builder;
             }
 
             builder.AddHostedJob<TJob>(schedule);
 
-            return (HostApplicationBuilder)builder;
+            return builder;
         }
 
         /// <summary>
