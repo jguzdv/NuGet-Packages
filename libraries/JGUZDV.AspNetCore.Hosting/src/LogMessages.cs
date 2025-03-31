@@ -38,7 +38,7 @@ internal partial class LogMessages
     public static partial void DataProtectionMissing(ILogger logger, string configSection);
 
     [LoggerMessage(LogLevel.Information, "Could not read DataProtection application discriminator from '{configKey}'. In Production a fallback to {defaultDiscriminator} will happen.")]
-    public static partial void ApplicationDiscriminatorNotSet(ILogger logger, string configKey);
+    public static partial void ApplicationDiscriminatorNotSet(ILogger logger, string configKey, string defaultDiscriminator);
 
 
     [LoggerMessage(LogLevel.Warning, "Could not find configuration for DistributedCache in config-section '{configSection}'. If you do not use IDistributedCache, you can ignore this warning. Else you need to configure and setup the caches accordingly.")]

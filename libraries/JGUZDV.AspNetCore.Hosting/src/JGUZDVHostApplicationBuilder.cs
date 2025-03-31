@@ -667,7 +667,7 @@ public class JGUZDVHostApplicationBuilder
 
             if (string.IsNullOrWhiteSpace(Configuration[$"{Constants.ConfigSections.DataProtection}:ApplicationDiscriminator"]))
             {
-                LogMessages.ApplicationDiscriminatorNotSet(logger, $"{Constants.ConfigSections.DataProtection}:ApplicationDiscriminator");
+                LogMessages.ApplicationDiscriminatorNotSet(logger, $"{Constants.ConfigSections.DataProtection}:ApplicationDiscriminator", Environment.ApplicationName);
             }
 
             Services.AddDataProtection();
