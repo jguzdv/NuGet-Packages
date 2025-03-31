@@ -21,7 +21,7 @@
 
 <AuthorizeView Context="context">
     <NotAuthorized>
-        <a class="btn btn-light border login-button" href="@LoginUrl?redirectUri=@redirectUri">
+        <a class="btn btn-light border login-button" href="@LoginUrl?redirectUri=@redirectUri" data-enhance-nav="false">
             <i class="fas fa-sign-in-alt"></i>
             <span class="d-none d-lg-inline">@LR["AuthView.LoginButton"]</span>
         </a>
