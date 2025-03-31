@@ -22,10 +22,7 @@ namespace JGUZDV.JobHost.Tests
                 quartzHostedServiceOptions => quartzHostedServiceOptions.WaitForJobsToComplete = true);
             var testObject = new JobHostWrapper();
 
-            builder.ConfigureServices((ctx, services) =>
-            {
-                services.AddSingleton(testObject);
-            });
+            builder.Services.AddSingleton(testObject);
 
             builder.AddHostedJob<TestJob>();
             builder.AddHostedJob<TestJob2>();
@@ -46,10 +43,7 @@ namespace JGUZDV.JobHost.Tests
                 configureWindowsService => configureWindowsService.ServiceName = "Test",
                 quartzHostedServiceOptions => quartzHostedServiceOptions.WaitForJobsToComplete = true);
             var testObject = new JobHostWrapper();
-            builder.ConfigureServices((ctx, services) =>
-            {
-                services.AddSingleton(testObject);
-            });
+            builder.Services.AddSingleton(testObject);
 
             builder.AddHostedJob<TestJob3>();
 
@@ -85,10 +79,6 @@ namespace JGUZDV.JobHost.Tests
             var builder = JobHost.CreateJobHostBuilder(Array.Empty<string>(),
                     configureWindowsService => configureWindowsService.ServiceName = "DashboardTest",
                     quartzHostedServiceOptions => quartzHostedServiceOptions.WaitForJobsToComplete = true)
-                .ConfigureServices(services =>
-                {
-                    services.AddDbContextFactory<JobHostContext>(x => x.UseSqlServer(_connectionString));
-                })
                 .UseJobHostContextReporting(x =>
                 {
                     x.JobHostName = "Test";
@@ -97,10 +87,8 @@ namespace JGUZDV.JobHost.Tests
 
             var testObject = new JobHostWrapper();
 
-            builder.ConfigureServices((ctx, services) =>
-            {
-                services.AddSingleton(testObject);
-            });
+            builder.Services.AddDbContextFactory<JobHostContext>(x => x.UseSqlServer(_connectionString));
+            builder.Services.AddSingleton(testObject);
 
             builder.AddHostedJob<TestJob>();
             builder.AddHostedJob<TestJob2>();
@@ -139,7 +127,6 @@ namespace JGUZDV.JobHost.Tests
             var builder = JobHost.CreateJobHostBuilder(Array.Empty<string>(),
                     configureWindowsService => configureWindowsService.ServiceName = "ExecuteNowTest",
                     quartzHostedServiceOptions => quartzHostedServiceOptions.WaitForJobsToComplete = true)
-                .ConfigureServices(services => services.AddDbContextFactory<JobHostContext>(x => x.UseSqlServer(_connectionString)))
                 .UseJobReporting<JobHostContextReporter>(x =>
                 {
                     x.JobHostName = "Test";
@@ -148,10 +135,8 @@ namespace JGUZDV.JobHost.Tests
                 });
             var testObject = new JobHostWrapper();
 
-            builder.ConfigureServices((ctx, services) =>
-            {
-                services.AddSingleton(testObject);
-            });
+            builder.Services.AddDbContextFactory<JobHostContext>(x => x.UseSqlServer(_connectionString));
+            builder.Services.AddSingleton(testObject);
 
             var now = DateTimeOffset.Now;
             builder.AddHostedJob<TestJob3>($"{(now.Second + 30) % 60} * * * * ?");

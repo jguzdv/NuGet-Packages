@@ -19,7 +19,7 @@ namespace JGUZDV.JobHost.Dashboard.EntityFrameworkCore
         /// <param name="section">Configuration section containing dashboard settings (default is <see cref="Constants.DefaultDashboardConfigSection"/>).</param>
         /// <returns>The extended host builder.</returns>
         /// <exception cref="InvalidOperationException"></exception>
-        public static IHostBuilder UseJobHostContextReporting(this IHostBuilder builder,
+        public static HostApplicationBuilder UseJobHostContextReporting(this HostApplicationBuilder builder,
             string section = Constants.DefaultDashboardConfigSection)
         {
             builder.UseJobReporting<JobHostContextReporter>(section);
@@ -35,7 +35,7 @@ namespace JGUZDV.JobHost.Dashboard.EntityFrameworkCore
         /// <param name="builder">The host builder to extend.</param>
         /// <param name="configureOptions">Action that configures the <see cref="JobReportOptions"/></param>
         /// <returns>The extended host builder.</returns>
-        public static IHostBuilder UseJobHostContextReporting(this IHostBuilder builder,
+        public static HostApplicationBuilder UseJobHostContextReporting(this HostApplicationBuilder builder,
             Action<JobReportOptions> configureOptions)
         {
             builder.UseJobReporting<JobHostContextReporter>(configureOptions);
@@ -53,14 +53,11 @@ namespace JGUZDV.JobHost.Dashboard.EntityFrameworkCore
         /// <param name="section">Configuration section containing dashboard settings (default is <see cref="Constants.DefaultDashboardConfigSection"/>).</param>
         /// <returns>The extended host builder.</returns>
         /// <exception cref="InvalidOperationException"></exception>
-        public static IHostBuilder UseJobHostContextReporting(this IHostBuilder builder,
+        public static HostApplicationBuilder UseJobHostContextReporting(this HostApplicationBuilder builder,
             Action<DbContextOptionsBuilder> configureDbContext,
             string section = Constants.DefaultDashboardConfigSection)
         {
-            builder.ConfigureServices(services =>
-            {
-                services.AddDbContextFactory<JobHostContext>(configureDbContext);
-            });
+            builder.Services.AddDbContextFactory<JobHostContext>(configureDbContext);
 
             builder.UseJobReporting<JobHostContextReporter>(section);
 
@@ -75,14 +72,11 @@ namespace JGUZDV.JobHost.Dashboard.EntityFrameworkCore
         /// <param name="builder">The host builder to extend.</param>
         /// <param name="configureOptions">Action that configures the <see cref="JobReportOptions"/></param>
         /// <returns>The extended host builder.</returns>
-        public static IHostBuilder UseJobHostContextReporting(this IHostBuilder builder,
+        public static HostApplicationBuilder UseJobHostContextReporting(this HostApplicationBuilder builder,
             Action<DbContextOptionsBuilder> configureDbContext,
             Action<JobReportOptions> configureOptions)
         {
-            builder.ConfigureServices(services =>
-            {
-                services.AddDbContextFactory<JobHostContext>(configureDbContext);
-            });
+            builder.Services.AddDbContextFactory<JobHostContext>(configureDbContext);
 
             builder.UseJobReporting<JobHostContextReporter>(configureOptions);
 
