@@ -15,10 +15,6 @@ internal class JGUDataProtectionConfiguration : IValidatableObject
 
     public IEnumerable<ValidationResult> Validate(ValidationContext? validationContext)
     {
-        if (string.IsNullOrWhiteSpace(ApplicationDiscriminator))
-            yield return new ValidationResult("ApplicationDiscriminator must be set", new[] { nameof(ApplicationDiscriminator) });
-
-        
         if (string.IsNullOrWhiteSpace(Persistence?.FileSystem?.Path))
             yield return new ValidationResult("Persistence:FileSystem:Path must be set", new[] { nameof(Persistence.FileSystem) });
 

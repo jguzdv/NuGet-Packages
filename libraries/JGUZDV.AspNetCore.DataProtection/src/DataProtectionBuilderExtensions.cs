@@ -26,7 +26,7 @@ public static class DataProtectionBuilderExtensions
         if (validation.Any())
             throw new ValidationException(validation.First(), null, null);
 
-        builder.SetApplicationName(config.ApplicationDiscriminator!);
+        builder.SetApplicationName(config.ApplicationDiscriminator ?? environment.ApplicationName);
 
         if(config.DisableAutomaticKeyGeneration)
             builder.DisableAutomaticKeyGeneration();
