@@ -37,7 +37,7 @@ internal partial class LogMessages
     [LoggerMessage(LogLevel.Warning, "Could not find configuration for DataProtection in config-section '{configSection}'. Generally we configure data-protection machine wide, so you most likely can ignore this message when running in development.")]
     public static partial void DataProtectionMissing(ILogger logger, string configSection);
 
-    [LoggerMessage(LogLevel.Critical, "Could not read DataProtection application discriminator from '{configKey}'. Do set a discriminator in the config file. Generally a good choice is to use the application name as discriminator.")]
+    [LoggerMessage(LogLevel.Information, "Could not read DataProtection application discriminator from '{configKey}'. In Production a fallback to {defaultDiscriminator} will happen.")]
     public static partial void ApplicationDiscriminatorNotSet(ILogger logger, string configKey);
 
 

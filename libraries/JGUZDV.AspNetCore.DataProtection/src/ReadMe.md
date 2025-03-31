@@ -20,7 +20,7 @@ if (builder.Environment.IsProduction())
 {
   "JGUZDV": {
     "DataProtection" : {    // default section JGUZDV:DataProtection - a custom section can be passed
-      "ApplicationDiscriminator" : "MyApp",    // Name to be used by SetApplicationName
+      "ApplicationDiscriminator" : "MyApp",    // Name to be used by SetApplicationName, if not present IHostingEnvironment.ApplicationName will be used
       "DisableAutomaticKeyGeneration" : false    // if true automatic key generation is disabled, default: false
 
       "Persistence" : {    // must be defined
