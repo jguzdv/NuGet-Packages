@@ -42,7 +42,7 @@ namespace JGUZDV.JobHost
                 """
 
                 ------- JobHost Debugging CLI -------
-                Please select one of the registered Jobs by typing the corresponding number.
+                Please select one of the registered Jobs by typing the corresponding number or type X to cancel debugging.
 
                 Resgistered Jobs:
 
@@ -57,10 +57,25 @@ namespace JGUZDV.JobHost
             {
                 Console.Write("\nSelect a job to execute: ");
 
-                if (int.TryParse(Console.ReadLine(), out int selectedJob) && selectedJob < keys.Count)
+                var input = Console.ReadLine();
+
+                if (int.TryParse(input, out int selectedJob) && selectedJob < keys.Count)
+                {
                     job = keys[selectedJob];
+                }
                 else
+                {
+                    if (input == null)
+                        return;
+
+                    if (input.Equals("x", StringComparison.OrdinalIgnoreCase))
+                    {
+                        _applicationLifetime.StopApplication();
+                        return;
+                    }
+                    
                     Console.WriteLine("Invalid input! Please try again or stop debugging by pressing Ctrl + C.");
+                }
 
             } while (job == null);
             Console.WriteLine("\nStarting execution of {0}...", job.Name);
