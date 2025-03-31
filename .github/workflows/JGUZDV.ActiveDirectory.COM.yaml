@@ -33,13 +33,13 @@ jobs:
       uses: microsoft/setup-msbuild@v2
 
     - name: Pack library project
-      run: msbuild ${{ env.src-proj }} /t:Restore,Build,Pack /p:configuration=Release /p:PackageOutputPath="${{ env.publish-path }}"
+      run: msbuild ${{ env.src-proj }} /t:Restore,Build,Pack /p:configuration=Release /p:PackageOutputPath="${GITHUB_WORKSPACE}${{ env.publish-path }}"
 
     - name: Upload nupkg
       uses: actions/upload-artifact@v4
       with:
         name: NuGetPackage
-        path: ${{ env.publish-path }}
+        path: '${GITHUB_WORKSPACE}${{ env.publish-path }}'
         retention-days: 7
   
   push_to_nuget:
