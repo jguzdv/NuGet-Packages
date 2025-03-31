@@ -54,6 +54,7 @@ jobs:
         with:
           name: NuGetPackage
           path: ${{ env.publish-path }}
+          if-no-files-found: error
           retention-days: 7
 
   push_to_nuget:
