@@ -49,7 +49,7 @@ namespace JGUZDV.JobHost
                 """);
             for (var i = 0; i < keys.Count; i++)
             {
-                Console.WriteLine("{0,3}:\t{1}", i + 9, keys[i].Name);
+                Console.WriteLine("{0,3}:\t{1}", i, keys[i].Name);
             }
 
             JobKey? job = null;
