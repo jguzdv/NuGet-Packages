@@ -13,7 +13,7 @@ namespace Microsoft.Extensions.DependencyInjection;
 /// </summary>
 public static class JGUZDVLoggingExtensions
 {
-    private const string FileLoggerSectionName = JGUZDV.AspNetCore.Logging.Constants.DefaultSectionName + JGUZDV.Extensions.Logging.File.Constants.FileProviderAlias;
+    private const string FileLoggerSectionName = $"{JGUZDV.AspNetCore.Logging.Constants.DefaultSectionName}:{JGUZDV.Extensions.Logging.File.Constants.FileProviderAlias}";
 
     /// <summary>
     /// Configures the web host to use the default logging configuration.
