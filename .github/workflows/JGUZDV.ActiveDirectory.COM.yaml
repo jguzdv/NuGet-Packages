@@ -19,12 +19,12 @@ env:
   
 jobs:
   build_pack:
-    name: Build ${{ env.library-name }}
+    name: Build $library-name
     runs-on: windows-latest
 
     env: 
-      src-proj: ./libraries/${{ env.library-name }}/src/${{ env.library-name }}.csproj
-      publish-path: ./publish/${{ env.library-name }}
+      src-proj: ./libraries/$library-name/src/$library-name.csproj
+      publish-path: ./publish/$library-name
 
     steps:
     - uses: actions/checkout@v3
@@ -45,7 +45,7 @@ jobs:
   push_to_nuget:
     needs: build_pack
     if: github.repository == 'jguzdv/NuGet-Packages' && github.ref == 'refs/heads/main' && inputs.push-to-nuget
-    name: Push ${{ env.library-name }}
+    name: Push $library-name
     runs-on: ubuntu-latest
 
     env:
