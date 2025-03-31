@@ -14,7 +14,6 @@ on:
       - libraries/JGUZDV.ActiveDirectory.COM/**
 
 env:
-  library-name: 'JGUZDV.ActiveDirectory.COM'
   dotnet-version: 9.0.x
   
 jobs:
@@ -23,8 +22,9 @@ jobs:
     runs-on: windows-latest
 
     env: 
-      src-proj: ./libraries/$library-name/src/$library-name.csproj
-      publish-path: ./publish/$library-name
+      library-name: 'JGUZDV.ActiveDirectory.COM'
+      src-proj: ./libraries/${{ env.library-name }}/src/${{ env.library-name }}.csproj
+      publish-path: ./publish/${{ env.library-name }}
 
     steps:
     - uses: actions/checkout@v3
@@ -33,7 +33,7 @@ jobs:
       uses: microsoft/setup-msbuild@v2
 
     - name: Pack library project
-      run: msbuild /t:Pack /p:configuration=Release /p:PackageOutputPath="${{ env.publish-path }}"
+      run: msbuild ${{ env.src-proj }} /t:Pack /p:configuration=Release /p:PackageOutputPath="${{ env.publish-path }}"
 
     - name: Upload nupkg
       uses: actions/upload-artifact@v4
