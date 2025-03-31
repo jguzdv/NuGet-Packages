@@ -23,8 +23,8 @@ jobs:
 
     env: 
       library-name: 'JGUZDV.ActiveDirectory.COM'
-      src-proj: ./libraries/${{ env.library-name }}/src/${{ env.library-name }}.csproj
-      publish-path: ./publish/${{ env.library-name }}
+      src-proj: ./libraries/JGUZDV.ActiveDirectory.COM/src/JGUZDV.ActiveDirectory.COM.csproj
+      publish-path: ./publish/JGUZDV.ActiveDirectory.COM
 
     steps:
     - uses: actions/checkout@v3
