@@ -1,0 +1,63 @@
+name: JGUZDV.ActiveDirectory.COM
+
+on:
+  workflow_dispatch:
+    inputs:
+      push-to-nuget:
+        description: Push package to NuGet
+        type: boolean
+
+  pull_request:
+    branches:
+      - main
+    paths:
+      - libraries/JGUZDV.ActiveDirectory.COM/**
+
+env:
+  library-name: 'JGUZDV.ActiveDirectory.COM'
+  dotnet-version: 9.0.x
+  
+jobs:
+  build_pack:
+    name: Build ${{ env.library-name }}
+    runs-on: windows-latest
+
+    env: 
+      src-proj: ./libraries/${{ env.library-name }}/src/${{ env.library-name }}.csproj
+      publish-path: ./publish/${{ env.library-name }}
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup MSBuild
+      uses: actions/setup-msbuild@v2
+
+    - name: Pack library project
+      run: msbuild /t:Pack /p:configuration=Release /p:PackageOutputPath="${{ env.publish-path }}"
+
+    - name: Upload nupkg
+      uses: actions/upload-artifact@v4
+      with:
+        name: NuGetPackage
+        path: ${{ env.publish-path }}
+        retention-days: 7
+  
+  push_to_nuget:
+    needs: build_pack
+    if: github.repository == 'jguzdv/NuGet-Packages' && github.ref == 'refs/heads/main' && inputs.push-to-nuget
+    name: Push ${{ env.library-name }}
+    runs-on: ubuntu-latest
+
+    env:
+      dotnet-version: 9.0.x
+
+    steps:
+    - name: Download nupkg
+      uses: actions/download-artifact@v4
+      with:
+        name: NuGetPackage
+        path: package
+
+    - name: Push library
+      run: dotnet nuget push package/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }}
+        
