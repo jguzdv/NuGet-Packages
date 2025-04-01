@@ -53,9 +53,14 @@
                     <div class="input-group">
                         <input type="@Field.FieldDefinition.Type!.InputType"
                                @bind="_inputValue"
+                               @bind:event="oninput"
                                @onkeyup="HandleKeyUp"
                                class="form-control">
-                        <button class="btn btn-outline-secondary" type="button">@Icons.Add(null)</button>
+                        <button class="btn btn-outline-secondary" 
+                        type="button"
+                                @onclick="() => OnInputChanged(_inputValue)">
+                            @Icons.Add(null)
+                            </button>
                     </div>
 
                     <div class="my-1 p-2 border">
@@ -67,7 +72,7 @@
                                     <span>
                                         @GetValueString(value)
                                     </span>
-                                    <button class="btn btn-sm btn-outline-danger" @onclick="@(() =>
+                                    <button type="button" class="btn btn-sm btn-outline-danger" @onclick="@(() =>
                                     {
                                         ((IList)Field.Value!).Remove(value);
                                         SetValue(Field.Value);
@@ -168,7 +173,6 @@
         if (e.Key == "Enter")
         {
             OnInputChanged(_inputValue);
-            _inputValue = null;
         }
     }
 
@@ -183,6 +187,8 @@
                 var stringValue = ConvertToValue(value?.ToString());
                 ((IList)Field.Value!).Add(stringValue);
                 SetValue(Field.Value);
+
+                _inputValue = null;
             }
             else
             {

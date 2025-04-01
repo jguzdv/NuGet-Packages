@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Runtime.InteropServices;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 using JGUZDV.DynamicForms.Serialization;
@@ -160,7 +161,10 @@ public record DateOnlyFieldType : FieldType
         {
             return dateOnly;
         }
-        throw new InvalidOperationException($"Could not parse string: {stringValue} into DateOnly.");
+        else
+        {
+            return JsonSerializer.Deserialize<DateOnly>(stringValue, DynamicFormsConfiguration.JsonSerializerOptions);
+        }
     }
 }
 

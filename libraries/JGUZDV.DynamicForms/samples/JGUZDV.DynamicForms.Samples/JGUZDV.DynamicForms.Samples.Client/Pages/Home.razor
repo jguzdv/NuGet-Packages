@@ -42,7 +42,6 @@ Welcome to your new app.
 
 <Modal @ref="_valueConfigModal" TModel="FieldDefinition">
     <Body>
-        <label>"EditFieldDefinition.ChoiceOptions</label>
         <ValueConfigurationForm @bind-FieldDefinition="context.Model"
                                 @bind-FieldDefinition:after="context.Modal.Accept">
         </ValueConfigurationForm>

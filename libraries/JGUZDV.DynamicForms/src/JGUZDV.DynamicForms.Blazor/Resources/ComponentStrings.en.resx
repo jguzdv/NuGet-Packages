@@ -117,6 +117,30 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ChoiceOptionInput.NewName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="ChoiceOptionInput.NewValue" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="ChoiceOptionInput.Save" xml:space="preserve">
+    <value>add</value>
+  </data>
+  <data name="EditChoiceOptions.Add" xml:space="preserve">
+    <value>New Choice</value>
+  </data>
+  <data name="EditChoiceOptions.Edit" xml:space="preserve">
+    <value>Edit Choices</value>
+  </data>
+  <data name="EditConstraints.Add" xml:space="preserve">
+    <value>add</value>
+  </data>
+  <data name="EditConstraints.Constraints" xml:space="preserve">
+    <value>Constraints</value>
+  </data>
+  <data name="EditConstraints.Select.Default" xml:space="preserve">
+    <value>please select</value>
+  </data>
   <data name="EditFieldDefinition.ChoiceOptions" xml:space="preserve">
     <value>Predefined values</value>
   </data>
@@ -129,6 +153,9 @@
   <data name="EditFieldDefinition.InputType" xml:space="preserve">
     <value>Input type</value>
   </data>
+  <data name="EditFieldDefinition.InvalidMetadata" xml:space="preserve">
+    <value>{0} is invalid</value>
+  </data>
   <data name="EditFieldDefinition.IsList" xml:space="preserve">
     <value>As list</value>
   </data>
@@ -140,6 +167,9 @@
   </data>
   <data name="EditFieldDefinition.Name" xml:space="preserve">
     <value>Name</value>
+  </data>
+  <data name="EditFieldDefinition.Save" xml:space="preserve">
+    <value>Save</value>
   </data>
   <data name="EditFieldDefinition.SelectType" xml:space="preserve">
     <value>please select</value>
@@ -162,7 +192,7 @@
   <data name="FileFieldInput.ValidationResults" xml:space="preserve">
     <value>Errors</value>
   </data>
-  <data name="EditFieldDefinition.InvalidMetadata" xml:space="preserve">
-    <value>{0} is invalid</value>
+  <data name="ValueConfigurationForm.ConfirmSwitch" xml:space="preserve">
+    <value>All previous configuration will be lost. Are you sure?</value>
   </data>
 </root>
