@@ -5,7 +5,7 @@
 <select class="form-control" @bind="_newConstraintString">
     @if (string.IsNullOrWhiteSpace(_newConstraintString))
     {
-        <option> select constraint type </option>
+        <option> @SL["EditConstraints.Select.Default"] </option>
     }
     @foreach (var constraintType in DynamicFormsConfiguration.GetConstraintTypes(FieldDefinition))
     {
@@ -19,7 +19,7 @@
         type="button"
         @onclick="AddNewConstraint"
         disabled="@string.IsNullOrWhiteSpace(_newConstraintString)">
-    add new Constraint
+    @SL["EditConstraints.Add"]
 </button>
 
 @*Current constraints*@

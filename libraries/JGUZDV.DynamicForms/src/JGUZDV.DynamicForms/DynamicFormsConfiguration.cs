@@ -54,6 +54,15 @@ namespace JGUZDV.DynamicForms
                     { new FileFieldType(), [typeof(FileSizeConstraint)] } // Added FileSizeConstraint
             };
 
+        private static HashSet<Type> _allConstraints = new()
+            {
+                typeof(RegexConstraint),
+                typeof(StringLengthConstraint),
+                typeof(RangeConstraint),
+                typeof(SizeConstraint),
+                typeof(FileSizeConstraint)
+            };
+
         /// <summary>
         /// Sets the allowed constraint types for a given FieldType.
         /// </summary>
@@ -67,6 +76,7 @@ namespace JGUZDV.DynamicForms
                 throw new InvalidOperationException("All constraint types must be of type Constraint");
             }
 
+            _allConstraints.UnionWith(constraintTypes);
             _fieldConstraints[fieldType] = constraintTypes;
         }
 
@@ -92,15 +102,6 @@ namespace JGUZDV.DynamicForms
             return result;
         }
 
-        /// <summary>
-        /// Gets the list of all distinct constraint types.
-        /// </summary>
-        /// <returns>The list of all distinct constraint types.</returns>
-        public static List<Type> GetConstraintTypes()
-        {
-            var types = _fieldConstraints.Values.SelectMany(x => x).Distinct().ToList();
-            return types;
-        }
 
         private static Dictionary<Type, L10nString> _constraintNames = new()
             {
@@ -151,9 +152,7 @@ namespace JGUZDV.DynamicForms
         /// <returns>The created constraint instance.</returns>
         public static Constraint Create(string typeName, FieldType fieldType)
         {
-            var constraintType = _fieldConstraints.Values
-                .SelectMany(x => x)
-                .Distinct()
+            var constraintType = _allConstraints
                 .First(x => x.Name == typeName);
 
             // TODO: check fieldType is allowed for constraint

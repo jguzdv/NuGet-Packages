@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json;
 
 using JGUZDV.Blazor.Components;
 using JGUZDV.DynamicForms;
@@ -33,8 +34,9 @@ builder.Services.ConfigureHttpJsonOptions(options =>
     options.SerializerOptions.PropertyNameCaseInsensitive = true;
 });
 
-builder.Services.AddScoped<ValueProvider>();
 builder.Services.AddToasts();
+
+builder.Services.AddDynamicForms();
 
 var app = builder.Build();
 
@@ -101,7 +103,7 @@ app.MapPost("api/documents/save", async (HttpRequest request, TestDbContext cont
         }
 
         var field = new Field(def);
-        field.Value = def.Type!.ConvertToValue(formField.Json);
+        field.Value = formField.ToFieldValue(def);
 
         var validationResults = field.Validate(new ValidationContext(field));
         if (validationResults.Any())
@@ -123,7 +125,7 @@ app.MapPost("api/documents/save", async (HttpRequest request, TestDbContext cont
         }
 
         var field = new Field(def);
-        
+
         field.Value = def.IsList
             ? fileGroup.Files
             : fileGroup.Files.First();

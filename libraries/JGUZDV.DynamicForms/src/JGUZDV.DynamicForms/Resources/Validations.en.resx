@@ -115,7 +115,7 @@
   <data name="InputDefinition.Label" xml:space="preserve">
     <value>Label ({0}) must be set</value>
   </data>
-  <data name="InputDefinition.Type" xml:space="preserve">
+  <data name="FieldDefinition.Type" xml:space="preserve">
     <value>Type must be set</value>
   </data>
 </root>

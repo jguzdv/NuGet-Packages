@@ -97,6 +97,30 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ChoiceOptionInput.NewName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="ChoiceOptionInput.NewValue" xml:space="preserve">
+    <value>Wert</value>
+  </data>
+  <data name="ChoiceOptionInput.Save" xml:space="preserve">
+    <value>hinzufügen</value>
+  </data>
+  <data name="EditChoiceOptions.Add" xml:space="preserve">
+    <value>Neue Wahlmöglichkeit</value>
+  </data>
+  <data name="EditChoiceOptions.Edit" xml:space="preserve">
+    <value>Wahlmöglichkeiten bearbeiten</value>
+  </data>
+  <data name="EditConstraints.Add" xml:space="preserve">
+    <value>hinzufügen</value>
+  </data>
+  <data name="EditConstraints.Constraints" xml:space="preserve">
+    <value>Einschränkungen</value>
+  </data>
+  <data name="EditConstraints.Select.Default" xml:space="preserve">
+    <value>bitte wählen</value>
+  </data>
   <data name="EditFieldDefinition.ChoiceOptions" xml:space="preserve">
     <value>Vorgegebene Werte</value>
   </data>
@@ -109,6 +133,9 @@
   <data name="EditFieldDefinition.InputType" xml:space="preserve">
     <value>Eingabetyp</value>
   </data>
+  <data name="EditFieldDefinition.InvalidMetadata" xml:space="preserve">
+    <value>{0} ist ungültig</value>
+  </data>
   <data name="EditFieldDefinition.IsList" xml:space="preserve">
     <value>Als Liste</value>
   </data>
@@ -120,6 +147,9 @@
   </data>
   <data name="EditFieldDefinition.Name" xml:space="preserve">
     <value>Name</value>
+  </data>
+  <data name="EditFieldDefinition.Save" xml:space="preserve">
+    <value>Speichern</value>
   </data>
   <data name="EditFieldDefinition.SelectType" xml:space="preserve">
     <value>Bitte wählen</value>
@@ -142,7 +172,7 @@
   <data name="FileFieldInput.ValidationResults" xml:space="preserve">
     <value>Fehler</value>
   </data>
-  <data name="EditFieldDefinition.InvalidMetadata" xml:space="preserve">
-    <value>{0} ist ungültig</value>
+  <data name="ValueConfigurationForm.ConfirmSwitch" xml:space="preserve">
+    <value>Beim Wechsel werden alle vorigen Einstellungen verworfen. Sind Sie sich sicher?</value>
   </data>
 </root>

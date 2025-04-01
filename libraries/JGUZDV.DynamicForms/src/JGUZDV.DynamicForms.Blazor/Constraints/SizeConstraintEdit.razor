@@ -26,7 +26,7 @@
     public required EventCallback<List<ValidationResult>> OnValidation { get; set; }
 
     [Inject]
-    public required StringLocalizer<ComponentStrings> SL { get; set; }
+    public required IStringLocalizer<ComponentStrings> SL { get; set; }
 
     private SizeConstraint _constraint => (SizeConstraint)Constraint!;
     private Guid _id = Guid.NewGuid();

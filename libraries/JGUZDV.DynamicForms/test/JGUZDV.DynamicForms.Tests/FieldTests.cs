@@ -126,14 +126,14 @@ namespace JGUZDV.DynamicForms.Tests
                 },
                 Type = GetFieldType("StringFieldType"),
                 Description = new L10nString { ["en"] = "Test Description" },
-                IsList = false,
+                IsList = true,
                 SortKey = 1,
                 IsRequired = true
             };
 
             var field = new Field(fieldDefinition)
             {
-                Value = "Test"
+                Value = new List<string> { "Test" }
             };
 
             var options = new JsonSerializerOptions
