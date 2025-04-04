@@ -121,7 +121,7 @@ public static class JGUZDVOpenTelemetryExtensions
     }
 
     /// <summary>
-    /// Validate and/or default the settings ConnectionString, ServiceNamespace, ServiceName and MeterName.
+    /// Validate and/or default the settings ConnectionString, ServiceNamespace, ServiceName, MeterName and MeterVersion.
     /// </summary>
     /// <param name="builder"></param>
     /// <param name="telemetryOptions"></param>
