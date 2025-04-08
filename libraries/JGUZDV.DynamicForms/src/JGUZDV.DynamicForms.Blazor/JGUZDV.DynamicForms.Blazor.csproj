@@ -7,7 +7,7 @@
 
         <PackageId>JGUZDV.DynamicForms.Blazor</PackageId>
         <IsPackable>true</IsPackable>
-        <Version>1.0.0-beta3</Version>
+        <Version>1.0.0-beta4</Version>
         <Authors>Aaron Puhl</Authors>
         <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
         <PackageDescription>Blazor component library for DynamicForms.</PackageDescription>

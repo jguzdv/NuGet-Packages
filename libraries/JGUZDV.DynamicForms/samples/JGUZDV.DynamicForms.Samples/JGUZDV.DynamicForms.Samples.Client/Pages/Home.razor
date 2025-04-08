@@ -24,8 +24,9 @@ Welcome to your new app.
         <FieldDefinitionForm @bind-FieldDefinition="context.Model"
                              @bind-FieldDefinition:after="() => {
                                 _fieldDefinitions.Add(context.Model);
-                                context.Modal.Accept();}
-        ">
+                                context.Modal.Accept();}"
+                             SubmitLabel="Validieren"
+        >
         </FieldDefinitionForm>
     </ModalBody>
 

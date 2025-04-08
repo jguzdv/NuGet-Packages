@@ -41,9 +41,9 @@
     <div class="mb-2">
         <label for="type">@SL["EditFieldDefinition.Type"]</label>
         <select id="type"
-                value="@FieldDefinition.Type?.ToJson()"
-                @onchange="HandleTypeChanged"
-                class="form-select">
+        value="@FieldDefinition.Type?.ToJson()"
+        @onchange="HandleTypeChanged"
+        class="form-select">
             @if (FieldDefinition.Type == null)
             {
                 <option value="" selected>@SL["EditFieldDefinition.SelectType"]</option>
@@ -60,8 +60,8 @@
         <div class="mb-2">
             <label for="metadata">@_metadataLabel</label>
             <select id="metadata"
-                    class="form-select"
-                    @bind="FieldDefinition.Metadata">
+            class="form-select"
+            @bind="FieldDefinition.Metadata">
                 @if (string.IsNullOrWhiteSpace(FieldDefinition.Metadata))
                 {
                     //TODO: Change key
@@ -96,8 +96,10 @@
     </div>
 
     <button type="submit"
-            class="btn btn-primary">
-        @SL["EditFieldDefinition.Save"]
+    class="btn btn-primary">
+        @(string.IsNullOrWhiteSpace(SubmitLabel)
+                ? SL["EditFieldDefinition.Save"]
+                : SubmitLabel)
     </button>
 </EditForm>
 
@@ -107,6 +109,9 @@
 
     [Parameter]
     public EventCallback<FieldDefinition> FieldDefinitionChanged { get; set; }
+
+    [Parameter]
+    public string? SubmitLabel { get; set; }
 
     private List<ChoiceOption>? _metadataChoices = null;
     private string _metadataLabel = "";
