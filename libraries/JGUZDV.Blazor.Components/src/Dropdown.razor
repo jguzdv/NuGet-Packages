@@ -1,5 +1,5 @@
 <div class="dropdown">
-    @DropdownToggle!.Invoke($"dropdown-toggle-{_guid}")
+    @_dropdownToggle!.Invoke($"dropdown-toggle-{_guid}")
 
     <input type="checkbox" id="dropdown-toggle-@_guid" class="dropdown-toggle d-none" />
     <div class="dropdown-menu @DropDownMenuClass">
@@ -9,6 +9,7 @@
 
 @code {
     private string _guid = Guid.NewGuid().ToString();
+    private RenderFragment<string>? _dropdownToggle;
 
     /// <summary>
     /// When set, this will be used as dropdown toggle. The argument is the id of the checkbox that toggles the dropdown visibility.
@@ -44,10 +45,15 @@
 
         if (DropdownLabelContent != null)
         {
-            DropdownToggle = (labelId) =>
+            _dropdownToggle = (labelId) =>
                 @<label for="@labelId" aria-haspopup="true">
                     @DropdownLabelContent
-                </label>;
+                </label>
+    ;
+        }
+        else
+        {
+            _dropdownToggle = DropdownToggle;
         }
     }
 }
