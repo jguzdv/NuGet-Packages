@@ -16,8 +16,8 @@ You can configure your schedules in the **appsettings.json**. The default sectio
 ```
 
 ### OpenTelemetry configuration
-Since OpenTelemetry is added automatically within the **JobHost.CreateJobHostBuilder()** method through [JGUZDV.Extensions.OpenTelemetry](https://github.com/jguzdv/NuGet-Packages/tree/main/libraries/JGUZDV.Extensions.OpenTelemetry/src).
-The **appsettings.json** has to have a "OpenTelemetry" section that looks like this:
+If you wish to use OpenTelemetry within your application you can define a section in your **appsettings.json** named "OpenTelemetry" that looks as follows:
+Since OpenTelemetry is added automatically within the **JobHost.CreateJobHostBuilder()** method through .
 
 ``` json
   ...
@@ -34,12 +34,15 @@ The **appsettings.json** has to have a "OpenTelemetry" section that looks like t
   },
   ...
 ```
+This Example shows the full difinition of the "OpenTelemetry" section.
+If you wish to see a more detailed explanation, please refer to the [JGUZDV.Extensions.OpenTelemetry](https://github.com/jguzdv/NuGet-Packages/tree/main/libraries/JGUZDV.Extensions.OpenTelemetry/src) NuGet-Package.
+
 
 ## Usage
 Your jobs must implement the **IJob** interface from **Quartz.net**.
 To use JGUZDV.JobHost, you can create an HostApplicationBuilder and register jobs with a cron schedule. 
 The jobs will be executed in the background as part of a Windows service.
-In addition to that, you need to implement a service that inherits from JGUZDVBaseMeter and register it as a singleton, as shown in [JGUZDV.Extensions.OpenTelemetry](https://github.com/jguzdv/NuGet-Packages/tree/main/libraries/JGUZDV.Extensions.OpenTelemetry/src).
+If you wish to use metrics, you need to implement a service that inherits from JGUZDVBaseMeter and register it as a singleton, as shown in [JGUZDV.Extensions.OpenTelemetry](https://github.com/jguzdv/NuGet-Packages/tree/main/libraries/JGUZDV.Extensions.OpenTelemetry/src).
 
 Here's a basic example:
 
