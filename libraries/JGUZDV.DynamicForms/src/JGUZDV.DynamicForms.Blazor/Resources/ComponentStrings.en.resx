@@ -130,7 +130,10 @@
     <value>New Choice</value>
   </data>
   <data name="EditChoiceOptions.Edit" xml:space="preserve">
-    <value>Edit Choices</value>
+    <value>Choices</value>
+  </data>
+  <data name="EditChoiceOptions.InvalidValue" xml:space="preserve">
+    <value>Value can not be converted to target type</value>
   </data>
   <data name="EditConstraints.Add" xml:space="preserve">
     <value>add</value>

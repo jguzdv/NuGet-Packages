@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json;
 
 using JGUZDV.DynamicForms.Resources;
 using JGUZDV.L10n;
@@ -144,6 +145,34 @@ public class FieldDefinition : IValidatableObject
     /// Gets or sets the type of the field.
     /// </summary>
     public FieldType? Type { get; set; }
+
+
+    /// <summary>
+    /// Copies the properties from another <see cref="FieldDefinition"/> instance to this instance.
+    /// </summary>
+    /// <param name="other"></param>
+    public void CopyFrom(FieldDefinition other)
+    {
+        foreach (var prop in GetType().GetProperties())
+        {
+            if (prop.CanWrite && prop.CanRead)
+            {
+                var value = prop.GetValue(other);
+                prop.SetValue(this, value);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Deep Copy of the field definition.
+    /// </summary>
+    /// <returns></returns>
+    public FieldDefinition Copy()
+    {
+        return JsonSerializer.Deserialize<FieldDefinition>(
+            JsonSerializer.Serialize(this, DynamicFormsConfiguration.JsonSerializerOptions),
+            DynamicFormsConfiguration.JsonSerializerOptions)!;
+    }
 
     /// <summary>
     /// Validates the field definition without checking the optional constraints and choice options.

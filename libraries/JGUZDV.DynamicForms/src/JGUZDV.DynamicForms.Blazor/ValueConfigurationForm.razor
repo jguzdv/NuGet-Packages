@@ -1,4 +1,5 @@
 ﻿@using JGUZDV.Blazor.Components.Modals
+@using JGUZDV.DynamicForms.Blazor.ChoicOptionComponents
 @using JGUZDV.DynamicForms.Blazor.ConstraintComponents
 @using JGUZDV.DynamicForms.Model
 
@@ -8,15 +9,15 @@
 
     <div class="d-flex btn-group pb-3" role="group">
         <button type="button"
-        class="col-6 btn @(!_isChoiceOptionMode ? "btn-primary" : "btn-outline-primary")"
-        disabled="@(!_isChoiceOptionMode)"
-        @onclick="HandleValueSwitch">
+                class="col-6 btn @(!_isChoiceOptionMode ? "btn-primary" : "btn-outline-primary")"
+                disabled="@(!_isChoiceOptionMode)"
+                @onclick="HandleValueSwitch">
             @SL["Werte einschränken"]
         </button>
         <button type="button"
-        class="col-6 btn @(_isChoiceOptionMode ? "btn-primary" : "btn-outline-primary")"
-        disabled="@(_isChoiceOptionMode)"
-        @onclick="HandleValueSwitch">
+                class="col-6 btn @(_isChoiceOptionMode ? "btn-primary" : "btn-outline-primary")"
+                disabled="@(_isChoiceOptionMode)"
+                @onclick="HandleValueSwitch">
             @SL["Werte vorgeben"]
         </button>
     </div>
@@ -25,13 +26,13 @@
     {
         <h3 class="h5">@SL["Einschränkung hinzufügen"]</h3>
         <EditConstraints @bind-FieldDefinition="FieldDefinition"
-        @bind-FieldDefinition:after="() => {}">
+                         @bind-FieldDefinition:after="() => {}">
         </EditConstraints>
     }
     else
     {
         <EditChoiceOptions @bind-Field="FieldDefinition"
-        @bind-Field:after="() => {}">
+                           @bind-Field:after="() => {}">
         </EditChoiceOptions>
     }
     <ValidationSummary />
@@ -43,12 +44,12 @@
 </EditForm>
 
 <ModalConfirmation @ref="@_confirmationModal"
-AcceptText="Yes"
-DenyText="No"></ModalConfirmation>
+                   AcceptText="Yes"
+                   DenyText="No"></ModalConfirmation>
 
 @code {
-    private bool _isChoiceOptionMode = true;
-    private EditForm _editForm;
+    private bool _isChoiceOptionMode;
+    private EditForm? _editForm;
 
     private ModalConfirmation? _confirmationModal;
 
@@ -90,7 +91,7 @@ DenyText="No"></ModalConfirmation>
             FieldDefinition.Constraints.Clear();
         }
 
-        _editForm.EditContext?.NotifyValidationStateChanged();
+        _editForm?.EditContext?.NotifyValidationStateChanged();
 
         _isChoiceOptionMode = !_isChoiceOptionMode;
     }

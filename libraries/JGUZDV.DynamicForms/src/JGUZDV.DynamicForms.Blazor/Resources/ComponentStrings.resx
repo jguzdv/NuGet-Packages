@@ -110,7 +110,10 @@
     <value>Neue Wahlmöglichkeit</value>
   </data>
   <data name="EditChoiceOptions.Edit" xml:space="preserve">
-    <value>Wahlmöglichkeiten bearbeiten</value>
+    <value>Wahlmöglichkeiten</value>
+  </data>
+  <data name="EditChoiceOptions.InvalidValue" xml:space="preserve">
+    <value>Wert kann nicht in Zieltyp übersetzt werden</value>
   </data>
   <data name="EditConstraints.Add" xml:space="preserve">
     <value>hinzufügen</value>
