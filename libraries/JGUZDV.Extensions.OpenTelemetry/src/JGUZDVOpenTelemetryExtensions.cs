@@ -41,14 +41,19 @@ public static class JGUZDVOpenTelemetryExtensions
             // getting 'OpenTelemetry' section and from appsettings
             var telemetrySettings = builder.Configuration.GetSection("OpenTelemetry");
 
-            // 'OpenTelemetry' section is required for configuration
+            // Its okay if there is no 'OpenTelemetry' settings node, but we will display a warning because this may not be indended.
             if (!telemetrySettings.Exists())
-                throw new ArgumentException("'OpenTelemetry' section is required for OpenTelemetry configuration.");
+            {
+                logger?.LogWarning("The JGUZDV OpenTelemetry library is included, but there are no settings to configure it. No telemetry will be sent.");
+                return builder;
+            }
 
-            // 'ConnectionString' is required for further configuration of OpenTelemetry
+            // 'ConnectionString' is absolutley required for further configuration of OpenTelemetry therefore we throw an exception if the 'OpenTelemetry' section is present without a ConnectionString.
+            // @see also ValidateAndSetDefaults(...)
             if (string.IsNullOrWhiteSpace(telemetrySettings.GetValue<string>("AzureMonitor:ConnectionString")))
                 throw new ArgumentException("Found 'OpenTelemetry' settings section, but no 'AzureMonitor:ConnectionString' setting is provided.");
 
+            // defining options since app is not built yet
             var telemetryOptions = telemetrySettings.Get<JGUZDVOpenTelemetryOptions>()
                 ?? throw new ArgumentException("Cannot bind JGUZDVOpenTelemetryOptions.");
 
@@ -66,28 +71,36 @@ public static class JGUZDVOpenTelemetryExtensions
 
             // Add the OpenTelemetry telemetry service to the application.
             // This service will collect and send telemetry data to Azure Monitor.
-            builder.Services.AddOpenTelemetry()
-                .WithTracing(tracing =>
-                {
-                    tracing.AddHttpClientInstrumentation()
-                        .AddAzureMonitorTraceExporter(options =>
-                        {
-                            options.ConnectionString = telemetryOptions.AzureMonitor.ConnectionString;
-                        });
-                    logger?.LogInformation("JGUZDV OpenTelemetry: Added tracing with HttpClient instrumentation.");
-                })
-                .WithMetrics(metrics =>
+            var telemetryBuilder = builder.Services.AddOpenTelemetry();
+
+            telemetryBuilder.WithTracing(tracing =>
+            {
+                tracing.AddHttpClientInstrumentation()
+                    .AddAzureMonitorTraceExporter(options =>
+                    {
+                        options.ConnectionString = telemetryOptions.AzureMonitor.ConnectionString;
+                    });
+                logger?.LogInformation("JGUZDV OpenTelemetry: Added tracing with HttpClient instrumentation.");
+            });
+
+            // adding metrics support if 'UseMetrics' section is specified
+            if (telemetryOptions.UseMeter != null)
+            {
+                telemetryBuilder.WithMetrics(metrics =>
                 {
                     metrics.AddHttpClientInstrumentation()
                         .AddAzureMonitorMetricExporter(options =>
                         {
                             options.ConnectionString = telemetryOptions.AzureMonitor.ConnectionString;
                         })
-                        .AddMeter(telemetryOptions.Metrics!.MeterName);
+                        .AddMeter(telemetryOptions.UseMeter!.MeterName);
                 });
 
-            logger?.LogInformation("JGUZDV OpenTelemetry: UseMeter active. Initialized a meter with " +
-                $"name {telemetryOptions.Metrics!.MeterName}");
+                logger?.LogInformation("JGUZDV OpenTelemetry: UseMeter active. Initialized a meter with " +
+                    $"name {telemetryOptions.UseMeter!.MeterName}");
+            }
+            else
+                logger?.LogInformation("JGUZDV OpenTelemetry: UseMeter not active. No metrics will be sent.");
 
             // Configure OpenTelemetry trace provider to use custom ResourceBuilder wich adds our own
             // attributes to all signals.
@@ -148,13 +161,6 @@ public static class JGUZDVOpenTelemetryExtensions
                 throw new ArgumentException("Found OpenTelemetry appsettings section, but no " +
                     "setting 'ServiceName' is provided and no default application name was found in host environment.");
         }
-
-        if (telemetryOptions.Metrics == null)
-            throw new ArgumentException("Found 'OpenTelemetry' configuration for metrics, but 'Metrics' is not provided!");
-
-        if (string.IsNullOrWhiteSpace(telemetryOptions.Metrics.MeterName)
-                || string.IsNullOrWhiteSpace(telemetryOptions.Metrics.MeterVersion))
-            throw new ArgumentException("'UseMeter:MeterName' and 'UseMeter:MeterVersion' need to be set to reasonable values.");
     }
 }
 
