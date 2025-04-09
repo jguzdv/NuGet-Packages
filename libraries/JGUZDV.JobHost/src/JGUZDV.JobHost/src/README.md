@@ -37,3 +37,7 @@ class Program
     }
 }
 ```
+
+### OpenTelemetry
+This Package automatically adds OpenTelemetry to the background service using [JGUZDV.Extensions.OpenTelemetry](https://github.com/jguzdv/NuGet-Packages/tree/shabani/main/libraries/JGUZDV.Extensions.OpenTelemetry/src). Therefore a "OpenTelemetry" section is required within the appsettings.json.
+Refer to **JGUZDV.Extensions.OpenTelemetry**s README for further details on how to configure and use OpenTelemetry.
