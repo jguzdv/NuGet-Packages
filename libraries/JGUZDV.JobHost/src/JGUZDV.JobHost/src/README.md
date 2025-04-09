@@ -9,10 +9,16 @@ You can configure your schedules in the **appsettings.json**. The default sectio
   "HostedJobs": {
     "MyJob": "* * * * * ?",
     "MyJob2": "* 0/5 * * * ?",
-    "MyJob3": "false" //this prevents the job from being registered e.g. for appsettings.development.json
+    "MyJob3": "false", //this prevents the job from being registered e.g. for appsettings.development.json
+    "DisableDevelopmentJobSelection": "true" // optional: disables the job selestion screen and runs the jobs with the given schedule in appsettings.Development.json
   }
 }
 ```
+
+### OpenTelemetry configuration
+This Package automatically adds OpenTelemetry to the background service using [JGUZDV.Extensions.OpenTelemetry](https://github.com/jguzdv/NuGet-Packages/tree/main/libraries/JGUZDV.Extensions.OpenTelemetry/src). Therefore a "OpenTelemetry" section is required within the **appsettings.json**.
+Refer to **JGUZDV.Extensions.OpenTelemetry**'s README for further details on how to correctly configure and use OpenTelemetry.
+
 ## Usage
 Your jobs must implement the **IJob** interface from **Quartz.net**.
 To use JGUZDV.JobHost, you can create an IHostBuilder and register jobs with a cron schedule. 
@@ -37,7 +43,3 @@ class Program
     }
 }
 ```
-
-### OpenTelemetry
-This Package automatically adds OpenTelemetry to the background service using [JGUZDV.Extensions.OpenTelemetry](https://github.com/jguzdv/NuGet-Packages/tree/main/libraries/JGUZDV.Extensions.OpenTelemetry/src). Therefore a "OpenTelemetry" section is required within the appsettings.json.
-Refer to **JGUZDV.Extensions.OpenTelemetry**s README for further details on how to configure and use OpenTelemetry.
