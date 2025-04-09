@@ -16,13 +16,30 @@ You can configure your schedules in the **appsettings.json**. The default sectio
 ```
 
 ### OpenTelemetry configuration
-This Package automatically adds OpenTelemetry to the background service using [JGUZDV.Extensions.OpenTelemetry](https://github.com/jguzdv/NuGet-Packages/tree/main/libraries/JGUZDV.Extensions.OpenTelemetry/src). Therefore a "OpenTelemetry" section is required within the **appsettings.json**.
-Refer to **JGUZDV.Extensions.OpenTelemetry**'s README for further details on how to correctly configure and use OpenTelemetry.
+Since OpenTelemetry is added automatically within the **JobHost.CreateJobHostBuilder()** method through [JGUZDV.Extensions.OpenTelemetry](https://github.com/jguzdv/NuGet-Packages/tree/main/libraries/JGUZDV.Extensions.OpenTelemetry/src).
+The **appsettings.json** has to have a "OpenTelemetry" section that looks like this:
+
+``` json
+  ...
+  "OpenTelemetry": {
+    "AzureMonitor": {
+      "ConnectionString": "<AzureMonitorConnectionString>"
+    },
+    "ServiceNamespace": "<AppNamespace>",
+    "ServiceName": "<AppName>",
+    "Metrics": {
+      "MeterName": "<AppMeterName>",
+      "MeterVersion": "<AppMeterVersion>"
+    }
+  },
+  ...
+```
 
 ## Usage
 Your jobs must implement the **IJob** interface from **Quartz.net**.
-To use JGUZDV.JobHost, you can create an IHostBuilder and register jobs with a cron schedule. 
+To use JGUZDV.JobHost, you can create an HostApplicationBuilder and register jobs with a cron schedule. 
 The jobs will be executed in the background as part of a Windows service.
+In addition to that, you need to implement a service that inherits from JGUZDVBaseMeter and register it as a singleton, as shown in [JGUZDV.Extensions.OpenTelemetry](https://github.com/jguzdv/NuGet-Packages/tree/main/libraries/JGUZDV.Extensions.OpenTelemetry/src).
 
 Here's a basic example:
 
@@ -37,9 +54,12 @@ class Program
         var host = JobHost.CreateJobHostBuilder(args, configureWindowsService, quartzHostedServiceOptions)
             .AddHostedJob<MyJob>() // with the configuration above the job runs every second
             .AddHostedJob<MyJob2>() // with the configuration above the job runs every 5 minutes (at 0, 5, 10, 15.... etc Minutes)
-            .Build();
+            
+        host.Services.AddSingleton<MeterContainer>(); // as shown in the JGUZDV.Extensions.OpenTelemetry example
+            
+        var app = host.Build();
 
-        _ = host.RunAsync();
+        _ = app.RunAsync();
     }
 }
 ```
