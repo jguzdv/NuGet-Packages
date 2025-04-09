@@ -21,7 +21,8 @@ Host.CreateApplicationBuilder()
 
 ## Configuration
 
-These required configuration settings should be configured in your appsettings.json using the follwing example:
+Basic configuration settings to initialize the services should be configured as 
+in the following example in your appsettings (root level):
 
 ~~~ JSON
   ...
@@ -39,15 +40,18 @@ These required configuration settings should be configured in your appsettings.j
   ...
 ~~~
 
-**Explanation:** Since this Extension is primarily aimed at ETL processes, for which sending metrics is essential, the "OpenTelemetry" section as well as all the parameters are required.
-ServiceNamespace should describe a summarizing border or boundary, and ServiceName should be the concrete and unique name of the application. 
+**Explanation:** If no "OpenTelemetry" section can be found, nothing will happen at all. 
+If such a section is present, the included parameters will be checked.
+ConnectionString is obviously a mandatory config parameter. 
+WebAppNamespace should describe a summarizing border or boundary, and WebAppName should be the concrete and unique name of the WebApp. 
 The name and namespace parameters should be about 10 to 15 characters, the strings should not include any whitespace or special characters.
+The section "UseMeter" is optional, but if it is present, the two inner fields are mandatory.
 
 ## Meter
 
-Since configuring a meter is required, this section details how to implement the necessary services to report metrics.
+If you wish to send metrics for your application follow these steps:
 
-**Steps:**
+- Configure "OpenTelemetry:UseMetrics" section in **appsettings.json**
 - Implement a service inheriting from JGUZDVBaseMeter
 - Add the service to the service container as singleton
 

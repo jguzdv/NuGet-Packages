@@ -27,7 +27,14 @@ public abstract class JGUZDVBaseMeter
     {
         _telemetryOptions = options;
 
-        Meter = new Meter(_telemetryOptions.Value.Metrics!.MeterName, options.Value.Metrics!.MeterVersion);
+        if (_telemetryOptions.Value.UseMeter == null)
+            throw new ArgumentException("Can only be used if UseMeter is completly configured in appsettings.");
+
+        if (string.IsNullOrWhiteSpace(_telemetryOptions.Value.UseMeter.MeterName)
+                || string.IsNullOrWhiteSpace(_telemetryOptions.Value.UseMeter.MeterVersion))
+            throw new ArgumentException("MeterName and MeterVersion must be set to reasonable values.");
+
+        Meter = new Meter(_telemetryOptions.Value.UseMeter.MeterName, _telemetryOptions.Value.UseMeter.MeterVersion);
     }
 }
 
