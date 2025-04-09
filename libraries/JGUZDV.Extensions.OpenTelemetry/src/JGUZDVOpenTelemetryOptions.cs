@@ -11,7 +11,7 @@ public class JGUZDVOpenTelemetryOptions
     public OpenTelemetryAzureMonitorOptions AzureMonitor { get; set; } = default!;
 
     /// <summary>
-    /// Mandatory. A namespace string representing the running application.
+    /// Optional. A namespace string representing the running application. Falls back to builder.Environment.ApplicationName.
     /// </summary>
     public string ServiceNamespace { get; set; } = default!;
 
@@ -21,9 +21,9 @@ public class JGUZDVOpenTelemetryOptions
     public string? ServiceName { get; set; } = default!;
 
     /// <summary>
-    /// Optional. Configures a basic env for metrics and creates a basic meter instance.
+    /// Mandatory. Configures a basic env for metrics and creates a basic meter instance.
     /// </summary>
-    public OpenTelemetryUseMeterOptions? UseMeter { get; set; } = default!;
+    public OpenTelemetryMetricsOptions? Metrics { get; set; } = default!;
 }
 
 /// <summary>
@@ -38,11 +38,11 @@ public class OpenTelemetryAzureMonitorOptions
 }
 
 /// <summary>
-/// Mandatory. UseMeter options to configure a Meter. A Meter is used to directly transfer
+/// Mandatory. Metrics options to configure a Meter. A Meter is used to directly transfer
 /// telemetry - like statistics, volume data or quantity structures.
 /// All inner properties are mandatory as well.
 /// </summary>
-public class OpenTelemetryUseMeterOptions
+public class OpenTelemetryMetricsOptions
 {
     /// <summary>
     /// The name of the meter that will be added.

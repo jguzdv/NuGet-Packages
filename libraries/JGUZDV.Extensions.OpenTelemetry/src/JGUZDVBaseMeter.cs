@@ -27,7 +27,7 @@ public abstract class JGUZDVBaseMeter
     {
         _telemetryOptions = options;
 
-        Meter = new Meter(_telemetryOptions.Value.UseMeter!.MeterName, options.Value.UseMeter!.MeterVersion);
+        Meter = new Meter(_telemetryOptions.Value.Metrics!.MeterName, options.Value.Metrics!.MeterVersion);
     }
 }
 

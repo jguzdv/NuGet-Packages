@@ -29,17 +29,17 @@ These required configuration settings should be configured in your appsettings.j
     "AzureMonitor": {
       "ConnectionString": "<AzureMonitorConnectionString>"
     },
-    "ServiceNamespace": "<WebAppNamespace>",
-    "ServiceName": "<WebAppName>",
-    "UseMeter": {
-      "MeterName": "<WebAppMeterName>",
-      "MeterVersion": "<WebAppMeterVersion>"
+    "ServiceNamespace": "<AppNamespace>",
+    "ServiceName": "<AppName>",
+    "Metrics": {
+      "MeterName": "<AppMeterName>",
+      "MeterVersion": "<AppMeterVersion>"
     }
   },
   ...
 ~~~
 
-**Explenation:** Since this Extension is primarily aimed at ETL processes, for which sending metrics is essential, the "OpenTelemetry" section as well as all the parameters are required.
+**Explanation:** Since this Extension is primarily aimed at ETL processes, for which sending metrics is essential, the "OpenTelemetry" section as well as all the parameters are required.
 ServiceNamespace should describe a summarizing border or boundary, and ServiceName should be the concrete and unique name of the application. 
 The name and namespace parameters should be about 10 to 15 characters, the strings should not include any whitespace or special characters.
 
