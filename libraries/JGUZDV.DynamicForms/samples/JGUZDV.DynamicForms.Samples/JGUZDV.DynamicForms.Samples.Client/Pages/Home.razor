@@ -44,8 +44,8 @@ Welcome to your new app.
 
 <Modal @ref="_valueConfigModal" TModel="FieldDefinition">
     <Body>
-        <ValueConfigurationForm @bind-FieldDefinition="context.Model"
-                                @bind-FieldDefinition:after="context.Modal.Accept">
+        <ValueConfigurationForm @bind-_fieldDefinition="context.Model"
+                                @bind-_fieldDefinition:after="context.Modal.Accept">
         </ValueConfigurationForm>
     </Body>
 </Modal>

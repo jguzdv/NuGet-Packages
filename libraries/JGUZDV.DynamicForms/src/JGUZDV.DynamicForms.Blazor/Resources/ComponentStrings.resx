@@ -178,4 +178,7 @@
   <data name="ValueConfigurationForm.ConfirmSwitch" xml:space="preserve">
     <value>Beim Wechsel werden alle vorigen Einstellungen verworfen. Sind Sie sich sicher?</value>
   </data>
+  <data name="ValueConfigurationForm.Ok" xml:space="preserve">
+    <value>übernehmen</value>
+  </data>
 </root>
