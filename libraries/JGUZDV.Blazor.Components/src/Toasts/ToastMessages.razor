@@ -32,12 +32,12 @@
     /// <summary>
     /// Dissmisses the toast message.
     /// </summary>
-    public async Task DismissToast(ToastMessage toast)
+    public void DismissToast(ToastMessage toast)
     {
         Toasts.Remove(toast);
         if (Toasts.Count == 0 && _jsModule is not null)
         {
-            await _jsModule.InvokeVoidAsync("hideToastContainer", EffectiveComponentId);
+            _ = _jsModule.InvokeVoidAsync("hideToastContainer", EffectiveComponentId);
         }
 
         StateHasChanged();
@@ -46,18 +46,23 @@
     /// <summary>
     /// Creates and shows a new toast message from the parameters
     /// </summary>
-    public async Task Show(ToastLevel toastLevel, string message, string? title)
-        => Show(new ToastMessage(toastLevel, message, title));
+    public ToastMessage Show(ToastLevel toastLevel, string message, string? title)
+    {
+        var toastMessage = new ToastMessage(toastLevel, message, title);
+        Show(toastMessage);
+
+        return toastMessage;
+    }
 
     /// <summary>
     /// Shows the given toast message.
     /// </summary>
-    public async Task Show(ToastMessage toast)
+    public void Show(ToastMessage toast)
     {
         Toasts.Add(toast);
         if (_jsModule is not null)
         {
-            await _jsModule.InvokeVoidAsync("showToastContainer", EffectiveComponentId);
+            _ = _jsModule.InvokeVoidAsync("showToastContainer", EffectiveComponentId);
         }
         StateHasChanged();
     }
