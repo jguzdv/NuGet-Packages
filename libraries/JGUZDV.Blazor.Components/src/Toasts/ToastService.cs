@@ -1,5 +1,6 @@
 ﻿namespace JGUZDV.Blazor.Components.Toasts
 {
+    [Obsolete("Use ToastMessages component as a ref with .Show() instead.")]
     public class ToastService : IToastService
     {
         private readonly List<ToastMessage> _toasts = new();
