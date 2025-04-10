@@ -16,7 +16,7 @@
         
         <ProjectReference Include="..\src\JGUZDV.Extensions.Authorization.csproj" />
         
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.3" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.4" />
         <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.0" />
         <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.0" />
