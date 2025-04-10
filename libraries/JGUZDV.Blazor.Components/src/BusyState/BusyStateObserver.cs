@@ -15,6 +15,7 @@ public class BusyStateObserver
     /// Raised when the busy state changes.
     /// </summary>
     public EventCallback<BusyState> BusyStateChanged { get; set; }
+    public BusyState CurrentState => _busyState;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BusyStateObserver"/> class.
