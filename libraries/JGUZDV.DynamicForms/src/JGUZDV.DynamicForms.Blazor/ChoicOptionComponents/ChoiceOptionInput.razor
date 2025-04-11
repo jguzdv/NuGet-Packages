@@ -1,0 +1,33 @@
+﻿@using JGUZDV.DynamicForms.Blazor.Resources
+@using JGUZDV.DynamicForms.Model
+
+
+<label for="@_guid">@SL["ChoiceOptionInput.NewValue"]</label>
+<input id="@_guid"
+       name="AllowedValue@_guid"
+       class="form-control"
+       @bind="@ChoiceOption.Value"
+       @bind:after="() => ChoiceOptionChanged.InvokeAsync(ChoiceOption)" />
+
+<div class="pt-1">
+    <label for="AllowedValueName@_guid">@SL["ChoiceOptionInput.NewName"]</label>
+    <JGUZDV.Blazor.Components.L10n.L10nEditor 
+        @bind-L10n="ChoiceOption.Name"
+        @bind-L10n:after="() => ChoiceOptionChanged.InvokeAsync(ChoiceOption)"/>
+</div>
+
+
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public ChoiceOption ChoiceOption { get; set; } = default!;
+
+    [Parameter]
+    public EventCallback<ChoiceOption> ChoiceOptionChanged { get; set; }
+
+    [Inject]
+    public required IStringLocalizer<ComponentStrings> SL { get; set; }
+
+    private Guid _guid = Guid.NewGuid();
+}

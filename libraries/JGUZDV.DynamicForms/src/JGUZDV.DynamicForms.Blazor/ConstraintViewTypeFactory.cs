@@ -1,4 +1,4 @@
-﻿using JGUZDV.DynamicForms.Blazor.Constraints;
+﻿using JGUZDV.DynamicForms.Blazor.ConstraintComponents;
 using JGUZDV.DynamicForms.Model;
 
 namespace JGUZDV.DynamicForms.Blazor

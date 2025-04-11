@@ -2,6 +2,7 @@
 @using JGUZDV.Blazor.Components.Modals
 @using JGUZDV.Blazor.Components.Toasts
 @using JGUZDV.DynamicForms.Blazor
+@using JGUZDV.DynamicForms.Blazor.FieldDefinitionComponents
 @using JGUZDV.DynamicForms.Model
 @using System.Text.Json
 @using JGUZDV.DynamicForms.Serialization
@@ -24,8 +25,9 @@ Welcome to your new app.
         <FieldDefinitionForm @bind-FieldDefinition="context.Model"
                              @bind-FieldDefinition:after="() => {
                                 _fieldDefinitions.Add(context.Model);
-                                context.Modal.Accept();}
-        ">
+                                context.Modal.Accept();}"
+                             SubmitLabel="Validieren"
+        >
         </FieldDefinitionForm>
     </ModalBody>
 
@@ -52,10 +54,10 @@ Welcome to your new app.
 {
     <div class="my-2">
         <div>
-            <button class="btn btn-outline-secondary" @onclick="() => _editModal.ShowModal(item)">
+            <button class="btn btn-outline-secondary" @onclick="() => _editModal!.ShowModal(item)">
                 edit
             </button>
-            <button class="btn btn-outline-secondary" @onclick="() => _valueConfigModal.ShowModal(item)">
+            <button class="btn btn-outline-secondary" @onclick="() => _valueConfigModal!.ShowModal(item)">
                 config values
             </button>
         </div>

@@ -1,56 +1,70 @@
 ﻿@using JGUZDV.Blazor.Components.Modals
-@using JGUZDV.DynamicForms.Blazor.Constraints
+@using JGUZDV.DynamicForms.Blazor.ChoicOptionComponents
+@using JGUZDV.DynamicForms.Blazor.ConstraintComponents
 @using JGUZDV.DynamicForms.Model
 
-<EditForm @ref="_editForm" Model="FieldDefinition" OnValidSubmit="() => FieldDefinitionChanged.InvokeAsync(FieldDefinition)">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
+<div class="d-flex btn-group pb-3" role="group">
+    <button type="button"
+    class="col-6 btn @(!_isChoiceOptionMode ? "btn-primary" : "btn-outline-primary")"
+    disabled="@(!_isChoiceOptionMode)"
+    @onclick="HandleValueSwitch">
+        @SL["Werte einschränken"]
+    </button>
+    <button type="button"
+    class="col-6 btn @(_isChoiceOptionMode ? "btn-primary" : "btn-outline-primary")"
+    disabled="@(_isChoiceOptionMode)"
+    @onclick="HandleValueSwitch">
+        @SL["Werte vorgeben"]
+    </button>
+</div>
 
-    <div class="d-flex btn-group pb-3" role="group">
-        <button type="button"
-        class="col-6 btn @(!_isChoiceOptionMode ? "btn-primary" : "btn-outline-primary")"
-        disabled="@(!_isChoiceOptionMode)"
-        @onclick="HandleValueSwitch">
-            @SL["Werte einschränken"]
-        </button>
-        <button type="button"
-        class="col-6 btn @(_isChoiceOptionMode ? "btn-primary" : "btn-outline-primary")"
-        disabled="@(_isChoiceOptionMode)"
-        @onclick="HandleValueSwitch">
-            @SL["Werte vorgeben"]
-        </button>
-    </div>
 
-    @if (!_isChoiceOptionMode)
-    {
+@if (!_isChoiceOptionMode)
+{
+    <EditForm @ref="_editForm" Model="_fieldDefinition" OnValidSubmit="Submit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
         <h3 class="h5">@SL["Einschränkung hinzufügen"]</h3>
-        <EditConstraints @bind-FieldDefinition="FieldDefinition"
+        <EditConstraints @bind-FieldDefinition="_fieldDefinition"
         @bind-FieldDefinition:after="() => {}">
         </EditConstraints>
-    }
-    else
-    {
-        <EditChoiceOptions @bind-Field="FieldDefinition"
+        <ValidationSummary />
+        <hr />
+        <button class="my-2 btn btn-primary" type="submit">
+            @SL["ValueConfigurationForm.Ok"]
+        </button>
+    </EditForm>
+}
+else
+{
+    <EditForm @ref="_editForm" Model="_fieldDefinition" OnValidSubmit="Submit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <EditChoiceOptions @bind-Field="_fieldDefinition"
         @bind-Field:after="() => {}">
         </EditChoiceOptions>
-    }
-    <ValidationSummary />
-    <hr />
-    <button class="my-2 btn btn-primary" type="submit">
-        Ok
-    </button>
+        <ValidationSummary />
+        <hr />
+        <button class="my-2 btn btn-primary" type="submit">
+            @SL["ValueConfigurationForm.Ok"]
+        </button>
+    </EditForm>
+}
 
-</EditForm>
+
 
 <ModalConfirmation @ref="@_confirmationModal"
 AcceptText="Yes"
 DenyText="No"></ModalConfirmation>
 
 @code {
-    private bool _isChoiceOptionMode = true;
-    private EditForm _editForm;
+    private bool _isChoiceOptionMode;
+    private EditForm? _editForm;
 
     private ModalConfirmation? _confirmationModal;
+
+    private FieldDefinition? _fieldDefinition;
 
     [Parameter]
     public required FieldDefinition FieldDefinition { get; set; }
@@ -63,16 +77,22 @@ DenyText="No"></ModalConfirmation>
 
     protected override void OnParametersSet()
     {
-        if (FieldDefinition.ChoiceOptions.Any())
+        _fieldDefinition = FieldDefinition.Copy();
+        if (_fieldDefinition.ChoiceOptions.Any())
         {
             _isChoiceOptionMode = true;
         }
-        else if (FieldDefinition.Constraints.Any())
+        else if (_fieldDefinition.Constraints.Any())
         {
             _isChoiceOptionMode = false;
         }
     }
 
+    private void Submit()
+    {
+        FieldDefinition.CopyFrom(_fieldDefinition!);
+        FieldDefinitionChanged.InvokeAsync(FieldDefinition);
+    }
 
     private async Task HandleValueSwitch()
     {
@@ -83,15 +103,15 @@ DenyText="No"></ModalConfirmation>
 
         if (_isChoiceOptionMode)
         {
-            FieldDefinition.ChoiceOptions.Clear();
+            _fieldDefinition?.ChoiceOptions.Clear();
         }
         else
         {
-            FieldDefinition.Constraints.Clear();
+            _fieldDefinition?.Constraints.Clear();
         }
 
-        _editForm.EditContext?.NotifyValidationStateChanged();
+        _editForm?.EditContext?.NotifyValidationStateChanged();
 
         _isChoiceOptionMode = !_isChoiceOptionMode;
     }
-}
+    }

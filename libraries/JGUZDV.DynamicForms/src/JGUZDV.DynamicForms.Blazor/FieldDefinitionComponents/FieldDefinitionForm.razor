@@ -10,7 +10,7 @@
 @inject IStringLocalizer<ComponentStrings> SL
 @inject IServiceProvider ServiceProvider
 
-<EditForm Model="@FieldDefinition" OnValidSubmit="HandleValidSubmit">
+<EditForm Model="@_fieldDefinition" OnValidSubmit="HandleValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
 
@@ -25,26 +25,26 @@
 
     <div class="mb-2">
         <label for="identifier">@SL["EditFieldDefinition.Identifier"]</label>
-        <InputText id="identifier" @bind-Value="FieldDefinition.Identifier" class="form-control" />
+        <InputText id="identifier" @bind-Value="_fieldDefinition.Identifier" class="form-control" />
     </div>
 
     <div class="mb-2">
         <label for="label">@SL["EditFieldDefinition.Label"]</label>
-        <L10nEditor L10n="FieldDefinition.InputDefinition.Label" />
+        <L10nEditor L10n="_fieldDefinition.InputDefinition.Label" />
     </div>
 
     <div class="mb-2">
         <label for="name">@SL["EditFieldDefinition.Name"]</label>
-        <InputText id="name" @bind-Value="FieldDefinition.InputDefinition.Name" class="form-control" />
+        <InputText id="name" @bind-Value="_fieldDefinition.InputDefinition.Name" class="form-control" />
     </div>
 
     <div class="mb-2">
         <label for="type">@SL["EditFieldDefinition.Type"]</label>
         <select id="type"
-                value="@FieldDefinition.Type?.ToJson()"
-                @onchange="HandleTypeChanged"
-                class="form-select">
-            @if (FieldDefinition.Type == null)
+        value="@_fieldDefinition.Type?.ToJson()"
+        @onchange="HandleTypeChanged"
+        class="form-select">
+            @if (_fieldDefinition.Type == null)
             {
                 <option value="" selected>@SL["EditFieldDefinition.SelectType"]</option>
             }
@@ -60,9 +60,9 @@
         <div class="mb-2">
             <label for="metadata">@_metadataLabel</label>
             <select id="metadata"
-                    class="form-select"
-                    @bind="FieldDefinition.Metadata">
-                @if (string.IsNullOrWhiteSpace(FieldDefinition.Metadata))
+            class="form-select"
+            @bind="_fieldDefinition.Metadata">
+                @if (string.IsNullOrWhiteSpace(_fieldDefinition.Metadata))
                 {
                     //TODO: Change key
                     <option value="" selected>@SL["EditFieldDefinition.SelectType"]</option>
@@ -77,27 +77,29 @@
 
     <div class="mb-2">
         <label for="description">@SL["EditFieldDefinition.Description"]</label>
-        <L10nEditor L10n="FieldDefinition.Description" />
+        <L10nEditor L10n="_fieldDefinition.Description" />
     </div>
 
     <div class="mb-2 form-check">
-        <InputCheckbox id="isList" @bind-Value="FieldDefinition.IsList" class="form-check-input" />
+        <InputCheckbox id="isList" @bind-Value="_fieldDefinition.IsList" class="form-check-input" />
         <label class="form-check-label" for="isList">@SL["EditFieldDefinition.IsList"]</label>
     </div>
 
     <div class="mb-2 form-check">
-        <InputCheckbox class="form-check-input" id="isRequired" @bind-Value="FieldDefinition.IsRequired" />
+        <InputCheckbox class="form-check-input" id="isRequired" @bind-Value="_fieldDefinition.IsRequired" />
         <label class="form-check-label" for="isRequired">@SL["EditFieldDefinition.IsRequired"]</label>
     </div>
 
     <div class="mb-2">
         <label for="sortKey">@SL["EditFieldDefinition.SortKey"]</label>
-        <InputNumber id="sortKey" @bind-Value="FieldDefinition.SortKey" class="form-control" />
+        <InputNumber id="sortKey" @bind-Value="_fieldDefinition.SortKey" class="form-control" />
     </div>
 
     <button type="submit"
-            class="btn btn-primary">
-        @SL["EditFieldDefinition.Save"]
+    class="btn btn-primary">
+        @(string.IsNullOrWhiteSpace(SubmitLabel)
+                                    ? SL["EditFieldDefinition.Save"]
+                                    : SubmitLabel)
     </button>
 </EditForm>
 
@@ -108,17 +110,29 @@
     [Parameter]
     public EventCallback<FieldDefinition> FieldDefinitionChanged { get; set; }
 
+    [Parameter]
+    public string? SubmitLabel { get; set; }
+
     private List<ChoiceOption>? _metadataChoices = null;
     private string _metadataLabel = "";
 
     private List<ValidationResult> _additionalValidationErrors = [];
+
+    private FieldDefinition? _fieldDefinition;
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        _fieldDefinition = FieldDefinition.Copy();
+    }
 
     private void HandleValidSubmit()
     {
         _additionalValidationErrors = [];
         if (_metadataChoices != null)
         {
-            if (!_metadataChoices.Any(x => x.Value == FieldDefinition.Metadata))
+            if (!_metadataChoices.Any(x => x.Value == _fieldDefinition!.Metadata))
             {
                 _additionalValidationErrors = new List<ValidationResult>
                 {
@@ -129,21 +143,24 @@
             }
         }
 
+
+        FieldDefinition.CopyFrom(_fieldDefinition);
+
         FieldDefinitionChanged.InvokeAsync(FieldDefinition);
     }
 
     private async Task HandleTypeChanged(ChangeEventArgs e)
     {
-        FieldDefinition.Type = FieldType.FromJson(e.Value!.ToString()!);
+        _fieldDefinition!.Type = FieldType.FromJson(e.Value!.ToString()!);
 
 
         var metadataService = ServiceProvider
-            .GetKeyedService<IFieldTypeMetadataProvider>(FieldDefinition.Type.GetType().Name);
+            .GetKeyedService<IFieldTypeMetadataProvider>(_fieldDefinition.Type.GetType().Name);
 
         if (metadataService != null)
         {
-            _metadataChoices = await metadataService.GetValues(FieldDefinition.Type);
-            _metadataLabel = metadataService.GetMetadataDisplayName(FieldDefinition.Type).ToString()!;
+            _metadataChoices = await metadataService.GetValues(_fieldDefinition.Type);
+            _metadataLabel = metadataService.GetMetadataDisplayName(_fieldDefinition.Type).ToString()!;
         }
         else
         {
