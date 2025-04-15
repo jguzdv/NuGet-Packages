@@ -15,7 +15,7 @@ on:
 
 jobs:
   call_default_build:
-    uses: ./.github/workflows/default_build.yml
+    uses: ./.github/workflows/default_tool_build.yml
     with:
       library-name: JGUZDV.JsonMerge
       push-to-nuget: ${{ inputs.push-to-nuget != '' && inputs.push-to-nuget }}
