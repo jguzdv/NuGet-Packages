@@ -1,0 +1,7 @@
+{
+    "@includes": [
+        "logging.json"
+    ],
+
+    "AllowedHosts": "*"
+}

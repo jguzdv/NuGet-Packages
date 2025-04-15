@@ -14,6 +14,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "libraries", "libraries", "{DA4DE709-E5BC-4B93-88D2-838656C217CE}"
 	ProjectSection(SolutionItems) = preProject
 		libraries\Directory.Build.props = libraries\Directory.Build.props
+		libraries\NuGet-Package-Icon.png = libraries\NuGet-Package-Icon.png
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JGUZDV.AspNetCore.Authentication.Cookies", "JGUZDV.AspNetCore.Authentication.Cookies", "{ED0A40A7-2790-42F3-822E-C475F021D7D8}"
@@ -256,6 +257,17 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.Extensions.OpenTelemetry", "libraries\JGUZDV.Extensions.OpenTelemetry\src\JGUZDV.Extensions.OpenTelemetry.csproj", "{2B1927EC-CE9B-F6AD-56FE-1D97084F86F1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.Extensions.OpenTelemetry.Tests", "libraries\JGUZDV.Extensions.OpenTelemetry\test\JGUZDV.Extensions.OpenTelemetry.Tests.csproj", "{C2D4AD96-C8A7-4D2F-36A4-7454F6F445D9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{07C2787E-EAC7-C090-1BA3-A61EC2A24D84}"
+	ProjectSection(SolutionItems) = preProject
+		tools\NuGet-Tools-Icon.png = tools\NuGet-Tools-Icon.png
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.JsonMerge", "tools\JGUZDV.JsonMerge\src\JGUZDV.JsonMerge.csproj", "{2AF6D5EE-9AFF-4506-81D4-C9B484C37AE8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JGUZDV.JsonMerge", "JGUZDV.JsonMerge", "{0941F7B6-51A5-48CC-9440-DF7023836C07}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.JsonMerge.Tests", "tools\JGUZDV.JsonMerge\test\JGUZDV.JsonMerge.Tests\JGUZDV.JsonMerge.Tests.csproj", "{A301DA50-8A07-4CBC-B8C5-AD84FB0D5A42}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1323,6 +1335,30 @@ Global
 		{C2D4AD96-C8A7-4D2F-36A4-7454F6F445D9}.Release|x64.Build.0 = Release|Any CPU
 		{C2D4AD96-C8A7-4D2F-36A4-7454F6F445D9}.Release|x86.ActiveCfg = Release|Any CPU
 		{C2D4AD96-C8A7-4D2F-36A4-7454F6F445D9}.Release|x86.Build.0 = Release|Any CPU
+		{2AF6D5EE-9AFF-4506-81D4-C9B484C37AE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AF6D5EE-9AFF-4506-81D4-C9B484C37AE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AF6D5EE-9AFF-4506-81D4-C9B484C37AE8}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2AF6D5EE-9AFF-4506-81D4-C9B484C37AE8}.Debug|x64.Build.0 = Debug|Any CPU
+		{2AF6D5EE-9AFF-4506-81D4-C9B484C37AE8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2AF6D5EE-9AFF-4506-81D4-C9B484C37AE8}.Debug|x86.Build.0 = Debug|Any CPU
+		{2AF6D5EE-9AFF-4506-81D4-C9B484C37AE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AF6D5EE-9AFF-4506-81D4-C9B484C37AE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2AF6D5EE-9AFF-4506-81D4-C9B484C37AE8}.Release|x64.ActiveCfg = Release|Any CPU
+		{2AF6D5EE-9AFF-4506-81D4-C9B484C37AE8}.Release|x64.Build.0 = Release|Any CPU
+		{2AF6D5EE-9AFF-4506-81D4-C9B484C37AE8}.Release|x86.ActiveCfg = Release|Any CPU
+		{2AF6D5EE-9AFF-4506-81D4-C9B484C37AE8}.Release|x86.Build.0 = Release|Any CPU
+		{A301DA50-8A07-4CBC-B8C5-AD84FB0D5A42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A301DA50-8A07-4CBC-B8C5-AD84FB0D5A42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A301DA50-8A07-4CBC-B8C5-AD84FB0D5A42}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A301DA50-8A07-4CBC-B8C5-AD84FB0D5A42}.Debug|x64.Build.0 = Debug|Any CPU
+		{A301DA50-8A07-4CBC-B8C5-AD84FB0D5A42}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A301DA50-8A07-4CBC-B8C5-AD84FB0D5A42}.Debug|x86.Build.0 = Debug|Any CPU
+		{A301DA50-8A07-4CBC-B8C5-AD84FB0D5A42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A301DA50-8A07-4CBC-B8C5-AD84FB0D5A42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A301DA50-8A07-4CBC-B8C5-AD84FB0D5A42}.Release|x64.ActiveCfg = Release|Any CPU
+		{A301DA50-8A07-4CBC-B8C5-AD84FB0D5A42}.Release|x64.Build.0 = Release|Any CPU
+		{A301DA50-8A07-4CBC-B8C5-AD84FB0D5A42}.Release|x86.ActiveCfg = Release|Any CPU
+		{A301DA50-8A07-4CBC-B8C5-AD84FB0D5A42}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1447,10 +1483,13 @@ Global
 		{02EA681E-C7D8-13C7-8484-4AC65E1B71E8} = {DA4DE709-E5BC-4B93-88D2-838656C217CE}
 		{2B1927EC-CE9B-F6AD-56FE-1D97084F86F1} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{C2D4AD96-C8A7-4D2F-36A4-7454F6F445D9} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{2AF6D5EE-9AFF-4506-81D4-C9B484C37AE8} = {0941F7B6-51A5-48CC-9440-DF7023836C07}
+		{0941F7B6-51A5-48CC-9440-DF7023836C07} = {07C2787E-EAC7-C090-1BA3-A61EC2A24D84}
+		{A301DA50-8A07-4CBC-B8C5-AD84FB0D5A42} = {0941F7B6-51A5-48CC-9440-DF7023836C07}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		RESX_SortFileContentOnSave = True
 		RESX_NeutralResourcesLanguage = de-DE
+		RESX_SortFileContentOnSave = True
 		SolutionGuid = {46ECC226-1874-4539-8589-8B2029909C4A}
 	EndGlobalSection
 EndGlobal

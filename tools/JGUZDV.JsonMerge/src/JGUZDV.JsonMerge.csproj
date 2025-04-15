@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+
+        <PackageId>JGUZDV.JsonMerge</PackageId>
+        <IsPackable>true</IsPackable>
+        <Version>1.0.0</Version>
+        <Authors>Thomas Ottenhus</Authors>
+        <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
+        <PackageDescription>Merges JSON files into a single output file</PackageDescription>
+        <NeutralLanguage>de-DE</NeutralLanguage>
+
+        <PackAsTool>true</PackAsTool>
+        <ToolCommandName>json-merge</ToolCommandName>
+
+        <!-- Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+
+        <!-- Embed source files that are not tracked by the source control manager in the PDB -->
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+
+        <!-- Recommended: Embed symbols containing Source Link in the main file (exe/dll) -->
+        <DebugType>embedded</DebugType>
+        <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageIcon>NuGet-Tools-Icon.png</PackageIcon>
+    </PropertyGroup>
+
+    <ItemGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="README.md" Pack="true" PackagePath="/" />
+        <None Include="../../NuGet-Tools-Icon.png" Pack="true" PackagePath="/" />
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,23 @@
+{
+    "@includes": [
+        "./includes/common.json",
+        "./includes/auth.json"
+    ],
+
+    "Logging":{
+        "LogLevel": {
+            "JGUZDV": "Information",
+            "Microsoft": "Error"
+        }
+    },
+
+    "Authentication":{
+        "JwtBearer": {
+            "Audience": "api2"
+        }
+    },
+
+    "AppSettings":{
+        "ApiBaseUrl":"https://api.example.com",
+    }
+}

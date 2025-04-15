@@ -1,0 +1,20 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft": "Error",
+      "Microsoft.Hosting.Lifetime": "Information",
+      "JGUZDV": "Information"
+    }
+  },
+  "AllowedHosts": "*",
+  "Authentication": {
+    "JwtBearer": {
+      "Authority": "https://localhost:5001",
+      "Audience": "api2"
+    }
+  },
+  "AppSettings": {
+    "ApiBaseUrl": "https://api.example.com"
+  }
+}
