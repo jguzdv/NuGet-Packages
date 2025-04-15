@@ -11,7 +11,7 @@ on:
       secrets:
         NUGET_API_KEY:
           required: true    
-  
+
   env:
       dotnet-version: 9.0.x
       src-proj: ./tools/${{ inputs.tool-name }}/src/${{ inputs.tool-name }}.csproj
