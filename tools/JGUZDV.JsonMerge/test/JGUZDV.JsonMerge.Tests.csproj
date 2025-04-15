@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\JGUZDV.JsonMerge.csproj" />
+    <ProjectReference Include="..\src\JGUZDV.JsonMerge.csproj" />
   </ItemGroup>
 
   <ItemGroup>
