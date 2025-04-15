@@ -267,7 +267,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.JsonMerge", "tools\J
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JGUZDV.JsonMerge", "JGUZDV.JsonMerge", "{0941F7B6-51A5-48CC-9440-DF7023836C07}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.JsonMerge.Tests", "tools\JGUZDV.JsonMerge\test\JGUZDV.JsonMerge.Tests\JGUZDV.JsonMerge.Tests.csproj", "{A301DA50-8A07-4CBC-B8C5-AD84FB0D5A42}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.JsonMerge.Tests", "tools\JGUZDV.JsonMerge\test\JGUZDV.JsonMerge.Tests.csproj", "{A301DA50-8A07-4CBC-B8C5-AD84FB0D5A42}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
