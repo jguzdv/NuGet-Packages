@@ -14,6 +14,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "libraries", "libraries", "{DA4DE709-E5BC-4B93-88D2-838656C217CE}"
 	ProjectSection(SolutionItems) = preProject
 		libraries\Directory.Build.props = libraries\Directory.Build.props
+		libraries\NuGet-Package-Icon.png = libraries\NuGet-Package-Icon.png
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JGUZDV.AspNetCore.Authentication.Cookies", "JGUZDV.AspNetCore.Authentication.Cookies", "{ED0A40A7-2790-42F3-822E-C475F021D7D8}"
@@ -258,6 +259,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.Extensions.OpenTelemetry.Tests", "libraries\JGUZDV.Extensions.OpenTelemetry\test\JGUZDV.Extensions.OpenTelemetry.Tests.csproj", "{C2D4AD96-C8A7-4D2F-36A4-7454F6F445D9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{07C2787E-EAC7-C090-1BA3-A61EC2A24D84}"
+	ProjectSection(SolutionItems) = preProject
+		tools\NuGet-Tools-Icon.png = tools\NuGet-Tools-Icon.png
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.JsonMerge", "tools\JGUZDV.JsonMerge\src\JGUZDV.JsonMerge.csproj", "{2AF6D5EE-9AFF-4506-81D4-C9B484C37AE8}"
 EndProject

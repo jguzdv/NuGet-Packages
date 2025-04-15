@@ -1,0 +1,78 @@
+on:
+    workflow_call:
+      inputs:
+        tool-name:
+          required: true
+          type: string
+        push-to-nuget:
+          required: false
+          type: boolean
+          default: false
+      secrets:
+        NUGET_API_KEY:
+          required: true    
+  
+  env:
+      dotnet-version: 9.0.x
+      src-proj: ./tools/${{ inputs.tool-name }}/src/${{ inputs.tool-name }}.csproj
+      test-proj: ./tools/${{ inputs.tool-name }}/test/${{ inputs.tool-name }}.Tests.csproj
+      publish-path: ./publish/${{ inputs.tool-name }}
+  
+  jobs:
+    build_test_pack:
+      name: Build and Test ${{ inputs.tool-name }}
+      runs-on: ubuntu-latest
+  
+      steps:
+        - uses: actions/checkout@v3
+        - name: Setup .NET Core SDK ${{ env.dotnet-version }}
+          uses: actions/setup-dotnet@v3
+          with:
+            dotnet-version: ${{ env.dotnet-version }}
+  
+        - name: Restore tool project
+          run: dotnet restore ${{ env.src-proj }}
+        - name: Restore test project
+          run: dotnet restore ${{ env.test-proj }}
+  
+        - name: Build tool project
+          run: dotnet build ${{ env.src-proj }} --no-restore -c Release
+        - name: Build test project
+          run: dotnet build ${{ env.test-proj }} --no-restore -c Release
+        
+        - name: Run tests
+          env:
+            DOTNET_ENVIRONMENT: 'test'
+            ASPNETCORE_ENVIRONMENT: 'test'
+          run: dotnet test ${{ env.test-proj }} --no-build -c Release --verbosity normal
+  
+        - name: Pack tool project
+          run: dotnet pack ${{ env.src-proj }} --no-build -c Release --output ${{ env.publish-path }}
+  
+        - name: Upload nupkg
+          uses: actions/upload-artifact@v4
+          with:
+            name: NuGetPackage
+            path: ${{ env.publish-path }}
+            if-no-files-found: error
+            retention-days: 7
+  
+    push_to_nuget:
+      needs: build_test_pack
+      if: github.repository == 'jguzdv/NuGet-Packages' && github.ref == 'refs/heads/main' && inputs.push-to-nuget
+      name: Push ${{ inputs.tool-name }}
+      runs-on: ubuntu-latest
+  
+      env:
+        dotnet-version: 9.0.x
+  
+      steps:
+        - name: Download nupkg
+          uses: actions/download-artifact@v4
+          with:
+            name: NuGetPackage
+            path: package
+  
+        - name: Push tool
+          run: dotnet nuget push package/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }}
+        
