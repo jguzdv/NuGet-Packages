@@ -21,7 +21,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="content\**" PackagePath="content" />
+    <Content Include="src\**" PackagePath="content" />
   </ItemGroup>
 
 </Project>
