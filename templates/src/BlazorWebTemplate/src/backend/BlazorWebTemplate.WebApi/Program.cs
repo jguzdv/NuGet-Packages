@@ -27,8 +27,9 @@ builder.Services.Configure<AuthorizationOptions>(options =>
 
 var app = builder.BuildAndConfigureDefault();
 
-app.MapGet("_app/user", 
-    ClaimsPrincipal user =>
+app.MapGet(
+    "_app/user",
+    (ClaimsPrincipal user) =>
     {
         if(user.Identity?.IsAuthenticated != true)
         {
