@@ -2,11 +2,7 @@ using JGUZDV.Blazor.Hosting;
 
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
-using ZDV.JGUDir.Web.Client;
-using ZDV.JGUDir.Web.SelfService.Client;
-using ZDV.JGUDir.Web.SelfService.Client.HttpClients;
-using ZDV.JGUDir.Web.SelfService.Client.Pages;
-using ZDV.JGUDir.Web.SelfService.Client.Services;
+using ZDV.BlazorWebTemplate.Web.Client;
 
 var builder = JGUZDVWebAssemblyApplicationBuilder.CreateDefault(args);
 

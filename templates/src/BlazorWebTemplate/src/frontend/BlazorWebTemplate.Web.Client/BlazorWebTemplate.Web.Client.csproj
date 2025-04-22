@@ -18,4 +18,8 @@
     <PackageReference Include="JGUZDV.Blazor.Components" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\BlazorWebTemplate.WebApi.HttpModel\BlazorWebTemplate.WebApi.HttpModel.csproj" />
+  </ItemGroup>
+
 </Project>

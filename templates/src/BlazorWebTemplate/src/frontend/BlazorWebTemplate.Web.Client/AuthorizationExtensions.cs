@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authorization;
+
 namespace ZDV.BlazorWebTemplate.Web.Client;
 
 public static class AuthorizationExtensions {
