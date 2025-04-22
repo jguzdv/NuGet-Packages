@@ -1,0 +1,13 @@
+﻿@using ZDV.BlazorWebTemplate.Web.Components.Layout
+<Router AppAssembly="@typeof(Program).Assembly" AdditionalAssemblies="[typeof(ZDV.BlazorWebTemplate.Web._Imports).Assembly]">
+    <Found Context="routeData">
+        <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+            <Authorizing>
+                <JGUZDV.Blazor.Components.Authentication.AuthorizingView />
+            </Authorizing>
+            <NotAuthorized>
+                <JGUZDV.Blazor.Components.Authentication.NotAuthorizedView />
+            </NotAuthorized>
+        </AuthorizeRouteView>
+    </Found>
+</Router>
