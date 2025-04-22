@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BlazorWebTemplate.WebApi.HttpModel\BlazorWebTemplate.WebApi.HttpModel.csproj" />
+    <ProjectReference Include="..\..\BlazorWebTemplate.WebApi.HttpModel\BlazorWebTemplate.WebApi.HttpModel.csproj" />
   </ItemGroup>
 
 </Project>

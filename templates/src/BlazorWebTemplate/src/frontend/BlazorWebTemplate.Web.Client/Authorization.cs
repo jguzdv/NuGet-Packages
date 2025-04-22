@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace ZDV.BlazorWebTemplate.Web.Client;
 
-public static class AuthorizationExtensions {
+public static class Authorization {
     public static class Policies {
         public const string Admin = "Admin";
     }

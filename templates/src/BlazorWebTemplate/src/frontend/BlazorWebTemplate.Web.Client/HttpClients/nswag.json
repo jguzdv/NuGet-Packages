@@ -1,0 +1,105 @@
+{
+  "runtime": "Default",
+
+  "documentGenerator": {
+    "fromDocument": {
+      "url": "https://localhost:4999/openapi/v1.json
+    }
+  },
+  "codeGenerators": {
+    "openApiToCSharpClient": {
+      "output": "WebApiClient.cs",
+      "jsonLibrary": "SystemTextJson",
+
+      "namespace": "ZDV.BlazorWebTemplate.Web.Client.HttpClients",
+      "_className": "(ClientPrefix)Client",
+
+      "generateClientClasses": true,
+      "generateExceptionClasses": true,
+      "_exceptionClass": "(ClientPrefix)ClientException",
+
+      "injectHttpClient": true,
+      "disposeHttpClient": false,
+      "useBaseUrl": false,
+      "generateBaseUrlProperty": true,
+
+      "exposeJsonSerializerSettings": true,
+
+      "operationGenerationMode": "MultipleClientsFromOperationId",
+      "generateOptionalParameters": true,
+      "generateDtoTypes": false,
+      "additionalNamespaceUsages": [
+        "ZDV.BlazorWebTemplate.WebAPI.HttpModel"
+      ],
+
+
+      "jsonConverters": [ "System.Text.Json.Serialization.JsonStringEnumConverter" ],
+
+      "_clientBaseClass": "HttpClientBase",
+      "_generateUpdateJsonSerializerSettingsMethod": true,
+      "_generateClientInterfaces": true,
+      "_configurationClass": null,
+      "_clientBaseInterface": null,
+      "_protectedMethods": [],
+      "_wrapDtoExceptions": true,
+      "_useHttpClientCreationMethod": false,
+      "_httpClientType": "System.Net.Http.HttpClient",
+      "_useHttpRequestMessageCreationMethod": false,
+      "_generateSyncMethods": false,
+
+      "_clientClassAccessModifier": "public",
+      "_typeAccessModifier": "public",
+      "_parameterDateTimeFormat": "s",
+      "_dateType": "System.DateOnly",
+      "_parameterDateFormat": "yyyy-MM-dd",
+      "_useRequestAndResponseSerializationSettings": false,
+      "_serializeTypeInformation": false,
+      "_queryNullValue": "",
+      "_generateJsonMethods": false,
+      "_enforceFlagEnums": false,
+      "_parameterArrayType": "System.Collections.Generic.IEnumerable",
+      "_parameterDictionaryType": "System.Collections.Generic.IDictionary",
+      "_responseArrayType": "System.Collections.Generic.ICollection",
+      "_responseDictionaryType": "System.Collections.Generic.IDictionary",
+      "_wrapResponses": false,
+      "_wrapResponseMethods": [],
+      "_generateResponseClasses": true,
+      "_responseClass": "SwaggerResponse",
+      "_requiredPropertiesMustBeDefined": true,
+
+      "_anyType": "object",
+      "_dateTimeType": "System.DateTimeOffset",
+      "_timeType": "System.TimeSpan",
+      "_timeSpanType": "System.TimeSpan",
+      "_arrayType": "System.Collections.Generic.ICollection",
+      "_arrayInstanceType": "System.Collections.ObjectModel.Collection",
+      "_dictionaryType": "System.Collections.Generic.IDictionary",
+      "_dictionaryInstanceType": "System.Collections.Generic.Dictionary",
+      "_arrayBaseType": "System.Collections.ObjectModel.Collection",
+      "_dictionaryBaseType": "System.Collections.Generic.Dictionary",
+      "_classStyle": "Poco",
+      "_generateDefaultValues": true,
+      "_generateDataAnnotations": true,
+      "_excludedTypeNames": [],
+      "_excludedParameterNames": [],
+      "_handleReferences": false,
+      "_generateImmutableArrayProperties": false,
+      "_generateImmutableDictionaryProperties": false,
+      "_jsonSerializerSettingsTransformationMethod": null,
+      "_inlineNamedArrays": false,
+      "_inlineNamedDictionaries": false,
+      "_inlineNamedTuples": true,
+      "_inlineNamedAny": false,
+      "_generateDtoTypes": true,
+      "_generateOptionalPropertiesAsNullable": false,
+      "_generateNullableReferenceTypes": false,
+      "_templateDirectory": null,
+      "_typeNameGeneratorType": null,
+      "_propertyNameGeneratorType": null,
+      "_enumNameGeneratorType": null,
+      "_serviceHost": null,
+      "_serviceSchemes": null,
+      "_newLineBehavior": "Auto"
+    }
+  }
+}
