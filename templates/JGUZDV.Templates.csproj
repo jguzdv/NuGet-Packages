@@ -6,8 +6,12 @@
 
     <IncludeContentInPack>true</IncludeContentInPack>
     <IncludeBuildOutput>false</IncludeBuildOutput>
-    <ContentTargetFolders>content</ContentTargetFolders>
-    
+    <IncludeSource>False</IncludeSource>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    <EnableDefaultItems>False</EnableDefaultItems>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+    <SuppressDependenciesWhenPacking>True</SuppressDependenciesWhenPacking>
+
     <IsPackable>true</IsPackable>
     <PackageId>JGUZDV.Templates</PackageId>
     <Version>1.0.0</Version>
@@ -17,8 +21,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="**\*" />
-    <Content Include="src\**\*" Exclude="src\**\bin\**;src\**\obj\**;src\**\.vs\**" />
+    <Content Include="content\**" PackagePath="content" />
   </ItemGroup>
 
 </Project>

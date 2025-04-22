@@ -12,13 +12,7 @@
     "sources": [
       {
         "modifiers": [
-          { "exclude": [ ".vs/**", ".template_config/**" ] },
-          {
-            "rename": {
-              ".editorconfig.in": ".editorconfig",
-              ".gitignore.in": ".gitignore"
-            }
-          }
+          { "exclude": [ ".vs/**", ".template_config/**" ] }
         ]
       }
     ]
