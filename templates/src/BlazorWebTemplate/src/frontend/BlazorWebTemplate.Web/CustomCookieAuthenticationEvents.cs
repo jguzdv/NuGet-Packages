@@ -38,7 +38,7 @@ namespace ZDV.BlazorWebTemplate.Web
             context.Principal = newPrincipal;
         }
 
-        private void AddNewClaims(WebApiUser? webApiUser, ClaimsIdentity identity)
+        private static void AddNewClaims(WebApiUser? webApiUser, ClaimsIdentity identity)
         {
             if(webApiUser == null)
             {
