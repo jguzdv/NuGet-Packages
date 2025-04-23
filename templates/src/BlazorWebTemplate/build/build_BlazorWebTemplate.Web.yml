@@ -1,0 +1,19 @@
+name: $(date:yyyy-MM-dd)$(rev:.r)
+
+trigger:
+  batch: true
+  branches:
+    include:
+    - main
+
+  paths:
+    include:
+    - projects/netcore/BlazorWebTemplate/src/frontend/BlazorWebTemplate.Web
+
+stages:
+- template: ../../.azuredevops/_build.yml
+  parameters:
+    BuildProjects: projects/netcore/BlazorWebTemplate/src/frontend/BlazorWebTemplate.Web/*.csproj
+    SkipTests: true
+    PublishProjects: projects/netcore/AccountServices/src/frontend/BlazorWebTemplate.Web/*.csproj
+    ArtifactStagingDirectory: $(Build.ArtifactStagingDirectory)

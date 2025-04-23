@@ -21,6 +21,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "backend", "backend", "{E62E
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{53B054EC-21E8-47D4-ADDD-15AB3C7CC560}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorWebTemplate.WebApi.Tests", "test\BlazorWebTemplate.WebApi.Tests\BlazorWebTemplate.WebApi.Tests.csproj", "{6525BF95-46D7-41F8-97C4-D3A0C54C8372}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{DEE5DD87-39C1-BF34-B639-A387DCCF972B}"
+	ProjectSection(SolutionItems) = preProject
+		build\build_BlazorWebTemplate.Web.yml = build\build_BlazorWebTemplate.Web.yml
+		build\build_BlazorWebTemplate.WebApi.yml = build\build_BlazorWebTemplate.WebApi.yml
+		build\deploy_BlazorWebTemplate.WebApi_JGU.yml = build\deploy_BlazorWebTemplate.WebApi_JGU.yml
+		build\deploy_BlazorWebTemplate.Web_UMZ.yml = build\deploy_BlazorWebTemplate.Web_UMZ.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -91,6 +101,18 @@ Global
 		{1CE4BC38-9168-427C-9032-150AC75D717B}.Release|x64.Build.0 = Release|Any CPU
 		{1CE4BC38-9168-427C-9032-150AC75D717B}.Release|x86.ActiveCfg = Release|Any CPU
 		{1CE4BC38-9168-427C-9032-150AC75D717B}.Release|x86.Build.0 = Release|Any CPU
+		{6525BF95-46D7-41F8-97C4-D3A0C54C8372}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6525BF95-46D7-41F8-97C4-D3A0C54C8372}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6525BF95-46D7-41F8-97C4-D3A0C54C8372}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{6525BF95-46D7-41F8-97C4-D3A0C54C8372}.Debug|x64.Build.0 = Debug|Any CPU
+		{6525BF95-46D7-41F8-97C4-D3A0C54C8372}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6525BF95-46D7-41F8-97C4-D3A0C54C8372}.Debug|x86.Build.0 = Debug|Any CPU
+		{6525BF95-46D7-41F8-97C4-D3A0C54C8372}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6525BF95-46D7-41F8-97C4-D3A0C54C8372}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6525BF95-46D7-41F8-97C4-D3A0C54C8372}.Release|x64.ActiveCfg = Release|Any CPU
+		{6525BF95-46D7-41F8-97C4-D3A0C54C8372}.Release|x64.Build.0 = Release|Any CPU
+		{6525BF95-46D7-41F8-97C4-D3A0C54C8372}.Release|x86.ActiveCfg = Release|Any CPU
+		{6525BF95-46D7-41F8-97C4-D3A0C54C8372}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -103,6 +125,7 @@ Global
 		{1CE4BC38-9168-427C-9032-150AC75D717B} = {E62E5BB3-3251-4787-93B1-9515017B3920}
 		{02EA681E-C7D8-13C7-8484-4AC65E1B71E8} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{E62E5BB3-3251-4787-93B1-9515017B3920} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+		{6525BF95-46D7-41F8-97C4-D3A0C54C8372} = {53B054EC-21E8-47D4-ADDD-15AB3C7CC560}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {91FE5E18-36D5-493A-A38E-592A560AE3C1}
