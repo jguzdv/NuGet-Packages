@@ -14,8 +14,8 @@ on:
 
 env:
   dotnet-version: 9.0.x
-  src-proj: ./templates/${{ inputs.template-name }}/src/${{ inputs.template-name }}.csproj
-  publish-path: ./publish/${{ inputs.template-name }}
+  src-proj: templates/JGUZDV.Templates.csproj
+  publish-path: ./publish/JGUZDV.Templates
   
 jobs:
     pack_template:
