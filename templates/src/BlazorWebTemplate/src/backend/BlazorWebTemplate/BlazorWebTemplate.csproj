@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="JGUZDV.CQRS" Version="2.3.2" />
+        <PackageReference Include="JGUZDV.CQRS" />
     </ItemGroup>
 
     <ItemGroup>
