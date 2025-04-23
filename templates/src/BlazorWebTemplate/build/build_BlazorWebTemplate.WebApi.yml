@@ -1,0 +1,22 @@
+name: $(date:yyyy-MM-dd)$(rev:.r)
+
+trigger:
+  batch: true
+  branches:
+    include:
+    - main
+
+  paths:
+    include:
+    - projects/netcore/BlazorWebTemplate/src/backend/BlazorWebTemplate.WebApi
+
+stages:
+- template: ../../.azuredevops/_build.yml
+  parameters:
+    BuildProjects: | 
+      projects/netcore/BlazorWebTemplate/src/backend/BlazorWebTemplate.WebApi/*.csproj
+      projects/netcore/BlazorWebTemplate/test/BlazorWebTemplate.WebApi.Tests/*.csproj
+    TestProjects: | 
+      projects/netcore/BlazorWebTemplate/test/BlazorWebTemplate.WebApi.Tests/*.csproj
+    PublishProjects: projects/netcore/BlazorWebTemplate/src/backend/BlazorWebTemplate.WebApi/*.csproj
+    ArtifactStagingDirectory: $(Build.ArtifactStagingDirectory)
