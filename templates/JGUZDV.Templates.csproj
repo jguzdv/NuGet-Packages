@@ -18,6 +18,8 @@
     <Authors>Thomas Ottenhus</Authors>
     <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
     <PackageDescription>Simple templates for our own projects</PackageDescription>
+
+    <NoWarn>CS2008</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
