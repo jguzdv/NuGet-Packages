@@ -28,6 +28,9 @@ jobs:
           uses: actions/setup-dotnet@v3
           with:
             dotnet-version: ${{ env.dotnet-version }}
+
+        - name: Restore project
+          run: dotnet restore ${{ env.src-proj }}
         
         - name: Pack template project
           run: dotnet pack ${{ env.src-proj }} --no-build -c Release --output ${{ env.publish-path }}
