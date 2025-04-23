@@ -3,7 +3,7 @@
 
   "documentGenerator": {
     "fromDocument": {
-      "url": "https://localhost:4999/openapi/v1.json
+      "url": "https://localhost:4999/openapi/v1.json"
     }
   },
   "codeGenerators": {
