@@ -71,11 +71,9 @@ public class ClaimCollectionAuthorizationRequirementTest
     [Fact]
     public async Task Authorization_Can_be_used_in_host()
     {
-        var hostBuilder = JGUZDVHostApplicationBuilder.CreateWebApi([], ctx =>
-        {
-            ctx.Builder.WebHost.UseEnvironment("Test");
-            ctx.Builder.WebHost.UseTestServer();
-        });
+        var hostBuilder = JGUZDVHostApplicationBuilder.Create(["--environment", "Test"]);
+
+        hostBuilder.Builder.WebHost.UseTestServer();
 
         hostBuilder.Services.AddAuthentication("TestScheme")
             .AddScheme<AuthenticationSchemeOptions, TestAuthenticationHandler>("TestScheme", null);
