@@ -1,4 +1,15 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System.Security.Claims;
+using System.Text.Encodings.Web;
+
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace JGUZDV.AspNetCore.Hosting.Tests;
 
