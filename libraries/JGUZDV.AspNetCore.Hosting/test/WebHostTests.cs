@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.Configuration;
 
 namespace JGUZDV.AspNetCore.Hosting.Tests;
 
@@ -7,14 +8,16 @@ public class WebHostTests
     [Fact]
     public void Host_Will_Run_with_Little_Configuration()
     {
-        var hostBuilder = JGUZDVHostApplicationBuilder.CreateWebApi([], ctx =>
+        var hostBuilder = JGUZDVHostApplicationBuilder.CreateWebApi(["--environment", "Test"], ctx =>
         {
-            var configs = new Dictionary<string, string?>
-            {
-                { "Logging:File:OutputDirectory", "."}
-            };
+            ctx.Builder.WebHost.UseTestServer();
 
-            ctx.Configuration.AddInMemoryCollection(configs);
+            //var config = new Dictionary<string, string?>
+            //{
+            //    { "Logging:File:OutputDirectory", "." }
+            //};
+
+            //ctx.Configuration.AddInMemoryCollection(config);
         });
         
             
