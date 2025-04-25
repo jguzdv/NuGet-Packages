@@ -22,13 +22,13 @@ namespace JGUZDV.AspNetCore.Hosting.Diagnostics
             diagnostics.MapGet("user",
                 (ClaimsPrincipal currentUser) =>
                 {
-                    Results.Ok(new
+                    return Results.Ok(new
                     {
                         Identities = currentUser.Identities.Select(identity => new
                         {
                             IsAuthenticated = identity.IsAuthenticated,
                             IsAuthenticatedType = identity.AuthenticationType,
-                            Claims = currentUser.Claims.Select(c => new
+                            Claims = identity.Claims.Select(c => new
                             {
                                 c.Type,
                                 c.Value
