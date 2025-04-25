@@ -6,6 +6,7 @@ using JGUZDV.AspNetCore.Hosting.Authorization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
@@ -72,13 +73,8 @@ public class ClaimCollectionAuthorizationRequirementTest
     {
         var hostBuilder = JGUZDVHostApplicationBuilder.CreateWebApi([], ctx =>
         {
+            ctx.Builder.WebHost.UseEnvironment("Test");
             ctx.Builder.WebHost.UseTestServer();
-
-            var configs = new Dictionary<string, string?>
-            {
-                { "Logging:File:OutputDirectory", "."}
-            };
-            ctx.Configuration.AddInMemoryCollection(configs);
         });
 
         hostBuilder.Services.AddAuthentication("TestScheme")

@@ -4,6 +4,7 @@ using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
@@ -20,12 +21,8 @@ public class WebHostTests
     {
         var hostBuilder = JGUZDVHostApplicationBuilder.CreateWebApi([], ctx =>
         {
-            var configs = new Dictionary<string, string?>
-            {
-                { "Logging:File:OutputDirectory", "."}
-            };
-
-            ctx.Configuration.AddInMemoryCollection(configs);
+            ctx.Builder.WebHost.UseEnvironment("Test");
+            ctx.Builder.WebHost.UseTestServer();
         });
         
             
