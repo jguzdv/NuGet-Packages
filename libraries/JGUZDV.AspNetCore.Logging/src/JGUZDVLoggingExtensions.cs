@@ -36,7 +36,12 @@ public static class JGUZDVLoggingExtensions
         {
             logger?.LogError(FileLoggerSectionName + " section is missing in the configuration. " +
                 "JGUZDV Logging requires a file logging section in production.");
+        }
 
+        // In Production we'll blindly add the JSON file logger.
+        if (isProduction)
+        {
+            builder.Logging.AddJsonFile();
 
             builder.Services.PostConfigure<FileLoggerOptions>(configureOptions =>
             {
@@ -52,12 +57,6 @@ public static class JGUZDVLoggingExtensions
                     configureOptions.OutputDirectory,
                     builder.Environment.ApplicationName);
             });
-        }
-
-        // In Production we'll blindly add the JSON file logger.
-        if (isProduction)
-        {
-            builder.Logging.AddJsonFile();
         }
         else
         {
