@@ -1,8 +1,10 @@
 ﻿using System.Security.Claims;
 
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Configuration;
 
 namespace JGUZDV.AspNetCore.Hosting.Diagnostics
 {
@@ -20,11 +22,26 @@ namespace JGUZDV.AspNetCore.Hosting.Diagnostics
                 .ExcludeFromDescription();
 
             diagnostics.MapGet("user",
-                (ClaimsPrincipal currentUser) =>
+                async (HttpContext ctx, IConfiguration configuration) =>
                 {
+                    string? id_token = null;
+                    string? accessToken = null;
+
+                    var showTokens = configuration.GetValue<bool>("Diagnostics:ShowTokens");
+
+                    if (configuration.GetValue<bool>("Diagnostics:ShowTokens"))
+                    {
+                        var authenticationResult = await ctx.AuthenticateAsync();
+                        if(authenticationResult.Succeeded)
+                        {
+                            id_token = authenticationResult.Properties.GetTokenValue("id_token");
+                            accessToken = authenticationResult.Properties.GetTokenValue("auth_token");
+                        }
+                    }
+
                     return Results.Ok(new
                     {
-                        Identities = currentUser.Identities.Select(identity => new
+                        Identities = ctx.User.Identities.Select(identity => new
                         {
                             IsAuthenticated = identity.IsAuthenticated,
                             IsAuthenticatedType = identity.AuthenticationType,
@@ -33,7 +50,14 @@ namespace JGUZDV.AspNetCore.Hosting.Diagnostics
                                 c.Type,
                                 c.Value
                             })
-                        })
+                        }),
+                        Tokens = !showTokens 
+                            ? "Add Diagnostics:ShowTokens=true to configuration to show tokens."
+                            : (object)new
+                            {
+                                id_token,
+                                accessToken
+                            }
                     });
                 });
 
