@@ -28,35 +28,20 @@ public static class JGUZDVLoggingExtensions
 
     private static void AddFileLogging(WebApplicationBuilder builder, ILogger? logger)
     {
-        var isProduction = builder.Environment.IsProduction();
+        var isNotDevelopment = !builder.Environment.IsDevelopment();
         var hasFileSection = builder.Configuration.GetSection(FileLoggerSectionName).Exists();
 
         // We'll log a missing log file as an error in production.
-        if (isProduction && !hasFileSection)
+        if (isNotDevelopment && !hasFileSection)
         {
             logger?.LogError(FileLoggerSectionName + " section is missing in the configuration. " +
                 "JGUZDV Logging requires a file logging section in production.");
         }
 
         // In Production we'll blindly add the JSON file logger.
-        if (isProduction)
+        if (isNotDevelopment)
         {
             builder.Logging.AddJsonFile();
-
-            builder.Services.PostConfigure<FileLoggerOptions>(configureOptions =>
-            {
-                if (string.IsNullOrWhiteSpace(configureOptions.OutputDirectory))
-                {
-                    throw new ArgumentException("No property OutputDirectory found in config section Logging:File. " +
-                            "JGUZDV Logging needs a directory to store logfiles.");
-                }
-
-                // Add the application name to the output directory, so log files for
-                // different apps will be written to different directories.
-                configureOptions.OutputDirectory = Path.Combine(
-                    configureOptions.OutputDirectory,
-                    builder.Environment.ApplicationName);
-            });
         }
         else
         {
@@ -66,6 +51,25 @@ public static class JGUZDVLoggingExtensions
             {
                 builder.Logging.AddPlainTextFile();
             }
+        }
+
+        if(hasFileSection) 
+        {
+            builder.Services.PostConfigure<FileLoggerOptions>(configureOptions =>
+            {
+                if (string.IsNullOrWhiteSpace(configureOptions.OutputDirectory))
+                {
+                    throw new ArgumentException(
+                        "No property OutputDirectory found in config section Logging:File. " +
+                        "JGUZDV Logging needs a directory to store logfiles.");
+                }
+
+                // Add the application name to the output directory, so log files for
+                // different apps will be written to different directories.
+                configureOptions.OutputDirectory = Path.Combine(
+                    configureOptions.OutputDirectory,
+                    builder.Environment.ApplicationName);
+            });
         }
     }
 }
