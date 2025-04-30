@@ -51,6 +51,8 @@ public static class JGUZDVLoggingExtensions
             }
 
 
+        if(hasFileSection) 
+        {
             builder.Services.PostConfigure<FileLoggerOptions>(configureOptions =>
             {
                 if (string.IsNullOrWhiteSpace(configureOptions.OutputDirectory))
