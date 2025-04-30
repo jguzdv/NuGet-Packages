@@ -34,7 +34,7 @@ public static class JGUZDVLoggingExtensions
         // We'll log a missing log file as an error in production.
         if (isProduction && !hasFileSection)
         {
-            logger?.LogError(FileLoggerSectionName + " section is missing in the configuration. " +
+            logger?.LogCritical(FileLoggerSectionName + " section is missing in the configuration. " +
                 "JGUZDV Logging requires a file logging section in production.");
         }
 
