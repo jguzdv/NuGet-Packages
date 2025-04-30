@@ -1,5 +1,4 @@
-﻿using JGUZDV.AspNetCore.Logging;
-using JGUZDV.Extensions.Logging.File;
+﻿using JGUZDV.Extensions.Logging.File;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -34,27 +33,24 @@ public static class JGUZDVLoggingExtensions
         // We'll log a missing log file as an error in production.
         if (isNotDevelopment && !hasFileSection)
         {
-            logger?.LogError(FileLoggerSectionName + " section is missing in the configuration. " +
+            logger?.LogCritical(FileLoggerSectionName + " section is missing in the configuration. " +
                 "JGUZDV Logging requires a file logging section in production.");
         }
 
-        // In Production we'll blindly add the JSON file logger.
-        if (isNotDevelopment)
+        if (hasFileSection)
         {
-            builder.Logging.AddJsonFile();
-        }
-        else
-        {
-            // In Development we'll add the plain text file logger if the file logger section is present.
-            // Else it's pretty annoying to have a file logger in development.
-            if (hasFileSection)
+            // In Production we'll blindly add the JSON file logger.
+            if (isNotDevelopment)
             {
+                builder.Logging.AddJsonFile();
+            }
+            else
+            {
+                // In Development we'll add the plain text file logger.
                 builder.Logging.AddPlainTextFile();
             }
-        }
 
-        if(hasFileSection) 
-        {
+
             builder.Services.PostConfigure<FileLoggerOptions>(configureOptions =>
             {
                 if (string.IsNullOrWhiteSpace(configureOptions.OutputDirectory))

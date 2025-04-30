@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.Configuration;
 
 namespace JGUZDV.AspNetCore.Hosting.Tests;
 
@@ -8,7 +7,7 @@ public class WebHostTests
     [Fact]
     public void Host_Will_Run_with_Little_Configuration()
     {
-        var hostBuilder = JGUZDVHostApplicationBuilder.CreateWebApi(["--environment", "Test"], ctx =>
+        var hostBuilder = JGUZDVHostApplicationBuilder.CreateWebApi([], ctx =>
         {
             ctx.Builder.WebHost.UseTestServer();
 
