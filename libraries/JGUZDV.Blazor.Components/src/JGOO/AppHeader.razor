@@ -2,7 +2,7 @@
 @using JGUZDV.Blazor.Components.Authentication;
 @using JGUZDV.Blazor.Components.Localization;
 
-<header class="jbs-header @AdditonalClasses">
+<header class="jbs-header bg-body @AdditonalClasses">
     <div class="header-grid">
         @if (Logo != null)
         {
@@ -12,9 +12,9 @@
                 </a>
             </div>
         }
-        
+
         <h1 class="header-app-title">@Title</h1>
-        
+
         @if (ChildContent != null)
         {
             <div class="header-content">
@@ -33,6 +33,11 @@
                 @if (ShowLanguageSelector)
                 {
                     <LanguageSelect />
+                }
+
+                @if (ShowDarkModeSelector)
+                {
+                    <DarkModeSelector />
                 }
 
                 @if (HelpUrl != null)
@@ -86,6 +91,9 @@
     public bool ShowAppSwitch { get; set; } = false;
 
     [Parameter]
+    public bool ShowDarkModeSelector { get; set; } = false;
+
+    [Parameter]
     public bool ShowSidebarToggle { get; set; } = true;
 
     [Parameter]
@@ -97,7 +105,8 @@
         ShowLanguageSelector || 
         ShowSidebarToggle ||
         ShowAppSwitch ||
-        HelpUrl != null
+        HelpUrl != null ||
+        ShowDarkModeSelector
         ;
 
 

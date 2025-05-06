@@ -7,7 +7,7 @@
 
         <PackageId>JGUZDV.Blazor.Components</PackageId>
         <IsPackable>true</IsPackable>
-        <Version>1.11.4</Version>
+        <Version>1.11.6</Version>
         <Authors>Thomas Ottenhus, Aylin Siebel, Aaron Puhl</Authors>
         <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
         <PackageDescription>Blazor component library - build for Bootstrap 5</PackageDescription>
@@ -26,6 +26,7 @@
       <None Include="tsconfig.json">
         <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       </None>
+      <None Include="wwwroot\JGUZDV.Blazor.Components.lib.module.js" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
