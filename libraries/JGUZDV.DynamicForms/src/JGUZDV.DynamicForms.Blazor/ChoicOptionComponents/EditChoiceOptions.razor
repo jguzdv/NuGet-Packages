@@ -1,0 +1,107 @@
+﻿@using JGUZDV.Blazor.Components.Modals
+@using JGUZDV.DynamicForms.Blazor.Resources
+@using JGUZDV.DynamicForms.Model
+@using System.ComponentModel.DataAnnotations
+
+
+<div class="pb-1">
+    <div class="fw-bold">@SL["EditChoiceOptions.Add"]</div>
+
+    <EditForm Model="_newChoiceOption" OnValidSubmit="() => AddChoiceOption(_newChoiceOption)">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        @if (_errors.Any())
+        {
+            <ul class="text-danger">
+                @foreach(var error in _errors)
+                {
+                    <li>@error.ErrorMessage</li>
+                }
+            </ul>
+        }
+
+        <ChoiceOptionInput @bind-ChoiceOption="_newChoiceOption" />
+
+        <div class="mt-2">
+            <button type="submit" class="btn btn-outline-primary">
+                @SL["ChoiceOptionInput.Save"]
+            </button>
+        </div>
+    </EditForm>
+</div>
+<hr />
+@if (Field.ChoiceOptions.Any())
+{
+    <div class="fw-bold">@SL["EditChoiceOptions.Edit"]</div>
+    <ul class="list-group">
+        @foreach (var option in Field.ChoiceOptions)
+        {
+            <li class="list-group-item">
+                @* <i class="fa fa-edit clickable"
+                   role="button"
+                   @onclick="() => HandleEditChoiceOption(option)"></i> *@
+                <i class="fa fa-trash pe-2 clickable"
+                role="button"
+                @onclick="() => RemoveChoiceOption(option)"></i>
+                @option.Name: @option.Value
+            </li>
+        }
+    </ul>
+}
+
+<Modal @ref=_editChoiceOptionModal TModel="ChoiceOption" Title="@SL["EditChoiceOptions.Edit"]">
+    <Body>
+        <ChoiceOptionInput ChoiceOption="@context.Model" ChoiceOptionChanged="() => _editChoiceOptionModal!.Close()"></ChoiceOptionInput>
+    </Body>
+</Modal>
+
+@code {
+    [Parameter]
+    public required FieldDefinition Field { get; set; }
+
+    [Parameter]
+    public EventCallback<FieldDefinition> FieldChanged { get; set; }
+
+    [Inject]
+    public required IStringLocalizer<ComponentStrings> SL { get; set; }
+
+    private Modal<ChoiceOption>? _editChoiceOptionModal = new();
+    private ChoiceOption _newChoiceOption = new();
+
+    private List<ValidationResult> _errors = [];
+
+    private void RemoveChoiceOption(ChoiceOption option)
+    {
+        Field.ChoiceOptions.Remove(option);
+        FieldChanged.InvokeAsync(Field);
+    }
+
+    private async Task HandleEditChoiceOption(ChoiceOption option)
+    {
+        var modal = await _editChoiceOptionModal!.ShowModal(option);
+        await FieldChanged.InvokeAsync(Field);
+    }
+
+    private void AddChoiceOption(ChoiceOption option)
+    {
+        _errors = [];
+        try
+        {
+            var val = Field.Type!.ConvertToValue(option.Value!);
+        }
+        catch
+        {
+            _errors = new List<ValidationResult>
+            {
+                new ValidationResult(SL["EditChoiceOptions.InvalidValue"])
+            };
+            return;
+        }
+
+
+        Field.ChoiceOptions.Add(option);
+        FieldChanged.InvokeAsync(Field);
+        _newChoiceOption = new();
+    }
+}

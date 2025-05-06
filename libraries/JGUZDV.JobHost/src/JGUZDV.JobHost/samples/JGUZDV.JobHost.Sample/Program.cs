@@ -10,6 +10,8 @@ using Microsoft.Extensions.Hosting;
 var builder = JobHost.CreateJobHostBuilder(args, configureWindowsService => configureWindowsService.ServiceName = "Sample",
                 quartzHostedServiceOptions => quartzHostedServiceOptions.WaitForJobsToComplete = true);
 
+builder.Services.AddSingleton<SampleMeterContainer>();
+
 builder.Services.AddDbContextFactory<JobHostContext>(x => x.UseSqlServer("Server=(LocalDb)\\MSSQLLocalDB;Database=JobHostDashboardSample;Trusted_Connection=True;MultipleActiveResultSets=true;Encrypt=False"));
 
 builder.UseJobReporting<JobHostContextReporter>();

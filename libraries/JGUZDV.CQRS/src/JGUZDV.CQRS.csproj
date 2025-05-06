@@ -8,7 +8,7 @@
 		
 		<PackageId>JGUZDV.CQRS</PackageId>
 		<IsPackable>true</IsPackable>
-		<Version>2.3.2</Version>
+		<Version>2.3.3</Version>
 		<Authors>Thomas Ottenhus</Authors>
 		<Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
 		<PackageDescription>Base classes that drive our CQRS-style business logic implementation</PackageDescription>

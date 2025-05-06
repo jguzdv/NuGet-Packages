@@ -1,0 +1,27 @@
+trigger: none # only trigger with pipeline resources
+
+resources:
+  pipelines:
+  - pipeline: Application
+    source: Applications/BlazorWebTemplate.Web
+    trigger: 
+      branches:
+        include: 
+        - main
+        - releases/*
+  - pipeline: Configuration
+    source: Configuration/DNSName
+    trigger: 
+      branches:
+        include: 
+        - main
+        - releases/*
+
+extends:
+  template: ../../.azuredevops/templates/WebApplication_Deployment.yml
+  parameters:
+    DeploymentName: 'Deploy_UMZ_Frontend'
+    DeployEnvironment: 'UMZ IIS-Farm'
+    IISWebApp:
+      Name: 'DNSName'
+      VirtualApplication: ''

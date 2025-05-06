@@ -130,7 +130,10 @@
     <value>New Choice</value>
   </data>
   <data name="EditChoiceOptions.Edit" xml:space="preserve">
-    <value>Edit Choices</value>
+    <value>Choices</value>
+  </data>
+  <data name="EditChoiceOptions.InvalidValue" xml:space="preserve">
+    <value>Value can not be converted to target type</value>
   </data>
   <data name="EditConstraints.Add" xml:space="preserve">
     <value>add</value>
@@ -194,5 +197,8 @@
   </data>
   <data name="ValueConfigurationForm.ConfirmSwitch" xml:space="preserve">
     <value>All previous configuration will be lost. Are you sure?</value>
+  </data>
+  <data name="ValueConfigurationForm.Ok" xml:space="preserve">
+    <value>ok</value>
   </data>
 </root>

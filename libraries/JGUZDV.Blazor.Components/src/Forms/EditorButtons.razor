@@ -27,19 +27,22 @@
     [Parameter] public bool IsDisabled { get; set; }
 
     /// <summary>
-    /// Manually set the busy state, if there's no CascadingBusyState.
+    /// Allows manually setting the busy state.
     /// </summary>
     [Parameter] public BusyState? BusyState { get; set; }
 
     [CascadingParameter]
-    public BusyState? CurrentBusyState { get; set; }
+    public BusyStateObserver? CascadedBusyStateObserver { get; set; }
     [CascadingParameter]
-    public BusyStateObserver? BusyStateObserver { get; set; }
+    public BusyState? CascadedBusyState { get; set; }
 
     public bool IsBusy => 
-        CurrentBusyState == Components.BusyState.Busy || 
-        BusyState == Components.BusyState.Busy;
+        CascadedBusyState == Components.BusyState.Busy ||
+        BusyState == Components.BusyState.Busy ||
+        _busyStateObserver?.CurrentState == Components.BusyState.Busy;
 
+
+    private BusyStateObserver? _busyStateObserver;
 
     protected override void OnParametersSet()
     {
@@ -49,6 +52,16 @@
             SaveLabel = LR["EditorButtons:DefaultSave"];
         if (DiscardLabel == null)
             DiscardLabel = LR["EditorButtons:DefaultDiscard"];
+
+        if (CascadedBusyStateObserver != null)
+        {
+            _busyStateObserver = CascadedBusyStateObserver;
+        }
+        else
+        {
+            _busyStateObserver ??= new BusyStateObserver();
+            _busyStateObserver.BusyStateChanged = EventCallback.Factory.Create<BusyState>(this, () => StateHasChanged());
+        }
     }
 
 
@@ -59,7 +72,7 @@
         }
 
         var task = OnDiscard.InvokeAsync();
-        BusyStateObserver?.AddTask(task);
+        _busyStateObserver?.AddTask(task);
     }
 
     private void InvokeSave(object args)
@@ -70,7 +83,7 @@
         }
 
         var task = OnSave.InvokeAsync();
-        BusyStateObserver?.AddTask(task);
+        _busyStateObserver?.AddTask(task);
     }
 
 

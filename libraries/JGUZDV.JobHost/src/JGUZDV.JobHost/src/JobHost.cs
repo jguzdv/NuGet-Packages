@@ -1,4 +1,5 @@
-﻿using JGUZDV.JobHost.Shared;
+﻿using JGUZDV.Extensions.OpenTelemetry;
+using JGUZDV.JobHost.Shared;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,7 +26,9 @@ namespace JGUZDV.JobHost
         /// <returns></returns>
         public static HostApplicationBuilder CreateJobHostBuilder(string[] args, Action<WindowsServiceLifetimeOptions> configureWindowsService, Action<QuartzHostedServiceOptions> configureQuartz)
         {
-            var builder = Host.CreateApplicationBuilder(args);
+            var builder = Host.CreateApplicationBuilder(args)
+                .AddJGUZDVOpenTelemetry();
+
             builder.Services.AddQuartzHostedService(x =>
             {
                 configureQuartz(x);
