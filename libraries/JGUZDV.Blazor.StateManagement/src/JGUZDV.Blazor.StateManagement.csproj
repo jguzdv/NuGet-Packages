@@ -1,12 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk.Razor">
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
 
         <PackageId>JGUZDV.Blazor.StateManagement</PackageId>
         <IsPackable>true</IsPackable>
-        <Version>1.0.1</Version>
+        <Version>1.1.0</Version>
         <Authors>Aaron Puhl</Authors>
         <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
         <PackageDescription>Blazor Statemanagement</PackageDescription>
@@ -22,7 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Components" Version="[7.0.14,)" />
+        <PackageReference Include="Microsoft.AspNetCore.Components" Version="[9.0.0,)" />
     </ItemGroup>
 
 </Project>
