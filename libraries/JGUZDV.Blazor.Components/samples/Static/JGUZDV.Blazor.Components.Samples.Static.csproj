@@ -11,8 +11,8 @@
     </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\libraries\JGUZDV.AspNetCore.Hosting\src\JGUZDV.AspNetCore.Hosting.csproj" />
-    <ProjectReference Include="..\libraries\JGUZDV.Blazor.Components\src\JGUZDV.Blazor.Components.csproj" />
+    <ProjectReference Include="..\..\..\JGUZDV.AspNetCore.Hosting\src\JGUZDV.AspNetCore.Hosting.csproj" />
+    <ProjectReference Include="..\..\src\JGUZDV.Blazor.Components.csproj" />
   </ItemGroup>
 
 </Project>
