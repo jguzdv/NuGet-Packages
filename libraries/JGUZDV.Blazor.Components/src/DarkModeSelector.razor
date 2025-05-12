@@ -8,13 +8,13 @@
         </span>
     </DropdownLabelContent>
     <DropdownContent>
-        <button class="dropdown-item" id="jgu-light-theme-icon" onclick="JGUZDVBlazorComponents.applyTheme('light')">
+        <button class="dropdown-item" id="jgu-light-theme-icon" onclick="JGUZDVBlazorComponents.applyTheme('light', false)">
             @Icons.LightMode("small pe-1") @LR["Theme.Light"]
         </button>
-        <button class="dropdown-item" id="jgu-dark-theme-icon" onclick="JGUZDVBlazorComponents.applyTheme('dark')">
+        <button class="dropdown-item" id="jgu-dark-theme-icon" onclick="JGUZDVBlazorComponents.applyTheme('dark', false)">
             @Icons.DarkMode("small pe-1") @LR["Theme.Dark"]
         </button>
-        <button class="dropdown-item" id="jgu-auto-theme-icon" onclick="JGUZDVBlazorComponents.applyTheme('auto')">
+        <button class="dropdown-item" id="jgu-auto-theme-icon" onclick="JGUZDVBlazorComponents.applyTheme('auto', false)">
             @Icons.AutoMode("small pe-1") Auto
         </button>
     </DropdownContent>

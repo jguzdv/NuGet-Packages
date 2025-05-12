@@ -1,12 +1,15 @@
 export type Theme = 'light' | 'dark' | 'auto';
 
-export function applyTheme(theme: Theme): void {
+export function applyTheme(theme: Theme, isInit: Boolean): void {
     if (theme === 'auto') {
         const preferred = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
         document.documentElement.setAttribute('data-bs-theme', preferred);
+        localStorage.removeItem("theme");
     } else {
         document.documentElement.setAttribute('data-bs-theme', theme);
-        localStorage.setItem("theme", theme);
+        if (!isInit) {
+            localStorage.setItem("theme", theme);
+        }
     }
 
     updateThemeIcon(theme);
@@ -16,6 +19,8 @@ export function applyTheme(theme: Theme): void {
 export function setStoredTheme(): Theme {
     const stored = localStorage.getItem("theme") as Theme | null;
     const theme: Theme = stored ?? 'light';
+
+    applyTheme(theme, true);
     return theme;
 }
 
@@ -51,14 +56,14 @@ declare global {
     interface Window {
         JGUZDVBlazorComponents: {
             loadTheme: () => Theme;
-            applyTheme: (theme: Theme) => void;
+            applyTheme: (theme: Theme, isInit: Boolean) => void;
         };
     }
 }
 
 window.JGUZDVBlazorComponents = {
     loadTheme : setStoredTheme,
-    applyTheme : function (theme: Theme): void {
-        applyTheme(theme);
+    applyTheme: function (theme: Theme, isInit: Boolean): void {
+        applyTheme(theme, isInit);
     }
 };
