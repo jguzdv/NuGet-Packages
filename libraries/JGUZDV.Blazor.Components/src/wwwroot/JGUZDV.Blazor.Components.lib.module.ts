@@ -6,23 +6,16 @@ export function applyTheme(theme: Theme): void {
         document.documentElement.setAttribute('data-bs-theme', preferred);
     } else {
         document.documentElement.setAttribute('data-bs-theme', theme);
+        localStorage.setItem("theme", theme);
     }
-    localStorage.setItem("theme", theme);
+
+    updateThemeIcon(theme);
     updateActiveThemeButton(theme);
 }
 
-export function loadTheme(): Theme {
+export function setStoredTheme(): Theme {
     const stored = localStorage.getItem("theme") as Theme | null;
-    const theme: Theme = stored ?? 'auto';
-
-    if (theme === 'auto') {
-        const preferred = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-        document.documentElement.setAttribute('data-bs-theme', preferred);
-    } else {
-        document.documentElement.setAttribute('data-bs-theme', theme);
-    }
-
-    updateActiveThemeButton(theme);
+    const theme: Theme = stored ?? 'light';
     return theme;
 }
 
@@ -49,14 +42,9 @@ export function updateActiveThemeButton(theme: Theme): void {
     });
 }
 
+
 export function afterWebStarted(): void {
-    const theme = loadTheme();
-    if ((window as any).blazor?.addEventListener) {
-        (window as any).blazor.addEventListener("enhancedload", () => {
-            loadTheme();
-        });
-    }
-    updateThemeIcon(localStorage.getItem("theme") as Theme ?? "auto");
+    setStoredTheme();
 }
 
 declare global {
@@ -68,10 +56,9 @@ declare global {
     }
 }
 
-window.JGUZDVBlazorComponents = window.JGUZDVBlazorComponents || {};
-
-window.JGUZDVBlazorComponents.loadTheme = loadTheme;
-window.JGUZDVBlazorComponents.applyTheme = function (theme: Theme): void {
-    applyTheme(theme);
-    updateThemeIcon(theme);
+window.JGUZDVBlazorComponents = {
+    loadTheme : setStoredTheme,
+    applyTheme : function (theme: Theme): void {
+        applyTheme(theme);
+    }
 };
