@@ -75,15 +75,16 @@ public static class Defaults
     /// </summary>
     public static IReadOnlyList<ClaimSource> KnownClaimSources = new List<ClaimSource>()
         {
-            new ("upn", "userPrincipalName"),
-            new ("security_identifier", "objectSid", "SDDL"),
-            new ("name", "displayName"),
-            new ("email", "mail", "lower"),
+            new ("affiliation", "eduPersonAffiliation"),
+            new ("department","department"),
+            new ("home_directory", "homeDirectory"),
+            new ("email", "mail", Casing: Casing.Lower),
             new ("family_name", "sn"),
             new ("given_name", "givenName"),
-            new ("home_directory", "homeDirectory"),
+            new ("name", "displayName"),
+            new ("security_identifier", "objectSid", OutputFormats.ByteArrays.SDDL),
             new ("scoped_affiliation", "eduPersonScopedAffiliation"),
-            new ("affiliation", "eduPersonAffiliation"),
             new ("uid", "sAMAccountName")
+            new ("upn", "userPrincipalName"),
         };
 }
