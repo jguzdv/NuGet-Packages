@@ -1,0 +1,21 @@
+﻿@inject IStringLocalizer<ComponentStrings> LR
+
+
+<Dropdown DropDownMenuClass="dropdown-menu-end">
+    <DropdownLabelContent>
+        <span class="btn btn-none" id="jgu-current-theme-icon" aria-haspopup="true" aria-expanded="false" aria-label="@LR["DarkModeSelector.Header"]">
+            <i class="fas fa-adjust"></i>
+        </span>
+    </DropdownLabelContent>
+    <DropdownContent>
+        <button class="dropdown-item" id="jgu-light-theme-icon" data-set-theme="light">
+            @Icons.LightMode("small pe-1") @LR["Theme.Light"]
+        </button>
+        <button class="dropdown-item" id="jgu-dark-theme-icon" data-set-theme="dark">
+            @Icons.DarkMode("small pe-1") @LR["Theme.Dark"]
+        </button>
+        <button class="dropdown-item" id="jgu-auto-theme-icon" data-set-theme="auto">
+            @Icons.AutoMode("small pe-1") Auto
+        </button>
+    </DropdownContent>
+</Dropdown>

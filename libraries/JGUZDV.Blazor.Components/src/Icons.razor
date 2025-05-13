@@ -69,4 +69,13 @@
 
     public static RenderFragment<string?> AppSelect { get; set; } = classes =>
     @<i class="fas fa-square @classes"></i>;
+
+    public static RenderFragment<string?> AutoMode { get; set; } = classes =>
+    @<i class="fas fa-adjust @classes"></i>;
+
+    public static RenderFragment<string?> DarkMode { get; set; } = classes =>
+    @<i class="fas fa-moon @classes"></i>;
+
+    public static RenderFragment<string?> LightMode { get; set; } = classes =>
+    @<i class="fas fa-sun @classes"></i>;
 }
