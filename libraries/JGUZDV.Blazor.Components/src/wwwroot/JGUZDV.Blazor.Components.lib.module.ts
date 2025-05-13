@@ -1,5 +1,16 @@
 export type Theme = 'light' | 'dark' | 'auto';
 
+export function registerThemeButtons(): void {
+    document.querySelectorAll<HTMLElement>('[data-set-theme]').forEach(el => {
+        el.addEventListener('click', () => {
+            const theme = el.getAttribute('data-set-theme') as Theme | null;
+            if (theme) {
+                applyTheme(theme, false);
+            }
+        });
+    });
+}
+
 export function applyTheme(theme: Theme, isInit: Boolean): void {
     if (theme === 'auto') {
         const preferred = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
@@ -50,6 +61,7 @@ export function updateActiveThemeButton(theme: Theme): void {
 
 export function afterWebStarted(): void {
     setStoredTheme();
+    registerThemeButtons();
 }
 
 declare global {
@@ -67,3 +79,7 @@ window.JGUZDVBlazorComponents = {
         applyTheme(theme, isInit);
     }
 };
+
+document.addEventListener("DOMContentLoaded", () => {
+    registerThemeButtons();
+});
