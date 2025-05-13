@@ -64,17 +64,7 @@ export function afterWebStarted(): void {
     registerThemeButtons();
 }
 
-declare global {
-    interface Window {
-        JGUZDVBlazorComponents: {
-            loadTheme: () => Theme;
-            applyTheme: (theme: Theme, isInit: Boolean) => void;
-        };
-    }
-}
-
-window.JGUZDVBlazorComponents = {
-    loadTheme: setStoredTheme,
-    applyTheme: applyTheme
-};
-
+document.addEventListener("DOMContentLoaded", () => {
+    setStoredTheme();
+    registerThemeButtons();
+});
