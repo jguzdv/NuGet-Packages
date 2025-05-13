@@ -84,7 +84,7 @@ public static class Defaults
             new ("name", "displayName"),
             new ("security_identifier", "objectSid", OutputFormats.ByteArrays.SDDL),
             new ("scoped_affiliation", "eduPersonScopedAffiliation"),
-            new ("uid", "sAMAccountName")
+            new ("uid", "sAMAccountName"),
             new ("upn", "userPrincipalName"),
         };
 }
