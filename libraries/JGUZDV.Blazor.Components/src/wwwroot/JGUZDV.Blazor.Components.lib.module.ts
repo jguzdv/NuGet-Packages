@@ -2,8 +2,9 @@ export type Theme = 'light' | 'dark' | 'auto';
 
 export function registerThemeButtons(): void {
     document.querySelectorAll<HTMLElement>('[data-set-theme]').forEach(el => {
-        el.addEventListener('click', () => {
-            const theme = el.getAttribute('data-set-theme') as Theme | null;
+        el.addEventListener('click', (event: Event) => {
+            const target = event.currentTarget as HTMLElement;
+            const theme = target.getAttribute('data-set-theme') as Theme | null;
             if (theme) {
                 applyTheme(theme, false);
             }
