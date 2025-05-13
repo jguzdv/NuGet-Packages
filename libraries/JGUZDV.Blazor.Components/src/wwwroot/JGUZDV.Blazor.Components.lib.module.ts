@@ -74,12 +74,7 @@ declare global {
 }
 
 window.JGUZDVBlazorComponents = {
-    loadTheme : setStoredTheme,
-    applyTheme: function (theme: Theme, isInit: Boolean): void {
-        applyTheme(theme, isInit);
-    }
+    loadTheme: setStoredTheme,
+    applyTheme: applyTheme
 };
 
-document.addEventListener("DOMContentLoaded", () => {
-    registerThemeButtons();
-});
