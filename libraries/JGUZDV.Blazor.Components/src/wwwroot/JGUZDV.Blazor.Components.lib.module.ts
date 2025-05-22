@@ -59,13 +59,7 @@ export function updateActiveThemeButton(theme: Theme): void {
     });
 }
 
-
 export function afterWebStarted(): void {
     setStoredTheme();
     registerThemeButtons();
 }
-
-document.addEventListener("DOMContentLoaded", () => {
-    setStoredTheme();
-    registerThemeButtons();
-});
