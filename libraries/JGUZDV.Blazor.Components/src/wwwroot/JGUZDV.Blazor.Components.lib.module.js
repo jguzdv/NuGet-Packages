@@ -54,7 +54,3 @@ export function afterWebStarted() {
     setStoredTheme();
     registerThemeButtons();
 }
-document.addEventListener("DOMContentLoaded", () => {
-    setStoredTheme();
-    registerThemeButtons();
-});
