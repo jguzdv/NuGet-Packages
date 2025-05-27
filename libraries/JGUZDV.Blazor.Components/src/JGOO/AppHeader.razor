@@ -1,6 +1,7 @@
 @using JGUZDV.Blazor.Components;
 @using JGUZDV.Blazor.Components.Authentication;
 @using JGUZDV.Blazor.Components.Localization;
+@using JGUZDV.Blazor.Components.NavigatorSwitch
 
 <header class="jbs-header bg-body @AdditonalClasses">
     <div class="header-grid">
@@ -49,9 +50,7 @@
 
                 @if (ShowAppSwitch) 
                 {
-                    <button class="jgu_btn btn btn-none">
-                        @Icons.AppSelect(null)
-                    </button>
+                    <NavigatorSwitchMenu />
                 }
 
                 @if (ShowSidebarToggle)

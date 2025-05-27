@@ -1,0 +1,64 @@
+﻿@using JGUZDV.Blazor.Components.NavigatorSwitch
+@inject NavigatorSwitchService NavigatorService
+
+
+<div class="app-menu-container">
+
+    <button class="jgu_btn btn btn-none" onclick="toggleAppMenu()">
+        @Icons.AppSelect("app-menu-icon")
+    </button>
+
+    <div id="appMenu" class="app-menu-dropdown">
+        @foreach (var widgetEntry in WidgetEntries)
+        {
+            <a href="@widgetEntry.ServiceLink.Url" title="@widgetEntry.ServiceLink.AnchorText_de" target="_blank" class="app-menu-item">
+                @if (string.IsNullOrEmpty(widgetEntry.LogoAsDataString))
+                {
+                    @* Todo: Klärung ob ein Defaultbild hinterlegt werden soll oder ob das Logo gesetzt werden muss *@
+                    <img src="https://cdn.zdv.uni-mainz.de/web/assets/logo_uni-mainz_quader.svg" alt="@widgetEntry.ShortName" />
+                }
+                else
+                {
+                    <img src="@widgetEntry.LogoAsDataString" alt="@widgetEntry.ShortName" />
+                }
+
+                <div class="text-truncate" style="max-width: 70px;">@widgetEntry.ShortName</div>
+            </a>
+        }
+    </div>
+
+</div>
+
+<script>
+    function toggleAppMenu() {
+        var menu = document.getElementById("appMenu");
+        if (menu.style.display === "grid") {
+            menu.style.display = "none";
+        } else {
+            menu.style.display = "grid";
+        }
+    }
+
+    document.addEventListener('click', function (event) {
+        var menu = document.getElementById("appMenu");
+        var icon = document.querySelector('.app-menu-icon');
+        if (!menu.contains(event.target) && !icon.contains(event.target)) {
+            menu.style.display = 'none';
+        }
+    });
+</script>
+
+
+@code {
+    private List<WidgetEntry> WidgetEntries = new List<WidgetEntry>();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            WidgetEntries = await NavigatorService.FindWidgetEntries();
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+}
