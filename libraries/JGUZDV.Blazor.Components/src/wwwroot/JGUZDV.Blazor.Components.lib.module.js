@@ -50,7 +50,30 @@ export function updateActiveThemeButton(theme) {
         }
     });
 }
+export function setupDropdownCloseOnClick() {
+    document.addEventListener('click', (event) => {
+        const target = event.target;
+        document.querySelectorAll('input.dropdown-toggle').forEach((checkbox) => {
+            const dropdown = checkbox.closest('.dropdown');
+            if (!dropdown)
+                return;
+            if (!dropdown.contains(target)) {
+                checkbox.checked = false;
+            }
+        });
+    });
+    document.querySelectorAll('[data-set-theme]').forEach((el) => {
+        el.addEventListener('click', () => {
+            const dropdown = el.closest('.dropdown');
+            const checkbox = dropdown?.querySelector('input.dropdown-toggle');
+            if (checkbox) {
+                checkbox.checked = false;
+            }
+        });
+    });
+}
 export function afterWebStarted() {
     setStoredTheme();
     registerThemeButtons();
+    setupDropdownCloseOnClick();
 }

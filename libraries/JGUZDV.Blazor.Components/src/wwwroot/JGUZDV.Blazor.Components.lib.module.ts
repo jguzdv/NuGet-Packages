@@ -59,7 +59,34 @@ export function updateActiveThemeButton(theme: Theme): void {
     });
 }
 
+export function setupDropdownCloseOnClick(): void {
+    document.addEventListener('click', (event: MouseEvent) => {
+        const target = event.target as Node;
+
+        document.querySelectorAll<HTMLInputElement>('input.dropdown-toggle').forEach((checkbox) => {
+            const dropdown = checkbox.closest('.dropdown');
+            if (!dropdown) return;
+
+            if (!dropdown.contains(target)) {
+                checkbox.checked = false;
+            }
+        });
+    });
+
+    document.querySelectorAll<HTMLElement>('[data-set-theme]').forEach((el) => {
+        el.addEventListener('click', () => {
+            const dropdown = el.closest('.dropdown');
+            const checkbox = dropdown?.querySelector<HTMLInputElement>('input.dropdown-toggle');
+            if (checkbox) {
+                checkbox.checked = false;
+            }
+        });
+    });
+}
+
+
 export function afterWebStarted(): void {
     setStoredTheme();
     registerThemeButtons();
+    setupDropdownCloseOnClick();
 }

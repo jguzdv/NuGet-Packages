@@ -31,6 +31,7 @@
             var jsModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/JGUZDV.Blazor.Components/JGUZDV.Blazor.Components.lib.module.js");
             await jsModule.InvokeVoidAsync("setStoredTheme");
             await jsModule.InvokeVoidAsync("registerThemeButtons");
+            await jsModule.InvokeVoidAsync("setupDropdownCloseOnClick");
         }
 
         await base.OnAfterRenderAsync(firstRender);
