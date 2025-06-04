@@ -78,59 +78,111 @@
     }
 </div>
 @code {
+
+    /// <summary>
+    /// The list of items to display in the selection dropdown.
+    /// </summary>
     [Parameter]
     [EditorRequired]
     public List<T> Items { get; set; } = default!;
 
+    /// <summary>
+    /// Template for rendering each item in the dropdown list.
+    /// </summary>
     [Parameter]
     [NotNull]
     public RenderFragment<T>? ItemTemplate { get; set; } = default!;
 
+    /// <summary>
+    /// Function to get the display name for an item.
+    /// </summary>
     [Parameter]
     [EditorRequired]
     public Func<T, string> ItemName { get; set; } = default!;
 
+    /// <summary>
+    /// Function to get the unique key for an item.
+    /// </summary>
     [Parameter]
     [EditorRequired]
     public Func<T?, TKey> ItemKey { get; set; } = default!;
 
+    /// <summary>
+    /// The currently selected values (for multi-select mode).
+    /// </summary>
     [Parameter]
     public List<T>? Values { get; set; } = default!;
 
+    /// <summary>
+    /// Event callback triggered when the selected values change.
+    /// </summary>
     [Parameter]
     public EventCallback<List<T>> ValuesChanged { get; set; }
 
+    /// <summary>
+    /// The currently selected value (for single-select mode).
+    /// </summary>
     [Parameter]
     public T? Value { get; set; } = default!;
 
+    /// <summary>
+    /// Event callback triggered when the selected value changes.
+    /// </summary>
     [Parameter]
     public EventCallback<T> ValueChanged { get; set; }
 
+    /// <summary>
+    /// The title displayed in the selection control.
+    /// </summary>
     [Parameter]
     [EditorRequired]
     public string Title { get; set; } = default!;
 
+    /// <summary>
+    /// The label for the 'select all' option.
+    /// </summary>
     [Parameter]
     public string? AllOptionLabel { get; set; }
 
+    /// <summary>
+    /// The CSS class for the host element.
+    /// </summary>
     [Parameter]
     public string? HostClass { get; set; }
 
+    /// <summary>
+    /// The label for the filter input.
+    /// </summary>
     [Parameter]
     public string? FilterLabel { get; set; }
 
+    /// <summary>
+    /// The icon to display in the filter input.
+    /// </summary>
     [Parameter]
     public RenderFragment<string> FilterIcon { get; set; } = Icons.Filter;
 
+    /// <summary>
+    /// Function to filter items based on a query string.
+    /// </summary>
     [Parameter]
     public Func<(T item, string query), bool>? Filter { get; set; }
 
+    /// <summary>
+    /// The CSS class for the items container.
+    /// </summary>
     [Parameter]
     public string? ItemsContainerClass { get; set; } = "row row-cols-1";
 
+    /// <summary>
+    /// If true, enables single selection mode; otherwise, multi-selection is enabled.
+    /// </summary>
     [Parameter]
     public bool UseSingleSelectionMode { get; set; }
 
+    /// <summary>
+    /// The render fragment for the close button.
+    /// </summary>
     [Parameter]
     public RenderFragment CloseButton { get; set; } =
         @<div class="btn btn-outline-secondary w-100">
@@ -138,12 +190,21 @@
         </div>
     ;
 
+    /// <summary>
+    /// The icon to display when the dropdown is open.
+    /// </summary>
     [Parameter]
     public RenderFragment<string> CloseIcon { get; set; } = Icons.Collapsed;
 
+    /// <summary>
+    /// The icon to display when the dropdown is closed.
+    /// </summary>
     [Parameter]
     public RenderFragment<string> OpenIcon { get; set; } = Icons.Collapsible;
 
+    /// <summary>
+    /// The icon to display on badges for selected items.
+    /// </summary>
     [Parameter]
     public RenderFragment<string> BadgeIcon { get; set; } = Icons.RemoveCircle;
 
