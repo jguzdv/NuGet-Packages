@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "./wwwroot",
-    "rootDir": "./ts",
+    "outDir": "wwwroot",
 
     "strict": true,
 
@@ -9,5 +8,8 @@
     "target": "ES2022",
     "module": "ES2022",
     "sourceMap": false
-  }
+  },
+  "include": [
+    "ts/**/*"
+  ]
 }

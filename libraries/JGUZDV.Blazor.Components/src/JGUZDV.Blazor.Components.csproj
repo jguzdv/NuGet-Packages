@@ -7,7 +7,7 @@
 
         <PackageId>JGUZDV.Blazor.Components</PackageId>
         <IsPackable>true</IsPackable>
-        <Version>1.12.6</Version>
+        <Version>1.12.7</Version>
         <Authors>Thomas Ottenhus, Aylin Siebel, Aaron Puhl</Authors>
         <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
         <PackageDescription>Blazor component library - build for Bootstrap 5</PackageDescription>
@@ -15,18 +15,6 @@
 
         <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     </PropertyGroup>
-
-    <ItemGroup>
-        <Content Update="tsconfig.json">
-            <Pack>false</Pack>
-        </Content>
-    </ItemGroup>
-
-    <ItemGroup>
-        <None Include="tsconfig.json">
-            <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-        </None>
-    </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
         <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="[8.0.0,)" />
@@ -55,7 +43,7 @@
     <Target Name="FixTypescriptCompileDependencies" BeforeTargets="BeforeBuild">
         <PropertyGroup>
             <PrepareForBuildDependsOn>
-                FindConfigFiles;
+                <!-- FindConfigFiles; -->
                 CompileTypeScript;
                 CompileTypeScriptWithTSConfig;
                 GetTypeScriptOutputForPublishing;
@@ -64,6 +52,7 @@
         </PropertyGroup>
     </Target>
 
+    
     <Target Name="RemoveDuplicateTypeScriptOutputs" AfterTargets="GetTypeScriptOutputForPublishing">
         <Message Importance="High" Text="GeneratedJavaScript files are: @(GeneratedJavaScript)" />
         <ItemGroup>
@@ -75,6 +64,13 @@
     <ItemGroup>
         <ProjectReference Include="..\..\JGUZDV.AspNetCore.Components.Localization\src\JGUZDV.AspNetCore.Components.Localization.csproj" />
         <ProjectReference Include="..\..\JGUZDV.Extensions.Json\src\JGUZDV.Extensions.Json.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Update="tsconfig.json">
+        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+        <Pack>false</Pack>
+      </Content>
     </ItemGroup>
 
     <ItemGroup>
