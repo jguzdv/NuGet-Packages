@@ -3,8 +3,14 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace JGUZDV.Blazor.Components.Authentication;
 
+/// <summary>
+/// Obsolete: Migrate to Components.Web and use PersistentAuthenticationStateProvider.
+/// </summary>
 public static class DelegatedAuthenticationStateProviderExtensions
 {
+    /// <summary>
+    /// Obsolete: Migrate to Components.Web and use PersistentAuthenticationStateProvider.
+    /// </summary>
     [Obsolete("Migrate to Components.Web and use PersistentAuthenticationStateProvider")]
     public static IServiceCollection AddAuthenticationStateProvider<TFetchAuthenticationState>(
         this IServiceCollection services)
@@ -18,6 +24,9 @@ public static class DelegatedAuthenticationStateProviderExtensions
         return services;
     }
 
+    /// <summary>
+    /// Obsolete: Migrate to Components.Web and use PersistentAuthenticationStateProvider.
+    /// </summary>
     [Obsolete("Migrate to Components.Web and use PersistentAuthenticationStateProvider")]
     public static IServiceCollection AddDefaultAuthenticationStateProvider(this IServiceCollection services)
     {
