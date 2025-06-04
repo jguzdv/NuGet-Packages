@@ -143,7 +143,7 @@
         base.OnParametersSet();
 
         if (!UseSingleSelectionMode && Values == null)
-            throw new InvalidOperationException($"Parameter {nameof(Values)} may not be null if multipe values are allowed");
+            throw new InvalidOperationException($"Parameter {nameof(Values)} may not be null if multiple values are allowed");
 
         if (UseSingleSelectionMode && Values != null)
             throw new InvalidOperationException($"Parameter {nameof(Values)} may not be set if only one value is allowed");

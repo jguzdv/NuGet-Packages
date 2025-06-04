@@ -160,7 +160,7 @@
     /// The icon to display in the filter input.
     /// </summary>
     [Parameter]
-    public RenderFragment<string> FilterIcon { get; set; } = Icons.Filter;
+    public RenderFragment<string?> FilterIcon { get; set; } = Icons.Filter;
 
     /// <summary>
     /// Function to filter items based on a query string.
@@ -194,24 +194,25 @@
     /// The icon to display when the dropdown is open.
     /// </summary>
     [Parameter]
-    public RenderFragment<string> CloseIcon { get; set; } = Icons.Collapsed;
+    public RenderFragment<string?> CloseIcon { get; set; } = Icons.Collapsed;
 
     /// <summary>
     /// The icon to display when the dropdown is closed.
     /// </summary>
     [Parameter]
-    public RenderFragment<string> OpenIcon { get; set; } = Icons.Collapsible;
+    public RenderFragment<string?> OpenIcon { get; set; } = Icons.Collapsible;
 
     /// <summary>
     /// The icon to display on badges for selected items.
     /// </summary>
     [Parameter]
-    public RenderFragment<string> BadgeIcon { get; set; } = Icons.RemoveCircle;
+    public RenderFragment<string?> BadgeIcon { get; set; } = Icons.RemoveCircle;
 
     private bool _isOpen;
 
     private ElementReference _anchor;
 
+    /// <inheritdoc />
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
