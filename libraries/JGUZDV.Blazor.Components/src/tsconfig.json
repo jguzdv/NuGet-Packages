@@ -1,5 +1,8 @@
 {
   "compilerOptions": {
+    "outDir": "./wwwroot",
+    "rootDir": "./ts",
+
     "strict": true,
 
     "isolatedModules": true,
