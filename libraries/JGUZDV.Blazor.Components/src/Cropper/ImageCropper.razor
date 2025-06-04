@@ -201,7 +201,7 @@
 
         if (firstRender)
         {
-            _jsModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/JGUZDV.Blazor.Components/Cropper/ImageCropper.razor.js");
+            _jsModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/JGUZDV.Blazor.Components/Cropper/ImageCropper.js");
             _cropperInstance = await _jsModule.InvokeAsync<IJSObjectReference>("createCropper", _dotNetObjectRef, HtmlWrapper);
 
             IsInitialized = true;
