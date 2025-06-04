@@ -3,6 +3,9 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace JGUZDV.Blazor.Components.Authentication;
 
+/// <summary>
+/// Obsolete: Migrate to Components.Web and use PersistentAuthenticationStateProvider.
+/// </summary>
 public static class DelegatedAuthenticationStateProviderExtensions
 {
     /// <summary>
