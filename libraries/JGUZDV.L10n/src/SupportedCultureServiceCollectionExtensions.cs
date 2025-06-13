@@ -5,6 +5,7 @@ namespace JGUZDV.L10n
     /// <summary>
     /// Handles the method to pass on the supported cultures.
     /// </summary>
+    [Obsolete("Use ILanguageService from JGUZDV.Blazor.Components.L10n")]
     public static class SupportedCultureServiceCollectionExtensions
     {
         /// <summary>
