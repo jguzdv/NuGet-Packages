@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
+        <StaticWebAssetProjectMode>Default</StaticWebAssetProjectMode>
+
+        <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
+
+        <RootNamespace>ZDV.BlazorWebTemplate.Web.Client</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" />
+        <PackageReference Include="JGUZDV.Blazor.Hosting" />
+        <PackageReference Include="JGUZDV.Blazor.Components" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\BlazorWebTemplate.WebApi.HttpModel\BlazorWebTemplate.WebApi.HttpModel.csproj" />
+    </ItemGroup>
+
+</Project>

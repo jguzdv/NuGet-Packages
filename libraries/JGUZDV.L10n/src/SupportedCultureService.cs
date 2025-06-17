@@ -3,6 +3,7 @@
     /// <summary>
     /// Handles methods and processes regarding the supported cultures.
     /// </summary>
+    [Obsolete("Use ILanguageService from JGUZDV.Blazor.Components.L10n")]
     public class SupportedCultureService : ISupportedCultureService
     {
         private readonly List<string> _supportedCultures;

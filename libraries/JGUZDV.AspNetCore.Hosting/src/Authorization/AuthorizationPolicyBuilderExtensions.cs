@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using JGUZDV.AspNetCore.Hosting.Authorization;
+
+using Microsoft.AspNetCore.Authorization;
 
 namespace JGUZDV.AspNetCore.Hosting;
 
@@ -14,9 +16,13 @@ public static class AuthorizationPolicyBuilderExtensions
     /// </summary>
     public static AuthorizationPolicyBuilder RequireScope(this AuthorizationPolicyBuilder builder, string allowedScope, string scopeClaimType = "scope")
     {
-        return builder.RequireAssertion(context =>
-            context.User.FindAll(scopeClaimType).SelectMany(c => c.Value.Split(' '))
-                .Contains(allowedScope, StringComparer.Ordinal)
+        return builder.AddRequirements(
+            new ClaimCollectionAuthorizationRequirement(
+                ClaimCollectionAuthorizationRequirement.MatchType.Any,
+                scopeClaimType,
+                null,
+                [allowedScope]
+            )
         );
     }
 
@@ -27,10 +33,13 @@ public static class AuthorizationPolicyBuilderExtensions
     /// </summary>
     public static AuthorizationPolicyBuilder RequireAnyScope(this AuthorizationPolicyBuilder builder, IEnumerable<string> allowedScopes, string scopeClaimType = "scope")
     {
-        return builder.RequireAssertion(context =>
-            context.User.FindAll(scopeClaimType).SelectMany(c => c.Value.Split(' '))
-                .Intersect(allowedScopes, StringComparer.Ordinal)
-                .Any()
+        return builder.AddRequirements(
+            new ClaimCollectionAuthorizationRequirement(
+                ClaimCollectionAuthorizationRequirement.MatchType.Any,
+                scopeClaimType,
+                null,
+                [.. allowedScopes]
+            )
         );
     }
 
@@ -41,14 +50,15 @@ public static class AuthorizationPolicyBuilderExtensions
     /// </summary>
     public static AuthorizationPolicyBuilder RequireAllScopes(this AuthorizationPolicyBuilder builder, IEnumerable<string> allowedScopes, string scopeClaimType = "scope")
     {
-        return builder.RequireAssertion(context =>
-            !allowedScopes
-                .Except(
-                    context.User
-                        .FindAll(scopeClaimType)
-                        .SelectMany(c => c.Value.Split(' ')), 
-                    StringComparer.Ordinal)
-                .Any()
+        return builder.AddRequirements(
+            new ClaimCollectionAuthorizationRequirement(
+                ClaimCollectionAuthorizationRequirement.MatchType.All,
+                scopeClaimType,
+                null,
+                [.. allowedScopes]
+            )
         );
     }
+
+
 }

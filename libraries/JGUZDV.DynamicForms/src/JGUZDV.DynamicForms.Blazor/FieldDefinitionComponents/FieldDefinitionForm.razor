@@ -1,0 +1,172 @@
+﻿@page "/edit-field-definition"
+@using JGUZDV.Blazor.Components.L10n
+@using JGUZDV.DynamicForms.Blazor.Resources
+@using JGUZDV.DynamicForms.Model
+@using JGUZDV.L10n
+@using Microsoft.Extensions.DependencyInjection
+@using System.ComponentModel.DataAnnotations
+
+@inject NavigationManager Navigation
+@inject IStringLocalizer<ComponentStrings> SL
+@inject IServiceProvider ServiceProvider
+
+<EditForm Model="@_fieldDefinition" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <ul>
+        @foreach (var item in _additionalValidationErrors)
+        {
+            <li class="text-danger">
+                @item.ErrorMessage
+            </li>
+        }
+    </ul>
+
+    <div class="mb-2">
+        <label for="identifier">@SL["EditFieldDefinition.Identifier"]</label>
+        <InputText id="identifier" @bind-Value="_fieldDefinition.Identifier" class="form-control" />
+    </div>
+
+    <div class="mb-2">
+        <label for="label">@SL["EditFieldDefinition.Label"]</label>
+        <L10nEditor L10n="_fieldDefinition.InputDefinition.Label" />
+    </div>
+
+    <div class="mb-2">
+        <label for="name">@SL["EditFieldDefinition.Name"]</label>
+        <InputText id="name" @bind-Value="_fieldDefinition.InputDefinition.Name" class="form-control" />
+    </div>
+
+    <div class="mb-2">
+        <label for="type">@SL["EditFieldDefinition.Type"]</label>
+        <select id="type"
+        value="@_fieldDefinition.Type?.ToJson()"
+        @onchange="HandleTypeChanged"
+        class="form-select">
+            @if (_fieldDefinition.Type == null)
+            {
+                <option value="" selected>@SL["EditFieldDefinition.SelectType"]</option>
+            }
+            @foreach (var type in DynamicFormsConfiguration.KnownFieldTypes)
+            {
+                <option value="@type.ToJson()">@type.DisplayName</option>
+            }
+        </select>
+    </div>
+
+    @if (_metadataChoices != null)
+    {
+        <div class="mb-2">
+            <label for="metadata">@_metadataLabel</label>
+            <select id="metadata"
+            class="form-select"
+            @bind="_fieldDefinition.Metadata">
+                @if (string.IsNullOrWhiteSpace(_fieldDefinition.Metadata))
+                {
+                    //TODO: Change key
+                    <option value="" selected>@SL["EditFieldDefinition.SelectType"]</option>
+                }
+                @foreach (var choice in _metadataChoices)
+                {
+                    <option value="@choice.Value">@choice.Name</option>
+                }
+            </select>
+        </div>
+    }
+
+    <div class="mb-2">
+        <label for="description">@SL["EditFieldDefinition.Description"]</label>
+        <L10nEditor L10n="_fieldDefinition.Description" />
+    </div>
+
+    <div class="mb-2 form-check">
+        <InputCheckbox id="isList" @bind-Value="_fieldDefinition.IsList" class="form-check-input" />
+        <label class="form-check-label" for="isList">@SL["EditFieldDefinition.IsList"]</label>
+    </div>
+
+    <div class="mb-2 form-check">
+        <InputCheckbox class="form-check-input" id="isRequired" @bind-Value="_fieldDefinition.IsRequired" />
+        <label class="form-check-label" for="isRequired">@SL["EditFieldDefinition.IsRequired"]</label>
+    </div>
+
+    <div class="mb-2">
+        <label for="sortKey">@SL["EditFieldDefinition.SortKey"]</label>
+        <InputNumber id="sortKey" @bind-Value="_fieldDefinition.SortKey" class="form-control" />
+    </div>
+
+    <button type="submit"
+    class="btn btn-primary">
+        @(string.IsNullOrWhiteSpace(SubmitLabel)
+                                    ? SL["EditFieldDefinition.Save"]
+                                    : SubmitLabel)
+    </button>
+</EditForm>
+
+@code {
+    [Parameter]
+    public required FieldDefinition FieldDefinition { get; set; }
+
+    [Parameter]
+    public EventCallback<FieldDefinition> FieldDefinitionChanged { get; set; }
+
+    [Parameter]
+    public string? SubmitLabel { get; set; }
+
+    private List<ChoiceOption>? _metadataChoices = null;
+    private string _metadataLabel = "";
+
+    private List<ValidationResult> _additionalValidationErrors = [];
+
+    private FieldDefinition? _fieldDefinition;
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        _fieldDefinition = FieldDefinition.Copy();
+    }
+
+    private void HandleValidSubmit()
+    {
+        _additionalValidationErrors = [];
+        if (_metadataChoices != null)
+        {
+            if (!_metadataChoices.Any(x => x.Value == _fieldDefinition!.Metadata))
+            {
+                _additionalValidationErrors = new List<ValidationResult>
+                {
+                    new ValidationResult(SL["EditFieldDefinition.InvalidMetadata", _metadataLabel])
+                };
+
+                return;
+            }
+        }
+
+
+        FieldDefinition.CopyFrom(_fieldDefinition);
+
+        FieldDefinitionChanged.InvokeAsync(FieldDefinition);
+    }
+
+    private async Task HandleTypeChanged(ChangeEventArgs e)
+    {
+        _fieldDefinition!.Type = FieldType.FromJson(e.Value!.ToString()!);
+
+
+        var metadataService = ServiceProvider
+            .GetKeyedService<IFieldTypeMetadataProvider>(_fieldDefinition.Type.GetType().Name);
+
+        if (metadataService != null)
+        {
+            _metadataChoices = await metadataService.GetValues(_fieldDefinition.Type);
+            _metadataLabel = metadataService.GetMetadataDisplayName(_fieldDefinition.Type).ToString()!;
+        }
+        else
+        {
+            _metadataChoices = null;
+            _metadataLabel = "";
+        }
+
+    }
+}

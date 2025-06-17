@@ -1,0 +1,34 @@
+﻿@using JGUZDV.Blazor.Components.JGOO
+
+@inherits LayoutComponentBase
+
+@{
+    var appLogo = new AppHeader.LogoSpecs() {
+        SrcUrl = Assets["assets/app_logo.svg"],
+        AltText = "Logo für " + LR["App.Title"],
+        Href = "/"
+    };
+}
+
+<div class="container p-0">
+    <div class="jbs-page jbs-grid jbs-container border">
+        <AppHeader Title="@LR["App.Title"]"
+            Logo="@appLogo"
+            ShowLoginButton="true" 
+            ShowLanguageSelector="true" 
+            HelpUrl="/help"
+        >
+            @* Additional Header content? *@
+        </AppHeader>
+        
+        <Sidebar>
+        </Sidebar>
+        
+        <div class="jbs-topbar container-fluid mt-2">
+        </div>
+
+        <main class="jbs-main container-fluid my-2">
+            @Body
+        </main>
+    </div>
+</div>

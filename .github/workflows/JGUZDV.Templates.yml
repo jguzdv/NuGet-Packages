@@ -1,0 +1,23 @@
+name: JGUZDV.Templates
+
+on:
+  workflow_dispatch:
+    inputs:
+      push-to-nuget:
+        description: Push template to NuGet
+        type: boolean
+
+  pull_request:
+    branches:
+      - main
+    paths:
+      - templates/JGUZDV.Templates/**
+
+jobs:
+  call_default_build:
+    uses: ./.github/workflows/default_template_build.yml
+    with:
+      template-name: JGUZDV.Templates
+      push-to-nuget: ${{ inputs.push-to-nuget != '' && inputs.push-to-nuget }}
+    secrets:
+      NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}

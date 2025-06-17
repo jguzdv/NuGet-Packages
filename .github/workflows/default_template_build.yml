@@ -1,0 +1,64 @@
+on:
+  workflow_call:
+    inputs:
+      template-name:
+        required: true
+        type: string
+      push-to-nuget:
+        required: false
+        type: boolean
+        default: false
+    secrets:
+      NUGET_API_KEY:
+        required: true    
+
+env:
+  dotnet-version: 9.0.x
+  src-proj: templates/JGUZDV.Templates.csproj
+  publish-path: ./publish/JGUZDV.Templates
+  
+jobs:
+    pack_template:
+      name: Pack ${{ inputs.template-name }}
+      runs-on: ubuntu-latest
+    
+      steps:
+        - uses: actions/checkout@v3
+        - name: Setup .NET Core SDK ${{ env.dotnet-version }}
+          uses: actions/setup-dotnet@v3
+          with:
+            dotnet-version: ${{ env.dotnet-version }}
+
+        - name: Restore project
+          run: dotnet restore ${{ env.src-proj }}
+        
+        - name: Pack template project
+          run: dotnet pack ${{ env.src-proj }} --no-build -c Release --output ${{ env.publish-path }}
+    
+        - name: Upload nupkg
+          uses: actions/upload-artifact@v4
+          with:
+            name: NuGetPackage
+            path: ${{ env.publish-path }}
+            if-no-files-found: error
+            retention-days: 7
+  
+    push_to_nuget:
+      needs: pack_template
+      if: github.repository == 'jguzdv/NuGet-Packages' && github.ref == 'refs/heads/main' && inputs.push-to-nuget
+      name: Push ${{ inputs.template-name }}
+      runs-on: ubuntu-latest
+  
+      env:
+        dotnet-version: 9.0.x
+  
+      steps:
+        - name: Download nupkg
+          uses: actions/download-artifact@v4
+          with:
+            name: NuGetPackage
+            path: package
+  
+        - name: Push template
+          run: dotnet nuget push package/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }}
+        

@@ -1,0 +1,23 @@
+name: JGUZDV.JsonMerge
+
+on:
+  workflow_dispatch:
+    inputs:
+      push-to-nuget:
+        description: Push tool to NuGet
+        type: boolean
+
+  pull_request:
+    branches:
+      - main
+    paths:
+      - tools/JGUZDV.JsonMerge/**
+
+jobs:
+  call_default_build:
+    uses: ./.github/workflows/default_tool_build.yml
+    with:
+      tool-name: JGUZDV.JsonMerge
+      push-to-nuget: ${{ inputs.push-to-nuget != '' && inputs.push-to-nuget }}
+    secrets:
+      NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}

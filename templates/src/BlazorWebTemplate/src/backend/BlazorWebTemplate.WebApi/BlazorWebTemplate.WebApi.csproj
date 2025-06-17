@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+
+        <RootNamespace>ZDV.BlazorWebTemplate.WebApi</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+
+        <PackageReference Include="JGUZDV.AspNetCore.Hosting" />
+        <PackageReference Include="JGUZDV.Extensions.Authorization" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\BlazorWebTemplate.WebApi.HttpModel\BlazorWebTemplate.WebApi.HttpModel.csproj" />
+        <ProjectReference Include="..\BlazorWebTemplate\BlazorWebTemplate.csproj" />
+    </ItemGroup>
+
+</Project>

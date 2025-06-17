@@ -32,6 +32,6 @@ public class LanguageService : ILanguageService
         => CultureInfo.CurrentUICulture.ToString();
 
     /// <inheritdoc />
-    public IEnumerable<LanguageItem>? GetLanguages()
-        => _options.Value.SupportedUICultures?.Select(c => new LanguageItem(c.ToString(), c.NativeName));
+    public IEnumerable<LanguageItem> GetLanguages()
+        => _options.Value.SupportedUICultures?.Select(c => new LanguageItem(c.ToString(), c.NativeName)) ?? [];
 }

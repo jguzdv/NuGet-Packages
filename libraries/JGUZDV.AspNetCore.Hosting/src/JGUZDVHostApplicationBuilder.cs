@@ -3,6 +3,7 @@
 using JGUZDV.AspNetCore.Hosting.Authentication;
 using JGUZDV.AspNetCore.Hosting.Components;
 using JGUZDV.AspNetCore.Hosting.Configuration;
+using JGUZDV.AspNetCore.Hosting.Diagnostics;
 using JGUZDV.AspNetCore.Hosting.Extensions;
 using JGUZDV.AspNetCore.Hosting.FeatureManagement;
 using JGUZDV.AspNetCore.Hosting.Localization;
@@ -579,6 +580,8 @@ public class JGUZDVHostApplicationBuilder
         {
             app.MapRazorPages();
         }
+
+        app.MapDiagnostics();
 
         return app;
     }
