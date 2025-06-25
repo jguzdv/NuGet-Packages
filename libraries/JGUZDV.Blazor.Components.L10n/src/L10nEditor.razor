@@ -35,6 +35,10 @@
         {
             _languages = SupportedCultures;
         }
+        else if (ServiceProvider.GetService<ISupportedCultureService>() is var cultureService and not null)
+        {
+            _languages = cultureService!.GetSupportedCultures();
+        }
         else
         {
             var service = ServiceProvider.GetService<ILanguageService>();
