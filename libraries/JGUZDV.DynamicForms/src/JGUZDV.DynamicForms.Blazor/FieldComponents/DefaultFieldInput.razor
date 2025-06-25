@@ -16,7 +16,16 @@
         </div>
     }
     <div>
-        <label for="@InputDefinition.Id">@InputDefinition.Label</label>
+        <label for="@InputDefinition.Id">
+            <span>@InputDefinition.Label</span>
+            <span class="small ps-1 clickable" @onclick="() => _showDescription = !_showDescription">@JGUZDV.Blazor.Components.Icons.Help(null)</span>
+        </label>
+        @if (_showDescription)
+        {
+            <p>
+                @Field.FieldDefinition.Description
+            </p>
+        }
         <Await Task="_initTask">
             @if (Field.FieldDefinition.ChoiceOptions?.Any() == true)
             {
@@ -124,6 +133,8 @@
     private List<ValidationResult> _validationErrors = new();
 
     private Task? _initTask;
+
+    private bool _showDescription = false;
 
     protected override Task OnInitializedAsync()
     {
