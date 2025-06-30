@@ -1,6 +1,9 @@
 @using JGUZDV.Blazor.Components;
 @using JGUZDV.Blazor.Components.Authentication;
 @using JGUZDV.Blazor.Components.Localization;
+@using Microsoft.AspNetCore.Components.Routing
+
+@inject NavigationManager NavManager
 
 <header class="jbs-header bg-body @AdditonalClasses">
     <div class="header-grid">
@@ -47,7 +50,7 @@
                     </a>
                 }
 
-                @if (ShowAppSwitch) 
+                @if (ShowAppSwitch)
                 {
                     <button class="jgu_btn btn btn-none">
                         @Icons.AppSelect(null)
@@ -62,6 +65,54 @@
                 }
             </div>
         }
+
+        @if (NavigationContent != null && NavigationContent.Any())
+        {
+            <nav class="header-navigation" aria-label="Navigation">
+                @foreach (var navItem in NavigationContent)
+                {
+                    @if (navItem.HasChildren)
+                    {
+                        <Dropdown>
+                            <DropdownLabelContent>
+                                <div class="header-navigation-link @(HasActiveChild(navItem.Children!) ? "active" : "") dropdown-toggle" id="@navItem.Name" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    @if (navItem.Icon != null)
+                                    {
+                                        @navItem.Icon
+                                    }
+                                    @navItem.Name
+                                </div>
+                            </DropdownLabelContent>
+                            <DropdownContent>
+                                <div class="header-navigation-dropdown">
+                                    @foreach (var child in navItem.Children!)
+                                    {
+                                        <NavLink class="dropdown-item" href="@child.NavUrl" Match="@child.Match">
+                                            @if (child.Icon != null)
+                                            {
+                                                @child.Icon
+                                            }
+                                            @child.Name
+                                        </NavLink>
+                                    }
+                                </div>
+                            </DropdownContent>
+                        </Dropdown>
+                    }
+                    else
+                    {
+                        <NavLink class="header-navigation-link" href="@navItem.NavUrl" Match="@navItem.Match">
+                            @if (navItem.Icon != null)
+                            {
+                                @navItem.Icon
+                            }
+                            @navItem.Name
+                        </NavLink>
+                    }
+                }
+            </nav>
+        }
+
     </div>
 </header>
 
@@ -86,7 +137,7 @@
 
     [Parameter]
     public bool ShowLanguageSelector { get; set; } = true;
-    
+
     [Parameter]
     public bool ShowAppSwitch { get; set; } = false;
 
@@ -99,10 +150,13 @@
     [Parameter]
     public string? HelpUrl { get; set; }
 
+    [Parameter]
+    public List<NavigationSpecs>? NavigationContent { get; set; }
 
-    public bool ShowButtons => 
-        ShowLoginButton || 
-        ShowLanguageSelector || 
+
+    public bool ShowButtons =>
+        ShowLoginButton ||
+        ShowLanguageSelector ||
         ShowSidebarToggle ||
         ShowAppSwitch ||
         HelpUrl != null ||
@@ -119,5 +173,46 @@
         public required string SrcUrl { get; set; }
         public required string AltText { get; set; }
         public string? Href { get; set; }
+    }
+
+    public class NavigationSpecs
+    {
+        public RenderFragment? Icon { get; set; }
+        public string? NavUrl { get; set; }
+        public required string Name { get; set; }
+        public NavLinkMatch Match { get; set; } = NavLinkMatch.Prefix;
+
+        public List<NavigationSpecs>? Children { get; set; }
+
+        public bool HasChildren => Children != null && Children.Any();
+    }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        if (NavigationContent != null)
+        {
+            foreach (var item in NavigationContent)
+            {
+                if (!string.IsNullOrWhiteSpace(item.NavUrl) && item.HasChildren)
+                {
+                    throw new InvalidOperationException($"Ein Navigationseintrag darf entweder eine URL oder Children besitzen, aber nicht beides. Fehler bei: '{item.Name}'");
+                }
+            }
+        }
+    }
+
+    public bool HasActiveChild(List<NavigationSpecs> children)
+    {
+        var uri = new Uri(NavManager.Uri);
+        var path = uri.AbsolutePath;
+
+        return children.Any(child =>
+            child.NavUrl != null &&
+            (child.Match == NavLinkMatch.All
+                ? path.Equals(child.NavUrl, StringComparison.OrdinalIgnoreCase)
+                : path != null && path.StartsWith(child.NavUrl, StringComparison.OrdinalIgnoreCase))
+        );
     }
 }

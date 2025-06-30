@@ -1,19 +1,71 @@
+@using Microsoft.AspNetCore.Components.Routing
+@using static JGUZDV.Blazor.Components.JGOO.AppHeader
+
 <input aria-hidden="true" type="checkbox" id="jbs-sidebar-toggle" class="d-none" checked="checked" />
 <aside class="jbs-sidebar @AdditionalClasses">
-    @if (Title != null)
-    {
-        <h1 class="h3 d-md-none">@Title</h1>
-    }
+
     @ChildContent
+
+    @if (NavigationContent != null && NavigationContent.Count > 0)
+    {
+        <div class="nav flex-column">
+            @foreach (var navItem in NavigationContent)
+            {
+                @if (navItem.HasChildren)
+                {
+                    <span class="nav-link disabled">@navItem.Name</span>
+                    @foreach (var child in navItem.Children!)
+                    {
+                        <NavLink class="nav-link header-navigation-sidebar" href="@child.NavUrl" Match="@child.Match">
+                            @if (child.Icon != null)
+                            {
+                                @child.Icon
+                            }
+                            <span class="nav-title">@child.Name</span>
+                        </NavLink>
+                    }
+
+                }
+                else
+                {
+                    <NavLink class="nav-link header-navigation-sidebar" href="@navItem.NavUrl" Match="@navItem.Match">
+                        @if (navItem.Icon != null)
+                        {
+                            @navItem.Icon
+                        }
+                        <span class="nav-title">@navItem.Name</span>
+                    </NavLink>
+                }
+                <hr />
+            }
+        </div>
+    }
+
 </aside>
 
 @code {
-    [Parameter]
-    public string? Title { get; set; }
-
     [Parameter, EditorRequired]
     public required RenderFragment ChildContent { get; set; }
 
     [Parameter]
     public string? AdditionalClasses { get; set; }
+
+    [Parameter]
+    public List<NavigationSpecs>? NavigationContent { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        if (NavigationContent != null)
+        {
+            foreach (var item in NavigationContent)
+            {
+                if (!string.IsNullOrWhiteSpace(item.NavUrl) && item.HasChildren)
+                {
+                    throw new InvalidOperationException($"Ein Navigationseintrag darf entweder eine URL oder Children besitzen, aber nicht beides. Fehler bei: '{item.Name}'");
+                }
+            }
+        }
+    }
 }

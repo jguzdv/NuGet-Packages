@@ -12,7 +12,8 @@ header {
     display: grid;
     grid-template-areas:
         "logo controls"
-        ". content";
+        ". content"
+        "navigation navigation";
     grid-template-columns: auto 1fr;
     column-gap: 0.5rem;
     row-gap: 0.25rem;
@@ -35,6 +36,40 @@ header {
     display: flex;
 }
 
+.header-navigation {
+    grid-area: navigation;
+    justify-self: start;
+    display: flex;
+    row-gap: 0.25rem;
+    column-gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+::deep .header-navigation-link {
+    text-decoration: none;
+    padding-block: 0.25rem;
+    padding-inline: 0.5rem;
+    color: inherit;
+    display: block;
+    border-bottom: 2px solid transparent;
+}
+
+    ::deep .header-navigation-link.active {
+        border-bottom: 2px solid #c1002a;
+        font-weight: bold;
+    }
+
+::deep .header-navigation-dropdown a {
+    padding: 0.5rem;
+}
+
+    ::deep .header-navigation-dropdown a.active {
+        font-weight: bold;
+        border-left: 2px solid #c1002a;
+        color: inherit;
+        background-color: white;
+    }
+
 .header-app-title {
     grid-area: title;
     display: none;
@@ -44,7 +79,8 @@ header {
 @container (min-width: 410px) {
     .header-grid {
         grid-template-areas: "logo title controls"
-            ". content content";
+            ". content content"
+            "navigation navigation navigation";
         grid-template-columns: auto 1fr auto;
     }
 
@@ -53,14 +89,13 @@ header {
     }
 }
 
-@container (min-widht: 520px) {
-
+@container (min-width: 520px) {
 }
 
 
 @container (min-width: 940px) {
     .header-grid {
-        grid-template-areas: "logo title content controls";
+        grid-template-areas: "logo title content controls" "navigation navigation navigation navigation";
         grid-template-columns: auto auto 1fr auto;
     }
 
