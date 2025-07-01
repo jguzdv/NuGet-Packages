@@ -1,4 +1,6 @@
-﻿using JGUZDV.AspNetCore.Components.Localization;
+﻿using HealthChecks.SqlServer;
+
+using JGUZDV.AspNetCore.Components.Localization;
 using JGUZDV.AspNetCore.Hosting.Components;
 using JGUZDV.AspNetCore.Hosting.Extensions;
 using JGUZDV.AspNetCore.Hosting.FeatureManagement;
@@ -18,6 +20,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Server;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -169,8 +172,43 @@ public static class JGUZDVHostApplicationBuilderExtensions
     public static JGUZDVHostApplicationBuilder AddHealthChecks(
         this JGUZDVHostApplicationBuilder appBuilder)
     {
-        appBuilder.Services.AddHealthChecks();
+        var healthBuilder = appBuilder.Services.AddHealthChecks();
+
+        // If there's a ConnectionStrings section, we assume it's for SQL Server and add a health check for all entries.
+        if (appBuilder.Configuration.GetSection("ConnectionStrings") is IConfigurationSection connectionStrings && connectionStrings.Exists())
+        {
+            foreach(var connectionString in connectionStrings.GetChildren())
+            {
+                try
+                {
+                    var csBuilder = new SqlConnectionStringBuilder(connectionString.Value);
+
+                    healthBuilder.AddSqlServer(csBuilder.ConnectionString, name: connectionString.Key, tags: ["sqlserver"]);
+                }
+                catch
+                {
+                    // TODO: Log an information if the connection string is invalid.
+                }
+            }
+
+        }
         
+        if (appBuilder.Configuration.HasConfigSection(Constants.ConfigSections.DistributedCache))
+        {
+            var connectionString = appBuilder.Configuration.GetSection(Constants.ConfigSections.DistributedCache).GetValue<string>("ConnectionString");
+
+            try
+            {
+                var csBuilder = new SqlConnectionStringBuilder(connectionString);
+
+                healthBuilder.AddSqlServer(csBuilder.ConnectionString, name: "DistributedCache", tags: ["sqlserver"]);
+            }
+            catch
+            {
+                // TODO: Log an information if the connection string is invalid.
+            }
+        }
+
         appBuilder.HasHealthChecks = true;
         return appBuilder;
     }

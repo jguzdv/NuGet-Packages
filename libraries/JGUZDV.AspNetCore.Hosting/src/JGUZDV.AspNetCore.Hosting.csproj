@@ -7,7 +7,7 @@
 
         <PackageId>JGUZDV.AspNetCore.Hosting</PackageId>
         <IsPackable>true</IsPackable>
-        <Version>1.5.15</Version>
+        <Version>1.5.16</Version>
         <Authors>Thomas Ottenhus</Authors>
         <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
         <PackageDescription>HostBuilders for our default setup.</PackageDescription>
@@ -34,5 +34,6 @@
         <PackageReference Include="Microsoft.Extensions.Configuration" Version="[9.0.4, )" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="[9.0.4, )" />
         <PackageReference Include="Microsoft.FeatureManagement.AspNetCore" Version="[4.0.0, )" />
+        <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="[9.0.0, )" />
     </ItemGroup>
 </Project>
