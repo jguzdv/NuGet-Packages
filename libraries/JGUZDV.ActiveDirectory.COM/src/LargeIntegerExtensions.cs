@@ -36,4 +36,13 @@ public static class LargeIntegerExtensions
         var largeIntegerValue = (ActiveDs.LargeInteger)propertyValueCollection.Value;
         return (long)largeIntegerValue.HighPart << 32 | (uint)largeIntegerValue.LowPart;
     }
+
+    /// <summary>
+    /// Gets the value as a <see cref="long"/> from an object that is expected to be an <see cref="ActiveDs.LargeInteger"/>.
+    /// </summary>
+    public static long GetLargeInteger(object value)
+    {
+        var largeInteger = (ActiveDs.LargeInteger)value;
+        return (long)largeInteger.HighPart << 32 | (uint)largeInteger.LowPart;
+    }
 }
