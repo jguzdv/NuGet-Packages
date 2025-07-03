@@ -47,6 +47,6 @@ public class PersistentStateLanguageService : ILanguageService
 
 
     /// <inheritdoc />
-    public IEnumerable<LanguageItem>? GetLanguages()
-        => State?.SupportedCultures;
+    public IEnumerable<LanguageItem> GetLanguages()
+        => State?.SupportedCultures ?? [];
 }

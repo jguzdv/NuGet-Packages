@@ -112,10 +112,10 @@
   <data name="FieldDefinition.SortKey" xml:space="preserve">
     <value>Sortierschlüssel muss positiv sein</value>
   </data>
-  <data name="InputDefinition.Label" xml:space="preserve">
-    <value>Label ({0}) muss gesetzt sein</value>
-  </data>
   <data name="FieldDefinition.Type" xml:space="preserve">
     <value>Typ muss gesetzt sein</value>
+  </data>
+  <data name="InputDefinition.Label" xml:space="preserve">
+    <value>Label ({0}) muss gesetzt sein</value>
   </data>
 </root>

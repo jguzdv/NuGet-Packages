@@ -7,3 +7,12 @@
         display: none;
     }
 }
+
+::deep .header-navigation-sidebar {
+    border-left: 2px solid transparent;
+}
+
+::deep .header-navigation-sidebar.active {
+    font-weight: bold;
+    border-left: 2px solid #c1002a;
+}

@@ -4,6 +4,10 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace JGUZDV.Blazor.Components
 {
+    /// <summary>
+    /// Extensions for adding toast services to the service collection.
+    /// </summary>
+    [Obsolete("Use ToastMessages component instead of this.")]
     public static class ToastServiceCollectionExtensions
     {
         [Obsolete("Use ToastMessages component instead of this.")]

@@ -32,8 +32,8 @@ public class RequestLocalizationPersistentStateProvider : IPersistentComponentSt
             CurrentCulture = CultureInfo.CurrentCulture.ToString(),
             CurrentUICulture = CultureInfo.CurrentUICulture.ToString(),
 
-            SupportedCultures = [.. _options.Value.SupportedCultures?.Select(c => new LanguageItem(c.ToString(), c.NativeName))],
-            SupportedUICultures = [.. _options.Value.SupportedUICultures?.Select(c => new LanguageItem(c.ToString(), c.NativeName))]
+            SupportedCultures = [.. _options.Value.SupportedCultures?.Select(c => new LanguageItem(c.ToString(), c.NativeName)) ?? []],
+            SupportedUICultures = [.. _options.Value.SupportedUICultures?.Select(c => new LanguageItem(c.ToString(), c.NativeName)) ?? []]
         };
 
         applicationState.PersistAsJson(nameof(RequestLocalizationState), requestLocalizationState);

@@ -18,5 +18,5 @@ public interface ILanguageService
     /// <summary>
     /// Get available languages for a language select.
     /// </summary>
-    public IEnumerable<LanguageItem>? GetLanguages();
+    public IEnumerable<LanguageItem> GetLanguages();
 }

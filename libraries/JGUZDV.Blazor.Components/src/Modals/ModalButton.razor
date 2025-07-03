@@ -33,32 +33,70 @@
         set { _modal = value; InvokeAsync(StateHasChanged); }
     }
 
+    /// <summary>
+    /// Defines the button that will open the modal.
+    /// </summary>
     [Parameter]
     [EditorRequired]
     public RenderFragment<Modal<T>> Button { get; set; } = default!;
 
+    /// <summary>
+    /// Defines the complete content of the modal, mutually exclusive with the other content parameters.
+    /// </summary>
     [Parameter]
     public RenderFragment<ModalContext<T>>? ModalChildContent { get; set; }
 
+    /// <summary>
+    /// Defines the content of the modal, mutually exclusive with ModalChildConten and the other content parameters.
+    /// </summary>
     [Parameter]
     public RenderFragment<ModalContext<T>>? ModalContent { get; set; }
 
+    /// <summary>
+    /// Defines the header of the modal, mutually exclusive with ModalChildContent and ModalContent.
+    /// </summary>
     [Parameter]
     public RenderFragment<ModalContext<T>>? ModalHeader { get; set; }
+
+    /// <summary>
+    /// Defines the body of the modal, mutually exclusive with ModalChildContent and ModalContent.
+    /// </summary>
     [Parameter]
     public RenderFragment<ModalContext<T>>? ModalBody { get; set; }
+
+    /// <summary>
+    /// Defines the footer of the modal, mutually exclusive with ModalChildContent and ModalContent.
+    /// </summary>
     [Parameter]
     public RenderFragment<ModalContext<T>>? ModalFooter { get; set; }
 
+    /// <summary>
+    /// Modal title, mutually exclusive with ModalHeader.
+    /// </summary>
     [Parameter]
     public string? ModalTitle { get; set; }
 
+    /// <summary>
+    /// Additinal CSS classes for the modal dialog.
+    /// </summary>
     [Parameter]
     public string? ModalDialogClasses { get; set; }
+
+    /// <summary>
+    /// Additional CSS classes for the modal header, if not using ModalHeader.
+    /// </summary>
     [Parameter]
     public string? ModalHeaderClasses { get; set; }
+
+    /// <summary>
+    /// Additional CSS classes for the modal body, if not using ModalBody.
+    /// </summary>
     [Parameter]
     public string? ModalBodyClasses { get; set; }
+
+    /// <summary>
+    /// Additional CSS classes for the modal footer, if not using ModalFooter.
+    /// </summary>
     [Parameter]
     public string? ModalFooterClasses { get; set; }
 }

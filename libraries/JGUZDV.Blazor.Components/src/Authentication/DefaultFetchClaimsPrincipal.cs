@@ -6,6 +6,9 @@ using JGUZDV.Extensions.Json.Converters;
 
 namespace JGUZDV.Blazor.Components.Authentication
 {
+    /// <summary>
+    /// Obsolete: Migrate to Components.Web and use PersistentAuthenticationStateProvider.
+    /// </summary>
     [Obsolete("Migrate to Components.Web and use PersistentAuthenticationStateProvider")]
     public class DefaultFetchClaimsPrincipal : IFetchAuthenticationState
     {
@@ -14,6 +17,9 @@ namespace JGUZDV.Blazor.Components.Authentication
         private readonly string _expiresAtClaimType;
         private readonly JsonSerializerOptions? _jsonSerializerOptions;
 
+        /// <summary>
+        /// Obsolete: Migrate to Components.Web and use PersistentAuthenticationStateProvider.
+        /// </summary>
         public DefaultFetchClaimsPrincipal(HttpClient httpClient, 
             string uri = "_app/principal",
             string expiresAtClaimType = "exp",
@@ -25,6 +31,9 @@ namespace JGUZDV.Blazor.Components.Authentication
             _jsonSerializerOptions = jsonSerializerOptions;
         }
 
+        /// <summary>
+        /// Obsolete: Migrate to Components.Web and use PersistentAuthenticationStateProvider.
+        /// </summary>
         public async Task<(ClaimsPrincipal? User, DateTimeOffset? ExpiresAt)> FetchPrincipalAsync(CancellationToken ct)
         {
             var options = new JsonSerializerOptions(_jsonSerializerOptions ?? JsonSerializerOptions.Default);

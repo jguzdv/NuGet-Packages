@@ -3,31 +3,11 @@
 
 <div class="container p-0">
     <div class="jbs-page jbs-grid jbs-container">
-        <AppHeader Title="@Title" Logo="@Logo" HelpUrl="@Logo.Href" ShowLanguageSelector="@true" ShowLoginButton="@true">
+        <AppHeader Title="@Title" Logo="@Logo" HelpUrl="@Logo.Href" ShowLanguageSelector="@true" ShowLoginButton="@true" NavigationContent="NavigationSpecsHeader">
         </AppHeader>
 
-        <Sidebar Title="@Title">
+        <Sidebar NavigationContent="NavigationSpecsSidebar">
             Lang: @System.Threading.Thread.CurrentThread.CurrentUICulture.Name
-            <div class="d-flex flex-column">
-                @{
-                    var aClass = "btn btn-default btn-block";
-                }
-                <a class="@aClass" href="image-cropper">Image Cropper</a>
-
-                <a class="@aClass" href="dropdown">Dropdowns</a>
-                <a class="@aClass" href="modal">Modal</a>
-                <a class="@aClass" href="l10nEdit">L10nEdit</a>
-                <a class="@aClass" href="l10nView">L10nView</a>
-                <a class="@aClass" href="multi-select">Multiselect</a>
-                <a class="@aClass" href="client-storage">client storage</a>
-                <a class="@aClass" href="editor-buttons">Editor Buttons</a>
-                <a class="@aClass" href="appheader">Dark-Mode Selector</a>
-
-                <a class="@aClass" href="counter">Counter</a>
-                <a class="@aClass" href="client-await">Wait on client</a>
-                <a class="@aClass" href="server-await">Wait on server</a>
-                <a class="@aClass" href="webassembly">A client side page</a>
-            </div>
         </Sidebar>
 
         <main>
@@ -40,12 +20,163 @@
 
 @code {
     private AppHeader.LogoSpecs Logo { get; } = new()
-        {
-            SrcUrl = "https://cdn.zdv.uni-mainz.de/web/assets/logo_uni-mainz_quader.svg",
-            AltText = "Logo der Johannes Gutenberg-Universität Mainz",
-            Href = "https://www.uni-mainz.de/"
-        };
+    {
+        SrcUrl = "https://cdn.zdv.uni-mainz.de/web/assets/logo_uni-mainz_quader.svg",
+        AltText = "Logo der Johannes Gutenberg-Universität Mainz",
+        Href = "https://www.uni-mainz.de/"
+    };
 
     private string Title { get; } = "JGU Blazor Components";
-}
 
+    private List<AppHeader.NavigationSpecs> NavigationSpecsHeader { get; } = new()
+    {
+        new AppHeader.NavigationSpecs
+        {
+            NavUrl = "/dropdown",
+            Name = "Dropdowns",
+            Icon = @<i class="fas fa-caret-square-down pe-2"></i>,
+            Match = NavLinkMatch.All
+        },
+        new AppHeader.NavigationSpecs
+        {
+            NavUrl = "/modal",
+            Name = "Modal",
+            Icon = @<i class="fas fa-window-restore pe-2"></i>,
+            Match = NavLinkMatch.Prefix
+        },
+        new AppHeader.NavigationSpecs
+        {
+            Name = "UI Komponenten",
+            Icon = @<i class="fas fa-puzzle-piece pe-2"></i>,
+            Match = NavLinkMatch.Prefix,
+            Children = new List<AppHeader.NavigationSpecs>
+            {
+                new AppHeader.NavigationSpecs
+                {
+                    NavUrl = "/image-cropper",
+                    Name = "Image Cropper"
+                },
+                new AppHeader.NavigationSpecs
+                {
+                    NavUrl = "/multi-select",
+                    Name = "Multiselect"
+                },
+                new AppHeader.NavigationSpecs
+                {
+                    NavUrl = "/editor-buttons",
+                    Name = "Editor Buttons"
+                }
+            }
+        },
+        new AppHeader.NavigationSpecs
+        {
+            Name = "L10N",
+            Icon = @<i class="fas fa-language pe-2"></i>,
+            Match = NavLinkMatch.Prefix,
+            Children = new List<AppHeader.NavigationSpecs>
+            {
+                new AppHeader.NavigationSpecs
+                {
+                    NavUrl = "/l10nEdit",
+                    Name = "Edit"
+                },
+                new AppHeader.NavigationSpecs
+                {
+                    NavUrl = "/l10nView",
+                    Name = "View"
+                }
+            }
+        }
+    };
+
+    private List<AppHeader.NavigationSpecs> NavigationSpecsSidebar { get; } = new()
+    {
+        new AppHeader.NavigationSpecs
+        {
+            Name = "Diesdas",
+            Children = new List<AppHeader.NavigationSpecs>
+            {
+                new AppHeader.NavigationSpecs
+                {
+                    NavUrl = "/image-cropper",
+                    Name = "Image Cropper"
+                },
+                new AppHeader.NavigationSpecs
+                {
+                    NavUrl = "/dropdown",
+                    Name = "Dropdowns"
+                },
+                new AppHeader.NavigationSpecs
+                {
+                    NavUrl = "/modal",
+                    Name = "Modal"
+                },
+                new AppHeader.NavigationSpecs
+                {
+                    NavUrl = "/multi-select",
+                    Name = "Multiselect"
+                },
+                new AppHeader.NavigationSpecs
+                {
+                    NavUrl = "/client-storage",
+                    Name = "Client Storage"
+                },
+                new AppHeader.NavigationSpecs
+                {
+                    NavUrl = "/editor-buttons",
+                    Name = "Editor Buttons"
+                },
+                new AppHeader.NavigationSpecs
+                {
+                    NavUrl = "/appheader",
+                    Name = "Dark-Mode Selector"
+                },
+                new AppHeader.NavigationSpecs
+                {
+                    NavUrl = "/counter",
+                    Name = "Counter"
+                },
+            }
+        },
+        new AppHeader.NavigationSpecs
+        {
+            Name = "L10nStuff",
+            Children = new List<AppHeader.NavigationSpecs>
+            {
+                new AppHeader.NavigationSpecs
+                {
+                    NavUrl = "/l10nEdit",
+                    Name = "L10nEdit"
+                },
+                new AppHeader.NavigationSpecs
+                {
+                    NavUrl = "/l10nView",
+                    Name = "L10nView"
+                },
+            }
+        },
+        new AppHeader.NavigationSpecs
+        {
+            Name = "ProjStructure",
+            Children = new List<AppHeader.NavigationSpecs>
+            {
+                new AppHeader.NavigationSpecs
+                {
+                    NavUrl = "/client-await",
+                    Name = "Wait on client"
+                },
+                new AppHeader.NavigationSpecs
+                {
+                    NavUrl = "/server-await",
+                    Name = "Wait on server"
+                },
+                new AppHeader.NavigationSpecs
+                {
+                    NavUrl = "/webassembly",
+                    Name = "A client side page"
+                }
+            }
+        }
+    };
+
+}

@@ -5,6 +5,9 @@ using Microsoft.Extensions.Logging;
 
 namespace JGUZDV.Blazor.Components.Authentication;
 
+/// <summary>
+/// Obsolete: Migrate to Components.Web and use PersistentAuthenticationStateProvider.
+/// </summary>
 [Obsolete("Migrate to Components.Web and use PersistentAuthenticationStateProvider")]
 public class DelegatedAuthenticationStateProvider : AuthenticationStateProvider
 {
@@ -17,6 +20,9 @@ public class DelegatedAuthenticationStateProvider : AuthenticationStateProvider
     private DateTimeOffset _stateExpiry = DateTimeOffset.MinValue;
     private Task<AuthenticationState>? _authenticationState;
 
+    /// <summary>
+    /// Obsolete: Migrate to Components.Web and use PersistentAuthenticationStateProvider.
+    /// </summary>
     public DelegatedAuthenticationStateProvider(
         TimeProvider timeProvider,
         IFetchAuthenticationState fetchAuthenticationState,
@@ -27,6 +33,9 @@ public class DelegatedAuthenticationStateProvider : AuthenticationStateProvider
         _logger = logger;
     }
 
+    /// <summary>
+    /// Obsolete: Migrate to Components.Web and use PersistentAuthenticationStateProvider.
+    /// </summary>
     public override Task<AuthenticationState> GetAuthenticationStateAsync()
     {
         if(_authenticationState == null || _stateExpiry < _timeProvider.GetUtcNow())
