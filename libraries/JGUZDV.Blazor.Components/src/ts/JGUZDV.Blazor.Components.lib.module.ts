@@ -8,6 +8,19 @@ export function registerThemeButtons(): void {
             if (theme) {
                 applyTheme(theme, false);
             }
+
+            const dropdownMenu = target.closest('.dropdown-menu') as HTMLElement;
+            if (dropdownMenu) {
+                dropdownMenu.hidden = true;
+
+                const buttonId = dropdownMenu.getAttribute('aria-labelledby');
+                if (buttonId) {
+                    const button = document.getElementById(buttonId);
+                    if (button) {
+                        button.setAttribute('aria-expanded', 'false');
+                    }
+                }
+            }
         });
     });
 }

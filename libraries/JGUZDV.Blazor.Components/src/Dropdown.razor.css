@@ -1,4 +1,8 @@
-﻿.dropdown-menu-end {
+﻿.dropdown {
+    align-content: center;
+}
+
+.dropdown-menu-end {
     inset: calc(100% + 0.25rem) 0 auto auto;
 }
 
