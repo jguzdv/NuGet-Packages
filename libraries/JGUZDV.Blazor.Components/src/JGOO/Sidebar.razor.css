@@ -1,11 +1,11 @@
 ﻿@media (max-width: 991.98px) {
-    .jbs-sidebar:not(.toggled) {
-        display: revert-layer;
-    }
-
-    #jbs-sidebar-toggle:checked + .jbs-sidebar {
+    .jbs-sidebar {
         display: none;
     }
+
+        .jbs-sidebar.toggled {
+            display: revert-layer;
+        }
 }
 
 ::deep .header-navigation-sidebar {
