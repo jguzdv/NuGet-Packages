@@ -1,7 +1,27 @@
-﻿.dropdown-toggle:checked + .dropdown-menu {
-    display: block;
+﻿.dropdown {
+    align-content: center;
 }
 
 .dropdown-menu-end {
     inset: calc(100% + 0.25rem) 0 auto auto;
 }
+
+.dropdown-menu[hidden] {
+    display: none;
+}
+
+.dropdown-menu {
+    display: block;
+}
+
+.dropdown-label {
+    all: unset;
+    cursor: pointer;
+    padding: 0;
+    font: inherit;
+}
+
+    .dropdown-label:focus-visible {
+        outline: 2px solid black;
+        outline-offset: 2px;
+    }

@@ -1,8 +1,7 @@
 @using Microsoft.AspNetCore.Components.Routing
 @using static JGUZDV.Blazor.Components.JGOO.AppHeader
 
-<input aria-hidden="true" type="checkbox" id="jbs-sidebar-toggle" class="d-none" checked="checked" />
-<aside class="jbs-sidebar @AdditionalClasses">
+<aside id="jbs-sidebar" class="jbs-sidebar @AdditionalClasses">
 
     @ChildContent
 
@@ -16,7 +15,7 @@
                     <span class="nav-link disabled">@navItem.Name</span>
                     @foreach (var child in navItem.Children!)
                     {
-                        <NavLink class="nav-link header-navigation-sidebar" href="@child.NavUrl" Match="@child.Match">
+                        <NavLink class="nav-link header-navigation-sidebar" href="@child.NavUrl" Match="@child.Match" data-sidebar-close>
                             @if (child.Icon != null)
                             {
                                 @child.Icon
@@ -28,7 +27,7 @@
                 }
                 else
                 {
-                    <NavLink class="nav-link header-navigation-sidebar" href="@navItem.NavUrl" Match="@navItem.Match">
+                    <NavLink class="nav-link header-navigation-sidebar" href="@navItem.NavUrl" Match="@navItem.Match" data-sidebar-close>
                         @if (navItem.Icon != null)
                         {
                             @navItem.Icon
@@ -52,6 +51,20 @@
 
     [Parameter]
     public List<NavigationSpecs>? NavigationContent { get; set; }
+
+    [Inject, NotNull]
+    private IJSRuntime? JSRuntime { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var jsModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/JGUZDV.Blazor.Components/JGUZDV.Blazor.Components.lib.module.js");
+            await jsModule.InvokeVoidAsync("setupSidebarToggle");
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
 
     protected override void OnParametersSet()
     {

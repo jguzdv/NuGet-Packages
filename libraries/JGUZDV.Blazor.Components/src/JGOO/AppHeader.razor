@@ -45,23 +45,23 @@
 
                 @if (HelpUrl != null)
                 {
-                    <a aria-label="@LR["Help"]" class="jgu_btn btn btn-none" target="_blank" href="@HelpUrl">
+                    <a aria-label="@LR["Helplink"]" class="btn btn-none" target="_blank" href="@HelpUrl" role="link" rel="noopener noreferrer">
                         @Icons.Help(null)
                     </a>
                 }
 
                 @if (ShowAppSwitch)
                 {
-                    <button class="jgu_btn btn btn-none">
+                    <button class="btn btn-none" type="button" aria-label="@LR["ToggleAppSwitch"]">
                         @Icons.AppSelect(null)
                     </button>
                 }
 
                 @if (ShowSidebarToggle)
                 {
-                    <label for="jbs-sidebar-toggle" class="jgu_btn btn btn-none d-lg-none">
+                    <button id="sidebar-toggle-btn" class="btn btn-none d-lg-none sidebar-toggle-button" type="button" aria-label="@LR["ToggleSidebar"]">
                         @Icons.Menu(null)
-                    </label>
+                    </button>
                 }
             </div>
         }
@@ -75,19 +75,19 @@
                     {
                         <Dropdown>
                             <DropdownLabelContent>
-                                <div class="header-navigation-link @(HasActiveChild(navItem.Children!) ? "active" : "") dropdown-toggle" id="@navItem.Name" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <span class="header-navigation-link @(HasActiveChild(navItem.Children!) ? "active" : "") dropdown-toggle">
                                     @if (navItem.Icon != null)
                                     {
                                         @navItem.Icon
                                     }
                                     @navItem.Name
-                                </div>
+                                </span>
                             </DropdownLabelContent>
                             <DropdownContent>
                                 <div class="header-navigation-dropdown">
                                     @foreach (var child in navItem.Children!)
                                     {
-                                        <NavLink class="dropdown-item" href="@child.NavUrl" Match="@child.Match">
+                                        <NavLink class="dropdown-item" role="menuitem" href="@child.NavUrl" Match="@child.Match">
                                             @if (child.Icon != null)
                                             {
                                                 @child.Icon

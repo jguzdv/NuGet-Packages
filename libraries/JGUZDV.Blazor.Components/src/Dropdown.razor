@@ -1,8 +1,7 @@
-<div class="dropdown">
-    @_dropdownToggle!.Invoke($"dropdown-toggle-{_guid}")
+<div class="dropdown" id="dropdown-@_guid">
+    @_dropdownToggle!.Invoke($"dropdown-button-{_guid}")
 
-    <input type="checkbox" id="dropdown-toggle-@_guid" class="dropdown-toggle d-none" />
-    <div class="dropdown-menu @DropDownMenuClass">
+    <div class="dropdown-menu @DropDownMenuClass" role="menu" id="dropdown-menu-@_guid" aria-labelledby="dropdown-button-@_guid" hidden>
         @DropdownContent
     </div>
 </div>
@@ -35,6 +34,20 @@
     public string? DropDownMenuClass { get; set; }
 
 
+    [Inject, NotNull]
+    private IJSRuntime? JSRuntime { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var jsModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/JGUZDV.Blazor.Components/JGUZDV.Blazor.Components.lib.module.js");
+            await jsModule.InvokeVoidAsync("setupDropdowns");
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
@@ -45,11 +58,15 @@
 
         if (DropdownLabelContent != null)
         {
-            _dropdownToggle = (labelId) =>
-                @<label for="@labelId" aria-haspopup="true">
-                    @DropdownLabelContent
-                </label>
-    ;
+            _dropdownToggle = (buttonId) =>
+                @<button id="@buttonId" tabindex="0"
+                class="dropdown-label"
+                                     type="button"
+                                     aria-haspopup="true"
+                                     aria-expanded="false"
+                                     aria-controls="dropdown-menu-@_guid">
+            @DropdownLabelContent
+            </button>;
         }
         else
         {

@@ -132,6 +132,9 @@
   <data name="DarkModeSelector.Header" xml:space="preserve">
     <value>Choose theme</value>
   </data>
+  <data name="Helplink" xml:space="preserve">
+    <value>Helplink of the application</value>
+  </data>
   <data name="LanguagePicker.Header" xml:space="preserve">
     <value>Choose language</value>
   </data>
@@ -140,5 +143,11 @@
   </data>
   <data name="Theme.Light" xml:space="preserve">
     <value>Light</value>
+  </data>
+  <data name="ToggleAppSwitch" xml:space="preserve">
+    <value>Toggle Applicationswitch</value>
+  </data>
+  <data name="ToggleSidebar" xml:space="preserve">
+    <value>Toggle sidebar</value>
   </data>
 </root>
