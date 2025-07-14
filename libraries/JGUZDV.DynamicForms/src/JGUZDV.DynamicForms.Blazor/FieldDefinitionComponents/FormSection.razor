@@ -1,0 +1,45 @@
+@using System.ComponentModel.DataAnnotations
+@implements IDisposable
+
+@ChildContent
+
+@code {
+    [CascadingParameter]
+    public required FieldDefinitionForm Form { get; set; }
+
+    [Parameter]
+    [EditorRequired]
+    public IValidatableObject Model { get; set; }
+
+    [Parameter]
+    [EditorRequired]
+    public RenderFragment ChildContent { get; set; }
+
+    [Inject]
+    public required IServiceProvider ServiceProvider { get; set; }
+
+    public void AddValidationResults(ValidationMessageStore messageStore)
+    {
+        var context = new ValidationContext(Model, ServiceProvider, null);
+        var errors = Model.Validate(context);
+
+        foreach (var error in errors)
+        {
+            foreach (var memberName in error.MemberNames)
+            {
+                messageStore.Add(new FieldIdentifier(Model, memberName), error.ErrorMessage ?? "");
+            }
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        Form.RegisterSection(this);
+    }
+
+    public void Dispose()
+    {
+        Form.UnregisterSection(this);
+    }
+}

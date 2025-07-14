@@ -7,6 +7,7 @@
 @using System.Text.Json
 @using JGUZDV.DynamicForms.Serialization
 @using JGUZDV.L10n
+@using System.ComponentModel.DataAnnotations
 
 <PageTitle>Home</PageTitle>
 
@@ -24,10 +25,15 @@ Welcome to your new app.
     <ModalBody>
         <FieldDefinitionForm @bind-FieldDefinition="context.Model"
                              @bind-FieldDefinition:after="() => {
-                                _fieldDefinitions.Add(context.Model);
-                                context.Modal.Accept();}"
-                             SubmitLabel="Validieren"
-        >
+                                                             _fieldDefinitions.Add(context.Model);
+                             context.Modal.Accept();}"
+                             SubmitLabel="Validieren">
+            <FormSection Model="_myModel" >
+                <div class="my-2">
+                    <label> Name</label>
+                    <input class="form-control" @bind-value="_myModel.Name" />
+                </div>
+            </FormSection>
         </FieldDefinitionForm>
     </ModalBody>
 
@@ -83,6 +89,8 @@ Welcome to your new app.
     [Inject]
     public required HttpClient Client { get; set; }
 
+    private MyModel _myModel = new();
+
     private List<FieldDefinition> _fieldDefinitions = new();
     private Modal<FieldDefinition>? _editModal;
     private Modal<FieldDefinition>? _valueConfigModal;
@@ -90,11 +98,26 @@ Welcome to your new app.
     private async Task Send()
     {
         var options = new JsonSerializerOptions()
-            {
-                PropertyNameCaseInsensitive = true
-            };
+        {
+            PropertyNameCaseInsensitive = true
+        };
 
         await Client.PostAsJsonAsync("https://localhost:7245/api/definitions/save", _fieldDefinitions, options);
     }
 
+
+    public class MyModel : IValidatableObject
+    {
+        public string Name { get; set; } = "";
+        public int Age { get; set; } = 18;
+        public string Email { get; set; } = "";
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (Name!.Length < 3)
+            {
+                yield return new ValidationResult("Name must be at least 3 characters long.", new[] { nameof(Name) });
+            }
+        }
+    }
 }

@@ -1,4 +1,7 @@
 ﻿@page "/edit-field-definition"
+
+@implements IDisposable
+
 @using JGUZDV.Blazor.Components.L10n
 @using JGUZDV.DynamicForms.Blazor.Resources
 @using JGUZDV.DynamicForms.Model
@@ -10,18 +13,9 @@
 @inject IStringLocalizer<ComponentStrings> SL
 @inject IServiceProvider ServiceProvider
 
-<EditForm Model="@_fieldDefinition" OnValidSubmit="HandleValidSubmit">
+<EditForm EditContext="_editContext" OnValidSubmit="HandleValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
-
-    <ul>
-        @foreach (var item in _additionalValidationErrors)
-        {
-            <li class="text-danger">
-                @item.ErrorMessage
-            </li>
-        }
-    </ul>
 
     <div class="mb-2">
         <label for="identifier">@SL["EditFieldDefinition.Identifier"]</label>
@@ -41,9 +35,9 @@
     <div class="mb-2">
         <label for="type">@SL["EditFieldDefinition.Type"]</label>
         <select id="type"
-        value="@_fieldDefinition.Type?.ToJson()"
-        @onchange="HandleTypeChanged"
-        class="form-select">
+                value="@_fieldDefinition.Type?.ToJson()"
+                @onchange="HandleTypeChanged"
+                class="form-select">
             @if (_fieldDefinition.Type == null)
             {
                 <option value="" selected>@SL["EditFieldDefinition.SelectType"]</option>
@@ -60,8 +54,8 @@
         <div class="mb-2">
             <label for="metadata">@_metadataLabel</label>
             <select id="metadata"
-            class="form-select"
-            @bind="_fieldDefinition.Metadata">
+                    class="form-select"
+                    @bind="_fieldDefinition.Metadata">
                 @if (string.IsNullOrWhiteSpace(_fieldDefinition.Metadata))
                 {
                     //TODO: Change key
@@ -95,11 +89,17 @@
         <InputNumber id="sortKey" @bind-Value="_fieldDefinition.SortKey" class="form-control" />
     </div>
 
+    <CascadingValue Value="this">
+        @ChildContent
+    </CascadingValue>
+
+    <ValidationSummary />
+
     <button type="submit"
-    class="btn btn-primary">
+            class="btn btn-primary">
         @(string.IsNullOrWhiteSpace(SubmitLabel)
-                                    ? SL["EditFieldDefinition.Save"]
-                                    : SubmitLabel)
+                ? SL["EditFieldDefinition.Save"]
+                : SubmitLabel)
     </button>
 </EditForm>
 
@@ -113,39 +113,66 @@
     [Parameter]
     public string? SubmitLabel { get; set; }
 
+    /// <summary>
+    /// Use <see cref="FormSection" /> for seamless integration.
+    /// </summary>
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    private EditContext? _editContext;
+    private ValidationMessageStore? _messageStore;
+    private HashSet<FormSection> _sections = [];
+
     private List<ChoiceOption>? _metadataChoices = null;
     private string _metadataLabel = "";
 
-    private List<ValidationResult> _additionalValidationErrors = [];
-
     private FieldDefinition? _fieldDefinition;
 
-    protected override void OnParametersSet()
+    public override Task SetParametersAsync(ParameterView parameters)
     {
-        base.OnParametersSet();
+        var newFieldDefinition = parameters.GetValueOrDefault<FieldDefinition>(nameof(FieldDefinition));
 
-        _fieldDefinition = FieldDefinition.Copy();
+        if(newFieldDefinition != FieldDefinition)
+        {
+            if (_editContext != null)
+                _editContext.OnValidationRequested -= HandleValidationRequested;
+            
+            _fieldDefinition = newFieldDefinition!.Copy();
+            _editContext = new EditContext(_fieldDefinition!);
+            _editContext.OnValidationRequested += HandleValidationRequested;
+            _messageStore = new ValidationMessageStore(_editContext);
+        }
+
+        return base.SetParametersAsync(parameters);
+    }
+
+    public void RegisterSection(FormSection section)
+    {
+        _sections.Add(section);
+    }
+
+    public void UnregisterSection(FormSection section)
+    {
+        _sections.Remove(section);
+    }
+
+    private void HandleValidationRequested(object? sender, ValidationRequestedEventArgs args)
+    {
+        _messageStore!.Clear();
+        foreach (var section in _sections)
+        {
+            section.AddValidationResults(_messageStore!);
+        }
+
+        if (_metadataChoices != null && !_metadataChoices.Any(x => x.Value == _fieldDefinition!.Metadata))
+        {
+            _messageStore!.Add(new FieldIdentifier(_fieldDefinition!, nameof(_fieldDefinition.Metadata)), SL["EditFieldDefinition.InvalidMetadata", _metadataLabel]);
+        }
     }
 
     private void HandleValidSubmit()
     {
-        _additionalValidationErrors = [];
-        if (_metadataChoices != null)
-        {
-            if (!_metadataChoices.Any(x => x.Value == _fieldDefinition!.Metadata))
-            {
-                _additionalValidationErrors = new List<ValidationResult>
-                {
-                    new ValidationResult(SL["EditFieldDefinition.InvalidMetadata", _metadataLabel])
-                };
-
-                return;
-            }
-        }
-
-
-        FieldDefinition.CopyFrom(_fieldDefinition);
-
+        FieldDefinition.CopyFrom(_fieldDefinition!);
         FieldDefinitionChanged.InvokeAsync(FieldDefinition);
     }
 
@@ -168,5 +195,10 @@
             _metadataLabel = "";
         }
 
+    }
+
+    public void Dispose()
+    {
+        _editContext!.OnValidationRequested += HandleValidationRequested;
     }
 }
