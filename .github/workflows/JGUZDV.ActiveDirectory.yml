@@ -1,4 +1,4 @@
-name: JGUZDV.ActiveDirectory.COM
+name: JGUZDV.ActiveDirectory
 
 on:
   workflow_dispatch:
@@ -11,7 +11,7 @@ on:
     branches:
       - main
     paths:
-      - libraries/JGUZDV.ActiveDirectory.COM/**
+      - libraries/JGUZDV.ActiveDirectory/**
 
 env:
   dotnet-version: 9.0.x
