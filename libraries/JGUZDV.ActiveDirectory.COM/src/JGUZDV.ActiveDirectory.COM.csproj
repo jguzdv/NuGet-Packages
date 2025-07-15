@@ -9,7 +9,7 @@
 
         <PackageId>JGUZDV.ActiveDirectory.COM</PackageId>
         <IsPackable>true</IsPackable>
-        <Version>1.0.1</Version>
+        <Version>1.0.2</Version>
         <Authors>Thomas Ottenhus</Authors>
         <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
         <PackageDescription>Provides commonly used AD methods that need COM.</PackageDescription>

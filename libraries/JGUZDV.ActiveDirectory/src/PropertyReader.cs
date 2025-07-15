@@ -116,7 +116,7 @@ internal class PropertyReader(
 
             else if (propertyInfo.PropertyType == typeof(long))
             {
-                var longValue = ConvertIAdsLargeInteger(propertyValue);
+                var longValue = LargeIntegerExtensions.GetLargeInteger(propertyValue);
 
                 if (OutputFormats.Long.FileTime.Equals(outputFormat, StringComparison.OrdinalIgnoreCase))
                 {
@@ -163,7 +163,7 @@ internal class PropertyReader(
     public long ReadLong(PropertyCollection properties, string propertyName)
     {
         var propertyValues = properties[propertyName];
-        return propertyValues.Count != 0 ? ConvertIAdsLargeInteger(propertyValues[0]!) : default;
+        return propertyValues.Count != 0 ? propertyValues.GetLargeInteger()!.Value : default;
     }
 
 
@@ -227,24 +227,6 @@ internal class PropertyReader(
     public DateTimeOffset ReadLongAsDateTime(PropertyCollection properties, string propertyName)
     {
         var propertyValues = properties[propertyName];
-        return propertyValues.Count != 0 ? DateTimeOffset.FromFileTime(ConvertIAdsLargeInteger(propertyValues[0]!)) : default;
-    }
-
-
-    private long ConvertIAdsLargeInteger(object value)
-    {
-        try
-        {
-            var iadsLargeIntType = value.GetType();
-            var highPart = (int)iadsLargeIntType.InvokeMember("HighPart", System.Reflection.BindingFlags.GetProperty, null, value, null)!;
-            var lowPart = (int)iadsLargeIntType.InvokeMember("LowPart", System.Reflection.BindingFlags.GetProperty, null, value, null)!;
-
-            return ((long)highPart << 32) | (uint)lowPart;
-        }
-        catch (Exception e)
-        {
-            _logger.LogWarning(e, "Failed to convert IAdsLargeInteger to long");
-            return default;
-        }
+        return propertyValues.Count != 0 ? DateTimeOffset.FromFileTime(propertyValues.GetLargeInteger()!.Value) : default;
     }
 }
