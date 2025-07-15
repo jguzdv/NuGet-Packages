@@ -1,0 +1,51 @@
+@using System.ComponentModel.DataAnnotations
+@implements IDisposable
+
+@ChildContent
+
+@code {
+    [CascadingParameter]
+    public required EditContext EditContext { get; set; }
+
+    [CascadingParameter]
+    public required ValidationMessageStore MessageStore { get; set; }
+
+    /// <summary>
+    /// The model of the section
+    /// </summary>
+    [Parameter]
+    [EditorRequired]
+    public IValidatableObject Model { get; set; }
+
+    [Parameter]
+    [EditorRequired]
+    public RenderFragment ChildContent { get; set; }
+
+    [Inject]
+    public required IServiceProvider ServiceProvider { get; set; }
+
+    public void AddValidationResults(object? sender, ValidationRequestedEventArgs args)
+    {
+        var context = new ValidationContext(Model, ServiceProvider, null);
+        var errors = Model.Validate(context);
+
+        foreach (var error in errors)
+        {
+            foreach (var memberName in error.MemberNames)
+            {
+                MessageStore.Add(new FieldIdentifier(Model, memberName), error.ErrorMessage ?? "");
+            }
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        EditContext.OnValidationRequested += AddValidationResults;
+    }
+
+    public void Dispose()
+    {
+        EditContext.OnValidationRequested -= AddValidationResults;
+    }
+}

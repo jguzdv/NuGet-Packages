@@ -12,7 +12,7 @@ namespace JGUZDV.DynamicForms
     /// </summary>
     public static class DynamicFormsConfiguration
     {
-        private static HashSet<FieldType> _knownFieldTypes = new()
+        private static readonly HashSet<FieldType> _knownFieldTypes = new()
             {
                 new DateOnlyFieldType(),
                 new IntFieldType(),
@@ -23,7 +23,7 @@ namespace JGUZDV.DynamicForms
         /// <summary>
         /// Removes a FieldType from the known field types.
         /// </summary>
-        /// <param name="type">The FieldType to remove</param>
+        /// <typeparam name="TFieldType"></typeparam>
         public static void RemoveFieldType<TFieldType>()
             where TFieldType : FieldType
         {
@@ -46,7 +46,7 @@ namespace JGUZDV.DynamicForms
         /// </summary>
         public static List<FieldType> KnownFieldTypes => _knownFieldTypes.ToList();
 
-        private static Dictionary<FieldType, List<Type>> _fieldConstraints = new()
+        private static readonly Dictionary<FieldType, List<Type>> _fieldConstraints = new()
             {
                     { new StringFieldType(), [ typeof(RegexConstraint), typeof(StringLengthConstraint), typeof(RangeConstraint) ] },
                     { new DateOnlyFieldType(), [ typeof(RangeConstraint) ] },
@@ -54,7 +54,7 @@ namespace JGUZDV.DynamicForms
                     { new FileFieldType(), [typeof(FileSizeConstraint)] } // Added FileSizeConstraint
             };
 
-        private static HashSet<Type> _allConstraints = new()
+        private static readonly HashSet<Type> _allConstraints = new()
             {
                 typeof(RegexConstraint),
                 typeof(StringLengthConstraint),
@@ -103,7 +103,7 @@ namespace JGUZDV.DynamicForms
         }
 
 
-        private static Dictionary<Type, L10nString> _constraintNames = new()
+        private static readonly Dictionary<Type, L10nString> _constraintNames = new()
             {
                 { typeof(RegexConstraint), new L10nString { ["de"] = "Regex", ["en"] = "Regex" } },
                 { typeof(StringLengthConstraint), new L10nString { ["de"] = "Textlänge", ["en"] = "Text Length" } },
