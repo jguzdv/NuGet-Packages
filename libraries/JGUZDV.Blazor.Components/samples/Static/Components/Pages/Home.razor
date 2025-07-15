@@ -1,7 +1,41 @@
 ﻿@page "/"
 
+@attribute [StreamRendering]
+
 <PageTitle>Home</PageTitle>
 
 <h1>Hello, world!</h1>
 
 Welcome to your new app.
+
+@if (task.IsCompletedSuccessfully)
+{
+    <Dropdown>
+        <DropdownLabelContent>
+            This is a dropdown
+        </DropdownLabelContent>
+        <DropdownContent>
+            <h6 class="dropdown-header">A Header</h6>
+
+            <button class="dropdown-item">And Item</button>
+        </DropdownContent>
+    </Dropdown>
+}
+else
+{
+    <div>
+        loading ....
+    </div>
+}
+
+
+@code {
+    public Task task;
+
+    protected override async Task OnInitializedAsync()
+    {
+        task = Task.Delay(1000); // Simulate some async work
+        await task; // Simulate some async initialization work
+        await base.OnInitializedAsync();
+    }
+}
