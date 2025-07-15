@@ -6,21 +6,40 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace JGUZDV.DynamicForms;
 
+/// <summary>
+/// Builder for configuring dynamic forms in the application.
+/// </summary>
 public class DynamicFormsBuilder
 {
     private readonly IServiceCollection _services;
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="services"></param>
     public DynamicFormsBuilder(IServiceCollection services)
     {
         _services = services;
     }
 
+    /// <summary>
+    /// Adds a new FieldType and its allowed constraints to the dynamic forms configuration.
+    /// </summary>
+    /// <param name="type"></param>
+    /// <param name="allowedConstraints"></param>
+    /// <returns></returns>
     public DynamicFormsBuilder AddFieldType(FieldType type, List<Type> allowedConstraints)
     {
         DynamicFormsConfiguration.AddFieldType(type, allowedConstraints);
         return this;
     }
 
+    /// <summary>
+    /// Adds metadata for the specified FieldType using the specified metadata provider.
+    /// </summary>
+    /// <typeparam name="TFieldType"></typeparam>
+    /// <typeparam name="TMetadataProvider"></typeparam>
+    /// <returns></returns>
     public DynamicFormsBuilder AddMetadata<TFieldType, TMetadataProvider>()
         where TFieldType : FieldType
         where TMetadataProvider : class, IFieldTypeMetadataProvider
@@ -34,6 +53,12 @@ public class DynamicFormsBuilder
         return this;
     }
 
+    /// <summary>
+    /// Adds a value provider for the specified FieldType. The value provider will be used to provide the allowed/selectable values for the FieldType.
+    /// </summary>
+    /// <typeparam name="TFieldType"></typeparam>
+    /// <typeparam name="TMetadataProvider"></typeparam>
+    /// <returns></returns>
     public DynamicFormsBuilder AddValueProvider<TFieldType, TMetadataProvider>()
        where TFieldType : FieldType
        where TMetadataProvider : class, IFieldTypeValueProvider
@@ -47,6 +72,11 @@ public class DynamicFormsBuilder
         return this;
     }
 
+    /// <summary>
+    /// Removes a FieldType from the dynamic forms configuration.
+    /// </summary>
+    /// <typeparam name="TFieldType"></typeparam>
+    /// <returns></returns>
     public DynamicFormsBuilder RemoveFieldType<TFieldType>()
         where TFieldType : FieldType
     {
