@@ -5,8 +5,14 @@
 
 @code {
     [CascadingParameter]
-    public required FieldDefinitionForm Form { get; set; }
+    public required EditContext EditContext { get; set; }
 
+    [CascadingParameter]
+    public required ValidationMessageStore MessageStore { get; set; }
+
+    /// <summary>
+    /// The model of the section
+    /// </summary>
     [Parameter]
     [EditorRequired]
     public IValidatableObject Model { get; set; }
@@ -18,7 +24,7 @@
     [Inject]
     public required IServiceProvider ServiceProvider { get; set; }
 
-    public void AddValidationResults(ValidationMessageStore messageStore)
+    public void AddValidationResults(object? sender, ValidationRequestedEventArgs args)
     {
         var context = new ValidationContext(Model, ServiceProvider, null);
         var errors = Model.Validate(context);
@@ -27,7 +33,7 @@
         {
             foreach (var memberName in error.MemberNames)
             {
-                messageStore.Add(new FieldIdentifier(Model, memberName), error.ErrorMessage ?? "");
+                MessageStore.Add(new FieldIdentifier(Model, memberName), error.ErrorMessage ?? "");
             }
         }
     }
@@ -35,11 +41,11 @@
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        Form.RegisterSection(this);
+        EditContext.OnValidationRequested += AddValidationResults;
     }
 
     public void Dispose()
     {
-        Form.UnregisterSection(this);
+        EditContext.OnValidationRequested -= AddValidationResults;
     }
 }

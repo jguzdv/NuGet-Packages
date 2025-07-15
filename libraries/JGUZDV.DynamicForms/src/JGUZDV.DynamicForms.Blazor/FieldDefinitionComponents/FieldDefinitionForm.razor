@@ -89,7 +89,7 @@
         <InputNumber id="sortKey" @bind-Value="_fieldDefinition.SortKey" class="form-control" />
     </div>
 
-    <CascadingValue Value="this">
+    <CascadingValue Value="_messageStore">
         @ChildContent
     </CascadingValue>
 
@@ -121,7 +121,6 @@
 
     private EditContext? _editContext;
     private ValidationMessageStore? _messageStore;
-    private HashSet<FormSection> _sections = [];
 
     private List<ChoiceOption>? _metadataChoices = null;
     private string _metadataLabel = "";
@@ -132,11 +131,11 @@
     {
         var newFieldDefinition = parameters.GetValueOrDefault<FieldDefinition>(nameof(FieldDefinition));
 
-        if(newFieldDefinition != FieldDefinition)
+        if (newFieldDefinition != FieldDefinition)
         {
             if (_editContext != null)
                 _editContext.OnValidationRequested -= HandleValidationRequested;
-            
+
             _fieldDefinition = newFieldDefinition!.Copy();
             _editContext = new EditContext(_fieldDefinition!);
             _editContext.OnValidationRequested += HandleValidationRequested;
@@ -146,23 +145,9 @@
         return base.SetParametersAsync(parameters);
     }
 
-    public void RegisterSection(FormSection section)
-    {
-        _sections.Add(section);
-    }
-
-    public void UnregisterSection(FormSection section)
-    {
-        _sections.Remove(section);
-    }
-
     private void HandleValidationRequested(object? sender, ValidationRequestedEventArgs args)
     {
         _messageStore!.Clear();
-        foreach (var section in _sections)
-        {
-            section.AddValidationResults(_messageStore!);
-        }
 
         if (_metadataChoices != null && !_metadataChoices.Any(x => x.Value == _fieldDefinition!.Metadata))
         {
