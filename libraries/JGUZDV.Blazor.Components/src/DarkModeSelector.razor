@@ -3,18 +3,18 @@
 
 <Dropdown DropDownMenuClass="dropdown-menu-end">
     <DropdownLabelContent>
-        <span class="btn btn-none" id="jgu-current-theme-icon" aria-haspopup="true" aria-expanded="false" aria-label="@LR["DarkModeSelector.Header"]">
+        <span id="jgu-current-theme-icon" aria-label="@LR["DarkModeSelector.Header"]">
             <i class="fas fa-adjust"></i>
         </span>
     </DropdownLabelContent>
     <DropdownContent>
-        <button class="dropdown-item" id="jgu-light-theme-icon" data-set-theme="light">
+        <button class="dropdown-item" id="jgu-light-theme-icon" data-set-theme="light" role="menuitem">
             @Icons.LightMode("small pe-1") @LR["Theme.Light"]
         </button>
-        <button class="dropdown-item" id="jgu-dark-theme-icon" data-set-theme="dark">
+        <button class="dropdown-item" id="jgu-dark-theme-icon" data-set-theme="dark" role="menuitem">
             @Icons.DarkMode("small pe-1") @LR["Theme.Dark"]
         </button>
-        <button class="dropdown-item" id="jgu-auto-theme-icon" data-set-theme="auto">
+        <button class="dropdown-item" id="jgu-auto-theme-icon" data-set-theme="auto" role="menuitem">
             @Icons.AutoMode("small pe-1") Auto
         </button>
     </DropdownContent>
@@ -31,7 +31,6 @@
             var jsModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/JGUZDV.Blazor.Components/JGUZDV.Blazor.Components.lib.module.js");
             await jsModule.InvokeVoidAsync("setStoredTheme");
             await jsModule.InvokeVoidAsync("registerThemeButtons");
-            await jsModule.InvokeVoidAsync("setupDropdownCloseOnClick");
         }
 
         await base.OnAfterRenderAsync(firstRender);

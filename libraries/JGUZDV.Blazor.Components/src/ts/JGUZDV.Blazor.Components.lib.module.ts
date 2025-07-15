@@ -1,4 +1,4 @@
-export type Theme = 'light' | 'dark' | 'auto';
+﻿export type Theme = 'light' | 'dark' | 'auto';
 
 export function registerThemeButtons(): void {
     document.querySelectorAll<HTMLElement>('[data-set-theme]').forEach(el => {
@@ -7,6 +7,19 @@ export function registerThemeButtons(): void {
             const theme = target.getAttribute('data-set-theme') as Theme | null;
             if (theme) {
                 applyTheme(theme, false);
+            }
+
+            const dropdownMenu = target.closest('.dropdown-menu') as HTMLElement;
+            if (dropdownMenu) {
+                dropdownMenu.hidden = true;
+
+                const buttonId = dropdownMenu.getAttribute('aria-labelledby');
+                if (buttonId) {
+                    const button = document.getElementById(buttonId);
+                    if (button) {
+                        button.setAttribute('aria-expanded', 'false');
+                    }
+                }
             }
         });
     });
@@ -59,26 +72,54 @@ export function updateActiveThemeButton(theme: Theme): void {
     });
 }
 
-export function setupDropdownCloseOnClick(): void {
-    document.addEventListener('click', (event: MouseEvent) => {
-        const target = event.target as Node;
+export function setupDropdowns(): void {
+    const buttons = document.querySelectorAll<HTMLButtonElement>('[id^="dropdown-button-"]');
 
-        document.querySelectorAll<HTMLInputElement>('input.dropdown-toggle').forEach((checkbox) => {
-            const dropdown = checkbox.closest('.dropdown');
-            if (!dropdown) return;
+    buttons.forEach((button) => {
+        const menuId = button.getAttribute('aria-controls');
+        if (!menuId) return;
 
-            if (!dropdown.contains(target)) {
-                checkbox.checked = false;
+        const menu = document.getElementById(menuId) as HTMLElement | null;
+        if (!menu) return;
+
+        button.addEventListener('click', (e: MouseEvent) => {
+            const expanded = button.getAttribute('aria-expanded') === 'true';
+            button.setAttribute('aria-expanded', String(!expanded));
+            menu.hidden = expanded;
+
+            if (!expanded) {
+                const firstItem = menu.querySelector<HTMLElement>('[role="menuitem"]');
+                if (firstItem) {
+                    firstItem.focus();
+                }
+            }
+        });
+
+        document.addEventListener('click', (event: MouseEvent) => {
+            const target = event.target as Node;
+
+            if (!button.contains(target) && !menu.contains(target)) {
+                button.setAttribute('aria-expanded', 'false');
+                menu.hidden = true;
             }
         });
     });
+}
 
-    document.querySelectorAll<HTMLElement>('[data-set-theme]').forEach((el) => {
-        el.addEventListener('click', () => {
-            const dropdown = el.closest('.dropdown');
-            const checkbox = dropdown?.querySelector<HTMLInputElement>('input.dropdown-toggle');
-            if (checkbox) {
-                checkbox.checked = false;
+export function setupSidebarToggle() {
+    const toggleBtn = document.getElementById("sidebar-toggle-btn");
+    const sidebar = document.getElementById("jbs-sidebar");
+
+    if (!toggleBtn || !sidebar) return;
+
+    toggleBtn.addEventListener("click", () => {
+        sidebar.classList.toggle("toggled");
+    });
+
+    document.querySelectorAll('[data-sidebar-close]').forEach(el => {
+        el.addEventListener("click", () => {
+            if (window.innerWidth < 992) {
+                sidebar.classList.remove("toggled");
             }
         });
     });
@@ -88,5 +129,6 @@ export function setupDropdownCloseOnClick(): void {
 export function afterWebStarted(): void {
     setStoredTheme();
     registerThemeButtons();
-    setupDropdownCloseOnClick();
+    setupDropdowns();
+    setupSidebarToggle();
 }
