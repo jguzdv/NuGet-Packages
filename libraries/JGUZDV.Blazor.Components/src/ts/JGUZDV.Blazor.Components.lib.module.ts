@@ -74,10 +74,10 @@ export function updateActiveThemeButton(theme: Theme): void {
 
 export function setupDropdown(id: string): void {
     const button = document.getElementById(id);
-    if (!button) return;
+    const menuId = button?.getAttribute('aria-controls');
+    const menu = menuId ? document.getElementById(menuId) : null;
 
-    const menu = ensureDropdownAttributes(button);
-    if (!menu) return;
+    if (!button || !menu) return;
 
     button.addEventListener('click', (e: MouseEvent) => {
         const expanded = button.getAttribute('aria-expanded') === 'true';
@@ -85,48 +85,17 @@ export function setupDropdown(id: string): void {
         menu.hidden = expanded;
 
         if (!expanded) {
-            const firstItem = menu.querySelector<HTMLElement>('[role="menuitem"]');
-            if (firstItem) {
-                firstItem.focus();
-            }
+            menu.querySelector<HTMLElement>('[role="menuitem"]')?.focus();
         }
     });
 
     document.addEventListener('click', (event: MouseEvent) => {
         const target = event.target as Node;
-
         if (!button.contains(target) && !menu.contains(target)) {
             button.setAttribute('aria-expanded', 'false');
             menu.hidden = true;
         }
     });
-}
-
-function ensureDropdownAttributes(button: HTMLElement): HTMLElement | null {
-    let menuId = button.getAttribute('aria-controls');
-    if (!menuId) {
-        const idSuffix = button.id.replace("dropdown-button-", "");
-        const menu = document.getElementById(`dropdown-menu-${idSuffix}`);
-        if (menu) {
-            menuId = menu.id;
-            button.setAttribute("aria-controls", menu.id);
-        }
-    }
-
-    if (!menuId) return null;
-
-    button.setAttribute("aria-haspopup", "true");
-    button.setAttribute("aria-expanded", "false");
-    button.classList.add("dropdown-label");
-
-    if (button.tagName === "BUTTON") {
-        button.setAttribute("type", button.getAttribute("type") ?? "button");
-    } else {
-        button.setAttribute("role", "button");
-        button.setAttribute("tabindex", "0");
-    }
-
-    return document.getElementById(menuId);
 }
 
 export function setupSidebarToggle() {
@@ -156,9 +125,9 @@ export function registerWebComponents(): void {
             }
 
             connectedCallback() {
-                const id = this.getAttribute('dropdown-id');
+                const id = this.getAttribute('button-id');
                 if (!id) {
-                    console.warn("No dropdown-id provided for <jgu-dropdown>");
+                    console.warn("No button-id provided for <jgu-dropdown>");
                     return;
                 }
 

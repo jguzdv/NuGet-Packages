@@ -1,29 +1,22 @@
-<div class="dropdown" id="dropdown-@_guid">
+<jgu-dropdown button-id="dropdown-button-@_guid" class="dropdown" id="dropdown-@_guid">
     @_dropdownToggle!.Invoke($"dropdown-button-{_guid}")
 
     <div class="dropdown-menu @DropDownMenuClass" role="menu" id="dropdown-menu-@_guid" aria-labelledby="dropdown-button-@_guid" hidden>
         @DropdownContent
     </div>
-
-    <jgu-dropdown dropdown-id="dropdown-button-@_guid"></jgu-dropdown>
-</div>
+</jgu-dropdown>
 
 @code {
     private string _guid = Guid.NewGuid().ToString();
     private RenderFragment<string>? _dropdownToggle;
 
     /// <summary>
-    /// When set, this will be used as dropdown toggle. The argument is the id of the checkbox that toggles the dropdown visibility.
+    /// Defines the visible content of the dropdown toggle button (e.g., text and or an icon).
+    /// This content will be automatically wrapped in a &lt;button&gt; element,
+    /// which is used to open or close the dropdown menu.
     /// </summary>
-    [Parameter]
-    public RenderFragment<string>? DropdownToggle { get; set; }
-
-    /// <summary>
-    /// If set, this will be used as dropdown toggle content.
-    /// It will be automatically wrapped in a &lt;label&gt; which should toggle the checkbox for dropdown visibility.
-    /// </summary>
-    [Parameter]
-    public RenderFragment? DropdownLabelContent { get; set; }
+    [Parameter, EditorRequired]
+    public RenderFragment DropdownLabelContent { get; set; }
 
     /// <summary>
     /// This is the dropdown containers content. E.g. the dropdown items.
@@ -31,48 +24,22 @@
     [Parameter]
     public required RenderFragment DropdownContent { get; set; }
 
-
     [Parameter]
     public string? DropDownMenuClass { get; set; }
 
-
-    [Inject, NotNull]
-    private IJSRuntime? JSRuntime { get; set; }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            var jsModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/JGUZDV.Blazor.Components/JGUZDV.Blazor.Components.lib.module.js");
-            await jsModule.InvokeVoidAsync("setupDropdowns");
-        }
-
-        await base.OnAfterRenderAsync(firstRender);
-    }
 
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
 
-
-        if (DropdownToggle != null && DropdownLabelContent != null)
-            throw new InvalidOperationException($"{nameof(DropdownToggle)} and {nameof(DropdownLabelContent)} may not be set at the same time.");
-
-        if (DropdownLabelContent != null)
-        {
-            _dropdownToggle = (buttonId) =>
+        _dropdownToggle = (buttonId) =>
                 @<button id="@buttonId" tabindex="0"
-                class="dropdown-label"
-                                     type="button"
-                                     aria-haspopup="true"
-                                     aria-expanded="false"
-                                     aria-controls="dropdown-menu-@_guid">
-            @DropdownLabelContent
-            </button>;
-        }
-        else
-        {
-            _dropdownToggle = DropdownToggle;
-        }
+                                 class="dropdown-label"
+                                 type="button"
+                                 aria-haspopup="true"
+                                 aria-expanded="false"
+                                 aria-controls="dropdown-menu-@_guid">
+        @DropdownLabelContent
+        </button>;
     }
 }

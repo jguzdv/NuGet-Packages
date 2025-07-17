@@ -14,19 +14,6 @@
     </DropdownContent>
 </Dropdown>
 
-<Dropdown>
-    <DropdownToggle>
-        <div id="@context">
-            This is a dropdown with dropdown toggle
-        </div>
-    </DropdownToggle>
-    <DropdownContent>
-        <h6 class="dropdown-header">A Header</h6>
-
-        <button class="dropdown-item">And Item</button>
-    </DropdownContent>
-</Dropdown>
-
 <label>suche</label>
 <DropdownSearch SearchFunction="Function" @bind-SearchQuery=@query>
     <ItemTemplate><i class="fa fa-fw fa-user"></i> @context</ItemTemplate>
@@ -42,14 +29,5 @@
     private Task<(List<string>, bool)> Function(string query, CancellationToken token)
     {
         return Task.FromResult((new List<string> { "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", "c" }, false));
-    }
-    protected override void OnAfterRender(bool firstRender)
-    {
-        base.OnAfterRender(firstRender);
-    }
-
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();
     }
 }
