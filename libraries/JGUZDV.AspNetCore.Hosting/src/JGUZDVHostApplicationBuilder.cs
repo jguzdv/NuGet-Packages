@@ -7,13 +7,16 @@ using JGUZDV.AspNetCore.Hosting.Diagnostics;
 using JGUZDV.AspNetCore.Hosting.Extensions;
 using JGUZDV.AspNetCore.Hosting.FeatureManagement;
 using JGUZDV.AspNetCore.Hosting.Localization;
+using JGUZDV.AspNetCore.Hosting.Resources;
 using JGUZDV.YARP.SimpleReverseProxy;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 
 namespace JGUZDV.AspNetCore.Hosting;
@@ -496,6 +499,18 @@ public class JGUZDVHostApplicationBuilder
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseStatusCodePages(async context =>
+            {
+                var statusCode = context.HttpContext.Response.StatusCode;
+                var localizer = context.HttpContext.RequestServices.GetRequiredService<IStringLocalizer<ErrorResource>>();
+
+                var html = JGUZDVHostApplicationBuilderExtensions.GenerateErrorPageHtml(localizer, statusCode, context.HttpContext);
+
+                context.HttpContext.Response.ContentType = "text/html";
+                context.HttpContext.Response.Headers.ContentLength = null;
+                await context.HttpContext.Response.WriteAsync(html);
+            });
 
             app.UseHttpsRedirection();
         }

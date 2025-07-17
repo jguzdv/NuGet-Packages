@@ -1,6 +1,4 @@
-﻿using HealthChecks.SqlServer;
-
-using JGUZDV.AspNetCore.Components.Localization;
+﻿using JGUZDV.AspNetCore.Components.Localization;
 using JGUZDV.AspNetCore.Hosting.Components;
 using JGUZDV.AspNetCore.Hosting.Extensions;
 using JGUZDV.AspNetCore.Hosting.FeatureManagement;
@@ -19,12 +17,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Server;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -62,7 +60,7 @@ public static class JGUZDVHostApplicationBuilderExtensions
         string configSection = Constants.ConfigSections.DataProtection)
     {
         appBuilder.Configuration.ValidateConfigSectionExists(configSection);
-        
+
         var builder = appBuilder.Builder.AddJGUZDVDataProtection(configSection);
         configure?.Invoke(builder);
 
@@ -81,7 +79,7 @@ public static class JGUZDVHostApplicationBuilderExtensions
     {
         appBuilder.Configuration.ValidateConfigSectionExists(configSection);
 
-        appBuilder.Services.AddDistributedSqlServerCache(opt => 
+        appBuilder.Services.AddDistributedSqlServerCache(opt =>
             appBuilder.Configuration.GetSection(configSection).Bind(opt));
 
         return appBuilder;
@@ -98,7 +96,7 @@ public static class JGUZDVHostApplicationBuilderExtensions
         appBuilder.Configuration.ValidateConfigSectionExists(Constants.ConfigSections.ReverseProxy);
 
         appBuilder.Services.AddSimpleReverseProxy(Constants.ConfigSections.ReverseProxy, configure, enableAccessTokenManagement: true);
-     
+
         appBuilder.HasReverseProxy = true;
         return appBuilder;
     }
@@ -177,7 +175,7 @@ public static class JGUZDVHostApplicationBuilderExtensions
         // If there's a ConnectionStrings section, we assume it's for SQL Server and add a health check for all entries.
         if (appBuilder.Configuration.GetSection("ConnectionStrings") is IConfigurationSection connectionStrings && connectionStrings.Exists())
         {
-            foreach(var connectionString in connectionStrings.GetChildren())
+            foreach (var connectionString in connectionStrings.GetChildren())
             {
                 try
                 {
@@ -192,7 +190,7 @@ public static class JGUZDVHostApplicationBuilderExtensions
             }
 
         }
-        
+
         if (appBuilder.Configuration.HasConfigSection(Constants.ConfigSections.DistributedCache))
         {
             var connectionString = appBuilder.Configuration.GetSection(Constants.ConfigSections.DistributedCache).GetValue<string>("ConnectionString");
@@ -307,10 +305,10 @@ public static class JGUZDVHostApplicationBuilderExtensions
     }
 
     #region Frontend Frameworks
-        /// <summary>
-        /// Adds MVC to the WebApplicationBuilder.<br/>
-        /// This will also configure the JsonOptions MVC controllers.
-        /// </summary>
+    /// <summary>
+    /// Adds MVC to the WebApplicationBuilder.<br/>
+    /// This will also configure the JsonOptions MVC controllers.
+    /// </summary>
     public static JGUZDVHostApplicationBuilder AddAspNetCoreMvc(
         this JGUZDVHostApplicationBuilder appBuilder,
         bool enableViewSupport,
@@ -329,7 +327,7 @@ public static class JGUZDVHostApplicationBuilderExtensions
         {
             mvcBuilder = appBuilder.Services.AddControllers(configureOptions);
         }
-        
+
         mvcBuilder.AddJsonOptions(opt => opt.JsonSerializerOptions.SetJGUZDVDefaults());
         configureBuilder?.Invoke(mvcBuilder);
 
@@ -353,6 +351,76 @@ public static class JGUZDVHostApplicationBuilderExtensions
         appBuilder.HasRazorPages = true;
         appBuilder.HasFrontend = true;
         return appBuilder;
+    }
+
+    /// <summary>
+    /// The method is a static extension methodthat generates an HTML error page based on the provided status code, localizer, and HTTP context information.
+    /// </summary>
+    /// <param name="localizer">An <see cref="IStringLocalizer"/> instance used to retrieve localized strings for the error page.</param>
+    /// <param name="statusCode">The HTTP status code representing the error condition. Determines the title and message displayed on the error
+    /// page.</param>
+    /// <param name="context">The <see cref="HttpContext"/> containing request-specific information, such as the trace identifier, request
+    /// path, and query string.</param>
+    public static string GenerateErrorPageHtml(
+            IStringLocalizer localizer,
+            int statusCode,
+            HttpContext context)
+    {
+
+        var traceId = context.TraceIdentifier;
+        var requestTimeUtc = DateTime.UtcNow;
+        var host = context.Request.Host.ToString();
+        var path = context.Request.Path;
+        var query = context.Request.QueryString;
+
+        var titleKey = $"Title.{statusCode}";
+        var messageKey = $"Message.{statusCode}";
+
+        var title = localizer[titleKey];
+        var message = localizer[messageKey];
+
+        if (title.ResourceNotFound) title = localizer["Title.Default"];
+        if (message.ResourceNotFound) message = localizer["Message.Default"];
+
+        return $"""
+                <html>
+                    <head> 
+                        <title>{title}</title>
+                        <meta charset="utf-8" />
+
+                        <link rel="icon" href="https://cdn.zdv.uni-mainz.de/web/assets/JGU-Quader.ico">
+                        <link rel="icon" sizes="16x16 32x32 64x64" href="https://cdn.zdv.uni-mainz.de/web/assets/JGU-Quader.ico">
+                        <link rel="icon" sizes="180x180" href="https://cdn.zdv.uni-mainz.de/web/assets/JGU-Quader-180.png">
+
+                        <link href="https://cdn.zdv.uni-mainz.de/web/jg-ootstrap/jg-ootstrap.css" rel="stylesheet" />
+                        <link href="https://cdn.zdv.uni-mainz.de/web/fontawesome/5-free/css/all.min.css" rel="stylesheet" />
+                    </head>
+                    <body>
+                        <div class="container col-xl-10 col-xxl-8 px-4 py-5">
+                            <div class="row align-items-center g-lg-5 py-5">
+                                <div class="col-lg-7 text-center text-lg-start">
+                                    <h1 class="display-4 fw-bold lh-1 mb-3"><i class="fas fa-bomb pe-1"></i> {title}</h1>
+                                    <p class="col-lg-10 fs-4">{message}</p>
+                                </div>
+                                <div class="col-md-10 mx-auto col-lg-5"> 
+                                    <div class="card">
+                                      <div class="card-body p-4 bg-light">
+                                        <h4 class="card-title d-flex justify-content-between align-items-center">{localizer["Errorinformations"]} <i class="fas fa-info fs-5"></i></h4>
+                                        <h6 class="card-subtitle mb-2 text-body-secondary">{localizer["Technical.Hint"]}</h6>
+                                        <ul class="list-group pt-2">
+                                          <li class="list-group-item bg-light"><strong>Trace ID:</strong> {traceId}</li>
+                                          <li class="list-group-item bg-light"><strong>{localizer["Time"]}:</strong> {requestTimeUtc}</li>
+                                          <li class="list-group-item bg-light"><strong>Host:</strong> {host}</li>
+                                          <li class="list-group-item bg-light"><strong>URL:</strong> {path}{query}</li>
+                                        </ul>
+                                      </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </body>
+                </html>
+                """;
     }
 
 
@@ -382,7 +450,8 @@ public static class JGUZDVHostApplicationBuilderExtensions
             LogMessages.FeatureAdded(logger, "InteractiveServerComponents");
         }
 
-        if (interactivityModes.HasFlag(BlazorInteractivityModes.WebAssembly)) {
+        if (interactivityModes.HasFlag(BlazorInteractivityModes.WebAssembly))
+        {
             builder.AddInteractiveWebAssemblyComponents();
             appBuilder.HasInteractiveWebAssemblyComponents = true;
             LogMessages.FeatureAdded(logger, "InteractiveWebAssemblyComponents");
@@ -457,7 +526,8 @@ public static class JGUZDVHostApplicationBuilderExtensions
         var bearerConfigSection = appBuilder.Configuration.GetSection(configSection);
 
         var authBuilder = appBuilder.Services
-            .AddAuthentication(opt => {
+            .AddAuthentication(opt =>
+            {
                 opt.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 
                 configureAuthentication?.Invoke(opt);
@@ -571,7 +641,7 @@ public static class JGUZDVHostApplicationBuilderExtensions
                 opt.Cookie.Name = appBuilder.Environment.ApplicationName;
                 opt.SlidingExpiration = false;
 
-                if(appBuilder.Configuration.HasConfigSection(cookieConfigSection))
+                if (appBuilder.Configuration.HasConfigSection(cookieConfigSection))
                 {
                     var cookieConfig = appBuilder.Configuration.GetSection(cookieConfigSection);
                     cookieConfig.Bind(opt);
