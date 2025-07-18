@@ -72,37 +72,29 @@ export function updateActiveThemeButton(theme: Theme): void {
     });
 }
 
-export function setupDropdowns(): void {
-    const buttons = document.querySelectorAll<HTMLButtonElement>('[id^="dropdown-button-"]');
+export function setupDropdown(id: string): void {
+    const button = document.getElementById(id);
+    const menuId = button?.getAttribute('aria-controls');
+    const menu = menuId ? document.getElementById(menuId) : null;
 
-    buttons.forEach((button) => {
-        const menuId = button.getAttribute('aria-controls');
-        if (!menuId) return;
+    if (!button || !menu) return;
 
-        const menu = document.getElementById(menuId) as HTMLElement | null;
-        if (!menu) return;
+    button.addEventListener('click', (e: MouseEvent) => {
+        const expanded = button.getAttribute('aria-expanded') === 'true';
+        button.setAttribute('aria-expanded', String(!expanded));
+        menu.hidden = expanded;
 
-        button.addEventListener('click', (e: MouseEvent) => {
-            const expanded = button.getAttribute('aria-expanded') === 'true';
-            button.setAttribute('aria-expanded', String(!expanded));
-            menu.hidden = expanded;
+        if (!expanded) {
+            menu.querySelector<HTMLElement>('[role="menuitem"]')?.focus();
+        }
+    });
 
-            if (!expanded) {
-                const firstItem = menu.querySelector<HTMLElement>('[role="menuitem"]');
-                if (firstItem) {
-                    firstItem.focus();
-                }
-            }
-        });
-
-        document.addEventListener('click', (event: MouseEvent) => {
-            const target = event.target as Node;
-
-            if (!button.contains(target) && !menu.contains(target)) {
-                button.setAttribute('aria-expanded', 'false');
-                menu.hidden = true;
-            }
-        });
+    document.addEventListener('click', (event: MouseEvent) => {
+        const target = event.target as Node;
+        if (!button.contains(target) && !menu.contains(target)) {
+            button.setAttribute('aria-expanded', 'false');
+            menu.hidden = true;
+        }
     });
 }
 
@@ -125,10 +117,30 @@ export function setupSidebarToggle() {
     });
 }
 
+export function registerWebComponents(): void {
+    customElements.define('jgu-dropdown',
+        class extends HTMLElement {
+            constructor() {
+                super();
+            }
+
+            connectedCallback() {
+                const id = this.getAttribute('button-id');
+                if (!id) {
+                    console.warn("No button-id provided for <jgu-dropdown>");
+                    return;
+                }
+
+                setupDropdown(id);
+            }
+        }
+    );
+}
 
 export function afterWebStarted(): void {
     setStoredTheme();
     registerThemeButtons();
-    setupDropdowns();
     setupSidebarToggle();
+
+    registerWebComponents();
 }
