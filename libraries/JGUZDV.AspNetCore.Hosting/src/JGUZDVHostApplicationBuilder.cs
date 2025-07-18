@@ -466,21 +466,17 @@ public class JGUZDVHostApplicationBuilder
             int statusCode,
             HttpContext context)
     {
+        var request = context.Request;
+        
+        var title = localizer[$"Title.{statusCode}"];
+        var message = localizer[$"Message.{statusCode}"];
 
-        var traceId = context.TraceIdentifier;
-        var requestTimeUtc = DateTime.UtcNow;
-        var host = context.Request.Host.ToString();
-        var path = context.Request.Path;
-        var query = context.Request.QueryString;
-
-        var titleKey = $"Title.{statusCode}";
-        var messageKey = $"Message.{statusCode}";
-
-        var title = localizer[titleKey];
-        var message = localizer[messageKey];
-
-        if (title.ResourceNotFound) title = localizer["Title.Default"];
-        if (message.ResourceNotFound) message = localizer["Message.Default"];
+        if (title.ResourceNotFound) {
+            title = localizer["Title.Default"];
+        }
+        if (message.ResourceNotFound) {
+            message = localizer["Message.Default"];
+        }
 
         return $"""
                 <html>
@@ -508,10 +504,10 @@ public class JGUZDVHostApplicationBuilder
                                         <h4 class="card-title d-flex justify-content-between align-items-center">{localizer["Errorinformations"]} <i class="fas fa-info fs-5"></i></h4>
                                         <h6 class="card-subtitle mb-2 text-body-secondary">{localizer["Technical.Hint"]}</h6>
                                         <ul class="list-group pt-2">
-                                          <li class="list-group-item bg-light"><strong>Trace ID:</strong> {traceId}</li>
-                                          <li class="list-group-item bg-light"><strong>{localizer["Time"]}:</strong> {requestTimeUtc}</li>
-                                          <li class="list-group-item bg-light"><strong>Host:</strong> {host}</li>
-                                          <li class="list-group-item bg-light"><strong>URL:</strong> {path}{query}</li>
+                                          <li class="list-group-item bg-light"><strong>Trace ID:</strong> {context.TraceIdentifier}</li>
+                                          <li class="list-group-item bg-light"><strong>{localizer["Time"]}:</strong> {DateTimeOffset.UtcNow:O}</li>
+                                          <li class="list-group-item bg-light"><strong>Host:</strong> {request.Host}</li>
+                                          <li class="list-group-item bg-light"><strong>URL:</strong> {request.Path}{request.QueryString}</li>
                                         </ul>
                                       </div>
                                     </div>
