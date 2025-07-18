@@ -11,11 +11,11 @@
     public required ValidationMessageStore MessageStore { get; set; }
 
     /// <summary>
-    /// The model of the section
+    /// The model of the section. If null, validation will not be performed.
     /// </summary>
     [Parameter]
     [EditorRequired]
-    public IValidatableObject Model { get; set; }
+    public IValidatableObject? Model { get; set; }
 
     [Parameter]
     [EditorRequired]
@@ -26,6 +26,11 @@
 
     public void AddValidationResults(object? sender, ValidationRequestedEventArgs args)
     {
+        if (Model == null)
+        {
+            return;
+        }
+
         var context = new ValidationContext(Model, ServiceProvider, null);
         var errors = Model.Validate(context);
 
