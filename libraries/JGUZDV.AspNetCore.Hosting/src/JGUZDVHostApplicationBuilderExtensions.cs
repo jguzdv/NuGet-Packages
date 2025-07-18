@@ -1,6 +1,4 @@
-﻿using HealthChecks.SqlServer;
-
-using JGUZDV.AspNetCore.Components.Localization;
+﻿using JGUZDV.AspNetCore.Components.Localization;
 using JGUZDV.AspNetCore.Hosting.Components;
 using JGUZDV.AspNetCore.Hosting.Extensions;
 using JGUZDV.AspNetCore.Hosting.FeatureManagement;
@@ -19,12 +17,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Server;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -62,7 +60,7 @@ public static class JGUZDVHostApplicationBuilderExtensions
         string configSection = Constants.ConfigSections.DataProtection)
     {
         appBuilder.Configuration.ValidateConfigSectionExists(configSection);
-        
+
         var builder = appBuilder.Builder.AddJGUZDVDataProtection(configSection);
         configure?.Invoke(builder);
 
@@ -81,7 +79,7 @@ public static class JGUZDVHostApplicationBuilderExtensions
     {
         appBuilder.Configuration.ValidateConfigSectionExists(configSection);
 
-        appBuilder.Services.AddDistributedSqlServerCache(opt => 
+        appBuilder.Services.AddDistributedSqlServerCache(opt =>
             appBuilder.Configuration.GetSection(configSection).Bind(opt));
 
         return appBuilder;
@@ -98,7 +96,7 @@ public static class JGUZDVHostApplicationBuilderExtensions
         appBuilder.Configuration.ValidateConfigSectionExists(Constants.ConfigSections.ReverseProxy);
 
         appBuilder.Services.AddSimpleReverseProxy(Constants.ConfigSections.ReverseProxy, configure, enableAccessTokenManagement: true);
-     
+
         appBuilder.HasReverseProxy = true;
         return appBuilder;
     }
@@ -177,7 +175,7 @@ public static class JGUZDVHostApplicationBuilderExtensions
         // If there's a ConnectionStrings section, we assume it's for SQL Server and add a health check for all entries.
         if (appBuilder.Configuration.GetSection("ConnectionStrings") is IConfigurationSection connectionStrings && connectionStrings.Exists())
         {
-            foreach(var connectionString in connectionStrings.GetChildren())
+            foreach (var connectionString in connectionStrings.GetChildren())
             {
                 try
                 {
@@ -192,7 +190,7 @@ public static class JGUZDVHostApplicationBuilderExtensions
             }
 
         }
-        
+
         if (appBuilder.Configuration.HasConfigSection(Constants.ConfigSections.DistributedCache))
         {
             var connectionString = appBuilder.Configuration.GetSection(Constants.ConfigSections.DistributedCache).GetValue<string>("ConnectionString");
@@ -307,10 +305,10 @@ public static class JGUZDVHostApplicationBuilderExtensions
     }
 
     #region Frontend Frameworks
-        /// <summary>
-        /// Adds MVC to the WebApplicationBuilder.<br/>
-        /// This will also configure the JsonOptions MVC controllers.
-        /// </summary>
+    /// <summary>
+    /// Adds MVC to the WebApplicationBuilder.<br/>
+    /// This will also configure the JsonOptions MVC controllers.
+    /// </summary>
     public static JGUZDVHostApplicationBuilder AddAspNetCoreMvc(
         this JGUZDVHostApplicationBuilder appBuilder,
         bool enableViewSupport,
@@ -329,7 +327,7 @@ public static class JGUZDVHostApplicationBuilderExtensions
         {
             mvcBuilder = appBuilder.Services.AddControllers(configureOptions);
         }
-        
+
         mvcBuilder.AddJsonOptions(opt => opt.JsonSerializerOptions.SetJGUZDVDefaults());
         configureBuilder?.Invoke(mvcBuilder);
 
@@ -382,7 +380,8 @@ public static class JGUZDVHostApplicationBuilderExtensions
             LogMessages.FeatureAdded(logger, "InteractiveServerComponents");
         }
 
-        if (interactivityModes.HasFlag(BlazorInteractivityModes.WebAssembly)) {
+        if (interactivityModes.HasFlag(BlazorInteractivityModes.WebAssembly))
+        {
             builder.AddInteractiveWebAssemblyComponents();
             appBuilder.HasInteractiveWebAssemblyComponents = true;
             LogMessages.FeatureAdded(logger, "InteractiveWebAssemblyComponents");
@@ -457,7 +456,8 @@ public static class JGUZDVHostApplicationBuilderExtensions
         var bearerConfigSection = appBuilder.Configuration.GetSection(configSection);
 
         var authBuilder = appBuilder.Services
-            .AddAuthentication(opt => {
+            .AddAuthentication(opt =>
+            {
                 opt.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 
                 configureAuthentication?.Invoke(opt);
@@ -571,7 +571,7 @@ public static class JGUZDVHostApplicationBuilderExtensions
                 opt.Cookie.Name = appBuilder.Environment.ApplicationName;
                 opt.SlidingExpiration = false;
 
-                if(appBuilder.Configuration.HasConfigSection(cookieConfigSection))
+                if (appBuilder.Configuration.HasConfigSection(cookieConfigSection))
                 {
                     var cookieConfig = appBuilder.Configuration.GetSection(cookieConfigSection);
                     cookieConfig.Bind(opt);
