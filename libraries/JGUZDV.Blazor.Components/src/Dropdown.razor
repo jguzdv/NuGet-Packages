@@ -1,14 +1,22 @@
 <jgu-dropdown button-id="dropdown-button-@_guid" class="dropdown" id="dropdown-@_guid">
-    @_dropdownToggle!.Invoke($"dropdown-button-{_guid}")
+
+    <button id="dropdown-button-@_guid" tabindex="0"
+            class="dropdown-label"
+            type="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+            aria-controls="dropdown-menu-@_guid">
+        @DropdownLabelContent
+    </button>
 
     <div class="dropdown-menu @DropDownMenuClass" role="menu" id="dropdown-menu-@_guid" aria-labelledby="dropdown-button-@_guid" hidden>
         @DropdownContent
     </div>
+
 </jgu-dropdown>
 
 @code {
     private string _guid = Guid.NewGuid().ToString();
-    private RenderFragment<string>? _dropdownToggle;
 
     /// <summary>
     /// Defines the visible content of the dropdown toggle button (e.g., text and or an icon).
@@ -26,20 +34,4 @@
 
     [Parameter]
     public string? DropDownMenuClass { get; set; }
-
-
-    protected override void OnParametersSet()
-    {
-        base.OnParametersSet();
-
-        _dropdownToggle = (buttonId) =>
-                @<button id="@buttonId" tabindex="0"
-                                 class="dropdown-label"
-                                 type="button"
-                                 aria-haspopup="true"
-                                 aria-expanded="false"
-                                 aria-controls="dropdown-menu-@_guid">
-        @DropdownLabelContent
-        </button>;
-    }
 }
