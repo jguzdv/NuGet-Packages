@@ -505,7 +505,7 @@ public class JGUZDVHostApplicationBuilder
                                         <h6 class="card-subtitle mb-2 text-body-secondary">{localizer["Technical.Hint"]}</h6>
                                         <ul class="list-group pt-2">
                                           <li class="list-group-item bg-light"><strong>Trace ID:</strong> {context.TraceIdentifier}</li>
-                                          <li class="list-group-item bg-light"><strong>{localizer["Time"]}:</strong> {DateTimeOffset.UtcNow:O}</li>
+                                          <li class="list-group-item bg-light"><strong>{localizer["Time"]}:</strong> {DateTimeOffset.UtcNow:G}</li>
                                           <li class="list-group-item bg-light"><strong>Host:</strong> {request.Host}</li>
                                           <li class="list-group-item bg-light"><strong>URL:</strong> {request.Path}{request.QueryString}</li>
                                         </ul>
