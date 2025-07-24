@@ -37,30 +37,33 @@ namespace JGUZDV.CQRS.Queries
 
         public async Task ExecuteAsync(TQuery query, ClaimsPrincipal? principal, CancellationToken ct)
         {
+            // We need to keep the original query reference to set the result later.
+            // If we fail to do so, records in combination with NormalizeQuery will potentially cause issues
+            var originalQuery = query;
+
             try
             {
                 if (ct.IsCancellationRequested)
                 {
-                    query.Result = HandlerResult.Canceled(ct);
+                    originalQuery.Result = HandlerResult.Canceled(ct);
                     Log.Cancelled(Logger);
                     return;
                 }
 
                 query = NormalizeQuery(query, principal);
-
                 
                 var isAuthorized = await AuthorizeExecuteAsync(query, principal, ct);
                 Log.QueryExecutionAuthorizationResult(Logger, isAuthorized);
 
                 if (!isAuthorized)
                 {
-                    query.Result = HandlerResult.NotAllowed();
+                    originalQuery.Result = HandlerResult.NotAllowed();
                     return;
                 }
 
                 if (ct.IsCancellationRequested) {
                     Log.StepCancelled(Logger, nameof(AuthorizeExecuteAsync));
-                    query.Result = HandlerResult.Canceled(ct);
+                    originalQuery.Result = HandlerResult.Canceled(ct);
                     return;
                 }
 
@@ -75,7 +78,7 @@ namespace JGUZDV.CQRS.Queries
                             Log.ValidationResultDetail(Logger, string.Join(", ", v.MemberNames), v.ErrorMessage ?? "n/a");
                     }
 
-                    query.Result = HandlerResult.NotValid(validationResult);
+                    originalQuery.Result = HandlerResult.NotValid(validationResult);
                     return;
 
                 }
@@ -83,7 +86,7 @@ namespace JGUZDV.CQRS.Queries
                 if (ct.IsCancellationRequested)
                 {
                     Log.StepCancelled(Logger, nameof(ValidateAsync));
-                    query.Result = HandlerResult.Canceled(ct);
+                    originalQuery.Result = HandlerResult.Canceled(ct);
                     return;
                 }
 
@@ -97,24 +100,24 @@ namespace JGUZDV.CQRS.Queries
                     
                     if (!isResultAuthorized)
                     {
-                        query.Result = HandlerResult.NotAllowed();
+                        originalQuery.Result = HandlerResult.NotAllowed();
                         return;
                     }
                 }
 
-                query.Result = executionResult;
+                originalQuery.Result = executionResult;
                 return;
             }
             catch (TaskCanceledException tcex)
             {
-                query.Result = HandlerResult.Canceled(tcex.CancellationToken);
                 Log.Cancelled(Logger);
+                originalQuery.Result = HandlerResult.Canceled(tcex.CancellationToken);
                 return;
             }
             catch (Exception ex)
             {
                 Log.ExecutionError(Logger, ex);
-                query.Result = HandlerResult.Fail("GenericError");
+                originalQuery.Result = HandlerResult.Fail("GenericError");
                 return;
             }
         }
