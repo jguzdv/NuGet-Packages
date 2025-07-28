@@ -6,7 +6,7 @@ namespace JGUZDV.CQRS.Queries;
 /// Describes the interface for a query handler.
 /// </summary>
 public interface IQueryHandler<in TQuery>
-        where TQuery : IQuery
+    where TQuery : IQuery
 {
     /// <summary>
     /// Execute the query for a given principal.
