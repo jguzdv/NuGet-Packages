@@ -1,5 +1,6 @@
 ﻿.dropdown {
     align-content: center;
+    display: block;
 }
 
 .dropdown-menu-end {
