@@ -1521,7 +1521,7 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {46ECC226-1874-4539-8589-8B2029909C4A}
-		RESX_NeutralResourcesLanguage = de-DE
 		RESX_SortFileContentOnSave = True
+		RESX_NeutralResourcesLanguage = de-DE
 	EndGlobalSection
 EndGlobal

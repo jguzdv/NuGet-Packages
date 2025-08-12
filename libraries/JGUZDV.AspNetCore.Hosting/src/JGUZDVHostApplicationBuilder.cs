@@ -7,13 +7,16 @@ using JGUZDV.AspNetCore.Hosting.Diagnostics;
 using JGUZDV.AspNetCore.Hosting.Extensions;
 using JGUZDV.AspNetCore.Hosting.FeatureManagement;
 using JGUZDV.AspNetCore.Hosting.Localization;
+using JGUZDV.AspNetCore.Hosting.Resources;
 using JGUZDV.YARP.SimpleReverseProxy;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 
 namespace JGUZDV.AspNetCore.Hosting;
@@ -450,6 +453,72 @@ public class JGUZDVHostApplicationBuilder
         return app;
     }
 
+    /// <summary>
+    /// The method is a static method that generates an HTML error page based on the provided status code, localizer, and HTTP context information.
+    /// </summary>
+    /// <param name="localizer">An <see cref="IStringLocalizer"/> instance used to retrieve localized strings for the error page.</param>
+    /// <param name="statusCode">The HTTP status code representing the error condition. Determines the title and message displayed on the error
+    /// page.</param>
+    /// <param name="context">The <see cref="HttpContext"/> containing request-specific information, such as the trace identifier, request
+    /// path, and query string.</param>
+    public static string GenerateErrorPageHtml(
+            IStringLocalizer localizer,
+            int statusCode,
+            HttpContext context)
+    {
+        var request = context.Request;
+        
+        var title = localizer[$"Title.{statusCode}"];
+        var message = localizer[$"Message.{statusCode}"];
+
+        if (title.ResourceNotFound) {
+            title = localizer["Title.Default"];
+        }
+        if (message.ResourceNotFound) {
+            message = localizer["Message.Default"];
+        }
+
+        return $"""
+                <html>
+                    <head> 
+                        <title>{title}</title>
+                        <meta charset="utf-8" />
+
+                        <link rel="icon" href="https://cdn.zdv.uni-mainz.de/web/assets/JGU-Quader.ico">
+                        <link rel="icon" sizes="16x16 32x32 64x64" href="https://cdn.zdv.uni-mainz.de/web/assets/JGU-Quader.ico">
+                        <link rel="icon" sizes="180x180" href="https://cdn.zdv.uni-mainz.de/web/assets/JGU-Quader-180.png">
+
+                        <link href="https://cdn.zdv.uni-mainz.de/web/jg-ootstrap/jg-ootstrap.css" rel="stylesheet" />
+                        <link href="https://cdn.zdv.uni-mainz.de/web/fontawesome/5-free/css/all.min.css" rel="stylesheet" />
+                    </head>
+                    <body>
+                        <div class="container col-xl-10 col-xxl-8 px-4 py-5">
+                            <div class="row align-items-center g-lg-5 py-5">
+                                <div class="col-lg-7 text-center text-lg-start">
+                                    <h1 class="display-4 fw-bold lh-1 mb-3">{title}</h1>
+                                    <p class="col-lg-10 fs-4">{message}</p>
+                                </div>
+                                <div class="col-md-10 mx-auto col-lg-5"> 
+                                    <div class="card">
+                                      <div class="card-body p-4 bg-light">
+                                        <h4 class="card-title d-flex justify-content-between align-items-center">{localizer["Errorinformations"]} <i class="fas fa-info fs-5"></i></h4>
+                                        <h6 class="card-subtitle mb-2 text-body-secondary">{localizer["Technical.Hint"]}</h6>
+                                        <ul class="list-group pt-2">
+                                          <li class="list-group-item bg-light"><strong>Trace ID:</strong> {context.TraceIdentifier}</li>
+                                          <li class="list-group-item bg-light"><strong>{localizer["Time"]}:</strong> {DateTimeOffset.UtcNow:G}</li>
+                                          <li class="list-group-item bg-light"><strong>Host:</strong> {request.Host}</li>
+                                          <li class="list-group-item bg-light"><strong>URL:</strong> {request.Path}{request.QueryString}</li>
+                                        </ul>
+                                      </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </body>
+                </html>
+                """;
+    }
+
 
     /// <summary>
     /// Configures the application and maps routes as configured*, for frontend only+:<br />
@@ -496,6 +565,18 @@ public class JGUZDVHostApplicationBuilder
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseStatusCodePages(async context =>
+            {
+                var statusCode = context.HttpContext.Response.StatusCode;
+                var localizer = context.HttpContext.RequestServices.GetRequiredService<IStringLocalizer<ErrorResource>>();
+
+                var html = GenerateErrorPageHtml(localizer, statusCode, context.HttpContext);
+
+                context.HttpContext.Response.ContentType = "text/html";
+                context.HttpContext.Response.Headers.ContentLength = null;
+                await context.HttpContext.Response.WriteAsync(html);
+            });
 
             app.UseHttpsRedirection();
         }
