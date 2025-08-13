@@ -52,10 +52,13 @@
         ArgumentNullException.ThrowIfNull(SearchHintTemplate);
         ArgumentNullException.ThrowIfNull(NoResultTemplate);
 
-        if (!string.IsNullOrWhiteSpace(SearchQuery) && SearchQuery != _searchQuery)
+        if (SearchQuery != _searchQuery)
         {
             _searchQuery = SearchQuery;
-            SearchTask = ExecuteDelayedSearch(_searchQuery, _searchInputDebounce.Token);
+            
+            if (!string.IsNullOrWhiteSpace(SearchQuery)) {
+                SearchTask = ExecuteDelayedSearch(SearchQuery, _searchInputDebounce.Token);
+            }
         }
     }
 
