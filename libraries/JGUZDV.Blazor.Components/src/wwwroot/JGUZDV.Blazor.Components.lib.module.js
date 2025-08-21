@@ -6,6 +6,17 @@ export function registerThemeButtons() {
             if (theme) {
                 applyTheme(theme, false);
             }
+            const dropdownMenu = target.closest('.dropdown-menu');
+            if (dropdownMenu) {
+                dropdownMenu.hidden = true;
+                const buttonId = dropdownMenu.getAttribute('aria-labelledby');
+                if (buttonId) {
+                    const button = document.getElementById(buttonId);
+                    if (button) {
+                        button.setAttribute('aria-expanded', 'false');
+                    }
+                }
+            }
         });
     });
 }
@@ -50,30 +61,62 @@ export function updateActiveThemeButton(theme) {
         }
     });
 }
-export function setupDropdownCloseOnClick() {
+export function setupDropdown(id) {
+    const button = document.getElementById(id);
+    const menuId = button?.getAttribute('aria-controls');
+    const menu = menuId ? document.getElementById(menuId) : null;
+    if (!button || !menu)
+        return;
+    button.addEventListener('click', (e) => {
+        const expanded = button.getAttribute('aria-expanded') === 'true';
+        button.setAttribute('aria-expanded', String(!expanded));
+        menu.hidden = expanded;
+        if (!expanded) {
+            menu.querySelector('[role="menuitem"]')?.focus();
+        }
+    });
     document.addEventListener('click', (event) => {
         const target = event.target;
-        document.querySelectorAll('input.dropdown-toggle').forEach((checkbox) => {
-            const dropdown = checkbox.closest('.dropdown');
-            if (!dropdown)
-                return;
-            if (!dropdown.contains(target)) {
-                checkbox.checked = false;
+        if (!button.contains(target) && !menu.contains(target)) {
+            button.setAttribute('aria-expanded', 'false');
+            menu.hidden = true;
+        }
+    });
+}
+export function setupSidebarToggle() {
+    const toggleBtn = document.getElementById("sidebar-toggle-btn");
+    const sidebar = document.getElementById("jbs-sidebar");
+    if (!toggleBtn || !sidebar)
+        return;
+    toggleBtn.addEventListener("click", () => {
+        sidebar.classList.toggle("toggled");
+    });
+    document.querySelectorAll('[data-sidebar-close]').forEach(el => {
+        el.addEventListener("click", () => {
+            if (window.innerWidth < 992) {
+                sidebar.classList.remove("toggled");
             }
         });
     });
-    document.querySelectorAll('[data-set-theme]').forEach((el) => {
-        el.addEventListener('click', () => {
-            const dropdown = el.closest('.dropdown');
-            const checkbox = dropdown?.querySelector('input.dropdown-toggle');
-            if (checkbox) {
-                checkbox.checked = false;
+}
+export function registerWebComponents() {
+    customElements.define('jgu-dropdown', class extends HTMLElement {
+        constructor() {
+            super();
+        }
+        connectedCallback() {
+            const id = this.getAttribute('button-id');
+            if (!id) {
+                console.warn("No button-id provided for <jgu-dropdown>");
+                return;
             }
-        });
+            setupDropdown(id);
+        }
     });
 }
 export function afterWebStarted() {
     setStoredTheme();
     registerThemeButtons();
-    setupDropdownCloseOnClick();
+    setupSidebarToggle();
+    registerWebComponents();
 }
