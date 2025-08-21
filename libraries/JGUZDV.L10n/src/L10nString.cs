@@ -54,7 +54,7 @@ public class L10nString : IEquatable<L10nString>, IEqualityComparer<L10nString>
     }
 
     /// <summary>
-    /// Initializes the instance from a list of tuples, where each tuple contains a key and a value.
+    /// Initializes the instance from tuples which are defined as params. Each tuple contains a key and a value.
     /// </summary>
     /// <param name="values"></param>
     public L10nString(params (string key, string value)[] values)
