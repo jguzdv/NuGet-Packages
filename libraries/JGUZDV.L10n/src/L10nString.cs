@@ -54,6 +54,17 @@ public class L10nString : IEquatable<L10nString>, IEqualityComparer<L10nString>
     }
 
     /// <summary>
+    /// Initializes the instance from a list of tuples, where each tuple contains a key and a value.
+    /// </summary>
+    /// <param name="values"></param>
+    public L10nString(params (string key, string value)[] values)
+        :this()
+    {
+        foreach (var (k, v) in values)
+            SetValue(k, v);
+    }
+
+    /// <summary>
     /// Wraps <see cref="GetValue(string)"/> and <see cref="SetValue(string, string?)"/> into an indexer.
     /// </summary>
     /// <returns>The string matching the language or null, if it does not exist.</returns>
