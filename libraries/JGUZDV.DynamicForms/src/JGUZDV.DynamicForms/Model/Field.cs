@@ -61,7 +61,7 @@ public class Field : IValidatableObject, IDisposable, IAsyncDisposable
         get => _value;
         set
         {
-            if (value != null)
+            if (value != null && FieldDefinition.ChoiceOptions.Count == 0) //TODO: Maybe check this in validation not in setter
             {
                 var valueType = value.GetType();
                 if (FieldDefinition.IsList)
