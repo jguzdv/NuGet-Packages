@@ -215,6 +215,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JGUZDV.Blazor.Hosting.Tests", "libraries\JGUZDV.Blazor.Hosting\test\JGUZDV.Blazor.Hosting.Tests.csproj", "{5FB340D2-5033-41EB-95B9-B20789591C08}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JGUZDV.DynamicForms", "JGUZDV.DynamicForms", "{D71AD329-3074-48E8-863E-D1B64A5589D6}"
+	ProjectSection(SolutionItems) = preProject
+		libraries\JGUZDV.DynamicForms\Directory.Build.props = libraries\JGUZDV.DynamicForms\Directory.Build.props
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JGUZDV.DynamicForms", "libraries\JGUZDV.DynamicForms\src\JGUZDV.DynamicForms\JGUZDV.DynamicForms.csproj", "{2433F5E7-FA58-4DBE-A86E-45CDF14D9E21}"
 EndProject
@@ -1521,7 +1524,7 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {46ECC226-1874-4539-8589-8B2029909C4A}
-		RESX_SortFileContentOnSave = True
 		RESX_NeutralResourcesLanguage = de-DE
+		RESX_SortFileContentOnSave = True
 	EndGlobalSection
 EndGlobal

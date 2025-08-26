@@ -9,7 +9,6 @@
 
         <PackageId>JGUZDV.DynamicForms.Extensions</PackageId>
         <IsPackable>true</IsPackable>
-        <Version>1.0.0-beta8</Version>
         <Authors>Aaron Puhl</Authors>
         <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
         <PackageDescription>Extensions for DynamicForms</PackageDescription>
