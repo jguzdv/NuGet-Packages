@@ -94,7 +94,7 @@ public class Field : IValidatableObject, IDisposable, IAsyncDisposable
     /// <exception cref="InvalidOperationException">Thrown when the field is not a list.</exception>
     [JsonIgnore]
     public IReadOnlyList<object> Values => FieldDefinition.IsList
-        ? ((IList)Value!).OfType<object>().ToList()
+        ? ((IEnumerable)Value!).OfType<object>().ToList()
         : throw new InvalidOperationException("Only list fields have multiple values");
 
     /// <summary>
@@ -151,11 +151,21 @@ public class Field : IValidatableObject, IDisposable, IAsyncDisposable
         }
         else
         {
-            val = ((IList)Activator.CreateInstance(typeof(List<>).MakeGenericType(ValueType.ClrType))!).OfType<object>().ToList();
+            val = ((IEnumerable)Activator.CreateInstance(typeof(List<>).MakeGenericType(ValueType.ClrType))!).OfType<object>().ToList();
             val.Add(Value);
         }
 
         var errors = FieldDefinition.Constraints.SelectMany(x => x.ValidateConstraint(val, validationContext));
+        if (FieldDefinition.ChoiceOptions.Any())
+        {
+            foreach (var v in val)
+            {
+                if (!FieldDefinition.ChoiceOptions.Any(o => o.Value == FieldDefinition.Type!.ConvertFromValue(v)))
+                {
+                    errors = errors.Append(new ValidationResult($"Value '{FieldDefinition.Type!.ConvertFromValue(v)}' is not a valid option", new string[] { FieldDefinition.InputDefinition.Label.ToString()! }));
+                }
+            }
+        }
 
         return errors;
     }
