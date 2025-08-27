@@ -39,6 +39,7 @@ public static class DomainControllerLocator
     /// The Fallback will be the PDC Emulator if requested, otherwise it will be another Domain Controller from the same domain.
     /// Fallback will be null if the result is the same as the 'primary' result.
     /// </summary>
+    // TODO: We could return a list, which is easier to use than Tuples
     public static (DomainController Result, DomainController? Fallback) GetDomainControllerAndFallback(
         string? domainName = null,
         string? siteName = null,
@@ -62,6 +63,7 @@ public static class DomainControllerLocator
         return (result, fallback);
     }
 
+    // TODO: This method will always return the same controller, when called multiple times - perhaps FindAll and a direct multipick will be easier to use.
     private static DomainController PickDomainController(DirectoryContext domainContext, string? siteName, bool pickRandom)
     {
         var locatorOptions = pickRandom ? LocatorOptions.ForceRediscovery : 0;
@@ -72,8 +74,8 @@ public static class DomainControllerLocator
 
     /// <summary>
     /// Returns the LDAP base path for the given <see cref="DomainController"/>,
-    /// e.g. "ldap://dc1.example.com:636"
+    /// e.g. "LDAP://dc1.example.com:636"
     /// </summary>
     public static string LdapBasePath(this DomainController domainController, int port = 636)
-        => $"ldap://{domainController.Name}:{port:0}";
+        => $"LDAP://{domainController.Name}:{port:0}";
 }
