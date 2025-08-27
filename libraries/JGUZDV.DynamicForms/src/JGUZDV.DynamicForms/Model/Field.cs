@@ -66,7 +66,7 @@ public class Field : IValidatableObject, IDisposable, IAsyncDisposable
                 var valueType = value.GetType();
                 if (FieldDefinition.IsList)
                 {
-                    if (!typeof(IEnumerable).IsAssignableFrom(valueType)
+                    if (!typeof(IList).IsAssignableFrom(valueType)
                         || !valueType.IsGenericType
                         || valueType.GetGenericArguments()[0] != ValueType.ClrType)
                     {
@@ -94,7 +94,7 @@ public class Field : IValidatableObject, IDisposable, IAsyncDisposable
     /// <exception cref="InvalidOperationException">Thrown when the field is not a list.</exception>
     [JsonIgnore]
     public IReadOnlyList<object> Values => FieldDefinition.IsList
-        ? ((IEnumerable)Value!).OfType<object>().ToList()
+        ? ((IList)Value!).OfType<object>().ToList()
         : throw new InvalidOperationException("Only list fields have multiple values");
 
     /// <summary>
@@ -151,7 +151,7 @@ public class Field : IValidatableObject, IDisposable, IAsyncDisposable
         }
         else
         {
-            val = ((IEnumerable)Activator.CreateInstance(typeof(List<>).MakeGenericType(ValueType.ClrType))!).OfType<object>().ToList();
+            val = ((IList)Activator.CreateInstance(typeof(List<>).MakeGenericType(ValueType.ClrType))!).OfType<object>().ToList();
             val.Add(Value);
         }
 

@@ -20,7 +20,10 @@
     <div>
         <label for="@InputDefinition.Id">
             <span>@InputDefinition.Label</span>
-            <span class="small ps-1 clickable" @onclick="() => _showDescription = !_showDescription">@JGUZDV.Blazor.Components.Icons.Help(null)</span>
+            <span class="small ps-1 clickable"
+                  @onclick="() => _showDescription = !_showDescription">
+                @JGUZDV.Blazor.Components.Icons.Help(null)
+            </span>
         </label>
         @if (_showDescription)
         {
@@ -39,7 +42,7 @@
                                  ItemKey="x => x.Value"
                                  Title="@InputDefinition.Label.ToString()"
                                  Values="@(Field.Values?.Select(x => GetChoiceOption(x)).ToList())"
-                                 ValuesChanged="(value) => SetValue(value.Select(x => ConvertToValue(x.Value)))"
+                                 ValuesChanged="(value) => SetValue(value.Select(x => ConvertToValue(x.Value)).ToList())"
                                  TKey="string"
                                  T="ChoiceOption"></MultiSelect>
                 }
@@ -66,7 +69,7 @@
                                @bind="_inputValue"
                                @bind:event="oninput"
                                @onkeyup="HandleKeyUp"
-                               class="form-control">
+                               class="form-control" />
                         <button class="btn btn-outline-secondary"
                                 type="button"
                                 @onclick="() => OnInputChanged(_inputValue)">
@@ -83,22 +86,23 @@
                                     <span>
                                         @GetValueString(value)
                                     </span>
-                                    <button type="button" class="btn btn-sm btn-outline-danger" @onclick="@(() =>
-                                                                                                                                                                                                                                    {
-                                                                                                                                                                                                                                        ((IList)Field.Value!).Remove(value);
-                                                                                                                                                                                                                                        SetValue(Field.Value);
-                                                                                                                                                                                                                                    })">
-                        @Icons.Remove(null)
-                    </button>
-                </span>
-                                }
+                                    <button type="button"
+                                            class="btn btn-sm btn-outline-danger"
+                                            @onclick="@(() =>
+                                            {
+                                                ((IList)Field.Value!).Remove(value);
+                                                SetValue(Field.Value);
+                                            })">
+                                          @Icons.Remove(null)
+                                      </button>
+                                  </span>
+                            }
                         }
                         else
                         {
                             @SL["FieldInput.NoValues"]
                         }
                     </div>
-
                 }
                 else
                 {
