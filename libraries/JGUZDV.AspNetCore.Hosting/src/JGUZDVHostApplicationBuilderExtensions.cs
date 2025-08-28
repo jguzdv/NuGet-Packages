@@ -17,7 +17,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Server;
 using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
@@ -583,6 +582,26 @@ public static class JGUZDVHostApplicationBuilderExtensions
 
         appBuilder.HasAuthentication = true;
         return appBuilder;
+    }
+    #endregion
+
+
+    #region HttpClient
+    /// <summary>
+    /// Adds an httpClient with the given baseUrl to the service collection.
+    /// </summary>
+    /// <param name="baseUrlConfigurationKey">The configuration key pointing to the baseUrl</param>
+    public static IHttpClientBuilder AddHttpClient<TClient>(this JGUZDVHostApplicationBuilder builder, string baseUrlConfigurationKey)
+        where TClient : class
+    {
+        return builder.Services.AddHttpClient<TClient>((sp, httpClient) =>
+        {
+            var baseUrl = sp.GetRequiredService<IConfiguration>()[baseUrlConfigurationKey]
+                ?? throw new ConfigurationMissingException(baseUrlConfigurationKey);
+
+            httpClient.BaseAddress = new Uri(baseUrl);
+        })
+            .AddLocalizationHeaderHandler();
     }
     #endregion
 }
