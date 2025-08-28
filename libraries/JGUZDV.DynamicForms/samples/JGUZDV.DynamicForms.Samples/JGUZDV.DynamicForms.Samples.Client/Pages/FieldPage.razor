@@ -6,33 +6,37 @@
 @using JGUZDV.DynamicForms.Samples.Client.Model
 @using JGUZDV.DynamicForms.Serialization
 @using JGUZDV.L10n
+@using System.ComponentModel.DataAnnotations
 
 
 <h1>New Fields</h1>
 
-@foreach (var kvp in _fieldsByDocumentDefinition)
-{
-    <h2>Document Definition ID: @kvp.Key</h2>
-    @foreach (var field in kvp.Value)
+<EditForm Model="_fieldsByDocumentDefinition" OnSubmit="Save">
+    <ValidationSummary />
+    @foreach (var kvp in _fieldsByDocumentDefinition)
     {
-        <FieldInput Field="field" />
-        <hr />
-    }
-}
-
-<h1>Saved Documents</h1>
-<div>
-    @foreach (var oldField in _documents)
-    {
-        @foreach (var x in oldField.Fields)
+        <h2>Document Definition ID: @kvp.Key</h2>
+        @foreach (var field in kvp.Value)
         {
-            <div>
-                @x.FieldDefinition.InputDefinition.Label: @x.Value
-            </div>
+            <FieldInput Field="field" />
+            <hr />
         }
     }
-</div>
 
+    <h1>Saved Documents</h1>
+    <div>
+        @foreach (var oldField in _documents)
+        {
+            @foreach (var x in oldField.Fields)
+            {
+                <div>
+                    @x.FieldDefinition.InputDefinition.Label: @x.Value
+                </div>
+            }
+        }
+    </div>
+    <button type="submit">Save</button>
+</EditForm>
 
 
 <button @onclick="Save">Save</button>
@@ -44,12 +48,15 @@
     [Inject]
     public required HttpClient Client { get; set; }
 
+    [Inject]
+    public required IServiceProvider ServiceProvider { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         var options = new JsonSerializerOptions()
-            {
-                PropertyNameCaseInsensitive = true
-            };
+        {
+            PropertyNameCaseInsensitive = true
+        };
 
         var definitions = await Client.GetFromJsonAsync<List<DocumentDefinition>>("https://localhost:7245/api/definitions", options);
         Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(definitions, options));
@@ -58,6 +65,99 @@
             def => def.Id,
             def => def.FieldDefinitions.Select(fd => new Field(fd)).ToList()
         );
+
+        if (!_fieldsByDocumentDefinition.Any())
+        {
+            _fieldsByDocumentDefinition[0] = [
+                new Field(new FieldDefinition
+                {
+                    Type = new StringFieldType(),
+                    InputDefinition = new ()
+                    {
+                        Label = new L10nString {["de"] = "Strings"},
+                        Name = "Strings",
+                    },
+                    IsRequired = true,
+                    IsList = true,
+                    ChoiceOptions = [
+                        new ChoiceOption { Value = "1", Name = new L10nString { ["de"] = "Option 1" } },
+                        new ChoiceOption { Value = "2", Name = new L10nString { ["de"] = "Option 2" } },
+                        new ChoiceOption { Value = "3", Name = new L10nString { ["de"] = "Option 3" } }
+                    ]
+                }),
+                new Field(new FieldDefinition
+                {
+                    Type = new IntFieldType(),
+                    InputDefinition = new ()
+                    {
+                        Label = new L10nString {["de"] = "Numbers"},
+                        Name = "Numbers",
+                    },
+                    IsRequired = true,
+                    IsList = true,
+                    ChoiceOptions = [
+                        new ChoiceOption { Value = "1", Name = new L10nString { ["de"] = "Option 1" } },
+                        new ChoiceOption { Value = "2", Name = new L10nString { ["de"] = "Option 2" } },
+                        new ChoiceOption { Value = "3", Name = new L10nString { ["de"] = "Option 3" } }
+                    ]
+                }),
+                new Field(new FieldDefinition
+                {
+                    Type = new IntFieldType(),
+                    InputDefinition = new ()
+                    {
+                        Label = new L10nString {["de"] = "Number"},
+                        Name = "Number",
+                    },
+                    IsRequired = true,
+                    IsList = false,
+                    ChoiceOptions = [
+                        new ChoiceOption { Value = "1", Name = new L10nString { ["de"] = "Option 1" } },
+                        new ChoiceOption { Value = "2", Name = new L10nString { ["de"] = "Option 2" } },
+                        new ChoiceOption { Value = "3", Name = new L10nString { ["de"] = "Option 3" } }
+                    ]
+                }),
+                new Field(new FieldDefinition
+                {
+
+                    Type = new DateOnlyFieldType(),
+                    InputDefinition = new ()
+                    {
+                        Label = new L10nString {["de"] = "Date"},
+                        Name = "Date",
+                    },
+                }),
+                new Field(new FieldDefinition
+                {
+                    Type = new DateOnlyFieldType(),
+                    InputDefinition = new ()
+                    {
+                        Label = new L10nString {["de"] = "Dates"},
+                        Name = "Dates",
+                    },
+                    IsList = true,
+                }),
+                new Field(new FieldDefinition
+                {
+                    Type = new IntFieldType(),
+                    InputDefinition = new ()
+                    {
+                        Label = new L10nString {["de"] = "NumbersInput"},
+                        Name = "NumbersInput",
+                    },
+                    IsList = true,
+                }),
+                new Field(new FieldDefinition
+                {
+                    Type = new StringFieldType(),
+                    InputDefinition = new ()
+                    {
+                        Label = new L10nString {["de"] = "TextInput"},
+                        Name = "TextInput",
+                    },
+                }),
+            ];
+        }
 
         _documents = await Client.GetFromJsonAsync<List<Document>>("https://localhost:7245/api/documents", options);
     }
@@ -74,7 +174,18 @@
             var content = new MultipartFormDataContent();
 
             foreach (var field in fields)
-        {
+            {
+                var ctx = new ValidationContext(field, ServiceProvider, null);
+                var errors = field.Validate(ctx);
+                foreach (var error in errors)
+                {
+                    Console.WriteLine($"Validation error in field {field.FieldDefinition.InputDefinition.Name}: {error.ErrorMessage}");
+                }
+                if (!errors.Any())
+                {
+                    Console.WriteLine($"Field {field.FieldDefinition.InputDefinition.Name} is valid.");
+                }
+
                 field.AddToContent(content);
             }
 

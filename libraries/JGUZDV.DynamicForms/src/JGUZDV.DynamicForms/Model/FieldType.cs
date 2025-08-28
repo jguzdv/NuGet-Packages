@@ -1,5 +1,4 @@
-﻿using System.Runtime.InteropServices;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
 using JGUZDV.DynamicForms.Serialization;
@@ -218,6 +217,12 @@ public record IntFieldType : FieldType
         ["de"] = "Ganzzahl",
         ["en"] = "Integer"
     };
+
+    /// <summary>
+    /// Gets the input type of the field.
+    /// </summary>
+    [JsonIgnore]
+    public override string InputType => "number";
 }
 
 /// <summary>

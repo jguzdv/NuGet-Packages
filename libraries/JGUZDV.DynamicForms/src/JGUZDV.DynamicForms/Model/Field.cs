@@ -66,7 +66,7 @@ public class Field : IValidatableObject, IDisposable, IAsyncDisposable
                 var valueType = value.GetType();
                 if (FieldDefinition.IsList)
                 {
-                    if (!typeof(IEnumerable).IsAssignableFrom(valueType)
+                    if (!typeof(IList).IsAssignableFrom(valueType)
                         || !valueType.IsGenericType
                         || valueType.GetGenericArguments()[0] != ValueType.ClrType)
                     {
@@ -156,6 +156,16 @@ public class Field : IValidatableObject, IDisposable, IAsyncDisposable
         }
 
         var errors = FieldDefinition.Constraints.SelectMany(x => x.ValidateConstraint(val, validationContext));
+        if (FieldDefinition.ChoiceOptions.Any())
+        {
+            foreach (var v in val)
+            {
+                if (!FieldDefinition.ChoiceOptions.Any(o => o.Value == FieldDefinition.Type!.ConvertFromValue(v)))
+                {
+                    errors = errors.Append(new ValidationResult($"Value '{FieldDefinition.Type!.ConvertFromValue(v)}' is not a valid option", new string[] { FieldDefinition.InputDefinition.Label.ToString()! }));
+                }
+            }
+        }
 
         return errors;
     }

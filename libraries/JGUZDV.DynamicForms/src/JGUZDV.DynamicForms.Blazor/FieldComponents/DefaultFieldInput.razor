@@ -1,10 +1,12 @@
-﻿@using JGUZDV.Blazor.Components.Inputs
+﻿@using JGUZDV.Blazor.Components.Extensions
+@using JGUZDV.Blazor.Components.Inputs
 @using JGUZDV.DynamicForms.Blazor.Resources
 @using JGUZDV.DynamicForms.Model
 @using JGUZDV.Blazor.Components
 @using System.Collections
 @using System.ComponentModel.DataAnnotations
 @using Microsoft.Extensions.DependencyInjection
+@using Microsoft.Extensions.Logging
 
 @*TODO: Check if EditForm is a good idea HERE to show validation errors*@
 <EditForm Model="Field">
@@ -18,7 +20,10 @@
     <div>
         <label for="@InputDefinition.Id">
             <span>@InputDefinition.Label</span>
-            <span class="small ps-1 clickable" @onclick="() => _showDescription = !_showDescription">@JGUZDV.Blazor.Components.Icons.Help(null)</span>
+            <span class="small ps-1 clickable"
+                  @onclick="() => _showDescription = !_showDescription">
+                @JGUZDV.Blazor.Components.Icons.Help(null)
+            </span>
         </label>
         @if (_showDescription)
         {
@@ -37,7 +42,7 @@
                                  ItemKey="x => x.Value"
                                  Title="@InputDefinition.Label.ToString()"
                                  Values="@(Field.Values?.Select(x => GetChoiceOption(x)).ToList())"
-                                 ValuesChanged="(value) => SetValue(value.Select(x => ConvertToValue(x.Value)))"
+                                 ValuesChanged="(value) => SetValue(value.Select(x => ConvertToValue(x.Value)).ToList())"
                                  TKey="string"
                                  T="ChoiceOption"></MultiSelect>
                 }
@@ -64,12 +69,12 @@
                                @bind="_inputValue"
                                @bind:event="oninput"
                                @onkeyup="HandleKeyUp"
-                               class="form-control">
-                        <button class="btn btn-outline-secondary" 
-                        type="button"
+                               class="form-control" />
+                        <button class="btn btn-outline-secondary"
+                                type="button"
                                 @onclick="() => OnInputChanged(_inputValue)">
                             @Icons.Add(null)
-                            </button>
+                        </button>
                     </div>
 
                     <div class="my-1 p-2 border">
@@ -81,14 +86,16 @@
                                     <span>
                                         @GetValueString(value)
                                     </span>
-                                    <button type="button" class="btn btn-sm btn-outline-danger" @onclick="@(() =>
-                                    {
-                                        ((IList)Field.Value!).Remove(value);
-                                        SetValue(Field.Value);
-                                    })">
-                                        @Icons.Remove(null)
-                                    </button>
-                                </span>
+                                    <button type="button"
+                                            class="btn btn-sm btn-outline-danger"
+                                            @onclick="@(() =>
+                                            {
+                                                ((IList)Field.Value!).Remove(value);
+                                                SetValue(Field.Value);
+                                            })">
+                                          @Icons.Remove(null)
+                                      </button>
+                                  </span>
                             }
                         }
                         else
@@ -96,7 +103,6 @@
                             @SL["FieldInput.NoValues"]
                         }
                     </div>
-
                 }
                 else
                 {
@@ -126,6 +132,9 @@
 
     [Inject]
     public required IStringLocalizer<ComponentStrings> SL { get; set; }
+
+    [Inject]
+    public required ILogger<DefaultFieldInput> Logger { get; set; }
 
     private InputDefinition InputDefinition => Field.FieldDefinition.InputDefinition;
 
@@ -181,10 +190,7 @@
 
     private void HandleKeyUp(KeyboardEventArgs e)
     {
-        if (e.Key == "Enter")
-        {
-            OnInputChanged(_inputValue);
-        }
+        e.OnEnter(() => OnInputChanged(_inputValue));
     }
 
     private void OnInputChanged(string? value)
@@ -206,9 +212,17 @@
                 SetValue(ConvertToValue(value?.ToString()));
             }
         }
-        catch
+        catch (Exception e)
         {
-            SetValue(null);
+            Logger.LogError(e, "Error converting value");
+            if (Field.FieldDefinition.IsList)
+            {
+                SetValue(Enumerable.Empty<object>());
+            }
+            else
+            {
+                SetValue(null);
+            }
             _validationErrors.Add(new ValidationResult($"FieldInput.Validation.Convert"));
         }
     }
