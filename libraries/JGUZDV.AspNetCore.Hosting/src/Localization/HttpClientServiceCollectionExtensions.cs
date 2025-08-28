@@ -1,5 +1,7 @@
 ﻿using JGUZDV.AspNetCore.Hosting.Localization;
 
+using Microsoft.Extensions.DependencyInjection.Extensions;
+
 namespace Microsoft.Extensions.DependencyInjection
 {
     /// <summary>
@@ -12,6 +14,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         public static IHttpClientBuilder AddLocalizationHeaderHandler(
             this IHttpClientBuilder httpClientBuilder)
-            => httpClientBuilder.AddHttpMessageHandler<LanguageHeaderHandler>();
+        {
+            httpClientBuilder.Services.TryAddTransient<LanguageHeaderHandler>();
+            return httpClientBuilder.AddHttpMessageHandler<LanguageHeaderHandler>();
+        }
     }
 }
