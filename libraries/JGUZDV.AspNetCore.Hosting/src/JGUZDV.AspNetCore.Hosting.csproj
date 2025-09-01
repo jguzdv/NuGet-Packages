@@ -7,7 +7,7 @@
 
         <PackageId>JGUZDV.AspNetCore.Hosting</PackageId>
         <IsPackable>true</IsPackable>
-        <Version>1.5.22</Version>
+        <Version>1.5.23</Version>
         <Authors>Thomas Ottenhus</Authors>
         <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
         <PackageDescription>HostBuilders for our default setup.</PackageDescription>
@@ -24,6 +24,7 @@
         <ProjectReference Include="..\..\JGUZDV.Extensions.Authorization\src\JGUZDV.Extensions.Authorization.csproj" />
         <ProjectReference Include="..\..\JGUZDV.Extensions.Json\src\JGUZDV.Extensions.Json.csproj" />
         <ProjectReference Include="..\..\JGUZDV.YARP.SimpleReverseProxy\src\JGUZDV.YARP.SimpleReverseProxy.csproj" />
+        <ProjectReference Include="..\..\JGUZDV.AspNetCore.Extensions.OpenTelemetry\src\JGUZDV.AspNetCore.Extensions.OpenTelemetry.csproj" />
     </ItemGroup>
 
     <ItemGroup>

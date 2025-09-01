@@ -154,9 +154,8 @@ public static class JGUZDVHostApplicationBuilderExtensions
         this JGUZDVHostApplicationBuilder appBuilder,
         string configSection = Constants.ConfigSections.OpenTelemetry)
     {
-        //appBuilder.Configuration.ValidateConfigSectionExists(configSection);
-        //appBuilder.Services.AddApplicationInsightsTelemetry(
-        //    appBuilder.Configuration.GetSection(configSection).Get<string>()!);
+        // Default OpenTelemetry config, needs the OpenTelemetry config section.
+        appBuilder.Builder.AddJGUZDVOpenTelemetry();
 
         appBuilder.HasOpenTelemetry = true;
         return appBuilder;
