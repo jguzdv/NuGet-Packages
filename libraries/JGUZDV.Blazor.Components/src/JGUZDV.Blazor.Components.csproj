@@ -35,30 +35,31 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="5.8.1">
             <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <IncludeAssets>runtime;native; contentfiles; analyzers</IncludeAssets>
         </PackageReference>
     </ItemGroup>
 
-    <!-- https://github.com/microsoft/TypeScript/issues/60538#issuecomment-2884509647 -->
-    <Target Name="FixTypescriptCompileDependencies" BeforeTargets="BeforeBuild">
+    <!-- https://github.com/microsoft/TypeScript/issues/60538#issuecomment-2884509647 
+    <Target Name="FixTypescriptCompileDependencies" BeforeTargets="UpdateExistingPackageStaticWebAssets">
         <PropertyGroup>
             <PrepareForBuildDependsOn>
-                <!-- FindConfigFiles; -->
+                FindConfigFiles;
                 CompileTypeScript;
                 CompileTypeScriptWithTSConfig;
                 GetTypeScriptOutputForPublishing;
                 $(PrepareForBuildDependsOn)
             </PrepareForBuildDependsOn>
         </PropertyGroup>
-    </Target>
+    </Target> -->
 
     
-    <Target Name="RemoveDuplicateTypeScriptOutputs" AfterTargets="GetTypeScriptOutputForPublishing">
+    <!--
+    <Target Name="RemoveDuplicateTypeScriptOutputs" BeforeTargets="CompileTypeScript">
         <Message Importance="High" Text="GeneratedJavaScript files are: @(GeneratedJavaScript)" />
         <ItemGroup>
-            <Content Remove="@(GeneratedJavaScript)" />
+            <Content Remove="wwwroot/**/*.js" />
         </ItemGroup>
-    </Target>
+    </Target> -->
     <!-- End of TypeScript fix -->
 
     <ItemGroup>
