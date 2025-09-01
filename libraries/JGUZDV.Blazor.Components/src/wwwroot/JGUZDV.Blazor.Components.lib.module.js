@@ -123,7 +123,7 @@ export function afterWebStarted(blazor) {
     registerThemeButtons();
     setupSidebarToggle();
 }
-export function beforeWebStarted(options) {
+export function beforeWebStart(options) {
     setStoredTheme();
     registerWebComponents();
 }
