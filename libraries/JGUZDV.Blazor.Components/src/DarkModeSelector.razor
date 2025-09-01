@@ -19,20 +19,3 @@
         </button>
     </DropdownContent>
 </Dropdown>
-
-@code{
-    [Inject, NotNull]
-    private IJSRuntime? JSRuntime { get; set; }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            var jsModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/JGUZDV.Blazor.Components/JGUZDV.Blazor.Components.lib.module.js");
-            await jsModule.InvokeVoidAsync("setStoredTheme");
-            await jsModule.InvokeVoidAsync("registerThemeButtons");
-        }
-
-        await base.OnAfterRenderAsync(firstRender);
-    }
-}

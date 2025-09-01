@@ -59,9 +59,10 @@
 
                 @if (ShowSidebarToggle)
                 {
-                    <button id="sidebar-toggle-btn" class="btn btn-none d-lg-none sidebar-toggle-button" type="button" aria-label="@LR["ToggleSidebar"]">
-                        @Icons.Menu(null)
-                    </button>
+                    <jbs-toggle target-id="jbs-sidebar" class="btn btn-none d-lg-none sidebar-toggle-button" role="button" aria-label="@LR["ToggleSidebar"]">
+                            @Icons.Menu(null)
+                    </jbs-toggle>
+                    
                 }
             </div>
         }

@@ -63,46 +63,6 @@ export function updateActiveThemeButton(theme) {
         }
     });
 }
-export function setupDropdown(id) {
-    const button = document.getElementById(id);
-    const menuId = button?.getAttribute('aria-controls');
-    const menu = menuId ? document.getElementById(menuId) : null;
-    if (!button || !menu)
-        return;
-    button.addEventListener('click', (e) => {
-        const expanded = button.getAttribute('aria-expanded') === 'true';
-        button.setAttribute('aria-expanded', String(!expanded));
-        menu.hidden = expanded;
-        if (!expanded) {
-            menu.querySelector('[role="menuitem"]')?.focus();
-        }
-    });
-    document.addEventListener('click', (event) => {
-        const target = event.target;
-        if (!button.contains(target) && !menu.contains(target)) {
-            button.setAttribute('aria-expanded', 'false');
-            menu.hidden = true;
-        }
-    });
-    console.debug('dropdowns were set');
-}
-export function setupSidebarToggle() {
-    const toggleBtn = document.getElementById("sidebar-toggle-btn");
-    const sidebar = document.getElementById("jbs-sidebar");
-    if (!toggleBtn || !sidebar)
-        return;
-    toggleBtn.addEventListener("click", () => {
-        sidebar.classList.toggle("toggled");
-    });
-    document.querySelectorAll('[data-sidebar-close]').forEach(el => {
-        el.addEventListener("click", () => {
-            if (window.innerWidth < 992) {
-                sidebar.classList.remove("toggled");
-            }
-        });
-    });
-    console.debug('sidebar toggle was set');
-}
 export function registerWebComponents() {
     customElements.define('jgu-dropdown', class extends HTMLElement {
         constructor() {
@@ -114,14 +74,49 @@ export function registerWebComponents() {
                 console.warn("No button-id provided for <jgu-dropdown>");
                 return;
             }
-            setupDropdown(id);
+            const button = document.getElementById(id);
+            const menuId = button?.getAttribute('aria-controls');
+            const menu = menuId ? document.getElementById(menuId) : null;
+            if (!button || !menu)
+                return;
+            button.addEventListener('click', (e) => {
+                const expanded = button.getAttribute('aria-expanded') === 'true';
+                button.setAttribute('aria-expanded', String(!expanded));
+                menu.hidden = expanded;
+                if (!expanded) {
+                    menu.querySelector('[role="menuitem"]')?.focus();
+                }
+            });
+            document.addEventListener('click', (event) => {
+                const target = event.target;
+                if (!button.contains(target) && !menu.contains(target)) {
+                    button.setAttribute('aria-expanded', 'false');
+                    menu.hidden = true;
+                }
+            });
         }
     });
     console.debug('web components (jgu-dropdown) were registered');
+    customElements.define('jbs-toggle', class extends HTMLElement {
+        constructor() {
+            super();
+        }
+        connectedCallback() {
+            this.addEventListener("click", () => {
+                const targetId = this.getAttribute('target-id');
+                if (!targetId) {
+                    console.warn("No target-id provided for <jbs-toggle>");
+                    return;
+                }
+                const toggleClass = this.getAttribute('toggle-class') || "toggled";
+                document.getElementById(targetId)?.classList.toggle(toggleClass);
+            });
+        }
+    });
+    console.debug('web components (toggle) were registered');
 }
 export function afterWebStarted(blazor) {
     registerThemeButtons();
-    setupSidebarToggle();
 }
 export function beforeWebStart(options) {
     setStoredTheme();
