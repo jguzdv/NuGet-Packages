@@ -86,12 +86,12 @@
     };
 }
 
-export const beforeWebStart = () => {
+export const beforeWebStart = (options) => {
     console.debug('Running beforeWebStart');
 
     registerLoader();
 };
-export const afterWebStarted = () => {
+export const afterWebStarted = (blazor) => {
     console.debug('Running afterWebStart');
 };
 
@@ -114,6 +114,7 @@ const registerLoader = () => {
     const useFullscreenLoader = document.documentElement.getAttribute("loader-type") == 'fullscreen'
         ? true : false;
     customElements.define('app-loader', AppLoader); 
+    console.debug('app-loader registered')
 }
 
 const showLoader = () => {
