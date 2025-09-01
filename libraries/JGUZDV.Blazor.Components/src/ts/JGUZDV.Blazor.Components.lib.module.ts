@@ -76,9 +76,6 @@ export function updateActiveThemeButton(theme: Theme): void {
     });
 }
 
-
-
-
 export function registerWebComponents(): void {
     customElements.define('jgu-dropdown',
         class extends HTMLElement {
@@ -142,9 +139,8 @@ export function registerWebComponents(): void {
         }
     );
 
-    console.debug('web components (toggle) were registered');
+    console.debug('web components (jbs-toggle) were registered');
 }
-
 
 export function afterWebStarted(blazor: any): void {
     registerThemeButtons();

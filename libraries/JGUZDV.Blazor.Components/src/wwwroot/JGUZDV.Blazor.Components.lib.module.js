@@ -113,7 +113,7 @@ export function registerWebComponents() {
             });
         }
     });
-    console.debug('web components (toggle) were registered');
+    console.debug('web components (jbs-toggle) were registered');
 }
 export function afterWebStarted(blazor) {
     registerThemeButtons();
