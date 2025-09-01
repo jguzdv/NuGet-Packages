@@ -152,7 +152,7 @@ export function afterWebStarted(blazor: any): void {
     setupSidebarToggle();
 }
 
-export function beforeWebStarted(options: any): void {
+export function beforeWebStart(options: any): void {
     setStoredTheme();
     registerWebComponents();
 } 
