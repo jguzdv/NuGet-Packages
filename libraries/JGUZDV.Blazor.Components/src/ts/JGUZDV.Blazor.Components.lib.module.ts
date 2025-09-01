@@ -147,7 +147,7 @@ export function registerWebComponents(): void {
     console.debug('web components (jgu-dropdown) were registered');
 }
 
-export function afterWebStarted(blazor:any): void {
+export function afterWebStarted(blazor: any): void {
     registerThemeButtons();
     setupSidebarToggle();
 }
