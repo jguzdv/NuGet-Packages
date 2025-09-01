@@ -94,25 +94,43 @@ export function registerWebComponents(): void {
                 const menuId = button?.getAttribute('aria-controls');
                 const menu = menuId ? document.getElementById(menuId) : null;
 
-                if (!button || !menu) return;
+                if (!button || !menu) {
+                    console.error("Button or menu not found for <jgu-dropdown> :", button, menu);
+                    return;
+                }
 
                 button.addEventListener('click', (e: MouseEvent) => {
-                    const expanded = button.getAttribute('aria-expanded') === 'true';
-                    button.setAttribute('aria-expanded', String(!expanded));
-                    menu.hidden = expanded;
+                    const shouldClose = button.getAttribute('aria-expanded') === 'true';
+                    button.setAttribute('aria-expanded', String(!shouldClose));
+                    menu.hidden = shouldClose;
 
-                    if (!expanded) {
+                    if (!shouldClose) {
                         menu.querySelector<HTMLElement>('[role="menuitem"]')?.focus();
+                        document.addEventListener('click', this.globalCloseHandler);
+
+                    } else {
+                        document.removeEventListener('click', this.globalCloseHandler);
                     }
                 });
 
-                document.addEventListener('click', (event: MouseEvent) => {
-                    const target = event.target as Node;
-                    if (!button.contains(target) && !menu.contains(target)) {
-                        button.setAttribute('aria-expanded', 'false');
-                        menu.hidden = true;
-                    }
-                });
+                console.debug("The button and menu was connected: ", button, menu);
+            }
+
+            globalCloseHandler(event: MouseEvent) {
+                const id = this.getAttribute('button-id')!;
+                const button = document.getElementById(id)!;
+                const menuId = button?.getAttribute('aria-controls')!;
+                const menu = document.getElementById(menuId)!;
+                const target = event.target as Node;
+
+                console.debug("The globalCloseHandler was triggered", button);
+
+                if (!button.contains(target) && !menu.contains(target)) {
+                    button.setAttribute('aria-expanded', 'false');
+                    menu.hidden = true;
+                }
+
+                document.removeEventListener('click', this.globalCloseHandler);
             }
         }
     );
