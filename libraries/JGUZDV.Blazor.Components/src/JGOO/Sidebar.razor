@@ -52,20 +52,6 @@
     [Parameter]
     public List<NavigationSpecs>? NavigationContent { get; set; }
 
-    [Inject, NotNull]
-    private IJSRuntime? JSRuntime { get; set; }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            var jsModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/JGUZDV.Blazor.Components/JGUZDV.Blazor.Components.lib.module.js");
-            await jsModule.InvokeVoidAsync("setupSidebarToggle");
-        }
-
-        await base.OnAfterRenderAsync(firstRender);
-    }
-
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
