@@ -23,6 +23,8 @@ export function registerThemeButtons(): void {
             }
         });
     });
+
+    console.debug('theme buttons were registered');
 }
 
 export function applyTheme(theme: Theme, isInit: Boolean): void {
@@ -36,6 +38,8 @@ export function applyTheme(theme: Theme, isInit: Boolean): void {
             localStorage.setItem("theme", theme);
         }
     }
+
+    console.debug('theme was set', theme);
 
     updateThemeIcon(theme);
     updateActiveThemeButton(theme);
@@ -96,6 +100,8 @@ export function setupDropdown(id: string): void {
             menu.hidden = true;
         }
     });
+
+    console.debug('dropdowns were set');
 }
 
 export function setupSidebarToggle() {
@@ -115,6 +121,8 @@ export function setupSidebarToggle() {
             }
         });
     });
+
+    console.debug('sidebar toggle was set');
 }
 
 export function registerWebComponents(): void {
@@ -135,12 +143,16 @@ export function registerWebComponents(): void {
             }
         }
     );
+
+    console.debug('web components (jgu-dropdown) were registered');
 }
 
-export function afterWebStarted(): void {
-    setStoredTheme();
+export function afterWebStarted(blazor: any): void {
     registerThemeButtons();
     setupSidebarToggle();
-
-    registerWebComponents();
 }
+
+export function beforeWebStarted(options: any): void {
+    setStoredTheme();
+    registerWebComponents();
+} 

@@ -19,6 +19,7 @@ export function registerThemeButtons() {
             }
         });
     });
+    console.debug('theme buttons were registered');
 }
 export function applyTheme(theme, isInit) {
     if (theme === 'auto') {
@@ -32,6 +33,7 @@ export function applyTheme(theme, isInit) {
             localStorage.setItem("theme", theme);
         }
     }
+    console.debug('theme was set', theme);
     updateThemeIcon(theme);
     updateActiveThemeButton(theme);
 }
@@ -82,6 +84,7 @@ export function setupDropdown(id) {
             menu.hidden = true;
         }
     });
+    console.debug('dropdowns were set');
 }
 export function setupSidebarToggle() {
     const toggleBtn = document.getElementById("sidebar-toggle-btn");
@@ -98,6 +101,7 @@ export function setupSidebarToggle() {
             }
         });
     });
+    console.debug('sidebar toggle was set');
 }
 export function registerWebComponents() {
     customElements.define('jgu-dropdown', class extends HTMLElement {
@@ -113,10 +117,13 @@ export function registerWebComponents() {
             setupDropdown(id);
         }
     });
+    console.debug('web components (jgu-dropdown) were registered');
 }
-export function afterWebStarted() {
-    setStoredTheme();
+export function afterWebStarted(blazor) {
     registerThemeButtons();
     setupSidebarToggle();
+}
+export function beforeWebStarted(options) {
+    setStoredTheme();
     registerWebComponents();
 }

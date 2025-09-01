@@ -1,23 +1,31 @@
 ﻿@using JGUZDV.Blazor.Components.JGOO
 @inherits LayoutComponentBase
 
-<div>
-   <AppHeader Title="@Title" Logo="@Logo" HelpUrl="@Logo.Href" ShowDarkModeSelector="@true" ShowLoginButton="@false">
+
+<div class="container p-0">
+    <div class="jbs-page jbs-grid jbs-container">
+        <AppHeader Title="@Title" Logo="@Logo" HelpUrl="@Logo.Href" ShowDarkModeSelector="@true" ShowLoginButton="@false">
         </AppHeader>
-    <main>
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
+
+        <Sidebar>
+            Lang: @System.Threading.Thread.CurrentThread.CurrentUICulture.Name
+        </Sidebar>
+
+        <main>
+            <article class="content px-4">
+                @Body
+            </article>
+        </main>
+    </div>
 </div>
 
 @code {
     private AppHeader.LogoSpecs Logo { get; } = new()
-        {
-            SrcUrl = "https://cdn.zdv.uni-mainz.de/web/assets/logo_uni-mainz_quader.svg",
-            AltText = "Logo der Johannes Gutenberg-Universität Mainz",
-            Href = "https://www.uni-mainz.de/"
-        };
+    {
+        SrcUrl = "https://cdn.zdv.uni-mainz.de/web/assets/logo_uni-mainz_quader.svg",
+        AltText = "Logo der Johannes Gutenberg-Universität Mainz",
+        Href = "https://www.uni-mainz.de/"
+    };
 
     private string Title { get; } = "JGU Blazor Components Static";
 }
