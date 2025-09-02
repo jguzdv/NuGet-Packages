@@ -1,5 +1,5 @@
 ﻿export type Theme = 'light' | 'dark' | 'auto';
- 
+
 export function registerThemeButtons(): void {
     document.querySelectorAll<HTMLElement>('[data-set-theme]').forEach(el => {
         el.addEventListener('click', (event: Event) => {
@@ -24,7 +24,7 @@ export function registerThemeButtons(): void {
         });
     });
 
-    console.debug('theme buttons were registered');
+    console.debug('theme buttons registered');
 }
 
 export function applyTheme(theme: Theme, isInit: Boolean): void {
@@ -39,7 +39,7 @@ export function applyTheme(theme: Theme, isInit: Boolean): void {
         }
     }
 
-    console.debug('theme was set', theme);
+    console.debug('theme set to: ', theme);
 
     updateThemeIcon(theme);
     updateActiveThemeButton(theme);
@@ -84,60 +84,53 @@ export function registerWebComponents(): void {
             }
 
             connectedCallback() {
-                const id = this.getAttribute('button-id');
-                if (!id) {
-                    console.warn("No button-id provided for <jgu-dropdown>");
-                    return;
-                }
+                const button = this.getElementsByTagName("button")[0];
 
-                const button = document.getElementById(id);
-                const menuId = button?.getAttribute('aria-controls');
-                const menu = menuId ? document.getElementById(menuId) : null;
+                button.addEventListener('click', this.toggleHandler);
 
-                if (!button || !menu) {
-                    console.error("Button or menu not found for <jgu-dropdown> :", button, menu);
-                    return;
-                }
-
-                button.addEventListener('click', (e: MouseEvent) => {
-                    const shouldClose = button.getAttribute('aria-expanded') === 'true';
-                    button.setAttribute('aria-expanded', String(!shouldClose));
-                    menu.hidden = shouldClose;
-
-                    if (!shouldClose) {
-                        menu.querySelector<HTMLElement>('[role="menuitem"]')?.focus();
-                        document.addEventListener('click', this.globalCloseHandler);
-
-                    } else {
-                        document.removeEventListener('click', this.globalCloseHandler);
-                    }
-                });
-
-                console.debug("The button and menu was connected: ", button, menu);
+                console.debug("jgu-dropdown connected: ", this);
             }
 
-            globalCloseHandler(event: MouseEvent) {
-                const id = this.getAttribute('button-id')!;
-                const button = document.getElementById(id)!;
-                const menuId = button?.getAttribute('aria-controls')!;
-                const menu = document.getElementById(menuId)!;
-                const target = event.target as Node;
+            disconnectedCallback() {
+                const button = this.getElementsByTagName("button")[0];
+                button.removeEventListener('click', this.toggleHandler);
+            }
 
-                console.debug("The globalCloseHandler was triggered", button);
+            toggleHandler = (event: MouseEvent) => {
+                const button = this.getElementsByTagName("button")[0];
+                const menu = this.getElementsByTagName("div")[0];
 
-                if (!button.contains(target) && !menu.contains(target)) {
-                    button.setAttribute('aria-expanded', 'false');
-                    menu.hidden = true;
+                console.debug("toggleHandler triggered", this);
+
+                const shouldClose = button.getAttribute('aria-expanded') === 'true';
+                button.setAttribute('aria-expanded', String(!shouldClose));
+                menu.hidden = shouldClose;
+
+                if (!shouldClose) {
+                    menu.querySelector<HTMLElement>('[role="menuitem"]')?.focus();
+                    setTimeout(() => document.addEventListener('click', this.globalCloseHandler), 0);
+                } else {
+                    document.removeEventListener('click', this.globalCloseHandler);
                 }
+            }
+
+            globalCloseHandler = (event: MouseEvent) => {
+                const button = this.getElementsByTagName("button")[0];
+                const menu = this.getElementsByTagName("div")[0];
+
+                console.debug("globalCloseHandler triggered", this);
+
+                button.setAttribute('aria-expanded', 'false');
+                menu.hidden = true;
 
                 document.removeEventListener('click', this.globalCloseHandler);
             }
         }
     );
 
-    console.debug('web components (jgu-dropdown) were registered');
+    console.debug('web component (jgu-dropdown) registered');
 
-    customElements.define('jbs-toggle',
+    customElements.define('jgu-toggle',
         class extends HTMLElement {
             constructor() {
                 super();
@@ -146,7 +139,7 @@ export function registerWebComponents(): void {
                 this.addEventListener("click", () => {
                     const targetId = this.getAttribute('target-id');
                     if (!targetId) {
-                        console.warn("No target-id provided for <jbs-toggle>");
+                        console.warn("no target-id provided for <jgu-toggle>");
                         return;
                     }
 
@@ -157,7 +150,7 @@ export function registerWebComponents(): void {
         }
     );
 
-    console.debug('web components (jbs-toggle) were registered');
+    console.debug('web component (jgu-toggle) registered');
 }
 
 export function afterWebStarted(blazor: any): void {
