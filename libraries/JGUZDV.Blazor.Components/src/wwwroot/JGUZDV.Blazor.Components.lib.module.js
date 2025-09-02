@@ -69,8 +69,7 @@ export function registerWebComponents() {
             super();
         }
         connectedCallback() {
-            const button = this.getElementsByTagName("button")[0];
-            button.addEventListener('click', this.toggleHandler);
+            this.addEventListener('click', this.toggleHandler);
             console.debug("jgu-dropdown connected: ", this);
         }
         disconnectedCallback() {
@@ -79,6 +78,10 @@ export function registerWebComponents() {
         }
         toggleHandler = (event) => {
             const button = this.getElementsByTagName("button")[0];
+            const target = event.target;
+            if (!button.contains(target)) {
+                return;
+            }
             const menu = this.getElementsByTagName("div")[0];
             console.debug("toggleHandler triggered", this);
             const shouldClose = button.getAttribute('aria-expanded') === 'true';

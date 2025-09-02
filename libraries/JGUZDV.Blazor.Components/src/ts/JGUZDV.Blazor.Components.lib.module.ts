@@ -84,10 +84,7 @@ export function registerWebComponents(): void {
             }
 
             connectedCallback() {
-                const button = this.getElementsByTagName("button")[0];
-
-                button.addEventListener('click', this.toggleHandler);
-
+                this.addEventListener('click', this.toggleHandler);
                 console.debug("jgu-dropdown connected: ", this);
             }
 
@@ -98,6 +95,12 @@ export function registerWebComponents(): void {
 
             toggleHandler = (event: MouseEvent) => {
                 const button = this.getElementsByTagName("button")[0];
+
+                const target = event.target as Node;
+                if (!button.contains(target)) {
+                    return;
+                }
+
                 const menu = this.getElementsByTagName("div")[0];
 
                 console.debug("toggleHandler triggered", this);
