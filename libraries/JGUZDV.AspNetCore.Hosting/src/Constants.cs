@@ -35,7 +35,7 @@ public static class Constants
         /// <summary>
         /// Default Configuration section for Telemetry.
         /// </summary>
-        public const string OpenTelemetry = "ApplicationInsights";
+        public const string OpenTelemetry = "OpenTelemetry";
 
         /// <summary>
         /// Default Configuration section for FeatureManagement.
