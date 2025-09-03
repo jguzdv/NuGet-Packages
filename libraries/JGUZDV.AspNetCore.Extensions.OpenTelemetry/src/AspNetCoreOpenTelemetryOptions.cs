@@ -27,6 +27,11 @@ namespace JGUZDV.AspNetCore.Extensions.OpenTelemetry
         public string? ServiceName { get; set; } = default!;
 
         /// <summary>
+        /// Optional. Sets Azure Monitor sampling rate. Use values between 0.0f and 1.0f.
+        /// </summary>
+        public float? SamplingRatio { get; set; } = default!;
+        
+        /// <summary>
         /// Optional. Configures a basic env for metrics and creates a basic meter instance.
         /// </summary>
         public OtUseMeterOptions? UseMeter { get; set; } = default!;
