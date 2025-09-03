@@ -97,10 +97,16 @@ public static class JGUZDVAspNetCoreOpenTelemetryExtensions
             }
 
             // Configure the connection string.
-            // TODO Configure Auth?
             otBuilder.UseAzureMonitor(options =>
             {
                 options.ConnectionString = otOptions.AzureMonitor.ConnectionString;
+
+                if (otOptions.SamplingRatio is >= 0.0f and <= 1.0f)
+                {
+                    options.SamplingRatio = otOptions.SamplingRatio.Value;
+                    logger?.LogInformation("JGUZDV OpenTelemetry: Set SamplingRatio value " +
+                                           "to {SamplingRatio}.", otOptions.SamplingRatio.Value);
+                }
             });
 
             // Configure the ResourceBuilder to add the custom resource attributes to all signals.
