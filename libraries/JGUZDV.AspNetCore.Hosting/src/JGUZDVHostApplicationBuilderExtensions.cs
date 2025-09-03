@@ -152,10 +152,11 @@ public static class JGUZDVHostApplicationBuilderExtensions
     /// </summary>
     public static JGUZDVHostApplicationBuilder AddOpenTelemetry(
         this JGUZDVHostApplicationBuilder appBuilder,
+        ILogger logger,
         string configSection = Constants.ConfigSections.OpenTelemetry)
     {
         // Default OpenTelemetry config, needs the OpenTelemetry config section.
-        appBuilder.Builder.AddJGUZDVOpenTelemetry();
+        appBuilder.Builder.AddJGUZDVOpenTelemetry(logger);
 
         appBuilder.HasOpenTelemetry = true;
         return appBuilder;

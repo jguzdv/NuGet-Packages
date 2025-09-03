@@ -820,7 +820,7 @@ public class JGUZDVHostApplicationBuilder
     {
         if (Configuration.HasConfigSection(Constants.ConfigSections.OpenTelemetry))
         {
-            this.AddOpenTelemetry();
+            this.AddOpenTelemetry(logger);
             LogMessages.FeatureConfigured(logger, "OpenTelemetry", Constants.ConfigSections.OpenTelemetry);
         }
         else
