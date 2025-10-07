@@ -10,6 +10,9 @@
     [CascadingParameter]
     public required ValidationMessageStore MessageStore { get; set; }
 
+    [CascadingParameter]
+    public required FieldDefinitionForm Parent { get; set; }
+
     /// <summary>
     /// The model of the section. If null, validation will not be performed.
     /// </summary>
@@ -23,6 +26,17 @@
 
     [Inject]
     public required IServiceProvider ServiceProvider { get; set; }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        Parent.RegisterFormSection(this);
+    }
+
+    public void Dispose()
+    {
+        Parent.UnregisterFormSection(this);
+    }
 
     public void AddValidationResults(object? sender, ValidationRequestedEventArgs args)
     {
@@ -41,16 +55,5 @@
                 MessageStore.Add(new FieldIdentifier(Model, memberName), error.ErrorMessage ?? "");
             }
         }
-    }
-
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();
-        EditContext.OnValidationRequested += AddValidationResults;
-    }
-
-    public void Dispose()
-    {
-        EditContext.OnValidationRequested -= AddValidationResults;
     }
 }

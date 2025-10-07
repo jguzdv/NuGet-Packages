@@ -89,8 +89,10 @@
         <InputNumber id="sortKey" @bind-Value="_fieldDefinition.SortKey" class="form-control" />
     </div>
 
-    <CascadingValue Value="_messageStore">
-        @ChildContent
+    <CascadingValue Value="this">
+        <CascadingValue Value="_messageStore">
+            @ChildContent
+        </CascadingValue>
     </CascadingValue>
 
     <ValidationSummary />
@@ -127,6 +129,8 @@
 
     private FieldDefinition? _fieldDefinition;
 
+    private readonly HashSet<FormSection> _sections = new();
+
     public override Task SetParametersAsync(ParameterView parameters)
     {
         var newFieldDefinition = parameters.GetValueOrDefault<FieldDefinition>(nameof(FieldDefinition));
@@ -134,11 +138,21 @@
         if (newFieldDefinition != FieldDefinition)
         {
             if (_editContext != null)
+            {
                 _editContext.OnValidationRequested -= HandleValidationRequested;
+                foreach (var section in _sections)
+                {
+                    _editContext.OnValidationRequested -= section.AddValidationResults;
+                }
+            }
 
             _fieldDefinition = newFieldDefinition!.Copy();
             _editContext = new EditContext(_fieldDefinition!);
             _editContext.OnValidationRequested += HandleValidationRequested;
+            foreach (var section in _sections)
+            {
+                _editContext.OnValidationRequested += section.AddValidationResults;
+            }
             _messageStore = new ValidationMessageStore(_editContext);
         }
 
@@ -182,8 +196,30 @@
 
     }
 
+    public void RegisterFormSection(FormSection section)
+    {
+        _sections.Add(section);
+        if (_editContext != null)
+        {
+            _editContext.OnValidationRequested += section.AddValidationResults;
+        }
+    }
+
+    public void UnregisterFormSection(FormSection section)
+    {
+        _sections.Remove(section);
+        if (_editContext != null)
+        {
+            _editContext.OnValidationRequested -= section.AddValidationResults;
+        }
+    }
+
     public void Dispose()
     {
-        _editContext!.OnValidationRequested += HandleValidationRequested;
+        _editContext!.OnValidationRequested -= HandleValidationRequested;
+        foreach (var section in _sections)
+        {
+            _editContext!.OnValidationRequested -= section.AddValidationResults;
+        }
     }
 }
