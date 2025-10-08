@@ -35,8 +35,9 @@
         await base.OnParametersSetAsync();
     }
 
-    private async Task ExecuteNow(Job job)
+    private Task ExecuteNow(Job job)
     {
-        await State.Value.ExecuteNow(job.Id);
+        job.ShouldExecuteAt = DateTimeOffset.Now;
+        return State.Value.ExecuteNow(job.Id);
     }
 }

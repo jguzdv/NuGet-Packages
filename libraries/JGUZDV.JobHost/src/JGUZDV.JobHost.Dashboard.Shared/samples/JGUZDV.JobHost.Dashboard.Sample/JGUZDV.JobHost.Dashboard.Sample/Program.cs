@@ -25,6 +25,7 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<JobHostContext>();
+    context.Database.EnsureDeleted();
     context.Database.EnsureCreated();
     if(!context.Hosts.Any())
         SeedData.AddSeedData(context);

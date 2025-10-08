@@ -34,7 +34,7 @@ namespace JGUZDV.JobHost.Dashboard.Sample
                         FailMessage = i % mod == 0 ? null : "Critical error during execution - uh OH",
                         Name = $"Job-{i}",
                         Schedule = "* 0/15 * * *",
-                        ShouldExecuteAt = DateTimeOffset.Now,
+                        ShouldExecuteAt = null,
                     })
                     .ToList();
 
