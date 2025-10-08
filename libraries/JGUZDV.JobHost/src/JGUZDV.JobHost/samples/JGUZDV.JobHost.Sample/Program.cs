@@ -21,7 +21,6 @@ var host = builder.Build();
 using (var scope = host.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<JobHostContext>();
-    context.Database.EnsureDeleted();
     context.Database.EnsureCreated();
 }
 

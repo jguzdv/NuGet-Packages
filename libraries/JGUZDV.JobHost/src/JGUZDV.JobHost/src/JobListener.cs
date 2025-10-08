@@ -1,5 +1,7 @@
 ﻿using JGUZDV.JobHost.Shared;
 
+using Microsoft.Extensions.Logging;
+
 using Quartz;
 using Quartz.Listener;
 
@@ -8,10 +10,12 @@ namespace JGUZDV.JobHost
     internal class JobListener : JobListenerSupport
     {
         private readonly IJobExecutionManager _reporter;
+        private readonly ILogger<JobListener> _logger;
 
-        public JobListener(IJobExecutionManager reporter)
+        public JobListener(IJobExecutionManager reporter, ILogger<JobListener> logger)
         {
             _reporter = reporter;
+            _logger = logger;
         }
 
         public override string Name => nameof(JobListener);
@@ -31,9 +35,9 @@ namespace JGUZDV.JobHost
                     RunTime = context.JobRunTime
                 });
             }
-            catch
+            catch (Exception e)
             {
-
+                _logger.LogError(e, "Error reporting job execution");
             }
         }
 
@@ -44,7 +48,7 @@ namespace JGUZDV.JobHost
                 return null;
             }
 
-            while(exception is SchedulerException && exception.InnerException != null)
+            while (exception is SchedulerException && exception.InnerException != null)
             {
                 exception = exception.InnerException;
             }

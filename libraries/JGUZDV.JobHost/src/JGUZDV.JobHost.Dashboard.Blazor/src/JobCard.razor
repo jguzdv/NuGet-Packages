@@ -6,7 +6,7 @@
         @Job.Name
     </div>
     <hr />
-    
+
     <div class="my-2">
         <div>
             <label class="fw-bold">
@@ -24,6 +24,17 @@
                 @Job.RunTime.ToString("g")
             </span>
         </div>
+        @if (Job.NextExecutionAt != null)
+        {
+            <div>
+                <label class="fw-bold">
+                    next execution:
+                </label>
+                <span>
+                    @Job.NextExecutionAt?.ToLocalTime().ToString("g") <span class="small">(local)</span>
+                </span>
+            </div>
+        }
         <div>
             <label class="fw-bold">
                 schedule:
@@ -32,6 +43,10 @@
                 @Job.Schedule
             </span>
         </div>
+        @if (Job.ShouldExecuteAt.HasValue && Job.ShouldExecuteAt > Job.LastExecutedAt)
+        {
+            <ActivityIndicator Style="ActivityIndicator.IndicatorStyle.Marquee"></ActivityIndicator>
+        }
     </div>
 
     @if (!string.IsNullOrWhiteSpace(Job.FailMessage))

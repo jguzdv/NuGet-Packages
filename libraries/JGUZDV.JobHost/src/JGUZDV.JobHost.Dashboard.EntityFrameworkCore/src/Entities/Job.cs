@@ -31,7 +31,7 @@
         public required string LastResult { get; set; }
 
         /// <summary>
-        /// The timestamp of the next execution
+        /// The timestamp of the next regular execution
         /// </summary>
         public DateTimeOffset? NextExecutionAt { get; set; }
 
