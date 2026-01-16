@@ -207,7 +207,7 @@ public record IntFieldType : FieldType
     /// Gets the CLR type of the field.
     /// </summary>
     [JsonIgnore]
-    public override Type ClrType => typeof(int);
+    public override Type ClrType => typeof(long);
 
     /// <summary>
     /// Gets the display name of the field type.

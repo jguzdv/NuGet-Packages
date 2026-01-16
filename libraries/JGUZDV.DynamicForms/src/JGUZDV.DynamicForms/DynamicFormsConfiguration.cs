@@ -17,7 +17,10 @@ namespace JGUZDV.DynamicForms
                 new DateOnlyFieldType(),
                 new IntFieldType(),
                 new StringFieldType(),
-                new FileFieldType()
+                new FileFieldType(),
+                new BoolFieldType(),
+                new TimeFieldType(),
+                new FloatFieldType()
             };
 
         /// <summary>
@@ -51,7 +54,10 @@ namespace JGUZDV.DynamicForms
                     { new StringFieldType(), [ typeof(RegexConstraint), typeof(StringLengthConstraint), typeof(RangeConstraint) ] },
                     { new DateOnlyFieldType(), [ typeof(RangeConstraint) ] },
                     { new IntFieldType(), [typeof(RangeConstraint)] },
-                    { new FileFieldType(), [typeof(FileSizeConstraint)] } // Added FileSizeConstraint
+                    { new FileFieldType(), [typeof(FileSizeConstraint)] },
+                    { new BoolFieldType(), [ ] },
+                    { new TimeFieldType(), [ typeof(RangeConstraint) ] },
+                    { new FloatFieldType(), [typeof(RangeConstraint)] }
             };
 
         private static readonly HashSet<Type> _allConstraints = new()
