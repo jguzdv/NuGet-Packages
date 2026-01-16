@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
 using JGUZDV.L10n;
 
@@ -29,4 +30,27 @@ public record TimeFieldType : FieldType
     /// </summary>
     [JsonIgnore]
     public override string InputType => "time";
+
+    /// <inheritdoc/>
+    public override string ConvertFromValue(object value)
+    {
+        if (value is TimeOnly timeOnly)
+        {
+            return timeOnly.ToString("O");
+        }
+        throw new InvalidOperationException($"Invalid value type: {value.GetType().Name}. Expected TimeOnly.");
+    }
+
+    /// <inheritdoc/>
+    public override object ConvertToValue(string stringValue)
+    {
+        if (TimeOnly.TryParse(stringValue, out var dateOnly))
+        {
+            return dateOnly;
+        }
+        else
+        {
+            return JsonSerializer.Deserialize<TimeOnly>(stringValue, DynamicFormsConfiguration.JsonSerializerOptions);
+        }
+    }
 }

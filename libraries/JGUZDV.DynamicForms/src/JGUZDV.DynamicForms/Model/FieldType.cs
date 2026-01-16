@@ -37,7 +37,9 @@ public abstract record FieldType
     /// <returns>A string representation of the value.</returns>
     public virtual string ConvertFromValue(object value)
     {
-        return JsonSerializer.Serialize(value, DynamicFormsConfiguration.JsonSerializerOptions);
+        return ClrType.IsPrimitive
+            ? value?.ToString() ?? ""
+            : JsonSerializer.Serialize(value, DynamicFormsConfiguration.JsonSerializerOptions);
     }
 
     /// <summary>
@@ -47,7 +49,9 @@ public abstract record FieldType
     /// <returns>An object of the CLR type.</returns>
     public virtual object ConvertToValue(string stringValue)
     {
-        return JsonSerializer.Deserialize(stringValue, ClrType, DynamicFormsConfiguration.JsonSerializerOptions) ?? throw new InvalidOperationException($"Could not parse json: {stringValue} into target type: {ClrType.Name}");
+        return ClrType.IsPrimitive
+            ? Convert.ChangeType(stringValue, ClrType)
+            : JsonSerializer.Deserialize(stringValue, ClrType, DynamicFormsConfiguration.JsonSerializerOptions) ?? throw new InvalidOperationException($"Could not parse json: {stringValue} into target type: {ClrType.Name}");
     }
 
     /// <summary>
