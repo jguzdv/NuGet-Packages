@@ -93,9 +93,9 @@
                                                 ((IList)Field.Value!).Remove(value);
                                                 SetValue(Field.Value);
                                             })">
-                                          @Icons.Remove(null)
-                                      </button>
-                                  </span>
+                                        @Icons.Remove(null)
+                                    </button>
+                                </span>
                             }
                         }
                         else
@@ -106,11 +106,24 @@
                 }
                 else
                 {
-                    <input class="form-control"
-                           @bind-value="_inputValue"
-                           @bind-value:after="() => OnInputChanged(_inputValue)"
-                           @onkeyup="HandleKeyUp"
-                           type="@Field.FieldDefinition.Type!.InputType" name="@InputDefinition.Name" id="@InputDefinition.Id" />
+                    if (Field.FieldDefinition.Type!.InputType == "checkbox")
+                    {
+                        <input class="form-check"
+                               value="@_inputValue"
+                               @oninput="(y) => { _inputValue = y.Value!.ToString(); OnInputChanged(_inputValue);}"
+                               checked=@(_inputValue == "true")
+                               @onkeyup="HandleKeyUp"
+                               type="@Field.FieldDefinition.Type!.InputType" name="@InputDefinition.Name" id="@InputDefinition.Id" />
+
+                    }
+                    else
+                    {
+                        <input class="form-control"
+                               @bind-value="_inputValue"
+                               @bind-value:after="() => OnInputChanged(_inputValue)"
+                               @onkeyup="HandleKeyUp"
+                               type="@Field.FieldDefinition.Type!.InputType" name="@InputDefinition.Name" id="@InputDefinition.Id" />
+                    }
                 }
             }
         </Await>
