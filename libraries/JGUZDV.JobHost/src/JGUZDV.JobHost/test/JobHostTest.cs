@@ -45,6 +45,7 @@ namespace JGUZDV.JobHost.Tests
             var testObject = new JobHostWrapper();
             builder.Services.AddSingleton(testObject);
 
+            builder.AddHostedJob<TestJob>();
             builder.AddHostedJob<TestJob3>();
 
             var host = builder.Build();

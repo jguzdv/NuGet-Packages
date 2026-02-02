@@ -4,7 +4,7 @@ using JGUZDV.Blazor.StateManagement.Components;
 
 namespace JGUZDV.Blazor.StateManagement.Tests
 {
-    public class Tests : TestContext
+    public class Tests : BunitContext
     {
         [Fact]
         public void Test1()
@@ -12,7 +12,7 @@ namespace JGUZDV.Blazor.StateManagement.Tests
             Services.AddScoped<IState<SomeState>>(x => new State<SomeState>(new()));
             Services.AddScoped<IServiceProvider>(x => Services);
 
-            var stateview = RenderComponent<StateView<SomeState>>(x => x.Add(
+            var stateview = Render<StateView<SomeState>>(x => x.Add(
                 p => p.ChildContent,
                 x => $"<p>{x.PropertyOne}</p>"));
 
