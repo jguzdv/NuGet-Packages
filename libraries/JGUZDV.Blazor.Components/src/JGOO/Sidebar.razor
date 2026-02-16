@@ -7,7 +7,7 @@
 
     @if (NavigationContent != null && NavigationContent.Count > 0)
     {
-        <div class="nav flex-column">
+        <div class="nav flex-column mt-3">
             @foreach (var navItem in NavigationContent)
             {
                 @if (navItem.HasChildren)
@@ -35,7 +35,7 @@
                         <span class="nav-title">@navItem.Name</span>
                     </NavLink>
                 }
-                <hr />
+            <hr />
             }
         </div>
     }
@@ -43,8 +43,8 @@
 </aside>
 
 @code {
-    [Parameter, EditorRequired]
-    public required RenderFragment ChildContent { get; set; }
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
 
     [Parameter]
     public string? AdditionalClasses { get; set; }
