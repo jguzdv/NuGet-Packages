@@ -1,0 +1,46 @@
+@namespace JGUZDV.Blazor.Components.JGOO.Sidebar
+@using Microsoft.AspNetCore.Components.Routing
+
+@if (ChildContent != null)
+{
+    <span class="nav-link disabled">@Name</span>
+    @ChildContent
+}
+else
+{
+    <NavLink class="nav-link header-navigation-sidebar" href="@NavUrl" Match="@Match" data-sidebar-close>
+        @if (Icon != null)
+        {
+            @Icon
+        }
+        <span class="nav-title">@Name</span>
+    </NavLink>
+}
+<hr />
+
+@code {
+    [Parameter, EditorRequired]
+    public required string Name { get; set; }
+
+    [Parameter]
+    public string? NavUrl { get; set; }
+
+    [Parameter]
+    public RenderFragment? Icon { get; set; }
+
+    [Parameter]
+    public NavLinkMatch Match { get; set; } = NavLinkMatch.Prefix;
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        if (!string.IsNullOrWhiteSpace(NavUrl) && ChildContent != null)
+        {
+            throw new InvalidOperationException($"Ein Navigationseintrag darf entweder eine URL oder Children besitzen, aber nicht beides. Fehler bei: '{Name}'");
+        }
+    }
+}

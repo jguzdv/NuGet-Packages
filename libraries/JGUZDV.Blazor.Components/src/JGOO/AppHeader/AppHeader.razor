@@ -67,7 +67,13 @@
             </div>
         }
 
-        @if (NavigationContent != null && NavigationContent.Any())
+        @if (NavItems != null)
+        {
+            <nav class="header-navigation" aria-label="Navigation">
+                @NavItems
+            </nav>
+        }
+        else if (NavigationContent != null && NavigationContent.Any())
         {
             <nav class="header-navigation" aria-label="Navigation">
                 @foreach (var navItem in NavigationContent)
@@ -152,6 +158,10 @@
     public string? HelpUrl { get; set; }
 
     [Parameter]
+    public RenderFragment? NavItems { get; set; }
+
+    [Parameter]
+    [Obsolete("Use NavItems parameter with AppHeader.NavItem child components instead. This will be removed in a future version.")]
     public List<NavigationSpecs>? NavigationContent { get; set; }
 
 
@@ -176,21 +186,15 @@
         public string? Href { get; set; }
     }
 
-    public class NavigationSpecs
-    {
-        public RenderFragment? Icon { get; set; }
-        public string? NavUrl { get; set; }
-        public required string Name { get; set; }
-        public NavLinkMatch Match { get; set; } = NavLinkMatch.Prefix;
-
-        public List<NavigationSpecs>? Children { get; set; }
-
-        public bool HasChildren => Children != null && Children.Any();
-    }
 
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
+
+        if (NavItems != null && NavigationContent != null)
+        {
+            throw new InvalidOperationException($"Either {nameof(NavItems)} or {nameof(NavigationContent)} may be set, but not both.");
+        }
 
         if (NavigationContent != null)
         {

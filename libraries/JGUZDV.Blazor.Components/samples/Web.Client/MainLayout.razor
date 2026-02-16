@@ -1,15 +1,86 @@
 ﻿@using JGUZDV.Blazor.Components.JGOO
+@using JGUZDV.Blazor.Components.JGOO.AppHeader
+@using JGUZDV.Blazor.Components.JGOO.Sidebar;
 @using Microsoft.AspNetCore.Components.Routing
 @inherits LayoutComponentBase
 
 <div class="container p-0">
     <div class="jbs-page jbs-grid jbs-container border">
-        <AppHeader Title="@Title" Logo="@Logo" HelpUrl="@Logo.Href" ShowLanguageSelector="@true" ShowLoginButton="@true" NavigationContent="NavigationSpecsHeader">
+        @* --- New Component-Based Syntax (Preferred) --- *@
+        Uncomment to use the new NavItems approach with component hierarchy:
+        
+        <AppHeader Title="@Title" Logo="@Logo" HelpUrl="@Logo.Href" ShowLanguageSelector="@true" ShowLoginButton="@true">
+            <NavItems>
+                <JGUZDV.Blazor.Components.JGOO.AppHeader.NavItem Name="Dropdowns" NavUrl="/dropdown" Match="NavLinkMatch.All">
+                    <Icon><i class="fas fa-caret-square-down pe-2"></i></Icon>
+                </JGUZDV.Blazor.Components.JGOO.AppHeader.NavItem>
+                <JGUZDV.Blazor.Components.JGOO.AppHeader.NavItem Name="Modal" NavUrl="/modal" Match="NavLinkMatch.Prefix">
+                    <Icon><i class="fas fa-window-restore pe-2"></i></Icon>
+                </JGUZDV.Blazor.Components.JGOO.AppHeader.NavItem>
+                <JGUZDV.Blazor.Components.JGOO.AppHeader.NavItem Name="UI Komponenten" Match="NavLinkMatch.Prefix">
+                    <Icon><i class="fas fa-puzzle-piece pe-2"></i></Icon>
+                    <ChildContent>
+                        <JGUZDV.Blazor.Components.JGOO.AppHeader.NavItem Name="Image Cropper">
+                            <ChildContent>
+                                <JGUZDV.Blazor.Components.JGOO.AppHeader.NavItem Name="Sub Item 1" NavUrl="/image-cropper" />
+                                <JGUZDV.Blazor.Components.JGOO.AppHeader.NavItem Name="Sub Item 2" NavUrl="/image-cropper" />
+                            </ChildContent>
+                        </JGUZDV.Blazor.Components.JGOO.AppHeader.NavItem>
+                        <JGUZDV.Blazor.Components.JGOO.AppHeader.NavItem Name="Multiselect" NavUrl="/multi-select" />
+                        <JGUZDV.Blazor.Components.JGOO.AppHeader.NavItem Name="Editor Buttons" NavUrl="/editor-buttons" />
+                    </ChildContent>
+                </JGUZDV.Blazor.Components.JGOO.AppHeader.NavItem>
+                <JGUZDV.Blazor.Components.JGOO.AppHeader.NavItem Name="L10N" Match="NavLinkMatch.Prefix">
+                    <Icon><i class="fas fa-language pe-2"></i></Icon>
+                    <ChildContent>
+                        <JGUZDV.Blazor.Components.JGOO.AppHeader.NavItem Name="Edit" NavUrl="/l10nEdit" />
+                        <JGUZDV.Blazor.Components.JGOO.AppHeader.NavItem Name="View" NavUrl="/l10nView" />
+                    </ChildContent>
+                </JGUZDV.Blazor.Components.JGOO.AppHeader.NavItem>
+            </NavItems>
+        </AppHeader>
+
+        <Sidebar>
+            <ChildContent>
+                Lang: @System.Threading.Thread.CurrentThread.CurrentUICulture.Name
+            </ChildContent>
+            <NavItems>
+                <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="Diesdas">
+                    <ChildContent>
+                        <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="Image Cropper" NavUrl="/image-cropper" />
+                        <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="Dropdowns" NavUrl="/dropdown" />
+                        <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="Modal" NavUrl="/modal" />
+                        <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="Multiselect" NavUrl="/multi-select" />
+                        <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="Client Storage" NavUrl="/client-storage" />
+                        <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="Editor Buttons" NavUrl="/editor-buttons" />
+                        <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="Dark-Mode Selector" NavUrl="/appheader" />
+                        <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="Counter" NavUrl="/counter" />
+                    </ChildContent>
+                </JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem>
+                <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="L10nStuff">
+                    <ChildContent>
+                        <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="L10nEdit" NavUrl="/l10nEdit" />
+                        <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="L10nView" NavUrl="/l10nView" />
+                    </ChildContent>
+                </JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem>
+                <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="ProjStructure">
+                    <ChildContent>
+                        <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="Wait on client" NavUrl="/client-await" />
+                        <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="Wait on server" NavUrl="/server-await" />
+                        <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="A client side page" NavUrl="/webassembly" />
+                    </ChildContent>
+                </JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem>
+            </NavItems>
+        </Sidebar>
+       
+
+        @* --- Old NavigationSpecs Syntax (Obsolete, but still functional) --- *@
+        @* <AppHeader Title="@Title" Logo="@Logo" HelpUrl="@Logo.Href" ShowLanguageSelector="@true" ShowLoginButton="@true" NavigationContent="NavigationSpecsHeader">
         </AppHeader>
 
         <Sidebar NavigationContent="NavigationSpecsSidebar">
             Lang: @System.Threading.Thread.CurrentThread.CurrentUICulture.Name
-        </Sidebar>
+        </Sidebar> *@
 
         <main>
             <div class="p-2">
@@ -29,59 +100,59 @@
 
     private string Title { get; } = "JGU Blazor Components";
 
-    private List<AppHeader.NavigationSpecs> NavigationSpecsHeader { get; } = new()
+    private List<NavigationSpecs> NavigationSpecsHeader { get; } = new()
     {
-        new AppHeader.NavigationSpecs
+        new NavigationSpecs
         {
             NavUrl = "/dropdown",
             Name = "Dropdowns",
             Icon = @<i class="fas fa-caret-square-down pe-2"></i>,
             Match = NavLinkMatch.All
         },
-        new AppHeader.NavigationSpecs
+        new NavigationSpecs
         {
             NavUrl = "/modal",
             Name = "Modal",
             Icon = @<i class="fas fa-window-restore pe-2"></i>,
             Match = NavLinkMatch.Prefix
         },
-        new AppHeader.NavigationSpecs
+        new NavigationSpecs
         {
             Name = "UI Komponenten",
             Icon = @<i class="fas fa-puzzle-piece pe-2"></i>,
             Match = NavLinkMatch.Prefix,
-            Children = new List<AppHeader.NavigationSpecs>
+            Children = new List<NavigationSpecs>
             {
-                new AppHeader.NavigationSpecs
+                new NavigationSpecs
                 {
                     NavUrl = "/image-cropper",
                     Name = "Image Cropper"
                 },
-                new AppHeader.NavigationSpecs
+                new NavigationSpecs
                 {
                     NavUrl = "/multi-select",
                     Name = "Multiselect"
                 },
-                new AppHeader.NavigationSpecs
+                new NavigationSpecs
                 {
                     NavUrl = "/editor-buttons",
                     Name = "Editor Buttons"
                 }
             }
         },
-        new AppHeader.NavigationSpecs
+        new NavigationSpecs
         {
             Name = "L10N",
             Icon = @<i class="fas fa-language pe-2"></i>,
             Match = NavLinkMatch.Prefix,
-            Children = new List<AppHeader.NavigationSpecs>
+            Children = new List<NavigationSpecs>
             {
-                new AppHeader.NavigationSpecs
+                new NavigationSpecs
                 {
                     NavUrl = "/l10nEdit",
                     Name = "Edit"
                 },
-                new AppHeader.NavigationSpecs
+                new NavigationSpecs
                 {
                     NavUrl = "/l10nView",
                     Name = "View"
@@ -90,88 +161,88 @@
         }
     };
 
-    private List<AppHeader.NavigationSpecs> NavigationSpecsSidebar { get; } = new()
+    private List<NavigationSpecs> NavigationSpecsSidebar { get; } = new()
     {
-        new AppHeader.NavigationSpecs
+        new NavigationSpecs
         {
             Name = "Diesdas",
-            Children = new List<AppHeader.NavigationSpecs>
+            Children = new List<NavigationSpecs>
             {
-                new AppHeader.NavigationSpecs
+                new NavigationSpecs
                 {
                     NavUrl = "/image-cropper",
                     Name = "Image Cropper"
                 },
-                new AppHeader.NavigationSpecs
+                new NavigationSpecs
                 {
                     NavUrl = "/dropdown",
                     Name = "Dropdowns"
                 },
-                new AppHeader.NavigationSpecs
+                new NavigationSpecs
                 {
                     NavUrl = "/modal",
                     Name = "Modal"
                 },
-                new AppHeader.NavigationSpecs
+                new NavigationSpecs
                 {
                     NavUrl = "/multi-select",
                     Name = "Multiselect"
                 },
-                new AppHeader.NavigationSpecs
+                new NavigationSpecs
                 {
                     NavUrl = "/client-storage",
                     Name = "Client Storage"
                 },
-                new AppHeader.NavigationSpecs
+                new NavigationSpecs
                 {
                     NavUrl = "/editor-buttons",
                     Name = "Editor Buttons"
                 },
-                new AppHeader.NavigationSpecs
+                new NavigationSpecs
                 {
                     NavUrl = "/appheader",
                     Name = "Dark-Mode Selector"
                 },
-                new AppHeader.NavigationSpecs
+                new NavigationSpecs
                 {
                     NavUrl = "/counter",
                     Name = "Counter"
                 },
             }
         },
-        new AppHeader.NavigationSpecs
+        new NavigationSpecs
         {
             Name = "L10nStuff",
-            Children = new List<AppHeader.NavigationSpecs>
+            Children = new List<NavigationSpecs>
             {
-                new AppHeader.NavigationSpecs
+                new NavigationSpecs
                 {
                     NavUrl = "/l10nEdit",
                     Name = "L10nEdit"
                 },
-                new AppHeader.NavigationSpecs
+                new NavigationSpecs
                 {
                     NavUrl = "/l10nView",
                     Name = "L10nView"
                 },
             }
         },
-        new AppHeader.NavigationSpecs
+        new NavigationSpecs
         {
             Name = "ProjStructure",
-            Children = new List<AppHeader.NavigationSpecs>
+            Children = new List<NavigationSpecs>
             {
-                new AppHeader.NavigationSpecs
+                new NavigationSpecs
                 {
                     NavUrl = "/client-await",
                     Name = "Wait on client"
                 },
-                new AppHeader.NavigationSpecs
+                new NavigationSpecs
                 {
                     NavUrl = "/server-await",
                     Name = "Wait on server"
                 },
-                new AppHeader.NavigationSpecs
+                new NavigationSpecs
                 {
                     NavUrl = "/webassembly",
                     Name = "A client side page"

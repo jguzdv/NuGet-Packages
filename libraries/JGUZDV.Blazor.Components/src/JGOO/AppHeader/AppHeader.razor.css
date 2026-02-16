@@ -70,6 +70,12 @@ header {
         background-color: white;
     }
 
+/* Active dropdown parent detection using CSS :has() selector */
+::deep .dropdown:has(.dropdown-menu .active) .dropdown-toggle {
+    border-bottom: 2px solid #c1002a;
+    font-weight: bold;
+}
+
 .header-app-title {
     grid-area: title;
     display: block;

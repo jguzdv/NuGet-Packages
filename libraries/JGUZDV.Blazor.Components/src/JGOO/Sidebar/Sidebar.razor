@@ -1,11 +1,16 @@
 @using Microsoft.AspNetCore.Components.Routing
-@using static JGUZDV.Blazor.Components.JGOO.AppHeader
 
 <aside id="jbs-sidebar" class="jbs-sidebar @AdditionalClasses">
 
     @ChildContent
 
-    @if (NavigationContent != null && NavigationContent.Count > 0)
+    @if (NavItems != null)
+    {
+        <div class="nav flex-column mt-3">
+            @NavItems
+        </div>
+    }
+    else if (NavigationContent != null && NavigationContent.Count > 0)
     {
         <div class="nav flex-column mt-3">
             @foreach (var navItem in NavigationContent)
@@ -50,11 +55,20 @@
     public string? AdditionalClasses { get; set; }
 
     [Parameter]
+    public RenderFragment? NavItems { get; set; }
+
+    [Parameter]
+    [Obsolete("Use NavItems parameter with Sidebar.NavItem child components instead. This will be removed in a future version.")]
     public List<NavigationSpecs>? NavigationContent { get; set; }
 
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
+
+        if (NavItems != null && NavigationContent != null)
+        {
+            throw new InvalidOperationException($"Either {nameof(NavItems)} or {nameof(NavigationContent)} may be set, but not both.");
+        }
 
         if (NavigationContent != null)
         {
