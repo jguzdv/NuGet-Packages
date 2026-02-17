@@ -7,7 +7,9 @@
     @if (NavItems != null)
     {
         <div class="nav flex-column mt-3">
-            @NavItems
+            <CascadingValue Value="@_navRenderContext">
+                @NavItems
+            </CascadingValue>
         </div>
     }
     else if (NavigationContent != null && NavigationContent.Count > 0)
@@ -60,6 +62,8 @@
     [Parameter]
     [Obsolete("Use NavItems parameter with Sidebar.NavItem child components instead. This will be removed in a future version.")]
     public List<NavigationSpecs>? NavigationContent { get; set; }
+
+    private readonly NavRenderContext _navRenderContext = NavRenderContext.CreateRootContext();
 
     protected override void OnParametersSet()
     {

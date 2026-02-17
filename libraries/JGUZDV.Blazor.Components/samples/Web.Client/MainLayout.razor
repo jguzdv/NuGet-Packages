@@ -23,7 +23,12 @@
                         <JGUZDV.Blazor.Components.JGOO.AppHeader.NavItem Name="Image Cropper">
                             <ChildContent>
                                 <JGUZDV.Blazor.Components.JGOO.AppHeader.NavItem Name="Sub Item 1" NavUrl="/image-cropper" />
-                                <JGUZDV.Blazor.Components.JGOO.AppHeader.NavItem Name="Sub Item 2" NavUrl="/image-cropper" />
+                                <JGUZDV.Blazor.Components.JGOO.AppHeader.NavItem Name="Sub Item 2">
+                                    <JGUZDV.Blazor.Components.JGOO.AppHeader.NavItem Name="SubSub Item 1" NavUrl="/image-cropper" />
+                                    <JGUZDV.Blazor.Components.JGOO.AppHeader.NavItem Name="SubSub Item 1" NavUrl="/image-cropper/t2" />
+                                </JGUZDV.Blazor.Components.JGOO.AppHeader.NavItem>
+                                <JGUZDV.Blazor.Components.JGOO.AppHeader.NavItem Name="Sub Item 3" NavUrl="/image-cropper" />
+                                <JGUZDV.Blazor.Components.JGOO.AppHeader.NavItem Name="Sub Item 4" NavUrl="/image-cropper/4" />
                             </ChildContent>
                         </JGUZDV.Blazor.Components.JGOO.AppHeader.NavItem>
                         <JGUZDV.Blazor.Components.JGOO.AppHeader.NavItem Name="Multiselect" NavUrl="/multi-select" />
@@ -47,7 +52,17 @@
             <NavItems>
                 <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="Diesdas">
                     <ChildContent>
-                        <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="Image Cropper" NavUrl="/image-cropper" />
+                        <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="Image Cropper">
+                        <ChildContent>
+                                <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="Sub Item 1" NavUrl="/image-cropper" />
+                                <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="Sub Item 2" >
+                                    <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="SubSub Item 1" NavUrl="/image-cropper/t1" />
+                                    <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="SubSub Item 1" NavUrl="/image-cropper/t2" />
+                                 </JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem>
+                                <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="Sub Item 3" NavUrl="/image-cropper" />
+                                <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="Sub Item 4" NavUrl="/image-cropper/4" />
+                        </ChildContent>
+                        </JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem>
                         <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="Dropdowns" NavUrl="/dropdown" />
                         <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="Modal" NavUrl="/modal" />
                         <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="Multiselect" NavUrl="/multi-select" />
