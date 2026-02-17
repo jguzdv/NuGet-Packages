@@ -11,37 +11,37 @@
         
         <AppHeader Title="@Title" Logo="@Logo" HelpUrl="@Logo.Href" ShowLanguageSelector="@true" ShowLoginButton="@true">
             <NavItems>
-                <JGUZDV.Blazor.Components.JGOO.AppHeader.NavItem Name="Dropdowns" NavUrl="/dropdown" Match="NavLinkMatch.All">
+                <AppHeaderNavItem Name="Dropdowns" NavUrl="/dropdown" Match="NavLinkMatch.All">
                     <Icon><i class="fas fa-caret-square-down pe-2"></i></Icon>
-                </JGUZDV.Blazor.Components.JGOO.AppHeader.NavItem>
-                <JGUZDV.Blazor.Components.JGOO.AppHeader.NavItem Name="Modal" NavUrl="/modal" Match="NavLinkMatch.Prefix">
+                </AppHeaderNavItem>
+                <AppHeaderNavItem Name="Modal" NavUrl="/modal" Match="NavLinkMatch.Prefix">
                     <Icon><i class="fas fa-window-restore pe-2"></i></Icon>
-                </JGUZDV.Blazor.Components.JGOO.AppHeader.NavItem>
-                <JGUZDV.Blazor.Components.JGOO.AppHeader.NavItem Name="UI Komponenten" Match="NavLinkMatch.Prefix">
+                </AppHeaderNavItem>
+                <AppHeaderNavItem Name="UI Komponenten" Match="NavLinkMatch.Prefix">
                     <Icon><i class="fas fa-puzzle-piece pe-2"></i></Icon>
                     <ChildContent>
-                        <JGUZDV.Blazor.Components.JGOO.AppHeader.NavItem Name="Image Cropper">
+                        <AppHeaderNavItem Name="Image Cropper">
                             <ChildContent>
-                                <JGUZDV.Blazor.Components.JGOO.AppHeader.NavItem Name="Sub Item 1" NavUrl="/image-cropper" />
-                                <JGUZDV.Blazor.Components.JGOO.AppHeader.NavItem Name="Sub Item 2">
-                                    <JGUZDV.Blazor.Components.JGOO.AppHeader.NavItem Name="SubSub Item 1" NavUrl="/image-cropper/t1" />
-                                    <JGUZDV.Blazor.Components.JGOO.AppHeader.NavItem Name="SubSub Item 1" NavUrl="/image-cropper/t2" />
-                                </JGUZDV.Blazor.Components.JGOO.AppHeader.NavItem>
-                                <JGUZDV.Blazor.Components.JGOO.AppHeader.NavItem Name="Sub Item 3" NavUrl="/image-cropper/s3" />
-                                <JGUZDV.Blazor.Components.JGOO.AppHeader.NavItem Name="Sub Item 4" NavUrl="/image-cropper/s4" />
+                                <AppHeaderNavItem Name="Sub Item 1" NavUrl="/image-cropper" />
+                                <AppHeaderNavItem Name="Sub Item 2">
+                                    <AppHeaderNavItem Name="SubSub Item 1" NavUrl="/image-cropper/t1" />
+                                    <AppHeaderNavItem Name="SubSub Item 2" NavUrl="/image-cropper/t2" />
+                                </AppHeaderNavItem>
+                                <AppHeaderNavItem Name="Sub Item 3" NavUrl="/image-cropper/s3" />
+                                <AppHeaderNavItem Name="Sub Item 4" NavUrl="/image-cropper/s4" />
                             </ChildContent>
-                        </JGUZDV.Blazor.Components.JGOO.AppHeader.NavItem>
-                        <JGUZDV.Blazor.Components.JGOO.AppHeader.NavItem Name="Multiselect" NavUrl="/multi-select" />
-                        <JGUZDV.Blazor.Components.JGOO.AppHeader.NavItem Name="Editor Buttons" NavUrl="/editor-buttons" />
+                        </AppHeaderNavItem>
+                        <AppHeaderNavItem Name="Multiselect" NavUrl="/multi-select" />
+                        <AppHeaderNavItem Name="Editor Buttons" NavUrl="/editor-buttons" />
                     </ChildContent>
-                </JGUZDV.Blazor.Components.JGOO.AppHeader.NavItem>
-                <JGUZDV.Blazor.Components.JGOO.AppHeader.NavItem Name="L10N" Match="NavLinkMatch.Prefix">
+                </AppHeaderNavItem>
+                <AppHeaderNavItem Name="L10N" Match="NavLinkMatch.Prefix">
                     <Icon><i class="fas fa-language pe-2"></i></Icon>
                     <ChildContent>
-                        <JGUZDV.Blazor.Components.JGOO.AppHeader.NavItem Name="Edit" NavUrl="/l10nEdit" />
-                        <JGUZDV.Blazor.Components.JGOO.AppHeader.NavItem Name="View" NavUrl="/l10nView" />
+                        <AppHeaderNavItem Name="Edit" NavUrl="/l10nEdit" />
+                        <AppHeaderNavItem Name="View" NavUrl="/l10nView" />
                     </ChildContent>
-                </JGUZDV.Blazor.Components.JGOO.AppHeader.NavItem>
+                </AppHeaderNavItem>
             </NavItems>
         </AppHeader>
 
@@ -50,41 +50,41 @@
                 Lang: @System.Threading.Thread.CurrentThread.CurrentUICulture.Name
             </ChildContent>
             <NavItems>
-                <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="Diesdas">
+                <SidebarNavItem Name="Diesdas">
                     <ChildContent>
-                        <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="Image Cropper">
+                        <SidebarNavItem Name="Image Cropper">
                         <ChildContent>
-                                <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="Sub Item 1" NavUrl="/image-cropper" />
-                                <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="Sub Item 2" >
-                                    <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="SubSub Item 1" NavUrl="/image-cropper/t1" />
-                                    <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="SubSub Item 1" NavUrl="/image-cropper/t2" />
-                                 </JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem>
-                                <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="Sub Item 3" NavUrl="/image-cropper/s3" />
-                                <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="Sub Item 4" NavUrl="/image-cropper/s4" />
+                                <SidebarNavItem Name="Sub Item 1" NavUrl="/image-cropper" />
+                                <SidebarNavItem Name="Sub Item 2" >
+                                    <SidebarNavItem Name="SubSub Item 1" NavUrl="/image-cropper/t1" />
+                                    <SidebarNavItem Name="SubSub Item 2" NavUrl="/image-cropper/t2" />
+                                </SidebarNavItem>
+                                <SidebarNavItem Name="Sub Item 3" NavUrl="/image-cropper/s3" />
+                                <SidebarNavItem Name="Sub Item 4" NavUrl="/image-cropper/s4" />
                         </ChildContent>
-                        </JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem>
-                        <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="Dropdowns" NavUrl="/dropdown" />
-                        <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="Modal" NavUrl="/modal" />
-                        <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="Multiselect" NavUrl="/multi-select" />
-                        <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="Client Storage" NavUrl="/client-storage" />
-                        <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="Editor Buttons" NavUrl="/editor-buttons" />
-                        <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="Dark-Mode Selector" NavUrl="/appheader" />
-                        <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="Counter" NavUrl="/counter" />
+                        </SidebarNavItem>
+                        <SidebarNavItem Name="Dropdowns" NavUrl="/dropdown" />
+                        <SidebarNavItem Name="Modal" NavUrl="/modal" />
+                        <SidebarNavItem Name="Multiselect" NavUrl="/multi-select" />
+                        <SidebarNavItem Name="Client Storage" NavUrl="/client-storage" />
+                        <SidebarNavItem Name="Editor Buttons" NavUrl="/editor-buttons" />
+                        <SidebarNavItem Name="Dark-Mode Selector" NavUrl="/appheader" />
+                        <SidebarNavItem Name="Counter" NavUrl="/counter" />
                     </ChildContent>
-                </JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem>
-                <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="L10nStuff">
+                </SidebarNavItem>
+                <SidebarNavItem Name="L10nStuff">
                     <ChildContent>
-                        <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="L10nEdit" NavUrl="/l10nEdit" />
-                        <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="L10nView" NavUrl="/l10nView" />
+                        <SidebarNavItem Name="L10nEdit" NavUrl="/l10nEdit" />
+                        <SidebarNavItem Name="L10nView" NavUrl="/l10nView" />
                     </ChildContent>
-                </JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem>
-                <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="ProjStructure">
+                </SidebarNavItem>
+                <SidebarNavItem Name="ProjStructure">
                     <ChildContent>
-                        <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="Wait on client" NavUrl="/client-await" />
-                        <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="Wait on server" NavUrl="/server-await" />
-                        <JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem Name="A client side page" NavUrl="/webassembly" />
+                        <SidebarNavItem Name="Wait on client" NavUrl="/client-await" />
+                        <SidebarNavItem Name="Wait on server" NavUrl="/server-await" />
+                        <SidebarNavItem Name="A client side page" NavUrl="/webassembly" />
                     </ChildContent>
-                </JGUZDV.Blazor.Components.JGOO.Sidebar.NavItem>
+                </SidebarNavItem>
             </NavItems>
         </Sidebar>
        
