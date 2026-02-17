@@ -54,26 +54,27 @@ header {
     border-bottom: 2px solid transparent;
 }
 
-    ::deep .header-navigation-link.active {
-        border-bottom: 2px solid #c1002a;
-        font-weight: bold;
-    }
-
-::deep .header-navigation-dropdown a {
-    padding: 0.5rem;
+::deep .header-navigation-link.active {
+    border-bottom: 2px solid #c1002a;
+    font-weight: bold;
 }
 
-    ::deep .header-navigation-dropdown a.active {
-        font-weight: bold;
-        border-left: 2px solid #c1002a;
-        color: inherit;
-        background-color: white;
-    }
+::deep .header-navigation-dropdown a.active {
+    font-weight: bold;
+    border-left: 2px solid #c1002a;
+    color: inherit;
+    background-color: white;
+}
 
 /* Active dropdown parent detection using CSS :has() selector */
 ::deep .dropdown:has(.dropdown-menu .active) .dropdown-toggle {
     border-bottom: 2px solid #c1002a;
     font-weight: bold;
+}
+
+/* Add transparent border for consistent baseline with active state */
+::deep .header-navigation-dropdown .dropdown-item {
+    border-left: 2px solid transparent;
 }
 
 .header-app-title {

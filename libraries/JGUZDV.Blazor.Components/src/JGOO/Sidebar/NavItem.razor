@@ -4,27 +4,31 @@
 
 @if (ChildContent != null)
 {
-    <span class="nav-link disabled @GetPadding() @(Context.NestingLevel > 0 ? "header-navigation-sidebar" : "")">
-        @if (Icon != null)
-        {
-            @Icon
-        }
-        @Name
+    <span class="nav-link disabled fw-bold @(Context.NestingLevel > 0 ? "header-navigation-sidebar" : "")">
+        <span class="@GetPadding()">
+            @if (Icon != null)
+            {
+                @Icon
+            }
+            @Name
+        </span>
     </span>
-    <CascadingValue Value="@GetNestedContext()">
-        <div class="nav flex-column border-left border-1">
+    <CascadingValue Value="@NavRenderContext.CreateNestedContext(Context)">
+        <div class="nav flex-column">
             @ChildContent
         </div>
     </CascadingValue>
 }
 else
 {
-    <NavLink class="@NavLinkClass" href="@NavUrl" Match="@Match" data-sidebar-close>
-        @if (Icon != null)
-        {
-            @Icon
-        }
-        <span class="nav-title">@Name</span>
+    <NavLink class="nav-link header-navigation-sidebar" href="@NavUrl" Match="@Match" data-sidebar-close>
+        <span class="@GetPadding()">
+            @if (Icon != null)
+            {
+                @Icon
+            }
+            <span class="nav-title">@Name</span>
+        </span>
     </NavLink>
 }
 
@@ -63,17 +67,6 @@ else
         }
     }
 
-    private NavRenderContext GetNestedContext()
-    {
-        if (Context == null)
-        {
-            return NavRenderContext.CreateNestedContext(NavRenderContext.CreateRootContext());
-        }
+    private string GetPadding() => ($"ps-{Context.NestingLevel}");
 
-        return NavRenderContext.CreateNestedContext(Context);
-    }
-
-    private string GetPadding() => ($"ps-{Context.NestingLevel + 1}");
-
-    private string NavLinkClass => $"nav-link header-navigation-sidebar {GetPadding()}";
 }

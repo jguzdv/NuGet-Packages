@@ -1,38 +1,78 @@
 @namespace JGUZDV.Blazor.Components.JGOO.AppHeader
 @using JGUZDV.Blazor.Components
 @using Microsoft.AspNetCore.Components.Routing
+@using JGUZDV.Blazor.Components.JGOO
 
-@if (ChildContent != null)
+@if (Context.NestingLevel == 0)
 {
-    <Dropdown>
-        <DropdownLabelContent>
-            <span class="header-navigation-link dropdown-toggle">
+    @if (ChildContent != null)
+    {
+        <Dropdown>
+            <DropdownLabelContent>
+                <span class="header-navigation-link dropdown-toggle">
+                    @if (Icon != null)
+                    {
+                        @Icon
+                    }
+                    @Name
+                </span>
+            </DropdownLabelContent>
+            <DropdownContent>
+                <div class="header-navigation-dropdown">
+                    <CascadingValue Value="@NavRenderContext.CreateNestedContext(Context)">
+                        @ChildContent
+                    </CascadingValue>
+                </div>
+            </DropdownContent>
+        </Dropdown>
+    }
+    else
+    {
+        <NavLink class="header-navigation-link" href="@NavUrl" Match="@Match">
+            @if (Icon != null)
+            {
+                @Icon
+            }
+            @Name
+        </NavLink>
+    }
+}
+@* Nested items (inside dropdown menu) *@
+else
+{
+    @if (ChildContent != null)
+    {
+        <span class="dropdown-item disabled fw-bold">
+            <span class="@GetPadding()">
                 @if (Icon != null)
                 {
                     @Icon
                 }
                 @Name
             </span>
-        </DropdownLabelContent>
-        <DropdownContent>
-            <div class="header-navigation-dropdown">
-                @ChildContent
-            </div>
-        </DropdownContent>
-    </Dropdown>
-}
-else
-{
-    <NavLink class="header-navigation-link" href="@NavUrl" Match="@Match">
-        @if (Icon != null)
-        {
-            @Icon
-        }
-        @Name
-    </NavLink>
+        </span>
+        <CascadingValue Value="@NavRenderContext.CreateNestedContext(Context)">
+            @ChildContent
+        </CascadingValue>
+    }
+    else
+    {
+        <NavLink class="dropdown-item" href="@NavUrl" Match="@Match">
+            <span class="@GetPadding()">
+                @if (Icon != null)
+                {
+                    @Icon
+                }
+                @Name
+            </span>
+        </NavLink>
+    }
 }
 
 @code {
+    [CascadingParameter]
+    public NavRenderContext Context { get; set; } = NavRenderContext.CreateRootContext();
+
     [Parameter, EditorRequired]
     public required string Name { get; set; }
 
@@ -57,4 +97,6 @@ else
             throw new InvalidOperationException($"Ein Navigationseintrag darf entweder eine URL oder Children besitzen, aber nicht beides. Fehler bei: '{Name}'");
         }
     }
+
+    private string GetPadding() => Context.NestingLevel > 0 ? $"ps-{Context.NestingLevel - 1}" : string.Empty;
 }
