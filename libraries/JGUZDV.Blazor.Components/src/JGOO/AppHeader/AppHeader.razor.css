@@ -96,14 +96,22 @@ header {
     }
 }
 
-/* 
-This CSS adds borders for tab navigation. It was only used for testing purposes and is not deployed, as it can be distracting for users. 
-a.btn:focus {
-    outline: 2px solid black;
-    outline-offset: 2px;
+::deep .padding-1 {
+    padding-inline-start: 0.5rem;
 }
 
-.sidebar-toggle-button:focus {
-    outline: 2px solid black;
-    outline-offset: 2px;
-}*/
+::deep .padding-2 {
+    padding-inline-start: 1rem;
+}
+
+::deep .padding-3 {
+    padding-inline-start: 1.5rem;
+}
+
+::deep .padding-4 {
+    padding-inline-start: 2rem;
+}
+
+::deep .padding-5 {
+    padding-inline-start: 2.5rem;
+}

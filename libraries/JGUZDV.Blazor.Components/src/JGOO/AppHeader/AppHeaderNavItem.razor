@@ -98,5 +98,5 @@ else
         }
     }
 
-    private string GetPadding() => Context.NestingLevel > 0 ? $"ps-{Context.NestingLevel - 1}" : string.Empty;
+    private string GetPadding() => Context.NestingLevel > 1 ? $"padding-{Context.NestingLevel - 1}" : string.Empty;
 }
