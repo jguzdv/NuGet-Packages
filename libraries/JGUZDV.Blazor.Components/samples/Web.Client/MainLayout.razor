@@ -6,9 +6,6 @@
 
 <div class="container p-0">
     <div class="jbs-page jbs-grid jbs-container border">
-        @* --- New Component-Based Syntax (Preferred) --- *@
-        Uncomment to use the new NavItems approach with component hierarchy:
-        
         <AppHeader Title="@Title" Logo="@Logo" HelpUrl="@Logo.Href" ShowLanguageSelector="@true" ShowLoginButton="@true">
             <NavItems>
                 <AppHeaderNavItem Name="Dropdowns" NavUrl="/dropdown" Match="NavLinkMatch.All">
@@ -21,15 +18,13 @@
                     <Icon><i class="fas fa-puzzle-piece pe-2"></i></Icon>
                     <ChildContent>
                         <AppHeaderNavItem Name="Image Cropper">
-                            <ChildContent>
-                                <AppHeaderNavItem Name="Sub Item 1" NavUrl="/image-cropper" />
-                                <AppHeaderNavItem Name="Sub Item 2">
-                                    <AppHeaderNavItem Name="SubSub Item 1" NavUrl="/image-cropper/t1" />
-                                    <AppHeaderNavItem Name="SubSub Item 2" NavUrl="/image-cropper/t2" />
-                                </AppHeaderNavItem>
-                                <AppHeaderNavItem Name="Sub Item 3" NavUrl="/image-cropper/s3" />
-                                <AppHeaderNavItem Name="Sub Item 4" NavUrl="/image-cropper/s4" />
-                            </ChildContent>
+                            <AppHeaderNavItem Name="Sub Item 1" NavUrl="/image-cropper" />
+                            <AppHeaderNavItem Name="Sub Item 2">
+                                <AppHeaderNavItem Name="SubSub Item 1" NavUrl="/image-cropper/t1" />
+                                <AppHeaderNavItem Name="SubSub Item 2" NavUrl="/image-cropper/t2" />
+                            </AppHeaderNavItem>
+                            <AppHeaderNavItem Name="Sub Item 3" NavUrl="/image-cropper/s3" />
+                            <AppHeaderNavItem Name="Sub Item 4" NavUrl="/image-cropper/s4" />
                         </AppHeaderNavItem>
                         <AppHeaderNavItem Name="Multiselect" NavUrl="/multi-select" />
                         <AppHeaderNavItem Name="Editor Buttons" NavUrl="/editor-buttons" />
@@ -51,51 +46,34 @@
             </ChildContent>
             <NavItems>
                 <SidebarNavItem Name="Diesdas">
-                    <ChildContent>
-                        <SidebarNavItem Name="Image Cropper">
-                        <ChildContent>
-                                <SidebarNavItem Name="Sub Item 1" NavUrl="/image-cropper" />
-                                <SidebarNavItem Name="Sub Item 2" >
-                                    <SidebarNavItem Name="SubSub Item 1" NavUrl="/image-cropper/t1" />
-                                    <SidebarNavItem Name="SubSub Item 2" NavUrl="/image-cropper/t2" />
-                                </SidebarNavItem>
-                                <SidebarNavItem Name="Sub Item 3" NavUrl="/image-cropper/s3" />
-                                <SidebarNavItem Name="Sub Item 4" NavUrl="/image-cropper/s4" />
-                        </ChildContent>
+                    <SidebarNavItem Name="Image Cropper">
+                        <SidebarNavItem Name="Sub Item 1" NavUrl="/image-cropper" />
+                        <SidebarNavItem Name="Sub Item 2">
+                            <SidebarNavItem Name="SubSub Item 1" NavUrl="/image-cropper/t1" />
+                            <SidebarNavItem Name="SubSub Item 2" NavUrl="/image-cropper/t2" />
                         </SidebarNavItem>
-                        <SidebarNavItem Name="Dropdowns" NavUrl="/dropdown" />
-                        <SidebarNavItem Name="Modal" NavUrl="/modal" />
-                        <SidebarNavItem Name="Multiselect" NavUrl="/multi-select" />
-                        <SidebarNavItem Name="Client Storage" NavUrl="/client-storage" />
-                        <SidebarNavItem Name="Editor Buttons" NavUrl="/editor-buttons" />
-                        <SidebarNavItem Name="Dark-Mode Selector" NavUrl="/appheader" />
-                        <SidebarNavItem Name="Counter" NavUrl="/counter" />
-                    </ChildContent>
+                        <SidebarNavItem Name="Sub Item 3" NavUrl="/image-cropper/s3" />
+                        <SidebarNavItem Name="Sub Item 4" NavUrl="/image-cropper/s4" />
+                    </SidebarNavItem>
+                    <SidebarNavItem Name="Dropdowns" NavUrl="/dropdown" />
+                    <SidebarNavItem Name="Modal" NavUrl="/modal" />
+                    <SidebarNavItem Name="Multiselect" NavUrl="/multi-select" />
+                    <SidebarNavItem Name="Client Storage" NavUrl="/client-storage" />
+                    <SidebarNavItem Name="Editor Buttons" NavUrl="/editor-buttons" />
+                    <SidebarNavItem Name="Dark-Mode Selector" NavUrl="/appheader" />
+                    <SidebarNavItem Name="Counter" NavUrl="/counter" />
                 </SidebarNavItem>
                 <SidebarNavItem Name="L10nStuff">
-                    <ChildContent>
-                        <SidebarNavItem Name="L10nEdit" NavUrl="/l10nEdit" />
-                        <SidebarNavItem Name="L10nView" NavUrl="/l10nView" />
-                    </ChildContent>
+                    <SidebarNavItem Name="L10nEdit" NavUrl="/l10nEdit" />
+                    <SidebarNavItem Name="L10nView" NavUrl="/l10nView" />
                 </SidebarNavItem>
                 <SidebarNavItem Name="ProjStructure">
-                    <ChildContent>
-                        <SidebarNavItem Name="Wait on client" NavUrl="/client-await" />
-                        <SidebarNavItem Name="Wait on server" NavUrl="/server-await" />
-                        <SidebarNavItem Name="A client side page" NavUrl="/webassembly" />
-                    </ChildContent>
+                    <SidebarNavItem Name="Wait on client" NavUrl="/client-await" />
+                    <SidebarNavItem Name="Wait on server" NavUrl="/server-await" />
+                    <SidebarNavItem Name="A client side page" NavUrl="/webassembly" />
                 </SidebarNavItem>
             </NavItems>
         </Sidebar>
-       
-
-        @* --- Old NavigationSpecs Syntax (Obsolete, but still functional) --- *@
-        @* <AppHeader Title="@Title" Logo="@Logo" HelpUrl="@Logo.Href" ShowLanguageSelector="@true" ShowLoginButton="@true" NavigationContent="NavigationSpecsHeader">
-        </AppHeader>
-
-        <Sidebar NavigationContent="NavigationSpecsSidebar">
-            Lang: @System.Threading.Thread.CurrentThread.CurrentUICulture.Name
-        </Sidebar> *@
 
         <main>
             <div class="p-2">
