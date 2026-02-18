@@ -6,11 +6,7 @@
 {
     <span class="nav-link disabled fw-bold @(Context.NestingLevel > 0 ? "header-navigation-sidebar" : "")">
         <span class="@GetPadding()">
-            @if (Icon != null)
-            {
-                @Icon
-            }
-            @Name
+            @NameTemplate(Name)
         </span>
     </span>
     <CascadingValue Value="@NavRenderContext.CreateNestedContext(Context)">
@@ -23,11 +19,7 @@ else
 {
     <NavLink class="nav-link header-navigation-sidebar" href="@NavUrl" Match="@Match" data-sidebar-close>
         <span class="@GetPadding()">
-            @if (Icon != null)
-            {
-                @Icon
-            }
-            <span class="nav-title">@Name</span>
+            <span class="nav-title">@NameTemplate(Name)</span>
         </span>
     </NavLink>
 }
@@ -49,7 +41,7 @@ else
     public string? NavUrl { get; set; }
 
     [Parameter]
-    public RenderFragment? Icon { get; set; }
+    public RenderFragment<string> NameTemplate { get; set; } = name => @<span>@name</span>;
 
     [Parameter]
     public NavLinkMatch Match { get; set; } = NavLinkMatch.All;

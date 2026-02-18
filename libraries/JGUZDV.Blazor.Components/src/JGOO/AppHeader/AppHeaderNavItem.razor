@@ -10,11 +10,7 @@
         <Dropdown>
             <DropdownLabelContent>
                 <span class="header-navigation-link dropdown-toggle">
-                    @if (Icon != null)
-                    {
-                        @Icon
-                    }
-                    @Name
+                    @NameTemplate(Name)
                 </span>
             </DropdownLabelContent>
             <DropdownContent>
@@ -29,11 +25,7 @@
     else
     {
         <NavLink class="header-navigation-link" href="@NavUrl" Match="@Match">
-            @if (Icon != null)
-            {
-                @Icon
-            }
-            @Name
+            @NameTemplate(Name)
         </NavLink>
     }
 }
@@ -44,11 +36,7 @@ else
     {
         <span class="dropdown-item disabled fw-bold">
             <span class="@GetPadding()">
-                @if (Icon != null)
-                {
-                    @Icon
-                }
-                @Name
+                @NameTemplate(Name)
             </span>
         </span>
         <CascadingValue Value="@NavRenderContext.CreateNestedContext(Context)">
@@ -59,11 +47,7 @@ else
     {
         <NavLink class="dropdown-item" href="@NavUrl" Match="@Match">
             <span class="@GetPadding()">
-                @if (Icon != null)
-                {
-                    @Icon
-                }
-                @Name
+                @NameTemplate(Name)
             </span>
         </NavLink>
     }
@@ -80,7 +64,7 @@ else
     public string? NavUrl { get; set; }
 
     [Parameter]
-    public RenderFragment? Icon { get; set; }
+    public RenderFragment<string> NameTemplate { get; set; } = name => @<span>@name</span>;
 
     [Parameter]
     public NavLinkMatch Match { get; set; } = NavLinkMatch.All;
@@ -91,6 +75,7 @@ else
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
+
 
         if (!string.IsNullOrWhiteSpace(NavUrl) && ChildContent != null)
         {

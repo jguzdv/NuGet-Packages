@@ -9,13 +9,13 @@
         <AppHeader Title="@Title" Logo="@Logo" HelpUrl="@Logo.Href" ShowLanguageSelector="@true" ShowLoginButton="@true">
             <NavItems>
                 <AppHeaderNavItem Name="Dropdowns" NavUrl="/dropdown" Match="NavLinkMatch.All">
-                    <Icon><i class="fas fa-caret-square-down pe-2"></i></Icon>
+                    <NameTemplate><i class="fas fa-caret-square-down pe-2"></i> @context</NameTemplate>
                 </AppHeaderNavItem>
                 <AppHeaderNavItem Name="Modal" NavUrl="/modal" Match="NavLinkMatch.Prefix">
-                    <Icon><i class="fas fa-window-restore pe-2"></i></Icon>
+                    <NameTemplate><i class="fas fa-window-restore pe-2"></i> @context</NameTemplate>
                 </AppHeaderNavItem>
                 <AppHeaderNavItem Name="UI Komponenten" Match="NavLinkMatch.Prefix">
-                    <Icon><i class="fas fa-puzzle-piece pe-2"></i></Icon>
+                    <NameTemplate><i class="fas fa-puzzle-piece pe-2"></i> @context</NameTemplate>
                     <ChildContent>
                         <AppHeaderNavItem Name="Image Cropper">
                             <AppHeaderNavItem Name="Sub Item 1" NavUrl="/image-cropper" />
@@ -31,7 +31,7 @@
                     </ChildContent>
                 </AppHeaderNavItem>
                 <AppHeaderNavItem Name="L10N" Match="NavLinkMatch.Prefix">
-                    <Icon><i class="fas fa-language pe-2"></i></Icon>
+                    <NameTemplate><i class="fas fa-language pe-2"></i> @context</NameTemplate>
                     <ChildContent>
                         <AppHeaderNavItem Name="Edit" NavUrl="/l10nEdit" />
                         <AppHeaderNavItem Name="View" NavUrl="/l10nView" />
