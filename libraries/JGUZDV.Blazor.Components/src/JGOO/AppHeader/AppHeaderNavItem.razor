@@ -1,0 +1,87 @@
+@namespace JGUZDV.Blazor.Components.JGOO.AppHeader
+@using JGUZDV.Blazor.Components
+@using Microsoft.AspNetCore.Components.Routing
+@using JGUZDV.Blazor.Components.JGOO
+
+@if (Context.NestingLevel == 0)
+{
+    @if (ChildContent != null)
+    {
+        <Dropdown>
+            <DropdownLabelContent>
+                <span class="header-navigation-link dropdown-toggle">
+                    @NameTemplate(Name)
+                </span>
+            </DropdownLabelContent>
+            <DropdownContent>
+                <div class="header-navigation-dropdown">
+                    <CascadingValue Value="@NavRenderContext.CreateNestedContext(Context)">
+                        @ChildContent
+                    </CascadingValue>
+                </div>
+            </DropdownContent>
+        </Dropdown>
+    }
+    else
+    {
+        <NavLink class="header-navigation-link" href="@NavUrl" Match="@Match">
+            @NameTemplate(Name)
+        </NavLink>
+    }
+}
+@* Nested items (inside dropdown menu) *@
+else
+{
+    @if (ChildContent != null)
+    {
+        <span class="dropdown-item disabled fw-bold">
+            <span class="@GetPadding()">
+                @NameTemplate(Name)
+            </span>
+        </span>
+        <CascadingValue Value="@NavRenderContext.CreateNestedContext(Context)">
+            @ChildContent
+        </CascadingValue>
+    }
+    else
+    {
+        <NavLink class="dropdown-item" href="@NavUrl" Match="@Match">
+            <span class="@GetPadding()">
+                @NameTemplate(Name)
+            </span>
+        </NavLink>
+    }
+}
+
+@code {
+    [CascadingParameter]
+    public NavRenderContext Context { get; set; } = NavRenderContext.CreateRootContext();
+
+    [Parameter, EditorRequired]
+    public required string Name { get; set; }
+
+    [Parameter]
+    public string? NavUrl { get; set; }
+
+    [Parameter]
+    public RenderFragment<string> NameTemplate { get; set; } = name => @<span>@name</span>;
+
+    [Parameter]
+    public NavLinkMatch Match { get; set; } = NavLinkMatch.All;
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+
+        if (!string.IsNullOrWhiteSpace(NavUrl) && ChildContent != null)
+        {
+            throw new InvalidOperationException($"Ein Navigationseintrag darf entweder eine URL oder Children besitzen, aber nicht beides. Fehler bei: '{Name}'");
+        }
+    }
+
+    private string GetPadding() => Context.NestingLevel > 1 ? $"padding-{Context.NestingLevel - 1}" : string.Empty;
+}

@@ -1,0 +1,64 @@
+@namespace JGUZDV.Blazor.Components.JGOO.Sidebar
+@using Microsoft.AspNetCore.Components.Routing
+@using JGUZDV.Blazor.Components.JGOO
+
+@if (ChildContent != null)
+{
+    <span class="nav-link disabled fw-bold @(Context.NestingLevel > 0 ? "header-navigation-sidebar" : "")">
+        <span class="@GetPadding()">
+            @NameTemplate(Name)
+        </span>
+    </span>
+    <CascadingValue Value="@NavRenderContext.CreateNestedContext(Context)">
+        <div class="nav flex-column">
+            @ChildContent
+        </div>
+    </CascadingValue>
+}
+else
+{
+    <NavLink class="nav-link header-navigation-sidebar" href="@NavUrl" Match="@Match" data-sidebar-close>
+        <span class="@GetPadding()">
+            <span class="nav-title">@NameTemplate(Name)</span>
+        </span>
+    </NavLink>
+}
+
+@* Only render separator after top-level items *@
+@if ((Context?.NestingLevel ?? 0) == 0)
+{
+    <hr />
+}
+
+@code {
+    [CascadingParameter, EditorRequired]
+    public required NavRenderContext Context { get; set; }
+
+    [Parameter, EditorRequired]
+    public required string Name { get; set; }
+
+    [Parameter]
+    public string? NavUrl { get; set; }
+
+    [Parameter]
+    public RenderFragment<string> NameTemplate { get; set; } = name => @<span>@name</span>;
+
+    [Parameter]
+    public NavLinkMatch Match { get; set; } = NavLinkMatch.All;
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        if (!string.IsNullOrWhiteSpace(NavUrl) && ChildContent != null)
+        {
+            throw new InvalidOperationException($"Ein Navigationseintrag darf entweder eine URL oder Children besitzen, aber nicht beides. Fehler bei: '{Name}'");
+        }
+    }
+
+    private string GetPadding() => ($"padding-{Context.NestingLevel}");
+
+}

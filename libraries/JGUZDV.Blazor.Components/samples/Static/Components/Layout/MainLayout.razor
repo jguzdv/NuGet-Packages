@@ -1,14 +1,51 @@
-﻿@using JGUZDV.Blazor.Components.JGOO
+﻿@using JGUZDV.Blazor.Components.JGOO.AppHeader
+@using JGUZDV.Blazor.Components.JGOO.Sidebar
 @inherits LayoutComponentBase
 
 
 <div class="container p-0">
-    <div class="jbs-page jbs-grid jbs-container">
+    <div class="jbs-page jbs-grid jbs-container border">
         <AppHeader Title="@Title" Logo="@Logo" HelpUrl="@Logo.Href" ShowDarkModeSelector="@true" ShowLoginButton="@false">
+            <NavItems>
+                <AppHeaderNavItem Name="Diesdas">
+                    <AppHeaderNavItem Name="Image Cropper">
+                        <AppHeaderNavItem Name="Sub Item 1" NavUrl="/image-cropper" />
+                        <AppHeaderNavItem Name="Sub Item 2">
+                            <AppHeaderNavItem Name="SubSub Item 1" NavUrl="/image-cropper/t1" />
+                            <AppHeaderNavItem Name="SubSub Item 2" NavUrl="/image-cropper/t2" />
+                        </AppHeaderNavItem>
+                        <AppHeaderNavItem Name="Sub Item 3" NavUrl="/image-cropper/s3" />
+                        <AppHeaderNavItem Name="Sub Item 4" NavUrl="/image-cropper/s4" />
+                    </AppHeaderNavItem>
+                </AppHeaderNavItem>
+                <AppHeaderNavItem Name="Home">
+                    <AppHeaderNavItem Name="L10nEdit" NavUrl="/" />
+                </AppHeaderNavItem>
+
+            </NavItems>
         </AppHeader>
 
         <Sidebar>
-            Lang: @System.Threading.Thread.CurrentThread.CurrentUICulture.Name
+            <ChildContent>
+                Lang: @System.Threading.Thread.CurrentThread.CurrentUICulture.Name
+            </ChildContent>
+            <NavItems>
+                <SidebarNavItem Name="Diesdas">
+                    <SidebarNavItem Name="Image Cropper">
+                        <SidebarNavItem Name="Sub Item 1" NavUrl="/image-cropper" />
+                        <SidebarNavItem Name="Sub Item 2">
+                            <SidebarNavItem Name="SubSub Item 1" NavUrl="/image-cropper/t1" />
+                            <SidebarNavItem Name="SubSub Item 2" NavUrl="/image-cropper/t2" />
+                        </SidebarNavItem>
+                        <SidebarNavItem Name="Sub Item 3" NavUrl="/image-cropper/s3" />
+                        <SidebarNavItem Name="Sub Item 4" NavUrl="/image-cropper/s4" />
+                    </SidebarNavItem>
+                </SidebarNavItem>
+                <SidebarNavItem Name="Home">
+                    <SidebarNavItem Name="L10nEdit" NavUrl="/" />
+                </SidebarNavItem>
+               
+            </NavItems>
         </Sidebar>
 
         <main>
