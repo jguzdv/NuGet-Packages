@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components.Routing;
 
 namespace JGUZDV.Blazor.Components.JGOO;
 
-[Obsolete("Use AppHeader.NavItem or Sidebar.NavItem components instead. This will be removed in a future version.")]
+[Obsolete($"Use {nameof(AppHeader.AppHeaderNavItem)} or {nameof(Sidebar.SidebarNavItem)} components instead. This will be removed in a future version.")]
 public class NavigationSpecs
 {
     public RenderFragment? Icon { get; set; }

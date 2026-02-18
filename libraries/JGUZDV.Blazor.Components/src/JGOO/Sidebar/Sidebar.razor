@@ -60,7 +60,7 @@
     public RenderFragment? NavItems { get; set; }
 
     [Parameter]
-    [Obsolete("Use NavItems parameter with Sidebar.NavItem child components instead. This will be removed in a future version.")]
+    [Obsolete($"Use {nameof(NavItems)} parameter with {nameof(SidebarNavItem)} components instead. This will be removed in a future version.")]
     public List<NavigationSpecs>? NavigationContent { get; set; }
 
     private readonly NavRenderContext _navRenderContext = NavRenderContext.CreateRootContext();
