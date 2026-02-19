@@ -1,5 +1,6 @@
 ﻿@using JGUZDV.Blazor.Components.JGOO
 @using JGUZDV.Blazor.Components.JGOO.AppHeader
+@using JGUZDV.Blazor.Components.JGOO.Footer
 @using Microsoft.AspNetCore.Components.Routing
 @using JGUZDV.Blazor.Components.JGOO.Sidebar
 @inherits LayoutComponentBase
@@ -80,8 +81,14 @@
                 @Body
             </div>
         </main>
+
+        <AppFooter></AppFooter>
     </div>
+    
 </div>
+
+<WebFooter></WebFooter>
+
 
 @code {
     private AppHeader.LogoSpecs Logo { get; } = new()

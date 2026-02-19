@@ -150,4 +150,19 @@
   <data name="ToggleSidebar" xml:space="preserve">
     <value>Toggle sidebar</value>
   </data>
+  <data name="Dataprotection" xml:space="preserve">
+    <value>Data protection</value>
+  </data>
+  <data name="Imprint" xml:space="preserve">
+    <value>Imprint</value>
+  </data>
+  <data name="Contact" xml:space="preserve">
+    <value>Contact</value>
+  </data>
+  <data name="Accessibility" xml:space="preserve">
+    <value>Accessibility</value>
+  </data>
+  <data name="EasyLanguage" xml:space="preserve">
+    <value>Easy language</value>
+  </data>
 </root>
