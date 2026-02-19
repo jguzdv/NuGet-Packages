@@ -1,0 +1,183 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/libraries/">
+    <File Path="libraries/Directory.Build.props" />
+    <File Path="libraries/NuGet-Package-Icon.png" />
+  </Folder>
+  <Folder Name="/libraries/JGUZDV.ActiveDirectory/">
+    <Project Path="libraries/JGUZDV.ActiveDirectory.COM/src/JGUZDV.ActiveDirectory.COM.csproj" />
+    <Project Path="libraries/JGUZDV.ActiveDirectory/src/JGUZDV.ActiveDirectory.csproj" />
+    <Project Path="libraries/JGUZDV.ActiveDirectory/test/JGUZDV.ActiveDirectory.Tests.csproj" />
+  </Folder>
+  <Folder Name="/libraries/JGUZDV.AspNetCore.Authentication.Cookies/">
+    <Project Path="libraries/JGUZDV.AspNetCore.Authentication.Cookies/src/JGUZDV.AspNetCore.Authentication.Cookies.csproj" />
+    <Project Path="libraries/JGUZDV.AspNetCore.Authentication.Cookies/test/JGUZDV.AspNetCore.Authentication.Cookies.Tests.csproj" />
+  </Folder>
+  <Folder Name="/libraries/JGUZDV.AspNetCore.Components.Localization/">
+    <Project Path="libraries/JGUZDV.AspNetCore.Components.Localization/src/JGUZDV.AspNetCore.Components.Localization.csproj" />
+    <Project Path="libraries/JGUZDV.AspNetCore.Components.Localization/test/JGUZDV.AspNetCore.Components.Localization.Tests.csproj" />
+  </Folder>
+  <Folder Name="/libraries/JGUZDV.AspNetCore.DataProtection/">
+    <Project Path="libraries/JGUZDV.AspNetCore.DataProtection/src/JGUZDV.AspNetCore.DataProtection.csproj" />
+    <Project Path="libraries/JGUZDV.AspNetCore.DataProtection/test/JGUZDV.AspNetCore.DataProtection.Tests.csproj" />
+  </Folder>
+  <Folder Name="/libraries/JGUZDV.AspNetCore.Extensions.OpenTelemetry/">
+    <Project Path="libraries/JGUZDV.AspNetCore.Extensions.OpenTelemetry/src/JGUZDV.AspNetCore.Extensions.OpenTelemetry.csproj" />
+    <Project Path="libraries/JGUZDV.AspNetCore.Extensions.OpenTelemetry/test/JGUZDV.AspNetCore.Extensions.OpenTelemetry.Tests.csproj" />
+  </Folder>
+  <Folder Name="/libraries/JGUZDV.AspNetCore.Hosting/">
+    <Project Path="libraries/JGUZDV.AspNetCore.Hosting/src/JGUZDV.AspNetCore.Hosting.csproj" />
+    <Project Path="libraries/JGUZDV.AspNetCore.Hosting/test/JGUZDV.AspNetCore.Hosting.Tests.csproj" />
+  </Folder>
+  <Folder Name="/libraries/JGUZDV.AspNetCore.Logging/">
+    <Project Path="libraries/JGUZDV.AspNetCore.Logging/src/JGUZDV.AspNetCore.Logging.csproj" />
+    <Project Path="libraries/JGUZDV.AspNetCore.Logging/test/JGUZDV.AspNetCore.Logging.Tests.csproj" />
+  </Folder>
+  <Folder Name="/libraries/JGUZDV.Blazor.Components.ClaimRequirements/">
+    <Project Path="libraries/JGUZDV.Blazor.Components.ClaimRequirements/src/JGUZDV.Blazor.Components.ClaimRequirements.csproj" />
+    <Project Path="libraries/JGUZDV.Blazor.Components.ClaimRequirements/test/JGUZDV.Blazor.Components.ClaimRequirements.Tests.csproj" />
+  </Folder>
+  <Folder Name="/libraries/JGUZDV.Blazor.Components.L10n/">
+    <Project Path="libraries/JGUZDV.Blazor.Components.L10n/src/JGUZDV.Blazor.Components.L10n.csproj" />
+    <Project Path="libraries/JGUZDV.Blazor.Components.L10n/test/JGUZDV.Blazor.Components.L10n.Tests.csproj" />
+  </Folder>
+  <Folder Name="/libraries/JGUZDV.Blazor.Components/">
+    <Project Path="libraries/JGUZDV.Blazor.Components/samples/Shared/JGUZDV.Blazor.Components.Samples.csproj" />
+    <Project Path="libraries/JGUZDV.Blazor.Components/samples/Static/JGUZDV.Blazor.Components.Samples.Static.csproj" />
+    <Project Path="libraries/JGUZDV.Blazor.Components/samples/Web.Client/JGUZDV.Blazor.Components.Samples.Web.Client.csproj" />
+    <Project Path="libraries/JGUZDV.Blazor.Components/samples/Web/JGUZDV.Blazor.Components.Samples.Web.csproj" />
+    <Project Path="libraries/JGUZDV.Blazor.Components/samples/WebAssembly/JGUZDV.Blazor.Components.Samples.Standalone.csproj" />
+    <Project Path="libraries/JGUZDV.Blazor.Components/src/JGUZDV.Blazor.Components.csproj" />
+    <Project Path="libraries/JGUZDV.Blazor.Components/test/JGUZDV.Blazor.Components.Tests.csproj" />
+  </Folder>
+  <Folder Name="/libraries/JGUZDV.Blazor.Hosting/">
+    <Project Path="libraries/JGUZDV.Blazor.Hosting/src/JGUZDV.Blazor.Hosting.csproj" />
+    <Project Path="libraries/JGUZDV.Blazor.Hosting/test/JGUZDV.Blazor.Hosting.Tests.csproj" />
+  </Folder>
+  <Folder Name="/libraries/JGUZDV.Blazor.StateManagement/">
+    <Project Path="libraries/JGUZDV.Blazor.StateManagement/src/JGUZDV.Blazor.StateManagement.csproj" />
+    <Project Path="libraries/JGUZDV.Blazor.StateManagement/test/JGUZDV.Blazor.StateManagement.Tests.csproj" />
+  </Folder>
+  <Folder Name="/libraries/JGUZDV.Blazor.WasmServerHost/">
+    <Project Path="libraries/JGUZDV.Blazor.WasmServerHost/src/JGUZDV.Blazor.WasmServerHost.csproj" />
+    <Project Path="libraries/JGUZDV.Blazor.WasmServerHost/test/JGUZDV.Blazor.WasmServerHost.Tests.csproj" />
+  </Folder>
+  <Folder Name="/libraries/JGUZDV.ClientStorage.Blazor/">
+    <Project Path="libraries/JGUZDV.ClientStorage.Blazor/src/JGUZDV.ClientStorage.Blazor.csproj" />
+    <Project Path="libraries/JGUZDV.ClientStorage.Blazor/test/JGUZDV.ClientStorage.Blazor.Tests.csproj" />
+  </Folder>
+  <Folder Name="/libraries/JGUZDV.ClientStorage/">
+    <Project Path="libraries/JGUZDV.ClientStorage/src/JGUZDV.ClientStorage.csproj" />
+    <Project Path="libraries/JGUZDV.ClientStorage/test/JGUZDV.ClientStorage.Tests.csproj" />
+  </Folder>
+  <Folder Name="/libraries/JGUZDV.CQRS.AspNetCore/">
+    <Project Path="libraries/JGUZDV.CQRS.AspNetCore/src/JGUZDV.CQRS.AspNetCore.csproj" />
+    <Project Path="libraries/JGUZDV.CQRS.AspNetCore/test/JGUZDV.CQRS.AspNetCore.Tests.csproj" />
+  </Folder>
+  <Folder Name="/libraries/JGUZDV.CQRS/">
+    <Project Path="libraries/JGUZDV.CQRS/analyzer/JGUZDV.CQRS.Analyzer.CodeFix/JGUZDV.CQRS.Analyzer.CodeFix.csproj" />
+    <Project Path="libraries/JGUZDV.CQRS/analyzer/JGUZDV.CQRS.Analyzer/JGUZDV.CQRS.Analyzer.csproj" />
+    <Project Path="libraries/JGUZDV.CQRS/src/JGUZDV.CQRS.csproj" />
+    <Project Path="libraries/JGUZDV.CQRS/test/JGUZDV.CQRS.Tests.csproj" />
+  </Folder>
+  <Folder Name="/libraries/JGUZDV.DynamicForms/">
+    <File Path="libraries/JGUZDV.DynamicForms/Directory.Build.props" />
+    <Project Path="libraries/JGUZDV.DynamicForms/samples/JGUZDV.DynamicForms.Samples/JGUZDV.DynamicForms.Samples.Client/JGUZDV.DynamicForms.Samples.Client.csproj" />
+    <Project Path="libraries/JGUZDV.DynamicForms/samples/JGUZDV.DynamicForms.Samples/JGUZDV.DynamicForms.Samples/JGUZDV.DynamicForms.Samples.csproj" />
+    <Project Path="libraries/JGUZDV.DynamicForms/src/JGUZDV.DynamicForms.Blazor/JGUZDV.DynamicForms.Blazor.csproj" />
+    <Project Path="libraries/JGUZDV.DynamicForms/src/JGUZDV.DynamicForms.Extensions/JGUZDV.DynamicForms.Extensions.csproj" />
+    <Project Path="libraries/JGUZDV.DynamicForms/src/JGUZDV.DynamicForms/JGUZDV.DynamicForms.csproj" />
+    <Project Path="libraries/JGUZDV.DynamicForms/test/JGUZDV.DynamicForms.Blazor.Tests/JGUZDV.DynamicForms.Blazor.Tests.csproj" />
+    <Project Path="libraries/JGUZDV.DynamicForms/test/JGUZDV.DynamicForms.Extensions.Tests/JGUZDV.DynamicForms.Extensions.Tests.csproj" />
+    <Project Path="libraries/JGUZDV.DynamicForms/test/JGUZDV.DynamicForms.Tests/JGUZDV.DynamicForms.Tests.csproj" />
+  </Folder>
+  <Folder Name="/libraries/JGUZDV.Extensions.Authorization/">
+    <Project Path="libraries/JGUZDV.Extensions.Authorization/src/JGUZDV.Extensions.Authorization.csproj" />
+    <Project Path="libraries/JGUZDV.Extensions.Authorization/test/JGUZDV.Extensions.Authorization.Tests.csproj" />
+  </Folder>
+  <Folder Name="/libraries/JGUZDV.Extensions.Json/">
+    <Project Path="libraries/JGUZDV.Extensions.Json/src/JGUZDV.Extensions.Json.csproj" />
+    <Project Path="libraries/JGUZDV.Extensions.Json/test/JGUZDV.Extensions.Json.Tests.csproj" />
+  </Folder>
+  <Folder Name="/libraries/JGUZDV.Extensions.Logging.File/">
+    <Project Path="libraries/JGUZDV.Extensions.Logging.File/src/JGUZDV.Extensions.Logging.File.csproj" />
+    <Project Path="libraries/JGUZDV.Extensions.Logging.File/test/JGUZDV.Extensions.Logging.File.Tests.csproj" />
+  </Folder>
+  <Folder Name="/libraries/JGUZDV.Extensions.Logging/">
+    <Project Path="libraries/JGUZDV.Extensions.Logging/src/JGUZDV.Extensions.Logging.csproj" />
+    <Project Path="libraries/JGUZDV.Extensions.Logging/test/JGUZDV.Extensions.Logging.Tests.csproj" />
+  </Folder>
+  <Folder Name="/libraries/JGUZDV.Extensions.OpenTelemetry/">
+    <Project Path="libraries/JGUZDV.Extensions.OpenTelemetry/src/JGUZDV.Extensions.OpenTelemetry.csproj" />
+    <Project Path="libraries/JGUZDV.Extensions.OpenTelemetry/test/JGUZDV.Extensions.OpenTelemetry.Tests.csproj" />
+  </Folder>
+  <Folder Name="/libraries/JGUZDV.JobHost/">
+    <File Path="libraries/JGUZDV.JobHost/Directory.Build.props" />
+    <Project Path="libraries/JGUZDV.JobHost/src/JGUZDV.JobHost.Dashboard.Api/src/JGUZDV.JobHost.Dashboard.Api.csproj" />
+    <Project Path="libraries/JGUZDV.JobHost/src/JGUZDV.JobHost.Dashboard.Api/test/JGUZDV.JobHost.Dashboard.Api.Tests.csproj" />
+    <Project Path="libraries/JGUZDV.JobHost/src/JGUZDV.JobHost.Dashboard.Blazor/src/JGUZDV.JobHost.Dashboard.Blazor.csproj" />
+    <Project Path="libraries/JGUZDV.JobHost/src/JGUZDV.JobHost.Dashboard.Blazor/test/JGUZDV.JobHost.Dashboard.Blazor.Tests.csproj" />
+    <Project Path="libraries/JGUZDV.JobHost/src/JGUZDV.JobHost.Dashboard.EntityFrameworkCore/src/JGUZDV.JobHost.Dashboard.EntityFrameworkCore.csproj" />
+    <Project Path="libraries/JGUZDV.JobHost/src/JGUZDV.JobHost.Dashboard.EntityFrameworkCore/test/JGUZDV.JobHost.Dashboard.EntityFrameworkCore.Tests.csproj" />
+    <Project Path="libraries/JGUZDV.JobHost/src/JGUZDV.JobHost.Dashboard.Shared/samples/JGUZDV.JobHost.Dashboard.Sample/JGUZDV.JobHost.Dashboard.Sample.Client/JGUZDV.JobHost.Dashboard.Sample.Client.csproj" />
+    <Project Path="libraries/JGUZDV.JobHost/src/JGUZDV.JobHost.Dashboard.Shared/samples/JGUZDV.JobHost.Dashboard.Sample/JGUZDV.JobHost.Dashboard.Sample/JGUZDV.JobHost.Dashboard.Sample.csproj" />
+    <Project Path="libraries/JGUZDV.JobHost/src/JGUZDV.JobHost.Dashboard.Shared/src/JGUZDV.JobHost.Dashboard.Shared.csproj" />
+    <Project Path="libraries/JGUZDV.JobHost/src/JGUZDV.JobHost.Dashboard.Shared/test/JGUZDV.JobHost.Dashboard.Shared.Tests.csproj" />
+    <Project Path="libraries/JGUZDV.JobHost/src/JGUZDV.JobHost.Shared/src/JGUZDV.JobHost.Shared.csproj" />
+    <Project Path="libraries/JGUZDV.JobHost/src/JGUZDV.JobHost.Shared/test/JGUZDV.JobHost.Shared.Tests.csproj" />
+    <Project Path="libraries/JGUZDV.JobHost/src/JGUZDV.JobHost/samples/JGUZDV.JobHost.Sample/JGUZDV.JobHost.Sample.csproj" />
+    <Project Path="libraries/JGUZDV.JobHost/src/JGUZDV.JobHost/src/JGUZDV.JobHost.csproj" />
+    <Project Path="libraries/JGUZDV.JobHost/src/JGUZDV.JobHost/test/JGUZDV.JobHost.Tests.csproj" />
+  </Folder>
+  <Folder Name="/libraries/JGUZDV.L10n.EntityFramework/">
+    <Project Path="libraries/JGUZDV.L10n.EntityFramework/src/JGUZDV.L10n.EntityFramework.csproj" />
+    <Project Path="libraries/JGUZDV.L10n.EntityFramework/test/JGUZDV.L10n.EntityFramework.Tests.csproj" />
+  </Folder>
+  <Folder Name="/libraries/JGUZDV.L10n/">
+    <Project Path="libraries/JGUZDV.L10n/src/JGUZDV.L10n.csproj" />
+    <Project Path="libraries/JGUZDV.L10n/test/JGUZDV.L10n.Tests.csproj" />
+  </Folder>
+  <Folder Name="/libraries/JGUZDV.Linq/">
+    <Project Path="libraries/JGUZDV.Linq/src/JGUZDV.Linq.csproj" />
+    <Project Path="libraries/JGUZDV.Linq/test/JGUZDV.Linq.Tests.csproj" />
+  </Folder>
+  <Folder Name="/libraries/JGUZDV.OpenIddict.KeyManager/">
+    <Project Path="libraries/JGUZDV.OpenIddict.KeyManager/src/JGUZDV.OpenIddict.KeyManager.csproj" />
+    <Project Path="libraries/JGUZDV.OpenIddict.KeyManager/test/JGUZDV.OpenIddict.KeyManager.Tests.csproj" />
+  </Folder>
+  <Folder Name="/libraries/JGUZDV.WebApiHost/">
+    <Project Path="libraries/JGUZDV.WebApiHost/src/JGUZDV.WebApiHost.csproj" />
+    <Project Path="libraries/JGUZDV.WebApiHost/test/JGUZDV.WebApiHost.Tests.csproj" />
+  </Folder>
+  <Folder Name="/libraries/JGUZDV.WebHost/">
+    <Project Path="libraries/JGUZDV.WebHost/src/JGUZDV.WebHost.csproj" />
+    <Project Path="libraries/JGUZDV.WebHost/test/JGUZDV.WebHost.Tests.csproj" />
+  </Folder>
+  <Folder Name="/libraries/JGUZDV.YARP.SimpleReverseProxy/">
+    <Project Path="libraries/JGUZDV.YARP.SimpleReverseProxy/src/JGUZDV.YARP.SimpleReverseProxy.csproj" />
+    <Project Path="libraries/JGUZDV.YARP.SimpleReverseProxy/test/JGUZDV.YARP.SimpleReverseProxy.Tests.csproj" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path=".gitignore" />
+    <File Path="AddLibrary.ps1" />
+    <File Path="LICENSE" />
+  </Folder>
+  <Folder Name="/templates/">
+    <Project Path="templates/JGUZDV.Templates.csproj" />
+  </Folder>
+  <Folder Name="/tools/">
+    <File Path="tools/NuGet-Tools-Icon.png" />
+  </Folder>
+  <Folder Name="/tools/JGUZDV.JsonMerge/">
+    <Project Path="tools/JGUZDV.JsonMerge/src/JGUZDV.JsonMerge.csproj" />
+    <Project Path="tools/JGUZDV.JsonMerge/test/JGUZDV.JsonMerge.Tests.csproj" />
+  </Folder>
+  <Properties Name="ExtensibilityGlobals" Scope="PostLoad">
+    <Property Name="RESX_SortFileContentOnSave" Value="True" />
+  </Properties>
+</Solution>
