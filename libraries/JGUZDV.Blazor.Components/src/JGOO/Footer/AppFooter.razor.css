@@ -1,0 +1,20 @@
+﻿@font-face {
+    font-family: 'RelaunchFont';
+    src: url('https://cms-cdn.zdv.uni-mainz.de/fonts/NotoSans-SemiCondensed-Medium-subset.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.socials-light {
+    filter: invert(83%) sepia(7%) saturate(106%) hue-rotate(142deg) brightness(97%) contrast(93%);
+    height: 40px;
+    width: 40px;
+}
+
+.bg-relaunch-dark {
+    background-color: #23373c;
+}
+
+.relaunch-font {
+    font-family: 'RelaunchFont';
+}

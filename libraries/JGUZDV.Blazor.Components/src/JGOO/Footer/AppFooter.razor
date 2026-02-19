@@ -1,0 +1,51 @@
+﻿<footer class="jbs-footer relaunch-font bg-relaunch-dark text-white p-5 @AdditonalClasses">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <p>
+                    Johannes Gutenberg-Universität Mainz<br>
+                    Saarstr. 21<br>
+                    55122 Mainz
+                </p>
+                <a class="text-white" href="https://go.uni-mainz.de/rechtliches/campusplan">
+                    <i class="far fa-map pe-3"></i>
+                    <span>Campusplan</span>
+                </a>
+            </div>
+            <div class="col-auto d-flex flex-wrap gap-3">
+                <a href="https://go.uni-mainz.de/rechtliches/kontakt" class="text-white">
+                    @LR["Contact"]
+                </a>
+                <a href="https://go.uni-mainz.de/rechtliches/impressum" class="text-white">
+                    @LR["Imprint"]
+                </a>
+                <a href="https://go.uni-mainz.de/rechtliches/datenschutz" class="text-white">
+                    @LR["Dataprotection"]
+                </a>
+                <a href="https://go.uni-mainz.de/rechtliches/leichte-sprache" class="text-white">
+                    @LR["EasyLanguage"]
+                </a>
+                <a href="https://go.uni-mainz.de/rechtliches/barrierefreiheit" class="text-white">
+                    @LR["Accessibility"]
+                </a>
+            </div>
+        </div>
+        <div class="d-flex flex-wrap justify-content-end gap-4 pt-4">
+            <a title="Instagram" href="https://jgu.to/social/instagram" target="_blank" aria-label="Instagram"><img src="https://cms-cdn.zdv.uni-mainz.de/ico/logo-instagram.svg" alt="Instagram" class="socials-light"></a>
+            <a title="LinkedIn" href="https://jgu.to/social/linkedin" target="_blank" aria-label="LinkedIn"><img src="https://cms-cdn.zdv.uni-mainz.de/ico/logo-linkedin.svg" alt="LinkedIn" class="socials-light"></a>
+            <a title="TikTok" href="https://jgu.to/social/tiktok" target="_blank" aria-label="TikTok"><img src="https://cms-cdn.zdv.uni-mainz.de/ico/logo-tiktok.svg" alt="TikTok" class="socials-light"></a>
+            <a title="Facebook" href="https://jgu.to/social/facebook" target="_blank" aria-label="Facebook"><img src="https://cms-cdn.zdv.uni-mainz.de/ico/logo-facebook.svg" alt="Facebook" class="socials-light"></a>
+            <a title="Mastodon" href="https://jgu.to/social/mastodon" target="_blank" aria-label="Mastodon"><img src="https://cms-cdn.zdv.uni-mainz.de/ico/logo-mastodon.svg" alt="Mastodon" class="socials-light"></a>
+            <a title="Bluesky" href="https://jgu.to/social/bluesky" target="_blank" aria-label="Bluesky"><img src="https://cms-cdn.zdv.uni-mainz.de/ico/logo-bluesky.svg" alt="Bluesky" class="socials-light"></a>
+            <a title="YouTube" href="https://jgu.to/social/youtube" target="_blank" aria-label="YouTube"><img src="https://cms-cdn.zdv.uni-mainz.de/ico/logo-youtube.svg" alt="YouTube" class="socials-light"></a>
+        </div>
+    </div>
+</footer>
+
+@code {
+    [Inject, NotNull]
+    private IStringLocalizer<ComponentStrings>? LR { get; set; }
+
+    [Parameter]
+    public string? AdditonalClasses { get; set; }
+}
