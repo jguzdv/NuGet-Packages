@@ -14,7 +14,7 @@ header {
         "logo title controls"
         ". content content"
         "navigation navigation navigation";
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: min-content minmax(0, auto) min-content;
     column-gap: 0.5rem;
     row-gap: 0.25rem;
     align-items: center;
@@ -79,15 +79,12 @@ header {
 
 .header-app-title {
     grid-area: title;
-    display: block;
-    text-overflow: ellipsis;
-    margin: 0;
 }
 
 @container (min-width: 940px) {
     .header-grid {
         grid-template-areas: "logo title content controls" "navigation navigation navigation navigation";
-        grid-template-columns: auto auto 1fr auto;
+        grid-template-columns: min-content minmax(0, auto) 1fr minmax(min-content, max-content);
     }
 
     .header-app-title {

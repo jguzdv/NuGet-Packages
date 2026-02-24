@@ -1,67 +1,94 @@
 export function registerThemeButtons() {
-    document.querySelectorAll('[data-set-theme]').forEach(el => {
-        el.addEventListener('click', (event) => {
-            const target = event.currentTarget;
-            const theme = target.getAttribute('data-set-theme');
-            if (theme) {
-                applyTheme(theme, false);
-            }
-            const dropdownMenu = target.closest('.dropdown-menu');
-            if (dropdownMenu) {
-                dropdownMenu.hidden = true;
-                const buttonId = dropdownMenu.getAttribute('aria-labelledby');
-                if (buttonId) {
-                    const button = document.getElementById(buttonId);
-                    if (button) {
-                        button.setAttribute('aria-expanded', 'false');
-                    }
-                }
-            }
-        });
+    customElements.define('jgu-theme-button', class extends HTMLElement {
+        connectedCallback() {
+            this.addEventListener('click', this.handleClick);
+
+            const currentTheme = document.documentElement.getAttribute("data-bs-theme") || "light";
+            this.classList.toggle("active", this.getAttribute("theme") === currentTheme);
+        }
+
+        disconnectedCallback() {
+            this.removeEventListener('click', this.handleClick);
+        }
+
+        handleClick = () => {
+            const theme = this.getAttribute('theme');
+            if (!theme) return;
+
+            applyTheme(theme, false);
+        }
     });
-    console.debug('theme buttons registered');
+    console.debug('web component (jgu-theme-button) registered');
+
+    customElements.define('jgu-theme-icon', class extends HTMLElement {
+        connectedCallback() {
+            this.update();
+            this.observer = new MutationObserver(() => this.update());
+            this.observer.observe(document.documentElement, {
+                attributes: true,
+                attributeFilter: ['data-bs-theme']
+            });
+        }
+
+        disconnectedCallback() {
+            this.observer?.disconnect();
+        }
+
+        update() {
+            const attrTheme = document.documentElement.getAttribute("data-bs-theme");
+            const stored = localStorage.getItem("theme");
+            const theme = stored ?? (attrTheme ?? "light");
+
+            const icon = this.querySelector("i");
+            if (!icon) return;
+
+            const map = { light: "fa-sun", dark: "fa-moon", auto: "fa-adjust" };
+
+            const displayTheme = stored ? stored : "auto";
+
+            icon.className = `fas ${map[displayTheme] ?? "fa-adjust"}`;
+        }
+    });
+    console.debug('web component (jgu-theme-icon) registered');
+}
+export function registerThemeGuard() {
+    const observer = new MutationObserver(() => {
+        if (!document.documentElement.hasAttribute("data-bs-theme")) {
+            setStoredTheme();
+        }
+    });
+
+    observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ["data-bs-theme"]
+    });
 }
 export function applyTheme(theme, isInit) {
-    if (theme === 'auto') {
-        const preferred = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-        document.documentElement.setAttribute('data-bs-theme', preferred);
+    const isAuto = theme === 'auto';
+
+    const resolved = isAuto
+        ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+        : theme;
+
+    document.documentElement.setAttribute('data-bs-theme', resolved);
+
+    if (isAuto) {
         localStorage.removeItem("theme");
+    } else if (!isInit) {
+        localStorage.setItem("theme", theme);
     }
-    else {
-        document.documentElement.setAttribute('data-bs-theme', theme);
-        if (!isInit) {
-            localStorage.setItem("theme", theme);
-        }
-    }
-    console.debug('theme set to: ', theme);
-    updateThemeIcon(theme);
-    updateActiveThemeButton(theme);
+
+    document.querySelectorAll("jgu-theme-button").forEach(btn => {
+        btn.classList.toggle("active", btn.getAttribute("theme") === theme);
+    });
+
+    console.debug('theme is set to: ', theme);
 }
 export function setStoredTheme() {
     const stored = localStorage.getItem("theme");
-    const theme = stored ?? 'light';
+    const theme = stored ?? 'auto';
     applyTheme(theme, true);
     return theme;
-}
-export function updateThemeIcon(theme) {
-    const iconElement = document.querySelector("#jgu-current-theme-icon i");
-    if (!iconElement)
-        return;
-    const themeClass = {
-        light: "fa-sun",
-        dark: "fa-moon",
-        auto: "fa-adjust"
-    }[theme] ?? "fa-adjust";
-    iconElement.className = `fas ${themeClass}`;
-}
-export function updateActiveThemeButton(theme) {
-    const themes = ["light", "dark", "auto"];
-    themes.forEach(t => {
-        const btn = document.getElementById(`jgu-${t}-theme-icon`);
-        if (btn) {
-            btn.classList.toggle("active", t === theme);
-        }
-    });
 }
 export function registerWebComponents() {
     customElements.define('jgu-dropdown', class extends HTMLElement {
@@ -123,10 +150,10 @@ export function registerWebComponents() {
     });
     console.debug('web component (jgu-toggle) registered');
 }
-export function afterWebStarted(blazor) {
-    registerThemeButtons();
-}
+
 export function beforeWebStart(options) {
-    setStoredTheme();
     registerWebComponents();
+    setStoredTheme();
+    registerThemeButtons();
+    registerThemeGuard();
 }

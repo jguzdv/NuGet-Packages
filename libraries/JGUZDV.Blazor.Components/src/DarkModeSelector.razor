@@ -3,19 +3,21 @@
 
 <Dropdown DropDownMenuClass="dropdown-menu-end">
     <DropdownLabelContent>
-        <span id="jgu-current-theme-icon" aria-label="@LR["DarkModeSelector.Header"]">
+        <jgu-theme-icon>
             <i class="fas fa-adjust"></i>
-        </span>
+        </jgu-theme-icon>
     </DropdownLabelContent>
     <DropdownContent>
-        <button class="dropdown-item" id="jgu-light-theme-icon" data-set-theme="light" role="menuitem">
+        <jgu-theme-button class="dropdown-item" theme="light" role="menuitem" style="cursor: pointer;">
             @Icons.LightMode("small pe-1") @LR["Theme.Light"]
-        </button>
-        <button class="dropdown-item" id="jgu-dark-theme-icon" data-set-theme="dark" role="menuitem">
+        </jgu-theme-button>
+
+        <jgu-theme-button class="dropdown-item" theme="dark" role="menuitem" style="cursor: pointer;">
             @Icons.DarkMode("small pe-1") @LR["Theme.Dark"]
-        </button>
-        <button class="dropdown-item" id="jgu-auto-theme-icon" data-set-theme="auto" role="menuitem">
+        </jgu-theme-button>
+
+        <jgu-theme-button class="dropdown-item" theme="auto" role="menuitem" style="cursor: pointer;">
             @Icons.AutoMode("small pe-1") Auto
-        </button>
+        </jgu-theme-button>
     </DropdownContent>
 </Dropdown>
