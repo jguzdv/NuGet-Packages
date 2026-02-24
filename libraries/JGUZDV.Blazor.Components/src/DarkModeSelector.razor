@@ -1,6 +1,5 @@
 ﻿@inject IStringLocalizer<ComponentStrings> LR
 
-
 <Dropdown DropDownMenuClass="dropdown-menu-end">
     <DropdownLabelContent>
         <jgu-theme-icon>
@@ -8,15 +7,17 @@
         </jgu-theme-icon>
     </DropdownLabelContent>
     <DropdownContent>
-        <jgu-theme-button class="dropdown-item" theme="light" role="menuitem" style="cursor: pointer;">
+        <h6 class="dropdown-header">@LR["DarkModeSelector.Header"]</h6>
+
+        <jgu-theme-button class="dropdown-item" theme="light" role="menuitem">
             @Icons.LightMode("small pe-1") @LR["Theme.Light"]
         </jgu-theme-button>
 
-        <jgu-theme-button class="dropdown-item" theme="dark" role="menuitem" style="cursor: pointer;">
+        <jgu-theme-button class="dropdown-item" theme="dark" role="menuitem">
             @Icons.DarkMode("small pe-1") @LR["Theme.Dark"]
         </jgu-theme-button>
 
-        <jgu-theme-button class="dropdown-item" theme="auto" role="menuitem" style="cursor: pointer;">
+        <jgu-theme-button class="dropdown-item" theme="auto" role="menuitem">
             @Icons.AutoMode("small pe-1") Auto
         </jgu-theme-button>
     </DropdownContent>
