@@ -16,7 +16,9 @@
             </div>
         }
 
-        <h1 class="header-app-title">@Title</h1>
+        <div>
+            <h1 class="header-app-title text-truncate w-100">@Title</h1>
+        </div>
 
         @if (ChildContent != null)
         {
@@ -60,9 +62,9 @@
                 @if (ShowSidebarToggle)
                 {
                     <jgu-toggle target-id="jbs-sidebar" class="btn btn-none d-lg-none sidebar-toggle-button" role="button" aria-label="@LR["ToggleSidebar"]">
-                            @Icons.Menu(null)
+                        @Icons.Menu(null)
                     </jgu-toggle>
-                    
+
                 }
             </div>
         }
