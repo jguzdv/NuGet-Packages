@@ -23,8 +23,8 @@ export function registerThemeButtons() {
 
     customElements.define('jgu-theme-icon', class extends HTMLElement {
         connectedCallback() {
-            this.update();
-            this.observer = new MutationObserver(() => this.update());
+            this.render();
+            this.observer = new MutationObserver(() => this.render());
             this.observer.observe(document.documentElement, {
                 attributes: true,
                 attributeFilter: ['data-bs-theme']
@@ -35,14 +35,11 @@ export function registerThemeButtons() {
             this.observer?.disconnect();
         }
 
-        update() {
+        render() {
             const theme = localStorage.getItem("theme") ?? "auto";
             const map = { light: "fa-sun", dark: "fa-moon", auto: "fa-adjust" };
 
-            const icon = this.querySelector("i");
-            if (!icon) return;
-
-            icon.className = `fas ${map[theme] ?? "fa-adjust"}`;
+            this.innerHTML = `<i class="fas ${map[theme] ?? "fa-adjust"}"></i>`;
         }
     });
     console.debug('web component (jgu-theme-icon) registered');
