@@ -1,0 +1,11 @@
+﻿::deep .header-navigation-sidebar {
+    color: var(--sidebar-link-color);
+}
+
+::deep [data-bs-theme="light"] {
+    --sidebar-link-color: --bs-dark-rgb;
+}
+
+::deep [data-bs-theme="dark"] {
+    --sidebar-link-color: --bs-light-rgb;
+}

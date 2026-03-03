@@ -21,14 +21,10 @@ else
         <span class="@GetPadding()">
             <span class="nav-title">@NameTemplate(Name)</span>
         </span>
+
     </NavLink>
 }
 
-@* Only render separator after top-level items *@
-@if ((Context?.NestingLevel ?? 0) == 0)
-{
-    <hr />
-}
 
 @code {
     [CascadingParameter, EditorRequired]
@@ -48,6 +44,7 @@ else
 
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
+
 
     protected override void OnParametersSet()
     {
