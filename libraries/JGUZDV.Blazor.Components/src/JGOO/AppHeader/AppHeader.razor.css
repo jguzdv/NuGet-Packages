@@ -63,7 +63,15 @@ header {
     font-weight: bold;
     border-left: 2px solid #c1002a;
     color: inherit;
-    background-color: white;
+    background-color: var(--header-dropdown-color);
+}
+
+::deep [data-bs-theme="light"] {
+    --header-dropdown-color: white;
+}
+
+::deep [data-bs-theme="dark"] {
+    --header-dropdown-color: #212529;
 }
 
 /* Active dropdown parent detection using CSS :has() selector */
