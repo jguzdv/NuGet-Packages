@@ -25,11 +25,6 @@ else
     </NavLink>
 }
 
-@* Only render separator after top-level items *@
-@if ((Context?.NestingLevel ?? 0) == 0 && !DisableTopLevelSeperator)
-{
-    <hr />
-}
 
 @code {
     [CascadingParameter, EditorRequired]
@@ -50,8 +45,6 @@ else
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
-    [Parameter]
-    public bool DisableTopLevelSeperator { get; set; } = false;
 
     protected override void OnParametersSet()
     {
