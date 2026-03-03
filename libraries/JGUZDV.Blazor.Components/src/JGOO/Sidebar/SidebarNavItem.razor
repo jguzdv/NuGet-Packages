@@ -26,7 +26,7 @@ else
 }
 
 @* Only render separator after top-level items *@
-@if ((Context?.NestingLevel ?? 0) == 0 && DisableTopLevelSeperator)
+@if ((Context?.NestingLevel ?? 0) == 0 && !DisableTopLevelSeperator)
 {
     <hr />
 }

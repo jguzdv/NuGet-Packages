@@ -42,9 +42,9 @@
 }
 
 ::deep [data-bs-theme="light"] {
-    --sidebar-link-color: #23373c;
+    --sidebar-link-color: --bs-dark-rgb;
 }
 
 ::deep [data-bs-theme="dark"] {
-    --sidebar-link-color: #ffffff;
+    --sidebar-link-color: --bs-light-rgb;
 }

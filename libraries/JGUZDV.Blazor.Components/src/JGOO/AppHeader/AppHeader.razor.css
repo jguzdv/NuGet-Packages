@@ -67,11 +67,11 @@ header {
 }
 
 ::deep [data-bs-theme="light"] {
-    --header-dropdown-color: white;
+    --header-dropdown-color: --bs-light-rgb;
 }
 
 ::deep [data-bs-theme="dark"] {
-    --header-dropdown-color: #212529;
+    --header-dropdown-color: --bs-dark-rgb;
 }
 
 /* Active dropdown parent detection using CSS :has() selector */
