@@ -21,7 +21,7 @@
 
 <AuthorizeView Context="context">
     <NotAuthorized>
-        <a class="btn btn-light border login-button" href="@LoginUrl?redirectUri=@redirectUri" data-enhance-nav="false">
+        <a class="btn btn-none border login-button" href="@LoginUrl?redirectUri=@redirectUri" data-enhance-nav="false">
             <i class="fas fa-sign-in-alt"></i>
             <span class="d-none d-lg-inline">@LR["AuthView.LoginButton"]</span>
         </a>
@@ -37,7 +37,7 @@
         }
         <Dropdown DropDownMenuClass="dropdown-menu-end">
             <DropdownLabelContent>
-                <span class="jgu_btn btn btn-light border">
+                <span class="jgu_btn btn btn-none border">
                     <i class="fas fa-user-circle"></i>
                     <span class="d-none d-lg-inline-block ms-2">@displayName</span>
                 </span>
