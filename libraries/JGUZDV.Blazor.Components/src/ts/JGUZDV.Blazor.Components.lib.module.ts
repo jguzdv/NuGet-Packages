@@ -33,6 +33,8 @@
         connectedCallback(): void {
             this.render();
 
+            applyTheme(localStorage.getItem("theme") ?? "auto");
+
             this.observer = new MutationObserver(() => this.render());
             this.observer.observe(document.documentElement, {
                 attributes: true,
@@ -88,10 +90,12 @@ export function applyTheme(theme: string): void {
     console.debug('theme is set to: ', theme);
 }
 
-export function setStoredTheme(): string {
-    const stored = localStorage.getItem("theme") ?? 'auto';
+export function setStoredTheme(): void {
+    const stored = localStorage.getItem("theme");
+    if (stored == null) {
+        return;
+    }
     applyTheme(stored);
-    return stored;
 }
 
 export function registerWebComponents(): void {
@@ -186,7 +190,6 @@ export function registerWebComponents(): void {
 
 export function beforeWebStart(options?: unknown): void {
     registerWebComponents();
-    setStoredTheme();
     registerThemeButtons();
     registerThemeGuard();
 }
