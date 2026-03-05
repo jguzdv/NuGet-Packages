@@ -21,6 +21,7 @@ export function registerThemeButtons() {
         observer;
         connectedCallback() {
             this.render();
+            applyTheme(localStorage.getItem("theme") ?? "auto");
             this.observer = new MutationObserver(() => this.render());
             this.observer.observe(document.documentElement, {
                 attributes: true,
@@ -65,9 +66,11 @@ export function applyTheme(theme) {
     console.debug('theme is set to: ', theme);
 }
 export function setStoredTheme() {
-    const stored = localStorage.getItem("theme") ?? 'auto';
+    const stored = localStorage.getItem("theme");
+    if (stored == null) {
+        return;
+    }
     applyTheme(stored);
-    return stored;
 }
 export function registerWebComponents() {
     customElements.define('jgu-dropdown', class extends HTMLElement {
@@ -137,7 +140,6 @@ export function registerWebComponents() {
 }
 export function beforeWebStart(options) {
     registerWebComponents();
-    setStoredTheme();
     registerThemeButtons();
     registerThemeGuard();
 }
