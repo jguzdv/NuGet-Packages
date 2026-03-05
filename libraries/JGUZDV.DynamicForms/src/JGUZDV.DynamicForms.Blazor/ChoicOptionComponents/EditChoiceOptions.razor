@@ -56,9 +56,9 @@
                 @ondrop="() => HandleDropAt(_dropIndex)"
                 @ondrop:preventDefault="true">
                 <i class="fa fa-solid fa-grip-vertical"></i>
-                @* <i class="fa fa-edit clickable"
+                <i class="fa fa-edit clickable"
                    role="button"
-                   @onclick="() => HandleEditChoiceOption(option)"></i> *@
+                   @onclick="() => HandleEditChoiceOption(option)"></i>
                 <i class="fa fa-trash pe-2 clickable"
                    role="button"
                    @onclick="() => RemoveChoiceOption(option)"></i>
@@ -78,7 +78,7 @@
 
 <Modal @ref=_editChoiceOptionModal TModel="ChoiceOption" Title="@SL["EditChoiceOptions.Edit"]">
     <Body>
-        <ChoiceOptionInput ChoiceOption="@context.Model" ChoiceOptionChanged="() => _editChoiceOptionModal!.Close()"></ChoiceOptionInput>
+        <ChoiceOptionInput ChoiceOption="@context.Model"></ChoiceOptionInput>
     </Body>
 </Modal>
 
