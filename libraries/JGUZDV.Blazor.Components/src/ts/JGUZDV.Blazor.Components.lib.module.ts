@@ -33,6 +33,8 @@
         connectedCallback(): void {
             this.render();
 
+            applyTheme(localStorage.getItem("theme") ?? "auto");
+
             this.observer = new MutationObserver(() => this.render());
             this.observer.observe(document.documentElement, {
                 attributes: true,
@@ -188,7 +190,6 @@ export function registerWebComponents(): void {
 
 export function beforeWebStart(options?: unknown): void {
     registerWebComponents();
-    setStoredTheme();
     registerThemeButtons();
     registerThemeGuard();
 }

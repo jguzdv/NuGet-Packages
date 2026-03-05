@@ -21,6 +21,7 @@ export function registerThemeButtons() {
         observer;
         connectedCallback() {
             this.render();
+            applyTheme(localStorage.getItem("theme") ?? "auto");
             this.observer = new MutationObserver(() => this.render());
             this.observer.observe(document.documentElement, {
                 attributes: true,
@@ -139,7 +140,6 @@ export function registerWebComponents() {
 }
 export function beforeWebStart(options) {
     registerWebComponents();
-    setStoredTheme();
     registerThemeButtons();
     registerThemeGuard();
 }
