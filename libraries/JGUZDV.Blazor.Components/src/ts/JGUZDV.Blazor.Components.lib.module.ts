@@ -88,10 +88,10 @@ export function applyTheme(theme: string): void {
     console.debug('theme is set to: ', theme);
 }
 
-export function setStoredTheme(): string {
-    const stored = localStorage.getItem("theme") ?? 'light';
+export function setStoredTheme(): void {
+    const stored = localStorage.getItem("theme");
+    if(stored)
     applyTheme(stored);
-    return stored;
 }
 
 export function registerWebComponents(): void {
