@@ -2,7 +2,7 @@ export function registerThemeButtons() {
     customElements.define('jgu-theme-button', class extends HTMLElement {
         connectedCallback() {
             this.addEventListener('click', this.handleClick);
-            const currentTheme = document.documentElement.getAttribute("data-bs-theme") || "light";
+            const currentTheme = document.documentElement.getAttribute("data-bs-theme") || "auto";
             this.classList.toggle("active", this.getAttribute("theme") === currentTheme);
         }
         disconnectedCallback() {
@@ -31,7 +31,7 @@ export function registerThemeButtons() {
             this.observer?.disconnect();
         }
         render() {
-            const theme = localStorage.getItem("theme") ?? "light";
+            const theme = localStorage.getItem("theme") ?? "auto";
             const map = {
                 light: "fa-sun",
                 dark: "fa-moon",
@@ -65,9 +65,11 @@ export function applyTheme(theme) {
     console.debug('theme is set to: ', theme);
 }
 export function setStoredTheme() {
-    const stored = localStorage.getItem("theme") ?? 'light';
+    const stored = localStorage.getItem("theme");
+    if (stored == null) {
+        return;
+    }
     applyTheme(stored);
-    return stored;
 }
 export function registerWebComponents() {
     customElements.define('jgu-dropdown', class extends HTMLElement {

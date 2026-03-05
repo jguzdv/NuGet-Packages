@@ -4,7 +4,7 @@
             this.addEventListener('click', this.handleClick);
 
             const currentTheme =
-                document.documentElement.getAttribute("data-bs-theme") || "light";
+                document.documentElement.getAttribute("data-bs-theme") || "auto";
 
             this.classList.toggle(
                 "active",
@@ -45,7 +45,7 @@
         }
 
         render(): void {
-            const theme = localStorage.getItem("theme") ?? "light";
+            const theme = localStorage.getItem("theme") ?? "auto";
             const map: Record<string, string> = {
                 light: "fa-sun",
                 dark: "fa-moon",
@@ -90,7 +90,9 @@ export function applyTheme(theme: string): void {
 
 export function setStoredTheme(): void {
     const stored = localStorage.getItem("theme");
-    if(stored)
+    if (stored == null) {
+        return;
+    }
     applyTheme(stored);
 }
 
