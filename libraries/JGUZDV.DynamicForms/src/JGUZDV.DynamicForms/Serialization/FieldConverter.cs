@@ -41,7 +41,15 @@ public class FieldConverter : JsonConverter<Field>
                         ? typeof(List<>).MakeGenericType(fieldType.ClrType)
                         : fieldType.ClrType;
 
-                    value = JsonSerializer.Deserialize(ref reader, type, options);
+                    if(type.IsPrimitive && !fieldDefinition.IsRequired && type is null)
+                    {
+                        value = null;
+                    }
+                    else
+                    {
+                       value = JsonSerializer.Deserialize(ref reader, type, options);
+                    }
+
                     break;
             }
         }
