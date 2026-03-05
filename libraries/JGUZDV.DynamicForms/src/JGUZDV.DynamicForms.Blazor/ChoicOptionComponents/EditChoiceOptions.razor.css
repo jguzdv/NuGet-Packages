@@ -1,0 +1,16 @@
+﻿.choice-option-item {
+    cursor: grab;
+}
+
+    .choice-option-item:active {
+        cursor: grabbing;
+    }
+
+.drop-spacer {
+    height: 8px;
+    list-style: none;
+}
+
+    .drop-spacer.active {
+        background-color: var(--bs-primary-bg-subtle);
+    }
