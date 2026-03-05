@@ -14,7 +14,7 @@
         @if (_errors.Any())
         {
             <ul class="text-danger">
-                @foreach(var error in _errors)
+                @foreach (var error in _errors)
                 {
                     <li>@error.ErrorMessage</li>
                 }
@@ -33,18 +33,44 @@
 <hr />
 @if (Field.ChoiceOptions.Any())
 {
-    <div class="fw-bold">@SL["EditChoiceOptions.Edit"]</div>
+    <div class="fw-bold">
+        @SL["EditChoiceOptions.Edit"]
+        <small class="text-muted fw-normal">@SL["EditChoiceOptions.DragAndDropHint"]</small>
+    </div>
     <ul class="list-group">
-        @foreach (var option in Field.ChoiceOptions)
+        <li style="@GetSpacerStyle(0)"
+            @ondragover="() => _dropIndex = 0"
+            @ondragover:preventDefault="true"
+            @ondragenter="() => _dropIndex = 0"
+            @ondrop="() => HandleDropAt(0)"
+            @ondrop:preventDefault="true">
+        </li>
+
+        @foreach (var (option, i) in Field.ChoiceOptions.OrderByDescending(x => x.SortKey).Select((o, i) => (o, i)))
         {
-            <li class="list-group-item">
+            var dropIndex = i + 1;
+            <li class="list-group-item"
+                draggable="true"
+                @ondragstart="() => HandleDragStart(option)"
+                @ondragover:preventDefault="true"
+                @ondrop="() => HandleDropAt(_dropIndex)"
+                @ondrop:preventDefault="true">
+                <i class="fa fa-solid fa-grip-vertical"></i>
                 @* <i class="fa fa-edit clickable"
                    role="button"
                    @onclick="() => HandleEditChoiceOption(option)"></i> *@
                 <i class="fa fa-trash pe-2 clickable"
-                role="button"
-                @onclick="() => RemoveChoiceOption(option)"></i>
+                   role="button"
+                   @onclick="() => RemoveChoiceOption(option)"></i>
                 @option.Name: @option.Value
+            </li>
+
+            <li style="@GetSpacerStyle(dropIndex)"
+                @ondragover="() => _dropIndex = dropIndex"
+                @ondragover:preventDefault="true"
+                @ondragenter="() => _dropIndex = dropIndex"
+                @ondrop="() => HandleDropAt(dropIndex)"
+                @ondrop:preventDefault="true">
             </li>
         }
     </ul>
@@ -70,6 +96,9 @@
     private ChoiceOption _newChoiceOption = new();
 
     private List<ValidationResult> _errors = [];
+
+    private ChoiceOption? _draggedOption;
+    private int? _dropIndex;
 
     private void RemoveChoiceOption(ChoiceOption option)
     {
@@ -103,5 +132,47 @@
         Field.ChoiceOptions.Add(option);
         FieldChanged.InvokeAsync(Field);
         _newChoiceOption = new();
+    }
+
+    private void HandleDragStart(ChoiceOption option)
+    {
+        _draggedOption = option;
+    }
+
+    private string GetSpacerStyle(int index) =>
+        $"height: 8px; list-style: none; background: {(_dropIndex == index ? "blue" : "transparent")};";
+
+    private void HandleDropAt(int? insertIndexParam)
+    {
+        if (_draggedOption is null || insertIndexParam is null)
+        {
+            _dropIndex = null;
+            return;
+        }
+
+        int insertIndex = insertIndexParam.Value;
+
+        var sortedList = Field.ChoiceOptions.OrderByDescending(x => x.SortKey).ToList();
+
+        int draggedIndex = sortedList.IndexOf(_draggedOption);
+
+        sortedList.Remove(_draggedOption);
+
+        if (draggedIndex < insertIndex)
+        {
+            insertIndex--;
+        }
+
+        insertIndex = Math.Clamp(insertIndex, 0, sortedList.Count);
+        sortedList.Insert(insertIndex, _draggedOption);
+
+        for (int i = 0; i < sortedList.Count; i++)
+        {
+            sortedList[i].SortKey = (sortedList.Count - i) * 1000;
+        }
+
+        _draggedOption = null;
+        _dropIndex = null;
+        FieldChanged.InvokeAsync(Field);
     }
 }
