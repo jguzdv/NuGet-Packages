@@ -14,7 +14,7 @@
         @if (_errors.Any())
         {
             <ul class="text-danger">
-                @foreach(var error in _errors)
+                @foreach (var error in _errors)
                 {
                     <li>@error.ErrorMessage</li>
                 }
@@ -33,18 +33,43 @@
 <hr />
 @if (Field.ChoiceOptions.Any())
 {
-    <div class="fw-bold">@SL["EditChoiceOptions.Edit"]</div>
+    <div class="fw-bold">
+        @SL["EditChoiceOptions.Plural"]
+        <small class="text-muted fw-normal">@SL["EditChoiceOptions.DragAndDropHint"]</small>
+    </div>
     <ul class="list-group">
-        @foreach (var option in Field.ChoiceOptions)
+        <li class="drop-spacer @(_dropIndex == 0 ? "active" : "")"
+            @ondragover="() => _dropIndex = 0"
+            @ondragover:preventDefault="true"
+            @ondragenter="() => _dropIndex = 0"
+            @ondrop="() => HandleDropAt(0)"
+            @ondrop:preventDefault="true">
+        </li>
+
+        @foreach (var (option, i) in Field.ChoiceOptions.OrderByDescending(x => x.SortKey).Select((o, i) => (o, i)))
         {
-            <li class="list-group-item">
-                @* <i class="fa fa-edit clickable"
+            var dropIndex = i + 1;
+            <li class="list-group-item choice-option-item"
+                draggable="true"
+                @ondragstart="() => HandleDragStart(option)"
+                @ondragover:preventDefault="true"
+                @ondrop="() => HandleDropAt(_dropIndex)"
+                @ondrop:preventDefault="true">
+                <i class="fa fa-edit clickable"
                    role="button"
-                   @onclick="() => HandleEditChoiceOption(option)"></i> *@
+                   @onclick="() => HandleEditChoiceOption(option)"></i>
                 <i class="fa fa-trash pe-2 clickable"
-                role="button"
-                @onclick="() => RemoveChoiceOption(option)"></i>
+                   role="button"
+                   @onclick="() => RemoveChoiceOption(option)"></i>
                 @option.Name: @option.Value
+            </li>
+
+            <li class="drop-spacer @(_dropIndex == dropIndex ? "active" : "")"
+                @ondragover="() => _dropIndex = dropIndex"
+                @ondragover:preventDefault="true"
+                @ondragenter="() => _dropIndex = dropIndex"
+                @ondrop="() => HandleDropAt(dropIndex)"
+                @ondrop:preventDefault="true">
             </li>
         }
     </ul>
@@ -52,7 +77,15 @@
 
 <Modal @ref=_editChoiceOptionModal TModel="ChoiceOption" Title="@SL["EditChoiceOptions.Edit"]">
     <Body>
-        <ChoiceOptionInput ChoiceOption="@context.Model" ChoiceOptionChanged="() => _editChoiceOptionModal!.Close()"></ChoiceOptionInput>
+        <ChoiceOptionInput @bind-ChoiceOption="context.Model" />
+        <div class="mt-2">
+            <button type="button" class="btn btn-primary" @onclick="() => context.Modal.Accept()">
+                @SL["ChoiceOptionInput.Edit.Save"]
+            </button>
+            <button type="button" class="btn btn-danger ms-2" @onclick="() => context.Modal.Dismiss()">
+                @SL["ChoiceOptionInput.Edit.Cancel"]
+            </button>
+        </div>
     </Body>
 </Modal>
 
@@ -71,6 +104,9 @@
 
     private List<ValidationResult> _errors = [];
 
+    private ChoiceOption? _draggedOption;
+    private int? _dropIndex;
+
     private void RemoveChoiceOption(ChoiceOption option)
     {
         Field.ChoiceOptions.Remove(option);
@@ -79,8 +115,22 @@
 
     private async Task HandleEditChoiceOption(ChoiceOption option)
     {
-        var modal = await _editChoiceOptionModal!.ShowModal(option);
-        await FieldChanged.InvokeAsync(Field);
+        var copy = new ChoiceOption
+        {
+            Name = new L10n.L10nString(option.Name),
+            Value = option.Value,
+            SortKey = option.SortKey
+        };
+
+        var modalResult = await _editChoiceOptionModal!.ShowModal(copy);
+
+        if (modalResult == ModalResult.Accepted)
+        {
+            option.Name = copy.Name;
+            option.Value = copy.Value;
+            option.SortKey = copy.SortKey;
+            await FieldChanged.InvokeAsync(Field);
+        }
     }
 
     private void AddChoiceOption(ChoiceOption option)
@@ -103,5 +153,55 @@
         Field.ChoiceOptions.Add(option);
         FieldChanged.InvokeAsync(Field);
         _newChoiceOption = new();
+    }
+
+    private void HandleDragStart(ChoiceOption option)
+    {
+        _draggedOption = option;
+    }
+
+    private void HandleDropAt(int? insertIndexParam)
+    {
+        if (_draggedOption is null || insertIndexParam is null)
+        {
+            _dropIndex = null;
+            return;
+        }
+
+        int insertIndex = insertIndexParam.Value;
+
+        var sortedList = Field.ChoiceOptions.OrderByDescending(x => x.SortKey).ToList();
+
+        int draggedIndex = sortedList.IndexOf(_draggedOption);
+
+        sortedList.Remove(_draggedOption);
+
+        if (draggedIndex < insertIndex)
+        {
+            insertIndex--;
+        }
+
+        insertIndex = Math.Clamp(insertIndex, 0, sortedList.Count);
+
+        if (sortedList.Count == 0)
+        {
+            
+        }
+        else if (insertIndex == 0)
+        {
+            _draggedOption.SortKey = sortedList[0].SortKey + 1000;
+        }
+        else if (insertIndex == sortedList.Count)
+        {
+            _draggedOption.SortKey = sortedList[^1].SortKey - 1000;
+        }
+        else
+        {
+            _draggedOption.SortKey = (sortedList[insertIndex - 1].SortKey + sortedList[insertIndex].SortKey) / 2.0;
+        }
+
+        _draggedOption = null;
+        _dropIndex = null;
+        FieldChanged.InvokeAsync(Field);
     }
 }
