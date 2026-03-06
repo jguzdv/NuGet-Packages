@@ -2,6 +2,11 @@
     height: 40px;
 }
 
+::deep .btn-none:hover {
+    background-color: var(--bs-tertiary-bg);
+    border: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color) !important;
+}
+
 header {
     container: header / inline-size;
     padding-inline: 0.5rem;
