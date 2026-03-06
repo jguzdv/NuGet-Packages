@@ -6,8 +6,13 @@
 @inherits LayoutComponentBase
 
 <div class="container p-0">
-    <div class="jbs-page jbs-grid jbs-container border">
+    <div class="jbs-page jbs-grid jbs-container border-start border-end">
         <AppHeader Title="@Title" Logo="@Logo" HelpUrl="@Logo.Href" ShowLanguageSelector="@true" ShowLoginButton="@true" ShowDarkModeSelector="@true">
+            <ChildContent>
+                <span class="ms-auto border p-1">
+                    test
+                </span>
+            </ChildContent>
             <NavItems>
                 <AppHeaderNavItem Name="Dropdowns" NavUrl="/dropdown" Match="NavLinkMatch.All">
                     <NameTemplate><i class="fas fa-caret-square-down pe-2"></i> @context</NameTemplate>
@@ -84,7 +89,7 @@
 
         <AppFooter></AppFooter>
     </div>
-    
+
 </div>
 
 <WebFooter></WebFooter>
