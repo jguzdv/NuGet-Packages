@@ -3,8 +3,7 @@
         connectedCallback(): void {
             this.addEventListener('click', this.handleClick);
 
-            const currentTheme =
-                document.documentElement.getAttribute("data-bs-theme") || "auto";
+            const currentTheme = localStorage.getItem("theme") ?? "auto";
 
             this.classList.toggle(
                 "active",
