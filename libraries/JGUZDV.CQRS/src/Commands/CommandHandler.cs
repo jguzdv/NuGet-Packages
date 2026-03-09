@@ -37,7 +37,10 @@ public abstract partial class CommandHandler<TCommand, TContext> : ICommandHandl
     /// If this is not overriden or explicitly skipped, the command will fail with a NotAllowed result.
     /// </summary>
     protected virtual Task<bool> AuthorizeAsync(TCommand command, TContext context, ClaimsPrincipal? principal, CancellationToken ct)
-        => Task.FromResult(false);
+    {
+        Log.AuthorizeNotImplemented(Logger);
+        return Task.FromResult(false);
+    }
 
     /// <summary>
     /// Validates the command object before execution.
@@ -152,7 +155,11 @@ public abstract partial class CommandHandler<TCommand, TContext> : ICommandHandl
 
         [LoggerMessage(EventId = 4030, Message = "Command authorization result was: {authorized}", EventName = "CommandAuthorization")]
         internal static partial void AuthorizationResult(ILogger logger, LogLevel loglevel, bool authorized);
-        
+
+
+        [LoggerMessage(4031, LogLevel.Warning, "Command authorization failed due to method not being overriden.", EventName = "CommandAuthorizationMissing")]
+        internal static partial void AuthorizeNotImplemented(ILogger logger);
+
         [LoggerMessage(4040, LogLevel.Information, "Command did not find an object to act on (NotFound).", EventName = "CommandExecutionObjectNotFound")]
         internal static partial void NotFound(ILogger logger);
 
