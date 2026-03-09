@@ -25,7 +25,7 @@ public class ChoiceOption : IValidatableObject
     /// <summary>
     /// Gets or sets the sortkey of the choice option.
     /// </summary>
-    public int SortKey { get; set; }
+    public double SortKey { get; set; }
 
     /// <summary>
     /// Validates the choice option.

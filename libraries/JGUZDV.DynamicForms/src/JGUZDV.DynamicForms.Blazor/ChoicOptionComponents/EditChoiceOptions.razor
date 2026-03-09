@@ -34,11 +34,11 @@
 @if (Field.ChoiceOptions.Any())
 {
     <div class="fw-bold">
-        @SL["EditChoiceOptions.Edit"]
+        @SL["EditChoiceOptions.Plural"]
         <small class="text-muted fw-normal">@SL["EditChoiceOptions.DragAndDropHint"]</small>
     </div>
     <ul class="list-group">
-        <li style="@GetSpacerStyle(0)"
+        <li class="drop-spacer @(_dropIndex == 0 ? "active" : "")"
             @ondragover="() => _dropIndex = 0"
             @ondragover:preventDefault="true"
             @ondragenter="() => _dropIndex = 0"
@@ -49,13 +49,12 @@
         @foreach (var (option, i) in Field.ChoiceOptions.OrderByDescending(x => x.SortKey).Select((o, i) => (o, i)))
         {
             var dropIndex = i + 1;
-            <li class="list-group-item"
+            <li class="list-group-item choice-option-item"
                 draggable="true"
                 @ondragstart="() => HandleDragStart(option)"
                 @ondragover:preventDefault="true"
                 @ondrop="() => HandleDropAt(_dropIndex)"
                 @ondrop:preventDefault="true">
-                <i class="fa fa-solid fa-grip-vertical"></i>
                 <i class="fa fa-edit clickable"
                    role="button"
                    @onclick="() => HandleEditChoiceOption(option)"></i>
@@ -65,7 +64,7 @@
                 @option.Name: @option.Value
             </li>
 
-            <li style="@GetSpacerStyle(dropIndex)"
+            <li class="drop-spacer @(_dropIndex == dropIndex ? "active" : "")"
                 @ondragover="() => _dropIndex = dropIndex"
                 @ondragover:preventDefault="true"
                 @ondragenter="() => _dropIndex = dropIndex"
@@ -78,7 +77,15 @@
 
 <Modal @ref=_editChoiceOptionModal TModel="ChoiceOption" Title="@SL["EditChoiceOptions.Edit"]">
     <Body>
-        <ChoiceOptionInput ChoiceOption="@context.Model"></ChoiceOptionInput>
+        <ChoiceOptionInput @bind-ChoiceOption="context.Model" />
+        <div class="mt-2">
+            <button type="button" class="btn btn-primary" @onclick="() => context.Modal.Accept()">
+                @SL["ChoiceOptionInput.Edit.Save"]
+            </button>
+            <button type="button" class="btn btn-danger ms-2" @onclick="() => context.Modal.Dismiss()">
+                @SL["ChoiceOptionInput.Edit.Cancel"]
+            </button>
+        </div>
     </Body>
 </Modal>
 
@@ -108,8 +115,22 @@
 
     private async Task HandleEditChoiceOption(ChoiceOption option)
     {
-        var modal = await _editChoiceOptionModal!.ShowModal(option);
-        await FieldChanged.InvokeAsync(Field);
+        var copy = new ChoiceOption
+        {
+            Name = new L10n.L10nString(option.Name),
+            Value = option.Value,
+            SortKey = option.SortKey
+        };
+
+        var modalResult = await _editChoiceOptionModal!.ShowModal(copy);
+
+        if (modalResult == ModalResult.Accepted)
+        {
+            option.Name = copy.Name;
+            option.Value = copy.Value;
+            option.SortKey = copy.SortKey;
+            await FieldChanged.InvokeAsync(Field);
+        }
     }
 
     private void AddChoiceOption(ChoiceOption option)
@@ -139,9 +160,6 @@
         _draggedOption = option;
     }
 
-    private string GetSpacerStyle(int index) =>
-        $"height: 8px; list-style: none; background: {(_dropIndex == index ? "blue" : "transparent")};";
-
     private void HandleDropAt(int? insertIndexParam)
     {
         if (_draggedOption is null || insertIndexParam is null)
@@ -164,11 +182,22 @@
         }
 
         insertIndex = Math.Clamp(insertIndex, 0, sortedList.Count);
-        sortedList.Insert(insertIndex, _draggedOption);
 
-        for (int i = 0; i < sortedList.Count; i++)
+        if (sortedList.Count == 0)
         {
-            sortedList[i].SortKey = (sortedList.Count - i) * 1000;
+            
+        }
+        else if (insertIndex == 0)
+        {
+            _draggedOption.SortKey = sortedList[0].SortKey + 1000;
+        }
+        else if (insertIndex == sortedList.Count)
+        {
+            _draggedOption.SortKey = sortedList[^1].SortKey - 1000;
+        }
+        else
+        {
+            _draggedOption.SortKey = (sortedList[insertIndex - 1].SortKey + sortedList[insertIndex].SortKey) / 2.0;
         }
 
         _draggedOption = null;
