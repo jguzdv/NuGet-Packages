@@ -2,7 +2,7 @@ export function registerThemeButtons() {
     customElements.define('jgu-theme-button', class extends HTMLElement {
         connectedCallback() {
             this.addEventListener('click', this.handleClick);
-            const currentTheme = document.documentElement.getAttribute("data-bs-theme") || "auto";
+            const currentTheme = localStorage.getItem("theme") ?? "auto";
             this.classList.toggle("active", this.getAttribute("theme") === currentTheme);
         }
         disconnectedCallback() {
