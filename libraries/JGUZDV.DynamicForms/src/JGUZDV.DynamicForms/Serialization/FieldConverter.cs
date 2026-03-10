@@ -37,6 +37,12 @@ public class FieldConverter : JsonConverter<Field>
 
                     var fieldType = fieldDefinition.Type ?? throw new InvalidOperationException("FieldType must be set");
 
+                    if (!fieldDefinition.IsRequired && reader.TokenType == JsonTokenType.Null)
+                    {
+                        value = null;
+                        break;
+                    }
+
                     var type = fieldDefinition.IsList
                         ? typeof(List<>).MakeGenericType(fieldType.ClrType)
                         : fieldType.ClrType;
