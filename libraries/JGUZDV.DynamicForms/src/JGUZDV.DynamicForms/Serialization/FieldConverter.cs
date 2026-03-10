@@ -37,7 +37,7 @@ public class FieldConverter : JsonConverter<Field>
 
                     var fieldType = fieldDefinition.Type ?? throw new InvalidOperationException("FieldType must be set");
 
-                    if (!fieldDefinition.IsRequired && reader.TokenType == JsonTokenType.Null)
+                    if (reader.TokenType == JsonTokenType.Null)
                     {
                         value = null;
                         break;
