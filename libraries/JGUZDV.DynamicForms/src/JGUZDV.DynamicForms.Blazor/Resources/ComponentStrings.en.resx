@@ -132,8 +132,8 @@
     <data name="ChoiceOptionInput.Save" xml:space="preserve">
     <value>add</value>
   </data>
-    <data name="ChoiceOptionInput.SortKey" xml:space="preserve">
-    <value>Sortkey</value>
+    <data name="ChoiceOptionInput.SortPriority" xml:space="preserve">
+    <value>Sort Priority</value>
   </data>
     <data name="EditChoiceOptions.Add" xml:space="preserve">
     <value>New Choice</value>

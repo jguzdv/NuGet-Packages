@@ -46,7 +46,7 @@
             @ondrop:preventDefault="true">
         </li>
 
-        @foreach (var (option, i) in Field.ChoiceOptions.OrderByDescending(x => x.SortKey).Select((o, i) => (o, i)))
+        @foreach (var (option, i) in Field.ChoiceOptions.OrderByDescending(x => x.SortPriority).Select((o, i) => (o, i)))
         {
             var dropIndex = i + 1;
             <li class="list-group-item choice-option-item"
@@ -119,7 +119,7 @@
         {
             Name = new L10n.L10nString(option.Name),
             Value = option.Value,
-            SortKey = option.SortKey
+            SortPriority = option.SortPriority
         };
 
         var modalResult = await _editChoiceOptionModal!.ShowModal(copy);
@@ -128,7 +128,7 @@
         {
             option.Name = copy.Name;
             option.Value = copy.Value;
-            option.SortKey = copy.SortKey;
+            option.SortPriority = copy.SortPriority;
             await FieldChanged.InvokeAsync(Field);
         }
     }
@@ -170,7 +170,7 @@
 
         int insertIndex = insertIndexParam.Value;
 
-        var sortedList = Field.ChoiceOptions.OrderByDescending(x => x.SortKey).ToList();
+        var sortedList = Field.ChoiceOptions.OrderByDescending(x => x.SortPriority).ToList();
 
         int draggedIndex = sortedList.IndexOf(_draggedOption);
 
@@ -189,15 +189,15 @@
         }
         else if (insertIndex == 0)
         {
-            _draggedOption.SortKey = sortedList[0].SortKey + 1000;
+            _draggedOption.SortPriority = sortedList[0].SortPriority + 1000;
         }
         else if (insertIndex == sortedList.Count)
         {
-            _draggedOption.SortKey = sortedList[^1].SortKey - 1000;
+            _draggedOption.SortPriority = sortedList[^1].SortPriority - 1000;
         }
         else
         {
-            _draggedOption.SortKey = (sortedList[insertIndex - 1].SortKey + sortedList[insertIndex].SortKey) / 2.0;
+            _draggedOption.SortPriority = (sortedList[insertIndex - 1].SortPriority + sortedList[insertIndex].SortPriority) / 2.0;
         }
 
         _draggedOption = null;
