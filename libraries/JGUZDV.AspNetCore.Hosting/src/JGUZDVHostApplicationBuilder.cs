@@ -600,6 +600,7 @@ public class JGUZDVHostApplicationBuilder
         {
             app.UseCors();
         }
+
         if (HasOpenApi)
         {
             app.MapOpenApi();
