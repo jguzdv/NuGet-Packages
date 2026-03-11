@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Server;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
@@ -146,6 +147,50 @@ public static class JGUZDVHostApplicationBuilderExtensions
         return appBuilder;
     }
 
+    /// <summary>
+    /// Adds Cross-Origin Resource Sharing (CORS) to the WebApplicationBuilder.
+    /// </summary>
+    /// <param name="appBuilder"></param>
+    /// <param name="configure"></param>
+    /// <param name="configSection"></param>
+    /// <returns></returns>
+    public static JGUZDVHostApplicationBuilder AddCORS(
+        this JGUZDVHostApplicationBuilder appBuilder,
+        Action<CorsOptions>? configure = null,
+        string configSection = Constants.ConfigSections.CORS)
+    {
+        if (appBuilder.Configuration.HasConfigSection(configSection))
+        {
+            appBuilder.Services.AddCors(opt =>
+            {
+                foreach (var policySection in appBuilder.Configuration.GetSection(configSection).GetChildren())
+                {
+                    var headers = policySection.GetSection("Headers").GetChildren().Select(element => element.Value).OfType<string>();
+                    var methods = policySection.GetSection("Methods").GetChildren().Select(element => element.Value).OfType<string>();
+                    var origins = policySection.GetSection("Origins").GetChildren().Select(element => element.Value).OfType<string>();
+                    
+                    var supportsCredentials = policySection.GetValue<bool>("SupportsCredentials");
+
+                    opt.AddPolicy(policySection.Key, policyBuilder =>
+                    {
+                        policyBuilder.WithHeaders([.. headers])
+                                     .WithMethods([.. methods])
+                                     .WithOrigins([.. origins]);
+                        
+                        if (supportsCredentials)
+                        {
+                            policyBuilder.AllowCredentials();
+                        }
+                    });
+                }
+            
+                configure?.Invoke(opt);
+            });
+            appBuilder.HasCORS = true;
+        }
+
+        return appBuilder;
+    }
 
     /// <summary>
     /// Adds Telemetry to the WebApplicationBuilder.

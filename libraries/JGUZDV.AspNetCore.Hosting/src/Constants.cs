@@ -73,5 +73,10 @@ public static class Constants
         /// Default Configuration section for Logging.
         /// </summary>
         public const string FileLogging = "Logging:File";
+
+        /// <summary>
+        /// Default Configuration section for CORS.
+        /// </summary>
+        public const string CORS = "CORS";
     }
 }
