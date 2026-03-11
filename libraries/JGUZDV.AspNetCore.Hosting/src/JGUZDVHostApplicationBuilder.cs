@@ -554,10 +554,6 @@ public class JGUZDVHostApplicationBuilder
     /// <returns></returns>
     private WebApplication ConfigureDefaultApp(WebApplication app)
     {
-        if(HasCORS)
-        {
-            app.UseCors();
-        }
         app.UseStaticFiles();
 
         if (HasForwardedHeaders)
@@ -600,9 +596,19 @@ public class JGUZDVHostApplicationBuilder
 
         app.UseRouting();
 
+        if(HasCORS)
+        {
+            app.UseCors();
+        }
+
         if (HasOpenApi)
         {
             app.MapOpenApi();
+        }
+        
+        if (HasRequestLocalization)
+        {
+            app.UseRequestLocalization();
         }
 
         if (HasHealthChecks)
@@ -617,16 +623,10 @@ public class JGUZDVHostApplicationBuilder
             // TODO app.MapPrometheus();
         }
 
-
         if (HasAuthentication)
         {
             app.UseAuthentication();
             app.UseAuthorization();
-        }
-
-        if (HasRequestLocalization)
-        {
-            app.UseRequestLocalization();
         }
 
         if (HasInteractiveWebAssemblyComponents)
