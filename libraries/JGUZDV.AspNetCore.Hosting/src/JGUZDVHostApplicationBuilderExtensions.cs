@@ -165,17 +165,17 @@ public static class JGUZDVHostApplicationBuilderExtensions
             {
                 foreach (var policySection in appBuilder.Configuration.GetSection(configSection).GetChildren())
                 {
-                    var headers = policySection.GetSection("Headers").GetChildren().Select(element => element.Value).OfType<string>();
-                    var methods = policySection.GetSection("Methods").GetChildren().Select(element => element.Value).OfType<string>();
-                    var origins = policySection.GetSection("Origins").GetChildren().Select(element => element.Value).OfType<string>();
+                    var headers = policySection.GetSection("Headers").Get<string[]>() ?? [];
+                    var methods = policySection.GetSection("Methods").Get<string[]>() ?? [];
+                    var origins = policySection.GetSection("Origins").Get<string[]>() ?? [];
                     
                     var supportsCredentials = policySection.GetValue<bool>("SupportsCredentials");
 
                     opt.AddPolicy(policySection.Key, policyBuilder =>
                     {
-                        policyBuilder.WithHeaders([.. headers])
-                                     .WithMethods([.. methods])
-                                     .WithOrigins([.. origins]);
+                        policyBuilder.WithHeaders(headers)
+                                     .WithMethods(methods)
+                                     .WithOrigins(origins);
                         
                         if (supportsCredentials)
                         {
@@ -605,7 +605,7 @@ public static class JGUZDVHostApplicationBuilderExtensions
                 oidcConfig.Bind(opt);
 
                 opt.Scope.Clear();
-                var scopes = oidcConfig.GetSection(nameof(opt.Scope)).GetChildren().Select(element => element.Value).OfType<string>();
+                var scopes = oidcConfig.GetSection(nameof(opt.Scope)).Get<string[]>() ?? [];
 
                 foreach (var scope in scopes)
                     opt.Scope.Add(scope);
