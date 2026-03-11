@@ -23,9 +23,9 @@ public class ChoiceOption : IValidatableObject
     public L10nString Name { get; set; } = new();
 
     /// <summary>
-    /// Gets or sets the sort priority of the choice option.
+    /// Gets or sets the sort weight of the choice option.
     /// </summary>
-    public double SortPriority { get; set; }
+    public double SortWeight { get; set; }
 
     /// <summary>
     /// Validates the choice option.

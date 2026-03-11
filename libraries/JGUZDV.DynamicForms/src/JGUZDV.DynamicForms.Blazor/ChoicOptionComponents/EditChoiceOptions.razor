@@ -37,7 +37,7 @@
         @SL["EditChoiceOptions.Plural"]
         <small class="text-muted fw-normal">@SL["EditChoiceOptions.DragAndDropHint"]</small>
     </div>
-    <ul class="list-group">
+    <ul class="list-group" @ondragend="() => { _draggedOption = null; _dropIndex = null; }">
         <li class="drop-spacer @(_dropIndex == 0 ? "active" : "")"
             @ondragover="() => _dropIndex = 0"
             @ondragover:preventDefault="true"
@@ -46,7 +46,7 @@
             @ondrop:preventDefault="true">
         </li>
 
-        @foreach (var (option, i) in Field.ChoiceOptions.OrderByDescending(x => x.SortPriority).Select((o, i) => (o, i)))
+        @foreach (var (option, i) in Field.ChoiceOptions.OrderByDescending(x => x.SortWeight).Select((o, i) => (o, i)))
         {
             var dropIndex = i + 1;
             <li class="list-group-item choice-option-item"
@@ -119,7 +119,7 @@
         {
             Name = new L10n.L10nString(option.Name),
             Value = option.Value,
-            SortPriority = option.SortPriority
+            SortWeight = option.SortWeight
         };
 
         var modalResult = await _editChoiceOptionModal!.ShowModal(copy);
@@ -128,7 +128,7 @@
         {
             option.Name = copy.Name;
             option.Value = copy.Value;
-            option.SortPriority = copy.SortPriority;
+            option.SortWeight = copy.SortWeight;
             await FieldChanged.InvokeAsync(Field);
         }
     }
@@ -170,7 +170,7 @@
 
         int insertIndex = insertIndexParam.Value;
 
-        var sortedList = Field.ChoiceOptions.OrderByDescending(x => x.SortPriority).ToList();
+        var sortedList = Field.ChoiceOptions.OrderByDescending(x => x.SortWeight).ToList();
 
         int draggedIndex = sortedList.IndexOf(_draggedOption);
 
@@ -185,19 +185,19 @@
 
         if (sortedList.Count == 0)
         {
-            
+
         }
         else if (insertIndex == 0)
         {
-            _draggedOption.SortPriority = sortedList[0].SortPriority + 1000;
+            _draggedOption.SortWeight = sortedList[0].SortWeight + 1000;
         }
         else if (insertIndex == sortedList.Count)
         {
-            _draggedOption.SortPriority = sortedList[^1].SortPriority - 1000;
+            _draggedOption.SortWeight = sortedList[^1].SortWeight - 1000;
         }
         else
         {
-            _draggedOption.SortPriority = (sortedList[insertIndex - 1].SortPriority + sortedList[insertIndex].SortPriority) / 2.0;
+            _draggedOption.SortWeight = (sortedList[insertIndex - 1].SortWeight + sortedList[insertIndex].SortWeight) / 2.0;
         }
 
         _draggedOption = null;
