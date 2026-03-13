@@ -1,0 +1,18 @@
+﻿<li class="drop-spacer @(IsActive ? "active" : "")"
+    @ondragover="() => OnDragOver()"
+    @ondragover:preventDefault="true"
+    @ondragenter="() => OnDragEnter.InvokeAsync()"
+    @ondrop="() => OnDrop.InvokeAsync()"
+    @ondrop:preventDefault="true">
+</li>
+
+@code {
+    [Parameter]
+    public bool IsActive { get; set; }
+    [Parameter]
+    public EventCallback OnDragEnter { get; set; }
+    [Parameter]
+    public EventCallback OnDrop { get; set; }
+
+    private void OnDragOver() { }
+}
