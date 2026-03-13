@@ -23,6 +23,11 @@ public class ChoiceOption : IValidatableObject
     public L10nString Name { get; set; } = new();
 
     /// <summary>
+    /// Gets or sets the sort weight of the choice option.
+    /// </summary>
+    public double SortWeight { get; set; }
+
+    /// <summary>
     /// Validates the choice option.
     /// </summary>
     /// <param name="validationContext">The validation context.</param>

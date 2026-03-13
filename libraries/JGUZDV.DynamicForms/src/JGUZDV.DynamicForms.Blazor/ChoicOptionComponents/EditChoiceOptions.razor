@@ -14,7 +14,7 @@
         @if (_errors.Any())
         {
             <ul class="text-danger">
-                @foreach(var error in _errors)
+                @foreach (var error in _errors)
                 {
                     <li>@error.ErrorMessage</li>
                 }
@@ -33,26 +33,51 @@
 <hr />
 @if (Field.ChoiceOptions.Any())
 {
-    <div class="fw-bold">@SL["EditChoiceOptions.Edit"]</div>
-    <ul class="list-group">
-        @foreach (var option in Field.ChoiceOptions)
+    <div class="fw-bold">
+        @SL["EditChoiceOptions.Plural"]
+        <small class="text-muted fw-normal">@SL["EditChoiceOptions.DragAndDropHint"]</small>
+    </div>
+    <ul class="list-group" @ondragend="() => { _draggedOption = null; _dropIndex = null; }">
+        <DropSpacer IsActive="_dropIndex == 0"
+                    OnDragEnter="() => SetDropIndex(0)"
+                    OnDrop="() => HandleDropAt(0)" />
+
+        @foreach (var (option, i) in _sortedOptions.Select((o, i) => (o, i)))
         {
-            <li class="list-group-item">
-                @* <i class="fa fa-edit clickable"
+            var dropIndex = i + 1;
+            <li class="list-group-item choice-option-item"
+                draggable="true"
+                @ondragstart="() => HandleDragStart(option)"
+                @ondragover:preventDefault="true"
+                @ondrop="() => HandleDropAt(_dropIndex)"
+                @ondrop:preventDefault="true">
+                <i class="fa fa-edit clickable"
                    role="button"
-                   @onclick="() => HandleEditChoiceOption(option)"></i> *@
+                   @onclick="() => HandleEditChoiceOption(option)"></i>
                 <i class="fa fa-trash pe-2 clickable"
-                role="button"
-                @onclick="() => RemoveChoiceOption(option)"></i>
+                   role="button"
+                   @onclick="() => RemoveChoiceOption(option)"></i>
                 @option.Name: @option.Value
             </li>
+
+            <DropSpacer IsActive="_dropIndex == dropIndex"
+                        OnDragEnter="() => SetDropIndex(dropIndex)"
+                        OnDrop="() => HandleDropAt(dropIndex)" />
         }
     </ul>
 }
 
 <Modal @ref=_editChoiceOptionModal TModel="ChoiceOption" Title="@SL["EditChoiceOptions.Edit"]">
     <Body>
-        <ChoiceOptionInput ChoiceOption="@context.Model" ChoiceOptionChanged="() => _editChoiceOptionModal!.Close()"></ChoiceOptionInput>
+        <ChoiceOptionInput @bind-ChoiceOption="context.Model" />
+        <div class="mt-2">
+            <button type="button" class="btn btn-primary" @onclick="() => context.Modal.Accept()">
+                @SL["ChoiceOptionInput.Edit.Save"]
+            </button>
+            <button type="button" class="btn btn-danger ms-2" @onclick="() => context.Modal.Dismiss()">
+                @SL["ChoiceOptionInput.Edit.Cancel"]
+            </button>
+        </div>
     </Body>
 </Modal>
 
@@ -71,16 +96,48 @@
 
     private List<ValidationResult> _errors = [];
 
+    private ChoiceOption? _draggedOption;
+    private int? _dropIndex;
+    private List<ChoiceOption> _sortedOptions = new();
+
+    protected override void OnParametersSet()
+    {
+        _sortedOptions = Field.ChoiceOptions.OrderByDescending(x => x.SortWeight).ToList();
+        base.OnParametersSet();
+    }
+
+    private void SetDropIndex(int index)
+    {
+        if (index == _dropIndex) return;
+        _dropIndex = index;
+        StateHasChanged();
+    }
     private void RemoveChoiceOption(ChoiceOption option)
     {
         Field.ChoiceOptions.Remove(option);
         FieldChanged.InvokeAsync(Field);
+        _sortedOptions = Field.ChoiceOptions.OrderByDescending(x => x.SortWeight).ToList();
     }
 
     private async Task HandleEditChoiceOption(ChoiceOption option)
     {
-        var modal = await _editChoiceOptionModal!.ShowModal(option);
-        await FieldChanged.InvokeAsync(Field);
+        var copy = new ChoiceOption
+        {
+            Name = new L10n.L10nString(option.Name),
+            Value = option.Value,
+            SortWeight = option.SortWeight
+        };
+
+        var modalResult = await _editChoiceOptionModal!.ShowModal(copy);
+
+        if (modalResult == ModalResult.Accepted)
+        {
+            option.Name = copy.Name;
+            option.Value = copy.Value;
+            option.SortWeight = copy.SortWeight;
+            await FieldChanged.InvokeAsync(Field);
+            _sortedOptions = Field.ChoiceOptions.OrderByDescending(x => x.SortWeight).ToList();
+        }
     }
 
     private void AddChoiceOption(ChoiceOption option)
@@ -103,5 +160,57 @@
         Field.ChoiceOptions.Add(option);
         FieldChanged.InvokeAsync(Field);
         _newChoiceOption = new();
+        _sortedOptions = Field.ChoiceOptions.OrderByDescending(x => x.SortWeight).ToList();
+    }
+
+    private void HandleDragStart(ChoiceOption option)
+    {
+        _draggedOption = option;
+    }
+
+    private void HandleDropAt(int? insertIndexParam)
+    {
+        if (_draggedOption is null || insertIndexParam is null)
+        {
+            _dropIndex = null;
+            return;
+        }
+
+        int insertIndex = insertIndexParam.Value;
+
+        var sortedList = Field.ChoiceOptions.OrderByDescending(x => x.SortWeight).ToList();
+
+        int draggedIndex = sortedList.IndexOf(_draggedOption);
+
+        sortedList.Remove(_draggedOption);
+
+        if (draggedIndex < insertIndex)
+        {
+            insertIndex--;
+        }
+
+        insertIndex = Math.Clamp(insertIndex, 0, sortedList.Count);
+
+        if (sortedList.Count == 0)
+        {
+
+        }
+        else if (insertIndex == 0)
+        {
+            _draggedOption.SortWeight = sortedList[0].SortWeight + 1000;
+        }
+        else if (insertIndex == sortedList.Count)
+        {
+            _draggedOption.SortWeight = sortedList[^1].SortWeight - 1000;
+        }
+        else
+        {
+            _draggedOption.SortWeight = (sortedList[insertIndex - 1].SortWeight + sortedList[insertIndex].SortWeight) / 2.0;
+        }
+
+        _draggedOption = null;
+        _dropIndex = null;
+        FieldChanged.InvokeAsync(Field);
+        _sortedOptions = Field.ChoiceOptions.OrderByDescending(x => x.SortWeight).ToList();
     }
 }
