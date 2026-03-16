@@ -25,10 +25,10 @@ Welcome to your new app.
     <ModalBody>
         <FieldDefinitionForm @bind-FieldDefinition="context.Model"
                              @bind-FieldDefinition:after="() => {
-                                                             _fieldDefinitions.Add(context.Model);
+                                                                                                                       _fieldDefinitions.Add(context.Model);
                              context.Modal.Accept();}"
                              SubmitLabel="Validieren">
-            <FormSection Model="_myModel" >
+            <FormSection Model="_myModel">
                 <div class="my-2">
                     <label> Name</label>
                     <input class="form-control" @bind-value="_myModel.Name" />
@@ -95,6 +95,74 @@ Welcome to your new app.
     private Modal<FieldDefinition>? _editModal;
     private Modal<FieldDefinition>? _valueConfigModal;
 
+    protected override void OnInitialized()
+    {
+        _fieldDefinitions.Add(new FieldDefinition()
+        {
+            Type = new StringFieldType(),
+            InputDefinition = new InputDefinition()
+            {
+                Id = "0",
+                Label = new JGUZDV.L10n.L10nString([new("de", "Test Fielddefinition"), new("en", "Test Fielddefinition")]),
+                Name = "0"
+            },
+            Description = new JGUZDV.L10n.L10nString()
+            {
+                ["en"] = "Test Description",
+                ["de"] = "Test Description"
+            },
+            Metadata = "test",
+            ChoiceOptions = new List<ChoiceOption>()
+            {
+                new() {
+                    Name = new() { ["de"] = "1", ["en"] = "1"},
+                    Value = "1",
+                    SortWeight = 1
+                },
+                new() {
+                    Name = new() { ["de"] = "2", ["en"] = "2"},
+                    Value = "2",
+                    SortWeight =2
+                },
+                new() {
+                    Name = new() { ["de"] = "3", ["en"] = "3"},
+                    Value = "3",
+                    SortWeight =3
+                },
+                new() {
+                    Name = new() { ["de"] = "4", ["en"] = "4"},
+                    Value = "4",
+                    SortWeight = 4
+                },
+                new() {
+                    Name = new() { ["de"] = "5", ["en"] = "5"},
+                    Value = "5",
+                    SortWeight = 5
+                },
+                new() {
+                    Name = new() { ["de"] = "6", ["en"] = "6"},
+                    Value = "6",
+                    SortWeight =6
+                },
+                new() {
+                    Name = new() { ["de"] = "7", ["en"] = "7"},
+                    Value = "7",
+                    SortWeight =7
+                },
+                new() {
+                    Name = new() { ["de"] = "8", ["en"] = "8"},
+                    Value = "8",
+                    SortWeight =8
+                },
+                new() {
+                    Name = new() { ["de"] = "9", ["en"] = "9"},
+                    Value = "9",
+                    SortWeight =9
+                }
+            }
+        });
+        base.OnInitialized();
+    }
     private async Task Send()
     {
         var options = new JsonSerializerOptions()
