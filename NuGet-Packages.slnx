@@ -47,7 +47,7 @@
   </Folder>
   <Folder Name="/libraries/JGUZDV.Blazor.Components.Map/">
     <Project Path="libraries/JGUZDV.Blazor.Components.Map/src/JGUZDV.Blazor.Components.Map.csproj" />
-    <Project Path="libraries/JGUZDV.Blazor.Components.Map/test/JGUZDV.Blazor.Components.Map.Test.csproj" />
+    <Project Path="libraries/JGUZDV.Blazor.Components.Map/test/JGUZDV.Blazor.Components.Map.Tests.csproj" />
   </Folder>
   <Folder Name="/libraries/JGUZDV.Blazor.Components/">
     <Project Path="libraries/JGUZDV.Blazor.Components/samples/Shared/JGUZDV.Blazor.Components.Samples.csproj" />
