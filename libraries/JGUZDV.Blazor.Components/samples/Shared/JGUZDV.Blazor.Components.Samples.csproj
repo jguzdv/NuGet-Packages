@@ -9,11 +9,13 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.Localization" Version="9.0.2" />
         <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.2" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\..\..\JGUZDV.Blazor.Components.ClaimRequirements\src\JGUZDV.Blazor.Components.ClaimRequirements.csproj" />
         <ProjectReference Include="..\..\..\JGUZDV.Blazor.Components.L10n\src\JGUZDV.Blazor.Components.L10n.csproj" />
+        <ProjectReference Include="..\..\..\JGUZDV.Blazor.Components.Map\src\JGUZDV.Blazor.Components.Map.csproj" />
         <ProjectReference Include="..\..\..\JGUZDV.ClientStorage.Blazor\src\JGUZDV.ClientStorage.Blazor.csproj" />
         <ProjectReference Include="..\..\..\JGUZDV.ClientStorage\src\JGUZDV.ClientStorage.csproj" />
         <ProjectReference Include="..\..\src\JGUZDV.Blazor.Components.csproj" />
