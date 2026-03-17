@@ -1,5 +1,4 @@
 ﻿<li class="drop-spacer @(IsActive ? "active" : "")"
-    @ondragover="() => { }"
     @ondragover:preventDefault
     @ondragenter="() => OnDragEnter.InvokeAsync()"
     @ondrop="() => OnDrop.InvokeAsync()"
