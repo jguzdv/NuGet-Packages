@@ -38,7 +38,7 @@ namespace JGUZDV.CQRS.Queries
         public async Task ExecuteAsync(TQuery query, ClaimsPrincipal? principal, CancellationToken ct)
         {
             // We need to keep the original query reference to set the result later.
-            // If we fail to do so, records in combination with NormalizeQuery will potentially cause issues
+            // If we fail to do so, records in combination with NormalizeQuery might cause issues
             var originalQuery = query;
 
             try
