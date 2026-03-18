@@ -4,7 +4,7 @@
 @using Microsoft.AspNetCore.Components.Web;
 @using JGUZDV.Blazor.Components.Extensions;
 
-<div class="@(HostClass == null ? "px-2 py-1 border" : $"{HostClass}")">
+<div class="multi-select @(HostClass == null ? "px-2 py-1 border" : $"{HostClass}")">
     <div @ref="_anchor" class="d-flex justify-content-between clickable" role="button" tabindex="0" @onkeypress="e => e.OnEnter(ToggleSelection)" @onclick="ToggleSelection">
         <div class="d-flex flex-nowrap overflow-hidden text-nowrap text-truncate">
             <span class="me-1">@Title </span>
@@ -33,47 +33,49 @@
         </div>
     </div>
 
-    @if (!UseSingleSelectionMode && Values!.Any() && _isOpen)
-    {
-        <div class="d-flex gap-2 flex-wrap my-3">
-            @foreach (var item in Values!)
-            {
-                <div class="badge button d-flex justify-content-between gap-1 mw-0 text-bg-secondary" tabindex="0"
-                      @onkeypress="e => e.OnEnter(() => HandleBadgeClick(item))"
-                      @onclick="() => HandleBadgeClick(item)">
-                    <span class="text-truncate">@ItemName(item)</span> @BadgeIcon("")
-                </div>
-            }
-        </div>
-    }
-
     @if (_isOpen)
     {
-        <div class="fade-in my-3">
-            @{
+        <div class="@(UseOverlayMode ? "multi-select-overlay fade-in overflow-auto bg-body border px-2 py-1" : null)">
+            @if (!UseSingleSelectionMode && Values!.Any())
+            {
+                <div class="d-flex gap-2 flex-wrap my-2">
+                    @foreach (var item in Values!)
+                    {
+                        <div class="badge button d-flex justify-content-between gap-1 mw-0 text-bg-secondary" tabindex="0"
+                              @onkeypress="e => e.OnEnter(() => HandleBadgeClick(item))"
+                              @onclick="() => HandleBadgeClick(item)">
+                            <span class="text-truncate">@ItemName(item)</span> @BadgeIcon("")
+                        </div>
+                    }
+                </div>
+            }
+
+            <div class="@(UseOverlayMode ? "my-2" : "fade-in my-2")">
+                @{
 #pragma warning disable 8601 // warning is wrong
-            }
-            <MultiSelectBody Items="@Items"
-                             Values="@Values"
-                             ValuesChanged="@ValuesChanged"
-                             Value="@Value"
-                             ValueChanged="@ValueChanged"
-                             FilterLabel="@FilterLabel"
-                             Filter="@Filter"
-                             ItemsContainerClass="@ItemsContainerClass"
-                             ItemKey="@ItemKey"
-                             ItemTemplate="@ItemTemplate"
-                             AllOptionLabel="@AllOptionLabel"
-                             UseSingleSelectionMode="@UseSingleSelectionMode"
-                             T="T"
-                             TKey="TKey">
-            </MultiSelectBody>
-            @{
+                }
+                <MultiSelectBody Items="@Items"
+                                 Values="@Values"
+                                 ValuesChanged="@ValuesChanged"
+                                 Value="@Value"
+                                 ValueChanged="@ValueChanged"
+                                 FilterLabel="@FilterLabel"
+                                 Filter="@Filter"
+                                 ItemsContainerClass="@ItemsContainerClass"
+                                 ItemKey="@ItemKey"
+                                 ItemTemplate="@ItemTemplate"
+                                 AllOptionLabel="@AllOptionLabel"
+                                 UseSingleSelectionMode="@UseSingleSelectionMode"
+                                 T="T"
+                                 TKey="TKey">
+                </MultiSelectBody>
+                @{
 #pragma warning restore
-            }
-        </div>
-        <div role="button" tabindex="0" @onclick="ToggleSelection" @onkeypress="e => e.OnEnter(ToggleSelection)">
-            @CloseButton
+                }
+            </div>
+            <div role="button" tabindex="0" @onclick="ToggleSelection" @onkeypress="e => e.OnEnter(ToggleSelection)">
+                @CloseButton
+            </div>
         </div>
     }
 </div>
@@ -179,6 +181,12 @@
     /// </summary>
     [Parameter]
     public bool UseSingleSelectionMode { get; set; }
+
+    /// <summary>
+    /// If true, displays the selection panel as an anchored overlay.
+    /// </summary>
+    [Parameter]
+    public bool UseOverlayMode { get; set; }
 
     /// <summary>
     /// The render fragment for the close button.
