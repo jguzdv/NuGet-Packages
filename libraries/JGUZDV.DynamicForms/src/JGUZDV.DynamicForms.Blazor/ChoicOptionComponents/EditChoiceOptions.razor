@@ -37,10 +37,8 @@
         @SL["EditChoiceOptions.Plural"]
         <small class="text-muted fw-normal">@SL["EditChoiceOptions.DragAndDropHint"]</small>
     </div>
-    <ul class="list-group" @ondragend="() => { _draggedOption = null; _dropIndex = null; }">
-        <DropSpacer IsActive="_dropIndex == 0"
-                    OnDragEnter="() => SetDropIndex(0)"
-                    OnDrop="() => HandleDropAt(0)" />
+    <ul class="list-group" @ondragend="() => { _draggedOption = null; }">
+        <DropSpacer OnDrop="() => HandleDropAt(0)" />
 
         @foreach (var (option, i) in _sortedOptions.Select((o, i) => (o, i)))
         {
@@ -48,9 +46,8 @@
             <li class="list-group-item choice-option-item"
                 draggable="true"
                 @ondragstart="() => HandleDragStart(option)"
-                @ondragover:preventDefault="true"
-                @ondrop="() => HandleDropAt(_dropIndex)"
-                @ondrop:preventDefault="true">
+                @ondragover:preventDefault
+                @ondrop:preventDefault>
                 <i class="fa fa-edit clickable"
                    role="button"
                    @onclick="() => HandleEditChoiceOption(option)"></i>
@@ -60,9 +57,7 @@
                 @option.Name: @option.Value
             </li>
 
-            <DropSpacer IsActive="_dropIndex == dropIndex"
-                        OnDragEnter="() => SetDropIndex(dropIndex)"
-                        OnDrop="() => HandleDropAt(dropIndex)" />
+            <DropSpacer OnDrop="() => HandleDropAt(dropIndex)" />
         }
     </ul>
 }
@@ -97,21 +92,13 @@
     private List<ValidationResult> _errors = [];
 
     private ChoiceOption? _draggedOption;
-    private int? _dropIndex;
     private List<ChoiceOption> _sortedOptions = new();
 
     protected override void OnParametersSet()
     {
         _sortedOptions = Field.ChoiceOptions.OrderByDescending(x => x.SortWeight).ToList();
-        base.OnParametersSet();
     }
 
-    private void SetDropIndex(int index)
-    {
-        if (index == _dropIndex) return;
-        _dropIndex = index;
-        StateHasChanged();
-    }
     private void RemoveChoiceOption(ChoiceOption option)
     {
         Field.ChoiceOptions.Remove(option);
@@ -172,7 +159,6 @@
     {
         if (_draggedOption is null || insertIndexParam is null)
         {
-            _dropIndex = null;
             return;
         }
 
@@ -209,7 +195,6 @@
         }
 
         _draggedOption = null;
-        _dropIndex = null;
         FieldChanged.InvokeAsync(Field);
         _sortedOptions = Field.ChoiceOptions.OrderByDescending(x => x.SortWeight).ToList();
     }
