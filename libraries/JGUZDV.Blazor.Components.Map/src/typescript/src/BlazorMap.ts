@@ -6,12 +6,12 @@ class BlazorMap {
     private $isInitialized: (value: void | PromiseLike<void>) => void = () => { };
     private _pathPrefix: string;
     private _initializationCompleted: boolean = false;
+    private _map: GlMap;
 
 
     constructor(
         private _dotnetRef,
         _rootElement: HTMLElement,
-        private _mapId: string,
         center: LngLatLike,
         zoom: number,
         baselayerurl: string,
@@ -57,7 +57,7 @@ class BlazorMap {
             }
             this.completeInitialization();
         });
-        this.setMap(map);
+        this._map = map;
     }
 
     private completeInitialization = () => {
@@ -69,8 +69,7 @@ class BlazorMap {
         this.$isInitialized();
     }
 
-    private setMap = (map: any) => { (window as any)[this._mapId] = map; }
-    private getMap = () => { return (window as any)[this._mapId]; }
+    private getMap = () => { return this._map; }
 
     private onMapClick = (e: MapMouseEvent) => {
         let map: GlMap = this.getMap();
@@ -110,6 +109,15 @@ class BlazorMap {
 
         if (jsonData.images) {
             for (let image of jsonData.images) {
+                if (!image.id) {
+                    console.warn("Image without 'id' can not be added!");
+                    continue;
+                }
+                if (!image.imgUrl) {
+                    console.warn(`Image definition ${image.id} is missing required properties. (Required properties: imgUrl).`);
+                    continue;
+                }
+
                 map.loadImage(this.buildUrl(image.imgUrl), function (error, icon) {
                     if (error) {
                         console.error(`Image: ${image.id} could not load!`, error);
@@ -125,13 +133,6 @@ class BlazorMap {
                         console.warn("Image" + image.id + " already added");
                     }
                 });
-
-                if (!image.id) {
-                    console.warn("Image without 'id' can not be added!");
-                }
-                if (!image.imgUrl) {
-                    console.warn(`Image definition ${image.id} is missing required properties. (Required properties: imgUrl).`);
-                }
             }
         } else {
             console.debug("No images were found!");
@@ -258,7 +259,6 @@ class BlazorMap {
         this.completeInitialization();
 
         if (!map) {
-            delete (window as any)[this._mapId];
             return;
         }
 
@@ -269,7 +269,6 @@ class BlazorMap {
         }
 
         map.remove();
-        delete (window as any)[this._mapId];
     }
 
     public buildUrl = (path: string) => {
@@ -287,6 +286,6 @@ class BlazorMap {
 
 export function createMap(_dotnetRef, _rootElement: HTMLElement, center: LngLatLike, zoom: number, baselayerurl: string, maxBounds: LngLatBounds, spritePathPrefix: string) {
     console.debug("Creating Map ...")
-    return new BlazorMap(_dotnetRef, _rootElement, `map_${Math.random()}`, center, zoom, baselayerurl, maxBounds, spritePathPrefix);
+    return new BlazorMap(_dotnetRef, _rootElement, center, zoom, baselayerurl, maxBounds, spritePathPrefix);
 }
 

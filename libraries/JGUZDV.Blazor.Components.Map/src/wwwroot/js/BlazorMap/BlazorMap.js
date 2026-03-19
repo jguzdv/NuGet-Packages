@@ -16,29 +16,13 @@ var __copyProps = (to, from, except, desc) => {
   return to;
 };
 var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
   isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
   mod
 ));
-var __async = (__this, __arguments, generator) => {
-  return new Promise((resolve, reject) => {
-    var fulfilled = (value) => {
-      try {
-        step(generator.next(value));
-      } catch (e) {
-        reject(e);
-      }
-    };
-    var rejected = (value) => {
-      try {
-        step(generator.throw(value));
-      } catch (e) {
-        reject(e);
-      }
-    };
-    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
-    step((generator = generator.apply(__this, __arguments)).next());
-  });
-};
 
 // node_modules/maplibre-gl/dist/maplibre-gl.js
 var require_maplibre_gl = __commonJS({
@@ -183,22 +167,17 @@ var require_maplibre_gl = __commonJS({
         }, sampleCurveDerivativeX: function(t2) {
           return (3 * this.ax * t2 + 2 * this.bx) * t2 + this.cx;
         }, solveCurveX: function(t2, e2) {
-          if (void 0 === e2 && (e2 = 1e-6), t2 < 0)
-            return 0;
-          if (t2 > 1)
-            return 1;
+          if (void 0 === e2 && (e2 = 1e-6), t2 < 0) return 0;
+          if (t2 > 1) return 1;
           for (var r2 = t2, n2 = 0; n2 < 8; n2++) {
             var i2 = this.sampleCurveX(r2) - t2;
-            if (Math.abs(i2) < e2)
-              return r2;
+            if (Math.abs(i2) < e2) return r2;
             var a2 = this.sampleCurveDerivativeX(r2);
-            if (Math.abs(a2) < 1e-6)
-              break;
+            if (Math.abs(a2) < 1e-6) break;
             r2 -= i2 / a2;
           }
           var s2 = 0, o2 = 1;
-          for (r2 = t2, n2 = 0; n2 < 20 && (i2 = this.sampleCurveX(r2), !(Math.abs(i2 - t2) < e2)); n2++)
-            t2 > i2 ? s2 = r2 : o2 = r2, r2 = 0.5 * (o2 - s2) + s2;
+          for (r2 = t2, n2 = 0; n2 < 20 && (i2 = this.sampleCurveX(r2), !(Math.abs(i2 - t2) < e2)); n2++) t2 > i2 ? s2 = r2 : o2 = r2, r2 = 0.5 * (o2 - s2) + s2;
           return r2;
         }, solve: function(t2, e2) {
           return this.sampleCurveY(this.solveCurveX(t2, e2));
@@ -217,11 +196,10 @@ var require_maplibre_gl = __commonJS({
                 e2.fillStyle = `rgb(${n2},${n2 + 1},${n2 + 2})`, e2.fillRect(r3 % t2, Math.floor(r3 / t2), 1, 1);
               }
               const r2 = e2.getImageData(0, 0, t2, t2).data;
-              for (let e3 = 0; e3 < t2 * t2 * 4; e3++)
-                if (e3 % 4 != 3 && r2[e3] !== e3) {
-                  c = true;
-                  break;
-                }
+              for (let e3 = 0; e3 < t2 * t2 * 4; e3++) if (e3 % 4 != 3 && r2[e3] !== e3) {
+                c = true;
+                break;
+              }
             }
           }
           return c || false;
@@ -241,22 +219,18 @@ var require_maplibre_gl = __commonJS({
           return i2 === e2 ? r2 : i2;
         }
         function g(t2, ...e2) {
-          for (const r2 of e2)
-            for (const e3 in r2)
-              t2[e3] = r2[e3];
+          for (const r2 of e2) for (const e3 in r2) t2[e3] = r2[e3];
           return t2;
         }
         let x = 1;
         function v(t2, e2, r2) {
           const n2 = {};
-          for (const i2 in t2)
-            n2[i2] = e2.call(r2 || this, t2[i2], i2, t2);
+          for (const i2 in t2) n2[i2] = e2.call(r2 || this, t2[i2], i2, t2);
           return n2;
         }
         function b(t2, e2, r2) {
           const n2 = {};
-          for (const i2 in t2)
-            e2.call(r2 || this, t2[i2], i2, t2) && (n2[i2] = t2[i2]);
+          for (const i2 in t2) e2.call(r2 || this, t2[i2], i2, t2) && (n2[i2] = t2[i2]);
           return n2;
         }
         function w(t2) {
@@ -271,8 +245,7 @@ var require_maplibre_gl = __commonJS({
         }
         function k(t2) {
           let e2 = 0;
-          for (let r2, n2, i2 = 0, a2 = t2.length, s2 = a2 - 1; i2 < a2; s2 = i2++)
-            r2 = t2[i2], n2 = t2[s2], e2 += (n2.x - r2.x) * (r2.y + n2.y);
+          for (let r2, n2, i2 = 0, a2 = t2.length, s2 = a2 - 1; i2 < a2; s2 = i2++) r2 = t2[i2], n2 = t2[s2], e2 += (n2.x - r2.x) * (r2.y + n2.y);
           return e2;
         }
         function I() {
@@ -285,22 +258,19 @@ var require_maplibre_gl = __commonJS({
         const C = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAC0lEQVQYV2NgAAIAAAUAAarVyFEAAAAASUVORK5CYII=";
         function B(t2, r2, n2, i2, a2) {
           return e(this, void 0, void 0, function* () {
-            if ("undefined" == typeof VideoFrame)
-              throw new Error("VideoFrame not supported");
+            if ("undefined" == typeof VideoFrame) throw new Error("VideoFrame not supported");
             const e2 = new VideoFrame(t2, { timestamp: 0 });
             try {
               const s2 = null == e2 ? void 0 : e2.format;
-              if (!s2 || !s2.startsWith("BGR") && !s2.startsWith("RGB"))
-                throw new Error(`Unrecognized format ${s2}`);
+              if (!s2 || !s2.startsWith("BGR") && !s2.startsWith("RGB")) throw new Error(`Unrecognized format ${s2}`);
               const o2 = s2.startsWith("BGR"), l2 = new Uint8ClampedArray(i2 * a2 * 4);
               if (yield e2.copyTo(l2, function(t3, e3, r3, n3, i3) {
                 const a3 = 4 * Math.max(-e3, 0), s3 = (Math.max(0, r3) - r3) * n3 * 4 + a3, o3 = 4 * n3, l3 = Math.max(0, e3), u2 = Math.max(0, r3);
                 return { rect: { x: l3, y: u2, width: Math.min(t3.width, e3 + n3) - l3, height: Math.min(t3.height, r3 + i3) - u2 }, layout: [{ offset: s3, stride: o3 }] };
-              }(t2, r2, n2, i2, a2)), o2)
-                for (let t3 = 0; t3 < l2.length; t3 += 4) {
-                  const e3 = l2[t3];
-                  l2[t3] = l2[t3 + 2], l2[t3 + 2] = e3;
-                }
+              }(t2, r2, n2, i2, a2)), o2) for (let t3 = 0; t3 < l2.length; t3 += 4) {
+                const e3 = l2[t3];
+                l2[t3] = l2[t3 + 2], l2[t3 + 2] = e3;
+              }
               return l2;
             } finally {
               e2.close();
@@ -315,8 +285,7 @@ var require_maplibre_gl = __commonJS({
           return this.getImageCanvasContext(t2).getImageData(-e2, -e2, t2.width + 2 * e2, t2.height + 2 * e2);
         }, getImageCanvasContext(t2) {
           const e2 = window.document.createElement("canvas"), r2 = e2.getContext("2d", { willReadFrequently: true });
-          if (!r2)
-            throw new Error("failed to create canvas 2d context");
+          if (!r2) throw new Error("failed to create canvas 2d context");
           return e2.width = t2.width, e2.height = t2.height, r2.drawImage(t2, 0, 0, t2.width, t2.height), r2;
         }, resolveURL: (t2) => (E || (E = document.createElement("a")), E.href = t2, E.href), hardwareConcurrency: "undefined" != typeof navigator && navigator.hardwareConcurrency || 4, get prefersReducedMotion() {
           return !!matchMedia && (null == F && (F = matchMedia("(prefers-reduced-motion: reduce)")), F.matches);
@@ -345,34 +314,28 @@ var require_maplibre_gl = __commonJS({
         }
         const R = function(t2, e2) {
           if (/:\/\//.test(t2.url) && !/^https?:|^file:/.test(t2.url)) {
-            if (I() && self.worker && self.worker.actor)
-              return self.worker.actor.send("getResource", t2, e2);
-            if (!I())
-              return (O(t2.url) || U)(t2, e2);
+            if (I() && self.worker && self.worker.actor) return self.worker.actor.send("getResource", t2, e2);
+            if (!I()) return (O(t2.url) || U)(t2, e2);
           }
           if (!(/^file:/.test(r2 = t2.url) || /^file:/.test(D()) && !/^\w+:/.test(r2))) {
-            if (fetch && Request && AbortController && Object.prototype.hasOwnProperty.call(Request.prototype, "signal"))
-              return U(t2, e2);
-            if (I() && self.worker && self.worker.actor)
-              return self.worker.actor.send("getResource", t2, e2, void 0, true);
+            if (fetch && Request && AbortController && Object.prototype.hasOwnProperty.call(Request.prototype, "signal")) return U(t2, e2);
+            if (I() && self.worker && self.worker.actor) return self.worker.actor.send("getResource", t2, e2, void 0, true);
           }
           var r2;
           return function(t3, e3) {
             const r3 = new XMLHttpRequest();
             r3.open(t3.method || "GET", t3.url, true), "arrayBuffer" !== t3.type && "image" !== t3.type || (r3.responseType = "arraybuffer");
-            for (const e4 in t3.headers)
-              r3.setRequestHeader(e4, t3.headers[e4]);
+            for (const e4 in t3.headers) r3.setRequestHeader(e4, t3.headers[e4]);
             return "json" === t3.type && (r3.responseType = "text", r3.setRequestHeader("Accept", "application/json")), r3.withCredentials = "include" === t3.credentials, r3.onerror = () => {
               e3(new Error(r3.statusText));
             }, r3.onload = () => {
               if ((r3.status >= 200 && r3.status < 300 || 0 === r3.status) && null !== r3.response) {
                 let n2 = r3.response;
-                if ("json" === t3.type)
-                  try {
-                    n2 = JSON.parse(r3.response);
-                  } catch (t4) {
-                    return e3(t4);
-                  }
+                if ("json" === t3.type) try {
+                  n2 = JSON.parse(r3.response);
+                } catch (t4) {
+                  return e3(t4);
+                }
                 e3(null, n2, r3.getResponseHeader("Cache-Control"), r3.getResponseHeader("Expires"));
               } else {
                 const n2 = new Blob([r3.response], { type: r3.getResponseHeader("Content-Type") });
@@ -384,8 +347,7 @@ var require_maplibre_gl = __commonJS({
           return R(g(t2, { type: "arrayBuffer" }), e2);
         };
         function j(t2) {
-          if (!t2 || t2.indexOf("://") <= 0 || 0 === t2.indexOf("data:image/") || 0 === t2.indexOf("blob:"))
-            return true;
+          if (!t2 || t2.indexOf("://") <= 0 || 0 === t2.indexOf("data:image/") || 0 === t2.indexOf("blob:")) return true;
           const e2 = new URL(t2), r2 = window.location;
           return e2.protocol === r2.protocol && e2.host === r2.host;
         }
@@ -424,15 +386,12 @@ var require_maplibre_gl = __commonJS({
             if (this.listens(r2)) {
               t2.target = this;
               const e3 = this._listeners && this._listeners[r2] ? this._listeners[r2].slice() : [];
-              for (const r3 of e3)
-                r3.call(this, t2);
+              for (const r3 of e3) r3.call(this, t2);
               const n2 = this._oneTimeListeners && this._oneTimeListeners[r2] ? this._oneTimeListeners[r2].slice() : [];
-              for (const e4 of n2)
-                Z(r2, e4, this._oneTimeListeners), e4.call(this, t2);
+              for (const e4 of n2) Z(r2, e4, this._oneTimeListeners), e4.call(this, t2);
               const i2 = this._eventedParent;
               i2 && (g(t2, "function" == typeof this._eventedParentData ? this._eventedParentData() : this._eventedParentData), i2.fire(t2));
-            } else
-              t2 instanceof G && console.error(t2.error);
+            } else t2 instanceof G && console.error(t2.error);
             return this;
           }
           listens(t2) {
@@ -446,29 +405,21 @@ var require_maplibre_gl = __commonJS({
         const Y = ["type", "source", "source-layer", "minzoom", "maxzoom", "filter", "layout"];
         function H(t2, e2) {
           const r2 = {};
-          for (const e3 in t2)
-            "ref" !== e3 && (r2[e3] = t2[e3]);
+          for (const e3 in t2) "ref" !== e3 && (r2[e3] = t2[e3]);
           return Y.forEach((t3) => {
             t3 in e2 && (r2[t3] = e2[t3]);
           }), r2;
         }
         function W(t2, e2) {
           if (Array.isArray(t2)) {
-            if (!Array.isArray(e2) || t2.length !== e2.length)
-              return false;
-            for (let r2 = 0; r2 < t2.length; r2++)
-              if (!W(t2[r2], e2[r2]))
-                return false;
+            if (!Array.isArray(e2) || t2.length !== e2.length) return false;
+            for (let r2 = 0; r2 < t2.length; r2++) if (!W(t2[r2], e2[r2])) return false;
             return true;
           }
           if ("object" == typeof t2 && null !== t2 && null !== e2) {
-            if ("object" != typeof e2)
-              return false;
-            if (Object.keys(t2).length !== Object.keys(e2).length)
-              return false;
-            for (const r2 in t2)
-              if (!W(t2[r2], e2[r2]))
-                return false;
+            if ("object" != typeof e2) return false;
+            if (Object.keys(t2).length !== Object.keys(e2).length) return false;
+            for (const r2 in t2) if (!W(t2[r2], e2[r2])) return false;
             return true;
           }
           return t2 === e2;
@@ -485,20 +436,14 @@ var require_maplibre_gl = __commonJS({
         }
         function nt(t2, e2, r2) {
           let n2;
-          for (n2 in t2[r2])
-            if (Object.prototype.hasOwnProperty.call(t2[r2], n2) && "data" !== n2 && !W(t2[r2][n2], e2[r2][n2]))
-              return false;
-          for (n2 in e2[r2])
-            if (Object.prototype.hasOwnProperty.call(e2[r2], n2) && "data" !== n2 && !W(t2[r2][n2], e2[r2][n2]))
-              return false;
+          for (n2 in t2[r2]) if (Object.prototype.hasOwnProperty.call(t2[r2], n2) && "data" !== n2 && !W(t2[r2][n2], e2[r2][n2])) return false;
+          for (n2 in e2[r2]) if (Object.prototype.hasOwnProperty.call(e2[r2], n2) && "data" !== n2 && !W(t2[r2][n2], e2[r2][n2])) return false;
           return true;
         }
         function it(t2, e2, r2, n2, i2, a2) {
           let s2;
-          for (s2 in e2 = e2 || {}, t2 = t2 || {})
-            Object.prototype.hasOwnProperty.call(t2, s2) && (W(t2[s2], e2[s2]) || r2.push({ command: a2, args: [n2, s2, e2[s2], i2] }));
-          for (s2 in e2)
-            Object.prototype.hasOwnProperty.call(e2, s2) && !Object.prototype.hasOwnProperty.call(t2, s2) && (W(t2[s2], e2[s2]) || r2.push({ command: a2, args: [n2, s2, e2[s2], i2] }));
+          for (s2 in e2 = e2 || {}, t2 = t2 || {}) Object.prototype.hasOwnProperty.call(t2, s2) && (W(t2[s2], e2[s2]) || r2.push({ command: a2, args: [n2, s2, e2[s2], i2] }));
+          for (s2 in e2) Object.prototype.hasOwnProperty.call(e2, s2) && !Object.prototype.hasOwnProperty.call(t2, s2) && (W(t2[s2], e2[s2]) || r2.push({ command: a2, args: [n2, s2, e2[s2], i2] }));
         }
         function at(t2) {
           return t2.id;
@@ -512,9 +457,7 @@ var require_maplibre_gl = __commonJS({
           }
         }
         function lt(t2, ...e2) {
-          for (const r2 of e2)
-            for (const e3 in r2)
-              t2[e3] = r2[e3];
+          for (const r2 of e2) for (const e3 in r2) t2[e3] = r2[e3];
           return t2;
         }
         class ut extends Error {
@@ -525,17 +468,14 @@ var require_maplibre_gl = __commonJS({
         class ct {
           constructor(t2, e2 = []) {
             this.parent = t2, this.bindings = {};
-            for (const [t3, r2] of e2)
-              this.bindings[t3] = r2;
+            for (const [t3, r2] of e2) this.bindings[t3] = r2;
           }
           concat(t2) {
             return new ct(this, t2);
           }
           get(t2) {
-            if (this.bindings[t2])
-              return this.bindings[t2];
-            if (this.parent)
-              return this.parent.get(t2);
+            if (this.bindings[t2]) return this.bindings[t2];
+            if (this.parent) return this.parent.get(t2);
             throw new Error(`${t2} not found in scope.`);
           }
           has(t2) {
@@ -555,18 +495,13 @@ var require_maplibre_gl = __commonJS({
         }
         const kt = [ht, pt, ft, dt, yt, vt, mt, At(gt), bt, wt, _t];
         function It(t2, e2) {
-          if ("error" === e2.kind)
-            return null;
+          if ("error" === e2.kind) return null;
           if ("array" === t2.kind) {
-            if ("array" === e2.kind && (0 === e2.N && "value" === e2.itemType.kind || !It(t2.itemType, e2.itemType)) && ("number" != typeof t2.N || t2.N === e2.N))
-              return null;
+            if ("array" === e2.kind && (0 === e2.N && "value" === e2.itemType.kind || !It(t2.itemType, e2.itemType)) && ("number" != typeof t2.N || t2.N === e2.N)) return null;
           } else {
-            if (t2.kind === e2.kind)
-              return null;
+            if (t2.kind === e2.kind) return null;
             if ("value" === t2.kind) {
-              for (const t3 of kt)
-                if (!It(t3, e2))
-                  return null;
+              for (const t3 of kt) if (!It(t3, e2)) return null;
             }
           }
           return `Expected ${St(t2)} but found ${St(e2)} instead.`;
@@ -625,13 +560,10 @@ var require_maplibre_gl = __commonJS({
             this.r = t2, this.g = e2, this.b = r2, this.a = n2, i2 || (this.r *= n2, this.g *= n2, this.b *= n2, n2 || this.overwriteGetter("rgb", [t2, e2, r2, n2]));
           }
           static parse(t2) {
-            if (t2 instanceof Yt)
-              return t2;
-            if ("string" != typeof t2)
-              return;
+            if (t2 instanceof Yt) return t2;
+            if ("string" != typeof t2) return;
             const e2 = function(t3) {
-              if ("transparent" === (t3 = t3.toLowerCase().trim()))
-                return [0, 0, 0, 0];
+              if ("transparent" === (t3 = t3.toLowerCase().trim())) return [0, 0, 0, 0];
               const e3 = Xt[t3];
               if (e3) {
                 const [t4, r3, n2] = e3;
@@ -650,8 +582,7 @@ var require_maplibre_gl = __commonJS({
                     const t5 = [n2, s2, u2].join(""), e5 = "%%%" === t5 ? 100 : "" === t5 ? 255 : 0;
                     if (e5) {
                       const t6 = [Gt(+r3 / e5, 0, 1), Gt(+a2 / e5, 0, 1), Gt(+l2 / e5, 0, 1), h2 ? Kt(+h2, p2) : 1];
-                      if (Jt(t6))
-                        return t6;
+                      if (Jt(t6)) return t6;
                     }
                   }
                   return;
@@ -662,14 +593,13 @@ var require_maplibre_gl = __commonJS({
                 const [t4, e4, n2, i2, a2, s2, o2, l2, u2] = r2, c2 = [n2 || " ", a2 || " ", o2].join("");
                 if ("  " === c2 || "  /" === c2 || ",," === c2 || ",,," === c2) {
                   const t5 = [+e4, Gt(+i2, 0, 100), Gt(+s2, 0, 100), l2 ? Kt(+l2, u2) : 1];
-                  if (Jt(t5))
-                    return function([t6, e5, r3, n3]) {
-                      function i3(n4) {
-                        const i4 = (n4 + t6 / 30) % 12, a3 = e5 * Math.min(r3, 1 - r3);
-                        return r3 - a3 * Math.max(-1, Math.min(i4 - 3, 9 - i4, 1));
-                      }
-                      return t6 = Dt(t6), e5 /= 100, r3 /= 100, [i3(0), i3(8), i3(4), n3];
-                    }(t5);
+                  if (Jt(t5)) return function([t6, e5, r3, n3]) {
+                    function i3(n4) {
+                      const i4 = (n4 + t6 / 30) % 12, a3 = e5 * Math.min(r3, 1 - r3);
+                      return r3 - a3 * Math.max(-1, Math.min(i4 - 3, 9 - i4, 1));
+                    }
+                    return t6 = Dt(t6), e5 /= 100, r3 /= 100, [i3(0), i3(8), i3(4), n3];
+                  }(t5);
                 }
               }
             }(t2);
@@ -735,14 +665,10 @@ var require_maplibre_gl = __commonJS({
             this.values = t2.slice();
           }
           static parse(t2) {
-            if (t2 instanceof te)
-              return t2;
-            if ("number" == typeof t2)
-              return new te([t2, t2, t2, t2]);
+            if (t2 instanceof te) return t2;
+            if ("number" == typeof t2) return new te([t2, t2, t2, t2]);
             if (Array.isArray(t2) && !(t2.length < 1 || t2.length > 4)) {
-              for (const e2 of t2)
-                if ("number" != typeof e2)
-                  return;
+              for (const e2 of t2) if ("number" != typeof e2) return;
               switch (t2.length) {
                 case 1:
                   t2 = [t2[0], t2[0], t2[0], t2[0]];
@@ -766,15 +692,12 @@ var require_maplibre_gl = __commonJS({
             this.values = t2.slice();
           }
           static parse(t2) {
-            if (t2 instanceof re)
-              return t2;
+            if (t2 instanceof re) return t2;
             if (Array.isArray(t2) && !(t2.length < 1) && t2.length % 2 == 0) {
               for (let e2 = 0; e2 < t2.length; e2 += 2) {
                 const r2 = t2[e2], n2 = t2[e2 + 1];
-                if ("string" != typeof r2 || !ee.has(r2))
-                  return;
-                if (!Array.isArray(n2) || 2 !== n2.length || "number" != typeof n2[0] || "number" != typeof n2[1])
-                  return;
+                if ("string" != typeof r2 || !ee.has(r2)) return;
+                if (!Array.isArray(n2) || 2 !== n2.length || "number" != typeof n2[0] || "number" != typeof n2[1]) return;
               }
               return new re(t2);
             }
@@ -798,51 +721,35 @@ var require_maplibre_gl = __commonJS({
           return "number" == typeof t2 && t2 >= 0 && t2 <= 255 && "number" == typeof e2 && e2 >= 0 && e2 <= 255 && "number" == typeof r2 && r2 >= 0 && r2 <= 255 ? void 0 === n2 || "number" == typeof n2 && n2 >= 0 && n2 <= 1 ? null : `Invalid rgba value [${[t2, e2, r2, n2].join(", ")}]: 'a' must be between 0 and 1.` : `Invalid rgba value [${("number" == typeof n2 ? [t2, e2, r2, n2] : [t2, e2, r2]).join(", ")}]: 'r', 'g', and 'b' must be between 0 and 255.`;
         }
         function ae(t2) {
-          if (null === t2 || "string" == typeof t2 || "boolean" == typeof t2 || "number" == typeof t2 || t2 instanceof Yt || t2 instanceof Ht || t2 instanceof Qt || t2 instanceof te || t2 instanceof re || t2 instanceof ne)
-            return true;
+          if (null === t2 || "string" == typeof t2 || "boolean" == typeof t2 || "number" == typeof t2 || t2 instanceof Yt || t2 instanceof Ht || t2 instanceof Qt || t2 instanceof te || t2 instanceof re || t2 instanceof ne) return true;
           if (Array.isArray(t2)) {
-            for (const e2 of t2)
-              if (!ae(e2))
-                return false;
+            for (const e2 of t2) if (!ae(e2)) return false;
             return true;
           }
           if ("object" == typeof t2) {
-            for (const e2 in t2)
-              if (!ae(t2[e2]))
-                return false;
+            for (const e2 in t2) if (!ae(t2[e2])) return false;
             return true;
           }
           return false;
         }
         function se(t2) {
-          if (null === t2)
-            return ht;
-          if ("string" == typeof t2)
-            return ft;
-          if ("boolean" == typeof t2)
-            return dt;
-          if ("number" == typeof t2)
-            return pt;
-          if (t2 instanceof Yt)
-            return yt;
-          if (t2 instanceof Ht)
-            return xt;
-          if (t2 instanceof Qt)
-            return vt;
-          if (t2 instanceof te)
-            return bt;
-          if (t2 instanceof re)
-            return _t;
-          if (t2 instanceof ne)
-            return wt;
+          if (null === t2) return ht;
+          if ("string" == typeof t2) return ft;
+          if ("boolean" == typeof t2) return dt;
+          if ("number" == typeof t2) return pt;
+          if (t2 instanceof Yt) return yt;
+          if (t2 instanceof Ht) return xt;
+          if (t2 instanceof Qt) return vt;
+          if (t2 instanceof te) return bt;
+          if (t2 instanceof re) return _t;
+          if (t2 instanceof ne) return wt;
           if (Array.isArray(t2)) {
             const e2 = t2.length;
             let r2;
             for (const e3 of t2) {
               const t3 = se(e3);
               if (r2) {
-                if (r2 === t3)
-                  continue;
+                if (r2 === t3) continue;
                 r2 = gt;
                 break;
               }
@@ -861,10 +768,8 @@ var require_maplibre_gl = __commonJS({
             this.type = t2, this.value = e2;
           }
           static parse(t2, e2) {
-            if (2 !== t2.length)
-              return e2.error(`'literal' expression requires exactly one argument, but found ${t2.length - 1} instead.`);
-            if (!ae(t2[1]))
-              return e2.error("invalid value");
+            if (2 !== t2.length) return e2.error(`'literal' expression requires exactly one argument, but found ${t2.length - 1} instead.`);
+            if (!ae(t2[1])) return e2.error("invalid value");
             const r2 = t2[1];
             let n2 = se(r2);
             const i2 = e2.expectedType;
@@ -893,35 +798,29 @@ var require_maplibre_gl = __commonJS({
             this.type = t2, this.args = e2;
           }
           static parse(t2, e2) {
-            if (t2.length < 2)
-              return e2.error("Expected at least one argument.");
+            if (t2.length < 2) return e2.error("Expected at least one argument.");
             let r2, n2 = 1;
             const i2 = t2[0];
             if ("array" === i2) {
               let i3, a3;
               if (t2.length > 2) {
                 const r3 = t2[1];
-                if ("string" != typeof r3 || !(r3 in ce) || "object" === r3)
-                  return e2.error('The item type argument of "array" must be one of string, number, boolean', 1);
+                if ("string" != typeof r3 || !(r3 in ce) || "object" === r3) return e2.error('The item type argument of "array" must be one of string, number, boolean', 1);
                 i3 = ce[r3], n2++;
-              } else
-                i3 = gt;
+              } else i3 = gt;
               if (t2.length > 3) {
-                if (null !== t2[2] && ("number" != typeof t2[2] || t2[2] < 0 || t2[2] !== Math.floor(t2[2])))
-                  return e2.error('The length argument to "array" must be a positive integer literal', 2);
+                if (null !== t2[2] && ("number" != typeof t2[2] || t2[2] < 0 || t2[2] !== Math.floor(t2[2]))) return e2.error('The length argument to "array" must be a positive integer literal', 2);
                 a3 = t2[2], n2++;
               }
               r2 = At(i3, a3);
             } else {
-              if (!ce[i2])
-                throw new Error(`Types doesn't contain name = ${i2}`);
+              if (!ce[i2]) throw new Error(`Types doesn't contain name = ${i2}`);
               r2 = ce[i2];
             }
             const a2 = [];
             for (; n2 < t2.length; n2++) {
               const r3 = e2.parse(t2[n2], n2, gt);
-              if (!r3)
-                return null;
+              if (!r3) return null;
               a2.push(r3);
             }
             return new he(r2, a2);
@@ -929,10 +828,8 @@ var require_maplibre_gl = __commonJS({
           evaluate(t2) {
             for (let e2 = 0; e2 < this.args.length; e2++) {
               const r2 = this.args[e2].evaluate(t2);
-              if (!It(this.type, se(r2)))
-                return r2;
-              if (e2 === this.args.length - 1)
-                throw new ue(`Expected value to be of type ${St(this.type)}, but found ${St(se(r2))} instead.`);
+              if (!It(this.type, se(r2))) return r2;
+              if (e2 === this.args.length - 1) throw new ue(`Expected value to be of type ${St(this.type)}, but found ${St(se(r2))} instead.`);
             }
             throw new Error();
           }
@@ -949,18 +846,14 @@ var require_maplibre_gl = __commonJS({
             this.type = t2, this.args = e2;
           }
           static parse(t2, e2) {
-            if (t2.length < 2)
-              return e2.error("Expected at least one argument.");
+            if (t2.length < 2) return e2.error("Expected at least one argument.");
             const r2 = t2[0];
-            if (!pe[r2])
-              throw new Error(`Can't parse ${r2} as it is not part of the known types`);
-            if (("to-boolean" === r2 || "to-string" === r2) && 2 !== t2.length)
-              return e2.error("Expected one argument.");
+            if (!pe[r2]) throw new Error(`Can't parse ${r2} as it is not part of the known types`);
+            if (("to-boolean" === r2 || "to-string" === r2) && 2 !== t2.length) return e2.error("Expected one argument.");
             const n2 = pe[r2], i2 = [];
             for (let r3 = 1; r3 < t2.length; r3++) {
               const n3 = e2.parse(t2[r3], r3, gt);
-              if (!n3)
-                return null;
+              if (!n3) return null;
               i2.push(n3);
             }
             return new fe(n2, i2);
@@ -972,14 +865,11 @@ var require_maplibre_gl = __commonJS({
               case "color": {
                 let e2, r2;
                 for (const n2 of this.args) {
-                  if (e2 = n2.evaluate(t2), r2 = null, e2 instanceof Yt)
-                    return e2;
+                  if (e2 = n2.evaluate(t2), r2 = null, e2 instanceof Yt) return e2;
                   if ("string" == typeof e2) {
                     const r3 = t2.parseColor(e2);
-                    if (r3)
-                      return r3;
-                  } else if (Array.isArray(e2) && (r2 = e2.length < 3 || e2.length > 4 ? `Invalid rbga value ${JSON.stringify(e2)}: expected an array containing either three or four numeric values.` : ie(e2[0], e2[1], e2[2], e2[3]), !r2))
-                    return new Yt(e2[0] / 255, e2[1] / 255, e2[2] / 255, e2[3]);
+                    if (r3) return r3;
+                  } else if (Array.isArray(e2) && (r2 = e2.length < 3 || e2.length > 4 ? `Invalid rbga value ${JSON.stringify(e2)}: expected an array containing either three or four numeric values.` : ie(e2[0], e2[1], e2[2], e2[3]), !r2)) return new Yt(e2[0] / 255, e2[1] / 255, e2[2] / 255, e2[3]);
                 }
                 throw new ue(r2 || `Could not parse color from value '${"string" == typeof e2 ? e2 : JSON.stringify(e2)}'`);
               }
@@ -988,8 +878,7 @@ var require_maplibre_gl = __commonJS({
                 for (const r2 of this.args) {
                   e2 = r2.evaluate(t2);
                   const n2 = te.parse(e2);
-                  if (n2)
-                    return n2;
+                  if (n2) return n2;
                 }
                 throw new ue(`Could not parse padding from value '${"string" == typeof e2 ? e2 : JSON.stringify(e2)}'`);
               }
@@ -998,19 +887,16 @@ var require_maplibre_gl = __commonJS({
                 for (const r2 of this.args) {
                   e2 = r2.evaluate(t2);
                   const n2 = re.parse(e2);
-                  if (n2)
-                    return n2;
+                  if (n2) return n2;
                 }
                 throw new ue(`Could not parse variableAnchorOffsetCollection from value '${"string" == typeof e2 ? e2 : JSON.stringify(e2)}'`);
               }
               case "number": {
                 let e2 = null;
                 for (const r2 of this.args) {
-                  if (e2 = r2.evaluate(t2), null === e2)
-                    return 0;
+                  if (e2 = r2.evaluate(t2), null === e2) return 0;
                   const n2 = Number(e2);
-                  if (!isNaN(n2))
-                    return n2;
+                  if (!isNaN(n2)) return n2;
                 }
                 throw new ue(`Could not convert ${JSON.stringify(e2)} to number.`);
               }
@@ -1066,32 +952,21 @@ var require_maplibre_gl = __commonJS({
               return "assert" === r3 ? new he(e3, [t3]) : "coerce" === r3 ? new fe(e3, [t3]) : t3;
             }
             if (null !== t2 && "string" != typeof t2 && "boolean" != typeof t2 && "number" != typeof t2 || (t2 = ["literal", t2]), Array.isArray(t2)) {
-              if (0 === t2.length)
-                return this.error('Expected an array with at least one element. If you wanted a literal array, use ["literal", []].');
+              if (0 === t2.length) return this.error('Expected an array with at least one element. If you wanted a literal array, use ["literal", []].');
               const n2 = t2[0];
-              if ("string" != typeof n2)
-                return this.error(`Expression name must be a string, but found ${typeof n2} instead. If you wanted a literal array, use ["literal", [...]].`, 0), null;
+              if ("string" != typeof n2) return this.error(`Expression name must be a string, but found ${typeof n2} instead. If you wanted a literal array, use ["literal", [...]].`, 0), null;
               const i2 = this.registry[n2];
               if (i2) {
                 let n3 = i2.parse(t2, this);
-                if (!n3)
-                  return null;
+                if (!n3) return null;
                 if (this.expectedType) {
                   const t3 = this.expectedType, i3 = n3.type;
-                  if ("string" !== t3.kind && "number" !== t3.kind && "boolean" !== t3.kind && "object" !== t3.kind && "array" !== t3.kind || "value" !== i3.kind)
-                    if ("color" !== t3.kind && "formatted" !== t3.kind && "resolvedImage" !== t3.kind || "value" !== i3.kind && "string" !== i3.kind)
-                      if ("padding" !== t3.kind || "value" !== i3.kind && "number" !== i3.kind && "array" !== i3.kind)
-                        if ("variableAnchorOffsetCollection" !== t3.kind || "value" !== i3.kind && "array" !== i3.kind) {
-                          if (this.checkSubtype(t3, i3))
-                            return null;
-                        } else
-                          n3 = r2(n3, t3, e2.typeAnnotation || "coerce");
-                      else
-                        n3 = r2(n3, t3, e2.typeAnnotation || "coerce");
-                    else
-                      n3 = r2(n3, t3, e2.typeAnnotation || "coerce");
-                  else
-                    n3 = r2(n3, t3, e2.typeAnnotation || "assert");
+                  if ("string" !== t3.kind && "number" !== t3.kind && "boolean" !== t3.kind && "object" !== t3.kind && "array" !== t3.kind || "value" !== i3.kind) if ("color" !== t3.kind && "formatted" !== t3.kind && "resolvedImage" !== t3.kind || "value" !== i3.kind && "string" !== i3.kind) if ("padding" !== t3.kind || "value" !== i3.kind && "number" !== i3.kind && "array" !== i3.kind) if ("variableAnchorOffsetCollection" !== t3.kind || "value" !== i3.kind && "array" !== i3.kind) {
+                    if (this.checkSubtype(t3, i3)) return null;
+                  } else n3 = r2(n3, t3, e2.typeAnnotation || "coerce");
+                  else n3 = r2(n3, t3, e2.typeAnnotation || "coerce");
+                  else n3 = r2(n3, t3, e2.typeAnnotation || "coerce");
+                  else n3 = r2(n3, t3, e2.typeAnnotation || "assert");
                 }
                 if (!(n3 instanceof le) && "resolvedImage" !== n3.type.kind && this._isConstant(n3)) {
                   const t3 = new ye();
@@ -1125,17 +1000,13 @@ var require_maplibre_gl = __commonJS({
             this.type = xt, this.locale = r2, this.caseSensitive = t2, this.diacriticSensitive = e2;
           }
           static parse(t2, e2) {
-            if (2 !== t2.length)
-              return e2.error("Expected one argument.");
+            if (2 !== t2.length) return e2.error("Expected one argument.");
             const r2 = t2[1];
-            if ("object" != typeof r2 || Array.isArray(r2))
-              return e2.error("Collator options argument must be an object.");
+            if ("object" != typeof r2 || Array.isArray(r2)) return e2.error("Collator options argument must be an object.");
             const n2 = e2.parse(void 0 !== r2["case-sensitive"] && r2["case-sensitive"], 1, dt);
-            if (!n2)
-              return null;
+            if (!n2) return null;
             const i2 = e2.parse(void 0 !== r2["diacritic-sensitive"] && r2["diacritic-sensitive"], 1, dt);
-            if (!i2)
-              return null;
+            if (!i2) return null;
             let a2 = null;
             return r2.locale && (a2 = e2.parse(r2.locale, 1, ft), !a2) ? null : new ge(n2, i2, a2);
           }
@@ -1169,8 +1040,7 @@ var require_maplibre_gl = __commonJS({
           for (let s2 = 0, o2 = e2.length; s2 < o2; s2++) {
             const o3 = e2[s2];
             for (let e3 = 0, s3 = o3.length; e3 < s3 - 1; e3++) {
-              if (_e(t2, o3[e3], o3[e3 + 1]))
-                return false;
+              if (_e(t2, o3[e3], o3[e3 + 1])) return false;
               (i2 = o3[e3])[1] > (n2 = t2)[1] != (a2 = o3[e3 + 1])[1] > n2[1] && n2[0] < (a2[0] - i2[0]) * (n2[1] - i2[1]) / (a2[1] - i2[1]) + i2[0] && (r2 = !r2);
             }
           }
@@ -1178,9 +1048,7 @@ var require_maplibre_gl = __commonJS({
           return r2;
         }
         function Se(t2, e2) {
-          for (let r2 = 0; r2 < e2.length; r2++)
-            if (Ae(t2, e2[r2]))
-              return true;
+          for (let r2 = 0; r2 < e2.length; r2++) if (Ae(t2, e2[r2])) return true;
           return false;
         }
         function ke(t2, e2, r2, n2) {
@@ -1188,26 +1056,17 @@ var require_maplibre_gl = __commonJS({
           return s2 > 0 && o2 < 0 || s2 < 0 && o2 > 0;
         }
         function Ie(t2, e2, r2) {
-          for (const u2 of r2)
-            for (let r3 = 0; r3 < u2.length - 1; ++r3)
-              if (0 != (o2 = [(s2 = u2[r3 + 1])[0] - (a2 = u2[r3])[0], s2[1] - a2[1]])[0] * (l2 = [(i2 = e2)[0] - (n2 = t2)[0], i2[1] - n2[1]])[1] - o2[1] * l2[0] && ke(n2, i2, a2, s2) && ke(a2, s2, n2, i2))
-                return true;
+          for (const u2 of r2) for (let r3 = 0; r3 < u2.length - 1; ++r3) if (0 != (o2 = [(s2 = u2[r3 + 1])[0] - (a2 = u2[r3])[0], s2[1] - a2[1]])[0] * (l2 = [(i2 = e2)[0] - (n2 = t2)[0], i2[1] - n2[1]])[1] - o2[1] * l2[0] && ke(n2, i2, a2, s2) && ke(a2, s2, n2, i2)) return true;
           var n2, i2, a2, s2, o2, l2;
           return false;
         }
         function ze(t2, e2) {
-          for (let r2 = 0; r2 < t2.length; ++r2)
-            if (!Ae(t2[r2], e2))
-              return false;
-          for (let r2 = 0; r2 < t2.length - 1; ++r2)
-            if (Ie(t2[r2], t2[r2 + 1], e2))
-              return false;
+          for (let r2 = 0; r2 < t2.length; ++r2) if (!Ae(t2[r2], e2)) return false;
+          for (let r2 = 0; r2 < t2.length - 1; ++r2) if (Ie(t2[r2], t2[r2 + 1], e2)) return false;
           return true;
         }
         function Me(t2, e2) {
-          for (let r2 = 0; r2 < e2.length; r2++)
-            if (ze(t2, e2[r2]))
-              return true;
+          for (let r2 = 0; r2 < e2.length; r2++) if (ze(t2, e2[r2])) return true;
           return false;
         }
         function Ce(t2, e2, r2) {
@@ -1240,11 +1099,10 @@ var require_maplibre_gl = __commonJS({
         }
         function Ve(t2, e2, r2, n2) {
           const i2 = Math.pow(2, n2.z) * xe, a2 = [n2.x * xe, n2.y * xe], s2 = [];
-          for (const n3 of t2)
-            for (const t3 of n3) {
-              const n4 = [t3.x + a2[0], t3.y + a2[1]];
-              Pe(n4, e2, r2, i2), s2.push(n4);
-            }
+          for (const n3 of t2) for (const t3 of n3) {
+            const n4 = [t3.x + a2[0], t3.y + a2[1]];
+            Pe(n4, e2, r2, i2), s2.push(n4);
+          }
           return s2;
         }
         function Ee(t2, e2, r2, n2) {
@@ -1259,9 +1117,7 @@ var require_maplibre_gl = __commonJS({
           }
           if (e2[2] - e2[0] <= i2 / 2) {
             (o2 = e2)[0] = o2[1] = 1 / 0, o2[2] = o2[3] = -1 / 0;
-            for (const t3 of s2)
-              for (const n3 of t3)
-                Pe(n3, e2, r2, i2);
+            for (const t3 of s2) for (const n3 of t3) Pe(n3, e2, r2, i2);
           }
           var o2;
           return s2;
@@ -1271,69 +1127,50 @@ var require_maplibre_gl = __commonJS({
             this.type = dt, this.geojson = t2, this.geometries = e2;
           }
           static parse(t2, e2) {
-            if (2 !== t2.length)
-              return e2.error(`'within' expression requires exactly one argument, but found ${t2.length - 1} instead.`);
+            if (2 !== t2.length) return e2.error(`'within' expression requires exactly one argument, but found ${t2.length - 1} instead.`);
             if (ae(t2[1])) {
               const e3 = t2[1];
-              if ("FeatureCollection" === e3.type)
-                for (let t3 = 0; t3 < e3.features.length; ++t3) {
-                  const r2 = e3.features[t3].geometry.type;
-                  if ("Polygon" === r2 || "MultiPolygon" === r2)
-                    return new Fe(e3, e3.features[t3].geometry);
-                }
+              if ("FeatureCollection" === e3.type) for (let t3 = 0; t3 < e3.features.length; ++t3) {
+                const r2 = e3.features[t3].geometry.type;
+                if ("Polygon" === r2 || "MultiPolygon" === r2) return new Fe(e3, e3.features[t3].geometry);
+              }
               else if ("Feature" === e3.type) {
                 const t3 = e3.geometry.type;
-                if ("Polygon" === t3 || "MultiPolygon" === t3)
-                  return new Fe(e3, e3.geometry);
-              } else if ("Polygon" === e3.type || "MultiPolygon" === e3.type)
-                return new Fe(e3, e3);
+                if ("Polygon" === t3 || "MultiPolygon" === t3) return new Fe(e3, e3.geometry);
+              } else if ("Polygon" === e3.type || "MultiPolygon" === e3.type) return new Fe(e3, e3);
             }
             return e2.error("'within' expression requires valid geojson object that contains polygon geometry type.");
           }
           evaluate(t2) {
             if (null != t2.geometry() && null != t2.canonicalID()) {
-              if ("Point" === t2.geometryType())
-                return function(t3, e2) {
-                  const r2 = [1 / 0, 1 / 0, -1 / 0, -1 / 0], n2 = [1 / 0, 1 / 0, -1 / 0, -1 / 0], i2 = t3.canonicalID();
-                  if ("Polygon" === e2.type) {
-                    const a2 = Ce(e2.coordinates, n2, i2), s2 = Ve(t3.geometry(), r2, n2, i2);
-                    if (!be(r2, n2))
-                      return false;
-                    for (const t4 of s2)
-                      if (!Ae(t4, a2))
-                        return false;
-                  }
-                  if ("MultiPolygon" === e2.type) {
-                    const a2 = Be(e2.coordinates, n2, i2), s2 = Ve(t3.geometry(), r2, n2, i2);
-                    if (!be(r2, n2))
-                      return false;
-                    for (const t4 of s2)
-                      if (!Se(t4, a2))
-                        return false;
-                  }
-                  return true;
-                }(t2, this.geometries);
-              if ("LineString" === t2.geometryType())
-                return function(t3, e2) {
-                  const r2 = [1 / 0, 1 / 0, -1 / 0, -1 / 0], n2 = [1 / 0, 1 / 0, -1 / 0, -1 / 0], i2 = t3.canonicalID();
-                  if ("Polygon" === e2.type) {
-                    const a2 = Ce(e2.coordinates, n2, i2), s2 = Ee(t3.geometry(), r2, n2, i2);
-                    if (!be(r2, n2))
-                      return false;
-                    for (const t4 of s2)
-                      if (!ze(t4, a2))
-                        return false;
-                  }
-                  if ("MultiPolygon" === e2.type) {
-                    const a2 = Be(e2.coordinates, n2, i2), s2 = Ee(t3.geometry(), r2, n2, i2);
-                    if (!be(r2, n2))
-                      return false;
-                    for (const t4 of s2)
-                      if (!Me(t4, a2))
-                        return false;
-                  }
-                  return true;
-                }(t2, this.geometries);
+              if ("Point" === t2.geometryType()) return function(t3, e2) {
+                const r2 = [1 / 0, 1 / 0, -1 / 0, -1 / 0], n2 = [1 / 0, 1 / 0, -1 / 0, -1 / 0], i2 = t3.canonicalID();
+                if ("Polygon" === e2.type) {
+                  const a2 = Ce(e2.coordinates, n2, i2), s2 = Ve(t3.geometry(), r2, n2, i2);
+                  if (!be(r2, n2)) return false;
+                  for (const t4 of s2) if (!Ae(t4, a2)) return false;
+                }
+                if ("MultiPolygon" === e2.type) {
+                  const a2 = Be(e2.coordinates, n2, i2), s2 = Ve(t3.geometry(), r2, n2, i2);
+                  if (!be(r2, n2)) return false;
+                  for (const t4 of s2) if (!Se(t4, a2)) return false;
+                }
+                return true;
+              }(t2, this.geometries);
+              if ("LineString" === t2.geometryType()) return function(t3, e2) {
+                const r2 = [1 / 0, 1 / 0, -1 / 0, -1 / 0], n2 = [1 / 0, 1 / 0, -1 / 0, -1 / 0], i2 = t3.canonicalID();
+                if ("Polygon" === e2.type) {
+                  const a2 = Ce(e2.coordinates, n2, i2), s2 = Ee(t3.geometry(), r2, n2, i2);
+                  if (!be(r2, n2)) return false;
+                  for (const t4 of s2) if (!ze(t4, a2)) return false;
+                }
+                if ("MultiPolygon" === e2.type) {
+                  const a2 = Be(e2.coordinates, n2, i2), s2 = Ee(t3.geometry(), r2, n2, i2);
+                  if (!be(r2, n2)) return false;
+                  for (const t4 of s2) if (!Me(t4, a2)) return false;
+                }
+                return true;
+              }(t2, this.geometries);
             }
             return false;
           }
@@ -1348,8 +1185,7 @@ var require_maplibre_gl = __commonJS({
             this.type = e2.type, this.name = t2, this.boundExpression = e2;
           }
           static parse(t2, e2) {
-            if (2 !== t2.length || "string" != typeof t2[1])
-              return e2.error("'var' expression requires exactly one string literal argument.");
+            if (2 !== t2.length || "string" != typeof t2[1]) return e2.error("'var' expression requires exactly one string literal argument.");
             const r2 = t2[1];
             return e2.scope.has(r2) ? new Te(r2, e2.scope.get(r2)) : e2.error(`Unknown variable "${r2}". Make sure "${r2}" has been bound in an enclosing "let" expression before using it.`, 1);
           }
@@ -1377,8 +1213,7 @@ var require_maplibre_gl = __commonJS({
           }
           static parse(t2, e2) {
             const r2 = t2[0], n2 = $e.definitions[r2];
-            if (!n2)
-              return e2.error(`Unknown expression "${r2}". If you wanted a literal array, use ["literal", [...]].`, 0);
+            if (!n2) return e2.error(`Unknown expression "${r2}". If you wanted a literal array, use ["literal", [...]].`, 0);
             const i2 = Array.isArray(n2) ? n2[0] : n2.type, a2 = Array.isArray(n2) ? [[n2[1], n2[2]]] : n2.overloads, s2 = a2.filter(([e3]) => !Array.isArray(e3) || e3.length === t2.length - 1);
             let o2 = null;
             for (const [n3, a3] of s2) {
@@ -1393,20 +1228,16 @@ var require_maplibre_gl = __commonJS({
                 }
                 s3.push(a4);
               }
-              if (!l2)
-                if (Array.isArray(n3) && n3.length !== s3.length)
-                  o2.error(`Expected ${n3.length} arguments, but found ${s3.length} instead.`);
-                else {
-                  for (let t3 = 0; t3 < s3.length; t3++) {
-                    const e3 = Array.isArray(n3) ? n3[t3] : n3.type, r3 = s3[t3];
-                    o2.concat(t3 + 1).checkSubtype(e3, r3.type);
-                  }
-                  if (0 === o2.errors.length)
-                    return new $e(r2, i2, a3, s3);
+              if (!l2) if (Array.isArray(n3) && n3.length !== s3.length) o2.error(`Expected ${n3.length} arguments, but found ${s3.length} instead.`);
+              else {
+                for (let t3 = 0; t3 < s3.length; t3++) {
+                  const e3 = Array.isArray(n3) ? n3[t3] : n3.type, r3 = s3[t3];
+                  o2.concat(t3 + 1).checkSubtype(e3, r3.type);
                 }
+                if (0 === o2.errors.length) return new $e(r2, i2, a3, s3);
+              }
             }
-            if (1 === s2.length)
-              e2.errors.push(...o2.errors);
+            if (1 === s2.length) e2.errors.push(...o2.errors);
             else {
               const r3 = (s2.length ? s2 : a2).map(([t3]) => {
                 return e3 = t3, Array.isArray(e3) ? `(${e3.map(St).join(", ")})` : `(${St(e3.type)}...)`;
@@ -1414,8 +1245,7 @@ var require_maplibre_gl = __commonJS({
               }).join(" | "), n3 = [];
               for (let r4 = 1; r4 < t2.length; r4++) {
                 const i3 = e2.parse(t2[r4], 1 + n3.length);
-                if (!i3)
-                  return null;
+                if (!i3) return null;
                 n3.push(St(i3.type));
               }
               e2.error(`Expected arguments of type ${r3}, but found (${n3.join(", ")}) instead.`);
@@ -1424,19 +1254,14 @@ var require_maplibre_gl = __commonJS({
           }
           static register(t2, e2) {
             $e.definitions = e2;
-            for (const r2 in e2)
-              t2[r2] = $e;
+            for (const r2 in e2) t2[r2] = $e;
           }
         }
         function Le(t2) {
-          if (t2 instanceof Te)
-            return Le(t2.boundExpression);
-          if (t2 instanceof $e && "error" === t2.name)
-            return false;
-          if (t2 instanceof ge)
-            return false;
-          if (t2 instanceof Fe)
-            return false;
+          if (t2 instanceof Te) return Le(t2.boundExpression);
+          if (t2 instanceof $e && "error" === t2.name) return false;
+          if (t2 instanceof ge) return false;
+          if (t2 instanceof Fe) return false;
           const e2 = t2 instanceof fe || t2 instanceof he;
           let r2 = true;
           return t2.eachChild((t3) => {
@@ -1445,35 +1270,27 @@ var require_maplibre_gl = __commonJS({
         }
         function De(t2) {
           if (t2 instanceof $e) {
-            if ("get" === t2.name && 1 === t2.args.length)
-              return false;
-            if ("feature-state" === t2.name)
-              return false;
-            if ("has" === t2.name && 1 === t2.args.length)
-              return false;
-            if ("properties" === t2.name || "geometry-type" === t2.name || "id" === t2.name)
-              return false;
-            if (/^filter-/.test(t2.name))
-              return false;
+            if ("get" === t2.name && 1 === t2.args.length) return false;
+            if ("feature-state" === t2.name) return false;
+            if ("has" === t2.name && 1 === t2.args.length) return false;
+            if ("properties" === t2.name || "geometry-type" === t2.name || "id" === t2.name) return false;
+            if (/^filter-/.test(t2.name)) return false;
           }
-          if (t2 instanceof Fe)
-            return false;
+          if (t2 instanceof Fe) return false;
           let e2 = true;
           return t2.eachChild((t3) => {
             e2 && !De(t3) && (e2 = false);
           }), e2;
         }
         function Oe(t2) {
-          if (t2 instanceof $e && "feature-state" === t2.name)
-            return false;
+          if (t2 instanceof $e && "feature-state" === t2.name) return false;
           let e2 = true;
           return t2.eachChild((t3) => {
             e2 && !Oe(t3) && (e2 = false);
           }), e2;
         }
         function Ue(t2, e2) {
-          if (t2 instanceof $e && e2.indexOf(t2.name) >= 0)
-            return false;
+          if (t2 instanceof $e && e2.indexOf(t2.name) >= 0) return false;
           let r2 = true;
           return t2.eachChild((t3) => {
             r2 && !Ue(t3, e2) && (r2 = false);
@@ -1482,62 +1299,49 @@ var require_maplibre_gl = __commonJS({
         function Re(t2, e2) {
           const r2 = t2.length - 1;
           let n2, i2, a2 = 0, s2 = r2, o2 = 0;
-          for (; a2 <= s2; )
-            if (o2 = Math.floor((a2 + s2) / 2), n2 = t2[o2], i2 = t2[o2 + 1], n2 <= e2) {
-              if (o2 === r2 || e2 < i2)
-                return o2;
-              a2 = o2 + 1;
-            } else {
-              if (!(n2 > e2))
-                throw new ue("Input is not a number.");
-              s2 = o2 - 1;
-            }
+          for (; a2 <= s2; ) if (o2 = Math.floor((a2 + s2) / 2), n2 = t2[o2], i2 = t2[o2 + 1], n2 <= e2) {
+            if (o2 === r2 || e2 < i2) return o2;
+            a2 = o2 + 1;
+          } else {
+            if (!(n2 > e2)) throw new ue("Input is not a number.");
+            s2 = o2 - 1;
+          }
           return 0;
         }
         class qe {
           constructor(t2, e2, r2) {
             this.type = t2, this.input = e2, this.labels = [], this.outputs = [];
-            for (const [t3, e3] of r2)
-              this.labels.push(t3), this.outputs.push(e3);
+            for (const [t3, e3] of r2) this.labels.push(t3), this.outputs.push(e3);
           }
           static parse(t2, e2) {
-            if (t2.length - 1 < 4)
-              return e2.error(`Expected at least 4 arguments, but found only ${t2.length - 1}.`);
-            if ((t2.length - 1) % 2 != 0)
-              return e2.error("Expected an even number of arguments.");
+            if (t2.length - 1 < 4) return e2.error(`Expected at least 4 arguments, but found only ${t2.length - 1}.`);
+            if ((t2.length - 1) % 2 != 0) return e2.error("Expected an even number of arguments.");
             const r2 = e2.parse(t2[1], 1, pt);
-            if (!r2)
-              return null;
+            if (!r2) return null;
             const n2 = [];
             let i2 = null;
             e2.expectedType && "value" !== e2.expectedType.kind && (i2 = e2.expectedType);
             for (let r3 = 1; r3 < t2.length; r3 += 2) {
               const a2 = 1 === r3 ? -1 / 0 : t2[r3], s2 = t2[r3 + 1], o2 = r3, l2 = r3 + 1;
-              if ("number" != typeof a2)
-                return e2.error('Input/output pairs for "step" expressions must be defined using literal numeric values (not computed expressions) for the input values.', o2);
-              if (n2.length && n2[n2.length - 1][0] >= a2)
-                return e2.error('Input/output pairs for "step" expressions must be arranged with input values in strictly ascending order.', o2);
+              if ("number" != typeof a2) return e2.error('Input/output pairs for "step" expressions must be defined using literal numeric values (not computed expressions) for the input values.', o2);
+              if (n2.length && n2[n2.length - 1][0] >= a2) return e2.error('Input/output pairs for "step" expressions must be arranged with input values in strictly ascending order.', o2);
               const u2 = e2.parse(s2, l2, i2);
-              if (!u2)
-                return null;
+              if (!u2) return null;
               i2 = i2 || u2.type, n2.push([a2, u2]);
             }
             return new qe(i2, r2, n2);
           }
           evaluate(t2) {
             const e2 = this.labels, r2 = this.outputs;
-            if (1 === e2.length)
-              return r2[0].evaluate(t2);
+            if (1 === e2.length) return r2[0].evaluate(t2);
             const n2 = this.input.evaluate(t2);
-            if (n2 <= e2[0])
-              return r2[0].evaluate(t2);
+            if (n2 <= e2[0]) return r2[0].evaluate(t2);
             const i2 = e2.length;
             return n2 >= e2[i2 - 1] ? r2[i2 - 1].evaluate(t2) : r2[Re(e2, n2)].evaluate(t2);
           }
           eachChild(t2) {
             t2(this.input);
-            for (const e2 of this.outputs)
-              t2(e2);
+            for (const e2 of this.outputs) t2(e2);
           }
           outputDefined() {
             return this.outputs.every((t2) => t2.outputDefined());
@@ -1558,8 +1362,7 @@ var require_maplibre_gl = __commonJS({
             case "hcl": {
               const [n3, i2, a2, s2] = t2.hcl, [o2, l2, u2, c2] = e2.hcl;
               let h2, p2;
-              if (isNaN(n3) || isNaN(o2))
-                isNaN(n3) ? isNaN(o2) ? h2 = NaN : (h2 = o2, 1 !== a2 && 0 !== a2 || (p2 = l2)) : (h2 = n3, 1 !== u2 && 0 !== u2 || (p2 = i2));
+              if (isNaN(n3) || isNaN(o2)) isNaN(n3) ? isNaN(o2) ? h2 = NaN : (h2 = o2, 1 !== a2 && 0 !== a2 || (p2 = l2)) : (h2 = n3, 1 !== u2 && 0 !== u2 || (p2 = i2));
               else {
                 let t3 = o2 - n3;
                 o2 > n3 && t3 > 180 ? t3 -= 360 : o2 < n3 && n3 - o2 > 180 && (t3 += 360), h2 = n3 + r2 * t3;
@@ -1578,12 +1381,10 @@ var require_maplibre_gl = __commonJS({
           return new te(Ne(t2.values, e2.values, r2));
         }, variableAnchorOffsetCollection: function(t2, e2, r2) {
           const n2 = t2.values, i2 = e2.values;
-          if (n2.length !== i2.length)
-            throw new ue(`Cannot interpolate values of different length. from: ${t2.toString()}, to: ${e2.toString()}`);
+          if (n2.length !== i2.length) throw new ue(`Cannot interpolate values of different length. from: ${t2.toString()}, to: ${e2.toString()}`);
           const a2 = [];
           for (let t3 = 0; t3 < n2.length; t3 += 2) {
-            if (n2[t3] !== i2[t3])
-              throw new ue(`Cannot interpolate values containing mismatched anchors. from[${t3}]: ${n2[t3]}, to[${t3}]: ${i2[t3]}`);
+            if (n2[t3] !== i2[t3]) throw new ue(`Cannot interpolate values containing mismatched anchors. from[${t3}]: ${n2[t3]}, to[${t3}]: ${i2[t3]}`);
             a2.push(n2[t3]);
             const [e3, s2] = n2[t3 + 1], [o2, l2] = i2[t3 + 1];
             a2.push([je(e3, o2, r2), je(s2, l2, r2)]);
@@ -1593,15 +1394,12 @@ var require_maplibre_gl = __commonJS({
         class Ke {
           constructor(t2, e2, r2, n2, i2) {
             this.type = t2, this.operator = e2, this.interpolation = r2, this.input = n2, this.labels = [], this.outputs = [];
-            for (const [t3, e3] of i2)
-              this.labels.push(t3), this.outputs.push(e3);
+            for (const [t3, e3] of i2) this.labels.push(t3), this.outputs.push(e3);
           }
           static interpolationFactor(t2, e2, r2, n2) {
             let i2 = 0;
-            if ("exponential" === t2.name)
-              i2 = Ge(e2, t2.base, r2, n2);
-            else if ("linear" === t2.name)
-              i2 = Ge(e2, 1, r2, n2);
+            if ("exponential" === t2.name) i2 = Ge(e2, t2.base, r2, n2);
+            else if ("linear" === t2.name) i2 = Ge(e2, 1, r2, n2);
             else if ("cubic-bezier" === t2.name) {
               const a2 = t2.controlPoints;
               i2 = new l(a2[0], a2[1], a2[2], a2[3]).solve(Ge(e2, 1, r2, n2));
@@ -1610,57 +1408,43 @@ var require_maplibre_gl = __commonJS({
           }
           static parse(t2, e2) {
             let [r2, n2, i2, ...a2] = t2;
-            if (!Array.isArray(n2) || 0 === n2.length)
-              return e2.error("Expected an interpolation type expression.", 1);
-            if ("linear" === n2[0])
-              n2 = { name: "linear" };
+            if (!Array.isArray(n2) || 0 === n2.length) return e2.error("Expected an interpolation type expression.", 1);
+            if ("linear" === n2[0]) n2 = { name: "linear" };
             else if ("exponential" === n2[0]) {
               const t3 = n2[1];
-              if ("number" != typeof t3)
-                return e2.error("Exponential interpolation requires a numeric base.", 1, 1);
+              if ("number" != typeof t3) return e2.error("Exponential interpolation requires a numeric base.", 1, 1);
               n2 = { name: "exponential", base: t3 };
             } else {
-              if ("cubic-bezier" !== n2[0])
-                return e2.error(`Unknown interpolation type ${String(n2[0])}`, 1, 0);
+              if ("cubic-bezier" !== n2[0]) return e2.error(`Unknown interpolation type ${String(n2[0])}`, 1, 0);
               {
                 const t3 = n2.slice(1);
-                if (4 !== t3.length || t3.some((t4) => "number" != typeof t4 || t4 < 0 || t4 > 1))
-                  return e2.error("Cubic bezier interpolation requires four numeric arguments with values between 0 and 1.", 1);
+                if (4 !== t3.length || t3.some((t4) => "number" != typeof t4 || t4 < 0 || t4 > 1)) return e2.error("Cubic bezier interpolation requires four numeric arguments with values between 0 and 1.", 1);
                 n2 = { name: "cubic-bezier", controlPoints: t3 };
               }
             }
-            if (t2.length - 1 < 4)
-              return e2.error(`Expected at least 4 arguments, but found only ${t2.length - 1}.`);
-            if ((t2.length - 1) % 2 != 0)
-              return e2.error("Expected an even number of arguments.");
-            if (i2 = e2.parse(i2, 2, pt), !i2)
-              return null;
+            if (t2.length - 1 < 4) return e2.error(`Expected at least 4 arguments, but found only ${t2.length - 1}.`);
+            if ((t2.length - 1) % 2 != 0) return e2.error("Expected an even number of arguments.");
+            if (i2 = e2.parse(i2, 2, pt), !i2) return null;
             const s2 = [];
             let o2 = null;
             "interpolate-hcl" === r2 || "interpolate-lab" === r2 ? o2 = yt : e2.expectedType && "value" !== e2.expectedType.kind && (o2 = e2.expectedType);
             for (let t3 = 0; t3 < a2.length; t3 += 2) {
               const r3 = a2[t3], n3 = a2[t3 + 1], i3 = t3 + 3, l2 = t3 + 4;
-              if ("number" != typeof r3)
-                return e2.error('Input/output pairs for "interpolate" expressions must be defined using literal numeric values (not computed expressions) for the input values.', i3);
-              if (s2.length && s2[s2.length - 1][0] >= r3)
-                return e2.error('Input/output pairs for "interpolate" expressions must be arranged with input values in strictly ascending order.', i3);
+              if ("number" != typeof r3) return e2.error('Input/output pairs for "interpolate" expressions must be defined using literal numeric values (not computed expressions) for the input values.', i3);
+              if (s2.length && s2[s2.length - 1][0] >= r3) return e2.error('Input/output pairs for "interpolate" expressions must be arranged with input values in strictly ascending order.', i3);
               const u2 = e2.parse(n3, l2, o2);
-              if (!u2)
-                return null;
+              if (!u2) return null;
               o2 = o2 || u2.type, s2.push([r3, u2]);
             }
             return Ct(o2, pt) || Ct(o2, yt) || Ct(o2, bt) || Ct(o2, _t) || Ct(o2, At(pt)) ? new Ke(o2, r2, n2, i2, s2) : e2.error(`Type ${St(o2)} is not interpolatable.`);
           }
           evaluate(t2) {
             const e2 = this.labels, r2 = this.outputs;
-            if (1 === e2.length)
-              return r2[0].evaluate(t2);
+            if (1 === e2.length) return r2[0].evaluate(t2);
             const n2 = this.input.evaluate(t2);
-            if (n2 <= e2[0])
-              return r2[0].evaluate(t2);
+            if (n2 <= e2[0]) return r2[0].evaluate(t2);
             const i2 = e2.length;
-            if (n2 >= e2[i2 - 1])
-              return r2[i2 - 1].evaluate(t2);
+            if (n2 >= e2[i2 - 1]) return r2[i2 - 1].evaluate(t2);
             const a2 = Re(e2, n2), s2 = Ke.interpolationFactor(this.interpolation, n2, e2[a2], e2[a2 + 1]), o2 = r2[a2].evaluate(t2), l2 = r2[a2 + 1].evaluate(t2);
             switch (this.operator) {
               case "interpolate":
@@ -1673,8 +1457,7 @@ var require_maplibre_gl = __commonJS({
           }
           eachChild(t2) {
             t2(this.input);
-            for (const e2 of this.outputs)
-              t2(e2);
+            for (const e2 of this.outputs) t2(e2);
           }
           outputDefined() {
             return this.outputs.every((t2) => t2.outputDefined());
@@ -1689,28 +1472,23 @@ var require_maplibre_gl = __commonJS({
             this.type = t2, this.args = e2;
           }
           static parse(t2, e2) {
-            if (t2.length < 2)
-              return e2.error("Expectected at least one argument.");
+            if (t2.length < 2) return e2.error("Expectected at least one argument.");
             let r2 = null;
             const n2 = e2.expectedType;
             n2 && "value" !== n2.kind && (r2 = n2);
             const i2 = [];
             for (const n3 of t2.slice(1)) {
               const t3 = e2.parse(n3, 1 + i2.length, r2, void 0, { typeAnnotation: "omit" });
-              if (!t3)
-                return null;
+              if (!t3) return null;
               r2 = r2 || t3.type, i2.push(t3);
             }
-            if (!r2)
-              throw new Error("No output type");
+            if (!r2) throw new Error("No output type");
             const a2 = n2 && i2.some((t3) => It(n2, t3.type));
             return new Je(a2 ? gt : r2, i2);
           }
           evaluate(t2) {
             let e2, r2 = null, n2 = 0;
-            for (const i2 of this.args)
-              if (n2++, r2 = i2.evaluate(t2), r2 && r2 instanceof ne && !r2.available && (e2 || (e2 = r2.name), r2 = null, n2 === this.args.length && (r2 = e2)), null !== r2)
-                break;
+            for (const i2 of this.args) if (n2++, r2 = i2.evaluate(t2), r2 && r2 instanceof ne && !r2.available && (e2 || (e2 = r2.name), r2 = null, n2 === this.args.length && (r2 = e2)), null !== r2) break;
             return r2;
           }
           eachChild(t2) {
@@ -1728,23 +1506,18 @@ var require_maplibre_gl = __commonJS({
             return this.result.evaluate(t2);
           }
           eachChild(t2) {
-            for (const e2 of this.bindings)
-              t2(e2[1]);
+            for (const e2 of this.bindings) t2(e2[1]);
             t2(this.result);
           }
           static parse(t2, e2) {
-            if (t2.length < 4)
-              return e2.error(`Expected at least 3 arguments, but found ${t2.length - 1} instead.`);
+            if (t2.length < 4) return e2.error(`Expected at least 3 arguments, but found ${t2.length - 1} instead.`);
             const r2 = [];
             for (let n3 = 1; n3 < t2.length - 1; n3 += 2) {
               const i2 = t2[n3];
-              if ("string" != typeof i2)
-                return e2.error(`Expected string, but found ${typeof i2} instead.`, n3);
-              if (/[^a-zA-Z0-9_]/.test(i2))
-                return e2.error("Variable names must contain only alphanumeric characters or '_'.", n3);
+              if ("string" != typeof i2) return e2.error(`Expected string, but found ${typeof i2} instead.`, n3);
+              if (/[^a-zA-Z0-9_]/.test(i2)) return e2.error("Variable names must contain only alphanumeric characters or '_'.", n3);
               const a2 = e2.parse(t2[n3 + 1], n3 + 1);
-              if (!a2)
-                return null;
+              if (!a2) return null;
               r2.push([i2, a2]);
             }
             const n2 = e2.parse(t2[t2.length - 1], t2.length - 1, e2.expectedType, r2);
@@ -1759,19 +1532,15 @@ var require_maplibre_gl = __commonJS({
             this.type = t2, this.index = e2, this.input = r2;
           }
           static parse(t2, e2) {
-            if (3 !== t2.length)
-              return e2.error(`Expected 2 arguments, but found ${t2.length - 1} instead.`);
+            if (3 !== t2.length) return e2.error(`Expected 2 arguments, but found ${t2.length - 1} instead.`);
             const r2 = e2.parse(t2[1], 1, pt), n2 = e2.parse(t2[2], 2, At(e2.expectedType || gt));
             return r2 && n2 ? new Ye(n2.type.itemType, r2, n2) : null;
           }
           evaluate(t2) {
             const e2 = this.index.evaluate(t2), r2 = this.input.evaluate(t2);
-            if (e2 < 0)
-              throw new ue(`Array index out of bounds: ${e2} < 0.`);
-            if (e2 >= r2.length)
-              throw new ue(`Array index out of bounds: ${e2} > ${r2.length - 1}.`);
-            if (e2 !== Math.floor(e2))
-              throw new ue(`Array index must be an integer, but found ${e2} instead.`);
+            if (e2 < 0) throw new ue(`Array index out of bounds: ${e2} < 0.`);
+            if (e2 >= r2.length) throw new ue(`Array index out of bounds: ${e2} > ${r2.length - 1}.`);
+            if (e2 !== Math.floor(e2)) throw new ue(`Array index must be an integer, but found ${e2} instead.`);
             return r2[e2];
           }
           eachChild(t2) {
@@ -1786,19 +1555,15 @@ var require_maplibre_gl = __commonJS({
             this.type = dt, this.needle = t2, this.haystack = e2;
           }
           static parse(t2, e2) {
-            if (3 !== t2.length)
-              return e2.error(`Expected 2 arguments, but found ${t2.length - 1} instead.`);
+            if (3 !== t2.length) return e2.error(`Expected 2 arguments, but found ${t2.length - 1} instead.`);
             const r2 = e2.parse(t2[1], 1, gt), n2 = e2.parse(t2[2], 2, gt);
             return r2 && n2 ? zt(r2.type, [dt, ft, pt, ht, gt]) ? new He(r2, n2) : e2.error(`Expected first argument to be of type boolean, string, number or null, but found ${St(r2.type)} instead`) : null;
           }
           evaluate(t2) {
             const e2 = this.needle.evaluate(t2), r2 = this.haystack.evaluate(t2);
-            if (!r2)
-              return false;
-            if (!Mt(e2, ["boolean", "string", "number", "null"]))
-              throw new ue(`Expected first argument to be of type boolean, string, number or null, but found ${St(se(e2))} instead.`);
-            if (!Mt(r2, ["string", "array"]))
-              throw new ue(`Expected second argument to be of type array or string, but found ${St(se(r2))} instead.`);
+            if (!r2) return false;
+            if (!Mt(e2, ["boolean", "string", "number", "null"])) throw new ue(`Expected first argument to be of type boolean, string, number or null, but found ${St(se(e2))} instead.`);
+            if (!Mt(r2, ["string", "array"])) throw new ue(`Expected second argument to be of type array or string, but found ${St(se(r2))} instead.`);
             return r2.indexOf(e2) >= 0;
           }
           eachChild(t2) {
@@ -1813,13 +1578,10 @@ var require_maplibre_gl = __commonJS({
             this.type = pt, this.needle = t2, this.haystack = e2, this.fromIndex = r2;
           }
           static parse(t2, e2) {
-            if (t2.length <= 2 || t2.length >= 5)
-              return e2.error(`Expected 3 or 4 arguments, but found ${t2.length - 1} instead.`);
+            if (t2.length <= 2 || t2.length >= 5) return e2.error(`Expected 3 or 4 arguments, but found ${t2.length - 1} instead.`);
             const r2 = e2.parse(t2[1], 1, gt), n2 = e2.parse(t2[2], 2, gt);
-            if (!r2 || !n2)
-              return null;
-            if (!zt(r2.type, [dt, ft, pt, ht, gt]))
-              return e2.error(`Expected first argument to be of type boolean, string, number or null, but found ${St(r2.type)} instead`);
+            if (!r2 || !n2) return null;
+            if (!zt(r2.type, [dt, ft, pt, ht, gt])) return e2.error(`Expected first argument to be of type boolean, string, number or null, but found ${St(r2.type)} instead`);
             if (4 === t2.length) {
               const i2 = e2.parse(t2[3], 3, pt);
               return i2 ? new We(r2, n2, i2) : null;
@@ -1828,10 +1590,8 @@ var require_maplibre_gl = __commonJS({
           }
           evaluate(t2) {
             const e2 = this.needle.evaluate(t2), r2 = this.haystack.evaluate(t2);
-            if (!Mt(e2, ["boolean", "string", "number", "null"]))
-              throw new ue(`Expected first argument to be of type boolean, string, number or null, but found ${St(se(e2))} instead.`);
-            if (!Mt(r2, ["string", "array"]))
-              throw new ue(`Expected second argument to be of type array or string, but found ${St(se(r2))} instead.`);
+            if (!Mt(e2, ["boolean", "string", "number", "null"])) throw new ue(`Expected first argument to be of type boolean, string, number or null, but found ${St(se(e2))} instead.`);
+            if (!Mt(r2, ["string", "array"])) throw new ue(`Expected second argument to be of type array or string, but found ${St(se(r2))} instead.`);
             if (this.fromIndex) {
               const n2 = this.fromIndex.evaluate(t2);
               return r2.indexOf(e2, n2);
@@ -1850,10 +1610,8 @@ var require_maplibre_gl = __commonJS({
             this.inputType = t2, this.type = e2, this.input = r2, this.cases = n2, this.outputs = i2, this.otherwise = a2;
           }
           static parse(t2, e2) {
-            if (t2.length < 5)
-              return e2.error(`Expected at least 4 arguments, but found only ${t2.length - 1}.`);
-            if (t2.length % 2 != 1)
-              return e2.error("Expected an even number of arguments.");
+            if (t2.length < 5) return e2.error(`Expected at least 4 arguments, but found only ${t2.length - 1}.`);
+            if (t2.length % 2 != 1) return e2.error("Expected an even number of arguments.");
             let r2, n2;
             e2.expectedType && "value" !== e2.expectedType.kind && (n2 = e2.expectedType);
             const i2 = {}, a2 = [];
@@ -1862,32 +1620,23 @@ var require_maplibre_gl = __commonJS({
               const l2 = t2[s3 + 1];
               Array.isArray(o3) || (o3 = [o3]);
               const u2 = e2.concat(s3);
-              if (0 === o3.length)
-                return u2.error("Expected at least one branch label.");
+              if (0 === o3.length) return u2.error("Expected at least one branch label.");
               for (const t3 of o3) {
-                if ("number" != typeof t3 && "string" != typeof t3)
-                  return u2.error("Branch labels must be numbers or strings.");
-                if ("number" == typeof t3 && Math.abs(t3) > Number.MAX_SAFE_INTEGER)
-                  return u2.error(`Branch labels must be integers no larger than ${Number.MAX_SAFE_INTEGER}.`);
-                if ("number" == typeof t3 && Math.floor(t3) !== t3)
-                  return u2.error("Numeric branch labels must be integer values.");
+                if ("number" != typeof t3 && "string" != typeof t3) return u2.error("Branch labels must be numbers or strings.");
+                if ("number" == typeof t3 && Math.abs(t3) > Number.MAX_SAFE_INTEGER) return u2.error(`Branch labels must be integers no larger than ${Number.MAX_SAFE_INTEGER}.`);
+                if ("number" == typeof t3 && Math.floor(t3) !== t3) return u2.error("Numeric branch labels must be integer values.");
                 if (r2) {
-                  if (u2.checkSubtype(r2, se(t3)))
-                    return null;
-                } else
-                  r2 = se(t3);
-                if (void 0 !== i2[String(t3)])
-                  return u2.error("Branch labels must be unique.");
+                  if (u2.checkSubtype(r2, se(t3))) return null;
+                } else r2 = se(t3);
+                if (void 0 !== i2[String(t3)]) return u2.error("Branch labels must be unique.");
                 i2[String(t3)] = a2.length;
               }
               const c2 = e2.parse(l2, s3, n2);
-              if (!c2)
-                return null;
+              if (!c2) return null;
               n2 = n2 || c2.type, a2.push(c2);
             }
             const s2 = e2.parse(t2[1], 1, gt);
-            if (!s2)
-              return null;
+            if (!s2) return null;
             const o2 = e2.parse(t2[t2.length - 1], t2.length - 1, n2);
             return o2 ? "value" !== s2.type.kind && e2.concat(1).checkSubtype(r2, s2.type) ? null : new Qe(r2, n2, s2, i2, a2, o2) : null;
           }
@@ -1907,38 +1656,29 @@ var require_maplibre_gl = __commonJS({
             this.type = t2, this.branches = e2, this.otherwise = r2;
           }
           static parse(t2, e2) {
-            if (t2.length < 4)
-              return e2.error(`Expected at least 3 arguments, but found only ${t2.length - 1}.`);
-            if (t2.length % 2 != 0)
-              return e2.error("Expected an odd number of arguments.");
+            if (t2.length < 4) return e2.error(`Expected at least 3 arguments, but found only ${t2.length - 1}.`);
+            if (t2.length % 2 != 0) return e2.error("Expected an odd number of arguments.");
             let r2;
             e2.expectedType && "value" !== e2.expectedType.kind && (r2 = e2.expectedType);
             const n2 = [];
             for (let i3 = 1; i3 < t2.length - 1; i3 += 2) {
               const a2 = e2.parse(t2[i3], i3, dt);
-              if (!a2)
-                return null;
+              if (!a2) return null;
               const s2 = e2.parse(t2[i3 + 1], i3 + 1, r2);
-              if (!s2)
-                return null;
+              if (!s2) return null;
               n2.push([a2, s2]), r2 = r2 || s2.type;
             }
             const i2 = e2.parse(t2[t2.length - 1], t2.length - 1, r2);
-            if (!i2)
-              return null;
-            if (!r2)
-              throw new Error("Can't infer output type");
+            if (!i2) return null;
+            if (!r2) throw new Error("Can't infer output type");
             return new tr(r2, n2, i2);
           }
           evaluate(t2) {
-            for (const [e2, r2] of this.branches)
-              if (e2.evaluate(t2))
-                return r2.evaluate(t2);
+            for (const [e2, r2] of this.branches) if (e2.evaluate(t2)) return r2.evaluate(t2);
             return this.otherwise.evaluate(t2);
           }
           eachChild(t2) {
-            for (const [e2, r2] of this.branches)
-              t2(e2), t2(r2);
+            for (const [e2, r2] of this.branches) t2(e2), t2(r2);
             t2(this.otherwise);
           }
           outputDefined() {
@@ -1950,13 +1690,10 @@ var require_maplibre_gl = __commonJS({
             this.type = t2, this.input = e2, this.beginIndex = r2, this.endIndex = n2;
           }
           static parse(t2, e2) {
-            if (t2.length <= 2 || t2.length >= 5)
-              return e2.error(`Expected 3 or 4 arguments, but found ${t2.length - 1} instead.`);
+            if (t2.length <= 2 || t2.length >= 5) return e2.error(`Expected 3 or 4 arguments, but found ${t2.length - 1} instead.`);
             const r2 = e2.parse(t2[1], 1, gt), n2 = e2.parse(t2[2], 2, pt);
-            if (!r2 || !n2)
-              return null;
-            if (!zt(r2.type, [At(gt), ft, gt]))
-              return e2.error(`Expected first argument to be of type array or string, but found ${St(r2.type)} instead`);
+            if (!r2 || !n2) return null;
+            if (!zt(r2.type, [At(gt), ft, gt])) return e2.error(`Expected first argument to be of type array or string, but found ${St(r2.type)} instead`);
             if (4 === t2.length) {
               const i2 = e2.parse(t2[3], 3, pt);
               return i2 ? new er(r2.type, r2, n2, i2) : null;
@@ -1965,8 +1702,7 @@ var require_maplibre_gl = __commonJS({
           }
           evaluate(t2) {
             const e2 = this.input.evaluate(t2), r2 = this.beginIndex.evaluate(t2);
-            if (!Mt(e2, ["string", "array"]))
-              throw new ue(`Expected first argument to be of type array or string, but found ${St(se(e2))} instead.`);
+            if (!Mt(e2, ["string", "array"])) throw new ue(`Expected first argument to be of type array or string, but found ${St(se(e2))} instead.`);
             if (this.endIndex) {
               const n2 = this.endIndex.evaluate(t2);
               return e2.slice(r2, n2);
@@ -1993,28 +1729,20 @@ var require_maplibre_gl = __commonJS({
               this.type = dt, this.lhs = t3, this.rhs = e3, this.collator = r3, this.hasUntypedArgument = "value" === t3.type.kind || "value" === e3.type.kind;
             }
             static parse(t3, e3) {
-              if (3 !== t3.length && 4 !== t3.length)
-                return e3.error("Expected two or three arguments.");
+              if (3 !== t3.length && 4 !== t3.length) return e3.error("Expected two or three arguments.");
               const r3 = t3[0];
               let a2 = e3.parse(t3[1], 1, gt);
-              if (!a2)
-                return null;
-              if (!rr(r3, a2.type))
-                return e3.concat(1).error(`"${r3}" comparisons are not supported for type '${St(a2.type)}'.`);
+              if (!a2) return null;
+              if (!rr(r3, a2.type)) return e3.concat(1).error(`"${r3}" comparisons are not supported for type '${St(a2.type)}'.`);
               let s2 = e3.parse(t3[2], 2, gt);
-              if (!s2)
-                return null;
-              if (!rr(r3, s2.type))
-                return e3.concat(2).error(`"${r3}" comparisons are not supported for type '${St(s2.type)}'.`);
-              if (a2.type.kind !== s2.type.kind && "value" !== a2.type.kind && "value" !== s2.type.kind)
-                return e3.error(`Cannot compare types '${St(a2.type)}' and '${St(s2.type)}'.`);
+              if (!s2) return null;
+              if (!rr(r3, s2.type)) return e3.concat(2).error(`"${r3}" comparisons are not supported for type '${St(s2.type)}'.`);
+              if (a2.type.kind !== s2.type.kind && "value" !== a2.type.kind && "value" !== s2.type.kind) return e3.error(`Cannot compare types '${St(a2.type)}' and '${St(s2.type)}'.`);
               n2 && ("value" === a2.type.kind && "value" !== s2.type.kind ? a2 = new he(s2.type, [a2]) : "value" !== a2.type.kind && "value" === s2.type.kind && (s2 = new he(a2.type, [s2])));
               let o2 = null;
               if (4 === t3.length) {
-                if ("string" !== a2.type.kind && "string" !== s2.type.kind && "value" !== a2.type.kind && "value" !== s2.type.kind)
-                  return e3.error("Cannot use collator to compare non-string types.");
-                if (o2 = e3.parse(t3[3], 3, xt), !o2)
-                  return null;
+                if ("string" !== a2.type.kind && "string" !== s2.type.kind && "value" !== a2.type.kind && "value" !== s2.type.kind) return e3.error("Cannot use collator to compare non-string types.");
+                if (o2 = e3.parse(t3[3], 3, xt), !o2) return null;
               }
               return new i2(a2, s2, o2);
             }
@@ -2022,13 +1750,11 @@ var require_maplibre_gl = __commonJS({
               const a2 = this.lhs.evaluate(i3), s2 = this.rhs.evaluate(i3);
               if (n2 && this.hasUntypedArgument) {
                 const e3 = se(a2), r3 = se(s2);
-                if (e3.kind !== r3.kind || "string" !== e3.kind && "number" !== e3.kind)
-                  throw new ue(`Expected arguments for "${t2}" to be (string, string) or (number, number), but found (${e3.kind}, ${r3.kind}) instead.`);
+                if (e3.kind !== r3.kind || "string" !== e3.kind && "number" !== e3.kind) throw new ue(`Expected arguments for "${t2}" to be (string, string) or (number, number), but found (${e3.kind}, ${r3.kind}) instead.`);
               }
               if (this.collator && !n2 && this.hasUntypedArgument) {
                 const t3 = se(a2), r3 = se(s2);
-                if ("string" !== t3.kind || "string" !== r3.kind)
-                  return e2(i3, a2, s2);
+                if ("string" !== t3.kind || "string" !== r3.kind) return e2(i3, a2, s2);
               }
               return this.collator ? r2(i3, a2, s2, this.collator.evaluate(i3)) : e2(i3, a2, s2);
             }
@@ -2068,23 +1794,17 @@ var require_maplibre_gl = __commonJS({
             this.type = ft, this.number = t2, this.locale = e2, this.currency = r2, this.minFractionDigits = n2, this.maxFractionDigits = i2;
           }
           static parse(t2, e2) {
-            if (3 !== t2.length)
-              return e2.error("Expected two arguments.");
+            if (3 !== t2.length) return e2.error("Expected two arguments.");
             const r2 = e2.parse(t2[1], 1, pt);
-            if (!r2)
-              return null;
+            if (!r2) return null;
             const n2 = t2[2];
-            if ("object" != typeof n2 || Array.isArray(n2))
-              return e2.error("NumberFormat options argument must be an object.");
+            if ("object" != typeof n2 || Array.isArray(n2)) return e2.error("NumberFormat options argument must be an object.");
             let i2 = null;
-            if (n2.locale && (i2 = e2.parse(n2.locale, 1, ft), !i2))
-              return null;
+            if (n2.locale && (i2 = e2.parse(n2.locale, 1, ft), !i2)) return null;
             let a2 = null;
-            if (n2.currency && (a2 = e2.parse(n2.currency, 1, ft), !a2))
-              return null;
+            if (n2.currency && (a2 = e2.parse(n2.currency, 1, ft), !a2)) return null;
             let s2 = null;
-            if (n2["min-fraction-digits"] && (s2 = e2.parse(n2["min-fraction-digits"], 1, pt), !s2))
-              return null;
+            if (n2["min-fraction-digits"] && (s2 = e2.parse(n2["min-fraction-digits"], 1, pt), !s2)) return null;
             let o2 = null;
             return n2["max-fraction-digits"] && (o2 = e2.parse(n2["max-fraction-digits"], 1, pt), !o2) ? null : new hr(r2, i2, a2, s2, o2);
           }
@@ -2103,11 +1823,9 @@ var require_maplibre_gl = __commonJS({
             this.type = vt, this.sections = t2;
           }
           static parse(t2, e2) {
-            if (t2.length < 2)
-              return e2.error("Expected at least one argument.");
+            if (t2.length < 2) return e2.error("Expected at least one argument.");
             const r2 = t2[1];
-            if (!Array.isArray(r2) && "object" == typeof r2)
-              return e2.error("First argument must be an image or text section.");
+            if (!Array.isArray(r2) && "object" == typeof r2) return e2.error("First argument must be an image or text section.");
             const n2 = [];
             let i2 = false;
             for (let r3 = 1; r3 <= t2.length - 1; ++r3) {
@@ -2115,23 +1833,18 @@ var require_maplibre_gl = __commonJS({
               if (i2 && "object" == typeof a2 && !Array.isArray(a2)) {
                 i2 = false;
                 let t3 = null;
-                if (a2["font-scale"] && (t3 = e2.parse(a2["font-scale"], 1, pt), !t3))
-                  return null;
+                if (a2["font-scale"] && (t3 = e2.parse(a2["font-scale"], 1, pt), !t3)) return null;
                 let r4 = null;
-                if (a2["text-font"] && (r4 = e2.parse(a2["text-font"], 1, At(ft)), !r4))
-                  return null;
+                if (a2["text-font"] && (r4 = e2.parse(a2["text-font"], 1, At(ft)), !r4)) return null;
                 let s2 = null;
-                if (a2["text-color"] && (s2 = e2.parse(a2["text-color"], 1, yt), !s2))
-                  return null;
+                if (a2["text-color"] && (s2 = e2.parse(a2["text-color"], 1, yt), !s2)) return null;
                 const o2 = n2[n2.length - 1];
                 o2.scale = t3, o2.font = r4, o2.textColor = s2;
               } else {
                 const a3 = e2.parse(t2[r3], 1, gt);
-                if (!a3)
-                  return null;
+                if (!a3) return null;
                 const s2 = a3.type.kind;
-                if ("string" !== s2 && "value" !== s2 && "null" !== s2 && "resolvedImage" !== s2)
-                  return e2.error("Formatted text type must be 'string', 'value', 'image' or 'null'.");
+                if ("string" !== s2 && "value" !== s2 && "null" !== s2 && "resolvedImage" !== s2) return e2.error("Formatted text type must be 'string', 'value', 'image' or 'null'.");
                 i2 = true, n2.push({ content: a3, scale: null, font: null, textColor: null });
               }
             }
@@ -2144,8 +1857,7 @@ var require_maplibre_gl = __commonJS({
             }));
           }
           eachChild(t2) {
-            for (const e2 of this.sections)
-              t2(e2.content), e2.scale && t2(e2.scale), e2.font && t2(e2.font), e2.textColor && t2(e2.textColor);
+            for (const e2 of this.sections) t2(e2.content), e2.scale && t2(e2.scale), e2.font && t2(e2.font), e2.textColor && t2(e2.textColor);
           }
           outputDefined() {
             return false;
@@ -2156,8 +1868,7 @@ var require_maplibre_gl = __commonJS({
             this.type = wt, this.input = t2;
           }
           static parse(t2, e2) {
-            if (2 !== t2.length)
-              return e2.error("Expected two arguments.");
+            if (2 !== t2.length) return e2.error("Expected two arguments.");
             const r2 = e2.parse(t2[1], 1, ft);
             return r2 ? new fr(r2) : e2.error("No image name provided.");
           }
@@ -2177,17 +1888,14 @@ var require_maplibre_gl = __commonJS({
             this.type = pt, this.input = t2;
           }
           static parse(t2, e2) {
-            if (2 !== t2.length)
-              return e2.error(`Expected 1 argument, but found ${t2.length - 1} instead.`);
+            if (2 !== t2.length) return e2.error(`Expected 1 argument, but found ${t2.length - 1} instead.`);
             const r2 = e2.parse(t2[1], 1);
             return r2 ? "array" !== r2.type.kind && "string" !== r2.type.kind && "value" !== r2.type.kind ? e2.error(`Expected argument of type string or array, but found ${St(r2.type)} instead.`) : new dr(r2) : null;
           }
           evaluate(t2) {
             const e2 = this.input.evaluate(t2);
-            if ("string" == typeof e2)
-              return e2.length;
-            if (Array.isArray(e2))
-              return e2.length;
+            if ("string" == typeof e2) return e2.length;
+            if (Array.isArray(e2)) return e2.length;
             throw new ue(`Expected value to be of type string or array, but found ${St(se(e2))} instead.`);
           }
           eachChild(t2) {
@@ -2201,8 +1909,7 @@ var require_maplibre_gl = __commonJS({
         function mr(t2, [e2, r2, n2, i2]) {
           e2 = e2.evaluate(t2), r2 = r2.evaluate(t2), n2 = n2.evaluate(t2);
           const a2 = i2 ? i2.evaluate(t2) : 1, s2 = ie(e2, r2, n2, a2);
-          if (s2)
-            throw new ue(s2);
+          if (s2) throw new ue(s2);
           return new Yt(e2 / 255, r2 / 255, n2 / 255, a2, false);
         }
         function gr(t2, e2) {
@@ -2245,22 +1952,17 @@ var require_maplibre_gl = __commonJS({
             const n3 = r2 ? Yt.parse : te.parse;
             (t2 = lt({}, t2)).stops && (t2.stops = t2.stops.map((t3) => [t3[0], n3(t3[1])])), t2.default = n3(t2.default ? t2.default : e2.default);
           }
-          if (t2.colorSpace && "rgb" !== (s2 = t2.colorSpace) && "hcl" !== s2 && "lab" !== s2)
-            throw new Error(`Unknown color space: "${t2.colorSpace}"`);
+          if (t2.colorSpace && "rgb" !== (s2 = t2.colorSpace) && "hcl" !== s2 && "lab" !== s2) throw new Error(`Unknown color space: "${t2.colorSpace}"`);
           var s2;
           let o2, l2, u2;
-          if ("exponential" === a2)
-            o2 = Vr;
-          else if ("interval" === a2)
-            o2 = Pr;
+          if ("exponential" === a2) o2 = Vr;
+          else if ("interval" === a2) o2 = Pr;
           else if ("categorical" === a2) {
             o2 = Br, l2 = /* @__PURE__ */ Object.create(null);
-            for (const e3 of t2.stops)
-              l2[e3[0]] = e3[1];
+            for (const e3 of t2.stops) l2[e3[0]] = e3[1];
             u2 = typeof t2.stops[0][0];
           } else {
-            if ("identity" !== a2)
-              throw new Error(`Unknown function type "${a2}"`);
+            if ("identity" !== a2) throw new Error(`Unknown function type "${a2}"`);
             o2 = Er;
           }
           if (n2) {
@@ -2270,8 +1972,7 @@ var require_maplibre_gl = __commonJS({
               void 0 === r3[a4] && (r3[a4] = { zoom: a4, type: t2.type, property: t2.property, default: t2.default, stops: [] }, n3.push(a4)), r3[a4].stops.push([i4[0].value, i4[1]]);
             }
             const i3 = [];
-            for (const t3 of n3)
-              i3.push([r3[t3].zoom, Mr(r3[t3], e2)]);
+            for (const t3 of n3) i3.push([r3[t3].zoom, Mr(r3[t3], e2)]);
             const a3 = { name: "linear" };
             return { kind: "composite", interpolationType: a3, interpolationFactor: Ke.interpolationFactor.bind(void 0, a3), zoomStops: i3.map((t3) => t3[0]), evaluate: ({ zoom: r4 }, n4) => Vr({ stops: i3, base: t2.base }, e2, r4).evaluate(r4, n4) };
           }
@@ -2291,37 +1992,28 @@ var require_maplibre_gl = __commonJS({
           return Cr(typeof r2 === i2 ? n2[r2] : void 0, t2.default, e2.default);
         }
         function Pr(t2, e2, r2) {
-          if ("number" !== kr(r2))
-            return Cr(t2.default, e2.default);
+          if ("number" !== kr(r2)) return Cr(t2.default, e2.default);
           const n2 = t2.stops.length;
-          if (1 === n2)
-            return t2.stops[0][1];
-          if (r2 <= t2.stops[0][0])
-            return t2.stops[0][1];
-          if (r2 >= t2.stops[n2 - 1][0])
-            return t2.stops[n2 - 1][1];
+          if (1 === n2) return t2.stops[0][1];
+          if (r2 <= t2.stops[0][0]) return t2.stops[0][1];
+          if (r2 >= t2.stops[n2 - 1][0]) return t2.stops[n2 - 1][1];
           const i2 = Re(t2.stops.map((t3) => t3[0]), r2);
           return t2.stops[i2][1];
         }
         function Vr(t2, e2, r2) {
           const n2 = void 0 !== t2.base ? t2.base : 1;
-          if ("number" !== kr(r2))
-            return Cr(t2.default, e2.default);
+          if ("number" !== kr(r2)) return Cr(t2.default, e2.default);
           const i2 = t2.stops.length;
-          if (1 === i2)
-            return t2.stops[0][1];
-          if (r2 <= t2.stops[0][0])
-            return t2.stops[0][1];
-          if (r2 >= t2.stops[i2 - 1][0])
-            return t2.stops[i2 - 1][1];
+          if (1 === i2) return t2.stops[0][1];
+          if (r2 <= t2.stops[0][0]) return t2.stops[0][1];
+          if (r2 >= t2.stops[i2 - 1][0]) return t2.stops[i2 - 1][1];
           const a2 = Re(t2.stops.map((t3) => t3[0]), r2), s2 = function(t3, e3, r3, n3) {
             const i3 = n3 - r3, a3 = t3 - r3;
             return 0 === i3 ? 0 : 1 === e3 ? a3 / i3 : (Math.pow(e3, a3) - 1) / (Math.pow(e3, i3) - 1);
           }(r2, n2, t2.stops[a2][0], t2.stops[a2 + 1][0]), o2 = t2.stops[a2][1], l2 = t2.stops[a2 + 1][1], u2 = Ze[e2.type] || zr;
           return "function" == typeof o2.evaluate ? { evaluate(...e3) {
             const r3 = o2.evaluate.apply(void 0, e3), n3 = l2.evaluate.apply(void 0, e3);
-            if (void 0 !== r3 && void 0 !== n3)
-              return u2(r3, n3, s2, t2.colorSpace);
+            if (void 0 !== r3 && void 0 !== n3) return u2(r3, n3, s2, t2.colorSpace);
           } } : u2(o2, l2, s2, t2.colorSpace);
         }
         function Er(t2, e2, r2) {
@@ -2350,13 +2042,11 @@ var require_maplibre_gl = __commonJS({
           return [255 * r2, 255 * n2, 255 * i2, a2];
         }], rgb: [yt, [pt, pt, pt], mr], rgba: [yt, [pt, pt, pt, pt], mr], has: { type: dt, overloads: [[[ft], (t2, [e2]) => gr(e2.evaluate(t2), t2.properties())], [[ft, mt], (t2, [e2, r2]) => gr(e2.evaluate(t2), r2.evaluate(t2))]] }, get: { type: gt, overloads: [[[ft], (t2, [e2]) => xr(e2.evaluate(t2), t2.properties())], [[ft, mt], (t2, [e2, r2]) => xr(e2.evaluate(t2), r2.evaluate(t2))]] }, "feature-state": [gt, [ft], (t2, [e2]) => xr(e2.evaluate(t2), t2.featureState || {})], properties: [mt, [], (t2) => t2.properties()], "geometry-type": [ft, [], (t2) => t2.geometryType()], id: [gt, [], (t2) => t2.id()], zoom: [pt, [], (t2) => t2.globals.zoom], "heatmap-density": [pt, [], (t2) => t2.globals.heatmapDensity || 0], "line-progress": [pt, [], (t2) => t2.globals.lineProgress || 0], accumulated: [gt, [], (t2) => void 0 === t2.globals.accumulated ? null : t2.globals.accumulated], "+": [pt, vr(pt), (t2, e2) => {
           let r2 = 0;
-          for (const n2 of e2)
-            r2 += n2.evaluate(t2);
+          for (const n2 of e2) r2 += n2.evaluate(t2);
           return r2;
         }], "*": [pt, vr(pt), (t2, e2) => {
           let r2 = 1;
-          for (const n2 of e2)
-            r2 *= n2.evaluate(t2);
+          for (const n2 of e2) r2 *= n2.evaluate(t2);
           return r2;
         }], "-": { type: pt, overloads: [[[pt, pt], (t2, [e2, r2]) => e2.evaluate(t2) - r2.evaluate(t2)], [[pt], (t2, [e2]) => -e2.evaluate(t2)]] }, "/": [pt, [pt, pt], (t2, [e2, r2]) => e2.evaluate(t2) / r2.evaluate(t2)], "%": [pt, [pt, pt], (t2, [e2, r2]) => e2.evaluate(t2) % r2.evaluate(t2)], ln2: [pt, [], () => Math.LN2], pi: [pt, [], () => Math.PI], e: [pt, [], () => Math.E], "^": [pt, [pt, pt], (t2, [e2, r2]) => Math.pow(e2.evaluate(t2), r2.evaluate(t2))], sqrt: [pt, [pt], (t2, [e2]) => Math.sqrt(e2.evaluate(t2))], log10: [pt, [pt], (t2, [e2]) => Math.log(e2.evaluate(t2)) / Math.LN10], ln: [pt, [pt], (t2, [e2]) => Math.log(e2.evaluate(t2))], log2: [pt, [pt], (t2, [e2]) => Math.log(e2.evaluate(t2)) / Math.LN2], sin: [pt, [pt], (t2, [e2]) => Math.sin(e2.evaluate(t2))], cos: [pt, [pt], (t2, [e2]) => Math.cos(e2.evaluate(t2))], tan: [pt, [pt], (t2, [e2]) => Math.tan(e2.evaluate(t2))], asin: [pt, [pt], (t2, [e2]) => Math.asin(e2.evaluate(t2))], acos: [pt, [pt], (t2, [e2]) => Math.acos(e2.evaluate(t2))], atan: [pt, [pt], (t2, [e2]) => Math.atan(e2.evaluate(t2))], min: [pt, vr(pt), (t2, e2) => Math.min(...e2.map((e3) => e3.evaluate(t2)))], max: [pt, vr(pt), (t2, e2) => Math.max(...e2.map((e3) => e3.evaluate(t2)))], abs: [pt, [pt], (t2, [e2]) => Math.abs(e2.evaluate(t2))], round: [pt, [pt], (t2, [e2]) => {
           const r2 = e2.evaluate(t2);
@@ -2388,20 +2078,15 @@ var require_maplibre_gl = __commonJS({
         }], "filter-has": [dt, [gt], (t2, [e2]) => e2.value in t2.properties()], "filter-has-id": [dt, [], (t2) => null !== t2.id() && void 0 !== t2.id()], "filter-type-in": [dt, [At(ft)], (t2, [e2]) => e2.value.indexOf(t2.geometryType()) >= 0], "filter-id-in": [dt, [At(gt)], (t2, [e2]) => e2.value.indexOf(t2.id()) >= 0], "filter-in-small": [dt, [ft, At(gt)], (t2, [e2, r2]) => r2.value.indexOf(t2.properties()[e2.value]) >= 0], "filter-in-large": [dt, [ft, At(gt)], (t2, [e2, r2]) => function(t3, e3, r3, n2) {
           for (; r3 <= n2; ) {
             const i2 = r3 + n2 >> 1;
-            if (e3[i2] === t3)
-              return true;
+            if (e3[i2] === t3) return true;
             e3[i2] > t3 ? n2 = i2 - 1 : r3 = i2 + 1;
           }
           return false;
         }(t2.properties()[e2.value], r2.value, 0, r2.value.length - 1)], all: { type: dt, overloads: [[[dt, dt], (t2, [e2, r2]) => e2.evaluate(t2) && r2.evaluate(t2)], [vr(dt), (t2, e2) => {
-          for (const r2 of e2)
-            if (!r2.evaluate(t2))
-              return false;
+          for (const r2 of e2) if (!r2.evaluate(t2)) return false;
           return true;
         }]] }, any: { type: dt, overloads: [[[dt, dt], (t2, [e2, r2]) => e2.evaluate(t2) || r2.evaluate(t2)], [vr(dt), (t2, e2) => {
-          for (const r2 of e2)
-            if (r2.evaluate(t2))
-              return true;
+          for (const r2 of e2) if (r2.evaluate(t2)) return true;
           return false;
         }]] }, "!": [dt, [dt], (t2, [e2]) => !e2.evaluate(t2)], "is-supported-script": [dt, [ft], (t2, [e2]) => {
           const r2 = t2.globals && t2.globals.isSupportedScript;
@@ -2419,10 +2104,8 @@ var require_maplibre_gl = __commonJS({
             this._evaluator.globals = t2, this._evaluator.feature = e2 || null, this._evaluator.featureState = r2 || null, this._evaluator.canonical = n2, this._evaluator.availableImages = i2 || null, this._evaluator.formattedSection = a2 || null;
             try {
               const t3 = this.expression.evaluate(this._evaluator);
-              if (null == t3 || "number" == typeof t3 && t3 != t3)
-                return this._defaultValue;
-              if (this._enumValues && !(t3 in this._enumValues))
-                throw new ue(`Expected value to be one of ${Object.keys(this._enumValues).map((t4) => JSON.stringify(t4)).join(", ")}, but found ${JSON.stringify(t3)} instead.`);
+              if (null == t3 || "number" == typeof t3 && t3 != t3) return this._defaultValue;
+              if (this._enumValues && !(t3 in this._enumValues)) throw new ue(`Expected value to be one of ${Object.keys(this._enumValues).map((t4) => JSON.stringify(t4)).join(", ")}, but found ${JSON.stringify(t3)} instead.`);
               return t3;
             } catch (t3) {
               return this._warningHistory[t3.message] || (this._warningHistory[t3.message] = true, "undefined" != typeof console && console.warn(t3.message)), this._defaultValue;
@@ -2466,14 +2149,11 @@ var require_maplibre_gl = __commonJS({
         }
         function Or(t2, e2) {
           const r2 = $r(t2, e2);
-          if ("error" === r2.result)
-            return r2;
+          if ("error" === r2.result) return r2;
           const n2 = r2.value.expression, i2 = De(n2);
-          if (!i2 && !_r(e2))
-            return wr([new ut("", "data expressions not supported")]);
+          if (!i2 && !_r(e2)) return wr([new ut("", "data expressions not supported")]);
           const a2 = Ue(n2, ["zoom"]);
-          if (!a2 && !Ar(e2))
-            return wr([new ut("", "zoom expressions not supported")]);
+          if (!a2 && !Ar(e2)) return wr([new ut("", "zoom expressions not supported")]);
           const s2 = Rr(n2);
           return s2 || a2 ? s2 instanceof ut ? wr([s2]) : s2 instanceof Ke && !Sr(e2) ? wr([new ut("", '"interpolate" expressions cannot be used with this property')]) : br(s2 ? new Dr(i2 ? "camera" : "composite", r2.value, s2.labels, s2 instanceof Ke ? s2.interpolation : void 0) : new Lr(i2 ? "constant" : "source", r2.value)) : wr([new ut("", '"zoom" expression may only be used as input to a top-level "step" or "interpolate" expression.')]);
         }
@@ -2490,24 +2170,18 @@ var require_maplibre_gl = __commonJS({
         }
         function Rr(t2) {
           let e2 = null;
-          if (t2 instanceof Xe)
-            e2 = Rr(t2.result);
+          if (t2 instanceof Xe) e2 = Rr(t2.result);
           else if (t2 instanceof Je) {
-            for (const r2 of t2.args)
-              if (e2 = Rr(r2), e2)
-                break;
-          } else
-            (t2 instanceof qe || t2 instanceof Ke) && t2.input instanceof $e && "zoom" === t2.input.name && (e2 = t2);
+            for (const r2 of t2.args) if (e2 = Rr(r2), e2) break;
+          } else (t2 instanceof qe || t2 instanceof Ke) && t2.input instanceof $e && "zoom" === t2.input.name && (e2 = t2);
           return e2 instanceof ut || t2.eachChild((t3) => {
             const r2 = Rr(t3);
             r2 instanceof ut ? e2 = r2 : !e2 && r2 ? e2 = new ut("", '"zoom" expression may only be used as input to a top-level "step" or "interpolate" expression.') : e2 && r2 && e2 !== r2 && (e2 = new ut("", 'Only one zoom-based "step" or "interpolate" subexpression may be used in an expression.'));
           }), e2;
         }
         function qr(t2) {
-          if (true === t2 || false === t2)
-            return true;
-          if (!Array.isArray(t2) || 0 === t2.length)
-            return false;
+          if (true === t2 || false === t2) return true;
+          if (!Array.isArray(t2) || 0 === t2.length) return false;
           switch (t2[0]) {
             case "has":
               return t2.length >= 2 && "$id" !== t2[1] && "$type" !== t2[1];
@@ -2526,9 +2200,7 @@ var require_maplibre_gl = __commonJS({
               return 3 !== t2.length || Array.isArray(t2[1]) || Array.isArray(t2[2]);
             case "any":
             case "all":
-              for (const e2 of t2.slice(1))
-                if (!qr(e2) && "boolean" != typeof e2)
-                  return false;
+              for (const e2 of t2.slice(1)) if (!qr(e2) && "boolean" != typeof e2) return false;
               return true;
             default:
               return true;
@@ -2536,30 +2208,23 @@ var require_maplibre_gl = __commonJS({
         }
         const jr = { type: "boolean", default: false, transition: false, "property-type": "data-driven", expression: { interpolated: false, parameters: ["zoom", "feature"] } };
         function Nr(t2) {
-          if (null == t2)
-            return { filter: () => true, needGeometry: false };
+          if (null == t2) return { filter: () => true, needGeometry: false };
           qr(t2) || (t2 = Gr(t2));
           const e2 = $r(t2, jr);
-          if ("error" === e2.result)
-            throw new Error(e2.value.map((t3) => `${t3.key}: ${t3.message}`).join(", "));
+          if ("error" === e2.result) throw new Error(e2.value.map((t3) => `${t3.key}: ${t3.message}`).join(", "));
           return { filter: (t3, r2, n2) => e2.value.evaluate(t3, r2, {}, n2), needGeometry: Kr(t2) };
         }
         function Zr(t2, e2) {
           return t2 < e2 ? -1 : t2 > e2 ? 1 : 0;
         }
         function Kr(t2) {
-          if (!Array.isArray(t2))
-            return false;
-          if ("within" === t2[0])
-            return true;
-          for (let e2 = 1; e2 < t2.length; e2++)
-            if (Kr(t2[e2]))
-              return true;
+          if (!Array.isArray(t2)) return false;
+          if ("within" === t2[0]) return true;
+          for (let e2 = 1; e2 < t2.length; e2++) if (Kr(t2[e2])) return true;
           return false;
         }
         function Gr(t2) {
-          if (!t2)
-            return true;
+          if (!t2) return true;
           const e2 = t2[0];
           return t2.length <= 1 ? "any" !== e2 : "==" === e2 ? Jr(t2[1], t2[2], "==") : "!=" === e2 ? Hr(Jr(t2[1], t2[2], "==")) : "<" === e2 || ">" === e2 || "<=" === e2 || ">=" === e2 ? Jr(t2[1], t2[2], e2) : "any" === e2 ? (r2 = t2.slice(1), ["any"].concat(r2.map(Gr))) : "all" === e2 ? ["all"].concat(t2.slice(1).map(Gr)) : "none" === e2 ? ["all"].concat(t2.slice(1).map(Gr).map(Hr)) : "in" === e2 ? Xr(t2[1], t2.slice(2)) : "!in" === e2 ? Hr(Xr(t2[1], t2.slice(2))) : "has" === e2 ? Yr(t2[1]) : "!has" === e2 ? Hr(Yr(t2[1])) : "within" !== e2 || t2;
           var r2;
@@ -2575,8 +2240,7 @@ var require_maplibre_gl = __commonJS({
           }
         }
         function Xr(t2, e2) {
-          if (0 === e2.length)
-            return false;
+          if (0 === e2.length) return false;
           switch (t2) {
             case "$type":
               return ["filter-type-in", ["literal", e2]];
@@ -2601,24 +2265,20 @@ var require_maplibre_gl = __commonJS({
         }
         function Wr(t2) {
           const e2 = typeof t2;
-          if ("number" === e2 || "boolean" === e2 || "string" === e2 || null == t2)
-            return JSON.stringify(t2);
+          if ("number" === e2 || "boolean" === e2 || "string" === e2 || null == t2) return JSON.stringify(t2);
           if (Array.isArray(t2)) {
             let e3 = "[";
-            for (const r3 of t2)
-              e3 += `${Wr(r3)},`;
+            for (const r3 of t2) e3 += `${Wr(r3)},`;
             return `${e3}]`;
           }
           const r2 = Object.keys(t2).sort();
           let n2 = "{";
-          for (let e3 = 0; e3 < r2.length; e3++)
-            n2 += `${JSON.stringify(r2[e3])}:${Wr(t2[r2[e3]])},`;
+          for (let e3 = 0; e3 < r2.length; e3++) n2 += `${JSON.stringify(r2[e3])}:${Wr(t2[r2[e3]])},`;
           return `${n2}}`;
         }
         function Qr(t2) {
           let e2 = "";
-          for (const r2 of Y)
-            e2 += `/${Wr(t2[r2])}`;
+          for (const r2 of Y) e2 += `/${Wr(t2[r2])}`;
           return e2;
         }
         function tn(t2) {
@@ -2629,12 +2289,10 @@ var require_maplibre_gl = __commonJS({
           return t2 instanceof Number || t2 instanceof String || t2 instanceof Boolean ? t2.valueOf() : t2;
         }
         function rn(t2) {
-          if (Array.isArray(t2))
-            return t2.map(rn);
+          if (Array.isArray(t2)) return t2.map(rn);
           if (t2 instanceof Object && !(t2 instanceof Number || t2 instanceof String || t2 instanceof Boolean)) {
             const e2 = {};
-            for (const r2 in t2)
-              e2[r2] = rn(t2[r2]);
+            for (const r2 in t2) e2[r2] = rn(t2[r2]);
             return e2;
           }
           return en(t2);
@@ -2643,17 +2301,13 @@ var require_maplibre_gl = __commonJS({
           const e2 = t2.key, r2 = t2.value, n2 = t2.valueSpec || {}, i2 = t2.objectElementValidators || {}, a2 = t2.style, s2 = t2.styleSpec, o2 = t2.validateSpec;
           let l2 = [];
           const u2 = kr(r2);
-          if ("object" !== u2)
-            return [new ot(e2, r2, `object expected, ${u2} found`)];
+          if ("object" !== u2) return [new ot(e2, r2, `object expected, ${u2} found`)];
           for (const t3 in r2) {
             const u3 = t3.split(".")[0], c2 = n2[u3] || n2["*"];
             let h2;
-            if (i2[u3])
-              h2 = i2[u3];
-            else if (n2[u3])
-              h2 = o2;
-            else if (i2["*"])
-              h2 = i2["*"];
+            if (i2[u3]) h2 = i2[u3];
+            else if (n2[u3]) h2 = o2;
+            else if (i2["*"]) h2 = i2["*"];
             else {
               if (!n2["*"]) {
                 l2.push(new ot(e2, r2[t3], `unknown property "${t3}"`));
@@ -2663,23 +2317,18 @@ var require_maplibre_gl = __commonJS({
             }
             l2 = l2.concat(h2({ key: (e2 ? `${e2}.` : e2) + t3, value: r2[t3], valueSpec: c2, style: a2, styleSpec: s2, object: r2, objectKey: t3, validateSpec: o2 }, r2));
           }
-          for (const t3 in n2)
-            i2[t3] || n2[t3].required && void 0 === n2[t3].default && void 0 === r2[t3] && l2.push(new ot(e2, r2, `missing required property "${t3}"`));
+          for (const t3 in n2) i2[t3] || n2[t3].required && void 0 === n2[t3].default && void 0 === r2[t3] && l2.push(new ot(e2, r2, `missing required property "${t3}"`));
           return l2;
         }
         function an(t2) {
           const e2 = t2.value, r2 = t2.valueSpec, n2 = t2.style, i2 = t2.styleSpec, a2 = t2.key, s2 = t2.arrayElementValidator || t2.validateSpec;
-          if ("array" !== kr(e2))
-            return [new ot(a2, e2, `array expected, ${kr(e2)} found`)];
-          if (r2.length && e2.length !== r2.length)
-            return [new ot(a2, e2, `array length ${r2.length} expected, length ${e2.length} found`)];
-          if (r2["min-length"] && e2.length < r2["min-length"])
-            return [new ot(a2, e2, `array length at least ${r2["min-length"]} expected, length ${e2.length} found`)];
+          if ("array" !== kr(e2)) return [new ot(a2, e2, `array expected, ${kr(e2)} found`)];
+          if (r2.length && e2.length !== r2.length) return [new ot(a2, e2, `array length ${r2.length} expected, length ${e2.length} found`)];
+          if (r2["min-length"] && e2.length < r2["min-length"]) return [new ot(a2, e2, `array length at least ${r2["min-length"]} expected, length ${e2.length} found`)];
           let o2 = { type: r2.value, values: r2.values };
           i2.$version < 7 && (o2.function = r2.function), "object" === kr(r2.value) && (o2 = r2.value);
           let l2 = [];
-          for (let r3 = 0; r3 < e2.length; r3++)
-            l2 = l2.concat(s2({ array: e2, arrayIndex: r3, value: e2[r3], valueSpec: o2, validateSpec: t2.validateSpec, style: n2, styleSpec: i2, key: `${a2}[${r3}]` }));
+          for (let r3 = 0; r3 < e2.length; r3++) l2 = l2.concat(s2({ array: e2, arrayIndex: r3, value: e2[r3], valueSpec: o2, validateSpec: t2.validateSpec, style: n2, styleSpec: i2, key: `${a2}[${r3}]` }));
           return l2;
         }
         function sn(t2) {
@@ -2691,8 +2340,7 @@ var require_maplibre_gl = __commonJS({
           const e2 = t2.valueSpec, r2 = en(t2.value.type);
           let n2, i2, a2, s2 = {};
           const o2 = "categorical" !== r2 && void 0 === t2.value.property, l2 = !o2, u2 = "array" === kr(t2.value.stops) && "array" === kr(t2.value.stops[0]) && "object" === kr(t2.value.stops[0][0]), c2 = nn({ key: t2.key, value: t2.value, valueSpec: t2.styleSpec.function, validateSpec: t2.validateSpec, style: t2.style, styleSpec: t2.styleSpec, objectElementValidators: { stops: function(t3) {
-            if ("identity" === r2)
-              return [new ot(t3.key, t3.value, 'identity function may not have a "stops" property')];
+            if ("identity" === r2) return [new ot(t3.key, t3.value, 'identity function may not have a "stops" property')];
             let e3 = [];
             const n3 = t3.value;
             return e3 = e3.concat(an({ key: t3.key, value: n3, valueSpec: t3.valueSpec, validateSpec: t3.validateSpec, style: t3.style, styleSpec: t3.styleSpec, arrayElementValidator: h2 })), "array" === kr(n3) && 0 === n3.length && e3.push(new ot(t3.key, n3, "array must have at least one stop")), e3;
@@ -2703,33 +2351,23 @@ var require_maplibre_gl = __commonJS({
           function h2(t3) {
             let r3 = [];
             const n3 = t3.value, o3 = t3.key;
-            if ("array" !== kr(n3))
-              return [new ot(o3, n3, `array expected, ${kr(n3)} found`)];
-            if (2 !== n3.length)
-              return [new ot(o3, n3, `array length 2 expected, length ${n3.length} found`)];
+            if ("array" !== kr(n3)) return [new ot(o3, n3, `array expected, ${kr(n3)} found`)];
+            if (2 !== n3.length) return [new ot(o3, n3, `array length 2 expected, length ${n3.length} found`)];
             if (u2) {
-              if ("object" !== kr(n3[0]))
-                return [new ot(o3, n3, `object expected, ${kr(n3[0])} found`)];
-              if (void 0 === n3[0].zoom)
-                return [new ot(o3, n3, "object stop key must have zoom")];
-              if (void 0 === n3[0].value)
-                return [new ot(o3, n3, "object stop key must have value")];
-              if (a2 && a2 > en(n3[0].zoom))
-                return [new ot(o3, n3[0].zoom, "stop zoom values must appear in ascending order")];
+              if ("object" !== kr(n3[0])) return [new ot(o3, n3, `object expected, ${kr(n3[0])} found`)];
+              if (void 0 === n3[0].zoom) return [new ot(o3, n3, "object stop key must have zoom")];
+              if (void 0 === n3[0].value) return [new ot(o3, n3, "object stop key must have value")];
+              if (a2 && a2 > en(n3[0].zoom)) return [new ot(o3, n3[0].zoom, "stop zoom values must appear in ascending order")];
               en(n3[0].zoom) !== a2 && (a2 = en(n3[0].zoom), i2 = void 0, s2 = {}), r3 = r3.concat(nn({ key: `${o3}[0]`, value: n3[0], valueSpec: { zoom: {} }, validateSpec: t3.validateSpec, style: t3.style, styleSpec: t3.styleSpec, objectElementValidators: { zoom: sn, value: p2 } }));
-            } else
-              r3 = r3.concat(p2({ key: `${o3}[0]`, value: n3[0], valueSpec: {}, validateSpec: t3.validateSpec, style: t3.style, styleSpec: t3.styleSpec }, n3));
+            } else r3 = r3.concat(p2({ key: `${o3}[0]`, value: n3[0], valueSpec: {}, validateSpec: t3.validateSpec, style: t3.style, styleSpec: t3.styleSpec }, n3));
             return Tr(rn(n3[1])) ? r3.concat([new ot(`${o3}[1]`, n3[1], "expressions are not allowed in function stops.")]) : r3.concat(t3.validateSpec({ key: `${o3}[1]`, value: n3[1], valueSpec: e2, validateSpec: t3.validateSpec, style: t3.style, styleSpec: t3.styleSpec }));
           }
           function p2(t3, a3) {
             const o3 = kr(t3.value), l3 = en(t3.value), u3 = null !== t3.value ? t3.value : a3;
             if (n2) {
-              if (o3 !== n2)
-                return [new ot(t3.key, u3, `${o3} stop domain type must match previous stop domain type ${n2}`)];
-            } else
-              n2 = o3;
-            if ("number" !== o3 && "string" !== o3 && "boolean" !== o3)
-              return [new ot(t3.key, u3, "stop domain value must be a number, string, or boolean")];
+              if (o3 !== n2) return [new ot(t3.key, u3, `${o3} stop domain type must match previous stop domain type ${n2}`)];
+            } else n2 = o3;
+            if ("number" !== o3 && "string" !== o3 && "boolean" !== o3) return [new ot(t3.key, u3, "stop domain value must be a number, string, or boolean")];
             if ("number" !== o3 && "categorical" !== r2) {
               let n3 = `number expected, ${o3} found`;
               return _r(e2) && void 0 === r2 && (n3 += '\nIf you intended to use a categorical function, specify `"type": "categorical"`.'), [new ot(t3.key, u3, n3)];
@@ -2739,20 +2377,14 @@ var require_maplibre_gl = __commonJS({
         }
         function ln(t2) {
           const e2 = ("property" === t2.expressionContext ? Or : $r)(rn(t2.value), t2.valueSpec);
-          if ("error" === e2.result)
-            return e2.value.map((e3) => new ot(`${t2.key}${e3.key}`, t2.value, e3.message));
+          if ("error" === e2.result) return e2.value.map((e3) => new ot(`${t2.key}${e3.key}`, t2.value, e3.message));
           const r2 = e2.value.expression || e2.value._styleExpression.expression;
-          if ("property" === t2.expressionContext && "text-font" === t2.propertyKey && !r2.outputDefined())
-            return [new ot(t2.key, t2.value, `Invalid data expression for "${t2.propertyKey}". Output values must be contained as literals within the expression.`)];
-          if ("property" === t2.expressionContext && "layout" === t2.propertyType && !Oe(r2))
-            return [new ot(t2.key, t2.value, '"feature-state" data expressions are not supported with layout properties.')];
-          if ("filter" === t2.expressionContext && !Oe(r2))
-            return [new ot(t2.key, t2.value, '"feature-state" data expressions are not supported with filters.')];
+          if ("property" === t2.expressionContext && "text-font" === t2.propertyKey && !r2.outputDefined()) return [new ot(t2.key, t2.value, `Invalid data expression for "${t2.propertyKey}". Output values must be contained as literals within the expression.`)];
+          if ("property" === t2.expressionContext && "layout" === t2.propertyType && !Oe(r2)) return [new ot(t2.key, t2.value, '"feature-state" data expressions are not supported with layout properties.')];
+          if ("filter" === t2.expressionContext && !Oe(r2)) return [new ot(t2.key, t2.value, '"feature-state" data expressions are not supported with filters.')];
           if (t2.expressionContext && 0 === t2.expressionContext.indexOf("cluster")) {
-            if (!Ue(r2, ["zoom", "feature-state"]))
-              return [new ot(t2.key, t2.value, '"zoom" and "feature-state" expressions are not supported with cluster properties.')];
-            if ("cluster-initial" === t2.expressionContext && !De(r2))
-              return [new ot(t2.key, t2.value, "Feature data expressions are not supported with initial expression part of cluster properties.")];
+            if (!Ue(r2, ["zoom", "feature-state"])) return [new ot(t2.key, t2.value, '"zoom" and "feature-state" expressions are not supported with cluster properties.')];
+            if ("cluster-initial" === t2.expressionContext && !De(r2)) return [new ot(t2.key, t2.value, "Feature data expressions are not supported with initial expression part of cluster properties.")];
           }
           return [];
         }
@@ -2765,12 +2397,10 @@ var require_maplibre_gl = __commonJS({
         }
         function hn(t2) {
           const e2 = t2.value, r2 = t2.key;
-          if ("array" !== kr(e2))
-            return [new ot(r2, e2, `array expected, ${kr(e2)} found`)];
+          if ("array" !== kr(e2)) return [new ot(r2, e2, `array expected, ${kr(e2)} found`)];
           const n2 = t2.styleSpec;
           let i2, a2 = [];
-          if (e2.length < 1)
-            return [new ot(r2, e2, "filter array must have at least 1 element")];
+          if (e2.length < 1) return [new ot(r2, e2, "filter array must have at least 1 element")];
           switch (a2 = a2.concat(un({ key: `${r2}[0]`, value: e2[0], valueSpec: n2.filter_operator, style: t2.style, styleSpec: t2.styleSpec })), en(e2[0])) {
             case "<":
             case "<=":
@@ -2783,14 +2413,12 @@ var require_maplibre_gl = __commonJS({
             case "in":
             case "!in":
               e2.length >= 2 && (i2 = kr(e2[1]), "string" !== i2 && a2.push(new ot(`${r2}[1]`, e2[1], `string expected, ${i2} found`)));
-              for (let s2 = 2; s2 < e2.length; s2++)
-                i2 = kr(e2[s2]), "$type" === en(e2[1]) ? a2 = a2.concat(un({ key: `${r2}[${s2}]`, value: e2[s2], valueSpec: n2.geometry_type, style: t2.style, styleSpec: t2.styleSpec })) : "string" !== i2 && "number" !== i2 && "boolean" !== i2 && a2.push(new ot(`${r2}[${s2}]`, e2[s2], `string, number, or boolean expected, ${i2} found`));
+              for (let s2 = 2; s2 < e2.length; s2++) i2 = kr(e2[s2]), "$type" === en(e2[1]) ? a2 = a2.concat(un({ key: `${r2}[${s2}]`, value: e2[s2], valueSpec: n2.geometry_type, style: t2.style, styleSpec: t2.styleSpec })) : "string" !== i2 && "number" !== i2 && "boolean" !== i2 && a2.push(new ot(`${r2}[${s2}]`, e2[s2], `string, number, or boolean expected, ${i2} found`));
               break;
             case "any":
             case "all":
             case "none":
-              for (let n3 = 1; n3 < e2.length; n3++)
-                a2 = a2.concat(hn({ key: `${r2}[${n3}]`, value: e2[n3], style: t2.style, styleSpec: t2.styleSpec }));
+              for (let n3 = 1; n3 < e2.length; n3++) a2 = a2.concat(hn({ key: `${r2}[${n3}]`, value: e2[n3], style: t2.style, styleSpec: t2.styleSpec }));
               break;
             case "has":
             case "!has":
@@ -2803,17 +2431,13 @@ var require_maplibre_gl = __commonJS({
         }
         function pn(t2, e2) {
           const r2 = t2.key, n2 = t2.validateSpec, i2 = t2.style, a2 = t2.styleSpec, s2 = t2.value, o2 = t2.objectKey, l2 = a2[`${e2}_${t2.layerType}`];
-          if (!l2)
-            return [];
+          if (!l2) return [];
           const u2 = o2.match(/^(.*)-transition$/);
-          if ("paint" === e2 && u2 && l2[u2[1]] && l2[u2[1]].transition)
-            return n2({ key: r2, value: s2, valueSpec: a2.transition, style: i2, styleSpec: a2 });
+          if ("paint" === e2 && u2 && l2[u2[1]] && l2[u2[1]].transition) return n2({ key: r2, value: s2, valueSpec: a2.transition, style: i2, styleSpec: a2 });
           const c2 = t2.valueSpec || l2[o2];
-          if (!c2)
-            return [new ot(r2, s2, `unknown property "${o2}"`)];
+          if (!c2) return [new ot(r2, s2, `unknown property "${o2}"`)];
           let h2;
-          if ("string" === kr(s2) && _r(c2) && !c2.tokens && (h2 = /^{([^}]+)}$/.exec(s2)))
-            return [new ot(r2, s2, `"${o2}" does not support interpolation syntax
+          if ("string" === kr(s2) && _r(c2) && !c2.tokens && (h2 = /^{([^}]+)}$/.exec(s2))) return [new ot(r2, s2, `"${o2}" does not support interpolation syntax
 Use an identity property function instead: \`{ "type": "identity", "property": ${JSON.stringify(h2[1])} }\`.`)];
           const p2 = [];
           return "symbol" === t2.layerType && ("text-field" === o2 && i2 && !i2.glyphs && p2.push(new ot(r2, s2, 'use of "text-field" requires a style "glyphs" property')), "text-font" === o2 && Ir(rn(s2)) && "identity" === en(s2.type) && p2.push(new ot(r2, s2, '"text-font" does not support identity functions'))), p2.concat(n2({ key: t2.key, value: s2, valueSpec: c2, style: i2, styleSpec: a2, expressionContext: "property", propertyType: e2, propertyKey: o2 }));
@@ -2844,12 +2468,10 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             }), i2.layers.forEach((e3) => {
               en(e3.id) === o2 && (t3 = e3);
             }), t3 ? t3.ref ? e2.push(new ot(n2, r2.ref, "ref cannot reference another ref layer")) : s2 = en(t3.type) : e2.push(new ot(n2, r2.ref, `ref layer "${o2}" not found`));
-          } else if ("background" !== s2)
-            if (r2.source) {
-              const t3 = i2.sources && i2.sources[r2.source], a3 = t3 && en(t3.type);
-              t3 ? "vector" === a3 && "raster" === s2 ? e2.push(new ot(n2, r2.source, `layer "${r2.id}" requires a raster source`)) : "raster-dem" !== a3 && "hillshade" === s2 ? e2.push(new ot(n2, r2.source, `layer "${r2.id}" requires a raster-dem source`)) : "raster" === a3 && "raster" !== s2 ? e2.push(new ot(n2, r2.source, `layer "${r2.id}" requires a vector source`)) : "vector" !== a3 || r2["source-layer"] ? "raster-dem" === a3 && "hillshade" !== s2 ? e2.push(new ot(n2, r2.source, "raster-dem source can only be used with layer type 'hillshade'.")) : "line" !== s2 || !r2.paint || !r2.paint["line-gradient"] || "geojson" === a3 && t3.lineMetrics || e2.push(new ot(n2, r2, `layer "${r2.id}" specifies a line-gradient, which requires a GeoJSON source with \`lineMetrics\` enabled.`)) : e2.push(new ot(n2, r2, `layer "${r2.id}" must specify a "source-layer"`)) : e2.push(new ot(n2, r2.source, `source "${r2.source}" not found`));
-            } else
-              e2.push(new ot(n2, r2, 'missing required property "source"'));
+          } else if ("background" !== s2) if (r2.source) {
+            const t3 = i2.sources && i2.sources[r2.source], a3 = t3 && en(t3.type);
+            t3 ? "vector" === a3 && "raster" === s2 ? e2.push(new ot(n2, r2.source, `layer "${r2.id}" requires a raster source`)) : "raster-dem" !== a3 && "hillshade" === s2 ? e2.push(new ot(n2, r2.source, `layer "${r2.id}" requires a raster-dem source`)) : "raster" === a3 && "raster" !== s2 ? e2.push(new ot(n2, r2.source, `layer "${r2.id}" requires a vector source`)) : "vector" !== a3 || r2["source-layer"] ? "raster-dem" === a3 && "hillshade" !== s2 ? e2.push(new ot(n2, r2.source, "raster-dem source can only be used with layer type 'hillshade'.")) : "line" !== s2 || !r2.paint || !r2.paint["line-gradient"] || "geojson" === a3 && t3.lineMetrics || e2.push(new ot(n2, r2, `layer "${r2.id}" specifies a line-gradient, which requires a GeoJSON source with \`lineMetrics\` enabled.`)) : e2.push(new ot(n2, r2, `layer "${r2.id}" must specify a "source-layer"`)) : e2.push(new ot(n2, r2.source, `source "${r2.source}" not found`));
+          } else e2.push(new ot(n2, r2, 'missing required property "source"'));
           return e2 = e2.concat(nn({ key: n2, value: r2, valueSpec: a2.layer, style: t2.style, styleSpec: t2.styleSpec, validateSpec: t2.validateSpec, objectElementValidators: { "*": () => [], type: () => t2.validateSpec({ key: `${n2}.type`, value: r2.type, valueSpec: a2.layer.type, style: t2.style, styleSpec: t2.styleSpec, validateSpec: t2.validateSpec, object: r2, objectKey: "type" }), filter: cn, layout: (t3) => nn({ layer: r2, key: t3.key, value: t3.value, style: t3.style, styleSpec: t3.styleSpec, validateSpec: t3.validateSpec, objectElementValidators: { "*": (t4) => dn(lt({ layerType: s2 }, t4)) } }), paint: (t3) => nn({ layer: r2, key: t3.key, value: t3.value, style: t3.style, styleSpec: t3.styleSpec, validateSpec: t3.validateSpec, objectElementValidators: { "*": (t4) => fn(lt({ layerType: s2 }, t4)) } }) } })), e2;
         }
         function mn(t2) {
@@ -2857,19 +2479,16 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           return "string" !== n2 ? [new ot(r2, e2, `string expected, ${n2} found`)] : [];
         }
         const gn = { promoteId: function({ key: t2, value: e2 }) {
-          if ("string" === kr(e2))
-            return mn({ key: t2, value: e2 });
+          if ("string" === kr(e2)) return mn({ key: t2, value: e2 });
           {
             const r2 = [];
-            for (const n2 in e2)
-              r2.push(...mn({ key: `${t2}.${n2}`, value: e2[n2] }));
+            for (const n2 in e2) r2.push(...mn({ key: `${t2}.${n2}`, value: e2[n2] }));
             return r2;
           }
         } };
         function xn(t2) {
           const e2 = t2.value, r2 = t2.key, n2 = t2.styleSpec, i2 = t2.style, a2 = t2.validateSpec;
-          if (!e2.type)
-            return [new ot(r2, e2, '"type" is required')];
+          if (!e2.type) return [new ot(r2, e2, '"type" is required')];
           const s2 = en(e2.type);
           let o2;
           switch (s2) {
@@ -2882,21 +2501,17 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
                 const r3 = null !== (e3 = t3.sourceName) && void 0 !== e3 ? e3 : "", n3 = t3.value, i3 = t3.styleSpec, a3 = i3.source_raster_dem, s3 = t3.style;
                 let o3 = [];
                 const l2 = kr(n3);
-                if (void 0 === n3)
-                  return o3;
-                if ("object" !== l2)
-                  return o3.push(new ot("source_raster_dem", n3, `object expected, ${l2} found`)), o3;
+                if (void 0 === n3) return o3;
+                if ("object" !== l2) return o3.push(new ot("source_raster_dem", n3, `object expected, ${l2} found`)), o3;
                 const u2 = "custom" === en(n3.encoding), c2 = ["redFactor", "greenFactor", "blueFactor", "baseShift"], h2 = t3.value.encoding ? `"${t3.value.encoding}"` : "Default";
-                for (const e4 in n3)
-                  !u2 && c2.includes(e4) ? o3.push(new ot(e4, n3[e4], `In "${r3}": "${e4}" is only valid when "encoding" is set to "custom". ${h2} encoding found`)) : a3[e4] ? o3 = o3.concat(t3.validateSpec({ key: e4, value: n3[e4], valueSpec: a3[e4], validateSpec: t3.validateSpec, style: s3, styleSpec: i3 })) : o3.push(new ot(e4, n3[e4], `unknown property "${e4}"`));
+                for (const e4 in n3) !u2 && c2.includes(e4) ? o3.push(new ot(e4, n3[e4], `In "${r3}": "${e4}" is only valid when "encoding" is set to "custom". ${h2} encoding found`)) : a3[e4] ? o3 = o3.concat(t3.validateSpec({ key: e4, value: n3[e4], valueSpec: a3[e4], validateSpec: t3.validateSpec, style: s3, styleSpec: i3 })) : o3.push(new ot(e4, n3[e4], `unknown property "${e4}"`));
                 return o3;
               }({ sourceName: r2, value: e2, style: t2.style, styleSpec: n2, validateSpec: a2 }), o2;
             case "geojson":
-              if (o2 = nn({ key: r2, value: e2, valueSpec: n2.source_geojson, style: i2, styleSpec: n2, validateSpec: a2, objectElementValidators: gn }), e2.cluster)
-                for (const t3 in e2.clusterProperties) {
-                  const [n3, i3] = e2.clusterProperties[t3], s3 = "string" == typeof n3 ? [n3, ["accumulated"], ["get", t3]] : n3;
-                  o2.push(...ln({ key: `${r2}.${t3}.map`, value: i3, validateSpec: a2, expressionContext: "cluster-map" })), o2.push(...ln({ key: `${r2}.${t3}.reduce`, value: s3, validateSpec: a2, expressionContext: "cluster-reduce" }));
-                }
+              if (o2 = nn({ key: r2, value: e2, valueSpec: n2.source_geojson, style: i2, styleSpec: n2, validateSpec: a2, objectElementValidators: gn }), e2.cluster) for (const t3 in e2.clusterProperties) {
+                const [n3, i3] = e2.clusterProperties[t3], s3 = "string" == typeof n3 ? [n3, ["accumulated"], ["get", t3]] : n3;
+                o2.push(...ln({ key: `${r2}.${t3}.map`, value: i3, validateSpec: a2, expressionContext: "cluster-map" })), o2.push(...ln({ key: `${r2}.${t3}.reduce`, value: s3, validateSpec: a2, expressionContext: "cluster-reduce" }));
+              }
               return o2;
             case "video":
               return nn({ key: r2, value: e2, valueSpec: n2.source_video, style: i2, validateSpec: a2, styleSpec: n2 });
@@ -2912,10 +2527,8 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           const e2 = t2.value, r2 = t2.styleSpec, n2 = r2.light, i2 = t2.style;
           let a2 = [];
           const s2 = kr(e2);
-          if (void 0 === e2)
-            return a2;
-          if ("object" !== s2)
-            return a2 = a2.concat([new ot("light", e2, `object expected, ${s2} found`)]), a2;
+          if (void 0 === e2) return a2;
+          if ("object" !== s2) return a2 = a2.concat([new ot("light", e2, `object expected, ${s2} found`)]), a2;
           for (const s3 in e2) {
             const o2 = s3.match(/^(.*)-transition$/);
             a2 = a2.concat(o2 && n2[o2[1]] && n2[o2[1]].transition ? t2.validateSpec({ key: s3, value: e2[s3], valueSpec: r2.transition, validateSpec: t2.validateSpec, style: i2, styleSpec: r2 }) : n2[s3] ? t2.validateSpec({ key: s3, value: e2[s3], valueSpec: n2[s3], validateSpec: t2.validateSpec, style: i2, styleSpec: r2 }) : [new ot(s3, e2[s3], `unknown property "${s3}"`)]);
@@ -2926,12 +2539,9 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           const e2 = t2.value, r2 = t2.styleSpec, n2 = r2.terrain, i2 = t2.style;
           let a2 = [];
           const s2 = kr(e2);
-          if (void 0 === e2)
-            return a2;
-          if ("object" !== s2)
-            return a2 = a2.concat([new ot("terrain", e2, `object expected, ${s2} found`)]), a2;
-          for (const s3 in e2)
-            a2 = a2.concat(n2[s3] ? t2.validateSpec({ key: s3, value: e2[s3], valueSpec: n2[s3], validateSpec: t2.validateSpec, style: i2, styleSpec: r2 }) : [new ot(s3, e2[s3], `unknown property "${s3}"`)]);
+          if (void 0 === e2) return a2;
+          if ("object" !== s2) return a2 = a2.concat([new ot("terrain", e2, `object expected, ${s2} found`)]), a2;
+          for (const s3 in e2) a2 = a2.concat(n2[s3] ? t2.validateSpec({ key: s3, value: e2[s3], valueSpec: n2[s3], validateSpec: t2.validateSpec, style: i2, styleSpec: r2 }) : [new ot(s3, e2[s3], `unknown property "${s3}"`)]);
           return a2;
         }
         function wn(t2) {
@@ -2939,8 +2549,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           const r2 = t2.value, n2 = t2.key;
           if (Array.isArray(r2)) {
             const i2 = [], a2 = [];
-            for (const s2 in r2)
-              r2[s2].id && i2.includes(r2[s2].id) && e2.push(new ot(n2, r2, `all the sprites' ids must be unique, but ${r2[s2].id} is duplicated`)), i2.push(r2[s2].id), r2[s2].url && a2.includes(r2[s2].url) && e2.push(new ot(n2, r2, `all the sprites' URLs must be unique, but ${r2[s2].url} is duplicated`)), a2.push(r2[s2].url), e2 = e2.concat(nn({ key: `${n2}[${s2}]`, value: r2[s2], valueSpec: { id: { type: "string", required: true }, url: { type: "string", required: true } }, validateSpec: t2.validateSpec }));
+            for (const s2 in r2) r2[s2].id && i2.includes(r2[s2].id) && e2.push(new ot(n2, r2, `all the sprites' ids must be unique, but ${r2[s2].id} is duplicated`)), i2.push(r2[s2].id), r2[s2].url && a2.includes(r2[s2].url) && e2.push(new ot(n2, r2, `all the sprites' URLs must be unique, but ${r2[s2].url} is duplicated`)), a2.push(r2[s2].url), e2 = e2.concat(nn({ key: `${n2}[${s2}]`, value: r2[s2], valueSpec: { id: { type: "string", required: true }, url: { type: "string", required: true } }, validateSpec: t2.validateSpec }));
             return e2;
           }
           return mn({ key: n2, value: r2 });
@@ -2958,22 +2567,18 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         }, padding: function(t2) {
           const e2 = t2.key, r2 = t2.value;
           if ("array" === kr(r2)) {
-            if (r2.length < 1 || r2.length > 4)
-              return [new ot(e2, r2, `padding requires 1 to 4 values; ${r2.length} values found`)];
+            if (r2.length < 1 || r2.length > 4) return [new ot(e2, r2, `padding requires 1 to 4 values; ${r2.length} values found`)];
             const n2 = { type: "number" };
             let i2 = [];
-            for (let a2 = 0; a2 < r2.length; a2++)
-              i2 = i2.concat(t2.validateSpec({ key: `${e2}[${a2}]`, value: r2[a2], validateSpec: t2.validateSpec, valueSpec: n2 }));
+            for (let a2 = 0; a2 < r2.length; a2++) i2 = i2.concat(t2.validateSpec({ key: `${e2}[${a2}]`, value: r2[a2], validateSpec: t2.validateSpec, valueSpec: n2 }));
             return i2;
           }
           return sn({ key: e2, value: r2, valueSpec: {} });
         }, variableAnchorOffsetCollection: function(t2) {
           const e2 = t2.key, r2 = t2.value, n2 = kr(r2), i2 = t2.styleSpec;
-          if ("array" !== n2 || r2.length < 1 || r2.length % 2 != 0)
-            return [new ot(e2, r2, "variableAnchorOffsetCollection requires a non-empty array of even length")];
+          if ("array" !== n2 || r2.length < 1 || r2.length % 2 != 0) return [new ot(e2, r2, "variableAnchorOffsetCollection requires a non-empty array of even length")];
           let a2 = [];
-          for (let n3 = 0; n3 < r2.length; n3 += 2)
-            a2 = a2.concat(un({ key: `${e2}[${n3}]`, value: r2[n3], valueSpec: i2.layout_symbol["text-anchor"] })), a2 = a2.concat(an({ key: `${e2}[${n3 + 1}]`, value: r2[n3 + 1], valueSpec: { length: 2, value: "number" }, validateSpec: t2.validateSpec, style: t2.style, styleSpec: i2 }));
+          for (let n3 = 0; n3 < r2.length; n3 += 2) a2 = a2.concat(un({ key: `${e2}[${n3}]`, value: r2[n3], valueSpec: i2.layout_symbol["text-anchor"] })), a2 = a2.concat(an({ key: `${e2}[${n3 + 1}]`, value: r2[n3 + 1], valueSpec: { length: 2, value: "number" }, validateSpec: t2.validateSpec, style: t2.style, styleSpec: i2 }));
           return a2;
         }, sprite: wn };
         function An(t2) {
@@ -3005,9 +2610,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         const Cn = kn, Bn = Cn.light, Pn = Cn.paintProperty, Vn = Cn.layoutProperty;
         function En(t2, e2) {
           let r2 = false;
-          if (e2 && e2.length)
-            for (const n2 of e2)
-              t2.fire(new G(new Error(n2.message))), r2 = true;
+          if (e2 && e2.length) for (const n2 of e2) t2.fire(new G(new Error(n2.message))), r2 = true;
           return r2;
         }
         class Fn {
@@ -3025,8 +2628,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               this.keys = i3.subarray(i3[3 + n2.length], a2), this.bboxes = i3.subarray(a2), this.insert = this._insertReadonly;
             } else {
               this.d = e2 + 2 * r2;
-              for (let t3 = 0; t3 < this.d * this.d; t3++)
-                n2.push([]);
+              for (let t3 = 0; t3 < this.d * this.d; t3++) n2.push([]);
               this.keys = [], this.bboxes = [];
             }
             this.n = e2, this.extent = t2, this.padding = r2, this.scale = e2 / t2, this.uid = 0;
@@ -3044,8 +2646,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }
           query(t2, e2, r2, n2, i2) {
             const a2 = this.min, s2 = this.max;
-            if (t2 <= a2 && e2 <= a2 && s2 <= r2 && s2 <= n2 && !i2)
-              return Array.prototype.slice.call(this.keys);
+            if (t2 <= a2 && e2 <= a2 && s2 <= r2 && s2 <= n2 && !i2) return Array.prototype.slice.call(this.keys);
             {
               const a3 = [];
               return this._forEachCell(t2, e2, r2, n2, this._queryCell, a3, {}, i2), a3;
@@ -3066,12 +2667,10 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }
           _forEachCell(t2, e2, r2, n2, i2, a2, s2, o2) {
             const l2 = this._convertToCellCoord(t2), u2 = this._convertToCellCoord(e2), c2 = this._convertToCellCoord(r2), h2 = this._convertToCellCoord(n2);
-            for (let p2 = l2; p2 <= c2; p2++)
-              for (let l3 = u2; l3 <= h2; l3++) {
-                const u3 = this.d * l3 + p2;
-                if ((!o2 || o2(this._convertFromCellCoord(p2), this._convertFromCellCoord(l3), this._convertFromCellCoord(p2 + 1), this._convertFromCellCoord(l3 + 1))) && i2.call(this, t2, e2, r2, n2, u3, a2, s2, o2))
-                  return;
-              }
+            for (let p2 = l2; p2 <= c2; p2++) for (let l3 = u2; l3 <= h2; l3++) {
+              const u3 = this.d * l3 + p2;
+              if ((!o2 || o2(this._convertFromCellCoord(p2), this._convertFromCellCoord(l3), this._convertFromCellCoord(p2 + 1), this._convertFromCellCoord(l3 + 1))) && i2.call(this, t2, e2, r2, n2, u3, a2, s2, o2)) return;
+            }
           }
           _convertFromCellCoord(t2) {
             return (t2 - this.padding) / this.scale;
@@ -3080,12 +2679,10 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             return Math.max(0, Math.min(this.d - 1, Math.floor(t2 * this.scale) + this.padding));
           }
           toArrayBuffer() {
-            if (this.arrayBuffer)
-              return this.arrayBuffer;
+            if (this.arrayBuffer) return this.arrayBuffer;
             const t2 = this.cells, e2 = 3 + this.cells.length + 1 + 1;
             let r2 = 0;
-            for (let t3 = 0; t3 < this.cells.length; t3++)
-              r2 += this.cells[t3].length;
+            for (let t3 = 0; t3 < this.cells.length; t3++) r2 += this.cells[t3].length;
             const n2 = new Int32Array(e2 + r2 + this.keys.length + this.bboxes.length);
             n2[0] = this.extent, n2[1] = this.n, n2[2] = this.padding;
             let i2 = e2;
@@ -3105,80 +2702,61 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         }
         const Tn = {};
         function $n(t2, e2, r2 = {}) {
-          if (Tn[t2])
-            throw new Error(`${t2} is already registered.`);
+          if (Tn[t2]) throw new Error(`${t2} is already registered.`);
           Object.defineProperty(e2, "_classRegistryKey", { value: t2, writeable: false }), Tn[t2] = { klass: e2, omit: r2.omit || [], shallow: r2.shallow || [] };
         }
         $n("Object", Object), $n("TransferableGridIndex", Fn), $n("Color", Yt), $n("Error", Error), $n("AJAXError", L), $n("ResolvedImage", ne), $n("StylePropertyFunction", Ur), $n("StyleExpression", Fr, { omit: ["_evaluator"] }), $n("ZoomDependentExpression", Dr), $n("ZoomConstantExpression", Lr), $n("CompoundExpression", $e, { omit: ["_evaluate"] });
-        for (const t2 in yr)
-          yr[t2]._classRegistryKey || $n(`Expression_${t2}`, yr[t2]);
+        for (const t2 in yr) yr[t2]._classRegistryKey || $n(`Expression_${t2}`, yr[t2]);
         function Ln(t2) {
           return t2 && "undefined" != typeof ArrayBuffer && (t2 instanceof ArrayBuffer || t2.constructor && "ArrayBuffer" === t2.constructor.name);
         }
         function Dn(t2, e2) {
-          if (null == t2 || "boolean" == typeof t2 || "number" == typeof t2 || "string" == typeof t2 || t2 instanceof Boolean || t2 instanceof Number || t2 instanceof String || t2 instanceof Date || t2 instanceof RegExp || t2 instanceof Blob)
-            return t2;
-          if (Ln(t2))
-            return e2 && e2.push(t2), t2;
-          if (M(t2))
-            return e2 && e2.push(t2), t2;
+          if (null == t2 || "boolean" == typeof t2 || "number" == typeof t2 || "string" == typeof t2 || t2 instanceof Boolean || t2 instanceof Number || t2 instanceof String || t2 instanceof Date || t2 instanceof RegExp || t2 instanceof Blob) return t2;
+          if (Ln(t2)) return e2 && e2.push(t2), t2;
+          if (M(t2)) return e2 && e2.push(t2), t2;
           if (ArrayBuffer.isView(t2)) {
             const r2 = t2;
             return e2 && e2.push(r2.buffer), r2;
           }
-          if (t2 instanceof ImageData)
-            return e2 && e2.push(t2.data.buffer), t2;
+          if (t2 instanceof ImageData) return e2 && e2.push(t2.data.buffer), t2;
           if (Array.isArray(t2)) {
             const r2 = [];
-            for (const n2 of t2)
-              r2.push(Dn(n2, e2));
+            for (const n2 of t2) r2.push(Dn(n2, e2));
             return r2;
           }
           if ("object" == typeof t2) {
             const r2 = t2.constructor, n2 = r2._classRegistryKey;
-            if (!n2)
-              throw new Error("can't serialize object of unregistered class");
-            if (!Tn[n2])
-              throw new Error(`${n2} is not registered.`);
+            if (!n2) throw new Error("can't serialize object of unregistered class");
+            if (!Tn[n2]) throw new Error(`${n2} is not registered.`);
             const i2 = r2.serialize ? r2.serialize(t2, e2) : {};
             if (r2.serialize) {
-              if (e2 && i2 === e2[e2.length - 1])
-                throw new Error("statically serialized object won't survive transfer of $name property");
+              if (e2 && i2 === e2[e2.length - 1]) throw new Error("statically serialized object won't survive transfer of $name property");
             } else {
               for (const r3 in t2) {
-                if (!t2.hasOwnProperty(r3))
-                  continue;
-                if (Tn[n2].omit.indexOf(r3) >= 0)
-                  continue;
+                if (!t2.hasOwnProperty(r3)) continue;
+                if (Tn[n2].omit.indexOf(r3) >= 0) continue;
                 const a2 = t2[r3];
                 i2[r3] = Tn[n2].shallow.indexOf(r3) >= 0 ? a2 : Dn(a2, e2);
               }
               t2 instanceof Error && (i2.message = t2.message);
             }
-            if (i2.$name)
-              throw new Error("$name property is reserved for worker serialization logic.");
+            if (i2.$name) throw new Error("$name property is reserved for worker serialization logic.");
             return "Object" !== n2 && (i2.$name = n2), i2;
           }
           throw new Error("can't serialize object of type " + typeof t2);
         }
         function On(t2) {
-          if (null == t2 || "boolean" == typeof t2 || "number" == typeof t2 || "string" == typeof t2 || t2 instanceof Boolean || t2 instanceof Number || t2 instanceof String || t2 instanceof Date || t2 instanceof RegExp || t2 instanceof Blob || Ln(t2) || M(t2) || ArrayBuffer.isView(t2) || t2 instanceof ImageData)
-            return t2;
-          if (Array.isArray(t2))
-            return t2.map(On);
+          if (null == t2 || "boolean" == typeof t2 || "number" == typeof t2 || "string" == typeof t2 || t2 instanceof Boolean || t2 instanceof Number || t2 instanceof String || t2 instanceof Date || t2 instanceof RegExp || t2 instanceof Blob || Ln(t2) || M(t2) || ArrayBuffer.isView(t2) || t2 instanceof ImageData) return t2;
+          if (Array.isArray(t2)) return t2.map(On);
           if ("object" == typeof t2) {
             const e2 = t2.$name || "Object";
-            if (!Tn[e2])
-              throw new Error(`can't deserialize unregistered class ${e2}`);
+            if (!Tn[e2]) throw new Error(`can't deserialize unregistered class ${e2}`);
             const { klass: r2 } = Tn[e2];
-            if (!r2)
-              throw new Error(`can't deserialize unregistered class ${e2}`);
-            if (r2.deserialize)
-              return r2.deserialize(t2);
+            if (!r2) throw new Error(`can't deserialize unregistered class ${e2}`);
+            if (r2.deserialize) return r2.deserialize(t2);
             const n2 = Object.create(r2.prototype);
             for (const r3 of Object.keys(t2)) {
-              if ("$name" === r3)
-                continue;
+              if ("$name" === r3) continue;
               const i2 = t2[r3];
               n2[r3] = Tn[e2].shallow.indexOf(r3) >= 0 ? i2 : On(i2);
             }
@@ -3197,15 +2775,11 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         }
         const Rn = { "Latin-1 Supplement": (t2) => t2 >= 128 && t2 <= 255, Arabic: (t2) => t2 >= 1536 && t2 <= 1791, "Arabic Supplement": (t2) => t2 >= 1872 && t2 <= 1919, "Arabic Extended-A": (t2) => t2 >= 2208 && t2 <= 2303, "Hangul Jamo": (t2) => t2 >= 4352 && t2 <= 4607, "Unified Canadian Aboriginal Syllabics": (t2) => t2 >= 5120 && t2 <= 5759, Khmer: (t2) => t2 >= 6016 && t2 <= 6143, "Unified Canadian Aboriginal Syllabics Extended": (t2) => t2 >= 6320 && t2 <= 6399, "General Punctuation": (t2) => t2 >= 8192 && t2 <= 8303, "Letterlike Symbols": (t2) => t2 >= 8448 && t2 <= 8527, "Number Forms": (t2) => t2 >= 8528 && t2 <= 8591, "Miscellaneous Technical": (t2) => t2 >= 8960 && t2 <= 9215, "Control Pictures": (t2) => t2 >= 9216 && t2 <= 9279, "Optical Character Recognition": (t2) => t2 >= 9280 && t2 <= 9311, "Enclosed Alphanumerics": (t2) => t2 >= 9312 && t2 <= 9471, "Geometric Shapes": (t2) => t2 >= 9632 && t2 <= 9727, "Miscellaneous Symbols": (t2) => t2 >= 9728 && t2 <= 9983, "Miscellaneous Symbols and Arrows": (t2) => t2 >= 11008 && t2 <= 11263, "CJK Radicals Supplement": (t2) => t2 >= 11904 && t2 <= 12031, "Kangxi Radicals": (t2) => t2 >= 12032 && t2 <= 12255, "Ideographic Description Characters": (t2) => t2 >= 12272 && t2 <= 12287, "CJK Symbols and Punctuation": (t2) => t2 >= 12288 && t2 <= 12351, Hiragana: (t2) => t2 >= 12352 && t2 <= 12447, Katakana: (t2) => t2 >= 12448 && t2 <= 12543, Bopomofo: (t2) => t2 >= 12544 && t2 <= 12591, "Hangul Compatibility Jamo": (t2) => t2 >= 12592 && t2 <= 12687, Kanbun: (t2) => t2 >= 12688 && t2 <= 12703, "Bopomofo Extended": (t2) => t2 >= 12704 && t2 <= 12735, "CJK Strokes": (t2) => t2 >= 12736 && t2 <= 12783, "Katakana Phonetic Extensions": (t2) => t2 >= 12784 && t2 <= 12799, "Enclosed CJK Letters and Months": (t2) => t2 >= 12800 && t2 <= 13055, "CJK Compatibility": (t2) => t2 >= 13056 && t2 <= 13311, "CJK Unified Ideographs Extension A": (t2) => t2 >= 13312 && t2 <= 19903, "Yijing Hexagram Symbols": (t2) => t2 >= 19904 && t2 <= 19967, "CJK Unified Ideographs": (t2) => t2 >= 19968 && t2 <= 40959, "Yi Syllables": (t2) => t2 >= 40960 && t2 <= 42127, "Yi Radicals": (t2) => t2 >= 42128 && t2 <= 42191, "Hangul Jamo Extended-A": (t2) => t2 >= 43360 && t2 <= 43391, "Hangul Syllables": (t2) => t2 >= 44032 && t2 <= 55215, "Hangul Jamo Extended-B": (t2) => t2 >= 55216 && t2 <= 55295, "Private Use Area": (t2) => t2 >= 57344 && t2 <= 63743, "CJK Compatibility Ideographs": (t2) => t2 >= 63744 && t2 <= 64255, "Arabic Presentation Forms-A": (t2) => t2 >= 64336 && t2 <= 65023, "Vertical Forms": (t2) => t2 >= 65040 && t2 <= 65055, "CJK Compatibility Forms": (t2) => t2 >= 65072 && t2 <= 65103, "Small Form Variants": (t2) => t2 >= 65104 && t2 <= 65135, "Arabic Presentation Forms-B": (t2) => t2 >= 65136 && t2 <= 65279, "Halfwidth and Fullwidth Forms": (t2) => t2 >= 65280 && t2 <= 65519 };
         function qn(t2) {
-          for (const e2 of t2)
-            if (Zn(e2.charCodeAt(0)))
-              return true;
+          for (const e2 of t2) if (Zn(e2.charCodeAt(0))) return true;
           return false;
         }
         function jn(t2) {
-          for (const e2 of t2)
-            if (!Nn(e2.charCodeAt(0)))
-              return false;
+          for (const e2 of t2) if (!Nn(e2.charCodeAt(0))) return false;
           return true;
         }
         function Nn(t2) {
@@ -3226,9 +2800,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           return !(!e2 && Gn(t2) || t2 >= 2304 && t2 <= 3583 || t2 >= 3840 && t2 <= 4255 || Rn.Khmer(t2));
         }
         function Xn(t2) {
-          for (const e2 of t2)
-            if (Gn(e2.charCodeAt(0)))
-              return true;
+          for (const e2 of t2) if (Gn(e2.charCodeAt(0))) return true;
           return false;
         }
         const Yn = "deferred", Hn = "loading", Wn = "loaded";
@@ -3242,22 +2814,18 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         const ii = new J(), ai = function() {
           return ti;
         }, si = function() {
-          if (ti !== Yn || !ei)
-            throw new Error("rtl-text-plugin cannot be downloaded unless a pluginURL is specified");
+          if (ti !== Yn || !ei) throw new Error("rtl-text-plugin cannot be downloaded unless a pluginURL is specified");
           ti = Hn, ni(), ei && q({ url: ei }, (t2) => {
             t2 ? ri(t2) : (ti = Wn, ni());
           });
         }, oi = { applyArabicShaping: null, processBidirectionalText: null, processStyledBidirectionalText: null, isLoaded: () => ti === Wn || null != oi.applyArabicShaping, isLoading: () => ti === Hn, setState(t2) {
-          if (!I())
-            throw new Error("Cannot set the state of the rtl-text-plugin when not in the web-worker context");
+          if (!I()) throw new Error("Cannot set the state of the rtl-text-plugin when not in the web-worker context");
           ti = t2.pluginStatus, ei = t2.pluginURL;
         }, isParsed() {
-          if (!I())
-            throw new Error("rtl-text-plugin is only parsed on the worker-threads");
+          if (!I()) throw new Error("rtl-text-plugin is only parsed on the worker-threads");
           return null != oi.applyArabicShaping && null != oi.processBidirectionalText && null != oi.processStyledBidirectionalText;
         }, getPluginURL() {
-          if (!I())
-            throw new Error("rtl-text-plugin url can only be queried from the worker threads");
+          if (!I()) throw new Error("rtl-text-plugin url can only be queried from the worker threads");
           return ei;
         } };
         class li {
@@ -3266,9 +2834,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }
           isSupportedScript(t2) {
             return function(t3, e2) {
-              for (const r2 of t3)
-                if (!Jn(r2.charCodeAt(0), e2))
-                  return false;
+              for (const r2 of t3) if (!Jn(r2.charCodeAt(0), e2)) return false;
               return true;
             }(t2, oi.isLoaded());
           }
@@ -3283,12 +2849,10 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         class ui {
           constructor(t2, e2) {
             this.property = t2, this.value = e2, this.expression = function(t3, e3) {
-              if (Ir(t3))
-                return new Ur(t3, e3);
+              if (Ir(t3)) return new Ur(t3, e3);
               if (Tr(t3)) {
                 const r2 = Or(t3, e3);
-                if ("error" === r2.result)
-                  throw new Error(r2.value.map((t4) => `${t4.key}: ${t4.message}`).join(", "));
+                if ("error" === r2.result) throw new Error(r2.value.map((t4) => `${t4.key}: ${t4.message}`).join(", "));
                 return r2.value;
               }
               {
@@ -3343,14 +2907,12 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }
           transitioned(t2, e2) {
             const r2 = new fi(this._properties);
-            for (const n2 of Object.keys(this._values))
-              r2._values[n2] = this._values[n2].transitioned(t2, e2._values[n2]);
+            for (const n2 of Object.keys(this._values)) r2._values[n2] = this._values[n2].transitioned(t2, e2._values[n2]);
             return r2;
           }
           untransitioned() {
             const t2 = new fi(this._properties);
-            for (const e2 of Object.keys(this._values))
-              t2._values[e2] = this._values[e2].untransitioned();
+            for (const e2 of Object.keys(this._values)) t2._values[e2] = this._values[e2].untransitioned();
             return t2;
           }
         }
@@ -3361,19 +2923,14 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           possiblyEvaluate(t2, e2, r2) {
             const n2 = t2.now || 0, i2 = this.value.possiblyEvaluate(t2, e2, r2), a2 = this.prior;
             if (a2) {
-              if (n2 > this.end)
-                return this.prior = null, i2;
-              if (this.value.isDataDriven())
-                return this.prior = null, i2;
-              if (n2 < this.begin)
-                return a2.possiblyEvaluate(t2, e2, r2);
+              if (n2 > this.end) return this.prior = null, i2;
+              if (this.value.isDataDriven()) return this.prior = null, i2;
+              if (n2 < this.begin) return a2.possiblyEvaluate(t2, e2, r2);
               {
                 const s2 = (n2 - this.begin) / (this.end - this.begin);
                 return this.property.interpolate(a2.possiblyEvaluate(t2, e2, r2), i2, function(t3) {
-                  if (t3 <= 0)
-                    return 0;
-                  if (t3 >= 1)
-                    return 1;
+                  if (t3 <= 0) return 0;
+                  if (t3 >= 1) return 1;
                   const e3 = t3 * t3, r3 = e3 * t3;
                   return 4 * (t3 < 0.5 ? r3 : 3 * (t3 - e3) + r3 - 0.75);
                 }(s2));
@@ -3388,14 +2945,11 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }
           possiblyEvaluate(t2, e2, r2) {
             const n2 = new mi(this._properties);
-            for (const i2 of Object.keys(this._values))
-              n2._values[i2] = this._values[i2].possiblyEvaluate(t2, e2, r2);
+            for (const i2 of Object.keys(this._values)) n2._values[i2] = this._values[i2].possiblyEvaluate(t2, e2, r2);
             return n2;
           }
           hasTransition() {
-            for (const t2 of Object.keys(this._values))
-              if (this._values[t2].prior)
-                return true;
+            for (const t2 of Object.keys(this._values)) if (this._values[t2].prior) return true;
             return false;
           }
         }
@@ -3422,8 +2976,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }
           possiblyEvaluate(t2, e2, r2) {
             const n2 = new mi(this._properties);
-            for (const i2 of Object.keys(this._values))
-              n2._values[i2] = this._values[i2].possiblyEvaluate(t2, e2, r2);
+            for (const i2 of Object.keys(this._values)) n2._values[i2] = this._values[i2].possiblyEvaluate(t2, e2, r2);
             return n2;
           }
         }
@@ -3454,8 +3007,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             this.specification = t2;
           }
           possiblyEvaluate(t2, e2) {
-            if (t2.isDataDriven())
-              throw new Error("Value should not be data driven");
+            if (t2.isDataDriven()) throw new Error("Value should not be data driven");
             return t2.expression.evaluate(e2);
           }
           interpolate(t2, e2, r2) {
@@ -3471,10 +3023,8 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             return new yi(this, "constant" === t2.expression.kind || "camera" === t2.expression.kind ? { kind: "constant", value: t2.expression.evaluate(e2, null, {}, r2, n2) } : t2.expression, e2);
           }
           interpolate(t2, e2, r2) {
-            if ("constant" !== t2.value.kind || "constant" !== e2.value.kind)
-              return t2;
-            if (void 0 === t2.value.value || void 0 === e2.value.value)
-              return new yi(this, { kind: "constant", value: void 0 }, t2.parameters);
+            if ("constant" !== t2.value.kind || "constant" !== e2.value.kind) return t2;
+            if (void 0 === t2.value.value || void 0 === e2.value.value) return new yi(this, { kind: "constant", value: void 0 }, t2.parameters);
             const n2 = Ze[this.specification.type];
             if (n2) {
               const i2 = n2(t2.value.value, e2.value.value, r2);
@@ -3488,8 +3038,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         }
         class vi extends xi {
           possiblyEvaluate(t2, e2, r2, n2) {
-            if (void 0 === t2.value)
-              return new yi(this, { kind: "constant", value: void 0 }, e2);
+            if (void 0 === t2.value) return new yi(this, { kind: "constant", value: void 0 }, e2);
             if ("constant" === t2.expression.kind) {
               const i2 = t2.expression.evaluate(e2, null, {}, r2, n2), a2 = "resolvedImage" === t2.property.specification.type && "string" != typeof i2 ? i2.name : i2, s2 = this._calculate(a2, a2, a2, e2);
               return new yi(this, { kind: "constant", value: s2 }, e2);
@@ -3562,10 +3111,8 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           constructor(t2, e2) {
             if (super(), this.id = t2.id, this.type = t2.type, this._featureFilter = { filter: () => true, needGeometry: false }, "custom" !== t2.type && (this.metadata = t2.metadata, this.minzoom = t2.minzoom, this.maxzoom = t2.maxzoom, "background" !== t2.type && (this.source = t2.source, this.sourceLayer = t2["source-layer"], this.filter = t2.filter), e2.layout && (this._unevaluatedLayout = new di(e2.layout)), e2.paint)) {
               this._transitionablePaint = new hi(e2.paint);
-              for (const e3 in t2.paint)
-                this.setPaintProperty(e3, t2.paint[e3], { validate: false });
-              for (const e3 in t2.layout)
-                this.setLayoutProperty(e3, t2.layout[e3], { validate: false });
+              for (const e3 in t2.paint) this.setPaintProperty(e3, t2.paint[e3], { validate: false });
+              for (const e3 in t2.layout) this.setLayoutProperty(e3, t2.layout[e3], { validate: false });
               this._transitioningPaint = this._transitionablePaint.untransitioned(), this.paint = new mi(e2.paint);
             }
           }
@@ -3582,10 +3129,8 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             return t2.endsWith(Ai) ? this._transitionablePaint.getTransition(t2.slice(0, -11)) : this._transitionablePaint.getValue(t2);
           }
           setPaintProperty(t2, e2, r2 = {}) {
-            if (null != e2 && this._validate(Pn, `layers.${this.id}.paint.${t2}`, t2, e2, r2))
-              return false;
-            if (t2.endsWith(Ai))
-              return this._transitionablePaint.setTransition(t2.slice(0, -11), e2 || void 0), false;
+            if (null != e2 && this._validate(Pn, `layers.${this.id}.paint.${t2}`, t2, e2, r2)) return false;
+            if (t2.endsWith(Ai)) return this._transitionablePaint.setTransition(t2.slice(0, -11), e2 || void 0), false;
             {
               const r3 = this._transitionablePaint._values[t2], n2 = "cross-faded-data-driven" === r3.property.specification["property-type"], i2 = r3.value.isDataDriven(), a2 = r3.value;
               this._transitionablePaint.setValue(t2, e2), this._handleSpecialPaintPropertyUpdate(t2);
@@ -3631,8 +3176,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           isStateDependent() {
             for (const t2 in this.paint._values) {
               const e2 = this.paint.get(t2);
-              if (e2 instanceof yi && _r(e2.property.specification) && ("source" === e2.value.kind || "composite" === e2.value.kind) && e2.value.isStateDependent)
-                return true;
+              if (e2 instanceof yi && _r(e2.property.specification) && ("source" === e2.value.kind || "composite" === e2.value.kind) && e2.value.isStateDependent) return true;
             }
             return false;
           }
@@ -4302,9 +3846,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             return this.segments;
           }
           destroy() {
-            for (const t2 of this.segments)
-              for (const e2 in t2.vaos)
-                t2.vaos[e2].destroy();
+            for (const t2 of this.segments) for (const e2 in t2.vaos) t2.vaos[e2].destroy();
           }
           static simpleSegment(t2, e2, r2, n2) {
             return new za([{ vertexOffset: t2, primitiveOffset: e2, vertexLength: r2, primitiveLength: n2, vaos: {}, sortKey: 0 }]);
@@ -4318,8 +3860,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         var Ba = { exports: {} }, Pa = { exports: {} };
         Pa.exports = function(t2, e2) {
           var r2, n2, i2, a2, s2, o2, l2, u2;
-          for (n2 = t2.length - (r2 = 3 & t2.length), i2 = e2, s2 = 3432918353, o2 = 461845907, u2 = 0; u2 < n2; )
-            l2 = 255 & t2.charCodeAt(u2) | (255 & t2.charCodeAt(++u2)) << 8 | (255 & t2.charCodeAt(++u2)) << 16 | (255 & t2.charCodeAt(++u2)) << 24, ++u2, i2 = 27492 + (65535 & (a2 = 5 * (65535 & (i2 = (i2 ^= l2 = (65535 & (l2 = (l2 = (65535 & l2) * s2 + (((l2 >>> 16) * s2 & 65535) << 16) & 4294967295) << 15 | l2 >>> 17)) * o2 + (((l2 >>> 16) * o2 & 65535) << 16) & 4294967295) << 13 | i2 >>> 19)) + ((5 * (i2 >>> 16) & 65535) << 16) & 4294967295)) + ((58964 + (a2 >>> 16) & 65535) << 16);
+          for (n2 = t2.length - (r2 = 3 & t2.length), i2 = e2, s2 = 3432918353, o2 = 461845907, u2 = 0; u2 < n2; ) l2 = 255 & t2.charCodeAt(u2) | (255 & t2.charCodeAt(++u2)) << 8 | (255 & t2.charCodeAt(++u2)) << 16 | (255 & t2.charCodeAt(++u2)) << 24, ++u2, i2 = 27492 + (65535 & (a2 = 5 * (65535 & (i2 = (i2 ^= l2 = (65535 & (l2 = (l2 = (65535 & l2) * s2 + (((l2 >>> 16) * s2 & 65535) << 16) & 4294967295) << 15 | l2 >>> 17)) * o2 + (((l2 >>> 16) * o2 & 65535) << 16) & 4294967295) << 13 | i2 >>> 19)) + ((5 * (i2 >>> 16) & 65535) << 16) & 4294967295)) + ((58964 + (a2 >>> 16) & 65535) << 16);
           switch (l2 = 0, r2) {
             case 3:
               l2 ^= (255 & t2.charCodeAt(u2 + 2)) << 16;
@@ -4332,8 +3873,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         };
         var Va = Pa.exports, Ea = { exports: {} };
         Ea.exports = function(t2, e2) {
-          for (var r2, n2 = t2.length, i2 = e2 ^ n2, a2 = 0; n2 >= 4; )
-            r2 = 1540483477 * (65535 & (r2 = 255 & t2.charCodeAt(a2) | (255 & t2.charCodeAt(++a2)) << 8 | (255 & t2.charCodeAt(++a2)) << 16 | (255 & t2.charCodeAt(++a2)) << 24)) + ((1540483477 * (r2 >>> 16) & 65535) << 16), i2 = 1540483477 * (65535 & i2) + ((1540483477 * (i2 >>> 16) & 65535) << 16) ^ (r2 = 1540483477 * (65535 & (r2 ^= r2 >>> 24)) + ((1540483477 * (r2 >>> 16) & 65535) << 16)), n2 -= 4, ++a2;
+          for (var r2, n2 = t2.length, i2 = e2 ^ n2, a2 = 0; n2 >= 4; ) r2 = 1540483477 * (65535 & (r2 = 255 & t2.charCodeAt(a2) | (255 & t2.charCodeAt(++a2)) << 8 | (255 & t2.charCodeAt(++a2)) << 16 | (255 & t2.charCodeAt(++a2)) << 24)) + ((1540483477 * (r2 >>> 16) & 65535) << 16), i2 = 1540483477 * (65535 & i2) + ((1540483477 * (i2 >>> 16) & 65535) << 16) ^ (r2 = 1540483477 * (65535 & (r2 ^= r2 >>> 24)) + ((1540483477 * (r2 >>> 16) & 65535) << 16)), n2 -= 4, ++a2;
           switch (n2) {
             case 3:
               i2 ^= (255 & t2.charCodeAt(a2 + 2)) << 16;
@@ -4355,8 +3895,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             this.ids.push(Da(t2)), this.positions.push(e2, r2, n2);
           }
           getPositions(t2) {
-            if (!this.indexed)
-              throw new Error("Trying to get index, but feature positions are not indexed");
+            if (!this.indexed) throw new Error("Trying to get index, but feature positions are not indexed");
             const e2 = Da(t2);
             let r2 = 0, n2 = this.ids.length - 1;
             for (; r2 < n2; ) {
@@ -4364,8 +3903,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               this.ids[t3] >= e2 ? n2 = t3 : r2 = t3 + 1;
             }
             const i2 = [];
-            for (; this.ids[r2] === e2; )
-              i2.push({ index: this.positions[3 * r2], start: this.positions[3 * r2 + 1], end: this.positions[3 * r2 + 2] }), r2++;
+            for (; this.ids[r2] === e2; ) i2.push({ index: this.positions[3 * r2], start: this.positions[3 * r2 + 1], end: this.positions[3 * r2 + 2] }), r2++;
             return i2;
           }
           static serialize(t2, e2) {
@@ -4392,8 +3930,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               do {
                 s2--;
               } while (t2[s2] > i2);
-              if (a2 >= s2)
-                break;
+              if (a2 >= s2) break;
               Ua(t2, a2, s2), Ua(e2, 3 * a2, 3 * s2), Ua(e2, 3 * a2 + 1, 3 * s2 + 1), Ua(e2, 3 * a2 + 2, 3 * s2 + 2);
             }
             s2 - r2 < n2 - s2 ? (Oa(t2, e2, r2, s2), r2 = s2 + 1) : (Oa(t2, e2, s2 + 1, n2), n2 = s2);
@@ -4478,11 +4015,9 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           _setPaintValue(t2, e2, r2) {
             if ("color" === this.type) {
               const n2 = Ka(r2);
-              for (let r3 = t2; r3 < e2; r3++)
-                this.paintVertexArray.emplace(r3, n2[0], n2[1]);
+              for (let r3 = t2; r3 < e2; r3++) this.paintVertexArray.emplace(r3, n2[0], n2[1]);
             } else {
-              for (let n2 = t2; n2 < e2; n2++)
-                this.paintVertexArray.emplace(n2, r2);
+              for (let n2 = t2; n2 < e2; n2++) this.paintVertexArray.emplace(n2, r2);
               this.maxValue = Math.max(this.maxValue, Math.abs(r2));
             }
           }
@@ -4508,11 +4043,9 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           _setPaintValue(t2, e2, r2, n2) {
             if ("color" === this.type) {
               const i2 = Ka(r2), a2 = Ka(n2);
-              for (let r3 = t2; r3 < e2; r3++)
-                this.paintVertexArray.emplace(r3, i2[0], i2[1], a2[0], a2[1]);
+              for (let r3 = t2; r3 < e2; r3++) this.paintVertexArray.emplace(r3, i2[0], i2[1], a2[0], a2[1]);
             } else {
-              for (let i2 = t2; i2 < e2; i2++)
-                this.paintVertexArray.emplace(i2, r2, n2);
+              for (let i2 = t2; i2 < e2; i2++) this.paintVertexArray.emplace(i2, r2, n2);
               this.maxValue = Math.max(this.maxValue, Math.abs(r2), Math.abs(n2));
             }
           }
@@ -4542,12 +4075,9 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             this._setPaintValues(t2, e2, r2.patterns && r2.patterns[this.layerId], i2);
           }
           _setPaintValues(t2, e2, r2, n2) {
-            if (!n2 || !r2)
-              return;
+            if (!n2 || !r2) return;
             const { min: i2, mid: a2, max: s2 } = r2, o2 = n2[i2], l2 = n2[a2], u2 = n2[s2];
-            if (o2 && l2 && u2)
-              for (let r3 = t2; r3 < e2; r3++)
-                this.zoomInPaintVertexArray.emplace(r3, l2.tl[0], l2.tl[1], l2.br[0], l2.br[1], o2.tl[0], o2.tl[1], o2.br[0], o2.br[1], l2.pixelRatio, o2.pixelRatio), this.zoomOutPaintVertexArray.emplace(r3, l2.tl[0], l2.tl[1], l2.br[0], l2.br[1], u2.tl[0], u2.tl[1], u2.br[0], u2.br[1], l2.pixelRatio, u2.pixelRatio);
+            if (o2 && l2 && u2) for (let r3 = t2; r3 < e2; r3++) this.zoomInPaintVertexArray.emplace(r3, l2.tl[0], l2.tl[1], l2.br[0], l2.br[1], o2.tl[0], o2.tl[1], o2.br[0], o2.br[1], l2.pixelRatio, o2.pixelRatio), this.zoomOutPaintVertexArray.emplace(r3, l2.tl[0], l2.tl[1], l2.br[0], l2.br[1], u2.tl[0], u2.tl[1], u2.br[0], u2.br[1], l2.pixelRatio, u2.pixelRatio);
           }
           upload(t2) {
             this.zoomInPaintVertexArray && this.zoomInPaintVertexArray.arrayBuffer && this.zoomOutPaintVertexArray && this.zoomOutPaintVertexArray.arrayBuffer && (this.zoomInPaintVertexBuffer = t2.createVertexBuffer(this.zoomInPaintVertexArray, Ca.members, this.expression.isStateDependent), this.zoomOutPaintVertexBuffer = t2.createVertexBuffer(this.zoomOutPaintVertexArray, Ca.members, this.expression.isStateDependent));
@@ -4561,14 +4091,11 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             this.binders = {}, this._buffers = [];
             const n2 = [];
             for (const i2 in t2.paint._values) {
-              if (!r2(i2))
-                continue;
+              if (!r2(i2)) continue;
               const a2 = t2.paint.get(i2);
-              if (!(a2 instanceof yi && _r(a2.property.specification)))
-                continue;
+              if (!(a2 instanceof yi && _r(a2.property.specification))) continue;
               const s2 = ts(i2, t2.type), o2 = a2.value, l2 = a2.property.specification.type, u2 = a2.property.useIntegerZoom, c2 = a2.property.specification["property-type"], h2 = "cross-faded" === c2 || "cross-faded-data-driven" === c2;
-              if ("constant" === o2.kind)
-                this.binders[i2] = h2 ? new Ja(o2.value, s2) : new Ga(o2.value, s2, l2), n2.push(`/u_${i2}`);
+              if ("constant" === o2.kind) this.binders[i2] = h2 ? new Ja(o2.value, s2) : new Ga(o2.value, s2, l2), n2.push(`/u_${i2}`);
               else if ("source" === o2.kind || h2) {
                 const r3 = es(i2, l2, "source");
                 this.binders[i2] = h2 ? new Ha(o2, l2, u2, e2, r3, t2.id) : new Xa(o2, s2, l2, r3), n2.push(`/a_${i2}`);
@@ -4624,12 +4151,8 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             const t2 = [];
             for (const e2 in this.binders) {
               const r2 = this.binders[e2];
-              if (r2 instanceof Xa || r2 instanceof Ya)
-                for (let e3 = 0; e3 < r2.paintVertexAttributes.length; e3++)
-                  t2.push(r2.paintVertexAttributes[e3].name);
-              else if (r2 instanceof Ha)
-                for (let e3 = 0; e3 < Ca.members.length; e3++)
-                  t2.push(Ca.members[e3].name);
+              if (r2 instanceof Xa || r2 instanceof Ya) for (let e3 = 0; e3 < r2.paintVertexAttributes.length; e3++) t2.push(r2.paintVertexAttributes[e3].name);
+              else if (r2 instanceof Ha) for (let e3 = 0; e3 < Ca.members.length; e3++) t2.push(Ca.members[e3].name);
             }
             return t2;
           }
@@ -4637,9 +4160,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             const t2 = [];
             for (const e2 in this.binders) {
               const r2 = this.binders[e2];
-              if (r2 instanceof Ga || r2 instanceof Ja || r2 instanceof Ya)
-                for (const e3 of r2.uniformNames)
-                  t2.push(e3);
+              if (r2 instanceof Ga || r2 instanceof Ja || r2 instanceof Ya) for (const e3 of r2.uniformNames) t2.push(e3);
             }
             return t2;
           }
@@ -4651,18 +4172,16 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             for (const n2 in this.binders) {
               const i2 = this.binders[n2];
               if (i2 instanceof Ga || i2 instanceof Ja || i2 instanceof Ya) {
-                for (const a2 of i2.uniformNames)
-                  if (e2[a2]) {
-                    const s2 = i2.getBinding(t2, e2[a2], a2);
-                    r2.push({ name: a2, property: n2, binding: s2 });
-                  }
+                for (const a2 of i2.uniformNames) if (e2[a2]) {
+                  const s2 = i2.getBinding(t2, e2[a2], a2);
+                  r2.push({ name: a2, property: n2, binding: s2 });
+                }
               }
             }
             return r2;
           }
           setUniforms(t2, e2, r2, n2) {
-            for (const { name: t3, property: i2, binding: a2 } of e2)
-              this.binders[i2].setUniform(a2, n2, r2.get(i2), t3);
+            for (const { name: t3, property: i2, binding: a2 } of e2) this.binders[i2].setUniform(a2, n2, r2.get(i2), t3);
           }
           updatePaintBuffers(t2) {
             this._buffers = [];
@@ -4671,8 +4190,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               if (t2 && r2 instanceof Ha) {
                 const e3 = 2 === t2.fromScale ? r2.zoomInPaintVertexBuffer : r2.zoomOutPaintVertexBuffer;
                 e3 && this._buffers.push(e3);
-              } else
-                (r2 instanceof Xa || r2 instanceof Ya) && r2.paintVertexBuffer && this._buffers.push(r2.paintVertexBuffer);
+              } else (r2 instanceof Xa || r2 instanceof Ya) && r2.paintVertexBuffer && this._buffers.push(r2.paintVertexBuffer);
             }
           }
           upload(t2) {
@@ -4692,32 +4210,27 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         class Qa {
           constructor(t2, e2, r2 = () => true) {
             this.programConfigurations = {};
-            for (const n2 of t2)
-              this.programConfigurations[n2.id] = new Wa(n2, e2, r2);
+            for (const n2 of t2) this.programConfigurations[n2.id] = new Wa(n2, e2, r2);
             this.needsUpload = false, this._featureMap = new La(), this._bufferOffset = 0;
           }
           populatePaintArrays(t2, e2, r2, n2, i2, a2) {
-            for (const r3 in this.programConfigurations)
-              this.programConfigurations[r3].populatePaintArrays(t2, e2, n2, i2, a2);
+            for (const r3 in this.programConfigurations) this.programConfigurations[r3].populatePaintArrays(t2, e2, n2, i2, a2);
             void 0 !== e2.id && this._featureMap.add(e2.id, r2, this._bufferOffset, t2), this._bufferOffset = t2, this.needsUpload = true;
           }
           updatePaintArrays(t2, e2, r2, n2) {
-            for (const i2 of r2)
-              this.needsUpload = this.programConfigurations[i2.id].updatePaintArrays(t2, this._featureMap, e2, i2, n2) || this.needsUpload;
+            for (const i2 of r2) this.needsUpload = this.programConfigurations[i2.id].updatePaintArrays(t2, this._featureMap, e2, i2, n2) || this.needsUpload;
           }
           get(t2) {
             return this.programConfigurations[t2];
           }
           upload(t2) {
             if (this.needsUpload) {
-              for (const e2 in this.programConfigurations)
-                this.programConfigurations[e2].upload(t2);
+              for (const e2 in this.programConfigurations) this.programConfigurations[e2].upload(t2);
               this.needsUpload = false;
             }
           }
           destroy() {
-            for (const t2 in this.programConfigurations)
-              this.programConfigurations[t2].destroy();
+            for (const t2 in this.programConfigurations) this.programConfigurations[t2].destroy();
           }
         }
         function ts(t2, e2) {
@@ -4758,8 +4271,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             "circle" === n2.type && (a2 = n2.layout.get("circle-sort-key"), s2 = !a2.isConstant());
             for (const { feature: e3, id: n3, index: o2, sourceLayerIndex: l2 } of t2) {
               const t3 = this.layers[0]._featureFilter.needGeometry, u2 = ss(e3, t3);
-              if (!this.layers[0]._featureFilter.filter(new li(this.zoom), u2, r2))
-                continue;
+              if (!this.layers[0]._featureFilter.filter(new li(this.zoom), u2, r2)) continue;
               const c2 = s2 ? a2.evaluate(u2, {}, r2) : void 0, h2 = { id: n3, properties: e3.properties, type: e3.type, sourceLayerIndex: l2, index: o2, geometry: t3 ? u2.geometry : as(e3), patterns: {}, sortKey: c2 };
               i2.push(h2);
             }
@@ -4785,67 +4297,46 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             this.layoutVertexBuffer && (this.layoutVertexBuffer.destroy(), this.indexBuffer.destroy(), this.programConfigurations.destroy(), this.segments.destroy());
           }
           addFeature(t2, e2, r2, n2) {
-            for (const r3 of e2)
-              for (const e3 of r3) {
-                const r4 = e3.x, n3 = e3.y;
-                if (r4 < 0 || r4 >= rs || n3 < 0 || n3 >= rs)
-                  continue;
-                const i2 = this.segments.prepareSegment(4, this.layoutVertexArray, this.indexArray, t2.sortKey), a2 = i2.vertexLength;
-                os(this.layoutVertexArray, r4, n3, -1, -1), os(this.layoutVertexArray, r4, n3, 1, -1), os(this.layoutVertexArray, r4, n3, 1, 1), os(this.layoutVertexArray, r4, n3, -1, 1), this.indexArray.emplaceBack(a2, a2 + 1, a2 + 2), this.indexArray.emplaceBack(a2, a2 + 3, a2 + 2), i2.vertexLength += 4, i2.primitiveLength += 2;
-              }
+            for (const r3 of e2) for (const e3 of r3) {
+              const r4 = e3.x, n3 = e3.y;
+              if (r4 < 0 || r4 >= rs || n3 < 0 || n3 >= rs) continue;
+              const i2 = this.segments.prepareSegment(4, this.layoutVertexArray, this.indexArray, t2.sortKey), a2 = i2.vertexLength;
+              os(this.layoutVertexArray, r4, n3, -1, -1), os(this.layoutVertexArray, r4, n3, 1, -1), os(this.layoutVertexArray, r4, n3, 1, 1), os(this.layoutVertexArray, r4, n3, -1, 1), this.indexArray.emplaceBack(a2, a2 + 1, a2 + 2), this.indexArray.emplaceBack(a2, a2 + 3, a2 + 2), i2.vertexLength += 4, i2.primitiveLength += 2;
+            }
             this.programConfigurations.populatePaintArrays(this.layoutVertexArray.length, t2, r2, {}, n2);
           }
         }
         function us(t2, e2) {
-          for (let r2 = 0; r2 < t2.length; r2++)
-            if (xs(e2, t2[r2]))
-              return true;
-          for (let r2 = 0; r2 < e2.length; r2++)
-            if (xs(t2, e2[r2]))
-              return true;
+          for (let r2 = 0; r2 < t2.length; r2++) if (xs(e2, t2[r2])) return true;
+          for (let r2 = 0; r2 < e2.length; r2++) if (xs(t2, e2[r2])) return true;
           return !!fs(t2, e2);
         }
         function cs(t2, e2, r2) {
           return !!xs(t2, e2) || !!ys(e2, t2, r2);
         }
         function hs(t2, e2) {
-          if (1 === t2.length)
-            return gs(e2, t2[0]);
+          if (1 === t2.length) return gs(e2, t2[0]);
           for (let r2 = 0; r2 < e2.length; r2++) {
             const n2 = e2[r2];
-            for (let e3 = 0; e3 < n2.length; e3++)
-              if (xs(t2, n2[e3]))
-                return true;
+            for (let e3 = 0; e3 < n2.length; e3++) if (xs(t2, n2[e3])) return true;
           }
-          for (let r2 = 0; r2 < t2.length; r2++)
-            if (gs(e2, t2[r2]))
-              return true;
-          for (let r2 = 0; r2 < e2.length; r2++)
-            if (fs(t2, e2[r2]))
-              return true;
+          for (let r2 = 0; r2 < t2.length; r2++) if (gs(e2, t2[r2])) return true;
+          for (let r2 = 0; r2 < e2.length; r2++) if (fs(t2, e2[r2])) return true;
           return false;
         }
         function ps(t2, e2, r2) {
           if (t2.length > 1) {
-            if (fs(t2, e2))
-              return true;
-            for (let n2 = 0; n2 < e2.length; n2++)
-              if (ys(e2[n2], t2, r2))
-                return true;
+            if (fs(t2, e2)) return true;
+            for (let n2 = 0; n2 < e2.length; n2++) if (ys(e2[n2], t2, r2)) return true;
           }
-          for (let n2 = 0; n2 < t2.length; n2++)
-            if (ys(t2[n2], e2, r2))
-              return true;
+          for (let n2 = 0; n2 < t2.length; n2++) if (ys(t2[n2], e2, r2)) return true;
           return false;
         }
         function fs(t2, e2) {
-          if (0 === t2.length || 0 === e2.length)
-            return false;
+          if (0 === t2.length || 0 === e2.length) return false;
           for (let r2 = 0; r2 < t2.length - 1; r2++) {
             const n2 = t2[r2], i2 = t2[r2 + 1];
-            for (let t3 = 0; t3 < e2.length - 1; t3++)
-              if (ds(n2, i2, e2[t3], e2[t3 + 1]))
-                return true;
+            for (let t3 = 0; t3 < e2.length - 1; t3++) if (ds(n2, i2, e2[t3], e2[t3 + 1])) return true;
           }
           return false;
         }
@@ -4854,17 +4345,13 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         }
         function ys(t2, e2, r2) {
           const n2 = r2 * r2;
-          if (1 === e2.length)
-            return t2.distSqr(e2[0]) < n2;
-          for (let r3 = 1; r3 < e2.length; r3++)
-            if (ms(t2, e2[r3 - 1], e2[r3]) < n2)
-              return true;
+          if (1 === e2.length) return t2.distSqr(e2[0]) < n2;
+          for (let r3 = 1; r3 < e2.length; r3++) if (ms(t2, e2[r3 - 1], e2[r3]) < n2) return true;
           return false;
         }
         function ms(t2, e2, r2) {
           const n2 = e2.distSqr(r2);
-          if (0 === n2)
-            return t2.distSqr(e2);
+          if (0 === n2) return t2.distSqr(e2);
           const i2 = ((t2.x - e2.x) * (r2.x - e2.x) + (t2.y - e2.y) * (r2.y - e2.y)) / n2;
           return t2.distSqr(i2 < 0 ? e2 : i2 > 1 ? r2 : r2.sub(e2)._mult(i2)._add(e2));
         }
@@ -4872,8 +4359,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           let r2, n2, i2, a2 = false;
           for (let s2 = 0; s2 < t2.length; s2++) {
             r2 = t2[s2];
-            for (let t3 = 0, s3 = r2.length - 1; t3 < r2.length; s3 = t3++)
-              n2 = r2[t3], i2 = r2[s3], n2.y > e2.y != i2.y > e2.y && e2.x < (i2.x - n2.x) * (e2.y - n2.y) / (i2.y - n2.y) + n2.x && (a2 = !a2);
+            for (let t3 = 0, s3 = r2.length - 1; t3 < r2.length; s3 = t3++) n2 = r2[t3], i2 = r2[s3], n2.y > e2.y != i2.y > e2.y && e2.x < (i2.x - n2.x) * (e2.y - n2.y) / (i2.y - n2.y) + n2.x && (a2 = !a2);
           }
           return a2;
         }
@@ -4887,8 +4373,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         }
         function vs(t2, e2, r2) {
           const n2 = r2[0], i2 = r2[2];
-          if (t2.x < n2.x && e2.x < n2.x || t2.x > i2.x && e2.x > i2.x || t2.y < n2.y && e2.y < n2.y || t2.y > i2.y && e2.y > i2.y)
-            return false;
+          if (t2.x < n2.x && e2.x < n2.x || t2.x > i2.x && e2.x > i2.x || t2.y < n2.y && e2.y < n2.y || t2.y > i2.y && e2.y > i2.y) return false;
           const a2 = S(t2, e2, r2[0]);
           return a2 !== S(t2, e2, r2[1]) || a2 !== S(t2, e2, r2[2]) || a2 !== S(t2, e2, r2[3]);
         }
@@ -4900,13 +4385,11 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           return Math.sqrt(t2[0] * t2[0] + t2[1] * t2[1]);
         }
         function _s(t2, e2, r2, n2, i2) {
-          if (!e2[0] && !e2[1])
-            return t2;
+          if (!e2[0] && !e2[1]) return t2;
           const s2 = a.convert(e2)._mult(i2);
           "viewport" === r2 && s2._rotate(-n2);
           const o2 = [];
-          for (let e3 = 0; e3 < t2.length; e3++)
-            o2.push(t2[e3].sub(s2));
+          for (let e3 = 0; e3 < t2.length; e3++) o2.push(t2[e3].sub(s2));
           return o2;
         }
         let As, Ss;
@@ -4924,8 +4407,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           return t2[0] = v2 * n2 + b2 * o2 + w2 * h2 + _2 * y2, t2[1] = v2 * i2 + b2 * l2 + w2 * p2 + _2 * m2, t2[2] = v2 * a2 + b2 * u2 + w2 * f2 + _2 * g2, t2[3] = v2 * s2 + b2 * c2 + w2 * d2 + _2 * x2, t2[4] = (v2 = r2[4]) * n2 + (b2 = r2[5]) * o2 + (w2 = r2[6]) * h2 + (_2 = r2[7]) * y2, t2[5] = v2 * i2 + b2 * l2 + w2 * p2 + _2 * m2, t2[6] = v2 * a2 + b2 * u2 + w2 * f2 + _2 * g2, t2[7] = v2 * s2 + b2 * c2 + w2 * d2 + _2 * x2, t2[8] = (v2 = r2[8]) * n2 + (b2 = r2[9]) * o2 + (w2 = r2[10]) * h2 + (_2 = r2[11]) * y2, t2[9] = v2 * i2 + b2 * l2 + w2 * p2 + _2 * m2, t2[10] = v2 * a2 + b2 * u2 + w2 * f2 + _2 * g2, t2[11] = v2 * s2 + b2 * c2 + w2 * d2 + _2 * x2, t2[12] = (v2 = r2[12]) * n2 + (b2 = r2[13]) * o2 + (w2 = r2[14]) * h2 + (_2 = r2[15]) * y2, t2[13] = v2 * i2 + b2 * l2 + w2 * p2 + _2 * m2, t2[14] = v2 * a2 + b2 * u2 + w2 * f2 + _2 * g2, t2[15] = v2 * s2 + b2 * c2 + w2 * d2 + _2 * x2, t2;
         }
         Math.hypot || (Math.hypot = function() {
-          for (var t2 = 0, e2 = arguments.length; e2--; )
-            t2 += arguments[e2] * arguments[e2];
+          for (var t2 = 0, e2 = arguments.length; e2--; ) t2 += arguments[e2] * arguments[e2];
           return Math.sqrt(t2);
         });
         var Bs, Ps = Cs;
@@ -4949,14 +4431,12 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             const l2 = _s(t2, this.paint.get("circle-translate"), this.paint.get("circle-translate-anchor"), a2.angle, s2), u2 = this.paint.get("circle-radius").evaluate(e2, r2) + this.paint.get("circle-stroke-width").evaluate(e2, r2), c2 = "map" === this.paint.get("circle-pitch-alignment"), h2 = c2 ? l2 : function(t3, e3) {
               return t3.map((t4) => Fs(t4, e3));
             }(l2, o2), p2 = c2 ? u2 * s2 : u2;
-            for (const t3 of n2)
-              for (const e3 of t3) {
-                const t4 = c2 ? e3 : Fs(e3, o2);
-                let r3 = p2;
-                const n3 = Vs([], [e3.x, e3.y, 0, 1], o2);
-                if ("viewport" === this.paint.get("circle-pitch-scale") && "map" === this.paint.get("circle-pitch-alignment") ? r3 *= n3[3] / a2.cameraToCenterDistance : "map" === this.paint.get("circle-pitch-scale") && "viewport" === this.paint.get("circle-pitch-alignment") && (r3 *= a2.cameraToCenterDistance / n3[3]), cs(h2, t4, r3))
-                  return true;
-              }
+            for (const t3 of n2) for (const e3 of t3) {
+              const t4 = c2 ? e3 : Fs(e3, o2);
+              let r3 = p2;
+              const n3 = Vs([], [e3.x, e3.y, 0, 1], o2);
+              if ("viewport" === this.paint.get("circle-pitch-scale") && "map" === this.paint.get("circle-pitch-alignment") ? r3 *= n3[3] / a2.cameraToCenterDistance : "map" === this.paint.get("circle-pitch-scale") && "viewport" === this.paint.get("circle-pitch-alignment") && (r3 *= a2.cameraToCenterDistance / n3[3]), cs(h2, t4, r3)) return true;
+            }
             return false;
           }
         }
@@ -4973,34 +4453,25 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         } };
         function Ds(t2, { width: e2, height: r2 }, n2, i2) {
           if (i2) {
-            if (i2 instanceof Uint8ClampedArray)
-              i2 = new Uint8Array(i2.buffer);
-            else if (i2.length !== e2 * r2 * n2)
-              throw new RangeError(`mismatched image size. expected: ${i2.length} but got: ${e2 * r2 * n2}`);
-          } else
-            i2 = new Uint8Array(e2 * r2 * n2);
+            if (i2 instanceof Uint8ClampedArray) i2 = new Uint8Array(i2.buffer);
+            else if (i2.length !== e2 * r2 * n2) throw new RangeError(`mismatched image size. expected: ${i2.length} but got: ${e2 * r2 * n2}`);
+          } else i2 = new Uint8Array(e2 * r2 * n2);
           return t2.width = e2, t2.height = r2, t2.data = i2, t2;
         }
         function Os(t2, { width: e2, height: r2 }, n2) {
-          if (e2 === t2.width && r2 === t2.height)
-            return;
+          if (e2 === t2.width && r2 === t2.height) return;
           const i2 = Ds({}, { width: e2, height: r2 }, n2);
           Us(t2, i2, { x: 0, y: 0 }, { x: 0, y: 0 }, { width: Math.min(t2.width, e2), height: Math.min(t2.height, r2) }, n2), t2.width = e2, t2.height = r2, t2.data = i2.data;
         }
         function Us(t2, e2, r2, n2, i2, a2) {
-          if (0 === i2.width || 0 === i2.height)
-            return e2;
-          if (i2.width > t2.width || i2.height > t2.height || r2.x > t2.width - i2.width || r2.y > t2.height - i2.height)
-            throw new RangeError("out of range source coordinates for image copy");
-          if (i2.width > e2.width || i2.height > e2.height || n2.x > e2.width - i2.width || n2.y > e2.height - i2.height)
-            throw new RangeError("out of range destination coordinates for image copy");
+          if (0 === i2.width || 0 === i2.height) return e2;
+          if (i2.width > t2.width || i2.height > t2.height || r2.x > t2.width - i2.width || r2.y > t2.height - i2.height) throw new RangeError("out of range source coordinates for image copy");
+          if (i2.width > e2.width || i2.height > e2.height || n2.x > e2.width - i2.width || n2.y > e2.height - i2.height) throw new RangeError("out of range destination coordinates for image copy");
           const s2 = t2.data, o2 = e2.data;
-          if (s2 === o2)
-            throw new Error("srcData equals dstData, so image is already copied");
+          if (s2 === o2) throw new Error("srcData equals dstData, so image is already copied");
           for (let l2 = 0; l2 < i2.height; l2++) {
             const u2 = ((r2.y + l2) * t2.width + r2.x) * a2, c2 = ((n2.y + l2) * e2.width + n2.x) * a2;
-            for (let t3 = 0; t3 < i2.width * a2; t3++)
-              o2[c2 + t3] = s2[u2 + t3];
+            for (let t3 = 0; t3 < i2.width * a2; t3++) o2[c2 + t3] = s2[u2 + t3];
           }
           return e2;
         }
@@ -5037,22 +4508,17 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         }
         function js(t2) {
           const e2 = {}, r2 = t2.resolution || 256, n2 = t2.clips ? t2.clips.length : 1, i2 = t2.image || new qs({ width: r2, height: n2 });
-          if (Math.log(r2) / Math.LN2 % 1 != 0)
-            throw new Error(`width is not a power of 2 - ${r2}`);
+          if (Math.log(r2) / Math.LN2 % 1 != 0) throw new Error(`width is not a power of 2 - ${r2}`);
           const a2 = (r3, n3, a3) => {
             e2[t2.evaluationKey] = a3;
             const s2 = t2.expression.evaluate(e2);
             i2.data[r3 + n3 + 0] = Math.floor(255 * s2.r / s2.a), i2.data[r3 + n3 + 1] = Math.floor(255 * s2.g / s2.a), i2.data[r3 + n3 + 2] = Math.floor(255 * s2.b / s2.a), i2.data[r3 + n3 + 3] = Math.floor(255 * s2.a);
           };
-          if (t2.clips)
-            for (let e3 = 0, i3 = 0; e3 < n2; ++e3, i3 += 4 * r2)
-              for (let n3 = 0, s2 = 0; n3 < r2; n3++, s2 += 4) {
-                const o2 = n3 / (r2 - 1), { start: l2, end: u2 } = t2.clips[e3];
-                a2(i3, s2, l2 * (1 - o2) + u2 * o2);
-              }
-          else
-            for (let t3 = 0, e3 = 0; t3 < r2; t3++, e3 += 4)
-              a2(0, e3, t3 / (r2 - 1));
+          if (t2.clips) for (let e3 = 0, i3 = 0; e3 < n2; ++e3, i3 += 4 * r2) for (let n3 = 0, s2 = 0; n3 < r2; n3++, s2 += 4) {
+            const o2 = n3 / (r2 - 1), { start: l2, end: u2 } = t2.clips[e3];
+            a2(i3, s2, l2 * (1 - o2) + u2 * o2);
+          }
+          else for (let t3 = 0, e3 = 0; t3 < r2; t3++, e3 += 4) a2(0, e3, t3 / (r2 - 1));
           return i2;
         }
         $n("AlphaImage", Rs), $n("RGBAImage", qs);
@@ -5099,44 +4565,33 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         function Hs(t2, e2, r2) {
           r2 = r2 || 2;
           var n2, i2, a2, s2, o2, l2, u2, c2 = e2 && e2.length, h2 = c2 ? e2[0] * r2 : t2.length, p2 = Ws(t2, 0, h2, r2, true), f2 = [];
-          if (!p2 || p2.next === p2.prev)
-            return f2;
+          if (!p2 || p2.next === p2.prev) return f2;
           if (c2 && (p2 = function(t3, e3, r3, n3) {
             var i3, a3, s3, o3 = [];
-            for (i3 = 0, a3 = e3.length; i3 < a3; i3++)
-              (s3 = Ws(t3, e3[i3] * n3, i3 < a3 - 1 ? e3[i3 + 1] * n3 : t3.length, n3, false)) === s3.next && (s3.steiner = true), o3.push(uo(s3));
-            for (o3.sort(ao), i3 = 0; i3 < o3.length; i3++)
-              r3 = so(o3[i3], r3);
+            for (i3 = 0, a3 = e3.length; i3 < a3; i3++) (s3 = Ws(t3, e3[i3] * n3, i3 < a3 - 1 ? e3[i3 + 1] * n3 : t3.length, n3, false)) === s3.next && (s3.steiner = true), o3.push(uo(s3));
+            for (o3.sort(ao), i3 = 0; i3 < o3.length; i3++) r3 = so(o3[i3], r3);
             return r3;
           }(t2, e2, p2, r2)), t2.length > 80 * r2) {
             n2 = a2 = t2[0], i2 = s2 = t2[1];
-            for (var d2 = r2; d2 < h2; d2 += r2)
-              (o2 = t2[d2]) < n2 && (n2 = o2), (l2 = t2[d2 + 1]) < i2 && (i2 = l2), o2 > a2 && (a2 = o2), l2 > s2 && (s2 = l2);
+            for (var d2 = r2; d2 < h2; d2 += r2) (o2 = t2[d2]) < n2 && (n2 = o2), (l2 = t2[d2 + 1]) < i2 && (i2 = l2), o2 > a2 && (a2 = o2), l2 > s2 && (s2 = l2);
             u2 = 0 !== (u2 = Math.max(a2 - n2, s2 - i2)) ? 32767 / u2 : 0;
           }
           return to(p2, f2, r2, n2, i2, u2, 0), f2;
         }
         function Ws(t2, e2, r2, n2, i2) {
           var a2, s2;
-          if (i2 === Ao(t2, e2, r2, n2) > 0)
-            for (a2 = e2; a2 < r2; a2 += n2)
-              s2 = bo(a2, t2[a2], t2[a2 + 1], s2);
-          else
-            for (a2 = r2 - n2; a2 >= e2; a2 -= n2)
-              s2 = bo(a2, t2[a2], t2[a2 + 1], s2);
+          if (i2 === Ao(t2, e2, r2, n2) > 0) for (a2 = e2; a2 < r2; a2 += n2) s2 = bo(a2, t2[a2], t2[a2 + 1], s2);
+          else for (a2 = r2 - n2; a2 >= e2; a2 -= n2) s2 = bo(a2, t2[a2], t2[a2 + 1], s2);
           return s2 && fo(s2, s2.next) && (wo(s2), s2 = s2.next), s2;
         }
         function Qs(t2, e2) {
-          if (!t2)
-            return t2;
+          if (!t2) return t2;
           e2 || (e2 = t2);
           var r2, n2 = t2;
           do {
-            if (r2 = false, n2.steiner || !fo(n2, n2.next) && 0 !== po(n2.prev, n2, n2.next))
-              n2 = n2.next;
+            if (r2 = false, n2.steiner || !fo(n2, n2.next) && 0 !== po(n2.prev, n2, n2.next)) n2 = n2.next;
             else {
-              if (wo(n2), (n2 = e2 = n2.prev) === n2.next)
-                break;
+              if (wo(n2), (n2 = e2 = n2.prev) === n2.next) break;
               r2 = true;
             }
           } while (r2 || n2 !== e2);
@@ -5153,55 +4608,44 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
                 var e4, r4, n4, i4, a3, s3, o3, l3, u3 = 1;
                 do {
                   for (r4 = t4, t4 = null, a3 = null, s3 = 0; r4; ) {
-                    for (s3++, n4 = r4, o3 = 0, e4 = 0; e4 < u3 && (o3++, n4 = n4.nextZ); e4++)
-                      ;
-                    for (l3 = u3; o3 > 0 || l3 > 0 && n4; )
-                      0 !== o3 && (0 === l3 || !n4 || r4.z <= n4.z) ? (i4 = r4, r4 = r4.nextZ, o3--) : (i4 = n4, n4 = n4.nextZ, l3--), a3 ? a3.nextZ = i4 : t4 = i4, i4.prevZ = a3, a3 = i4;
+                    for (s3++, n4 = r4, o3 = 0, e4 = 0; e4 < u3 && (o3++, n4 = n4.nextZ); e4++) ;
+                    for (l3 = u3; o3 > 0 || l3 > 0 && n4; ) 0 !== o3 && (0 === l3 || !n4 || r4.z <= n4.z) ? (i4 = r4, r4 = r4.nextZ, o3--) : (i4 = n4, n4 = n4.nextZ, l3--), a3 ? a3.nextZ = i4 : t4 = i4, i4.prevZ = a3, a3 = i4;
                     r4 = n4;
                   }
                   a3.nextZ = null, u3 *= 2;
                 } while (s3 > 1);
               }(i3);
             }(t2, n2, i2, a2);
-            for (var o2, l2, u2 = t2; t2.prev !== t2.next; )
-              if (o2 = t2.prev, l2 = t2.next, a2 ? ro(t2, n2, i2, a2) : eo(t2))
-                e2.push(o2.i / r2 | 0), e2.push(t2.i / r2 | 0), e2.push(l2.i / r2 | 0), wo(t2), t2 = l2.next, u2 = l2.next;
-              else if ((t2 = l2) === u2) {
-                s2 ? 1 === s2 ? to(t2 = no(Qs(t2), e2, r2), e2, r2, n2, i2, a2, 2) : 2 === s2 && io(t2, e2, r2, n2, i2, a2) : to(Qs(t2), e2, r2, n2, i2, a2, 1);
-                break;
-              }
+            for (var o2, l2, u2 = t2; t2.prev !== t2.next; ) if (o2 = t2.prev, l2 = t2.next, a2 ? ro(t2, n2, i2, a2) : eo(t2)) e2.push(o2.i / r2 | 0), e2.push(t2.i / r2 | 0), e2.push(l2.i / r2 | 0), wo(t2), t2 = l2.next, u2 = l2.next;
+            else if ((t2 = l2) === u2) {
+              s2 ? 1 === s2 ? to(t2 = no(Qs(t2), e2, r2), e2, r2, n2, i2, a2, 2) : 2 === s2 && io(t2, e2, r2, n2, i2, a2) : to(Qs(t2), e2, r2, n2, i2, a2, 1);
+              break;
+            }
           }
         }
         function eo(t2) {
           var e2 = t2.prev, r2 = t2, n2 = t2.next;
-          if (po(e2, r2, n2) >= 0)
-            return false;
+          if (po(e2, r2, n2) >= 0) return false;
           for (var i2 = e2.x, a2 = r2.x, s2 = n2.x, o2 = e2.y, l2 = r2.y, u2 = n2.y, c2 = i2 < a2 ? i2 < s2 ? i2 : s2 : a2 < s2 ? a2 : s2, h2 = o2 < l2 ? o2 < u2 ? o2 : u2 : l2 < u2 ? l2 : u2, p2 = i2 > a2 ? i2 > s2 ? i2 : s2 : a2 > s2 ? a2 : s2, f2 = o2 > l2 ? o2 > u2 ? o2 : u2 : l2 > u2 ? l2 : u2, d2 = n2.next; d2 !== e2; ) {
-            if (d2.x >= c2 && d2.x <= p2 && d2.y >= h2 && d2.y <= f2 && co(i2, o2, a2, l2, s2, u2, d2.x, d2.y) && po(d2.prev, d2, d2.next) >= 0)
-              return false;
+            if (d2.x >= c2 && d2.x <= p2 && d2.y >= h2 && d2.y <= f2 && co(i2, o2, a2, l2, s2, u2, d2.x, d2.y) && po(d2.prev, d2, d2.next) >= 0) return false;
             d2 = d2.next;
           }
           return true;
         }
         function ro(t2, e2, r2, n2) {
           var i2 = t2.prev, a2 = t2, s2 = t2.next;
-          if (po(i2, a2, s2) >= 0)
-            return false;
+          if (po(i2, a2, s2) >= 0) return false;
           for (var o2 = i2.x, l2 = a2.x, u2 = s2.x, c2 = i2.y, h2 = a2.y, p2 = s2.y, f2 = o2 < l2 ? o2 < u2 ? o2 : u2 : l2 < u2 ? l2 : u2, d2 = c2 < h2 ? c2 < p2 ? c2 : p2 : h2 < p2 ? h2 : p2, y2 = o2 > l2 ? o2 > u2 ? o2 : u2 : l2 > u2 ? l2 : u2, m2 = c2 > h2 ? c2 > p2 ? c2 : p2 : h2 > p2 ? h2 : p2, g2 = lo(f2, d2, e2, r2, n2), x2 = lo(y2, m2, e2, r2, n2), v2 = t2.prevZ, b2 = t2.nextZ; v2 && v2.z >= g2 && b2 && b2.z <= x2; ) {
-            if (v2.x >= f2 && v2.x <= y2 && v2.y >= d2 && v2.y <= m2 && v2 !== i2 && v2 !== s2 && co(o2, c2, l2, h2, u2, p2, v2.x, v2.y) && po(v2.prev, v2, v2.next) >= 0)
-              return false;
-            if (v2 = v2.prevZ, b2.x >= f2 && b2.x <= y2 && b2.y >= d2 && b2.y <= m2 && b2 !== i2 && b2 !== s2 && co(o2, c2, l2, h2, u2, p2, b2.x, b2.y) && po(b2.prev, b2, b2.next) >= 0)
-              return false;
+            if (v2.x >= f2 && v2.x <= y2 && v2.y >= d2 && v2.y <= m2 && v2 !== i2 && v2 !== s2 && co(o2, c2, l2, h2, u2, p2, v2.x, v2.y) && po(v2.prev, v2, v2.next) >= 0) return false;
+            if (v2 = v2.prevZ, b2.x >= f2 && b2.x <= y2 && b2.y >= d2 && b2.y <= m2 && b2 !== i2 && b2 !== s2 && co(o2, c2, l2, h2, u2, p2, b2.x, b2.y) && po(b2.prev, b2, b2.next) >= 0) return false;
             b2 = b2.nextZ;
           }
           for (; v2 && v2.z >= g2; ) {
-            if (v2.x >= f2 && v2.x <= y2 && v2.y >= d2 && v2.y <= m2 && v2 !== i2 && v2 !== s2 && co(o2, c2, l2, h2, u2, p2, v2.x, v2.y) && po(v2.prev, v2, v2.next) >= 0)
-              return false;
+            if (v2.x >= f2 && v2.x <= y2 && v2.y >= d2 && v2.y <= m2 && v2 !== i2 && v2 !== s2 && co(o2, c2, l2, h2, u2, p2, v2.x, v2.y) && po(v2.prev, v2, v2.next) >= 0) return false;
             v2 = v2.prevZ;
           }
           for (; b2 && b2.z <= x2; ) {
-            if (b2.x >= f2 && b2.x <= y2 && b2.y >= d2 && b2.y <= m2 && b2 !== i2 && b2 !== s2 && co(o2, c2, l2, h2, u2, p2, b2.x, b2.y) && po(b2.prev, b2, b2.next) >= 0)
-              return false;
+            if (b2.x >= f2 && b2.x <= y2 && b2.y >= d2 && b2.y <= m2 && b2 !== i2 && b2 !== s2 && co(o2, c2, l2, h2, u2, p2, b2.x, b2.y) && po(b2.prev, b2, b2.next) >= 0) return false;
             b2 = b2.nextZ;
           }
           return true;
@@ -5236,13 +4680,11 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             do {
               if (a2 <= n3.y && a2 >= n3.next.y && n3.next.y !== n3.y) {
                 var o2 = n3.x + (a2 - n3.y) * (n3.next.x - n3.x) / (n3.next.y - n3.y);
-                if (o2 <= i2 && o2 > s2 && (s2 = o2, r3 = n3.x < n3.next.x ? n3 : n3.next, o2 === i2))
-                  return r3;
+                if (o2 <= i2 && o2 > s2 && (s2 = o2, r3 = n3.x < n3.next.x ? n3 : n3.next, o2 === i2)) return r3;
               }
               n3 = n3.next;
             } while (n3 !== e3);
-            if (!r3)
-              return null;
+            if (!r3) return null;
             var l2, u2 = r3, c2 = r3.x, h2 = r3.y, p2 = 1 / 0;
             n3 = r3;
             do {
@@ -5250,8 +4692,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             } while (n3 !== u2);
             return r3;
           }(t2, e2);
-          if (!r2)
-            return e2;
+          if (!r2) return e2;
           var n2 = vo(r2, t2);
           return Qs(n2, n2.next), Qs(r2, r2.next);
         }
@@ -5275,8 +4716,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           return t2.next.i !== e2.i && t2.prev.i !== e2.i && !function(t3, e3) {
             var r2 = t3;
             do {
-              if (r2.i !== t3.i && r2.next.i !== t3.i && r2.i !== e3.i && r2.next.i !== e3.i && yo(r2, r2.next, t3, e3))
-                return true;
+              if (r2.i !== t3.i && r2.next.i !== t3.i && r2.i !== e3.i && r2.next.i !== e3.i && yo(r2, r2.next, t3, e3)) return true;
               r2 = r2.next;
             } while (r2 !== t3);
             return false;
@@ -5322,15 +4762,12 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           this.i = t2, this.x = e2, this.y = r2, this.prev = null, this.next = null, this.z = 0, this.prevZ = null, this.nextZ = null, this.steiner = false;
         }
         function Ao(t2, e2, r2, n2) {
-          for (var i2 = 0, a2 = e2, s2 = r2 - n2; a2 < r2; a2 += n2)
-            i2 += (t2[s2] - t2[a2]) * (t2[a2 + 1] + t2[s2 + 1]), s2 = a2;
+          for (var i2 = 0, a2 = e2, s2 = r2 - n2; a2 < r2; a2 += n2) i2 += (t2[s2] - t2[a2]) * (t2[a2 + 1] + t2[s2 + 1]), s2 = a2;
           return i2;
         }
         Ys.exports = Hs, Ys.exports.default = Hs, Hs.deviation = function(t2, e2, r2, n2) {
           var i2 = e2 && e2.length, a2 = Math.abs(Ao(t2, 0, i2 ? e2[0] * r2 : t2.length, r2));
-          if (i2)
-            for (var s2 = 0, o2 = e2.length; s2 < o2; s2++)
-              a2 -= Math.abs(Ao(t2, e2[s2] * r2, s2 < o2 - 1 ? e2[s2 + 1] * r2 : t2.length, r2));
+          if (i2) for (var s2 = 0, o2 = e2.length; s2 < o2; s2++) a2 -= Math.abs(Ao(t2, e2[s2] * r2, s2 < o2 - 1 ? e2[s2 + 1] * r2 : t2.length, r2));
           var l2 = 0;
           for (s2 = 0; s2 < n2.length; s2 += 3) {
             var u2 = n2[s2] * r2, c2 = n2[s2 + 1] * r2, h2 = n2[s2 + 2] * r2;
@@ -5339,9 +4776,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           return 0 === a2 && 0 === l2 ? 0 : Math.abs((l2 - a2) / a2);
         }, Hs.flatten = function(t2) {
           for (var e2 = t2[0][0].length, r2 = { vertices: [], holes: [], dimensions: e2 }, n2 = 0, i2 = 0; i2 < t2.length; i2++) {
-            for (var a2 = 0; a2 < t2[i2].length; a2++)
-              for (var s2 = 0; s2 < e2; s2++)
-                r2.vertices.push(t2[i2][a2][s2]);
+            for (var a2 = 0; a2 < t2[i2].length; a2++) for (var s2 = 0; s2 < e2; s2++) r2.vertices.push(t2[i2][a2][s2]);
             i2 > 0 && r2.holes.push(n2 += t2[i2 - 1].length);
           }
           return r2;
@@ -5358,10 +4793,8 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             }
             var c2 = t2[e2], h2 = r2, p2 = n2;
             for (zo(t2, r2, e2), i2(t2[n2], c2) > 0 && zo(t2, r2, n2); h2 < p2; ) {
-              for (zo(t2, h2, p2), h2++, p2--; i2(t2[h2], c2) < 0; )
-                h2++;
-              for (; i2(t2[p2], c2) > 0; )
-                p2--;
+              for (zo(t2, h2, p2), h2++, p2--; i2(t2[h2], c2) < 0; ) h2++;
+              for (; i2(t2[p2], c2) > 0; ) p2--;
             }
             0 === i2(t2[r2], c2) ? zo(t2, r2, p2) : zo(t2, ++p2, n2), p2 <= e2 && (r2 = p2 + 1), e2 <= p2 && (n2 = p2 - 1);
           }
@@ -5375,17 +4808,14 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         }
         function Co(t2, e2) {
           const r2 = t2.length;
-          if (r2 <= 1)
-            return [t2];
+          if (r2 <= 1) return [t2];
           const n2 = [];
           let i2, a2;
           for (let e3 = 0; e3 < r2; e3++) {
             const r3 = k(t2[e3]);
             0 !== r3 && (t2[e3].area = Math.abs(r3), void 0 === a2 && (a2 = r3 < 0), a2 === r3 < 0 ? (i2 && n2.push(i2), i2 = [t2[e3]]) : i2.push(t2[e3]));
           }
-          if (i2 && n2.push(i2), e2 > 1)
-            for (let t3 = 0; t3 < n2.length; t3++)
-              n2[t3].length <= e2 || (ko(n2[t3], e2, 1, n2[t3].length - 1, Bo), n2[t3] = n2[t3].slice(0, e2));
+          if (i2 && n2.push(i2), e2 > 1) for (let t3 = 0; t3 < n2.length; t3++) n2[t3].length <= e2 || (ko(n2[t3], e2, 1, n2[t3].length - 1, Bo), n2[t3] = n2[t3].slice(0, e2));
           return n2;
         }
         function Bo(t2, e2) {
@@ -5422,8 +4852,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             const n2 = this.layers[0].layout.get("fill-sort-key"), i2 = !n2.isConstant(), a2 = [];
             for (const { feature: s2, id: o2, index: l2, sourceLayerIndex: u2 } of t2) {
               const t3 = this.layers[0]._featureFilter.needGeometry, c2 = ss(s2, t3);
-              if (!this.layers[0]._featureFilter.filter(new li(this.zoom), c2, r2))
-                continue;
+              if (!this.layers[0]._featureFilter.filter(new li(this.zoom), c2, r2)) continue;
               const h2 = i2 ? n2.evaluate(c2, {}, r2, e2.availableImages) : void 0, p2 = { id: o2, properties: s2.properties, type: s2.type, sourceLayerIndex: u2, index: l2, geometry: t3 ? c2.geometry : as(s2), patterns: {}, sortKey: h2 };
               a2.push(p2);
             }
@@ -5433,8 +4862,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               if (this.hasPattern) {
                 const t3 = Vo("fill", this.layers, n3, this.zoom, e2);
                 this.patternFeatures.push(t3);
-              } else
-                this.addFeature(n3, i3, a3, r2, {});
+              } else this.addFeature(n3, i3, a3, r2, {});
               e2.featureIndex.insert(t2[a3].feature, i3, a3, s2, this.index);
             }
           }
@@ -5442,8 +4870,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             this.stateDependentLayers.length && this.programConfigurations.updatePaintArrays(t2, e2, this.stateDependentLayers, r2);
           }
           addFeatures(t2, e2, r2) {
-            for (const t3 of this.patternFeatures)
-              this.addFeature(t3, t3.geometry, t3.index, e2, r2);
+            for (const t3 of this.patternFeatures) this.addFeature(t3, t3.geometry, t3.index, e2, r2);
           }
           isEmpty() {
             return 0 === this.layoutVertexArray.length;
@@ -5460,22 +4887,18 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           addFeature(t2, e2, r2, n2, i2) {
             for (const t3 of Co(e2, 500)) {
               let e3 = 0;
-              for (const r4 of t3)
-                e3 += r4.length;
+              for (const r4 of t3) e3 += r4.length;
               const r3 = this.segments.prepareSegment(e3, this.layoutVertexArray, this.indexArray), n3 = r3.vertexLength, i3 = [], a2 = [];
               for (const e4 of t3) {
-                if (0 === e4.length)
-                  continue;
+                if (0 === e4.length) continue;
                 e4 !== t3[0] && a2.push(i3.length / 2);
                 const r4 = this.segments2.prepareSegment(e4.length, this.layoutVertexArray, this.indexArray2), n4 = r4.vertexLength;
                 this.layoutVertexArray.emplaceBack(e4[0].x, e4[0].y), this.indexArray2.emplaceBack(n4 + e4.length - 1, n4), i3.push(e4[0].x), i3.push(e4[0].y);
-                for (let t4 = 1; t4 < e4.length; t4++)
-                  this.layoutVertexArray.emplaceBack(e4[t4].x, e4[t4].y), this.indexArray2.emplaceBack(n4 + t4 - 1, n4 + t4), i3.push(e4[t4].x), i3.push(e4[t4].y);
+                for (let t4 = 1; t4 < e4.length; t4++) this.layoutVertexArray.emplaceBack(e4[t4].x, e4[t4].y), this.indexArray2.emplaceBack(n4 + t4 - 1, n4 + t4), i3.push(e4[t4].x), i3.push(e4[t4].y);
                 r4.vertexLength += e4.length, r4.primitiveLength += e4.length;
               }
               const s2 = So(i3, a2);
-              for (let t4 = 0; t4 < s2.length; t4 += 3)
-                this.indexArray.emplaceBack(n3 + s2[t4], n3 + s2[t4 + 1], n3 + s2[t4 + 2]);
+              for (let t4 = 0; t4 < s2.length; t4 += 3) this.indexArray.emplaceBack(n3 + s2[t4], n3 + s2[t4 + 1], n3 + s2[t4 + 2]);
               r3.vertexLength += e3, r3.primitiveLength += s2.length / 3;
             }
             this.programConfigurations.populatePaintArrays(this.layoutVertexArray.length, t2, r2, i2, n2);
@@ -5524,8 +4947,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }(r2, e2) : 3 == t2 ? e2.type = r2.readVarint() : 4 == t2 && (e2._geometry = r2.pos);
         }
         function Ko(t2) {
-          for (var e2, r2, n2 = 0, i2 = 0, a2 = t2.length, s2 = a2 - 1; i2 < a2; s2 = i2++)
-            n2 += ((r2 = t2[s2]).x - (e2 = t2[i2]).x) * (e2.y + r2.y);
+          for (var e2, r2, n2 = 0, i2 = 0, a2 = t2.length, s2 = a2 - 1; i2 < a2; s2 = i2++) n2 += ((r2 = t2[s2]).x - (e2 = t2[i2]).x) * (e2.y + r2.y);
           return n2;
         }
         No.types = ["Unknown", "Point", "LineString", "Polygon"], No.prototype.loadGeometry = function() {
@@ -5536,11 +4958,9 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               var l2 = t2.readVarint();
               n2 = 7 & l2, i2 = l2 >> 3;
             }
-            if (i2--, 1 === n2 || 2 === n2)
-              a2 += t2.readSVarint(), s2 += t2.readSVarint(), 1 === n2 && (e2 && o2.push(e2), e2 = []), e2.push(new qo(a2, s2));
+            if (i2--, 1 === n2 || 2 === n2) a2 += t2.readSVarint(), s2 += t2.readSVarint(), 1 === n2 && (e2 && o2.push(e2), e2 = []), e2.push(new qo(a2, s2));
             else {
-              if (7 !== n2)
-                throw new Error("unknown command " + n2);
+              if (7 !== n2) throw new Error("unknown command " + n2);
               e2 && e2.push(e2[0].clone());
             }
           }
@@ -5553,10 +4973,8 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               var c2 = t2.readVarint();
               r2 = 7 & c2, n2 = c2 >> 3;
             }
-            if (n2--, 1 === r2 || 2 === r2)
-              (i2 += t2.readSVarint()) < s2 && (s2 = i2), i2 > o2 && (o2 = i2), (a2 += t2.readSVarint()) < l2 && (l2 = a2), a2 > u2 && (u2 = a2);
-            else if (7 !== r2)
-              throw new Error("unknown command " + r2);
+            if (n2--, 1 === r2 || 2 === r2) (i2 += t2.readSVarint()) < s2 && (s2 = i2), i2 > o2 && (o2 = i2), (a2 += t2.readSVarint()) < l2 && (l2 = a2), a2 > u2 && (u2 = a2);
+            else if (7 !== r2) throw new Error("unknown command " + r2);
           }
           return [s2, l2, o2, u2];
         }, No.prototype.toGeoJSON = function(t2, e2, r2) {
@@ -5570,27 +4988,22 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           switch (this.type) {
             case 1:
               var h2 = [];
-              for (n2 = 0; n2 < l2.length; n2++)
-                h2[n2] = l2[n2][0];
+              for (n2 = 0; n2 < l2.length; n2++) h2[n2] = l2[n2][0];
               c2(l2 = h2);
               break;
             case 2:
-              for (n2 = 0; n2 < l2.length; n2++)
-                c2(l2[n2]);
+              for (n2 = 0; n2 < l2.length; n2++) c2(l2[n2]);
               break;
             case 3:
               for (l2 = function(t3) {
                 var e3 = t3.length;
-                if (e3 <= 1)
-                  return [t3];
+                if (e3 <= 1) return [t3];
                 for (var r3, n3, i3 = [], a3 = 0; a3 < e3; a3++) {
                   var s3 = Ko(t3[a3]);
                   0 !== s3 && (void 0 === n3 && (n3 = s3 < 0), n3 === s3 < 0 ? (r3 && i3.push(r3), r3 = [t3[a3]]) : r3.push(t3[a3]));
                 }
                 return r3 && i3.push(r3), i3;
-              }(l2), n2 = 0; n2 < l2.length; n2++)
-                for (i2 = 0; i2 < l2[n2].length; i2++)
-                  c2(l2[n2][i2]);
+              }(l2), n2 = 0; n2 < l2.length; n2++) for (i2 = 0; i2 < l2[n2].length; i2++) c2(l2[n2][i2]);
           }
           1 === l2.length ? l2 = l2[0] : u2 = "Multi" + u2;
           var p2 = { type: "Feature", geometry: { type: u2, coordinates: l2 }, properties: this.properties };
@@ -5610,8 +5023,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }(r2));
         }
         Xo.prototype.feature = function(t2) {
-          if (t2 < 0 || t2 >= this._features.length)
-            throw new Error("feature index out of bounds");
+          if (t2 < 0 || t2 >= this._features.length) throw new Error("feature index out of bounds");
           this._pbf.pos = this._features[t2];
           var e2 = this._pbf.readVarint() + this._pbf.pos;
           return new Go(this._pbf, e2, this.extent, this._keys, this._values);
@@ -5638,8 +5050,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             this.features = [], this.hasPattern = Po("fill-extrusion", this.layers, e2);
             for (const { feature: n2, id: i2, index: a2, sourceLayerIndex: s2 } of t2) {
               const t3 = this.layers[0]._featureFilter.needGeometry, o2 = ss(n2, t3);
-              if (!this.layers[0]._featureFilter.filter(new li(this.zoom), o2, r2))
-                continue;
+              if (!this.layers[0]._featureFilter.filter(new li(this.zoom), o2, r2)) continue;
               const l2 = { id: i2, sourceLayerIndex: s2, index: a2, geometry: t3 ? o2.geometry : as(n2), properties: n2.properties, type: n2.type, patterns: {} };
               this.hasPattern ? this.features.push(Vo("fill-extrusion", this.layers, l2, this.zoom, e2)) : this.addFeature(l2, l2.geometry, a2, r2, {}), e2.featureIndex.insert(n2, l2.geometry, a2, s2, this.index, true);
             }
@@ -5669,14 +5080,11 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             const a2 = { x: 0, y: 0, vertexCount: 0 };
             for (const r3 of Co(e2, 500)) {
               let e3 = 0;
-              for (const t3 of r3)
-                e3 += t3.length;
+              for (const t3 of r3) e3 += t3.length;
               let n3 = this.segments.prepareSegment(4, this.layoutVertexArray, this.indexArray);
               for (const t3 of r3) {
-                if (0 === t3.length)
-                  continue;
-                if (il(t3))
-                  continue;
+                if (0 === t3.length) continue;
+                if (il(t3)) continue;
                 let e4 = 0;
                 for (let r4 = 0; r4 < t3.length; r4++) {
                   const i4 = t3[r4];
@@ -5692,24 +5100,20 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
                   }
                 }
               }
-              if (n3.vertexLength + e3 > za.MAX_VERTEX_ARRAY_LENGTH && (n3 = this.segments.prepareSegment(e3, this.layoutVertexArray, this.indexArray)), "Polygon" !== Qo[t2.type])
-                continue;
+              if (n3.vertexLength + e3 > za.MAX_VERTEX_ARRAY_LENGTH && (n3 = this.segments.prepareSegment(e3, this.layoutVertexArray, this.indexArray)), "Polygon" !== Qo[t2.type]) continue;
               const i3 = [], s2 = [], o2 = n3.vertexLength;
-              for (const t3 of r3)
-                if (0 !== t3.length) {
-                  t3 !== r3[0] && s2.push(i3.length / 2);
-                  for (let e4 = 0; e4 < t3.length; e4++) {
-                    const r4 = t3[e4];
-                    el(this.layoutVertexArray, r4.x, r4.y, 0, 0, 1, 1, 0), a2.x += r4.x, a2.y += r4.y, a2.vertexCount += 1, i3.push(r4.x), i3.push(r4.y);
-                  }
+              for (const t3 of r3) if (0 !== t3.length) {
+                t3 !== r3[0] && s2.push(i3.length / 2);
+                for (let e4 = 0; e4 < t3.length; e4++) {
+                  const r4 = t3[e4];
+                  el(this.layoutVertexArray, r4.x, r4.y, 0, 0, 1, 1, 0), a2.x += r4.x, a2.y += r4.y, a2.vertexCount += 1, i3.push(r4.x), i3.push(r4.y);
                 }
+              }
               const l2 = So(i3, s2);
-              for (let t3 = 0; t3 < l2.length; t3 += 3)
-                this.indexArray.emplaceBack(o2 + l2[t3], o2 + l2[t3 + 2], o2 + l2[t3 + 1]);
+              for (let t3 = 0; t3 < l2.length; t3 += 3) this.indexArray.emplaceBack(o2 + l2[t3], o2 + l2[t3 + 2], o2 + l2[t3 + 1]);
               n3.primitiveLength += l2.length / 3, n3.vertexLength += e3;
             }
-            for (let t3 = 0; t3 < a2.vertexCount; t3++)
-              this.centroidVertexArray.emplaceBack(Math.floor(a2.x / a2.vertexCount), Math.floor(a2.y / a2.vertexCount));
+            for (let t3 = 0; t3 < a2.vertexCount; t3++) this.centroidVertexArray.emplaceBack(Math.floor(a2.x / a2.vertexCount), Math.floor(a2.y / a2.vertexCount));
             this.programConfigurations.populatePaintArrays(this.layoutVertexArray.length, t2, r2, i2, n2);
           }
         }
@@ -5781,20 +5185,16 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             let r2 = 0;
             const n2 = e2[r2++];
             let i2;
-            for (; !i2 || n2.equals(i2); )
-              if (i2 = e2[r2++], !i2)
-                return 1 / 0;
+            for (; !i2 || n2.equals(i2); ) if (i2 = e2[r2++], !i2) return 1 / 0;
             for (; r2 < e2.length; r2++) {
               const a2 = e2[r2], s2 = t2[0], o2 = i2.sub(n2), l2 = a2.sub(n2), u2 = s2.sub(n2), c2 = ll(o2, o2), h2 = ll(o2, l2), p2 = ll(l2, l2), f2 = ll(u2, o2), d2 = ll(u2, l2), y2 = c2 * p2 - h2 * h2, m2 = (p2 * f2 - h2 * d2) / y2, g2 = (c2 * d2 - h2 * f2) / y2, x2 = n2.z * (1 - m2 - g2) + i2.z * m2 + a2.z * g2;
-              if (isFinite(x2))
-                return x2;
+              if (isFinite(x2)) return x2;
             }
             return 1 / 0;
           }
           {
             let t3 = 1 / 0;
-            for (const r2 of e2)
-              t3 = Math.min(t3, r2.z);
+            for (const r2 of e2) t3 = Math.min(t3, r2.z);
             return t3;
           }
         }
@@ -5810,8 +5210,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             const n2 = this.layers[0].layout.get("line-sort-key"), i2 = !n2.isConstant(), a2 = [];
             for (const { feature: e3, id: s2, index: o2, sourceLayerIndex: l2 } of t2) {
               const t3 = this.layers[0]._featureFilter.needGeometry, u2 = ss(e3, t3);
-              if (!this.layers[0]._featureFilter.filter(new li(this.zoom), u2, r2))
-                continue;
+              if (!this.layers[0]._featureFilter.filter(new li(this.zoom), u2, r2)) continue;
               const c2 = i2 ? n2.evaluate(u2, {}, r2) : void 0, h2 = { id: s2, properties: e3.properties, type: e3.type, sourceLayerIndex: l2, index: o2, geometry: t3 ? u2.geometry : as(e3), patterns: {}, sortKey: c2 };
               a2.push(h2);
             }
@@ -5821,8 +5220,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               if (this.hasPattern) {
                 const t3 = Vo("line", this.layers, n3, this.zoom, e2);
                 this.patternFeatures.push(t3);
-              } else
-                this.addFeature(n3, i3, a3, r2, {});
+              } else this.addFeature(n3, i3, a3, r2, {});
               e2.featureIndex.insert(t2[a3].feature, i3, a3, s2, this.index);
             }
           }
@@ -5830,8 +5228,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             this.stateDependentLayers.length && this.programConfigurations.updatePaintArrays(t2, e2, this.stateDependentLayers, r2);
           }
           addFeatures(t2, e2, r2) {
-            for (const t3 of this.patternFeatures)
-              this.addFeature(t3, t3.geometry, t3.index, e2, r2);
+            for (const t3 of this.patternFeatures) this.addFeature(t3, t3.geometry, t3.index, e2, r2);
           }
           isEmpty() {
             return 0 === this.layoutVertexArray.length;
@@ -5846,39 +5243,32 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             this.layoutVertexBuffer && (this.layoutVertexBuffer.destroy(), this.indexBuffer.destroy(), this.programConfigurations.destroy(), this.segments.destroy());
           }
           lineFeatureClips(t2) {
-            if (t2.properties && Object.prototype.hasOwnProperty.call(t2.properties, "mapbox_clip_start") && Object.prototype.hasOwnProperty.call(t2.properties, "mapbox_clip_end"))
-              return { start: +t2.properties.mapbox_clip_start, end: +t2.properties.mapbox_clip_end };
+            if (t2.properties && Object.prototype.hasOwnProperty.call(t2.properties, "mapbox_clip_start") && Object.prototype.hasOwnProperty.call(t2.properties, "mapbox_clip_end")) return { start: +t2.properties.mapbox_clip_start, end: +t2.properties.mapbox_clip_end };
           }
           addFeature(t2, e2, r2, n2, i2) {
             const a2 = this.layers[0].layout, s2 = a2.get("line-join").evaluate(t2, {}), o2 = a2.get("line-cap"), l2 = a2.get("line-miter-limit"), u2 = a2.get("line-round-limit");
             this.lineClips = this.lineFeatureClips(t2);
-            for (const r3 of e2)
-              this.addLine(r3, t2, s2, o2, l2, u2);
+            for (const r3 of e2) this.addLine(r3, t2, s2, o2, l2, u2);
             this.programConfigurations.populatePaintArrays(this.layoutVertexArray.length, t2, r2, i2, n2);
           }
           addLine(t2, e2, r2, n2, i2, a2) {
             if (this.distance = 0, this.scaledDistance = 0, this.totalDistance = 0, this.lineClips) {
               this.lineClipsArray.push(this.lineClips);
-              for (let e3 = 0; e3 < t2.length - 1; e3++)
-                this.totalDistance += t2[e3].dist(t2[e3 + 1]);
+              for (let e3 = 0; e3 < t2.length - 1; e3++) this.totalDistance += t2[e3].dist(t2[e3 + 1]);
               this.updateScaledDistance(), this.maxLineLength = Math.max(this.maxLineLength, this.totalDistance);
             }
             const s2 = "Polygon" === dl[e2.type];
             let o2 = t2.length;
-            for (; o2 >= 2 && t2[o2 - 1].equals(t2[o2 - 2]); )
-              o2--;
+            for (; o2 >= 2 && t2[o2 - 1].equals(t2[o2 - 2]); ) o2--;
             let l2 = 0;
-            for (; l2 < o2 - 1 && t2[l2].equals(t2[l2 + 1]); )
-              l2++;
-            if (o2 < (s2 ? 3 : 2))
-              return;
+            for (; l2 < o2 - 1 && t2[l2].equals(t2[l2 + 1]); ) l2++;
+            if (o2 < (s2 ? 3 : 2)) return;
             "bevel" === r2 && (i2 = 1.05);
             const u2 = this.overscaling <= 16 ? 15 * rs / (512 * this.overscaling) : 0, c2 = this.segments.prepareSegment(10 * o2, this.layoutVertexArray, this.indexArray);
             let h2, p2, f2, d2, y2;
             this.e1 = this.e2 = -1, s2 && (h2 = t2[o2 - 2], y2 = t2[l2].sub(h2)._unit()._perp());
             for (let e3 = l2; e3 < o2; e3++) {
-              if (f2 = e3 === o2 - 1 ? s2 ? t2[l2 + 1] : void 0 : t2[e3 + 1], f2 && t2[e3].equals(f2))
-                continue;
+              if (f2 = e3 === o2 - 1 ? s2 ? t2[l2 + 1] : void 0 : t2[e3 + 1], f2 && t2[e3].equals(f2)) continue;
               y2 && (d2 = y2), h2 && (p2 = h2), h2 = t2[e3], y2 = f2 ? f2.sub(h2)._unit()._perp() : d2, d2 = d2 || y2;
               let m2 = d2.add(y2);
               0 === m2.x && 0 === m2.y || m2._unit();
@@ -5892,11 +5282,9 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               }
               const A2 = p2 && f2;
               let S2 = A2 ? r2 : s2 ? "butt" : n2;
-              if (A2 && "round" === S2 && (v2 < a2 ? S2 = "miter" : v2 <= 2 && (S2 = "fakeround")), "miter" === S2 && v2 > i2 && (S2 = "bevel"), "bevel" === S2 && (v2 > 2 && (S2 = "flipbevel"), v2 < i2 && (S2 = "miter")), p2 && this.updateDistance(p2, h2), "miter" === S2)
-                m2._mult(v2), this.addCurrentVertex(h2, m2, 0, 0, c2);
+              if (A2 && "round" === S2 && (v2 < a2 ? S2 = "miter" : v2 <= 2 && (S2 = "fakeround")), "miter" === S2 && v2 > i2 && (S2 = "bevel"), "bevel" === S2 && (v2 > 2 && (S2 = "flipbevel"), v2 < i2 && (S2 = "miter")), p2 && this.updateDistance(p2, h2), "miter" === S2) m2._mult(v2), this.addCurrentVertex(h2, m2, 0, 0, c2);
               else if ("flipbevel" === S2) {
-                if (v2 > 100)
-                  m2 = y2.mult(-1);
+                if (v2 > 100) m2 = y2.mult(-1);
                 else {
                   const t3 = v2 * d2.add(y2).mag() / d2.sub(y2).mag();
                   m2._perp()._mult(t3 * (_2 ? -1 : 1));
@@ -5917,13 +5305,11 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
                   }
                 }
                 f2 && this.addCurrentVertex(h2, y2, -e4, -r3, c2);
-              } else if ("butt" === S2)
-                this.addCurrentVertex(h2, m2, 0, 0, c2);
+              } else if ("butt" === S2) this.addCurrentVertex(h2, m2, 0, 0, c2);
               else if ("square" === S2) {
                 const t3 = p2 ? 1 : -1;
                 this.addCurrentVertex(h2, m2, t3, t3, c2);
-              } else
-                "round" === S2 && (p2 && (this.addCurrentVertex(h2, d2, 0, 0, c2), this.addCurrentVertex(h2, d2, 1, 1, c2, true)), f2 && (this.addCurrentVertex(h2, y2, -1, -1, c2, true), this.addCurrentVertex(h2, y2, 0, 0, c2)));
+              } else "round" === S2 && (p2 && (this.addCurrentVertex(h2, d2, 0, 0, c2), this.addCurrentVertex(h2, d2, 1, 1, c2, true)), f2 && (this.addCurrentVertex(h2, y2, -1, -1, c2, true), this.addCurrentVertex(h2, y2, 0, 0, c2)));
               if (w2 && e3 < o2 - 1) {
                 const t3 = h2.dist(f2);
                 if (t3 > 2 * u2) {
@@ -6008,12 +5394,9 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               for (let n3 = 0; n3 < e3.length; n3++) {
                 const i3 = e3[n3];
                 if (t3.length >= 3) {
-                  for (let e4 = 0; e4 < i3.length; e4++)
-                    if (xs(t3, i3[e4]))
-                      return true;
+                  for (let e4 = 0; e4 < i3.length; e4++) if (xs(t3, i3[e4])) return true;
                 }
-                if (ps(t3, i3, r3))
-                  return true;
+                if (ps(t3, i3, r3)) return true;
               }
               return false;
             }(l2, n2, u2);
@@ -6042,24 +5425,18 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         const Pl = { "!": "\uFE15", "#": "\uFF03", $: "\uFF04", "%": "\uFF05", "&": "\uFF06", "(": "\uFE35", ")": "\uFE36", "*": "\uFF0A", "+": "\uFF0B", ",": "\uFE10", "-": "\uFE32", ".": "\u30FB", "/": "\uFF0F", ":": "\uFE13", ";": "\uFE14", "<": "\uFE3F", "=": "\uFF1D", ">": "\uFE40", "?": "\uFE16", "@": "\uFF20", "[": "\uFE47", "\\": "\uFF3C", "]": "\uFE48", "^": "\uFF3E", _: "\uFE33", "`": "\uFF40", "{": "\uFE37", "|": "\u2015", "}": "\uFE38", "~": "\uFF5E", "\xA2": "\uFFE0", "\xA3": "\uFFE1", "\xA5": "\uFFE5", "\xA6": "\uFFE4", "\xAC": "\uFFE2", "\xAF": "\uFFE3", "\u2013": "\uFE32", "\u2014": "\uFE31", "\u2018": "\uFE43", "\u2019": "\uFE44", "\u201C": "\uFE41", "\u201D": "\uFE42", "\u2026": "\uFE19", "\u2027": "\u30FB", "\u20A9": "\uFFE6", "\u3001": "\uFE11", "\u3002": "\uFE12", "\u3008": "\uFE3F", "\u3009": "\uFE40", "\u300A": "\uFE3D", "\u300B": "\uFE3E", "\u300C": "\uFE41", "\u300D": "\uFE42", "\u300E": "\uFE43", "\u300F": "\uFE44", "\u3010": "\uFE3B", "\u3011": "\uFE3C", "\u3014": "\uFE39", "\u3015": "\uFE3A", "\u3016": "\uFE17", "\u3017": "\uFE18", "\uFF01": "\uFE15", "\uFF08": "\uFE35", "\uFF09": "\uFE36", "\uFF0C": "\uFE10", "\uFF0D": "\uFE32", "\uFF0E": "\u30FB", "\uFF1A": "\uFE13", "\uFF1B": "\uFE14", "\uFF1C": "\uFE3F", "\uFF1E": "\uFE40", "\uFF1F": "\uFE16", "\uFF3B": "\uFE47", "\uFF3D": "\uFE48", "\uFF3F": "\uFE33", "\uFF5B": "\uFE37", "\uFF5C": "\u2015", "\uFF5D": "\uFE38", "\uFF5F": "\uFE35", "\uFF60": "\uFE36", "\uFF61": "\uFE12", "\uFF62": "\uFE41", "\uFF63": "\uFE42" };
         var Vl = 24, El = $l, Fl = function(t2, e2, r2, n2, i2) {
           var a2, s2, o2 = 8 * i2 - n2 - 1, l2 = (1 << o2) - 1, u2 = l2 >> 1, c2 = -7, h2 = r2 ? i2 - 1 : 0, p2 = r2 ? -1 : 1, f2 = t2[e2 + h2];
-          for (h2 += p2, a2 = f2 & (1 << -c2) - 1, f2 >>= -c2, c2 += o2; c2 > 0; a2 = 256 * a2 + t2[e2 + h2], h2 += p2, c2 -= 8)
-            ;
-          for (s2 = a2 & (1 << -c2) - 1, a2 >>= -c2, c2 += n2; c2 > 0; s2 = 256 * s2 + t2[e2 + h2], h2 += p2, c2 -= 8)
-            ;
-          if (0 === a2)
-            a2 = 1 - u2;
+          for (h2 += p2, a2 = f2 & (1 << -c2) - 1, f2 >>= -c2, c2 += o2; c2 > 0; a2 = 256 * a2 + t2[e2 + h2], h2 += p2, c2 -= 8) ;
+          for (s2 = a2 & (1 << -c2) - 1, a2 >>= -c2, c2 += n2; c2 > 0; s2 = 256 * s2 + t2[e2 + h2], h2 += p2, c2 -= 8) ;
+          if (0 === a2) a2 = 1 - u2;
           else {
-            if (a2 === l2)
-              return s2 ? NaN : 1 / 0 * (f2 ? -1 : 1);
+            if (a2 === l2) return s2 ? NaN : 1 / 0 * (f2 ? -1 : 1);
             s2 += Math.pow(2, n2), a2 -= u2;
           }
           return (f2 ? -1 : 1) * s2 * Math.pow(2, a2 - n2);
         }, Tl = function(t2, e2, r2, n2, i2, a2) {
           var s2, o2, l2, u2 = 8 * a2 - i2 - 1, c2 = (1 << u2) - 1, h2 = c2 >> 1, p2 = 23 === i2 ? Math.pow(2, -24) - Math.pow(2, -77) : 0, f2 = n2 ? 0 : a2 - 1, d2 = n2 ? 1 : -1, y2 = e2 < 0 || 0 === e2 && 1 / e2 < 0 ? 1 : 0;
-          for (e2 = Math.abs(e2), isNaN(e2) || e2 === 1 / 0 ? (o2 = isNaN(e2) ? 1 : 0, s2 = c2) : (s2 = Math.floor(Math.log(e2) / Math.LN2), e2 * (l2 = Math.pow(2, -s2)) < 1 && (s2--, l2 *= 2), (e2 += s2 + h2 >= 1 ? p2 / l2 : p2 * Math.pow(2, 1 - h2)) * l2 >= 2 && (s2++, l2 /= 2), s2 + h2 >= c2 ? (o2 = 0, s2 = c2) : s2 + h2 >= 1 ? (o2 = (e2 * l2 - 1) * Math.pow(2, i2), s2 += h2) : (o2 = e2 * Math.pow(2, h2 - 1) * Math.pow(2, i2), s2 = 0)); i2 >= 8; t2[r2 + f2] = 255 & o2, f2 += d2, o2 /= 256, i2 -= 8)
-            ;
-          for (s2 = s2 << i2 | o2, u2 += i2; u2 > 0; t2[r2 + f2] = 255 & s2, f2 += d2, s2 /= 256, u2 -= 8)
-            ;
+          for (e2 = Math.abs(e2), isNaN(e2) || e2 === 1 / 0 ? (o2 = isNaN(e2) ? 1 : 0, s2 = c2) : (s2 = Math.floor(Math.log(e2) / Math.LN2), e2 * (l2 = Math.pow(2, -s2)) < 1 && (s2--, l2 *= 2), (e2 += s2 + h2 >= 1 ? p2 / l2 : p2 * Math.pow(2, 1 - h2)) * l2 >= 2 && (s2++, l2 /= 2), s2 + h2 >= c2 ? (o2 = 0, s2 = c2) : s2 + h2 >= 1 ? (o2 = (e2 * l2 - 1) * Math.pow(2, i2), s2 += h2) : (o2 = e2 * Math.pow(2, h2 - 1) * Math.pow(2, i2), s2 = 0)); i2 >= 8; t2[r2 + f2] = 255 & o2, f2 += d2, o2 /= 256, i2 -= 8) ;
+          for (s2 = s2 << i2 | o2, u2 += i2; u2 > 0; t2[r2 + f2] = 255 & s2, f2 += d2, s2 /= 256, u2 -= 8) ;
           t2[r2 + f2 - d2] |= 128 * y2;
         };
         function $l(t2) {
@@ -6076,44 +5453,34 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         function ql(t2, e2, r2) {
           var n2 = e2 <= 16383 ? 1 : e2 <= 2097151 ? 2 : e2 <= 268435455 ? 3 : Math.floor(Math.log(e2) / (7 * Math.LN2));
           r2.realloc(n2);
-          for (var i2 = r2.pos - 1; i2 >= t2; i2--)
-            r2.buf[i2 + n2] = r2.buf[i2];
+          for (var i2 = r2.pos - 1; i2 >= t2; i2--) r2.buf[i2 + n2] = r2.buf[i2];
         }
         function jl(t2, e2) {
-          for (var r2 = 0; r2 < t2.length; r2++)
-            e2.writeVarint(t2[r2]);
+          for (var r2 = 0; r2 < t2.length; r2++) e2.writeVarint(t2[r2]);
         }
         function Nl(t2, e2) {
-          for (var r2 = 0; r2 < t2.length; r2++)
-            e2.writeSVarint(t2[r2]);
+          for (var r2 = 0; r2 < t2.length; r2++) e2.writeSVarint(t2[r2]);
         }
         function Zl(t2, e2) {
-          for (var r2 = 0; r2 < t2.length; r2++)
-            e2.writeFloat(t2[r2]);
+          for (var r2 = 0; r2 < t2.length; r2++) e2.writeFloat(t2[r2]);
         }
         function Kl(t2, e2) {
-          for (var r2 = 0; r2 < t2.length; r2++)
-            e2.writeDouble(t2[r2]);
+          for (var r2 = 0; r2 < t2.length; r2++) e2.writeDouble(t2[r2]);
         }
         function Gl(t2, e2) {
-          for (var r2 = 0; r2 < t2.length; r2++)
-            e2.writeBoolean(t2[r2]);
+          for (var r2 = 0; r2 < t2.length; r2++) e2.writeBoolean(t2[r2]);
         }
         function Jl(t2, e2) {
-          for (var r2 = 0; r2 < t2.length; r2++)
-            e2.writeFixed32(t2[r2]);
+          for (var r2 = 0; r2 < t2.length; r2++) e2.writeFixed32(t2[r2]);
         }
         function Xl(t2, e2) {
-          for (var r2 = 0; r2 < t2.length; r2++)
-            e2.writeSFixed32(t2[r2]);
+          for (var r2 = 0; r2 < t2.length; r2++) e2.writeSFixed32(t2[r2]);
         }
         function Yl(t2, e2) {
-          for (var r2 = 0; r2 < t2.length; r2++)
-            e2.writeFixed64(t2[r2]);
+          for (var r2 = 0; r2 < t2.length; r2++) e2.writeFixed64(t2[r2]);
         }
         function Hl(t2, e2) {
-          for (var r2 = 0; r2 < t2.length; r2++)
-            e2.writeSFixed64(t2[r2]);
+          for (var r2 = 0; r2 < t2.length; r2++) e2.writeSFixed64(t2[r2]);
         }
         function Wl(t2, e2) {
           return (t2[e2] | t2[e2 + 1] << 8 | t2[e2 + 2] << 16) + 16777216 * t2[e2 + 3];
@@ -6156,18 +5523,12 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           var e2, r2, n2 = this.buf;
           return e2 = 127 & (r2 = n2[this.pos++]), r2 < 128 ? e2 : (e2 |= (127 & (r2 = n2[this.pos++])) << 7, r2 < 128 ? e2 : (e2 |= (127 & (r2 = n2[this.pos++])) << 14, r2 < 128 ? e2 : (e2 |= (127 & (r2 = n2[this.pos++])) << 21, r2 < 128 ? e2 : function(t3, e3, r3) {
             var n3, i2, a2 = r3.buf;
-            if (n3 = (112 & (i2 = a2[r3.pos++])) >> 4, i2 < 128)
-              return Rl(t3, n3, e3);
-            if (n3 |= (127 & (i2 = a2[r3.pos++])) << 3, i2 < 128)
-              return Rl(t3, n3, e3);
-            if (n3 |= (127 & (i2 = a2[r3.pos++])) << 10, i2 < 128)
-              return Rl(t3, n3, e3);
-            if (n3 |= (127 & (i2 = a2[r3.pos++])) << 17, i2 < 128)
-              return Rl(t3, n3, e3);
-            if (n3 |= (127 & (i2 = a2[r3.pos++])) << 24, i2 < 128)
-              return Rl(t3, n3, e3);
-            if (n3 |= (1 & (i2 = a2[r3.pos++])) << 31, i2 < 128)
-              return Rl(t3, n3, e3);
+            if (n3 = (112 & (i2 = a2[r3.pos++])) >> 4, i2 < 128) return Rl(t3, n3, e3);
+            if (n3 |= (127 & (i2 = a2[r3.pos++])) << 3, i2 < 128) return Rl(t3, n3, e3);
+            if (n3 |= (127 & (i2 = a2[r3.pos++])) << 10, i2 < 128) return Rl(t3, n3, e3);
+            if (n3 |= (127 & (i2 = a2[r3.pos++])) << 17, i2 < 128) return Rl(t3, n3, e3);
+            if (n3 |= (127 & (i2 = a2[r3.pos++])) << 24, i2 < 128) return Rl(t3, n3, e3);
+            if (n3 |= (1 & (i2 = a2[r3.pos++])) << 31, i2 < 128) return Rl(t3, n3, e3);
             throw new Error("Expected varint not more than 10 bytes");
           }(e2 |= (15 & (r2 = n2[this.pos])) << 28, t2, this))));
         }, readVarint64: function() {
@@ -6184,8 +5545,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }(this.buf, e2, t2) : function(t3, e3, r2) {
             for (var n2 = "", i2 = e3; i2 < r2; ) {
               var a2, s2, o2, l2 = t3[i2], u2 = null, c2 = l2 > 239 ? 4 : l2 > 223 ? 3 : l2 > 191 ? 2 : 1;
-              if (i2 + c2 > r2)
-                break;
+              if (i2 + c2 > r2) break;
               1 === c2 ? l2 < 128 && (u2 = l2) : 2 === c2 ? 128 == (192 & (a2 = t3[i2 + 1])) && (u2 = (31 & l2) << 6 | 63 & a2) <= 127 && (u2 = null) : 3 === c2 ? (s2 = t3[i2 + 2], 128 == (192 & (a2 = t3[i2 + 1])) && 128 == (192 & s2) && ((u2 = (15 & l2) << 12 | (63 & a2) << 6 | 63 & s2) <= 2047 || u2 >= 55296 && u2 <= 57343) && (u2 = null)) : 4 === c2 && (s2 = t3[i2 + 2], o2 = t3[i2 + 3], 128 == (192 & (a2 = t3[i2 + 1])) && 128 == (192 & s2) && 128 == (192 & o2) && ((u2 = (15 & l2) << 18 | (63 & a2) << 12 | (63 & s2) << 6 | 63 & o2) <= 65535 || u2 >= 1114112) && (u2 = null)), null === u2 ? (u2 = 65533, c2 = 1) : u2 > 65535 && (u2 -= 65536, n2 += String.fromCharCode(u2 >>> 10 & 1023 | 55296), u2 = 56320 | 1023 & u2), n2 += String.fromCharCode(u2), i2 += c2;
             }
             return n2;
@@ -6194,87 +5554,63 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           var t2 = this.readVarint() + this.pos, e2 = this.buf.subarray(this.pos, t2);
           return this.pos = t2, e2;
         }, readPackedVarint: function(t2, e2) {
-          if (this.type !== $l.Bytes)
-            return t2.push(this.readVarint(e2));
+          if (this.type !== $l.Bytes) return t2.push(this.readVarint(e2));
           var r2 = Ul(this);
-          for (t2 = t2 || []; this.pos < r2; )
-            t2.push(this.readVarint(e2));
+          for (t2 = t2 || []; this.pos < r2; ) t2.push(this.readVarint(e2));
           return t2;
         }, readPackedSVarint: function(t2) {
-          if (this.type !== $l.Bytes)
-            return t2.push(this.readSVarint());
+          if (this.type !== $l.Bytes) return t2.push(this.readSVarint());
           var e2 = Ul(this);
-          for (t2 = t2 || []; this.pos < e2; )
-            t2.push(this.readSVarint());
+          for (t2 = t2 || []; this.pos < e2; ) t2.push(this.readSVarint());
           return t2;
         }, readPackedBoolean: function(t2) {
-          if (this.type !== $l.Bytes)
-            return t2.push(this.readBoolean());
+          if (this.type !== $l.Bytes) return t2.push(this.readBoolean());
           var e2 = Ul(this);
-          for (t2 = t2 || []; this.pos < e2; )
-            t2.push(this.readBoolean());
+          for (t2 = t2 || []; this.pos < e2; ) t2.push(this.readBoolean());
           return t2;
         }, readPackedFloat: function(t2) {
-          if (this.type !== $l.Bytes)
-            return t2.push(this.readFloat());
+          if (this.type !== $l.Bytes) return t2.push(this.readFloat());
           var e2 = Ul(this);
-          for (t2 = t2 || []; this.pos < e2; )
-            t2.push(this.readFloat());
+          for (t2 = t2 || []; this.pos < e2; ) t2.push(this.readFloat());
           return t2;
         }, readPackedDouble: function(t2) {
-          if (this.type !== $l.Bytes)
-            return t2.push(this.readDouble());
+          if (this.type !== $l.Bytes) return t2.push(this.readDouble());
           var e2 = Ul(this);
-          for (t2 = t2 || []; this.pos < e2; )
-            t2.push(this.readDouble());
+          for (t2 = t2 || []; this.pos < e2; ) t2.push(this.readDouble());
           return t2;
         }, readPackedFixed32: function(t2) {
-          if (this.type !== $l.Bytes)
-            return t2.push(this.readFixed32());
+          if (this.type !== $l.Bytes) return t2.push(this.readFixed32());
           var e2 = Ul(this);
-          for (t2 = t2 || []; this.pos < e2; )
-            t2.push(this.readFixed32());
+          for (t2 = t2 || []; this.pos < e2; ) t2.push(this.readFixed32());
           return t2;
         }, readPackedSFixed32: function(t2) {
-          if (this.type !== $l.Bytes)
-            return t2.push(this.readSFixed32());
+          if (this.type !== $l.Bytes) return t2.push(this.readSFixed32());
           var e2 = Ul(this);
-          for (t2 = t2 || []; this.pos < e2; )
-            t2.push(this.readSFixed32());
+          for (t2 = t2 || []; this.pos < e2; ) t2.push(this.readSFixed32());
           return t2;
         }, readPackedFixed64: function(t2) {
-          if (this.type !== $l.Bytes)
-            return t2.push(this.readFixed64());
+          if (this.type !== $l.Bytes) return t2.push(this.readFixed64());
           var e2 = Ul(this);
-          for (t2 = t2 || []; this.pos < e2; )
-            t2.push(this.readFixed64());
+          for (t2 = t2 || []; this.pos < e2; ) t2.push(this.readFixed64());
           return t2;
         }, readPackedSFixed64: function(t2) {
-          if (this.type !== $l.Bytes)
-            return t2.push(this.readSFixed64());
+          if (this.type !== $l.Bytes) return t2.push(this.readSFixed64());
           var e2 = Ul(this);
-          for (t2 = t2 || []; this.pos < e2; )
-            t2.push(this.readSFixed64());
+          for (t2 = t2 || []; this.pos < e2; ) t2.push(this.readSFixed64());
           return t2;
         }, skip: function(t2) {
           var e2 = 7 & t2;
-          if (e2 === $l.Varint)
-            for (; this.buf[this.pos++] > 127; )
-              ;
-          else if (e2 === $l.Bytes)
-            this.pos = this.readVarint() + this.pos;
-          else if (e2 === $l.Fixed32)
-            this.pos += 4;
+          if (e2 === $l.Varint) for (; this.buf[this.pos++] > 127; ) ;
+          else if (e2 === $l.Bytes) this.pos = this.readVarint() + this.pos;
+          else if (e2 === $l.Fixed32) this.pos += 4;
           else {
-            if (e2 !== $l.Fixed64)
-              throw new Error("Unimplemented type: " + e2);
+            if (e2 !== $l.Fixed64) throw new Error("Unimplemented type: " + e2);
             this.pos += 8;
           }
         }, writeTag: function(t2, e2) {
           this.writeVarint(t2 << 3 | e2);
         }, realloc: function(t2) {
-          for (var e2 = this.length || 16; e2 < this.pos + t2; )
-            e2 *= 2;
+          for (var e2 = this.length || 16; e2 < this.pos + t2; ) e2 *= 2;
           if (e2 !== this.length) {
             var r2 = new Uint8Array(e2);
             r2.set(this.buf), this.buf = r2, this.length = e2;
@@ -6292,8 +5628,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         }, writeVarint: function(t2) {
           (t2 = +t2 || 0) > 268435455 || t2 < 0 ? function(t3, e2) {
             var r2, n2;
-            if (t3 >= 0 ? (r2 = t3 % 4294967296 | 0, n2 = t3 / 4294967296 | 0) : (n2 = ~(-t3 / 4294967296), 4294967295 ^ (r2 = ~(-t3 % 4294967296)) ? r2 = r2 + 1 | 0 : (r2 = 0, n2 = n2 + 1 | 0)), t3 >= 18446744073709552e3 || t3 < -18446744073709552e3)
-              throw new Error("Given varint doesn't fit into 10 bytes");
+            if (t3 >= 0 ? (r2 = t3 % 4294967296 | 0, n2 = t3 / 4294967296 | 0) : (n2 = ~(-t3 / 4294967296), 4294967295 ^ (r2 = ~(-t3 % 4294967296)) ? r2 = r2 + 1 | 0 : (r2 = 0, n2 = n2 + 1 | 0)), t3 >= 18446744073709552e3 || t3 < -18446744073709552e3) throw new Error("Given varint doesn't fit into 10 bytes");
             e2.realloc(10), function(t4, e3, r3) {
               r3.buf[r3.pos++] = 127 & t4 | 128, t4 >>>= 7, r3.buf[r3.pos++] = 127 & t4 | 128, t4 >>>= 7, r3.buf[r3.pos++] = 127 & t4 | 128, t4 >>>= 7, r3.buf[r3.pos++] = 127 & t4 | 128, r3.buf[r3.pos] = 127 & (t4 >>>= 7);
             }(r2, 0, e2), function(t4, e3) {
@@ -6320,8 +5655,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
                   continue;
                 }
                 n2 = i2 - 55296 << 10 | n2 - 56320 | 65536, i2 = null;
-              } else
-                i2 && (t3[r3++] = 239, t3[r3++] = 191, t3[r3++] = 189, i2 = null);
+              } else i2 && (t3[r3++] = 239, t3[r3++] = 191, t3[r3++] = 189, i2 = null);
               n2 < 128 ? t3[r3++] = n2 : (n2 < 2048 ? t3[r3++] = n2 >> 6 | 192 : (n2 < 65536 ? t3[r3++] = n2 >> 12 | 224 : (t3[r3++] = n2 >> 18 | 240, t3[r3++] = n2 >> 12 & 63 | 128), t3[r3++] = n2 >> 6 & 63 | 128), t3[r3++] = 63 & n2 | 128);
             }
             return r3;
@@ -6335,8 +5669,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         }, writeBytes: function(t2) {
           var e2 = t2.length;
           this.writeVarint(e2), this.realloc(e2);
-          for (var r2 = 0; r2 < e2; r2++)
-            this.buf[this.pos++] = t2[r2];
+          for (var r2 = 0; r2 < e2; r2++) this.buf[this.pos++] = t2[r2];
         }, writeRawMessage: function(t2, e2) {
           this.pos++;
           var r2 = this.pos;
@@ -6403,23 +5736,20 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         const su = ru;
         function ou(t2) {
           let e2 = 0, r2 = 0;
-          for (const n3 of t2)
-            e2 += n3.w * n3.h, r2 = Math.max(r2, n3.w);
+          for (const n3 of t2) e2 += n3.w * n3.h, r2 = Math.max(r2, n3.w);
           t2.sort((t3, e3) => e3.h - t3.h);
           const n2 = [{ x: 0, y: 0, w: Math.max(Math.ceil(Math.sqrt(e2 / 0.95)), r2), h: 1 / 0 }];
           let i2 = 0, a2 = 0;
-          for (const e3 of t2)
-            for (let t3 = n2.length - 1; t3 >= 0; t3--) {
-              const r3 = n2[t3];
-              if (!(e3.w > r3.w || e3.h > r3.h)) {
-                if (e3.x = r3.x, e3.y = r3.y, a2 = Math.max(a2, e3.y + e3.h), i2 = Math.max(i2, e3.x + e3.w), e3.w === r3.w && e3.h === r3.h) {
-                  const e4 = n2.pop();
-                  t3 < n2.length && (n2[t3] = e4);
-                } else
-                  e3.h === r3.h ? (r3.x += e3.w, r3.w -= e3.w) : e3.w === r3.w ? (r3.y += e3.h, r3.h -= e3.h) : (n2.push({ x: r3.x + e3.w, y: r3.y, w: r3.w - e3.w, h: e3.h }), r3.y += e3.h, r3.h -= e3.h);
-                break;
-              }
+          for (const e3 of t2) for (let t3 = n2.length - 1; t3 >= 0; t3--) {
+            const r3 = n2[t3];
+            if (!(e3.w > r3.w || e3.h > r3.h)) {
+              if (e3.x = r3.x, e3.y = r3.y, a2 = Math.max(a2, e3.y + e3.h), i2 = Math.max(i2, e3.x + e3.w), e3.w === r3.w && e3.h === r3.h) {
+                const e4 = n2.pop();
+                t3 < n2.length && (n2[t3] = e4);
+              } else e3.h === r3.h ? (r3.x += e3.w, r3.w -= e3.w) : e3.w === r3.w ? (r3.y += e3.h, r3.h -= e3.h) : (n2.push({ x: r3.x + e3.w, y: r3.y, w: r3.w - e3.w, h: e3.h }), r3.y += e3.h, r3.h -= e3.h);
+              break;
             }
+          }
           return { w: i2, h: a2, fill: e2 / (i2 * a2) || 0 };
         }
         const lu = 1;
@@ -6465,14 +5795,11 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }
           patchUpdatedImages(t2, e2) {
             t2.dispatchRenderCallbacks(this.haveRenderCallbacks);
-            for (const r2 in t2.updatedImages)
-              this.patchUpdatedImage(this.iconPositions[r2], t2.getImage(r2), e2), this.patchUpdatedImage(this.patternPositions[r2], t2.getImage(r2), e2);
+            for (const r2 in t2.updatedImages) this.patchUpdatedImage(this.iconPositions[r2], t2.getImage(r2), e2), this.patchUpdatedImage(this.patternPositions[r2], t2.getImage(r2), e2);
           }
           patchUpdatedImage(t2, e2, r2) {
-            if (!t2 || !e2)
-              return;
-            if (t2.version === e2.version)
-              return;
+            if (!t2 || !e2) return;
+            if (t2.version === e2.version) return;
             t2.version = e2.version;
             const [n2, i2] = t2.tl;
             r2.update(e2.data, void 0, { x: n2, y: i2 });
@@ -6530,11 +5857,9 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }
           trim() {
             let t2 = 0;
-            for (let e3 = 0; e3 < this.text.length && mu[this.text.charCodeAt(e3)]; e3++)
-              t2++;
+            for (let e3 = 0; e3 < this.text.length && mu[this.text.charCodeAt(e3)]; e3++) t2++;
             let e2 = this.text.length;
-            for (let r2 = this.text.length - 1; r2 >= 0 && r2 >= t2 && mu[this.text.charCodeAt(r2)]; r2--)
-              e2--;
+            for (let r2 = this.text.length - 1; r2 >= 0 && r2 >= t2 && mu[this.text.charCodeAt(r2)]; r2--) e2--;
             this.text = this.text.substring(t2, e2), this.sectionIndex = this.sectionIndex.slice(t2, e2);
           }
           substring(t2, e2) {
@@ -6550,13 +5875,11 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           addTextSection(t2, e2) {
             this.text += t2.text, this.sections.push(fu.forText(t2.scale, t2.fontStack || e2));
             const r2 = this.sections.length - 1;
-            for (let e3 = 0; e3 < t2.text.length; ++e3)
-              this.sectionIndex.push(r2);
+            for (let e3 = 0; e3 < t2.text.length; ++e3) this.sectionIndex.push(r2);
           }
           addImageSection(t2) {
             const e2 = t2.image ? t2.image.name : "";
-            if (0 === e2.length)
-              return void A("Can't add FormattedSection with an empty image.");
+            if (0 === e2.length) return void A("Can't add FormattedSection with an empty image.");
             const r2 = this.getNextImageSectionCharCode();
             r2 ? (this.text += String.fromCharCode(r2), this.sections.push(fu.forImage(e2)), this.sectionIndex.push(this.sections.length - 1)) : A("Reached maximum number of images 6401");
           }
@@ -6575,8 +5898,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             for (const e3 of t2) {
               const t3 = new du();
               t3.text = e3, t3.sections = g2.sections;
-              for (let r3 = 0; r3 < e3.length; r3++)
-                t3.sectionIndex.push(0);
+              for (let r3 = 0; r3 < e3.length; r3++) t3.sectionIndex.push(0);
               x2.push(t3);
             }
           } else if (b2) {
@@ -6586,14 +5908,12 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               const t3 = new du();
               t3.text = e3[0], t3.sectionIndex = e3[1], t3.sections = g2.sections, x2.push(t3);
             }
-          } else
-            x2 = function(t2, e3) {
-              const r3 = [], n3 = t2.text;
-              let i3 = 0;
-              for (const n4 of e3)
-                r3.push(t2.substring(i3, n4)), i3 = n4;
-              return i3 < n3.length && r3.push(t2.substring(i3, n3.length)), r3;
-            }(g2, Au(g2, c2, s2, r2, i2, d2, y2));
+          } else x2 = function(t2, e3) {
+            const r3 = [], n3 = t2.text;
+            let i3 = 0;
+            for (const n4 of e3) r3.push(t2.substring(i3, n4)), i3 = n4;
+            return i3 < n3.length && r3.push(t2.substring(i3, n3.length)), r3;
+          }(g2, Au(g2, c2, s2, r2, i2, d2, y2));
           const w2 = [], _2 = { positionedLines: w2, text: g2.toString(), top: h2[1], bottom: h2[1], left: h2[0], right: h2[0], writingMode: p2, iconsInText: false, verticalizable: false };
           return function(e3, r3, n3, i3, a3, s3, o3, l3, u3, c3, h3, p3) {
             let f3 = 0, d3 = pu, y3 = 0, m3 = 0;
@@ -6615,8 +5935,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
                 const I2 = !(u3 === t.ai.horizontal || !h3 && !Zn(g4) || h3 && (mu[g4] || (v3 = g4, Rn.Arabic(v3) || Rn["Arabic Supplement"](v3) || Rn["Arabic Extended-A"](v3) || Rn["Arabic Presentation Forms-A"](v3) || Rn["Arabic Presentation Forms-B"](v3))));
                 if (y4.imageName) {
                   const t2 = i3[y4.imageName];
-                  if (!t2)
-                    continue;
+                  if (!t2) continue;
                   S2 = y4.imageName, e3.iconsInText = e3.iconsInText || true, A3 = t2.paddedRect;
                   const r4 = t2.displaySize;
                   y4.scale = y4.scale * Vl / p3, b5 = { width: r4[0], height: r4[1], left: lu, top: -su, advance: I2 ? r4[1] : r4[0] }, x4 = l4 + (Vl - r4[1] * y4.scale), k2 = b5.advance;
@@ -6624,12 +5943,10 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
                   n4 > 0 && n4 > _4 && (_4 = n4);
                 } else {
                   const t2 = n3[y4.fontStack], e4 = t2 && t2[g4];
-                  if (e4 && e4.rect)
-                    A3 = e4.rect, b5 = e4.metrics;
+                  if (e4 && e4.rect) A3 = e4.rect, b5 = e4.metrics;
                   else {
                     const t3 = r3[y4.fontStack], e5 = t3 && t3[g4];
-                    if (!e5)
-                      continue;
+                    if (!e5) continue;
                     b5 = e5.metrics;
                   }
                   x4 = (a4 - y4.scale) * Vl;
@@ -6646,14 +5963,10 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               const u4 = (e4 - r4) * i4;
               let c4 = 0;
               c4 = a4 !== s4 ? -o4 * n4 - pu : (-n4 * l4 + 0.5) * s4;
-              for (const e5 of t2)
-                for (const t3 of e5.positionedGlyphs)
-                  t3.x += u4, t3.y += c4;
+              for (const e5 of t2) for (const t3 of e5.positionedGlyphs) t3.x += u4, t3.y += c4;
             })(e3.positionedLines, g3, w3, _3, y3, m3, s3, b3, a3.length), e3.top += -_3 * b3, e3.bottom = e3.top + b3, e3.left += -w3 * y3, e3.right = e3.left + y3;
           }(_2, r2, n2, i2, x2, o2, l2, u2, p2, c2, f2, m2), !function(t2) {
-            for (const e3 of t2)
-              if (0 !== e3.positionedGlyphs.length)
-                return false;
+            for (const e3 of t2) if (0 !== e3.positionedGlyphs.length) return false;
             return true;
           }(w2) && _2;
         }
@@ -6688,10 +6001,8 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           return t2 ? _u(t2.priorBreak).concat(t2.index) : [];
         }
         function Au(t2, e2, r2, n2, i2, a2, s2) {
-          if ("point" !== a2)
-            return [];
-          if (!t2)
-            return [];
+          if ("point" !== a2) return [];
+          if (!t2) return [];
           const o2 = [], l2 = function(t3, e3, r3, n3, i3, a3) {
             let s3 = 0;
             for (let r4 = 0; r4 < t3.length(); r4++) {
@@ -6738,11 +6049,9 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           return { horizontalAlign: e2, verticalAlign: r2 };
         }
         function ku(t2, e2, r2, n2, i2) {
-          if (!n2 && !i2)
-            return;
+          if (!n2 && !i2) return;
           const a2 = t2[r2], s2 = (t2[r2].x + a2.metrics.advance * a2.scale) * n2;
-          for (let n3 = e2; n3 <= r2; n3++)
-            t2[n3].x -= s2, t2[n3].y += i2;
+          for (let n3 = e2; n3 <= r2; n3++) t2[n3].x -= s2, t2[n3].y += i2;
         }
         function Iu(t2, e2, r2) {
           const { horizontalAlign: n2, verticalAlign: i2 } = Su(r2), a2 = e2[0] - t2.displaySize[0] * n2, s2 = e2[1] - t2.displaySize[1] * i2;
@@ -6764,19 +6073,15 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         const Mu = 255, Cu = 128, Bu = Mu * Cu;
         function Pu(t2, e2) {
           const { expression: r2 } = e2;
-          if ("constant" === r2.kind)
-            return { kind: "constant", layoutSize: r2.evaluate(new li(t2 + 1)) };
-          if ("source" === r2.kind)
-            return { kind: "source" };
+          if ("constant" === r2.kind) return { kind: "constant", layoutSize: r2.evaluate(new li(t2 + 1)) };
+          if ("source" === r2.kind) return { kind: "source" };
           {
             const { zoomStops: e3, interpolationType: n2 } = r2;
             let i2 = 0;
-            for (; i2 < e3.length && e3[i2] <= t2; )
-              i2++;
+            for (; i2 < e3.length && e3[i2] <= t2; ) i2++;
             i2 = Math.max(0, i2 - 1);
             let a2 = i2;
-            for (; a2 < e3.length && e3[a2] < t2 + 1; )
-              a2++;
+            for (; a2 < e3.length && e3[a2] < t2 + 1; ) a2++;
             a2 = Math.min(e3.length - 1, a2);
             const s2 = e3[i2], o2 = e3[a2];
             return "composite" === r2.kind ? { kind: "composite", minZoom: s2, maxZoom: o2, interpolationType: n2 } : { kind: "camera", minZoom: s2, maxZoom: o2, minSize: r2.evaluate(new li(s2)), maxSize: r2.evaluate(new li(o2)), interpolationType: n2 };
@@ -6796,9 +6101,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           t2.emplaceBack(e2.x, e2.y, r2), t2.emplaceBack(e2.x, e2.y, r2), t2.emplaceBack(e2.x, e2.y, r2), t2.emplaceBack(e2.x, e2.y, r2);
         }
         function Lu(t2) {
-          for (const e2 of t2.sections)
-            if (Xn(e2.text))
-              return true;
+          for (const e2 of t2.sections) if (Xn(e2.text)) return true;
           return false;
         }
         class Du {
@@ -6840,21 +6143,18 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             this.text = new Du(new Qa(this.layers, this.zoom, (t2) => /^text/.test(t2))), this.icon = new Du(new Qa(this.layers, this.zoom, (t2) => /^icon/.test(t2))), this.glyphOffsetArray = new aa(), this.lineVertexArray = new sa(), this.symbolInstances = new ia(), this.textAnchorOffsets = new la();
           }
           calculateGlyphDependencies(t2, e2, r2, n2, i2) {
-            for (let a2 = 0; a2 < t2.length; a2++)
-              if (e2[t2.charCodeAt(a2)] = true, (r2 || n2) && i2) {
-                const r3 = Pl[t2.charAt(a2)];
-                r3 && (e2[r3.charCodeAt(0)] = true);
-              }
+            for (let a2 = 0; a2 < t2.length; a2++) if (e2[t2.charCodeAt(a2)] = true, (r2 || n2) && i2) {
+              const r3 = Pl[t2.charAt(a2)];
+              r3 && (e2[r3.charCodeAt(0)] = true);
+            }
           }
           populate(e2, r2, n2) {
             const i2 = this.layers[0], a2 = i2.layout, s2 = a2.get("text-font"), o2 = a2.get("text-field"), l2 = a2.get("icon-image"), u2 = ("constant" !== o2.value.kind || o2.value.value instanceof Qt && !o2.value.value.isEmpty() || o2.value.value.toString().length > 0) && ("constant" !== s2.value.kind || s2.value.value.length > 0), c2 = "constant" !== l2.value.kind || !!l2.value.value || Object.keys(l2.parameters).length > 0, h2 = a2.get("symbol-sort-key");
-            if (this.features = [], !u2 && !c2)
-              return;
+            if (this.features = [], !u2 && !c2) return;
             const p2 = r2.iconDependencies, f2 = r2.glyphDependencies, d2 = r2.availableImages, y2 = new li(this.zoom);
             for (const { feature: r3, id: o3, index: l3, sourceLayerIndex: m2 } of e2) {
               const e3 = i2._featureFilter.needGeometry, g2 = ss(r3, e3);
-              if (!i2._featureFilter.filter(y2, g2, n2))
-                continue;
+              if (!i2._featureFilter.filter(y2, g2, n2)) continue;
               let x2, v2;
               if (e3 || (g2.geometry = as(r3)), u2) {
                 const t2 = i2.getValueAndResolveTokens("text-field", g2, n2, d2), e4 = Qt.factory(t2);
@@ -6864,19 +6164,16 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
                 const t2 = i2.getValueAndResolveTokens("icon-image", g2, n2, d2);
                 v2 = t2 instanceof ne ? t2 : ne.fromString(t2);
               }
-              if (!x2 && !v2)
-                continue;
+              if (!x2 && !v2) continue;
               const b2 = this.sortFeaturesByKey ? h2.evaluate(g2, {}, n2) : void 0;
               if (this.features.push({ id: o3, text: x2, icon: v2, index: l3, sourceLayerIndex: m2, geometry: g2.geometry, properties: r3.properties, type: Eu[r3.type], sortKey: b2 }), v2 && (p2[v2.name] = true), x2) {
                 const e4 = s2.evaluate(g2, {}, n2).join(","), r4 = "viewport" !== a2.get("text-rotation-alignment") && "point" !== a2.get("symbol-placement");
                 this.allowVerticalPlacement = this.writingModes && this.writingModes.indexOf(t.ai.vertical) >= 0;
-                for (const t2 of x2.sections)
-                  if (t2.image)
-                    p2[t2.image.name] = true;
-                  else {
-                    const n3 = qn(x2.toString()), i3 = t2.fontStack || e4, a3 = f2[i3] = f2[i3] || {};
-                    this.calculateGlyphDependencies(t2.text, a3, r4, this.allowVerticalPlacement, n3);
-                  }
+                for (const t2 of x2.sections) if (t2.image) p2[t2.image.name] = true;
+                else {
+                  const n3 = qn(x2.toString()), i3 = t2.fontStack || e4, a3 = f2[i3] = f2[i3] || {};
+                  this.calculateGlyphDependencies(t2.text, a3, r4, this.allowVerticalPlacement, n3);
+                }
               }
             }
             "line" === a2.get("symbol-placement") && (this.features = function(t2) {
@@ -6907,8 +6204,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
                 if (f3 in r3 && d3 in e3 && r3[f3] !== e3[d3]) {
                   const t3 = o3(f3, d3, h3), i4 = s3(f3, d3, n3[t3].geometry);
                   delete e3[f3], delete r3[d3], r3[l3(p3, n3[i4].geometry, true)] = i4, n3[t3].geometry = null;
-                } else
-                  f3 in r3 ? s3(f3, d3, h3) : d3 in e3 ? o3(f3, d3, h3) : (a3(u3), e3[f3] = i3 - 1, r3[d3] = i3 - 1);
+                } else f3 in r3 ? s3(f3, d3, h3) : d3 in e3 ? o3(f3, d3, h3) : (a3(u3), e3[f3] = i3 - 1, r3[d3] = i3 - 1);
               }
               return n3.filter((t3) => t3.geometry);
             }(this.features)), this.sortFeaturesByKey && this.features.sort((t2, e3) => t2.sortKey - e3.sortKey);
@@ -6936,10 +6232,8 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             if (void 0 !== t2.segment) {
               let r3 = t2.dist(e2[t2.segment + 1]), n2 = t2.dist(e2[t2.segment]);
               const i2 = {};
-              for (let n3 = t2.segment + 1; n3 < e2.length; n3++)
-                i2[n3] = { x: e2[n3].x, y: e2[n3].y, tileUnitDistanceFromAnchor: r3 }, n3 < e2.length - 1 && (r3 += e2[n3 + 1].dist(e2[n3]));
-              for (let r4 = t2.segment || 0; r4 >= 0; r4--)
-                i2[r4] = { x: e2[r4].x, y: e2[r4].y, tileUnitDistanceFromAnchor: n2 }, r4 > 0 && (n2 += e2[r4 - 1].dist(e2[r4]));
+              for (let n3 = t2.segment + 1; n3 < e2.length; n3++) i2[n3] = { x: e2[n3].x, y: e2[n3].y, tileUnitDistanceFromAnchor: r3 }, n3 < e2.length - 1 && (r3 += e2[n3 + 1].dist(e2[n3]));
+              for (let r4 = t2.segment || 0; r4 >= 0; r4--) i2[r4] = { x: e2[r4].x, y: e2[r4].y, tileUnitDistanceFromAnchor: n2 }, r4 > 0 && (n2 += e2[r4 - 1].dist(e2[r4]));
               for (let t3 = 0; t3 < e2.length; t3++) {
                 const e3 = i2[t3];
                 this.lineVertexArray.emplaceBack(e3.x, e3.y, e3.tileUnitDistanceFromAnchor);
@@ -7025,12 +6319,10 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }
           addIndicesForPlacedSymbol(t2, e2) {
             const r2 = t2.placedSymbolArray.get(e2), n2 = r2.vertexStartIndex + 4 * r2.numGlyphs;
-            for (let e3 = r2.vertexStartIndex; e3 < n2; e3 += 4)
-              t2.indexArray.emplaceBack(e3, e3 + 1, e3 + 2), t2.indexArray.emplaceBack(e3 + 1, e3 + 2, e3 + 3);
+            for (let e3 = r2.vertexStartIndex; e3 < n2; e3 += 4) t2.indexArray.emplaceBack(e3, e3 + 1, e3 + 2), t2.indexArray.emplaceBack(e3 + 1, e3 + 2, e3 + 3);
           }
           getSortedSymbolIndexes(t2) {
-            if (this.sortedAngle === t2 && void 0 !== this.symbolInstanceIndexes)
-              return this.symbolInstanceIndexes;
+            if (this.sortedAngle === t2 && void 0 !== this.symbolInstanceIndexes) return this.symbolInstanceIndexes;
             const e2 = Math.sin(t2), r2 = Math.cos(t2), n2 = [], i2 = [], a2 = [];
             for (let t3 = 0; t3 < this.symbolInstances.length; ++t3) {
               a2.push(t3);
@@ -7065,15 +6357,13 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         } };
         class Nu {
           constructor(t2) {
-            if (void 0 === t2.property.overrides)
-              throw new Error("overrides must be provided to instantiate FormatSectionOverride class");
+            if (void 0 === t2.property.overrides) throw new Error("overrides must be provided to instantiate FormatSectionOverride class");
             this.type = t2.property.overrides ? t2.property.overrides.runtimeType : ht, this.defaultValue = t2;
           }
           evaluate(t2) {
             if (t2.formattedSection) {
               const e2 = this.defaultValue.property.overrides;
-              if (e2 && e2.hasOverride(t2.formattedSection))
-                return e2.getOverride(t2.formattedSection);
+              if (e2 && e2.hasOverride(t2.formattedSection)) return e2.getOverride(t2.formattedSection);
             }
             return t2.feature && t2.featureState ? this.defaultValue.evaluate(t2.feature, t2.featureState) : this.defaultValue.property.specification.default;
           }
@@ -7097,11 +6387,9 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               const t3 = this.layout.get("text-writing-mode");
               if (t3) {
                 const e3 = [];
-                for (const r2 of t3)
-                  e3.indexOf(r2) < 0 && e3.push(r2);
+                for (const r2 of t3) e3.indexOf(r2) < 0 && e3.push(r2);
                 this.layout._values["text-writing-mode"] = e3;
-              } else
-                this.layout._values["text-writing-mode"] = ["horizontal"];
+              } else this.layout._values["text-writing-mode"] = ["horizontal"];
             }
             this._setPaintOverrides();
           }
@@ -7122,8 +6410,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }
           _setPaintOverrides() {
             for (const t2 of ju.paint.overridableProperties) {
-              if (!Zu.hasPaintOverride(this.layout, t2))
-                continue;
+              if (!Zu.hasPaintOverride(this.layout, t2)) continue;
               const e2 = this.paint.get(t2), r2 = new Nu(e2), n2 = new Fr(r2, e2.property.specification);
               let i2 = null;
               i2 = "constant" === e2.value.kind || "source" === e2.value.kind ? new Lr("source", n2) : new Dr("composite", n2, e2.value.zoomStops), this.paint._values[t2] = new yi(e2.property, i2, e2.parameters);
@@ -7136,12 +6423,9 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             const r2 = t2.get("text-field"), n2 = ju.paint.properties[e2];
             let i2 = false;
             const a2 = (t3) => {
-              for (const e3 of t3)
-                if (n2.overrides && n2.overrides.hasOverride(e3))
-                  return void (i2 = true);
+              for (const e3 of t3) if (n2.overrides && n2.overrides.hasOverride(e3)) return void (i2 = true);
             };
-            if ("constant" === r2.value.kind && r2.value.value instanceof Qt)
-              a2(r2.value.value.sections);
+            if ("constant" === r2.value.kind && r2.value.value instanceof Qt) a2(r2.value.value.sections);
             else if ("source" === r2.value.kind) {
               const t3 = (e4) => {
                 i2 || (e4 instanceof le && se(e4.value) === vt ? a2(e4.value.sections) : e4 instanceof pr ? a2(e4.sections) : e4.eachChild(t3));
@@ -7213,10 +6497,8 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         const tc = 63710088e-1;
         class ec {
           constructor(t2, e2) {
-            if (isNaN(t2) || isNaN(e2))
-              throw new Error(`Invalid LngLat object: (${t2}, ${e2})`);
-            if (this.lng = +t2, this.lat = +e2, this.lat > 90 || this.lat < -90)
-              throw new Error("Invalid LngLat latitude value: must be between -90 and 90");
+            if (isNaN(t2) || isNaN(e2)) throw new Error(`Invalid LngLat object: (${t2}, ${e2})`);
+            if (this.lng = +t2, this.lat = +e2, this.lat > 90 || this.lat < -90) throw new Error("Invalid LngLat latitude value: must be between -90 and 90");
           }
           wrap() {
             return new ec(m(this.lng, -180, 180), this.lat);
@@ -7232,12 +6514,9 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             return tc * Math.acos(Math.min(i2, 1));
           }
           static convert(t2) {
-            if (t2 instanceof ec)
-              return t2;
-            if (Array.isArray(t2) && (2 === t2.length || 3 === t2.length))
-              return new ec(Number(t2[0]), Number(t2[1]));
-            if (!Array.isArray(t2) && "object" == typeof t2 && null !== t2)
-              return new ec(Number("lng" in t2 ? t2.lng : t2.lon), Number(t2.lat));
+            if (t2 instanceof ec) return t2;
+            if (Array.isArray(t2) && (2 === t2.length || 3 === t2.length)) return new ec(Number(t2[0]), Number(t2[1]));
+            if (!Array.isArray(t2) && "object" == typeof t2 && null !== t2) return new ec(Number("lng" in t2 ? t2.lng : t2.lon), Number(t2.lat));
             throw new Error("`LngLatLike` argument must be specified as a LngLat instance, an object {lng: <lng>, lat: <lat>}, an object {lon: <lng>, lat: <lat>}, or an array of [<lng>, <lat>]");
           }
         }
@@ -7282,8 +6561,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         }
         class cc {
           constructor(t2, e2, r2) {
-            if (t2 < 0 || t2 > 25 || r2 < 0 || r2 >= Math.pow(2, t2) || e2 < 0 || e2 >= Math.pow(2, t2))
-              throw new Error(`x=${e2}, y=${r2}, z=${t2} outside of bounds. 0<=x<${Math.pow(2, t2)}, 0<=y<${Math.pow(2, t2)} 0<=z<=25 `);
+            if (t2 < 0 || t2 > 25 || r2 < 0 || r2 >= Math.pow(2, t2) || e2 < 0 || e2 >= Math.pow(2, t2)) throw new Error(`x=${e2}, y=${r2}, z=${t2} outside of bounds. 0<=x<${Math.pow(2, t2)}, 0<=y<${Math.pow(2, t2)} 0<=z<=25 `);
             this.z = t2, this.x = e2, this.y = r2, this.key = fc(0, t2, t2, e2, r2);
           }
           equals(t2) {
@@ -7294,8 +6572,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             var i2, a2, s2, o2, l2;
             const u2 = function(t3, e3, r3) {
               let n3, i3 = "";
-              for (let a3 = t3; a3 > 0; a3--)
-                n3 = 1 << a3 - 1, i3 += (e3 & n3 ? 1 : 0) + (r3 & n3 ? 2 : 0);
+              for (let a3 = t3; a3 > 0; a3--) n3 = 1 << a3 - 1, i3 += (e3 & n3 ? 1 : 0) + (r3 & n3 ? 2 : 0);
               return i3;
             }(this.z, this.x, this.y);
             return t2[(this.x + this.y) % t2.length].replace(/{prefix}/g, (this.x % 16).toString(16) + (this.y % 16).toString(16)).replace(/{z}/g, String(this.z)).replace(/{x}/g, String(this.x)).replace(/{y}/g, String("tms" === r2 ? Math.pow(2, this.z) - this.y - 1 : this.y)).replace(/{ratio}/g, e2 > 1 ? "@2x" : "").replace(/{quadkey}/g, u2).replace(/{bbox-epsg-3857}/g, n2);
@@ -7319,8 +6596,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         }
         class pc {
           constructor(t2, e2, r2, n2, i2) {
-            if (t2 < r2)
-              throw new Error(`overscaledZ should be >= z; overscaledZ = ${t2}; z = ${r2}`);
+            if (t2 < r2) throw new Error(`overscaledZ should be >= z; overscaledZ = ${t2}; z = ${r2}`);
             this.overscaledZ = t2, this.wrap = e2, this.canonical = new cc(r2, +n2, +i2), this.key = fc(e2, t2, r2, n2, i2);
           }
           clone() {
@@ -7330,26 +6606,22 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             return this.overscaledZ === t2.overscaledZ && this.wrap === t2.wrap && this.canonical.equals(t2.canonical);
           }
           scaledTo(t2) {
-            if (t2 > this.overscaledZ)
-              throw new Error(`targetZ > this.overscaledZ; targetZ = ${t2}; overscaledZ = ${this.overscaledZ}`);
+            if (t2 > this.overscaledZ) throw new Error(`targetZ > this.overscaledZ; targetZ = ${t2}; overscaledZ = ${this.overscaledZ}`);
             const e2 = this.canonical.z - t2;
             return t2 > this.canonical.z ? new pc(t2, this.wrap, this.canonical.z, this.canonical.x, this.canonical.y) : new pc(t2, this.wrap, t2, this.canonical.x >> e2, this.canonical.y >> e2);
           }
           calculateScaledKey(t2, e2) {
-            if (t2 > this.overscaledZ)
-              throw new Error(`targetZ > this.overscaledZ; targetZ = ${t2}; overscaledZ = ${this.overscaledZ}`);
+            if (t2 > this.overscaledZ) throw new Error(`targetZ > this.overscaledZ; targetZ = ${t2}; overscaledZ = ${this.overscaledZ}`);
             const r2 = this.canonical.z - t2;
             return t2 > this.canonical.z ? fc(this.wrap * +e2, t2, this.canonical.z, this.canonical.x, this.canonical.y) : fc(this.wrap * +e2, t2, t2, this.canonical.x >> r2, this.canonical.y >> r2);
           }
           isChildOf(t2) {
-            if (t2.wrap !== this.wrap)
-              return false;
+            if (t2.wrap !== this.wrap) return false;
             const e2 = this.canonical.z - t2.canonical.z;
             return 0 === t2.overscaledZ || t2.overscaledZ < this.overscaledZ && t2.canonical.x === this.canonical.x >> e2 && t2.canonical.y === this.canonical.y >> e2;
           }
           children(t2) {
-            if (this.overscaledZ >= t2)
-              return [new pc(this.overscaledZ + 1, this.wrap, this.canonical.z, this.canonical.x, this.canonical.y)];
+            if (this.overscaledZ >= t2) return [new pc(this.overscaledZ + 1, this.wrap, this.canonical.z, this.canonical.x, this.canonical.y)];
             const e2 = this.canonical.z + 1, r2 = 2 * this.canonical.x, n2 = 2 * this.canonical.y;
             return [new pc(e2, this.wrap, e2, r2, n2), new pc(e2, this.wrap, e2, r2 + 1, n2), new pc(e2, this.wrap, e2, r2, n2 + 1), new pc(e2, this.wrap, e2, r2 + 1, n2 + 1)];
           }
@@ -7383,10 +6655,8 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         $n("CanonicalTileID", cc), $n("OverscaledTileID", pc, { omit: ["posMatrix"] });
         class dc {
           constructor(t2, e2, r2, n2 = 1, i2 = 1, a2 = 1, s2 = 0) {
-            if (this.uid = t2, e2.height !== e2.width)
-              throw new RangeError("DEM tiles must be square");
-            if (r2 && !["mapbox", "terrarium", "custom"].includes(r2))
-              return void A(`"${r2}" is not a valid encoding type. Valid types include "mapbox", "terrarium" and "custom".`);
+            if (this.uid = t2, e2.height !== e2.width) throw new RangeError("DEM tiles must be square");
+            if (r2 && !["mapbox", "terrarium", "custom"].includes(r2)) return void A(`"${r2}" is not a valid encoding type. Valid types include "mapbox", "terrarium" and "custom".`);
             this.stride = e2.height;
             const o2 = this.dim = e2.height - 2;
             switch (this.data = new Uint32Array(e2.data.buffer), r2) {
@@ -7399,14 +6669,12 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               default:
                 this.redFactor = 6553.6, this.greenFactor = 25.6, this.blueFactor = 0.1, this.baseShift = 1e4;
             }
-            for (let t3 = 0; t3 < o2; t3++)
-              this.data[this._idx(-1, t3)] = this.data[this._idx(0, t3)], this.data[this._idx(o2, t3)] = this.data[this._idx(o2 - 1, t3)], this.data[this._idx(t3, -1)] = this.data[this._idx(t3, 0)], this.data[this._idx(t3, o2)] = this.data[this._idx(t3, o2 - 1)];
+            for (let t3 = 0; t3 < o2; t3++) this.data[this._idx(-1, t3)] = this.data[this._idx(0, t3)], this.data[this._idx(o2, t3)] = this.data[this._idx(o2 - 1, t3)], this.data[this._idx(t3, -1)] = this.data[this._idx(t3, 0)], this.data[this._idx(t3, o2)] = this.data[this._idx(t3, o2 - 1)];
             this.data[this._idx(-1, -1)] = this.data[this._idx(0, 0)], this.data[this._idx(o2, -1)] = this.data[this._idx(o2 - 1, 0)], this.data[this._idx(-1, o2)] = this.data[this._idx(0, o2 - 1)], this.data[this._idx(o2, o2)] = this.data[this._idx(o2 - 1, o2 - 1)], this.min = Number.MAX_SAFE_INTEGER, this.max = Number.MIN_SAFE_INTEGER;
-            for (let t3 = 0; t3 < o2; t3++)
-              for (let e3 = 0; e3 < o2; e3++) {
-                const r3 = this.get(t3, e3);
-                r3 > this.max && (this.max = r3), r3 < this.min && (this.min = r3);
-              }
+            for (let t3 = 0; t3 < o2; t3++) for (let e3 = 0; e3 < o2; e3++) {
+              const r3 = this.get(t3, e3);
+              r3 > this.max && (this.max = r3), r3 < this.min && (this.min = r3);
+            }
           }
           get(t2, e2) {
             const r2 = new Uint8Array(this.data.buffer), n2 = 4 * this._idx(t2, e2);
@@ -7416,8 +6684,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             return [this.redFactor, this.greenFactor, this.blueFactor, this.baseShift];
           }
           _idx(t2, e2) {
-            if (t2 < -1 || t2 >= this.dim + 1 || e2 < -1 || e2 >= this.dim + 1)
-              throw new RangeError("out of range source coordinates for DEM data");
+            if (t2 < -1 || t2 >= this.dim + 1 || e2 < -1 || e2 >= this.dim + 1) throw new RangeError("out of range source coordinates for DEM data");
             return (e2 + 1) * this.stride + (t2 + 1);
           }
           unpack(t2, e2, r2) {
@@ -7427,8 +6694,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             return new qs({ width: this.stride, height: this.stride }, new Uint8Array(this.data.buffer));
           }
           backfillBorder(t2, e2, r2) {
-            if (this.dim !== t2.dim)
-              throw new Error("dem dimension mismatch");
+            if (this.dim !== t2.dim) throw new Error("dem dimension mismatch");
             let n2 = e2 * this.dim, i2 = e2 * this.dim + this.dim, a2 = r2 * this.dim, s2 = r2 * this.dim + this.dim;
             switch (e2) {
               case -1:
@@ -7445,9 +6711,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
                 s2 = a2 + 1;
             }
             const o2 = -e2 * this.dim, l2 = -r2 * this.dim;
-            for (let e3 = a2; e3 < s2; e3++)
-              for (let r3 = n2; r3 < i2; r3++)
-                this.data[this._idx(r3, e3)] = t2.data[this._idx(r3 + o2, e3 + l2)];
+            for (let e3 = a2; e3 < s2; e3++) for (let r3 = n2; r3 < i2; r3++) this.data[this._idx(r3, e3)] = t2.data[this._idx(r3 + o2, e3 + l2)];
           }
         }
         $n("DEMData", dc);
@@ -7463,8 +6727,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             return this._stringToNumber[t2];
           }
           decode(t2) {
-            if (t2 >= this._numberToString.length)
-              throw new Error(`Out of bounds. Index requested n=${t2} can't be >= this._numberToString.length ${this._numberToString.length}`);
+            if (t2 >= this._numberToString.length) throw new Error(`Out of bounds. Index requested n=${t2} can't be >= this._numberToString.length ${this._numberToString.length}`);
             return this._numberToString[t2];
           }
         }
@@ -7480,8 +6743,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }
           toJSON() {
             const t2 = { geometry: this.geometry };
-            for (const e2 in this)
-              "_geometry" !== e2 && "_vectorTileFeature" !== e2 && (t2[e2] = this[e2]);
+            for (const e2 in this) "_geometry" !== e2 && "_vectorTileFeature" !== e2 && (t2[e2] = this[e2]);
             return t2;
           }
         }
@@ -7508,29 +6770,21 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           query(t2, e2, r2, n2) {
             this.loadVTLayers();
             const i2 = t2.params || {}, s2 = rs / t2.tileSize / t2.scale, o2 = Nr(i2.filter), l2 = t2.queryGeometry, u2 = t2.queryPadding * s2, c2 = vc(l2), h2 = this.grid.query(c2.minX - u2, c2.minY - u2, c2.maxX + u2, c2.maxY + u2), p2 = vc(t2.cameraQueryGeometry), f2 = this.grid3D.query(p2.minX - u2, p2.minY - u2, p2.maxX + u2, p2.maxY + u2, (e3, r3, n3, i3) => function(t3, e4, r4, n4, i4) {
-              for (const a2 of t3)
-                if (e4 <= a2.x && r4 <= a2.y && n4 >= a2.x && i4 >= a2.y)
-                  return true;
+              for (const a2 of t3) if (e4 <= a2.x && r4 <= a2.y && n4 >= a2.x && i4 >= a2.y) return true;
               const s3 = [new a(e4, r4), new a(e4, i4), new a(n4, i4), new a(n4, r4)];
               if (t3.length > 2) {
-                for (const e5 of s3)
-                  if (xs(t3, e5))
-                    return true;
+                for (const e5 of s3) if (xs(t3, e5)) return true;
               }
-              for (let e5 = 0; e5 < t3.length - 1; e5++)
-                if (vs(t3[e5], t3[e5 + 1], s3))
-                  return true;
+              for (let e5 = 0; e5 < t3.length - 1; e5++) if (vs(t3[e5], t3[e5 + 1], s3)) return true;
               return false;
             }(t2.cameraQueryGeometry, e3 - u2, r3 - u2, n3 + u2, i3 + u2));
-            for (const t3 of f2)
-              h2.push(t3);
+            for (const t3 of f2) h2.push(t3);
             h2.sort(bc);
             const d2 = {};
             let y2;
             for (let a2 = 0; a2 < h2.length; a2++) {
               const u3 = h2[a2];
-              if (u3 === y2)
-                continue;
+              if (u3 === y2) continue;
               y2 = u3;
               const c3 = this.featureIndexArray.get(u3);
               let p3 = null;
@@ -7541,34 +6795,26 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           loadMatchingFeature(t2, e2, r2, n2, i2, a2, s2, o2, l2, u2, c2) {
             const h2 = this.bucketLayerIDs[e2];
             if (a2 && !function(t3, e3) {
-              for (let r3 = 0; r3 < t3.length; r3++)
-                if (e3.indexOf(t3[r3]) >= 0)
-                  return true;
+              for (let r3 = 0; r3 < t3.length; r3++) if (e3.indexOf(t3[r3]) >= 0) return true;
               return false;
-            }(a2, h2))
-              return;
+            }(a2, h2)) return;
             const p2 = this.sourceLayerCoder.decode(r2), f2 = this.vtLayers[p2].feature(n2);
             if (i2.needGeometry) {
               const t3 = ss(f2, true);
-              if (!i2.filter(new li(this.tileID.overscaledZ), t3, this.tileID.canonical))
-                return;
-            } else if (!i2.filter(new li(this.tileID.overscaledZ), f2))
-              return;
+              if (!i2.filter(new li(this.tileID.overscaledZ), t3, this.tileID.canonical)) return;
+            } else if (!i2.filter(new li(this.tileID.overscaledZ), f2)) return;
             const d2 = this.getId(f2, p2);
             for (let e3 = 0; e3 < h2.length; e3++) {
               const r3 = h2[e3];
-              if (a2 && a2.indexOf(r3) < 0)
-                continue;
+              if (a2 && a2.indexOf(r3) < 0) continue;
               const i3 = o2[r3];
-              if (!i3)
-                continue;
+              if (!i3) continue;
               let p3 = {};
               d2 && u2 && (p3 = u2.getState(i3.sourceLayer || "_geojsonTileLayer", d2));
               const y2 = g({}, l2[r3]);
               y2.paint = xc(y2.paint, i3.paint, f2, p3, s2), y2.layout = xc(y2.layout, i3.layout, f2, p3, s2);
               const m2 = !c2 || c2(f2, i3, p3);
-              if (!m2)
-                continue;
+              if (!m2) continue;
               const x2 = new mc(f2, this.z, this.x, this.y, d2);
               x2.layer = y2;
               let v2 = t2[r3];
@@ -7579,15 +6825,11 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             const l2 = {};
             this.loadVTLayers();
             const u2 = Nr(i2);
-            for (const i3 of t2)
-              this.loadMatchingFeature(l2, r2, n2, i3, u2, a2, s2, o2, e2);
+            for (const i3 of t2) this.loadMatchingFeature(l2, r2, n2, i3, u2, a2, s2, o2, e2);
             return l2;
           }
           hasLayer(t2) {
-            for (const e2 of this.bucketLayerIDs)
-              for (const r2 of e2)
-                if (t2 === r2)
-                  return true;
+            for (const e2 of this.bucketLayerIDs) for (const r2 of e2) if (t2 === r2) return true;
             return false;
           }
           getId(t2, e2) {
@@ -7603,8 +6845,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         }
         function vc(t2) {
           let e2 = 1 / 0, r2 = 1 / 0, n2 = -1 / 0, i2 = -1 / 0;
-          for (const a2 of t2)
-            e2 = Math.min(e2, a2.x), r2 = Math.min(r2, a2.y), n2 = Math.max(n2, a2.x), i2 = Math.max(i2, a2.y);
+          for (const a2 of t2) e2 = Math.min(e2, a2.x), r2 = Math.min(r2, a2.y), n2 = Math.max(n2, a2.x), i2 = Math.max(i2, a2.y);
           return { minX: e2, minY: r2, maxX: n2, maxY: i2 };
         }
         function bc(t2, e2) {
@@ -7632,12 +6873,10 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }
         }
         function Ac(t2, e2, r2, n2, i2) {
-          if (void 0 === e2.segment || 0 === r2)
-            return true;
+          if (void 0 === e2.segment || 0 === r2) return true;
           let a2 = e2, s2 = e2.segment + 1, o2 = 0;
           for (; o2 > -r2 / 2; ) {
-            if (s2--, s2 < 0)
-              return false;
+            if (s2--, s2 < 0) return false;
             o2 -= t2[s2].dist(a2), a2 = t2[s2];
           }
           o2 += t2[s2].dist(t2[s2 + 1]), s2++;
@@ -7645,21 +6884,17 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           let u2 = 0;
           for (; o2 < r2 / 2; ) {
             const e3 = t2[s2], r3 = t2[s2 + 1];
-            if (!r3)
-              return false;
+            if (!r3) return false;
             let a3 = t2[s2 - 1].angleTo(e3) - e3.angleTo(r3);
-            for (a3 = Math.abs((a3 + 3 * Math.PI) % (2 * Math.PI) - Math.PI), l2.push({ distance: o2, angleDelta: a3 }), u2 += a3; o2 - l2[0].distance > n2; )
-              u2 -= l2.shift().angleDelta;
-            if (u2 > i2)
-              return false;
+            for (a3 = Math.abs((a3 + 3 * Math.PI) % (2 * Math.PI) - Math.PI), l2.push({ distance: o2, angleDelta: a3 }), u2 += a3; o2 - l2[0].distance > n2; ) u2 -= l2.shift().angleDelta;
+            if (u2 > i2) return false;
             s2++, o2 += e3.dist(r3);
           }
           return true;
         }
         function Sc(t2) {
           let e2 = 0;
-          for (let r2 = 0; r2 < t2.length - 1; r2++)
-            e2 += t2[r2].dist(t2[r2 + 1]);
+          for (let r2 = 0; r2 < t2.length - 1; r2++) e2 += t2[r2].dist(t2[r2 + 1]);
           return e2;
         }
         function kc(t2, e2, r2) {
@@ -7724,17 +6959,14 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             const t3 = Ec(p2, g2, y2), e3 = Ec(f2, x2, m2);
             for (let r3 = 0; r3 < t3.length - 1; r3++) {
               const n3 = t3[r3], a2 = t3[r3 + 1];
-              for (let t4 = 0; t4 < e3.length - 1; t4++)
-                i2.push(z2(n3, e3[t4], a2, e3[t4 + 1]));
+              for (let t4 = 0; t4 < e3.length - 1; t4++) i2.push(z2(n3, e3[t4], a2, e3[t4 + 1]));
             }
-          } else
-            i2.push(z2({ fixed: 0, stretch: -1 }, { fixed: 0, stretch: -1 }, { fixed: 0, stretch: l2 + 1 }, { fixed: 0, stretch: u2 + 1 }));
+          } else i2.push(z2({ fixed: 0, stretch: -1 }, { fixed: 0, stretch: -1 }, { fixed: 0, stretch: l2 + 1 }, { fixed: 0, stretch: u2 + 1 }));
           return i2;
         }
         function Vc(t2, e2, r2) {
           let n2 = 0;
-          for (const i2 of t2)
-            n2 += Math.max(e2, Math.min(r2, i2[1])) - Math.max(e2, Math.min(r2, i2[0]));
+          for (const i2 of t2) n2 += Math.max(e2, Math.min(r2, i2[1])) - Math.max(e2, Math.min(r2, i2[0]));
           return n2;
         }
         function Ec(t2, e2, r2) {
@@ -7773,16 +7005,13 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         }
         class Lc {
           constructor(t2 = [], e2 = Dc) {
-            if (this.data = t2, this.length = this.data.length, this.compare = e2, this.length > 0)
-              for (let t3 = (this.length >> 1) - 1; t3 >= 0; t3--)
-                this._down(t3);
+            if (this.data = t2, this.length = this.data.length, this.compare = e2, this.length > 0) for (let t3 = (this.length >> 1) - 1; t3 >= 0; t3--) this._down(t3);
           }
           push(t2) {
             this.data.push(t2), this.length++, this._up(this.length - 1);
           }
           pop() {
-            if (0 === this.length)
-              return;
+            if (0 === this.length) return;
             const t2 = this.data[0], e2 = this.data.pop();
             return this.length--, this.length > 0 && (this.data[0] = e2, this._down(0)), t2;
           }
@@ -7793,8 +7022,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             const { data: e2, compare: r2 } = this, n2 = e2[t2];
             for (; t2 > 0; ) {
               const i2 = t2 - 1 >> 1, a2 = e2[i2];
-              if (r2(n2, a2) >= 0)
-                break;
+              if (r2(n2, a2) >= 0) break;
               e2[t2] = a2, t2 = i2;
             }
             e2[t2] = n2;
@@ -7804,8 +7032,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             for (; t2 < n2; ) {
               let n3 = 1 + (t2 << 1), a2 = e2[n3];
               const s2 = n3 + 1;
-              if (s2 < this.length && r2(e2[s2], a2) < 0 && (n3 = s2, a2 = e2[s2]), r2(a2, i2) >= 0)
-                break;
+              if (s2 < this.length && r2(e2[s2], a2) < 0 && (n3 = s2, a2 = e2[s2]), r2(a2, i2) >= 0) break;
               e2[t2] = a2, t2 = n3;
             }
             e2[t2] = i2;
@@ -7824,11 +7051,8 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           const u2 = Math.min(s2 - n2, o2 - i2);
           let c2 = u2 / 2;
           const h2 = new Lc([], Uc);
-          if (0 === u2)
-            return new a(n2, i2);
-          for (let e3 = n2; e3 < s2; e3 += u2)
-            for (let r3 = i2; r3 < o2; r3 += u2)
-              h2.push(new Rc(e3 + c2, r3 + c2, c2, t2));
+          if (0 === u2) return new a(n2, i2);
+          for (let e3 = n2; e3 < s2; e3 += u2) for (let r3 = i2; r3 < o2; r3 += u2) h2.push(new Rc(e3 + c2, r3 + c2, c2, t2));
           let p2 = function(t3) {
             let e3 = 0, r3 = 0, n3 = 0;
             const i3 = t3[0];
@@ -7942,8 +7166,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             let n3;
             n3 = void 0 !== t2._unevaluatedLayout.getValue("text-radial-offset") ? [i2.get("text-radial-offset").evaluate(e2, {}, r2) * Vl, Nc] : i2.get("text-offset").evaluate(e2, {}, r2).map((t3) => t3 * Vl);
             const a3 = [];
-            for (const t3 of s2)
-              a3.push(t3, Zc(t3, n3));
+            for (const t3 of s2) a3.push(t3, Zc(t3, n3));
             return new re(a3);
           }
           return null;
@@ -7996,8 +7219,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
                   M3 = new $c(u3, r3, c3, h3, p4, a4, f3, d3, y3, t2);
                 }
                 const o4 = 1 === a4.positionedLines.length;
-                if (F2 += Xc(e3, r3, a4, s3, l4, y3, w3, m3, z3, i3.vertical ? t.ai.horizontal : t.ai.horizontalOnly, o4 ? U2 : [n4], D2, $2, _3, k3), o4)
-                  break;
+                if (F2 += Xc(e3, r3, a4, s3, l4, y3, w3, m3, z3, i3.vertical ? t.ai.horizontal : t.ai.horizontalOnly, o4 ? U2 : [n4], D2, $2, _3, k3), o4) break;
               }
               i3.vertical && (T2 += Xc(e3, r3, i3.vertical, s3, l4, y3, w3, m3, z3, t.ai.vertical, ["vertical"], D2, L2, _3, k3));
               const R2 = M3 ? M3.boxStartIndex : e3.collisionBoxArray.length, q2 = M3 ? M3.boxEndIndex : e3.collisionBoxArray.length, j2 = B3 ? B3.boxStartIndex : e3.collisionBoxArray.length, N2 = B3 ? B3.boxEndIndex : e3.collisionBoxArray.length, Z2 = C3 ? C3.boxStartIndex : e3.collisionBoxArray.length, K2 = C3 ? C3.boxEndIndex : e3.collisionBoxArray.length, G2 = P3 ? P3.boxStartIndex : e3.collisionBoxArray.length, J2 = P3 ? P3.boxEndIndex : e3.collisionBoxArray.length;
@@ -8008,118 +7230,95 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               H2 && (X2 *= I3 / Vl), e3.glyphOffsetArray.length >= Uu.MAX_GLYPHS && A("Too many glyphs being rendered in a tile. See https://github.com/mapbox/mapbox-gl-js/issues/2907"), void 0 !== w3.sortKey && e3.addToSortKeyRanges(e3.symbolInstances.length, w3.sortKey);
               const W2 = Kc(l4, w3, k3), [Q2, tt2] = function(e4, r4) {
                 const n4 = e4.length, i4 = null == r4 ? void 0 : r4.values;
-                if ((null == i4 ? void 0 : i4.length) > 0)
-                  for (let r5 = 0; r5 < i4.length; r5 += 2) {
-                    const n5 = i4[r5 + 1];
-                    e4.emplaceBack(t.aq[i4[r5]], n5[0], n5[1]);
-                  }
+                if ((null == i4 ? void 0 : i4.length) > 0) for (let r5 = 0; r5 < i4.length; r5 += 2) {
+                  const n5 = i4[r5 + 1];
+                  e4.emplaceBack(t.aq[i4[r5]], n5[0], n5[1]);
+                }
                 return [n4, e4.length];
               }(e3.textAnchorOffsets, W2);
               e3.symbolInstances.emplaceBack(r3.x, r3.y, D2.right >= 0 ? D2.right : -1, D2.center >= 0 ? D2.center : -1, D2.left >= 0 ? D2.left : -1, D2.vertical || -1, $2, L2, O2, R2, q2, j2, N2, Z2, K2, G2, J2, c3, F2, T2, V2, E2, H2, 0, f3, X2, Q2, tt2);
             }(e2, p3, l3, n2, i2, a2, B2, e2.layers[0], e2.collisionBoxArray, r2.index, r2.sourceLayerIndex, e2.index, g2, [w2, w2, w2, w2], k2, u2, v2, _2, I2, d2, r2, s2, c2, h2, o2);
           };
-          if ("line" === z2)
-            for (const t2 of wc(r2.geometry, 0, 0, rs, rs)) {
-              const r3 = Mc(t2, b2, S2, n2.vertical || y2, i2, 24, x2, e2.overscaling, rs);
-              for (const n3 of r3)
-                y2 && Hc(e2, y2.text, M2, n3) || P2(t2, n3);
-            }
+          if ("line" === z2) for (const t2 of wc(r2.geometry, 0, 0, rs, rs)) {
+            const r3 = Mc(t2, b2, S2, n2.vertical || y2, i2, 24, x2, e2.overscaling, rs);
+            for (const n3 of r3) y2 && Hc(e2, y2.text, M2, n3) || P2(t2, n3);
+          }
           else if ("line-center" === z2) {
-            for (const t2 of r2.geometry)
-              if (t2.length > 1) {
-                const e3 = zc(t2, S2, n2.vertical || y2, i2, 24, x2);
-                e3 && P2(t2, e3);
-              }
-          } else if ("Polygon" === r2.type)
-            for (const t2 of Co(r2.geometry, 0)) {
-              const e3 = Oc(t2, 16);
-              P2(t2[0], new _c(e3.x, e3.y, 0));
+            for (const t2 of r2.geometry) if (t2.length > 1) {
+              const e3 = zc(t2, S2, n2.vertical || y2, i2, 24, x2);
+              e3 && P2(t2, e3);
             }
-          else if ("LineString" === r2.type)
-            for (const t2 of r2.geometry)
-              P2(t2, new _c(t2[0].x, t2[0].y, 0));
-          else if ("Point" === r2.type)
-            for (const t2 of r2.geometry)
-              for (const e3 of t2)
-                P2([e3], new _c(e3.x, e3.y, 0));
+          } else if ("Polygon" === r2.type) for (const t2 of Co(r2.geometry, 0)) {
+            const e3 = Oc(t2, 16);
+            P2(t2[0], new _c(e3.x, e3.y, 0));
+          }
+          else if ("LineString" === r2.type) for (const t2 of r2.geometry) P2(t2, new _c(t2[0].x, t2[0].y, 0));
+          else if ("Point" === r2.type) for (const t2 of r2.geometry) for (const e3 of t2) P2([e3], new _c(e3.x, e3.y, 0));
         }
         function Xc(t2, e2, r2, n2, i2, s2, o2, l2, u2, c2, h2, p2, f2, d2, y2) {
           const m2 = function(t3, e3, r3, n3, i3, s3, o3, l3) {
             const u3 = n3.layout.get("text-rotate").evaluate(s3, {}) * Math.PI / 180, c3 = [];
-            for (const t4 of e3.positionedLines)
-              for (const n4 of t4.positionedGlyphs) {
-                if (!n4.rect)
-                  continue;
-                const s4 = n4.rect || {};
-                let h3 = su + 1, p3 = true, f3 = 1, d3 = 0;
-                const y3 = (i3 || l3) && n4.vertical, m3 = n4.metrics.advance * n4.scale / 2;
-                if (l3 && e3.verticalizable && (d3 = t4.lineOffset / 2 - (n4.imageName ? -(Vl - n4.metrics.width * n4.scale) / 2 : (n4.scale - 1) * Vl)), n4.imageName) {
-                  const t5 = o3[n4.imageName];
-                  p3 = t5.sdf, f3 = t5.pixelRatio, h3 = lu / f3;
-                }
-                const g3 = i3 ? [n4.x + m3, n4.y] : [0, 0];
-                let x3 = i3 ? [0, 0] : [n4.x + m3 + r3[0], n4.y + r3[1] - d3], v2 = [0, 0];
-                y3 && (v2 = x3, x3 = [0, 0]);
-                const b2 = n4.metrics.isDoubleResolution ? 2 : 1, w2 = (n4.metrics.left - h3) * n4.scale - m3 + x3[0], _2 = (-n4.metrics.top - h3) * n4.scale + x3[1], A2 = w2 + s4.w / b2 * n4.scale / f3, S2 = _2 + s4.h / b2 * n4.scale / f3, k2 = new a(w2, _2), I2 = new a(A2, _2), z2 = new a(w2, S2), M2 = new a(A2, S2);
-                if (y3) {
-                  const t5 = new a(-m3, m3 - pu), e4 = -Math.PI / 2, r4 = Vl / 2 - m3, i4 = new a(5 - pu - r4, -(n4.imageName ? r4 : 0)), s5 = new a(...v2);
-                  k2._rotateAround(e4, t5)._add(i4)._add(s5), I2._rotateAround(e4, t5)._add(i4)._add(s5), z2._rotateAround(e4, t5)._add(i4)._add(s5), M2._rotateAround(e4, t5)._add(i4)._add(s5);
-                }
-                if (u3) {
-                  const t5 = Math.sin(u3), e4 = Math.cos(u3), r4 = [e4, -t5, t5, e4];
-                  k2._matMult(r4), I2._matMult(r4), z2._matMult(r4), M2._matMult(r4);
-                }
-                const C2 = new a(0, 0), B2 = new a(0, 0);
-                c3.push({ tl: k2, tr: I2, bl: z2, br: M2, tex: s4, writingMode: e3.writingMode, glyphOffset: g3, sectionIndex: n4.sectionIndex, isSDF: p3, pixelOffsetTL: C2, pixelOffsetBR: B2, minFontScaleX: 0, minFontScaleY: 0 });
+            for (const t4 of e3.positionedLines) for (const n4 of t4.positionedGlyphs) {
+              if (!n4.rect) continue;
+              const s4 = n4.rect || {};
+              let h3 = su + 1, p3 = true, f3 = 1, d3 = 0;
+              const y3 = (i3 || l3) && n4.vertical, m3 = n4.metrics.advance * n4.scale / 2;
+              if (l3 && e3.verticalizable && (d3 = t4.lineOffset / 2 - (n4.imageName ? -(Vl - n4.metrics.width * n4.scale) / 2 : (n4.scale - 1) * Vl)), n4.imageName) {
+                const t5 = o3[n4.imageName];
+                p3 = t5.sdf, f3 = t5.pixelRatio, h3 = lu / f3;
               }
+              const g3 = i3 ? [n4.x + m3, n4.y] : [0, 0];
+              let x3 = i3 ? [0, 0] : [n4.x + m3 + r3[0], n4.y + r3[1] - d3], v2 = [0, 0];
+              y3 && (v2 = x3, x3 = [0, 0]);
+              const b2 = n4.metrics.isDoubleResolution ? 2 : 1, w2 = (n4.metrics.left - h3) * n4.scale - m3 + x3[0], _2 = (-n4.metrics.top - h3) * n4.scale + x3[1], A2 = w2 + s4.w / b2 * n4.scale / f3, S2 = _2 + s4.h / b2 * n4.scale / f3, k2 = new a(w2, _2), I2 = new a(A2, _2), z2 = new a(w2, S2), M2 = new a(A2, S2);
+              if (y3) {
+                const t5 = new a(-m3, m3 - pu), e4 = -Math.PI / 2, r4 = Vl / 2 - m3, i4 = new a(5 - pu - r4, -(n4.imageName ? r4 : 0)), s5 = new a(...v2);
+                k2._rotateAround(e4, t5)._add(i4)._add(s5), I2._rotateAround(e4, t5)._add(i4)._add(s5), z2._rotateAround(e4, t5)._add(i4)._add(s5), M2._rotateAround(e4, t5)._add(i4)._add(s5);
+              }
+              if (u3) {
+                const t5 = Math.sin(u3), e4 = Math.cos(u3), r4 = [e4, -t5, t5, e4];
+                k2._matMult(r4), I2._matMult(r4), z2._matMult(r4), M2._matMult(r4);
+              }
+              const C2 = new a(0, 0), B2 = new a(0, 0);
+              c3.push({ tl: k2, tr: I2, bl: z2, br: M2, tex: s4, writingMode: e3.writingMode, glyphOffset: g3, sectionIndex: n4.sectionIndex, isSDF: p3, pixelOffsetTL: C2, pixelOffsetBR: B2, minFontScaleX: 0, minFontScaleY: 0 });
+            }
             return c3;
           }(0, r2, l2, i2, s2, o2, n2, t2.allowVerticalPlacement), g2 = t2.textSizeData;
           let x2 = null;
           "source" === g2.kind ? (x2 = [Cu * i2.layout.get("text-size").evaluate(o2, {})], x2[0] > Bu && A(`${t2.layerIds[0]}: Value for "text-size" is >= ${Mu}. Reduce your "text-size".`)) : "composite" === g2.kind && (x2 = [Cu * d2.compositeTextSizes[0].evaluate(o2, {}, y2), Cu * d2.compositeTextSizes[1].evaluate(o2, {}, y2)], (x2[0] > Bu || x2[1] > Bu) && A(`${t2.layerIds[0]}: Value for "text-size" is >= ${Mu}. Reduce your "text-size".`)), t2.addSymbols(t2.text, m2, x2, l2, s2, o2, c2, e2, u2.lineStartIndex, u2.lineLength, f2, y2);
-          for (const e3 of h2)
-            p2[e3] = t2.text.placedSymbolArray.length - 1;
+          for (const e3 of h2) p2[e3] = t2.text.placedSymbolArray.length - 1;
           return 4 * m2.length;
         }
         function Yc(t2) {
-          for (const e2 in t2)
-            return t2[e2];
+          for (const e2 in t2) return t2[e2];
           return null;
         }
         function Hc(t2, e2, r2, n2) {
           const i2 = t2.compareText;
           if (e2 in i2) {
             const t3 = i2[e2];
-            for (let e3 = t3.length - 1; e3 >= 0; e3--)
-              if (n2.dist(t3[e3]) < r2)
-                return true;
-          } else
-            i2[e2] = [];
+            for (let e3 = t3.length - 1; e3 >= 0; e3--) if (n2.dist(t3[e3]) < r2) return true;
+          } else i2[e2] = [];
           return i2[e2].push(n2), false;
         }
         const Wc = [Int8Array, Uint8Array, Uint8ClampedArray, Int16Array, Uint16Array, Int32Array, Uint32Array, Float32Array, Float64Array];
         class Qc {
           static from(t2) {
-            if (!(t2 instanceof ArrayBuffer))
-              throw new Error("Data must be an instance of ArrayBuffer.");
+            if (!(t2 instanceof ArrayBuffer)) throw new Error("Data must be an instance of ArrayBuffer.");
             const [e2, r2] = new Uint8Array(t2, 0, 2);
-            if (219 !== e2)
-              throw new Error("Data does not appear to be in a KDBush format.");
+            if (219 !== e2) throw new Error("Data does not appear to be in a KDBush format.");
             const n2 = r2 >> 4;
-            if (1 !== n2)
-              throw new Error(`Got v${n2} data when expected v1.`);
+            if (1 !== n2) throw new Error(`Got v${n2} data when expected v1.`);
             const i2 = Wc[15 & r2];
-            if (!i2)
-              throw new Error("Unrecognized array type.");
+            if (!i2) throw new Error("Unrecognized array type.");
             const [a2] = new Uint16Array(t2, 2, 1), [s2] = new Uint32Array(t2, 4, 1);
             return new Qc(s2, a2, i2, t2);
           }
           constructor(t2, e2 = 64, r2 = Float64Array, n2) {
-            if (isNaN(t2) || t2 < 0)
-              throw new Error(`Unpexpected numItems value: ${t2}.`);
+            if (isNaN(t2) || t2 < 0) throw new Error(`Unpexpected numItems value: ${t2}.`);
             this.numItems = +t2, this.nodeSize = Math.min(Math.max(+e2, 2), 65535), this.ArrayType = r2, this.IndexArrayType = t2 < 65536 ? Uint16Array : Uint32Array;
             const i2 = Wc.indexOf(this.ArrayType), a2 = 2 * t2 * this.ArrayType.BYTES_PER_ELEMENT, s2 = t2 * this.IndexArrayType.BYTES_PER_ELEMENT, o2 = (8 - s2 % 8) % 8;
-            if (i2 < 0)
-              throw new Error(`Unexpected typed array class: ${r2}.`);
+            if (i2 < 0) throw new Error(`Unexpected typed array class: ${r2}.`);
             n2 && n2 instanceof ArrayBuffer ? (this.data = n2, this.ids = new this.IndexArrayType(this.data, 8, t2), this.coords = new this.ArrayType(this.data, 8 + s2 + o2, 2 * t2), this._pos = 2 * t2, this._finished = true) : (this.data = new ArrayBuffer(8 + a2 + s2 + o2), this.ids = new this.IndexArrayType(this.data, 8, t2), this.coords = new this.ArrayType(this.data, 8 + s2 + o2, 2 * t2), this._pos = 0, this._finished = false, new Uint8Array(this.data, 0, 2).set([219, 16 + i2]), new Uint16Array(this.data, 2, 1)[0] = e2, new Uint32Array(this.data, 4, 1)[0] = t2);
           }
           add(t2, e2) {
@@ -8128,13 +7327,11 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }
           finish() {
             const t2 = this._pos >> 1;
-            if (t2 !== this.numItems)
-              throw new Error(`Added ${t2} items when expected ${this.numItems}.`);
+            if (t2 !== this.numItems) throw new Error(`Added ${t2} items when expected ${this.numItems}.`);
             return th(this.ids, this.coords, this.nodeSize, 0, this.numItems - 1, 0), this._finished = true, this;
           }
           range(t2, e2, r2, n2) {
-            if (!this._finished)
-              throw new Error("Data not yet indexed - call index.finish().");
+            if (!this._finished) throw new Error("Data not yet indexed - call index.finish().");
             const { ids: i2, coords: a2, nodeSize: s2 } = this, o2 = [0, i2.length - 1, 0], l2 = [];
             for (; o2.length; ) {
               const u2 = o2.pop() || 0, c2 = o2.pop() || 0, h2 = o2.pop() || 0;
@@ -8151,14 +7348,12 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             return l2;
           }
           within(t2, e2, r2) {
-            if (!this._finished)
-              throw new Error("Data not yet indexed - call index.finish().");
+            if (!this._finished) throw new Error("Data not yet indexed - call index.finish().");
             const { ids: n2, coords: i2, nodeSize: a2 } = this, s2 = [0, n2.length - 1, 0], o2 = [], l2 = r2 * r2;
             for (; s2.length; ) {
               const u2 = s2.pop() || 0, c2 = s2.pop() || 0, h2 = s2.pop() || 0;
               if (c2 - h2 <= a2) {
-                for (let r3 = h2; r3 <= c2; r3++)
-                  ih(i2[2 * r3], i2[2 * r3 + 1], t2, e2) <= l2 && o2.push(n2[r3]);
+                for (let r3 = h2; r3 <= c2; r3++) ih(i2[2 * r3], i2[2 * r3 + 1], t2, e2) <= l2 && o2.push(n2[r3]);
                 continue;
               }
               const p2 = h2 + c2 >> 1, f2 = i2[2 * p2], d2 = i2[2 * p2 + 1];
@@ -8168,8 +7363,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }
         }
         function th(t2, e2, r2, n2, i2, a2) {
-          if (i2 - n2 <= r2)
-            return;
+          if (i2 - n2 <= r2) return;
           const s2 = n2 + i2 >> 1;
           eh(t2, e2, s2, n2, i2, a2), th(t2, e2, r2, n2, s2 - 1, 1 - a2), th(t2, e2, r2, s2 + 1, i2, 1 - a2);
         }
@@ -8182,10 +7376,8 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             const s2 = e2[2 * r2 + a2];
             let o2 = n2, l2 = i2;
             for (rh(t2, e2, n2, r2), e2[2 * i2 + a2] > s2 && rh(t2, e2, n2, i2); o2 < l2; ) {
-              for (rh(t2, e2, o2, l2), o2++, l2--; e2[2 * o2 + a2] < s2; )
-                o2++;
-              for (; e2[2 * l2 + a2] > s2; )
-                l2--;
+              for (rh(t2, e2, o2, l2), o2++, l2--; e2[2 * o2 + a2] < s2; ) o2++;
+              for (; e2[2 * l2 + a2] > s2; ) l2--;
             }
             e2[2 * n2 + a2] === s2 ? rh(t2, e2, n2, l2) : (l2++, rh(t2, e2, l2, i2)), l2 <= r2 && (n2 = l2 + 1), r2 <= l2 && (i2 = l2 - 1);
           }
@@ -8211,8 +7403,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           null != sh && oh.push(e2 - sh), sh = e2;
         }, clearMetrics() {
           sh = null, oh = [], performance.clearMeasures(uh), performance.clearMeasures(ch);
-          for (const e2 in t.bg)
-            performance.clearMarks(t.bg[e2]);
+          for (const e2 in t.bg) performance.clearMarks(t.bg[e2]);
         }, getPerformanceMetrics() {
           performance.measure(uh, t.bg.create, t.bg.load), performance.measure(ch, t.bg.create, t.bg.fullLoad);
           const e2 = performance.getEntriesByName(uh)[0].duration, r2 = performance.getEntriesByName(ch)[0].duration, n2 = oh.length, i2 = 1 / (oh.reduce((t2, e3) => t2 + e3, 0) / n2 / 1e3), a2 = oh.filter((t2) => t2 > lh).reduce((t2, e3) => t2 + (e3 - lh) / lh, 0);
@@ -8225,16 +7416,13 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           constructor(t2, e2, r2) {
             this.receive = (t3) => {
               const e3 = t3.data, r3 = e3.id;
-              if (r3 && (!e3.targetMapId || this.mapId === e3.targetMapId))
-                if ("<cancel>" === e3.type) {
-                  delete this.tasks[r3];
-                  const t4 = this.cancelCallbacks[r3];
-                  delete this.cancelCallbacks[r3], t4 && t4();
-                } else
-                  I() || e3.mustQueue ? (this.tasks[r3] = e3, this.taskQueue.push(r3), this.invoker.trigger()) : this.processTask(r3, e3);
+              if (r3 && (!e3.targetMapId || this.mapId === e3.targetMapId)) if ("<cancel>" === e3.type) {
+                delete this.tasks[r3];
+                const t4 = this.cancelCallbacks[r3];
+                delete this.cancelCallbacks[r3], t4 && t4();
+              } else I() || e3.mustQueue ? (this.tasks[r3] = e3, this.taskQueue.push(r3), this.invoker.trigger()) : this.processTask(r3, e3);
             }, this.process = () => {
-              if (!this.taskQueue.length)
-                return;
+              if (!this.taskQueue.length) return;
               const t3 = this.taskQueue.shift(), e3 = this.tasks[t3];
               delete this.tasks[t3], this.taskQueue.length && this.invoker.trigger(), e3 && this.processTask(t3, e3);
             }, this.target = t2, this.parent = e2, this.mapId = r2, this.callbacks = {}, this.tasks = {}, this.taskQueue = [], this.cancelCallbacks = {}, this.invoker = new Qu(this.process), this.target.addEventListener("message", this.receive, false), this.globalScope = I() ? t2 : window;
@@ -8262,13 +7450,11 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               };
               let a2 = null;
               const s2 = On(e2.data);
-              if (this.parent[e2.type])
-                a2 = this.parent[e2.type](e2.sourceMapId, s2, i2);
+              if (this.parent[e2.type]) a2 = this.parent[e2.type](e2.sourceMapId, s2, i2);
               else if ("getWorkerSource" in this.parent) {
                 const t3 = e2.type.split(".");
                 a2 = this.parent.getWorkerSource(e2.sourceMapId, t3[0], s2.source)[t3[1]](s2, i2);
-              } else
-                i2(new Error(`Could not find function ${e2.type}`));
+              } else i2(new Error(`Could not find function ${e2.type}`));
               !r2 && a2 && a2.cancel && (this.cancelCallbacks[t2] = a2.cancel);
             }
           }
@@ -8308,14 +7494,11 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         }, t.a6 = Nr, t.a7 = ss, t.a8 = li, t.a9 = mc, t.aA = ri, t.aB = function(t2) {
           t2 = t2.slice();
           const e2 = /* @__PURE__ */ Object.create(null);
-          for (let r2 = 0; r2 < t2.length; r2++)
-            e2[t2[r2].id] = t2[r2];
-          for (let r2 = 0; r2 < t2.length; r2++)
-            "ref" in t2[r2] && (t2[r2] = H(t2[r2], e2[t2[r2].ref]));
+          for (let r2 = 0; r2 < t2.length; r2++) e2[t2[r2].id] = t2[r2];
+          for (let r2 = 0; r2 < t2.length; r2++) "ref" in t2[r2] && (t2[r2] = H(t2[r2], e2[t2[r2].ref]));
           return t2;
         }, t.aC = function(t2) {
-          if ("custom" === t2.type)
-            return new Wu(t2);
+          if ("custom" === t2.type) return new Wu(t2);
           switch (t2.type) {
             case "background":
               return new Ju(t2);
@@ -8337,20 +7520,16 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               return new Zu(t2);
           }
         }, t.aD = w, t.aE = function(t2, e2) {
-          if (!t2)
-            return [{ command: Q.setStyle, args: [e2] }];
+          if (!t2) return [{ command: Q.setStyle, args: [e2] }];
           let r2 = [];
           try {
-            if (!W(t2.version, e2.version))
-              return [{ command: Q.setStyle, args: [e2] }];
+            if (!W(t2.version, e2.version)) return [{ command: Q.setStyle, args: [e2] }];
             W(t2.center, e2.center) || r2.push({ command: Q.setCenter, args: [e2.center] }), W(t2.zoom, e2.zoom) || r2.push({ command: Q.setZoom, args: [e2.zoom] }), W(t2.bearing, e2.bearing) || r2.push({ command: Q.setBearing, args: [e2.bearing] }), W(t2.pitch, e2.pitch) || r2.push({ command: Q.setPitch, args: [e2.pitch] }), W(t2.sprite, e2.sprite) || r2.push({ command: Q.setSprite, args: [e2.sprite] }), W(t2.glyphs, e2.glyphs) || r2.push({ command: Q.setGlyphs, args: [e2.glyphs] }), W(t2.transition, e2.transition) || r2.push({ command: Q.setTransition, args: [e2.transition] }), W(t2.light, e2.light) || r2.push({ command: Q.setLight, args: [e2.light] });
             const n2 = {}, i2 = [];
             !function(t3, e3, r3, n3) {
               let i3;
-              for (i3 in e3 = e3 || {}, t3 = t3 || {})
-                Object.prototype.hasOwnProperty.call(t3, i3) && (Object.prototype.hasOwnProperty.call(e3, i3) || et(i3, r3, n3));
-              for (i3 in e3)
-                Object.prototype.hasOwnProperty.call(e3, i3) && (Object.prototype.hasOwnProperty.call(t3, i3) ? W(t3[i3], e3[i3]) || ("geojson" === t3[i3].type && "geojson" === e3[i3].type && nt(t3, e3, i3) ? r3.push({ command: Q.setGeoJSONSourceData, args: [i3, e3[i3].data] }) : rt(i3, e3, r3, n3)) : tt(i3, e3, r3));
+              for (i3 in e3 = e3 || {}, t3 = t3 || {}) Object.prototype.hasOwnProperty.call(t3, i3) && (Object.prototype.hasOwnProperty.call(e3, i3) || et(i3, r3, n3));
+              for (i3 in e3) Object.prototype.hasOwnProperty.call(e3, i3) && (Object.prototype.hasOwnProperty.call(t3, i3) ? W(t3[i3], e3[i3]) || ("geojson" === t3[i3].type && "geojson" === e3[i3].type && nt(t3, e3, i3) ? r3.push({ command: Q.setGeoJSONSourceData, args: [i3, e3[i3].data] }) : rt(i3, e3, r3, n3)) : tt(i3, e3, r3));
             }(t2.sources, e2.sources, i2, n2);
             const a2 = [];
             t2.layers && t2.layers.forEach((t3) => {
@@ -8359,19 +7538,12 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               e3 = e3 || [];
               const n3 = (t3 = t3 || []).map(at), i3 = e3.map(at), a3 = t3.reduce(st, {}), s2 = e3.reduce(st, {}), o2 = n3.slice(), l2 = /* @__PURE__ */ Object.create(null);
               let u2, c2, h2, p2, f2, d2, y2;
-              for (u2 = 0, c2 = 0; u2 < n3.length; u2++)
-                h2 = n3[u2], Object.prototype.hasOwnProperty.call(s2, h2) ? c2++ : (r3.push({ command: Q.removeLayer, args: [h2] }), o2.splice(o2.indexOf(h2, c2), 1));
-              for (u2 = 0, c2 = 0; u2 < i3.length; u2++)
-                h2 = i3[i3.length - 1 - u2], o2[o2.length - 1 - u2] !== h2 && (Object.prototype.hasOwnProperty.call(a3, h2) ? (r3.push({ command: Q.removeLayer, args: [h2] }), o2.splice(o2.lastIndexOf(h2, o2.length - c2), 1)) : c2++, d2 = o2[o2.length - u2], r3.push({ command: Q.addLayer, args: [s2[h2], d2] }), o2.splice(o2.length - u2, 0, h2), l2[h2] = true);
-              for (u2 = 0; u2 < i3.length; u2++)
-                if (h2 = i3[u2], p2 = a3[h2], f2 = s2[h2], !l2[h2] && !W(p2, f2))
-                  if (W(p2.source, f2.source) && W(p2["source-layer"], f2["source-layer"]) && W(p2.type, f2.type)) {
-                    for (y2 in it(p2.layout, f2.layout, r3, h2, null, Q.setLayoutProperty), it(p2.paint, f2.paint, r3, h2, null, Q.setPaintProperty), W(p2.filter, f2.filter) || r3.push({ command: Q.setFilter, args: [h2, f2.filter] }), W(p2.minzoom, f2.minzoom) && W(p2.maxzoom, f2.maxzoom) || r3.push({ command: Q.setLayerZoomRange, args: [h2, f2.minzoom, f2.maxzoom] }), p2)
-                      Object.prototype.hasOwnProperty.call(p2, y2) && "layout" !== y2 && "paint" !== y2 && "filter" !== y2 && "metadata" !== y2 && "minzoom" !== y2 && "maxzoom" !== y2 && (0 === y2.indexOf("paint.") ? it(p2[y2], f2[y2], r3, h2, y2.slice(6), Q.setPaintProperty) : W(p2[y2], f2[y2]) || r3.push({ command: Q.setLayerProperty, args: [h2, y2, f2[y2]] }));
-                    for (y2 in f2)
-                      Object.prototype.hasOwnProperty.call(f2, y2) && !Object.prototype.hasOwnProperty.call(p2, y2) && "layout" !== y2 && "paint" !== y2 && "filter" !== y2 && "metadata" !== y2 && "minzoom" !== y2 && "maxzoom" !== y2 && (0 === y2.indexOf("paint.") ? it(p2[y2], f2[y2], r3, h2, y2.slice(6), Q.setPaintProperty) : W(p2[y2], f2[y2]) || r3.push({ command: Q.setLayerProperty, args: [h2, y2, f2[y2]] }));
-                  } else
-                    r3.push({ command: Q.removeLayer, args: [h2] }), d2 = o2[o2.lastIndexOf(h2) + 1], r3.push({ command: Q.addLayer, args: [f2, d2] });
+              for (u2 = 0, c2 = 0; u2 < n3.length; u2++) h2 = n3[u2], Object.prototype.hasOwnProperty.call(s2, h2) ? c2++ : (r3.push({ command: Q.removeLayer, args: [h2] }), o2.splice(o2.indexOf(h2, c2), 1));
+              for (u2 = 0, c2 = 0; u2 < i3.length; u2++) h2 = i3[i3.length - 1 - u2], o2[o2.length - 1 - u2] !== h2 && (Object.prototype.hasOwnProperty.call(a3, h2) ? (r3.push({ command: Q.removeLayer, args: [h2] }), o2.splice(o2.lastIndexOf(h2, o2.length - c2), 1)) : c2++, d2 = o2[o2.length - u2], r3.push({ command: Q.addLayer, args: [s2[h2], d2] }), o2.splice(o2.length - u2, 0, h2), l2[h2] = true);
+              for (u2 = 0; u2 < i3.length; u2++) if (h2 = i3[u2], p2 = a3[h2], f2 = s2[h2], !l2[h2] && !W(p2, f2)) if (W(p2.source, f2.source) && W(p2["source-layer"], f2["source-layer"]) && W(p2.type, f2.type)) {
+                for (y2 in it(p2.layout, f2.layout, r3, h2, null, Q.setLayoutProperty), it(p2.paint, f2.paint, r3, h2, null, Q.setPaintProperty), W(p2.filter, f2.filter) || r3.push({ command: Q.setFilter, args: [h2, f2.filter] }), W(p2.minzoom, f2.minzoom) && W(p2.maxzoom, f2.maxzoom) || r3.push({ command: Q.setLayerZoomRange, args: [h2, f2.minzoom, f2.maxzoom] }), p2) Object.prototype.hasOwnProperty.call(p2, y2) && "layout" !== y2 && "paint" !== y2 && "filter" !== y2 && "metadata" !== y2 && "minzoom" !== y2 && "maxzoom" !== y2 && (0 === y2.indexOf("paint.") ? it(p2[y2], f2[y2], r3, h2, y2.slice(6), Q.setPaintProperty) : W(p2[y2], f2[y2]) || r3.push({ command: Q.setLayerProperty, args: [h2, y2, f2[y2]] }));
+                for (y2 in f2) Object.prototype.hasOwnProperty.call(f2, y2) && !Object.prototype.hasOwnProperty.call(p2, y2) && "layout" !== y2 && "paint" !== y2 && "filter" !== y2 && "metadata" !== y2 && "minzoom" !== y2 && "maxzoom" !== y2 && (0 === y2.indexOf("paint.") ? it(p2[y2], f2[y2], r3, h2, y2.slice(6), Q.setPaintProperty) : W(p2[y2], f2[y2]) || r3.push({ command: Q.setLayerProperty, args: [h2, y2, f2[y2]] }));
+              } else r3.push({ command: Q.removeLayer, args: [h2] }), d2 = o2[o2.lastIndexOf(h2) + 1], r3.push({ command: Q.addLayer, args: [f2, d2] });
             }(a2, e2.layers, r2);
           } catch (t3) {
             console.warn("Unable to compute style diff:", t3), r2 = [{ command: Q.setStyle, args: [e2] }];
@@ -8382,21 +7554,14 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           return void 0 === r2 && e2.push({ message: `layers.${r2}: missing required property "id"` }), void 0 === t2.render && e2.push({ message: `layers.${r2}: missing required method "render"` }), t2.renderingMode && "2d" !== t2.renderingMode && "3d" !== t2.renderingMode && e2.push({ message: `layers.${r2}: property "renderingMode" must be either "2d" or "3d"` }), e2;
         }, t.aG = function t2(e2, r2) {
           if (Array.isArray(e2)) {
-            if (!Array.isArray(r2) || e2.length !== r2.length)
-              return false;
-            for (let n2 = 0; n2 < e2.length; n2++)
-              if (!t2(e2[n2], r2[n2]))
-                return false;
+            if (!Array.isArray(r2) || e2.length !== r2.length) return false;
+            for (let n2 = 0; n2 < e2.length; n2++) if (!t2(e2[n2], r2[n2])) return false;
             return true;
           }
           if ("object" == typeof e2 && null !== e2 && null !== r2) {
-            if ("object" != typeof r2)
-              return false;
-            if (Object.keys(e2).length !== Object.keys(r2).length)
-              return false;
-            for (const n2 in e2)
-              if (!t2(e2[n2], r2[n2]))
-                return false;
+            if ("object" != typeof r2) return false;
+            if (Object.keys(e2).length !== Object.keys(r2).length) return false;
+            for (const n2 in e2) if (!t2(e2[n2], r2[n2])) return false;
             return true;
           }
           return e2 === r2;
@@ -8414,13 +7579,11 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             super(t2, e2), this.current = Za;
           }
           set(t2) {
-            if (t2[12] !== this.current[12] || t2[0] !== this.current[0])
-              return this.current = t2, void this.gl.uniformMatrix4fv(this.location, false, t2);
-            for (let e2 = 1; e2 < 16; e2++)
-              if (t2[e2] !== this.current[e2]) {
-                this.current = t2, this.gl.uniformMatrix4fv(this.location, false, t2);
-                break;
-              }
+            if (t2[12] !== this.current[12] || t2[0] !== this.current[0]) return this.current = t2, void this.gl.uniformMatrix4fv(this.location, false, t2);
+            for (let e2 = 1; e2 < 16; e2++) if (t2[e2] !== this.current[e2]) {
+              this.current = t2, this.gl.uniformMatrix4fv(this.location, false, t2);
+              break;
+            }
           }
         }, t.aO = ja, t.aP = class extends Ra {
           constructor(t2, e2) {
@@ -8455,8 +7618,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           return e2;
         }, t.ab = function(t2, e2) {
           const r2 = [];
-          for (const n2 in t2)
-            n2 in e2 || r2.push(n2);
+          for (const n2 in t2) n2 in e2 || r2.push(n2);
           return r2;
         }, t.ac = function(t2) {
           if (null == z) {
@@ -8472,8 +7634,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           return e2[0] = t2[0], e2[1] = t2[1], e2[2] = t2[2], e2[3] = t2[3], e2[4] = t2[4], e2[5] = t2[5], e2[6] = t2[6], e2[7] = t2[7], e2[8] = t2[8], e2[9] = t2[9], e2[10] = t2[10], e2[11] = t2[11], e2[12] = t2[12], e2[13] = t2[13], e2[14] = t2[14], e2[15] = t2[15], e2;
         }, t.ag = Vs, t.ah = function(t2, e2) {
           let r2 = 0, n2 = 0;
-          if ("constant" === t2.kind)
-            n2 = t2.layoutSize;
+          if ("constant" === t2.kind) n2 = t2.layoutSize;
           else if ("source" !== t2.kind) {
             const { interpolationType: i2, minZoom: a2, maxZoom: s2 } = t2, o2 = i2 ? y(Ke.interpolationFactor(i2, e2, a2, s2), 0, 1) : 0;
             "camera" === t2.kind ? n2 = Ze.number(t2.minSize, t2.maxSize, o2) : r2 = o2;
@@ -8483,8 +7644,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           return "source" === t2.kind ? n2 / Cu : "composite" === t2.kind ? Ze.number(n2 / Cu, i2 / Cu, r2) : e2;
         }, t.ak = $u, t.al = function(t2, e2, r2, n2) {
           const i2 = e2.y - t2.y, s2 = e2.x - t2.x, o2 = n2.y - r2.y, l2 = n2.x - r2.x, u2 = o2 * s2 - l2 * i2;
-          if (0 === u2)
-            return null;
+          if (0 === u2) return null;
           const c2 = (l2 * (t2.y - r2.y) - o2 * (t2.x - r2.x)) / u2;
           return new a(t2.x + c2 * s2, t2.y + c2 * i2);
         }, t.am = wc, t.an = us, t.ao = Ms, t.ap = Vl, t.ar = Vu, t.as = function(t2, e2) {
@@ -8526,8 +7686,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           return t2[0] = e2[0], t2[1] = 0, t2[2] = 0, t2[3] = 0, t2[4] = 0, t2[5] = e2[1], t2[6] = 0, t2[7] = 0, t2[8] = 0, t2[9] = 0, t2[10] = e2[2], t2[11] = 0, t2[12] = 0, t2[13] = 0, t2[14] = 0, t2[15] = 1, t2;
         }, t.bd = class extends Pi {
         }, t.be = tc, t.bf = hh, t.bh = L, t.bi = function(t2, e2, r2 = false) {
-          if (ti === Yn || ti === Hn || ti === Wn)
-            throw new Error("setRTLTextPlugin cannot be called multiple times.");
+          if (ti === Yn || ti === Hn || ti === Wn) throw new Error("setRTLTextPlugin cannot be called multiple times.");
           ei = T.resolveURL(t2), ti = Yn, Qn = e2, ni(), r2 || si();
         }, t.bj = ai, t.bk = function(t2, e2) {
           const r2 = {};
@@ -8538,8 +7697,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             a2 || (a2 = r2[i2] = []), a2.push(t2[n3]);
           }
           const n2 = [];
-          for (const t3 in r2)
-            n2.push(r2[t3]);
+          for (const t3 in r2) n2.push(r2[t3]);
           return n2;
         }, t.bl = $n, t.bm = yc, t.bn = gc, t.bo = cu, t.bp = function(e2) {
           e2.bucket.createArrays(), e2.bucket.tilePixelRatio = rs / (512 * e2.bucket.overscaling), e2.bucket.compareText = {}, e2.bucket.iconsNeedLinear = false;
@@ -8568,20 +7726,14 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               };
               if (!o2 && x3) {
                 const r3 = /* @__PURE__ */ new Set();
-                if ("auto" === v3)
-                  for (let t2 = 0; t2 < x3.values.length; t2 += 2)
-                    r3.add(Gc(x3.values[t2]));
-                else
-                  r3.add(v3);
+                if ("auto" === v3) for (let t2 = 0; t2 < x3.values.length; t2 += 2) r3.add(Gc(x3.values[t2]));
+                else r3.add(v3);
                 let n3 = false;
-                for (const i4 of r3)
-                  if (!d2.horizontal[i4])
-                    if (n3)
-                      d2.horizontal[i4] = d2.horizontal[0];
-                    else {
-                      const r4 = yu(y2, e2.glyphMap, e2.glyphPositions, e2.imagePositions, c2, w2, s2, "center", i4, f3, g2, t.ai.horizontal, false, b2, p2, h2);
-                      r4 && (d2.horizontal[i4] = r4, n3 = 1 === r4.positionedLines.length);
-                    }
+                for (const i4 of r3) if (!d2.horizontal[i4]) if (n3) d2.horizontal[i4] = d2.horizontal[0];
+                else {
+                  const r4 = yu(y2, e2.glyphMap, e2.glyphPositions, e2.imagePositions, c2, w2, s2, "center", i4, f3, g2, t.ai.horizontal, false, b2, p2, h2);
+                  r4 && (d2.horizontal[i4] = r4, n3 = 1 === r4.positionedLines.length);
+                }
                 _2();
               } else {
                 "auto" === v3 && (v3 = Gc(m3));
@@ -8609,11 +7761,10 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }
         }, t.bu = eu, t.bv = Ro, t.bw = function(t2, r2, n2, i2, a2) {
           return e(this, void 0, void 0, function* () {
-            if (p())
-              try {
-                return yield B(t2, r2, n2, i2, a2);
-              } catch (t3) {
-              }
+            if (p()) try {
+              return yield B(t2, r2, n2, i2, a2);
+            } catch (t3) {
+            }
             return function(t3, e2, r3, n3, i3) {
               const a3 = t3.width, s2 = t3.height;
               P && V || (P = new OffscreenCanvas(a3, s2), V = P.getContext("2d", { willReadFrequently: true })), P.width = a3, P.height = s2, V.drawImage(t3, 0, 0, a3, s2);
@@ -8635,8 +7786,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         }, t.g = O, t.h = T, t.i = I, t.j = G, t.k = K, t.l = q, t.m = R, t.n = function(t2) {
           return new eu(t2).readFields(nu, []);
         }, t.o = function(t2, e2, r2) {
-          if (!t2.length)
-            return r2(null, []);
+          if (!t2.length) return r2(null, []);
           let n2 = t2.length;
           const i2 = new Array(t2.length);
           let a2 = null;
@@ -8664,14 +7814,12 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               const t3 = this._layers[i3.id] = e.aC(i3);
               t3._featureFilter = e.a6(t3.filter), this.keyCache[i3.id] && delete this.keyCache[i3.id];
             }
-            for (const e2 of i2)
-              delete this.keyCache[e2], delete this._layerConfigs[e2], delete this._layers[e2];
+            for (const e2 of i2) delete this.keyCache[e2], delete this._layerConfigs[e2], delete this._layers[e2];
             this.familiesBySource = {};
             const o2 = e.bk(Object.values(this._layerConfigs), this.keyCache);
             for (const e2 of o2) {
               const t3 = e2.map((e3) => this._layers[e3.id]), i3 = t3[0];
-              if ("none" === i3.visibility)
-                continue;
+              if ("none" === i3.visibility) continue;
               const o3 = i3.source || "";
               let r2 = this.familiesBySource[o3];
               r2 || (r2 = this.familiesBySource[o3] = {});
@@ -8688,8 +7836,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               const r3 = t2[e2], s3 = i2[e2] = {};
               for (const e3 in r3) {
                 const t3 = r3[+e3];
-                if (!t3 || 0 === t3.bitmap.width || 0 === t3.bitmap.height)
-                  continue;
+                if (!t3 || 0 === t3.bitmap.width || 0 === t3.bitmap.height) continue;
                 const i3 = { x: 0, y: 0, w: t3.bitmap.width + 2, h: t3.bitmap.height + 2 };
                 o2.push(i3), s3[e3] = { rect: i3, metrics: t3.metrics };
               }
@@ -8699,8 +7846,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               const r3 = t2[o3];
               for (const t3 in r3) {
                 const s3 = r3[+t3];
-                if (!s3 || 0 === s3.bitmap.width || 0 === s3.bitmap.height)
-                  continue;
+                if (!s3 || 0 === s3.bitmap.width || 0 === s3.bitmap.height) continue;
                 const a2 = i2[o3][t3].rect;
                 e.q.copy(s3.bitmap, n2, { x: 0, y: 0 }, { x: a2.x + 1, y: a2.y + 1 }, s3.bitmap);
               }
@@ -8720,8 +7866,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             const h2 = {}, u2 = { featureIndex: c2, iconDependencies: {}, patternDependencies: {}, glyphDependencies: {}, availableImages: s2 }, d2 = o2.familiesBySource[this.source];
             for (const i2 in d2) {
               const o3 = t2.layers[i2];
-              if (!o3)
-                continue;
+              if (!o3) continue;
               1 === o3.version && e.w(`Vector tile source "${this.source}" layer "${i2}" does not use vector tile spec v2 and therefore may have some rendering errors.`);
               const n3 = l2.encode(i2), a3 = [];
               for (let e2 = 0; e2 < o3.length; e2++) {
@@ -8746,8 +7891,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             })) : g2 = {};
             const x2 = Object.keys(u2.patternDependencies);
             function b2() {
-              if (p2)
-                return a2(p2);
+              if (p2) return a2(p2);
               if (f2 && g2 && m2) {
                 const t3 = new i(f2), o3 = new e.bo(g2, m2);
                 for (const i2 in h2) {
@@ -8764,22 +7908,19 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         }
         function r(t2, i2, o2) {
           const r2 = new e.a8(i2);
-          for (const e2 of t2)
-            e2.recalculate(r2, o2);
+          for (const e2 of t2) e2.recalculate(r2, o2);
         }
         function s(t2, i2) {
           const o2 = e.l(t2.request, (o3, r2, s2, n2) => {
-            if (o3)
-              i2(o3);
-            else if (r2)
-              try {
-                const t3 = new e.bv.VectorTile(new e.bu(r2));
-                i2(null, { vectorTile: t3, rawData: r2, cacheControl: s2, expires: n2 });
-              } catch (e2) {
-                const o4 = new Uint8Array(r2);
-                let s3 = `Unable to parse the tile at ${t2.request.url}, `;
-                s3 += 31 === o4[0] && 139 === o4[1] ? "please make sure the data is not gzipped and that you have configured the relevant header in the server" : `got error: ${e2.messge}`, i2(new Error(s3));
-              }
+            if (o3) i2(o3);
+            else if (r2) try {
+              const t3 = new e.bv.VectorTile(new e.bu(r2));
+              i2(null, { vectorTile: t3, rawData: r2, cacheControl: s2, expires: n2 });
+            } catch (e2) {
+              const o4 = new Uint8Array(r2);
+              let s3 = `Unable to parse the tile at ${t2.request.url}, `;
+              s3 += 31 === o4[0] && 139 === o4[1] ? "please make sure the data is not gzipped and that you have configured the relevant header in the server" : `got error: ${e2.messge}`, i2(new Error(s3));
+            }
           });
           return () => {
             o2.cancel(), i2();
@@ -8794,8 +7935,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             this.loading || (this.loading = {});
             const s2 = !!(t2 && t2.request && t2.request.collectResourceTiming) && new e.bt(t2.request), n2 = this.loading[r2] = new o(t2);
             n2.abort = this.loadVectorData(t2, (t3, o2) => {
-              if (delete this.loading[r2], t3 || !o2)
-                return n2.status = "done", this.loaded[r2] = n2, i2(t3);
+              if (delete this.loading[r2], t3 || !o2) return n2.status = "done", this.loaded[r2] = n2, i2(t3);
               const a2 = o2.rawData, l2 = {};
               o2.expires && (l2.expires = o2.expires), o2.cacheControl && (l2.cacheControl = o2.cacheControl);
               const c2 = {};
@@ -8804,8 +7944,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
                 e2 && (c2.resourceTiming = JSON.parse(JSON.stringify(e2)));
               }
               n2.vectorTile = o2.vectorTile, n2.parse(o2.vectorTile, this.layerIndex, this.availableImages, this.actor, (t4, o3) => {
-                if (delete this.fetching[r2], t4 || !o3)
-                  return i2(t4);
+                if (delete this.fetching[r2], t4 || !o3) return i2(t4);
                 i2(null, e.e({ rawTileData: a2.slice(0) }, o3, l2, c2));
               }), this.loaded = this.loaded || {}, this.loaded[r2] = n2, this.fetching[r2] = { rawTileData: a2, cacheControl: l2, resourceTiming: c2 };
             });
@@ -8815,14 +7954,12 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             if (o2 && o2[r2]) {
               const s2 = o2[r2];
               s2.showCollisionBoxes = t2.showCollisionBoxes, "parsing" === s2.status ? s2.parse(s2.vectorTile, this.layerIndex, this.availableImages, this.actor, (t3, o3) => {
-                if (t3 || !o3)
-                  return i2(t3, o3);
+                if (t3 || !o3) return i2(t3, o3);
                 let s3;
                 if (this.fetching[r2]) {
                   const { rawTileData: t4, cacheControl: i3, resourceTiming: n2 } = this.fetching[r2];
                   delete this.fetching[r2], s3 = e.e({ rawTileData: t4.slice(0) }, o3, i3, n2);
-                } else
-                  s3 = o3;
+                } else s3 = o3;
                 i2(null, s3);
               }) : "done" === s2.status && (s2.vectorTile ? s2.parse(s2.vectorTile, this.layerIndex, this.availableImages, this.actor, i2) : i2());
             }
@@ -8854,8 +7991,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         function l(e2, t2) {
           if (0 !== e2.length) {
             c(e2[0], t2);
-            for (var i2 = 1; i2 < e2.length; i2++)
-              c(e2[i2], !t2);
+            for (var i2 = 1; i2 < e2.length; i2++) c(e2[i2], !t2);
           }
         }
         function c(e2, t2) {
@@ -8867,19 +8003,11 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         }
         var h = e.by(function e2(t2, i2) {
           var o2, r2 = t2 && t2.type;
-          if ("FeatureCollection" === r2)
-            for (o2 = 0; o2 < t2.features.length; o2++)
-              e2(t2.features[o2], i2);
-          else if ("GeometryCollection" === r2)
-            for (o2 = 0; o2 < t2.geometries.length; o2++)
-              e2(t2.geometries[o2], i2);
-          else if ("Feature" === r2)
-            e2(t2.geometry, i2);
-          else if ("Polygon" === r2)
-            l(t2.coordinates, i2);
-          else if ("MultiPolygon" === r2)
-            for (o2 = 0; o2 < t2.coordinates.length; o2++)
-              l(t2.coordinates[o2], i2);
+          if ("FeatureCollection" === r2) for (o2 = 0; o2 < t2.features.length; o2++) e2(t2.features[o2], i2);
+          else if ("GeometryCollection" === r2) for (o2 = 0; o2 < t2.geometries.length; o2++) e2(t2.geometries[o2], i2);
+          else if ("Feature" === r2) e2(t2.geometry, i2);
+          else if ("Polygon" === r2) l(t2.coordinates, i2);
+          else if ("MultiPolygon" === r2) for (o2 = 0; o2 < t2.coordinates.length; o2++) l(t2.coordinates[o2], i2);
           return t2;
         });
         const u = e.bv.VectorTileFeature.prototype.toGeoJSON;
@@ -8896,40 +8024,34 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           var e2 = this.rawGeometry;
           this.geometry = [];
           for (var t2 = 0; t2 < e2.length; t2++) {
-            for (var i2 = e2[t2], o2 = [], r2 = 0; r2 < i2.length; r2++)
-              o2.push(new p(i2[r2][0], i2[r2][1]));
+            for (var i2 = e2[t2], o2 = [], r2 = 0; r2 < i2.length; r2++) o2.push(new p(i2[r2][0], i2[r2][1]));
             this.geometry.push(o2);
           }
           return this.geometry;
         }, y.prototype.bbox = function() {
           this.geometry || this.loadGeometry();
-          for (var e2 = this.geometry, t2 = 1 / 0, i2 = -1 / 0, o2 = 1 / 0, r2 = -1 / 0, s2 = 0; s2 < e2.length; s2++)
-            for (var n2 = e2[s2], a2 = 0; a2 < n2.length; a2++) {
-              var l2 = n2[a2];
-              t2 = Math.min(t2, l2.x), i2 = Math.max(i2, l2.x), o2 = Math.min(o2, l2.y), r2 = Math.max(r2, l2.y);
-            }
+          for (var e2 = this.geometry, t2 = 1 / 0, i2 = -1 / 0, o2 = 1 / 0, r2 = -1 / 0, s2 = 0; s2 < e2.length; s2++) for (var n2 = e2[s2], a2 = 0; a2 < n2.length; a2++) {
+            var l2 = n2[a2];
+            t2 = Math.min(t2, l2.x), i2 = Math.max(i2, l2.x), o2 = Math.min(o2, l2.y), r2 = Math.max(r2, l2.y);
+          }
           return [t2, o2, i2, r2];
         }, y.prototype.toGeoJSON = f.prototype.toGeoJSON;
         var v = e.bA, w = g;
         function x(e2) {
           var t2 = new v();
           return function(e3, t3) {
-            for (var i2 in e3.layers)
-              t3.writeMessage(3, b, e3.layers[i2]);
+            for (var i2 in e3.layers) t3.writeMessage(3, b, e3.layers[i2]);
           }(e2, t2), t2.finish();
         }
         function b(e2, t2) {
           var i2;
           t2.writeVarintField(15, e2.version || 1), t2.writeStringField(1, e2.name || ""), t2.writeVarintField(5, e2.extent || 4096);
           var o2 = { keys: [], values: [], keycache: {}, valuecache: {} };
-          for (i2 = 0; i2 < e2.length; i2++)
-            o2.feature = e2.feature(i2), t2.writeMessage(2, S, o2);
+          for (i2 = 0; i2 < e2.length; i2++) o2.feature = e2.feature(i2), t2.writeMessage(2, S, o2);
           var r2 = o2.keys;
-          for (i2 = 0; i2 < r2.length; i2++)
-            t2.writeStringField(3, r2[i2]);
+          for (i2 = 0; i2 < r2.length; i2++) t2.writeStringField(3, r2[i2]);
           var s2 = o2.values;
-          for (i2 = 0; i2 < s2.length; i2++)
-            t2.writeMessage(4, _, s2[i2]);
+          for (i2 = 0; i2 < s2.length; i2++) t2.writeMessage(4, _, s2[i2]);
         }
         function S(e2, t2) {
           var i2 = e2.feature;
@@ -8973,8 +8095,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         d.exports = x, d.exports.fromVectorTileJs = x, d.exports.fromGeojsonVt = function(e2, t2) {
           t2 = t2 || {};
           var i2 = {};
-          for (var o2 in e2)
-            i2[o2] = new w(e2[o2].features, t2), i2[o2].name = o2, i2[o2].version = t2.version, i2[o2].extent = t2.extent;
+          for (var o2 in e2) i2[o2] = new w(e2[o2].features, t2), i2[o2].name = o2, i2[o2].version = t2.version, i2[o2].extent = t2.extent;
           return x({ layers: i2 });
         }, d.exports.GeoJSONWrapper = w;
         var k = e.by(d.exports);
@@ -8993,8 +8114,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             const s2 = [];
             for (let t3 = 0; t3 < e2.length; t3++) {
               const i3 = e2[t3];
-              if (!i3.geometry)
-                continue;
+              if (!i3.geometry) continue;
               const [o3, r3] = i3.geometry.coordinates, n3 = D(Z(o3)), a2 = D(G(r3));
               s2.push(n3, a2, 1 / 0, t3, -1, 1), this.options.reduce && s2.push(0);
             }
@@ -9011,8 +8131,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             const o2 = Math.max(-90, Math.min(90, e2[1]));
             let r2 = 180 === e2[2] ? 180 : ((e2[2] + 180) % 360 + 360) % 360 - 180;
             const s2 = Math.max(-90, Math.min(90, e2[3]));
-            if (e2[2] - e2[0] >= 360)
-              i2 = -180, r2 = 180;
+            if (e2[2] - e2[0] >= 360) i2 = -180, r2 = 180;
             else if (i2 > r2) {
               const e3 = this.getClusters([i2, o2, 180, s2], t2), n3 = this.getClusters([-180, o2, r2, s2], t2);
               return e3.concat(n3);
@@ -9026,18 +8145,15 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }
           getChildren(e2) {
             const t2 = this._getOriginId(e2), i2 = this._getOriginZoom(e2), o2 = "No cluster with the specified id.", r2 = this.trees[i2];
-            if (!r2)
-              throw new Error(o2);
+            if (!r2) throw new Error(o2);
             const s2 = r2.data;
-            if (t2 * this.stride >= s2.length)
-              throw new Error(o2);
+            if (t2 * this.stride >= s2.length) throw new Error(o2);
             const n2 = this.options.radius / (this.options.extent * Math.pow(2, i2 - 1)), a2 = r2.within(s2[t2 * this.stride], s2[t2 * this.stride + 1], n2), l2 = [];
             for (const t3 of a2) {
               const i3 = t3 * this.stride;
               s2[i3 + 4] === e2 && l2.push(s2[i3 + F] > 1 ? E(s2, i3, this.clusterProps) : this.points[s2[i3 + L]]);
             }
-            if (0 === l2.length)
-              throw new Error(o2);
+            if (0 === l2.length) throw new Error(o2);
             return l2;
           }
           getLeaves(e2, t2, i2) {
@@ -9052,8 +8168,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             let t2 = this._getOriginZoom(e2) - 1;
             for (; t2 <= this.options.maxZoom; ) {
               const i2 = this.getChildren(e2);
-              if (t2++, 1 !== i2.length)
-                break;
+              if (t2++, 1 !== i2.length) break;
               e2 = i2[0].properties.cluster_id;
             }
             return t2;
@@ -9062,23 +8177,20 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             const s2 = this.getChildren(t2);
             for (const t3 of s2) {
               const s3 = t3.properties;
-              if (s3 && s3.cluster ? r2 + s3.point_count <= o2 ? r2 += s3.point_count : r2 = this._appendLeaves(e2, s3.cluster_id, i2, o2, r2) : r2 < o2 ? r2++ : e2.push(t3), e2.length === i2)
-                break;
+              if (s3 && s3.cluster ? r2 + s3.point_count <= o2 ? r2 += s3.point_count : r2 = this._appendLeaves(e2, s3.cluster_id, i2, o2, r2) : r2 < o2 ? r2++ : e2.push(t3), e2.length === i2) break;
             }
             return r2;
           }
           _createTree(t2) {
             const i2 = new e.av(t2.length / this.stride | 0, this.options.nodeSize, Float32Array);
-            for (let e2 = 0; e2 < t2.length; e2 += this.stride)
-              i2.add(t2[e2], t2[e2 + 1]);
+            for (let e2 = 0; e2 < t2.length; e2 += this.stride) i2.add(t2[e2], t2[e2 + 1]);
             return i2.finish(), i2.data = t2, i2;
           }
           _addTileFeatures(e2, t2, i2, o2, r2, s2) {
             for (const n2 of e2) {
               const e3 = n2 * this.stride, a2 = t2[e3 + F] > 1;
               let l2, c2, h2;
-              if (a2)
-                l2 = j(t2, e3, this.clusterProps), c2 = t2[e3], h2 = t2[e3 + 1];
+              if (a2) l2 = j(t2, e3, this.clusterProps), c2 = t2[e3], h2 = t2[e3 + 1];
               else {
                 const i3 = this.points[t2[e3 + L]];
                 l2 = i3.properties;
@@ -9096,8 +8208,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           _cluster(e2, t2) {
             const { radius: i2, extent: o2, reduce: r2, minPoints: s2 } = this.options, n2 = i2 / (o2 * Math.pow(2, t2)), a2 = e2.data, l2 = [], c2 = this.stride;
             for (let i3 = 0; i3 < a2.length; i3 += c2) {
-              if (a2[i3 + 2] <= t2)
-                continue;
+              if (a2[i3 + 2] <= t2) continue;
               a2[i3 + 2] = t2;
               const o3 = a2[i3], h2 = a2[i3 + 1], u2 = e2.within(a2[i3], a2[i3 + 1], n2), d2 = a2[i3 + F];
               let p2 = d2;
@@ -9110,25 +8221,21 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
                 const g2 = ((i3 / c2 | 0) << 5) + (t2 + 1) + this.points.length;
                 for (const o4 of u2) {
                   const l3 = o4 * c2;
-                  if (a2[l3 + 2] <= t2)
-                    continue;
+                  if (a2[l3 + 2] <= t2) continue;
                   a2[l3 + 2] = t2;
                   const h3 = a2[l3 + F];
                   s3 += a2[l3] * h3, n3 += a2[l3 + 1] * h3, a2[l3 + 4] = g2, r2 && (e3 || (e3 = this._map(a2, i3, true), f2 = this.clusterProps.length, this.clusterProps.push(e3)), r2(e3, this._map(a2, l3)));
                 }
                 a2[i3 + 4] = g2, l2.push(s3 / p2, n3 / p2, 1 / 0, g2, -1, p2), r2 && l2.push(f2);
               } else {
-                for (let e3 = 0; e3 < c2; e3++)
-                  l2.push(a2[i3 + e3]);
-                if (p2 > 1)
-                  for (const e3 of u2) {
-                    const i4 = e3 * c2;
-                    if (!(a2[i4 + 2] <= t2)) {
-                      a2[i4 + 2] = t2;
-                      for (let e4 = 0; e4 < c2; e4++)
-                        l2.push(a2[i4 + e4]);
-                    }
+                for (let e3 = 0; e3 < c2; e3++) l2.push(a2[i3 + e3]);
+                if (p2 > 1) for (const e3 of u2) {
+                  const i4 = e3 * c2;
+                  if (!(a2[i4 + 2] <= t2)) {
+                    a2[i4 + 2] = t2;
+                    for (let e4 = 0; e4 < c2; e4++) l2.push(a2[i4 + e4]);
                   }
+                }
               }
             }
             return l2;
@@ -9170,8 +8277,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         function B(e2, t2, i2, o2) {
           for (var r2, s2 = o2, n2 = i2 - t2 >> 1, a2 = i2 - t2, l2 = e2[t2], c2 = e2[t2 + 1], h2 = e2[i2], u2 = e2[i2 + 1], d2 = t2 + 3; d2 < i2; d2 += 3) {
             var p2 = Y(e2[d2], e2[d2 + 1], l2, c2, h2, u2);
-            if (p2 > s2)
-              r2 = d2, s2 = p2;
+            if (p2 > s2) r2 = d2, s2 = p2;
             else if (p2 === s2) {
               var f2 = Math.abs(d2 - n2);
               f2 < a2 && (r2 = d2, a2 = f2);
@@ -9191,45 +8297,31 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           var r2 = { id: void 0 === e2 ? null : e2, type: t2, geometry: i2, tags: o2, minX: 1 / 0, minY: 1 / 0, maxX: -1 / 0, maxY: -1 / 0 };
           return function(e3) {
             var t3 = e3.geometry, i3 = e3.type;
-            if ("Point" === i3 || "MultiPoint" === i3 || "LineString" === i3)
-              V(e3, t3);
-            else if ("Polygon" === i3 || "MultiLineString" === i3)
-              for (var o3 = 0; o3 < t3.length; o3++)
-                V(e3, t3[o3]);
-            else if ("MultiPolygon" === i3)
-              for (o3 = 0; o3 < t3.length; o3++)
-                for (var r3 = 0; r3 < t3[o3].length; r3++)
-                  V(e3, t3[o3][r3]);
+            if ("Point" === i3 || "MultiPoint" === i3 || "LineString" === i3) V(e3, t3);
+            else if ("Polygon" === i3 || "MultiLineString" === i3) for (var o3 = 0; o3 < t3.length; o3++) V(e3, t3[o3]);
+            else if ("MultiPolygon" === i3) for (o3 = 0; o3 < t3.length; o3++) for (var r3 = 0; r3 < t3[o3].length; r3++) V(e3, t3[o3][r3]);
           }(r2), r2;
         }
         function V(e2, t2) {
-          for (var i2 = 0; i2 < t2.length; i2 += 3)
-            e2.minX = Math.min(e2.minX, t2[i2]), e2.minY = Math.min(e2.minY, t2[i2 + 1]), e2.maxX = Math.max(e2.maxX, t2[i2]), e2.maxY = Math.max(e2.maxY, t2[i2 + 1]);
+          for (var i2 = 0; i2 < t2.length; i2 += 3) e2.minX = Math.min(e2.minX, t2[i2]), e2.minY = Math.min(e2.minY, t2[i2 + 1]), e2.maxX = Math.max(e2.maxX, t2[i2]), e2.maxY = Math.max(e2.maxY, t2[i2 + 1]);
         }
         function X(e2, t2, i2, o2) {
           if (t2.geometry) {
             var r2 = t2.geometry.coordinates, s2 = t2.geometry.type, n2 = Math.pow(i2.tolerance / ((1 << i2.maxZoom) * i2.extent), 2), a2 = [], l2 = t2.id;
-            if (i2.promoteId ? l2 = t2.properties[i2.promoteId] : i2.generateId && (l2 = o2 || 0), "Point" === s2)
-              q(r2, a2);
-            else if ("MultiPoint" === s2)
-              for (var c2 = 0; c2 < r2.length; c2++)
-                q(r2[c2], a2);
-            else if ("LineString" === s2)
-              R(r2, a2, n2, false);
+            if (i2.promoteId ? l2 = t2.properties[i2.promoteId] : i2.generateId && (l2 = o2 || 0), "Point" === s2) q(r2, a2);
+            else if ("MultiPoint" === s2) for (var c2 = 0; c2 < r2.length; c2++) q(r2[c2], a2);
+            else if ("LineString" === s2) R(r2, a2, n2, false);
             else if ("MultiLineString" === s2) {
               if (i2.lineMetrics) {
-                for (c2 = 0; c2 < r2.length; c2++)
-                  R(r2[c2], a2 = [], n2, false), e2.push(A(l2, "LineString", a2, t2.properties));
+                for (c2 = 0; c2 < r2.length; c2++) R(r2[c2], a2 = [], n2, false), e2.push(A(l2, "LineString", a2, t2.properties));
                 return;
               }
               W(r2, a2, n2, false);
-            } else if ("Polygon" === s2)
-              W(r2, a2, n2, true);
+            } else if ("Polygon" === s2) W(r2, a2, n2, true);
             else {
               if ("MultiPolygon" !== s2) {
                 if ("GeometryCollection" === s2) {
-                  for (c2 = 0; c2 < t2.geometry.geometries.length; c2++)
-                    X(e2, { id: l2, geometry: t2.geometry.geometries[c2], properties: t2.properties }, i2, o2);
+                  for (c2 = 0; c2 < t2.geometry.geometries.length; c2++) X(e2, { id: l2, geometry: t2.geometry.geometries[c2], properties: t2.properties }, i2, o2);
                   return;
                 }
                 throw new Error("Input data is not a valid GeoJSON object.");
@@ -9267,33 +8359,24 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           return i2 < 0 ? 0 : i2 > 1 ? 1 : i2;
         }
         function H(e2, t2, i2, o2, r2, s2, n2, a2) {
-          if (o2 /= t2, s2 >= (i2 /= t2) && n2 < o2)
-            return e2;
-          if (n2 < i2 || s2 >= o2)
-            return null;
+          if (o2 /= t2, s2 >= (i2 /= t2) && n2 < o2) return e2;
+          if (n2 < i2 || s2 >= o2) return null;
           for (var l2 = [], c2 = 0; c2 < e2.length; c2++) {
             var h2 = e2[c2], u2 = h2.geometry, d2 = h2.type, p2 = 0 === r2 ? h2.minX : h2.minY, f2 = 0 === r2 ? h2.maxX : h2.maxY;
-            if (p2 >= i2 && f2 < o2)
-              l2.push(h2);
+            if (p2 >= i2 && f2 < o2) l2.push(h2);
             else if (!(f2 < i2 || p2 >= o2)) {
               var g2 = [];
-              if ("Point" === d2 || "MultiPoint" === d2)
-                K(u2, g2, i2, o2, r2);
-              else if ("LineString" === d2)
-                Q(u2, g2, i2, o2, r2, false, a2.lineMetrics);
-              else if ("MultiLineString" === d2)
-                te(u2, g2, i2, o2, r2, false);
-              else if ("Polygon" === d2)
-                te(u2, g2, i2, o2, r2, true);
-              else if ("MultiPolygon" === d2)
-                for (var m2 = 0; m2 < u2.length; m2++) {
-                  var y2 = [];
-                  te(u2[m2], y2, i2, o2, r2, true), y2.length && g2.push(y2);
-                }
+              if ("Point" === d2 || "MultiPoint" === d2) K(u2, g2, i2, o2, r2);
+              else if ("LineString" === d2) Q(u2, g2, i2, o2, r2, false, a2.lineMetrics);
+              else if ("MultiLineString" === d2) te(u2, g2, i2, o2, r2, false);
+              else if ("Polygon" === d2) te(u2, g2, i2, o2, r2, true);
+              else if ("MultiPolygon" === d2) for (var m2 = 0; m2 < u2.length; m2++) {
+                var y2 = [];
+                te(u2[m2], y2, i2, o2, r2, true), y2.length && g2.push(y2);
+              }
               if (g2.length) {
                 if (a2.lineMetrics && "LineString" === d2) {
-                  for (m2 = 0; m2 < g2.length; m2++)
-                    l2.push(A(h2.id, d2, g2[m2], h2.tags));
+                  for (m2 = 0; m2 < g2.length; m2++) l2.push(A(h2.id, d2, g2[m2], h2.tags));
                   continue;
                 }
                 "LineString" !== d2 && "MultiLineString" !== d2 || (1 === g2.length ? (d2 = "LineString", g2 = g2[0]) : d2 = "MultiLineString"), "Point" !== d2 && "MultiPoint" !== d2 || (d2 = 3 === g2.length ? "Point" : "MultiPoint"), l2.push(A(h2.id, d2, g2, h2.tags));
@@ -9321,8 +8404,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           return t2.size = e2.size, t2.start = e2.start, t2.end = e2.end, t2;
         }
         function te(e2, t2, i2, o2, r2, s2) {
-          for (var n2 = 0; n2 < e2.length; n2++)
-            Q(e2[n2], t2, i2, o2, r2, s2, false);
+          for (var n2 = 0; n2 < e2.length; n2++) Q(e2[n2], t2, i2, o2, r2, s2, false);
         }
         function ie(e2, t2, i2, o2) {
           e2.push(t2), e2.push(i2), e2.push(o2);
@@ -9338,18 +8420,14 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         function se(e2, t2) {
           for (var i2 = [], o2 = 0; o2 < e2.length; o2++) {
             var r2, s2 = e2[o2], n2 = s2.type;
-            if ("Point" === n2 || "MultiPoint" === n2 || "LineString" === n2)
-              r2 = ne(s2.geometry, t2);
+            if ("Point" === n2 || "MultiPoint" === n2 || "LineString" === n2) r2 = ne(s2.geometry, t2);
             else if ("MultiLineString" === n2 || "Polygon" === n2) {
               r2 = [];
-              for (var a2 = 0; a2 < s2.geometry.length; a2++)
-                r2.push(ne(s2.geometry[a2], t2));
-            } else if ("MultiPolygon" === n2)
-              for (r2 = [], a2 = 0; a2 < s2.geometry.length; a2++) {
-                for (var l2 = [], c2 = 0; c2 < s2.geometry[a2].length; c2++)
-                  l2.push(ne(s2.geometry[a2][c2], t2));
-                r2.push(l2);
-              }
+              for (var a2 = 0; a2 < s2.geometry.length; a2++) r2.push(ne(s2.geometry[a2], t2));
+            } else if ("MultiPolygon" === n2) for (r2 = [], a2 = 0; a2 < s2.geometry.length; a2++) {
+              for (var l2 = [], c2 = 0; c2 < s2.geometry[a2].length; c2++) l2.push(ne(s2.geometry[a2][c2], t2));
+              r2.push(l2);
+            }
             i2.push(A(s2.id, n2, r2, s2.tags));
           }
           return i2;
@@ -9357,26 +8435,20 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         function ne(e2, t2) {
           var i2 = [];
           i2.size = e2.size, void 0 !== e2.start && (i2.start = e2.start, i2.end = e2.end);
-          for (var o2 = 0; o2 < e2.length; o2 += 3)
-            i2.push(e2[o2] + t2, e2[o2 + 1], e2[o2 + 2]);
+          for (var o2 = 0; o2 < e2.length; o2 += 3) i2.push(e2[o2] + t2, e2[o2 + 1], e2[o2 + 2]);
           return i2;
         }
         function ae(e2, t2) {
-          if (e2.transformed)
-            return e2;
+          if (e2.transformed) return e2;
           var i2, o2, r2, s2 = 1 << e2.z, n2 = e2.x, a2 = e2.y;
           for (i2 = 0; i2 < e2.features.length; i2++) {
             var l2 = e2.features[i2], c2 = l2.geometry, h2 = l2.type;
-            if (l2.geometry = [], 1 === h2)
-              for (o2 = 0; o2 < c2.length; o2 += 2)
-                l2.geometry.push(le(c2[o2], c2[o2 + 1], t2, s2, n2, a2));
-            else
-              for (o2 = 0; o2 < c2.length; o2++) {
-                var u2 = [];
-                for (r2 = 0; r2 < c2[o2].length; r2 += 2)
-                  u2.push(le(c2[o2][r2], c2[o2][r2 + 1], t2, s2, n2, a2));
-                l2.geometry.push(u2);
-              }
+            if (l2.geometry = [], 1 === h2) for (o2 = 0; o2 < c2.length; o2 += 2) l2.geometry.push(le(c2[o2], c2[o2 + 1], t2, s2, n2, a2));
+            else for (o2 = 0; o2 < c2.length; o2++) {
+              var u2 = [];
+              for (r2 = 0; r2 < c2[o2].length; r2 += 2) u2.push(le(c2[o2][r2], c2[o2][r2 + 1], t2, s2, n2, a2));
+              l2.geometry.push(u2);
+            }
           }
           return e2.transformed = true, e2;
         }
@@ -9393,25 +8465,17 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         }
         function he(e2, t2, i2, o2) {
           var r2 = t2.geometry, s2 = t2.type, n2 = [];
-          if ("Point" === s2 || "MultiPoint" === s2)
-            for (var a2 = 0; a2 < r2.length; a2 += 3)
-              n2.push(r2[a2]), n2.push(r2[a2 + 1]), e2.numPoints++, e2.numSimplified++;
-          else if ("LineString" === s2)
-            ue(n2, r2, e2, i2, false, false);
-          else if ("MultiLineString" === s2 || "Polygon" === s2)
-            for (a2 = 0; a2 < r2.length; a2++)
-              ue(n2, r2[a2], e2, i2, "Polygon" === s2, 0 === a2);
-          else if ("MultiPolygon" === s2)
-            for (var l2 = 0; l2 < r2.length; l2++) {
-              var c2 = r2[l2];
-              for (a2 = 0; a2 < c2.length; a2++)
-                ue(n2, c2[a2], e2, i2, true, 0 === a2);
-            }
+          if ("Point" === s2 || "MultiPoint" === s2) for (var a2 = 0; a2 < r2.length; a2 += 3) n2.push(r2[a2]), n2.push(r2[a2 + 1]), e2.numPoints++, e2.numSimplified++;
+          else if ("LineString" === s2) ue(n2, r2, e2, i2, false, false);
+          else if ("MultiLineString" === s2 || "Polygon" === s2) for (a2 = 0; a2 < r2.length; a2++) ue(n2, r2[a2], e2, i2, "Polygon" === s2, 0 === a2);
+          else if ("MultiPolygon" === s2) for (var l2 = 0; l2 < r2.length; l2++) {
+            var c2 = r2[l2];
+            for (a2 = 0; a2 < c2.length; a2++) ue(n2, c2[a2], e2, i2, true, 0 === a2);
+          }
           if (n2.length) {
             var h2 = t2.tags || null;
             if ("LineString" === s2 && o2.lineMetrics) {
-              for (var u2 in h2 = {}, t2.tags)
-                h2[u2] = t2.tags[u2];
+              for (var u2 in h2 = {}, t2.tags) h2[u2] = t2.tags[u2];
               h2.mapbox_clip_start = r2.start / r2.size, h2.mapbox_clip_end = r2.end / r2.size;
             }
             var d2 = { geometry: n2, type: "Polygon" === s2 || "MultiPolygon" === s2 ? 3 : "LineString" === s2 || "MultiLineString" === s2 ? 2 : 1, tags: h2 };
@@ -9420,39 +8484,29 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         }
         function ue(e2, t2, i2, o2, r2, s2) {
           var n2 = o2 * o2;
-          if (o2 > 0 && t2.size < (r2 ? n2 : o2))
-            i2.numPoints += t2.length / 3;
+          if (o2 > 0 && t2.size < (r2 ? n2 : o2)) i2.numPoints += t2.length / 3;
           else {
-            for (var a2 = [], l2 = 0; l2 < t2.length; l2 += 3)
-              (0 === o2 || t2[l2 + 2] > n2) && (i2.numSimplified++, a2.push(t2[l2]), a2.push(t2[l2 + 1])), i2.numPoints++;
+            for (var a2 = [], l2 = 0; l2 < t2.length; l2 += 3) (0 === o2 || t2[l2 + 2] > n2) && (i2.numSimplified++, a2.push(t2[l2]), a2.push(t2[l2 + 1])), i2.numPoints++;
             r2 && function(e3, t3) {
-              for (var i3 = 0, o3 = 0, r3 = e3.length, s3 = r3 - 2; o3 < r3; s3 = o3, o3 += 2)
-                i3 += (e3[o3] - e3[s3]) * (e3[o3 + 1] + e3[s3 + 1]);
-              if (i3 > 0 === t3)
-                for (o3 = 0, r3 = e3.length; o3 < r3 / 2; o3 += 2) {
-                  var n3 = e3[o3], a3 = e3[o3 + 1];
-                  e3[o3] = e3[r3 - 2 - o3], e3[o3 + 1] = e3[r3 - 1 - o3], e3[r3 - 2 - o3] = n3, e3[r3 - 1 - o3] = a3;
-                }
+              for (var i3 = 0, o3 = 0, r3 = e3.length, s3 = r3 - 2; o3 < r3; s3 = o3, o3 += 2) i3 += (e3[o3] - e3[s3]) * (e3[o3 + 1] + e3[s3 + 1]);
+              if (i3 > 0 === t3) for (o3 = 0, r3 = e3.length; o3 < r3 / 2; o3 += 2) {
+                var n3 = e3[o3], a3 = e3[o3 + 1];
+                e3[o3] = e3[r3 - 2 - o3], e3[o3 + 1] = e3[r3 - 1 - o3], e3[r3 - 2 - o3] = n3, e3[r3 - 1 - o3] = a3;
+              }
             }(a2, s2), e2.push(a2);
           }
         }
         function de(e2, t2) {
           var i2 = (t2 = this.options = function(e3, t3) {
-            for (var i3 in t3)
-              e3[i3] = t3[i3];
+            for (var i3 in t3) e3[i3] = t3[i3];
             return e3;
           }(Object.create(this.options), t2)).debug;
-          if (i2 && console.time("preprocess data"), t2.maxZoom < 0 || t2.maxZoom > 24)
-            throw new Error("maxZoom should be in the 0-24 range");
-          if (t2.promoteId && t2.generateId)
-            throw new Error("promoteId and generateId cannot be used together.");
+          if (i2 && console.time("preprocess data"), t2.maxZoom < 0 || t2.maxZoom > 24) throw new Error("maxZoom should be in the 0-24 range");
+          if (t2.promoteId && t2.generateId) throw new Error("promoteId and generateId cannot be used together.");
           var o2 = function(e3, t3) {
             var i3 = [];
-            if ("FeatureCollection" === e3.type)
-              for (var o3 = 0; o3 < e3.features.length; o3++)
-                X(i3, e3.features[o3], t3, o3);
-            else
-              X(i3, "Feature" === e3.type ? e3 : { geometry: e3 }, t3);
+            if ("FeatureCollection" === e3.type) for (var o3 = 0; o3 < e3.features.length; o3++) X(i3, e3.features[o3], t3, o3);
+            else X(i3, "Feature" === e3.type ? e3 : { geometry: e3 }, t3);
             return i3;
           }(e2, t2);
           this.tiles = {}, this.tileCoords = [], i2 && (console.timeEnd("preprocess data"), console.log("index: maxZoom: %d, maxPoints: %d", t2.indexMaxZoom, t2.indexMaxPoints), console.time("generate tiles"), this.stats = {}, this.total = 0), o2 = function(e3, t3) {
@@ -9467,18 +8521,14 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           return t2 ? e2.properties[t2] : e2.id;
         }
         function ge(e2, t2) {
-          if (null == e2)
-            return true;
-          if ("Feature" === e2.type)
-            return null != fe(e2, t2);
+          if (null == e2) return true;
+          if ("Feature" === e2.type) return null != fe(e2, t2);
           if ("FeatureCollection" === e2.type) {
             const i2 = /* @__PURE__ */ new Set();
             for (const o2 of e2.features) {
               const e3 = fe(o2, t2);
-              if (null == e3)
-                return false;
-              if (i2.has(e3))
-                return false;
+              if (null == e3) return false;
+              if (i2.has(e3)) return false;
               i2.add(e3);
             }
             return true;
@@ -9487,13 +8537,9 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         }
         function me(e2, t2) {
           const i2 = /* @__PURE__ */ new Map();
-          if (null == e2)
-            ;
-          else if ("Feature" === e2.type)
-            i2.set(fe(e2, t2), e2);
-          else
-            for (const o2 of e2.features)
-              i2.set(fe(o2, t2), o2);
+          if (null == e2) ;
+          else if ("Feature" === e2.type) i2.set(fe(e2, t2), e2);
+          else for (const o2 of e2.features) i2.set(fe(o2, t2), o2);
           return i2;
         }
         de.prototype.options = { maxZoom: 14, indexMaxZoom: 5, indexMaxPoints: 1e5, tolerance: 3, extent: 4096, buffer: 64, lineMetrics: false, promoteId: null, generateId: false, debug: 0 }, de.prototype.splitTile = function(e2, t2, i2, o2, r2, s2, n2) {
@@ -9506,13 +8552,10 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               this.stats[p2] = (this.stats[p2] || 0) + 1, this.total++;
             }
             if (d2.source = e2, r2) {
-              if (t2 === l2.maxZoom || t2 === r2)
-                continue;
+              if (t2 === l2.maxZoom || t2 === r2) continue;
               var f2 = 1 << r2 - t2;
-              if (i2 !== Math.floor(s2 / f2) || o2 !== Math.floor(n2 / f2))
-                continue;
-            } else if (t2 === l2.indexMaxZoom || d2.numPoints <= l2.indexMaxPoints)
-              continue;
+              if (i2 !== Math.floor(s2 / f2) || o2 !== Math.floor(n2 / f2)) continue;
+            } else if (t2 === l2.indexMaxZoom || d2.numPoints <= l2.indexMaxPoints) continue;
             if (d2.source = null, 0 !== e2.length) {
               c2 > 1 && console.time("clipping");
               var g2, m2, y2, v2, w2, x2, b2 = 0.5 * l2.buffer / l2.extent, S2 = 0.5 - b2, M2 = 0.5 + b2, I2 = 1 + b2;
@@ -9521,69 +8564,51 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }
         }, de.prototype.getTile = function(e2, t2, i2) {
           var o2 = this.options, r2 = o2.extent, s2 = o2.debug;
-          if (e2 < 0 || e2 > 24)
-            return null;
+          if (e2 < 0 || e2 > 24) return null;
           var n2 = 1 << e2, a2 = pe(e2, t2 = (t2 % n2 + n2) % n2, i2);
-          if (this.tiles[a2])
-            return ae(this.tiles[a2], r2);
+          if (this.tiles[a2]) return ae(this.tiles[a2], r2);
           s2 > 1 && console.log("drilling down to z%d-%d-%d", e2, t2, i2);
-          for (var l2, c2 = e2, h2 = t2, u2 = i2; !l2 && c2 > 0; )
-            c2--, h2 = Math.floor(h2 / 2), u2 = Math.floor(u2 / 2), l2 = this.tiles[pe(c2, h2, u2)];
+          for (var l2, c2 = e2, h2 = t2, u2 = i2; !l2 && c2 > 0; ) c2--, h2 = Math.floor(h2 / 2), u2 = Math.floor(u2 / 2), l2 = this.tiles[pe(c2, h2, u2)];
           return l2 && l2.source ? (s2 > 1 && console.log("found parent tile z%d-%d-%d", c2, h2, u2), s2 > 1 && console.time("drilling down"), this.splitTile(l2.source, c2, h2, u2, e2, t2, i2), s2 > 1 && console.timeEnd("drilling down"), this.tiles[a2] ? ae(this.tiles[a2], r2) : null) : null;
         };
         class ye extends n {
           constructor(t2, i2, o2, r2) {
             super(t2, i2, o2), this._dataUpdateable = /* @__PURE__ */ new Map(), this.loadGeoJSON = (t3, i3) => {
               const { promoteId: o3 } = t3;
-              if (t3.request)
-                return e.f(t3.request, (e2, t4, r3, s2) => {
-                  this._dataUpdateable = ge(t4, o3) ? me(t4, o3) : void 0, i3(e2, t4, r3, s2);
-                });
-              if ("string" == typeof t3.data)
-                try {
-                  const e2 = JSON.parse(t3.data);
-                  this._dataUpdateable = ge(e2, o3) ? me(e2, o3) : void 0, i3(null, e2);
-                } catch (e2) {
-                  i3(new Error(`Input data given to '${t3.source}' is not a valid GeoJSON object.`));
+              if (t3.request) return e.f(t3.request, (e2, t4, r3, s2) => {
+                this._dataUpdateable = ge(t4, o3) ? me(t4, o3) : void 0, i3(e2, t4, r3, s2);
+              });
+              if ("string" == typeof t3.data) try {
+                const e2 = JSON.parse(t3.data);
+                this._dataUpdateable = ge(e2, o3) ? me(e2, o3) : void 0, i3(null, e2);
+              } catch (e2) {
+                i3(new Error(`Input data given to '${t3.source}' is not a valid GeoJSON object.`));
+              }
+              else t3.dataDiff ? this._dataUpdateable ? (function(e2, t4, i4) {
+                var o4, r3, s2, n2;
+                if (t4.removeAll && e2.clear(), t4.remove) for (const i5 of t4.remove) e2.delete(i5);
+                if (t4.add) for (const o5 of t4.add) {
+                  const t5 = fe(o5, i4);
+                  null != t5 && e2.set(t5, o5);
                 }
-              else
-                t3.dataDiff ? this._dataUpdateable ? (function(e2, t4, i4) {
-                  var o4, r3, s2, n2;
-                  if (t4.removeAll && e2.clear(), t4.remove)
-                    for (const i5 of t4.remove)
-                      e2.delete(i5);
-                  if (t4.add)
-                    for (const o5 of t4.add) {
-                      const t5 = fe(o5, i4);
-                      null != t5 && e2.set(t5, o5);
-                    }
-                  if (t4.update)
-                    for (const i5 of t4.update) {
-                      let t5 = e2.get(i5.id);
-                      if (null == t5)
-                        continue;
-                      const a2 = !i5.removeAllProperties && ((null === (o4 = i5.removeProperties) || void 0 === o4 ? void 0 : o4.length) > 0 || (null === (r3 = i5.addOrUpdateProperties) || void 0 === r3 ? void 0 : r3.length) > 0);
-                      if ((i5.newGeometry || i5.removeAllProperties || a2) && (t5 = Object.assign({}, t5), e2.set(i5.id, t5), a2 && (t5.properties = Object.assign({}, t5.properties))), i5.newGeometry && (t5.geometry = i5.newGeometry), i5.removeAllProperties)
-                        t5.properties = {};
-                      else if ((null === (s2 = i5.removeProperties) || void 0 === s2 ? void 0 : s2.length) > 0)
-                        for (const e3 of i5.removeProperties)
-                          Object.prototype.hasOwnProperty.call(t5.properties, e3) && delete t5.properties[e3];
-                      if ((null === (n2 = i5.addOrUpdateProperties) || void 0 === n2 ? void 0 : n2.length) > 0)
-                        for (const { key: e3, value: o5 } of i5.addOrUpdateProperties)
-                          t5.properties[e3] = o5;
-                    }
-                }(this._dataUpdateable, t3.dataDiff, o3), i3(null, { type: "FeatureCollection", features: Array.from(this._dataUpdateable.values()) })) : i3(new Error(`Cannot update existing geojson data in ${t3.source}`)) : i3(new Error(`Input data given to '${t3.source}' is not a valid GeoJSON object.`));
+                if (t4.update) for (const i5 of t4.update) {
+                  let t5 = e2.get(i5.id);
+                  if (null == t5) continue;
+                  const a2 = !i5.removeAllProperties && ((null === (o4 = i5.removeProperties) || void 0 === o4 ? void 0 : o4.length) > 0 || (null === (r3 = i5.addOrUpdateProperties) || void 0 === r3 ? void 0 : r3.length) > 0);
+                  if ((i5.newGeometry || i5.removeAllProperties || a2) && (t5 = Object.assign({}, t5), e2.set(i5.id, t5), a2 && (t5.properties = Object.assign({}, t5.properties))), i5.newGeometry && (t5.geometry = i5.newGeometry), i5.removeAllProperties) t5.properties = {};
+                  else if ((null === (s2 = i5.removeProperties) || void 0 === s2 ? void 0 : s2.length) > 0) for (const e3 of i5.removeProperties) Object.prototype.hasOwnProperty.call(t5.properties, e3) && delete t5.properties[e3];
+                  if ((null === (n2 = i5.addOrUpdateProperties) || void 0 === n2 ? void 0 : n2.length) > 0) for (const { key: e3, value: o5 } of i5.addOrUpdateProperties) t5.properties[e3] = o5;
+                }
+              }(this._dataUpdateable, t3.dataDiff, o3), i3(null, { type: "FeatureCollection", features: Array.from(this._dataUpdateable.values()) })) : i3(new Error(`Cannot update existing geojson data in ${t3.source}`)) : i3(new Error(`Input data given to '${t3.source}' is not a valid GeoJSON object.`));
               return { cancel: () => {
               } };
             }, this.loadVectorData = this.loadGeoJSONTile, r2 && (this.loadGeoJSON = r2);
           }
           loadGeoJSONTile(t2, i2) {
             const o2 = t2.tileID.canonical;
-            if (!this._geoJSONIndex)
-              return i2(null, null);
+            if (!this._geoJSONIndex) return i2(null, null);
             const r2 = this._geoJSONIndex.getTile(o2.z, o2.x, o2.y);
-            if (!r2)
-              return i2(null, null);
+            if (!r2) return i2(null, null);
             const s2 = new class {
               constructor(t3) {
                 this.layers = { _geojsonTileLayer: this }, this.name = "_geojsonTileLayer", this.extent = e.N, this.length = t3.length, this._features = t3;
@@ -9596,16 +8621,14 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
                   loadGeometry() {
                     if (1 === this._feature.type) {
                       const t4 = [];
-                      for (const i3 of this._feature.geometry)
-                        t4.push([new e.P(i3[0], i3[1])]);
+                      for (const i3 of this._feature.geometry) t4.push([new e.P(i3[0], i3[1])]);
                       return t4;
                     }
                     {
                       const t4 = [];
                       for (const i3 of this._feature.geometry) {
                         const o3 = [];
-                        for (const t5 of i3)
-                          o3.push(new e.P(t5[0], t5[1]));
+                        for (const t5 of i3) o3.push(new e.P(t5[0], t5[1]));
                         t4.push(o3);
                       }
                       return t4;
@@ -9625,23 +8648,19 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             null === (o2 = this._pendingRequest) || void 0 === o2 || o2.cancel(), this._pendingCallback && this._pendingCallback(null, { abandoned: true });
             const r2 = !!(t2 && t2.request && t2.request.collectResourceTiming) && new e.bt(t2.request);
             this._pendingCallback = i2, this._pendingRequest = this.loadGeoJSON(t2, (o3, s2) => {
-              if (delete this._pendingCallback, delete this._pendingRequest, o3 || !s2)
-                return i2(o3);
-              if ("object" != typeof s2)
-                return i2(new Error(`Input data given to '${t2.source}' is not a valid GeoJSON object.`));
+              if (delete this._pendingCallback, delete this._pendingRequest, o3 || !s2) return i2(o3);
+              if ("object" != typeof s2) return i2(new Error(`Input data given to '${t2.source}' is not a valid GeoJSON object.`));
               {
                 h(s2, true);
                 try {
                   if (t2.filter) {
                     const i3 = e.bB(t2.filter, { type: "boolean", "property-type": "data-driven", overridable: false, transition: false });
-                    if ("error" === i3.result)
-                      throw new Error(i3.value.map((e2) => `${e2.key}: ${e2.message}`).join(", "));
+                    if ("error" === i3.result) throw new Error(i3.value.map((e2) => `${e2.key}: ${e2.message}`).join(", "));
                     const o4 = s2.features.filter((e2) => i3.value.evaluate({ zoom: 0 }, e2));
                     s2 = { type: "FeatureCollection", features: o4 };
                   }
                   this._geoJSONIndex = t2.cluster ? new N(function({ superclusterOptions: t3, clusterProperties: i3 }) {
-                    if (!i3 || !t3)
-                      return t3;
+                    if (!i3 || !t3) return t3;
                     const o4 = {}, r3 = {}, s3 = { accumulated: null, zoom: 0 }, n3 = { properties: null }, a2 = Object.keys(i3);
                     for (const t4 of a2) {
                       const [s4, n4] = i3[t4], a3 = e.bB(n4), l2 = e.bB("string" == typeof s4 ? [s4, ["accumulated"], ["get", t4]] : s4);
@@ -9650,13 +8669,11 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
                     return t3.map = (e2) => {
                       n3.properties = e2;
                       const t4 = {};
-                      for (const e3 of a2)
-                        t4[e3] = o4[e3].evaluate(s3, n3);
+                      for (const e3 of a2) t4[e3] = o4[e3].evaluate(s3, n3);
                       return t4;
                     }, t3.reduce = (e2, t4) => {
                       n3.properties = t4;
-                      for (const t5 of a2)
-                        s3.accumulated = e2[t5], e2[t5] = r3[t5].evaluate(s3, n3);
+                      for (const t5 of a2) s3.accumulated = e2[t5], e2[t5] = r3[t5].evaluate(s3, n3);
                     }, t3;
                   }(t2)).load(s2.features) : function(e2, t3) {
                     return new de(e2, t3);
@@ -9706,12 +8723,10 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         class ve {
           constructor(t2) {
             this.self = t2, this.actor = new e.C(t2, this), this.layerIndexes = {}, this.availableImages = {}, this.workerSourceTypes = { vector: n, geojson: ye }, this.workerSources = {}, this.demWorkerSources = {}, this.self.registerWorkerSource = (e2, t3) => {
-              if (this.workerSourceTypes[e2])
-                throw new Error(`Worker source with name "${e2}" already registered.`);
+              if (this.workerSourceTypes[e2]) throw new Error(`Worker source with name "${e2}" already registered.`);
               this.workerSourceTypes[e2] = t3;
             }, this.self.registerRTLTextPlugin = (t3) => {
-              if (e.bC.isParsed())
-                throw new Error("RTL text plugin already registered.");
+              if (e.bC.isParsed()) throw new Error("RTL text plugin already registered.");
               e.bC.applyArabicShaping = t3.applyArabicShaping, e.bC.processBidirectionalText = t3.processBidirectionalText, e.bC.processStyledBidirectionalText = t3.processStyledBidirectionalText;
             };
           }
@@ -9722,8 +8737,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             this.availableImages[e2] = t2;
             for (const i3 in this.workerSources[e2]) {
               const o2 = this.workerSources[e2][i3];
-              for (const e3 in o2)
-                o2[e3].availableImages = t2;
+              for (const e3 in o2) o2[e3].availableImages = t2;
             }
             i2();
           }
@@ -9752,8 +8766,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             this.getDEMWorkerSource(e2, t2.source).removeTile(t2);
           }
           removeSource(e2, t2, i2) {
-            if (!this.workerSources[e2] || !this.workerSources[e2][t2.type] || !this.workerSources[e2][t2.type][t2.source])
-              return;
+            if (!this.workerSources[e2] || !this.workerSources[e2][t2.type] || !this.workerSources[e2][t2.type][t2.source]) return;
             const o2 = this.workerSources[e2][t2.type][t2.source];
             delete this.workerSources[e2][t2.type][t2.source], void 0 !== o2.removeSource ? o2.removeSource(t2, i2) : i2();
           }
@@ -9801,11 +8814,8 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         var e = "3.5.2";
         class i {
           static testProp(t2) {
-            if (!i.docStyle)
-              return t2[0];
-            for (let e2 = 0; e2 < t2.length; e2++)
-              if (t2[e2] in i.docStyle)
-                return t2[e2];
+            if (!i.docStyle) return t2[0];
+            for (let e2 = 0; e2 < t2.length; e2++) if (t2[e2] in i.docStyle) return t2[e2];
             return t2[0];
           }
           static create(t2, e2, i2) {
@@ -9844,8 +8854,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }
           static touchPos(e2, i2) {
             const s2 = e2.getBoundingClientRect(), a2 = [];
-            for (let o2 = 0; o2 < i2.length; o2++)
-              a2.push(new t.P(i2[o2].clientX - s2.left - e2.clientLeft, i2[o2].clientY - s2.top - e2.clientTop));
+            for (let o2 = 0; o2 < i2.length; o2++) a2.push(new t.P(i2[o2].clientX - s2.left - e2.clientLeft, i2[o2].clientY - s2.top - e2.clientTop));
             return a2;
           }
           static mouseButton(t2) {
@@ -9864,8 +8873,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           const e2 = t2.createTexture();
           t2.bindTexture(t2.TEXTURE_2D, e2);
           try {
-            if (t2.texImage2D(t2.TEXTURE_2D, 0, t2.RGBA, t2.RGBA, t2.UNSIGNED_BYTE, o), t2.isContextLost())
-              return;
+            if (t2.texImage2D(t2.TEXTURE_2D, 0, t2.RGBA, t2.RGBA, t2.UNSIGNED_BYTE, o), t2.isContextLost()) return;
             s.supported = true;
           } catch (t3) {
           }
@@ -9908,9 +8916,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               const t2 = Object.keys(r2);
               let e4 = false;
               if (t2.length > 0) {
-                for (const i3 of t2)
-                  if (e4 = r2[i3](), e4)
-                    break;
+                for (const i3 of t2) if (e4 = r2[i3](), e4) break;
               }
               return e4;
             })() ? t.c.MAX_PARALLEL_IMAGE_REQUESTS_PER_FRAME : t.c.MAX_PARALLEL_IMAGE_REQUESTS;
@@ -9948,8 +8954,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           normalizeSpriteURL(t2, e2, i2) {
             const s2 = function(t3) {
               const e3 = t3.match(d);
-              if (!e3)
-                throw new Error(`Unable to parse URL "${t3}"`);
+              if (!e3) throw new Error(`Unable to parse URL "${t3}"`);
               return { protocol: e3[1], authority: e3[2], path: e3[3] || "/", params: e3[4] ? e3[4].split("&") : [] };
             }(t2);
             return s2.path += `${e2}${i2}`, function(t3) {
@@ -9976,8 +8981,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         };
         function g(t2) {
           const e2 = [];
-          if ("string" == typeof t2)
-            e2.push({ id: "default", url: t2 });
+          if ("string" == typeof t2) e2.push({ id: "default", url: t2 });
           else if (t2 && t2.length > 0) {
             const i2 = [];
             for (const { id: s2, url: a2 } of t2) {
@@ -9988,10 +8992,8 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           return e2;
         }
         function v(e2, i2, s2, a2, o2) {
-          if (a2)
-            return void e2(a2);
-          if (o2 !== Object.values(i2).length || o2 !== Object.values(s2).length)
-            return;
+          if (a2) return void e2(a2);
+          if (o2 !== Object.values(i2).length || o2 !== Object.values(s2).length) return;
           const r2 = {};
           for (const e3 in i2) {
             r2[e3] = {};
@@ -10013,8 +9015,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }
           update(e2, i2, s2) {
             const { width: a2, height: o2 } = e2, r2 = !(this.size && this.size[0] === a2 && this.size[1] === o2 || s2), { context: n2 } = this, { gl: l2 } = n2;
-            if (this.useMipmap = Boolean(i2 && i2.useMipmap), l2.bindTexture(l2.TEXTURE_2D, this.texture), n2.pixelStoreUnpackFlipY.set(false), n2.pixelStoreUnpack.set(1), n2.pixelStoreUnpackPremultiplyAlpha.set(this.format === l2.RGBA && (!i2 || false !== i2.premultiply)), r2)
-              this.size = [a2, o2], e2 instanceof HTMLImageElement || e2 instanceof HTMLCanvasElement || e2 instanceof HTMLVideoElement || e2 instanceof ImageData || t.a(e2) ? l2.texImage2D(l2.TEXTURE_2D, 0, this.format, this.format, l2.UNSIGNED_BYTE, e2) : l2.texImage2D(l2.TEXTURE_2D, 0, this.format, a2, o2, 0, this.format, l2.UNSIGNED_BYTE, e2.data);
+            if (this.useMipmap = Boolean(i2 && i2.useMipmap), l2.bindTexture(l2.TEXTURE_2D, this.texture), n2.pixelStoreUnpackFlipY.set(false), n2.pixelStoreUnpack.set(1), n2.pixelStoreUnpackPremultiplyAlpha.set(this.format === l2.RGBA && (!i2 || false !== i2.premultiply)), r2) this.size = [a2, o2], e2 instanceof HTMLImageElement || e2 instanceof HTMLCanvasElement || e2 instanceof HTMLVideoElement || e2 instanceof ImageData || t.a(e2) ? l2.texImage2D(l2.TEXTURE_2D, 0, this.format, this.format, l2.UNSIGNED_BYTE, e2) : l2.texImage2D(l2.TEXTURE_2D, 0, this.format, a2, o2, 0, this.format, l2.UNSIGNED_BYTE, e2.data);
             else {
               const { x: i3, y: r3 } = s2 || { x: 0, y: 0 };
               e2 instanceof HTMLImageElement || e2 instanceof HTMLCanvasElement || e2 instanceof HTMLVideoElement || e2 instanceof ImageData || t.a(e2) ? l2.texSubImage2D(l2.TEXTURE_2D, 0, i3, r3, l2.RGBA, l2.UNSIGNED_BYTE, e2) : l2.texSubImage2D(l2.TEXTURE_2D, 0, i3, r3, a2, o2, l2.RGBA, l2.UNSIGNED_BYTE, e2.data);
@@ -10046,8 +9047,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }
           setLoaded(t2) {
             if (this.loaded !== t2 && (this.loaded = t2, t2)) {
-              for (const { ids: t3, callback: e2 } of this.requestors)
-                this._notify(t3, e2);
+              for (const { ids: t3, callback: e2 } of this.requestors) this._notify(t3, e2);
               this.requestors = [];
             }
           }
@@ -10060,8 +9060,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             return i2;
           }
           addImage(t2, e2) {
-            if (this.images[t2])
-              throw new Error(`Image id ${t2} already exist, use updateImage instead`);
+            if (this.images[t2]) throw new Error(`Image id ${t2} already exist, use updateImage instead`);
             this._validate(t2, e2) && (this.images[t2] = e2);
           }
           _validate(e2, i2) {
@@ -10070,28 +9069,23 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             return this._validateStretch(i2.stretchX, a2 && a2.width) || (this.fire(new t.j(new Error(`Image "${e2}" has invalid "stretchX" value`))), s2 = false), this._validateStretch(i2.stretchY, a2 && a2.height) || (this.fire(new t.j(new Error(`Image "${e2}" has invalid "stretchY" value`))), s2 = false), this._validateContent(i2.content, i2) || (this.fire(new t.j(new Error(`Image "${e2}" has invalid "content" value`))), s2 = false), s2;
           }
           _validateStretch(t2, e2) {
-            if (!t2)
-              return true;
+            if (!t2) return true;
             let i2 = 0;
             for (const s2 of t2) {
-              if (s2[0] < i2 || s2[1] < s2[0] || e2 < s2[1])
-                return false;
+              if (s2[0] < i2 || s2[1] < s2[0] || e2 < s2[1]) return false;
               i2 = s2[1];
             }
             return true;
           }
           _validateContent(t2, e2) {
-            if (!t2)
-              return true;
-            if (4 !== t2.length)
-              return false;
+            if (!t2) return true;
+            if (4 !== t2.length) return false;
             const i2 = e2.spriteData, s2 = i2 && i2.width || e2.data.width, a2 = i2 && i2.height || e2.data.height;
             return !(t2[0] < 0 || s2 < t2[0] || t2[1] < 0 || a2 < t2[1] || t2[2] < 0 || s2 < t2[2] || t2[3] < 0 || a2 < t2[3] || t2[2] < t2[0] || t2[3] < t2[1]);
           }
           updateImage(t2, e2, i2 = true) {
             const s2 = this.getImage(t2);
-            if (i2 && (s2.data.width !== e2.data.width || s2.data.height !== e2.data.height))
-              throw new Error(`size mismatch between old image (${s2.data.width}x${s2.data.height}) and new image (${e2.data.width}x${e2.data.height}).`);
+            if (i2 && (s2.data.width !== e2.data.width || s2.data.height !== e2.data.height)) throw new Error(`size mismatch between old image (${s2.data.width}x${s2.data.height}) and new image (${e2.data.width}x${e2.data.height}).`);
             e2.version = s2.version + 1, this.images[t2] = e2, this.updatedImages[t2] = true;
           }
           removeImage(t2) {
@@ -10103,9 +9097,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }
           getImages(t2, e2) {
             let i2 = true;
-            if (!this.isLoaded())
-              for (const e3 of t2)
-                this.images[e3] || (i2 = false);
+            if (!this.isLoaded()) for (const e3 of t2) this.images[e3] || (i2 = false);
             this.isLoaded() || i2 ? this._notify(t2, e2) : this.requestors.push({ ids: t2, callback: e2 });
           }
           _notify(e2, i2) {
@@ -10122,12 +9114,9 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }
           getPattern(e2) {
             const i2 = this.patterns[e2], s2 = this.getImage(e2);
-            if (!s2)
-              return null;
-            if (i2 && i2.position.version === s2.version)
-              return i2.position;
-            if (i2)
-              i2.position.version = s2.version;
+            if (!s2) return null;
+            if (i2 && i2.position.version === s2.version) return i2.position;
+            if (i2) i2.position.version = s2.version;
             else {
               const i3 = { w: s2.data.width + 2, h: s2.data.height + 2, x: 0, y: 0 }, a2 = new t.I(i3, s2);
               this.patterns[e2] = { bin: i3, position: a2 };
@@ -10140,8 +9129,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }
           _updatePatternAtlas() {
             const e2 = [];
-            for (const t2 in this.patterns)
-              e2.push(this.patterns[t2].bin);
+            for (const t2 in this.patterns) e2.push(this.patterns[t2].bin);
             const { w: i2, h: s2 } = t.p(e2), a2 = this.atlasImage;
             a2.resize({ width: i2 || 1, height: s2 || 1 });
             for (const e3 in this.patterns) {
@@ -10155,8 +9143,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }
           dispatchRenderCallbacks(e2) {
             for (const i2 of e2) {
-              if (this.callbackDispatchedThisFrame[i2])
-                continue;
+              if (this.callbackDispatchedThisFrame[i2]) continue;
               this.callbackDispatchedThisFrame[i2] = true;
               const e3 = this.getImage(i2);
               e3 || t.w(`Image with ID: "${i2}" was not found`), y(e3) && this.updateImage(i2, e3);
@@ -10165,10 +9152,8 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         }
         const w = 1e20;
         function T(t2, e2, i2, s2, a2, o2, r2, n2, l2) {
-          for (let h2 = e2; h2 < e2 + s2; h2++)
-            I(t2, i2 * o2 + h2, o2, a2, r2, n2, l2);
-          for (let h2 = i2; h2 < i2 + a2; h2++)
-            I(t2, h2 * o2 + e2, 1, s2, r2, n2, l2);
+          for (let h2 = e2; h2 < e2 + s2; h2++) I(t2, i2 * o2 + h2, o2, a2, r2, n2, l2);
+          for (let h2 = i2; h2 < i2 + a2; h2++) I(t2, h2 * o2 + e2, 1, s2, r2, n2, l2);
         }
         function I(t2, e2, i2, s2, a2, o2, r2) {
           o2[0] = 0, r2[0] = -w, r2[1] = w, a2[0] = t2[e2];
@@ -10182,8 +9167,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             l2++, o2[l2] = n2, r2[l2] = h2, r2[l2 + 1] = w;
           }
           for (let n2 = 0, l2 = 0; n2 < s2; n2++) {
-            for (; r2[l2 + 1] < n2; )
-              l2++;
+            for (; r2[l2 + 1] < n2; ) l2++;
             const s3 = o2[l2], h2 = n2 - s3;
             t2[e2 + n2 * i2] = a2[s3] + h2 * h2;
           }
@@ -10197,44 +9181,33 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }
           getGlyphs(e2, i2) {
             const s2 = [];
-            for (const t2 in e2)
-              for (const i3 of e2[t2])
-                s2.push({ stack: t2, id: i3 });
+            for (const t2 in e2) for (const i3 of e2[t2]) s2.push({ stack: t2, id: i3 });
             t.o(s2, ({ stack: t2, id: e3 }, i3) => {
               let s3 = this.entries[t2];
               s3 || (s3 = this.entries[t2] = { glyphs: {}, requests: {}, ranges: {} });
               let a2 = s3.glyphs[e3];
-              if (void 0 !== a2)
-                return void i3(null, { stack: t2, id: e3, glyph: a2 });
-              if (a2 = this._tinySDF(s3, t2, e3), a2)
-                return s3.glyphs[e3] = a2, void i3(null, { stack: t2, id: e3, glyph: a2 });
+              if (void 0 !== a2) return void i3(null, { stack: t2, id: e3, glyph: a2 });
+              if (a2 = this._tinySDF(s3, t2, e3), a2) return s3.glyphs[e3] = a2, void i3(null, { stack: t2, id: e3, glyph: a2 });
               const o2 = Math.floor(e3 / 256);
-              if (256 * o2 > 65535)
-                return void i3(new Error("glyphs > 65535 not supported"));
-              if (s3.ranges[o2])
-                return void i3(null, { stack: t2, id: e3, glyph: a2 });
-              if (!this.url)
-                return void i3(new Error("glyphsUrl is not set"));
+              if (256 * o2 > 65535) return void i3(new Error("glyphs > 65535 not supported"));
+              if (s3.ranges[o2]) return void i3(null, { stack: t2, id: e3, glyph: a2 });
+              if (!this.url) return void i3(new Error("glyphsUrl is not set"));
               let r2 = s3.requests[o2];
               r2 || (r2 = s3.requests[o2] = [], E.loadGlyphRange(t2, o2, this.url, this.requestManager, (t3, e4) => {
                 if (e4) {
-                  for (const t4 in e4)
-                    this._doesCharSupportLocalGlyph(+t4) || (s3.glyphs[+t4] = e4[+t4]);
+                  for (const t4 in e4) this._doesCharSupportLocalGlyph(+t4) || (s3.glyphs[+t4] = e4[+t4]);
                   s3.ranges[o2] = true;
                 }
-                for (const i4 of r2)
-                  i4(t3, e4);
+                for (const i4 of r2) i4(t3, e4);
                 delete s3.requests[o2];
               })), r2.push((s4, a3) => {
                 s4 ? i3(s4) : a3 && i3(null, { stack: t2, id: e3, glyph: a3[e3] || null });
               });
             }, (t2, e3) => {
-              if (t2)
-                i2(t2);
+              if (t2) i2(t2);
               else if (e3) {
                 const t3 = {};
-                for (const { stack: i3, id: s3, glyph: a2 } of e3)
-                  (t3[i3] || (t3[i3] = {}))[s3] = a2 && { id: a2.id, bitmap: a2.bitmap.clone(), metrics: a2.metrics };
+                for (const { stack: i3, id: s3, glyph: a2 } of e3) (t3[i3] || (t3[i3] = {}))[s3] = a2 && { id: a2.id, bitmap: a2.bitmap.clone(), metrics: a2.metrics };
                 i2(null, t3);
               }
             });
@@ -10244,10 +9217,8 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }
           _tinySDF(e2, i2, s2) {
             const a2 = this.localIdeographFontFamily;
-            if (!a2)
-              return;
-            if (!this._doesCharSupportLocalGlyph(s2))
-              return;
+            if (!a2) return;
+            if (!this._doesCharSupportLocalGlyph(s2)) return;
             let o2 = e2.tinySDF;
             if (!o2) {
               let t2 = "400";
@@ -10260,12 +9231,10 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         E.loadGlyphRange = function(e2, i2, s2, a2, o2) {
           const r2 = 256 * i2, n2 = r2 + 255, l2 = a2.transformRequest(s2.replace("{fontstack}", e2).replace("{range}", `${r2}-${n2}`), c.Glyphs);
           t.l(l2, (e3, i3) => {
-            if (e3)
-              o2(e3);
+            if (e3) o2(e3);
             else if (i3) {
               const e4 = {};
-              for (const s3 of t.n(i3))
-                e4[s3.id] = s3;
+              for (const s3 of t.n(i3)) e4[s3.id] = s3;
               o2(null, e4);
             }
           });
@@ -10281,25 +9250,21 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }
           draw(t2) {
             const { width: e2, actualBoundingBoxAscent: i2, actualBoundingBoxDescent: s2, actualBoundingBoxLeft: a2, actualBoundingBoxRight: o2 } = this.ctx.measureText(t2), r2 = Math.ceil(i2), n2 = Math.max(0, Math.min(this.size - this.buffer, Math.ceil(o2 - a2))), l2 = Math.min(this.size - this.buffer, r2 + Math.ceil(s2)), h2 = n2 + 2 * this.buffer, c2 = l2 + 2 * this.buffer, u2 = Math.max(h2 * c2, 0), d2 = new Uint8ClampedArray(u2), _2 = { data: d2, width: h2, height: c2, glyphWidth: n2, glyphHeight: l2, glyphTop: r2, glyphLeft: 0, glyphAdvance: e2 };
-            if (0 === n2 || 0 === l2)
-              return _2;
+            if (0 === n2 || 0 === l2) return _2;
             const { ctx: p2, buffer: m2, gridInner: f2, gridOuter: g2 } = this;
             p2.clearRect(m2, m2, n2, l2), p2.fillText(t2, m2, m2 + r2);
             const v2 = p2.getImageData(m2, m2, n2, l2);
             g2.fill(w, 0, u2), f2.fill(0, 0, u2);
-            for (let t3 = 0; t3 < l2; t3++)
-              for (let e3 = 0; e3 < n2; e3++) {
-                const i3 = v2.data[4 * (t3 * n2 + e3) + 3] / 255;
-                if (0 === i3)
-                  continue;
-                const s3 = (t3 + m2) * h2 + e3 + m2;
-                if (1 === i3)
-                  g2[s3] = 0, f2[s3] = w;
-                else {
-                  const t4 = 0.5 - i3;
-                  g2[s3] = t4 > 0 ? t4 * t4 : 0, f2[s3] = t4 < 0 ? t4 * t4 : 0;
-                }
+            for (let t3 = 0; t3 < l2; t3++) for (let e3 = 0; e3 < n2; e3++) {
+              const i3 = v2.data[4 * (t3 * n2 + e3) + 3] / 255;
+              if (0 === i3) continue;
+              const s3 = (t3 + m2) * h2 + e3 + m2;
+              if (1 === i3) g2[s3] = 0, f2[s3] = w;
+              else {
+                const t4 = 0.5 - i3;
+                g2[s3] = t4 > 0 ? t4 * t4 : 0, f2[s3] = t4 < 0 ? t4 * t4 : 0;
               }
+            }
             T(g2, 0, 0, h2, c2, h2, this.f, this.v, this.z), T(f2, m2, m2, n2, l2, h2, this.f, this.v, this.z);
             for (let t3 = 0; t3 < u2; t3++) {
               const e3 = Math.sqrt(g2[t3]) - Math.sqrt(f2[t3]);
@@ -10328,11 +9293,10 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             return this._transitionable.serialize();
           }
           setLight(e2, i2 = {}) {
-            if (!this._validate(t.t, e2, i2))
-              for (const t2 in e2) {
-                const i3 = e2[t2];
-                t2.endsWith("-transition") ? this._transitionable.setTransition(t2.slice(0, -11), i3) : this._transitionable.setValue(t2, i3);
-              }
+            if (!this._validate(t.t, e2, i2)) for (const t2 in e2) {
+              const i3 = e2[t2];
+              t2.endsWith("-transition") ? this._transitionable.setTransition(t2.slice(0, -11), i3) : this._transitionable.setValue(t2, i3);
+            }
           }
           updateTransitions(t2) {
             this._transitioning = this._transitionable.transitioned(t2, this._transitioning);
@@ -10380,8 +9344,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
                 if (r2.isDash) {
                   const t3 = s2 - Math.abs(d2);
                   u2 = Math.sqrt(c2 * c2 + t3 * t3);
-                } else
-                  u2 = s2 - Math.sqrt(c2 * c2 + d2 * d2);
+                } else u2 = s2 - Math.sqrt(c2 * c2 + d2 * d2);
                 this.data[a2 + n2] = Math.max(0, Math.min(255, u2 + 128));
               }
             }
@@ -10403,11 +9366,9 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }
           addDash(e2, i2) {
             const s2 = i2 ? 7 : 0, a2 = 2 * s2 + 1;
-            if (this.nextRow + a2 > this.height)
-              return t.w("LineAtlas out of space"), null;
+            if (this.nextRow + a2 > this.height) return t.w("LineAtlas out of space"), null;
             let o2 = 0;
-            for (let t2 = 0; t2 < e2.length; t2++)
-              o2 += e2[t2];
+            for (let t2 = 0; t2 < e2.length; t2++) o2 += e2[t2];
             if (0 !== o2) {
               const t2 = this.width / o2, a3 = this.getDashRanges(e2, this.width, t2);
               i2 ? this.addRoundDash(a3, t2, s2) : this.addRegularDash(a3);
@@ -10428,8 +9389,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               const o2 = new t.C(a2[e3], i2, s2);
               o2.name = `Worker ${e3}`, this.actors.push(o2);
             }
-            if (!this.actors.length)
-              throw new Error("No actors found");
+            if (!this.actors.length) throw new Error("No actors found");
           }
           broadcast(e2, i2, s2) {
             t.o(this.actors, (t2, s3) => {
@@ -10448,8 +9408,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         }
         function z(e2, i2, s2) {
           const a2 = function(i3, a3) {
-            if (i3)
-              return s2(i3);
+            if (i3) return s2(i3);
             if (a3) {
               const i4 = t.F(t.e(a3, e2), ["tiles", "minzoom", "maxzoom", "attribution", "bounds", "scheme", "tileSize", "encoding"]);
               a3.vector_layers && (i4.vectorLayers = a3.vector_layers, i4.vectorLayerIds = i4.vectorLayers.map((t2) => t2.id)), s2(null, i4);
@@ -10470,13 +9429,10 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           extend(e2) {
             const i2 = this._sw, s2 = this._ne;
             let a2, o2;
-            if (e2 instanceof t.L)
-              a2 = e2, o2 = e2;
+            if (e2 instanceof t.L) a2 = e2, o2 = e2;
             else {
-              if (!(e2 instanceof L))
-                return Array.isArray(e2) ? 4 === e2.length || e2.every(Array.isArray) ? this.extend(L.convert(e2)) : this.extend(t.L.convert(e2)) : e2 && ("lng" in e2 || "lon" in e2) && "lat" in e2 ? this.extend(t.L.convert(e2)) : this;
-              if (a2 = e2._sw, o2 = e2._ne, !a2 || !o2)
-                return this;
+              if (!(e2 instanceof L)) return Array.isArray(e2) ? 4 === e2.length || e2.every(Array.isArray) ? this.extend(L.convert(e2)) : this.extend(t.L.convert(e2)) : e2 && ("lng" in e2 || "lon" in e2) && "lat" in e2 ? this.extend(t.L.convert(e2)) : this;
+              if (a2 = e2._sw, o2 = e2._ne, !a2 || !o2) return this;
             }
             return i2 || s2 ? (i2.lng = Math.min(a2.lng, i2.lng), i2.lat = Math.min(a2.lat, i2.lat), s2.lng = Math.max(o2.lng, s2.lng), s2.lat = Math.max(o2.lat, s2.lat)) : (this._sw = new t.L(a2.lng, a2.lat), this._ne = new t.L(o2.lng, o2.lat)), this;
           }
@@ -10547,8 +9503,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               this._loaded = false, this.fire(new t.k("dataloading", { dataType: "source" })), this._tileJSONRequest = z(this._options, this.map._requestManager, (e3, i3) => {
                 this._tileJSONRequest = null, this._loaded = true, this.map.style.sourceCaches[this.id].clearTiles(), e3 ? this.fire(new t.j(e3)) : i3 && (t.e(this, i3), i3.bounds && (this.tileBounds = new A(i3.bounds, this.minzoom, this.maxzoom)), this.fire(new t.k("data", { dataType: "source", sourceDataType: "metadata" })), this.fire(new t.k("data", { dataType: "source", sourceDataType: "content" })));
               });
-            }, this.serialize = () => t.e({}, this._options), this.id = e2, this.dispatcher = s2, this.type = "vector", this.minzoom = 0, this.maxzoom = 22, this.scheme = "xyz", this.tileSize = 512, this.reparseOverscaled = true, this.isTileClipped = true, this._loaded = false, t.e(this, t.F(i2, ["url", "scheme", "tileSize", "promoteId"])), this._options = t.e({ type: "vector" }, i2), this._collectResourceTiming = i2.collectResourceTiming, 512 !== this.tileSize)
-              throw new Error("vector tile sources must have a tileSize of 512");
+            }, this.serialize = () => t.e({}, this._options), this.id = e2, this.dispatcher = s2, this.type = "vector", this.minzoom = 0, this.maxzoom = 22, this.scheme = "xyz", this.tileSize = 512, this.reparseOverscaled = true, this.isTileClipped = true, this._loaded = false, t.e(this, t.F(i2, ["url", "scheme", "tileSize", "promoteId"])), this._options = t.e({ type: "vector" }, i2), this._collectResourceTiming = i2.collectResourceTiming, 512 !== this.tileSize) throw new Error("vector tile sources must have a tileSize of 512");
             this.setEventedParent(a2);
           }
           loaded() {
@@ -10628,10 +9583,8 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           loadTile(t2, e2) {
             const i2 = t2.tileID.canonical.url(this.tiles, this.map.getPixelRatio(), this.scheme);
             t2.request = h.getImage(this.map._requestManager.transformRequest(i2, c.Tile), (i3, s2, a2) => {
-              if (delete t2.request, t2.aborted)
-                t2.state = "unloaded", e2(null);
-              else if (i3)
-                t2.state = "errored", e2(i3);
+              if (delete t2.request, t2.aborted) t2.state = "unloaded", e2(null);
+              else if (i3) t2.state = "errored", e2(i3);
               else if (s2) {
                 this.map._refreshExpiredTiles && a2 && t2.setExpiryData(a2);
                 const i4 = this.map.painter.context, o2 = i4.gl;
@@ -10659,10 +9612,8 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               t2 && (e2.state = "errored", i2(t2)), s3 && (e2.dem = s3, e2.needsHillshadePrepare = true, e2.needsTerrainPrepare = true, e2.state = "loaded", i2(null));
             }
             e2.neighboringTiles = this._getNeighboringTiles(e2.tileID), e2.request = h.getImage(a2, (s3, a3, r2) => t._(this, void 0, void 0, function* () {
-              if (delete e2.request, e2.aborted)
-                e2.state = "unloaded", i2(null);
-              else if (s3)
-                e2.state = "errored", i2(s3);
+              if (delete e2.request, e2.aborted) e2.state = "unloaded", i2(null);
+              else if (s3) e2.state = "errored", i2(s3);
               else if (a3) {
                 this.map._refreshExpiredTiles && e2.setExpiryData(r2);
                 const i3 = t.a(a3) && t.J() ? a3 : yield function(e3) {
@@ -10721,11 +9672,9 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           _updateWorkerData(e2) {
             const i2 = t.e({}, this.workerOptions);
             e2 ? i2.dataDiff = e2 : "string" == typeof this._data ? (i2.request = this.map._requestManager.transformRequest(t.h.resolveURL(this._data), c.Source), i2.request.collectResourceTiming = this._collectResourceTiming) : i2.data = JSON.stringify(this._data), this._pendingLoads++, this.fire(new t.k("dataloading", { dataType: "source" })), this.actor.send(`${this.type}.loadData`, i2, (e3, i3) => {
-              if (this._pendingLoads--, this._removed || i3 && i3.abandoned)
-                return void this.fire(new t.k("dataabort", { dataType: "source" }));
+              if (this._pendingLoads--, this._removed || i3 && i3.abandoned) return void this.fire(new t.k("dataabort", { dataType: "source" }));
               let s2 = null;
-              if (i3 && i3.resourceTiming && i3.resourceTiming[this.id] && (s2 = i3.resourceTiming[this.id].slice(0)), e3)
-                return void this.fire(new t.j(e3));
+              if (i3 && i3.resourceTiming && i3.resourceTiming[this.id] && (s2 = i3.resourceTiming[this.id].slice(0)), e3) return void this.fire(new t.j(e3));
               const a2 = { dataType: "source" };
               this._collectResourceTiming && s2 && s2.length > 0 && t.e(a2, { resourceTiming: s2 }), this.fire(new t.k("data", Object.assign(Object.assign({}, a2), { sourceDataType: "metadata" }))), this.fire(new t.k("data", Object.assign(Object.assign({}, a2), { sourceDataType: "content" })));
             });
@@ -10760,8 +9709,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
                 this._request = null, this._loaded = true, s3 ? this.fire(new t.j(s3)) : a3 && (this.image = a3, e3 && (this.coordinates = e3), i3 && i3(), this._finishLoading());
               });
             }, this.prepare = () => {
-              if (0 === Object.keys(this.tiles).length || !this.image)
-                return;
+              if (0 === Object.keys(this.tiles).length || !this.image) return;
               const e3 = this.map.painter.context, i3 = e3.gl;
               this.boundsBuffer || (this.boundsBuffer = e3.createVertexBuffer(this._boundsArray, O.members)), this.boundsSegments || (this.boundsSegments = t.S.simpleSegment(0, 0, 4, 2)), this.texture || (this.texture = new x(e3, this.image, i3.RGBA), this.texture.bind(i3.LINEAR, i3.CLAMP_TO_EDGE));
               let s3 = false;
@@ -10794,8 +9742,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             const i2 = e2.map(t.U.fromLngLat);
             this.tileID = function(e3) {
               let i3 = 1 / 0, s3 = 1 / 0, a2 = -1 / 0, o2 = -1 / 0;
-              for (const t2 of e3)
-                i3 = Math.min(i3, t2.x), s3 = Math.min(s3, t2.y), a2 = Math.max(a2, t2.x), o2 = Math.max(o2, t2.y);
+              for (const t2 of e3) i3 = Math.min(i3, t2.x), s3 = Math.min(s3, t2.y), a2 = Math.max(a2, t2.x), o2 = Math.max(o2, t2.y);
               const r2 = Math.max(a2 - i3, o2 - s3), n2 = Math.max(0, Math.floor(-Math.log(r2) / Math.LN2)), l2 = Math.pow(2, n2);
               return new t.W(n2, Math.floor((i3 + a2) / 2 * l2), Math.floor((s3 + o2) / 2 * l2));
             }(i2), this.minzoom = this.maxzoom = this.tileID.z;
@@ -10815,16 +9762,14 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               this._loaded = false;
               const e3 = this.options;
               this.urls = [];
-              for (const t2 of e3.urls)
-                this.urls.push(this.map._requestManager.transformRequest(t2, c.Source).url);
+              for (const t2 of e3.urls) this.urls.push(this.map._requestManager.transformRequest(t2, c.Source).url);
               t.X(this.urls, (e4, i3) => {
                 this._loaded = true, e4 ? this.fire(new t.j(e4)) : i3 && (this.video = i3, this.video.loop = true, this.video.addEventListener("playing", () => {
                   this.map.triggerRepaint();
                 }), this.map && this.video.play(), this._finishLoading());
               });
             }, this.prepare = () => {
-              if (0 === Object.keys(this.tiles).length || this.video.readyState < 2)
-                return;
+              if (0 === Object.keys(this.tiles).length || this.video.readyState < 2) return;
               const e3 = this.map.painter.context, i3 = e3.gl;
               this.boundsBuffer || (this.boundsBuffer = e3.createVertexBuffer(this._boundsArray, O.members)), this.boundsSegments || (this.boundsSegments = t.S.simpleSegment(0, 0, 4, 2)), this.texture ? this.video.paused || (this.texture.bind(i3.LINEAR, i3.CLAMP_TO_EDGE), i3.texSubImage2D(i3.TEXTURE_2D, 0, 0, 0, i3.RGBA, i3.UNSIGNED_BYTE, this.video)) : (this.texture = new x(e3, this.video, i3.RGBA), this.texture.bind(i3.LINEAR, i3.CLAMP_TO_EDGE));
               let s3 = false;
@@ -10867,10 +9812,8 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               }, this._finishLoading());
             }, this.prepare = () => {
               let e3 = false;
-              if (this.canvas.width !== this.width && (this.width = this.canvas.width, e3 = true), this.canvas.height !== this.height && (this.height = this.canvas.height, e3 = true), this._hasInvalidDimensions())
-                return;
-              if (0 === Object.keys(this.tiles).length)
-                return;
+              if (this.canvas.width !== this.width && (this.width = this.canvas.width, e3 = true), this.canvas.height !== this.height && (this.height = this.canvas.height, e3 = true), this._hasInvalidDimensions()) return;
+              if (0 === Object.keys(this.tiles).length) return;
               const i3 = this.map.painter.context, s3 = i3.gl;
               this.boundsBuffer || (this.boundsBuffer = i3.createVertexBuffer(this._boundsArray, O.members)), this.boundsSegments || (this.boundsSegments = t.S.simpleSegment(0, 0, 4, 2)), this.texture ? (e3 || this._playing) && this.texture.update(this.canvas, { premultiply: true }) : this.texture = new x(i3, this.canvas, s3.RGBA, { premultiply: true });
               let a3 = false;
@@ -10894,9 +9837,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             return this._playing;
           }
           _hasInvalidDimensions() {
-            for (const t2 of [this.canvas.width, this.canvas.height])
-              if (isNaN(t2) || t2 <= 0)
-                return true;
+            for (const t2 of [this.canvas.width, this.canvas.height]) if (isNaN(t2) || t2 <= 0) return true;
             return false;
           }
         }
@@ -10925,41 +9866,34 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         }
         function q(t2, e2, i2, s2, a2, o2) {
           const r2 = function(t3, e3, i3) {
-            if (t3)
-              for (const s3 of t3) {
-                const t4 = e3[s3];
-                if (t4 && t4.source === i3 && "fill-extrusion" === t4.type)
-                  return true;
-              }
-            else
-              for (const t4 in e3) {
-                const s3 = e3[t4];
-                if (s3.source === i3 && "fill-extrusion" === s3.type)
-                  return true;
-              }
+            if (t3) for (const s3 of t3) {
+              const t4 = e3[s3];
+              if (t4 && t4.source === i3 && "fill-extrusion" === t4.type) return true;
+            }
+            else for (const t4 in e3) {
+              const s3 = e3[t4];
+              if (s3.source === i3 && "fill-extrusion" === s3.type) return true;
+            }
             return false;
           }(a2 && a2.layers, e2, t2.id), n2 = o2.maxPitchScaleFactor(), l2 = t2.tilesIn(s2, n2, r2);
           l2.sort($);
           const h2 = [];
-          for (const s3 of l2)
-            h2.push({ wrappedTileID: s3.tileID.wrapped().key, queryResults: s3.tile.queryRenderedFeatures(e2, i2, t2._state, s3.queryGeometry, s3.cameraQueryGeometry, s3.scale, a2, o2, n2, V(t2.transform, s3.tileID)) });
+          for (const s3 of l2) h2.push({ wrappedTileID: s3.tileID.wrapped().key, queryResults: s3.tile.queryRenderedFeatures(e2, i2, t2._state, s3.queryGeometry, s3.cameraQueryGeometry, s3.scale, a2, o2, n2, V(t2.transform, s3.tileID)) });
           const c2 = function(t3) {
             const e3 = {}, i3 = {};
             for (const s3 of t3) {
               const t4 = s3.queryResults, a3 = s3.wrappedTileID, o3 = i3[a3] = i3[a3] || {};
               for (const i4 in t4) {
                 const s4 = t4[i4], a4 = o3[i4] = o3[i4] || {}, r3 = e3[i4] = e3[i4] || [];
-                for (const t5 of s4)
-                  a4[t5.featureIndex] || (a4[t5.featureIndex] = true, r3.push(t5));
+                for (const t5 of s4) a4[t5.featureIndex] || (a4[t5.featureIndex] = true, r3.push(t5));
               }
             }
             return e3;
           }(h2);
-          for (const e3 in c2)
-            c2[e3].forEach((e4) => {
-              const i3 = e4.feature, s3 = t2.getFeatureState(i3.layer["source-layer"], i3.id);
-              i3.source = i3.layer.source, i3.layer["source-layer"] && (i3.sourceLayer = i3.layer["source-layer"]), i3.state = s3;
-            });
+          for (const e3 in c2) c2[e3].forEach((e4) => {
+            const i3 = e4.feature, s3 = t2.getFeatureState(i3.layer["source-layer"], i3.id);
+            i3.source = i3.layer.source, i3.layer["source-layer"] && (i3.sourceLayer = i3.layer["source-layer"]), i3.state = s3;
+          });
           return c2;
         }
         function $(t2, e2) {
@@ -10984,14 +9918,12 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             if (this.hasData() && this.unloadVectorData(), this.state = "loaded", e2) {
               e2.featureIndex && (this.latestFeatureIndex = e2.featureIndex, e2.rawTileData ? (this.latestRawTileData = e2.rawTileData, this.latestFeatureIndex.rawTileData = e2.rawTileData) : this.latestRawTileData && (this.latestFeatureIndex.rawTileData = this.latestRawTileData)), this.collisionBoxArray = e2.collisionBoxArray, this.buckets = function(t2, e3) {
                 const i3 = {};
-                if (!e3)
-                  return i3;
+                if (!e3) return i3;
                 for (const s3 of t2) {
                   const t3 = s3.layerIds.map((t4) => e3.getLayer(t4)).filter(Boolean);
                   if (0 !== t3.length) {
                     s3.layers = t3, s3.stateDependentLayerIds && (s3.stateDependentLayers = s3.stateDependentLayerIds.map((e4) => t3.filter((t4) => t4.id === e4)[0]));
-                    for (const e4 of t3)
-                      i3[e4.id] = s3;
+                    for (const e4 of t3) i3[e4.id] = s3;
                   }
                 }
                 return i3;
@@ -10999,31 +9931,27 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               for (const e3 in this.buckets) {
                 const i3 = this.buckets[e3];
                 if (i3 instanceof t.a4) {
-                  if (this.hasSymbolBuckets = true, !s2)
-                    break;
+                  if (this.hasSymbolBuckets = true, !s2) break;
                   i3.justReloaded = true;
                 }
               }
-              if (this.hasRTLText = false, this.hasSymbolBuckets)
-                for (const e3 in this.buckets) {
-                  const i3 = this.buckets[e3];
-                  if (i3 instanceof t.a4 && i3.hasRTLText) {
-                    this.hasRTLText = true, t.a5();
-                    break;
-                  }
+              if (this.hasRTLText = false, this.hasSymbolBuckets) for (const e3 in this.buckets) {
+                const i3 = this.buckets[e3];
+                if (i3 instanceof t.a4 && i3.hasRTLText) {
+                  this.hasRTLText = true, t.a5();
+                  break;
                 }
+              }
               this.queryPadding = 0;
               for (const t2 in this.buckets) {
                 const e3 = this.buckets[t2];
                 this.queryPadding = Math.max(this.queryPadding, i2.style.getLayer(t2).queryRadius(e3));
               }
               e2.imageAtlas && (this.imageAtlas = e2.imageAtlas), e2.glyphAtlasImage && (this.glyphAtlasImage = e2.glyphAtlasImage);
-            } else
-              this.collisionBoxArray = new t.a3();
+            } else this.collisionBoxArray = new t.a3();
           }
           unloadVectorData() {
-            for (const t2 in this.buckets)
-              this.buckets[t2].destroy();
+            for (const t2 in this.buckets) this.buckets[t2].destroy();
             this.buckets = {}, this.imageAtlasTexture && this.imageAtlasTexture.destroy(), this.imageAtlas && (this.imageAtlas = null), this.glyphAtlasTexture && this.glyphAtlasTexture.destroy(), this.latestFeatureIndex = null, this.state = "unloaded";
           }
           getBucket(t2) {
@@ -11045,20 +9973,16 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }
           querySourceFeatures(e2, i2) {
             const s2 = this.latestFeatureIndex;
-            if (!s2 || !s2.rawTileData)
-              return;
+            if (!s2 || !s2.rawTileData) return;
             const a2 = s2.loadVTLayers(), o2 = i2 && i2.sourceLayer ? i2.sourceLayer : "", r2 = a2._geojsonTileLayer || a2[o2];
-            if (!r2)
-              return;
+            if (!r2) return;
             const n2 = t.a6(i2 && i2.filter), { z: l2, x: h2, y: c2 } = this.tileID.canonical, u2 = { z: l2, x: h2, y: c2 };
             for (let i3 = 0; i3 < r2.length; i3++) {
               const a3 = r2.feature(i3);
               if (n2.needGeometry) {
                 const e3 = t.a7(a3, true);
-                if (!n2.filter(new t.a8(this.tileID.overscaledZ), e3, this.tileID.canonical))
-                  continue;
-              } else if (!n2.filter(new t.a8(this.tileID.overscaledZ), a3))
-                continue;
+                if (!n2.filter(new t.a8(this.tileID.overscaledZ), e3, this.tileID.canonical)) continue;
+              } else if (!n2.filter(new t.a8(this.tileID.overscaledZ), a3)) continue;
               const d2 = s2.getId(a3, o2), _2 = new t.a9(a3, l2, h2, c2, d2);
               _2.tile = u2, e2.push(_2);
             }
@@ -11074,39 +9998,30 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             if (e2.cacheControl) {
               const i3 = t.aa(e2.cacheControl);
               i3["max-age"] && (this.expirationTime = Date.now() + 1e3 * i3["max-age"]);
-            } else
-              e2.expires && (this.expirationTime = new Date(e2.expires).getTime());
+            } else e2.expires && (this.expirationTime = new Date(e2.expires).getTime());
             if (this.expirationTime) {
               const t2 = Date.now();
               let e3 = false;
-              if (this.expirationTime > t2)
-                e3 = false;
-              else if (i2)
-                if (this.expirationTime < i2)
-                  e3 = true;
-                else {
-                  const s2 = this.expirationTime - i2;
-                  s2 ? this.expirationTime = t2 + Math.max(s2, 3e4) : e3 = true;
-                }
-              else
-                e3 = true;
+              if (this.expirationTime > t2) e3 = false;
+              else if (i2) if (this.expirationTime < i2) e3 = true;
+              else {
+                const s2 = this.expirationTime - i2;
+                s2 ? this.expirationTime = t2 + Math.max(s2, 3e4) : e3 = true;
+              }
+              else e3 = true;
               e3 ? (this.expiredRequestCount++, this.state = "expired") : this.expiredRequestCount = 0;
             }
           }
           getExpiryTimeout() {
-            if (this.expirationTime)
-              return this.expiredRequestCount ? 1e3 * (1 << Math.min(this.expiredRequestCount - 1, 31)) : Math.min(this.expirationTime - new Date().getTime(), Math.pow(2, 31) - 1);
+            if (this.expirationTime) return this.expiredRequestCount ? 1e3 * (1 << Math.min(this.expiredRequestCount - 1, 31)) : Math.min(this.expirationTime - (/* @__PURE__ */ new Date()).getTime(), Math.pow(2, 31) - 1);
           }
           setFeatureState(t2, e2) {
-            if (!this.latestFeatureIndex || !this.latestFeatureIndex.rawTileData || 0 === Object.keys(t2).length)
-              return;
+            if (!this.latestFeatureIndex || !this.latestFeatureIndex.rawTileData || 0 === Object.keys(t2).length) return;
             const i2 = this.latestFeatureIndex.loadVTLayers();
             for (const s2 in this.buckets) {
-              if (!e2.style.hasLayer(s2))
-                continue;
+              if (!e2.style.hasLayer(s2)) continue;
               const a2 = this.buckets[s2], o2 = a2.layers[0].sourceLayer || "_geojsonTileLayer", r2 = i2[o2], n2 = t2[o2];
-              if (!r2 || !n2 || 0 === Object.keys(n2).length)
-                continue;
+              if (!r2 || !n2 || 0 === Object.keys(n2).length) continue;
               a2.update(n2, r2, this.imageAtlas && this.imageAtlas.patternPositions || {});
               const l2 = e2 && e2.style && e2.style.getLayer(s2);
               l2 && (this.queryPadding = Math.max(this.queryPadding, l2.queryRadius(a2)));
@@ -11126,17 +10041,14 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }
           setDependencies(t2, e2) {
             const i2 = {};
-            for (const t3 of e2)
-              i2[t3] = true;
+            for (const t3 of e2) i2[t3] = true;
             this.dependencies[t2] = i2;
           }
           hasDependency(t2, e2) {
             for (const i2 of t2) {
               const t3 = this.dependencies[i2];
               if (t3) {
-                for (const i3 of e2)
-                  if (t3[i3])
-                    return true;
+                for (const i3 of e2) if (t3[i3]) return true;
               }
             }
             return false;
@@ -11147,9 +10059,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             this.max = t2, this.onRemove = e2, this.reset();
           }
           reset() {
-            for (const t2 in this.data)
-              for (const e2 of this.data[t2])
-                e2.timeout && clearTimeout(e2.timeout), this.onRemove(e2.value);
+            for (const t2 in this.data) for (const e2 of this.data[t2]) e2.timeout && clearTimeout(e2.timeout), this.onRemove(e2.value);
             return this.data = {}, this.order = [], this;
           }
           add(t2, e2, i2) {
@@ -11182,8 +10092,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             return this.has(t2) ? this.data[t2.wrapped().key][0].value : null;
           }
           remove(t2, e2) {
-            if (!this.has(t2))
-              return this;
+            if (!this.has(t2)) return this;
             const i2 = t2.wrapped().key, s2 = void 0 === e2 ? 0 : this.data[i2].indexOf(e2), a2 = this.data[i2][s2];
             return this.data[i2].splice(s2, 1), a2.timeout && clearTimeout(a2.timeout), 0 === this.data[i2].length && delete this.data[i2], this.onRemove(a2.value), this.order.splice(this.order.indexOf(i2), 1), this;
           }
@@ -11196,11 +10105,8 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }
           filter(t2) {
             const e2 = [];
-            for (const i2 in this.data)
-              for (const s2 of this.data[i2])
-                t2(s2.value) || e2.push(s2);
-            for (const t3 of e2)
-              this.remove(t3.value.tileID, t3);
+            for (const i2 in this.data) for (const s2 of this.data[i2]) t2(s2.value) || e2.push(s2);
+            for (const t3 of e2) this.remove(t3.value.tileID, t3);
           }
         }
         class X {
@@ -11211,41 +10117,27 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             const a2 = String(i2);
             if (this.stateChanges[e2] = this.stateChanges[e2] || {}, this.stateChanges[e2][a2] = this.stateChanges[e2][a2] || {}, t.e(this.stateChanges[e2][a2], s2), null === this.deletedStates[e2]) {
               this.deletedStates[e2] = {};
-              for (const t2 in this.state[e2])
-                t2 !== a2 && (this.deletedStates[e2][t2] = null);
+              for (const t2 in this.state[e2]) t2 !== a2 && (this.deletedStates[e2][t2] = null);
             } else if (this.deletedStates[e2] && null === this.deletedStates[e2][a2]) {
               this.deletedStates[e2][a2] = {};
-              for (const t2 in this.state[e2][a2])
-                s2[t2] || (this.deletedStates[e2][a2][t2] = null);
-            } else
-              for (const t2 in s2)
-                this.deletedStates[e2] && this.deletedStates[e2][a2] && null === this.deletedStates[e2][a2][t2] && delete this.deletedStates[e2][a2][t2];
+              for (const t2 in this.state[e2][a2]) s2[t2] || (this.deletedStates[e2][a2][t2] = null);
+            } else for (const t2 in s2) this.deletedStates[e2] && this.deletedStates[e2][a2] && null === this.deletedStates[e2][a2][t2] && delete this.deletedStates[e2][a2][t2];
           }
           removeFeatureState(t2, e2, i2) {
-            if (null === this.deletedStates[t2])
-              return;
+            if (null === this.deletedStates[t2]) return;
             const s2 = String(e2);
-            if (this.deletedStates[t2] = this.deletedStates[t2] || {}, i2 && void 0 !== e2)
-              null !== this.deletedStates[t2][s2] && (this.deletedStates[t2][s2] = this.deletedStates[t2][s2] || {}, this.deletedStates[t2][s2][i2] = null);
-            else if (void 0 !== e2)
-              if (this.stateChanges[t2] && this.stateChanges[t2][s2])
-                for (i2 in this.deletedStates[t2][s2] = {}, this.stateChanges[t2][s2])
-                  this.deletedStates[t2][s2][i2] = null;
-              else
-                this.deletedStates[t2][s2] = null;
-            else
-              this.deletedStates[t2] = null;
+            if (this.deletedStates[t2] = this.deletedStates[t2] || {}, i2 && void 0 !== e2) null !== this.deletedStates[t2][s2] && (this.deletedStates[t2][s2] = this.deletedStates[t2][s2] || {}, this.deletedStates[t2][s2][i2] = null);
+            else if (void 0 !== e2) if (this.stateChanges[t2] && this.stateChanges[t2][s2]) for (i2 in this.deletedStates[t2][s2] = {}, this.stateChanges[t2][s2]) this.deletedStates[t2][s2][i2] = null;
+            else this.deletedStates[t2][s2] = null;
+            else this.deletedStates[t2] = null;
           }
           getState(e2, i2) {
             const s2 = String(i2), a2 = t.e({}, (this.state[e2] || {})[s2], (this.stateChanges[e2] || {})[s2]);
-            if (null === this.deletedStates[e2])
-              return {};
+            if (null === this.deletedStates[e2]) return {};
             if (this.deletedStates[e2]) {
               const t2 = this.deletedStates[e2][i2];
-              if (null === t2)
-                return {};
-              for (const e3 in t2)
-                delete a2[e3];
+              if (null === t2) return {};
+              for (const e3 in t2) delete a2[e3];
             }
             return a2;
           }
@@ -11257,30 +10149,21 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             for (const e3 in this.stateChanges) {
               this.state[e3] = this.state[e3] || {};
               const i3 = {};
-              for (const s3 in this.stateChanges[e3])
-                this.state[e3][s3] || (this.state[e3][s3] = {}), t.e(this.state[e3][s3], this.stateChanges[e3][s3]), i3[s3] = this.state[e3][s3];
+              for (const s3 in this.stateChanges[e3]) this.state[e3][s3] || (this.state[e3][s3] = {}), t.e(this.state[e3][s3], this.stateChanges[e3][s3]), i3[s3] = this.state[e3][s3];
               s2[e3] = i3;
             }
             for (const e3 in this.deletedStates) {
               this.state[e3] = this.state[e3] || {};
               const i3 = {};
-              if (null === this.deletedStates[e3])
-                for (const t2 in this.state[e3])
-                  i3[t2] = {}, this.state[e3][t2] = {};
-              else
-                for (const t2 in this.deletedStates[e3]) {
-                  if (null === this.deletedStates[e3][t2])
-                    this.state[e3][t2] = {};
-                  else
-                    for (const i4 of Object.keys(this.deletedStates[e3][t2]))
-                      delete this.state[e3][t2][i4];
-                  i3[t2] = this.state[e3][t2];
-                }
+              if (null === this.deletedStates[e3]) for (const t2 in this.state[e3]) i3[t2] = {}, this.state[e3][t2] = {};
+              else for (const t2 in this.deletedStates[e3]) {
+                if (null === this.deletedStates[e3][t2]) this.state[e3][t2] = {};
+                else for (const i4 of Object.keys(this.deletedStates[e3][t2])) delete this.state[e3][t2][i4];
+                i3[t2] = this.state[e3][t2];
+              }
               s2[e3] = s2[e3] || {}, t.e(s2[e3], i3);
             }
-            if (this.stateChanges = {}, this.deletedStates = {}, 0 !== Object.keys(s2).length)
-              for (const t2 in e2)
-                e2[t2].setFeatureState(s2, i2);
+            if (this.stateChanges = {}, this.deletedStates = {}, 0 !== Object.keys(s2).length) for (const t2 in e2) e2[t2].setFeatureState(s2, i2);
           }
         }
         class K extends t.E {
@@ -11293,8 +10176,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               this._sourceErrored = this._source.loaded();
             }), this._source = ((t3, e3, i3, s2) => {
               const a2 = new (j(e3.type))(t3, e3, i3, s2);
-              if (a2.id !== t3)
-                throw new Error(`Expected Source id to be ${t3} instead of ${a2.id}`);
+              if (a2.id !== t3) throw new Error(`Expected Source id to be ${t3} instead of ${a2.id}`);
               return a2;
             })(t2, e2, i2, this), this._tiles = {}, this._cache = new H(0, this._unloadTile.bind(this)), this._timers = {}, this._cacheTimers = {}, this._maxTileCacheSize = null, this._maxTileCacheZoomLevels = null, this._loadedParentTiles = {}, this._coveredTiles = {}, this._state = new X(), this._didEmitContent = false, this._updated = false;
           }
@@ -11305,20 +10187,14 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             this.clearTiles(), this._source && this._source.onRemove && this._source.onRemove(t2);
           }
           loaded() {
-            if (this._sourceErrored)
-              return true;
-            if (!this._sourceLoaded)
-              return false;
-            if (!this._source.loaded())
-              return false;
-            if (!(void 0 === this.used && void 0 === this.usedForTerrain || this.used || this.usedForTerrain))
-              return true;
-            if (!this._updated)
-              return false;
+            if (this._sourceErrored) return true;
+            if (!this._sourceLoaded) return false;
+            if (!this._source.loaded()) return false;
+            if (!(void 0 === this.used && void 0 === this.usedForTerrain || this.used || this.usedForTerrain)) return true;
+            if (!this._updated) return false;
             for (const t2 in this._tiles) {
               const e2 = this._tiles[t2];
-              if ("loaded" !== e2.state && "errored" !== e2.state)
-                return false;
+              if ("loaded" !== e2.state && "errored" !== e2.state) return false;
             }
             return true;
           }
@@ -11329,8 +10205,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             this._paused = true;
           }
           resume() {
-            if (!this._paused)
-              return;
+            if (!this._paused) return;
             const t2 = this._shouldReloadOnResume;
             this._paused = false, this._shouldReloadOnResume = false, t2 && this.reload(), this.transform && this.update(this.transform, this.terrain);
           }
@@ -11338,9 +10213,8 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             return this._source.loadTile(t2, e2);
           }
           _unloadTile(t2) {
-            if (this._source.unloadTile)
-              return this._source.unloadTile(t2, () => {
-              });
+            if (this._source.unloadTile) return this._source.unloadTile(t2, () => {
+            });
           }
           _abortTile(e2) {
             this._source.abortTile && this._source.abortTile(e2, () => {
@@ -11361,8 +10235,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }
           getRenderableIds(e2) {
             const i2 = [];
-            for (const t2 in this._tiles)
-              this._isIdRenderable(t2, e2) && i2.push(this._tiles[t2]);
+            for (const t2 in this._tiles) this._isIdRenderable(t2, e2) && i2.push(this._tiles[t2]);
             return e2 ? i2.sort((e3, i3) => {
               const s2 = e3.tileID, a2 = i3.tileID, o2 = new t.P(s2.canonical.x, s2.canonical.y)._rotate(this.transform.angle), r2 = new t.P(a2.canonical.x, a2.canonical.y)._rotate(this.transform.angle);
               return s2.overscaledZ - a2.overscaledZ || r2.y - o2.y || r2.x - o2.x;
@@ -11376,12 +10249,10 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             return this._tiles[t2] && this._tiles[t2].hasData() && !this._coveredTiles[t2] && (e2 || !this._tiles[t2].holdingForFade());
           }
           reload() {
-            if (this._paused)
-              this._shouldReloadOnResume = true;
+            if (this._paused) this._shouldReloadOnResume = true;
             else {
               this._cache.reset();
-              for (const t2 in this._tiles)
-                "errored" !== this._tiles[t2].state && this._reloadTile(t2, "reloading");
+              for (const t2 in this._tiles) "errored" !== this._tiles[t2].state && this._reloadTile(t2, "reloading");
             }
           }
           _reloadTile(t2, e2) {
@@ -11389,8 +10260,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             i2 && ("loading" !== i2.state && (i2.state = e2), this._loadTile(i2, this._tileLoaded.bind(this, i2, t2, e2)));
           }
           _tileLoaded(e2, i2, s2, a2) {
-            if (a2)
-              return e2.state = "errored", void (404 !== a2.status ? this._source.fire(new t.j(a2, { tile: e2 })) : this.update(this.transform, this.terrain));
+            if (a2) return e2.state = "errored", void (404 !== a2.status ? this._source.fire(new t.j(a2, { tile: e2 })) : this.update(this.transform, this.terrain));
             e2.timeAdded = t.h.now(), "expired" === s2 && (e2.refreshedUponExpiration = true), this._setTileReloadTimer(i2, e2), "raster-dem" === this.getSource().type && e2.dem && this._backfillDEM(e2), this._state.initializeTileState(e2, this.map ? this.map.painter : null), e2.aborted || this._source.fire(new t.k("data", { dataType: "source", tile: e2, coord: e2.tileID }));
           }
           _backfillDEM(t2) {
@@ -11418,19 +10288,17 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           _retainLoadedChildren(t2, e2, i2, s2) {
             for (const a2 in this._tiles) {
               let o2 = this._tiles[a2];
-              if (s2[a2] || !o2.hasData() || o2.tileID.overscaledZ <= e2 || o2.tileID.overscaledZ > i2)
-                continue;
+              if (s2[a2] || !o2.hasData() || o2.tileID.overscaledZ <= e2 || o2.tileID.overscaledZ > i2) continue;
               let r2 = o2.tileID;
               for (; o2 && o2.tileID.overscaledZ > e2 + 1; ) {
                 const t3 = o2.tileID.scaledTo(o2.tileID.overscaledZ - 1);
                 o2 = this._tiles[t3.key], o2 && o2.hasData() && (r2 = t3);
               }
               let n2 = r2;
-              for (; n2.overscaledZ > e2; )
-                if (n2 = n2.scaledTo(n2.overscaledZ - 1), t2[n2.key]) {
-                  s2[r2.key] = r2;
-                  break;
-                }
+              for (; n2.overscaledZ > e2; ) if (n2 = n2.scaledTo(n2.overscaledZ - 1), t2[n2.key]) {
+                s2[r2.key] = r2;
+                break;
+              }
             }
           }
           findLoadedParent(t2, e2) {
@@ -11440,8 +10308,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             }
             for (let i2 = t2.overscaledZ - 1; i2 >= e2; i2--) {
               const e3 = t2.scaledTo(i2), s2 = this._getLoadedTile(e3);
-              if (s2)
-                return s2;
+              if (s2) return s2;
             }
           }
           _getLoadedTile(t2) {
@@ -11461,27 +10328,23 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
                 s2.tileID = s2.tileID.unwrapTo(s2.tileID.wrap + e2), t3[s2.tileID.key] = s2;
               }
               this._tiles = t3;
-              for (const t4 in this._timers)
-                clearTimeout(this._timers[t4]), delete this._timers[t4];
-              for (const t4 in this._tiles)
-                this._setTileReloadTimer(t4, this._tiles[t4]);
+              for (const t4 in this._timers) clearTimeout(this._timers[t4]), delete this._timers[t4];
+              for (const t4 in this._tiles) this._setTileReloadTimer(t4, this._tiles[t4]);
             }
           }
           update(e2, i2) {
-            if (this.transform = e2, this.terrain = i2, !this._sourceLoaded || this._paused)
-              return;
+            if (this.transform = e2, this.terrain = i2, !this._sourceLoaded || this._paused) return;
             let s2;
             this.updateCacheSize(e2), this.handleWrapJump(this.transform.center.lng), this._coveredTiles = {}, this.used || this.usedForTerrain ? this._source.tileID ? s2 = e2.getVisibleUnwrappedCoordinates(this._source.tileID).map((e3) => new t.O(e3.canonical.z, e3.wrap, e3.canonical.z, e3.canonical.x, e3.canonical.y)) : (s2 = e2.coveringTiles({ tileSize: this.usedForTerrain ? this.tileSize : this._source.tileSize, minzoom: this._source.minzoom, maxzoom: this._source.maxzoom, roundZoom: !this.usedForTerrain && this._source.roundZoom, reparseOverscaled: this._source.reparseOverscaled, terrain: i2 }), this._source.hasTile && (s2 = s2.filter((t2) => this._source.hasTile(t2)))) : s2 = [];
             const a2 = e2.coveringZoomLevel(this._source), o2 = Math.max(a2 - K.maxOverzooming, this._source.minzoom), r2 = Math.max(a2 + K.maxUnderzooming, this._source.minzoom);
             if (this.usedForTerrain) {
               const t2 = {};
-              for (const e3 of s2)
-                if (e3.canonical.z > this._source.minzoom) {
-                  const i3 = e3.scaledTo(e3.canonical.z - 1);
-                  t2[i3.key] = i3;
-                  const s3 = e3.scaledTo(Math.max(this._source.minzoom, Math.min(e3.canonical.z, 5)));
-                  t2[s3.key] = s3;
-                }
+              for (const e3 of s2) if (e3.canonical.z > this._source.minzoom) {
+                const i3 = e3.scaledTo(e3.canonical.z - 1);
+                t2[i3.key] = i3;
+                const s3 = e3.scaledTo(Math.max(this._source.minzoom, Math.min(e3.canonical.z, 5)));
+                t2[s3.key] = s3;
+              }
               s2 = s2.concat(Object.values(t2));
             }
             const n2 = 0 === s2.length && !this._updated && this._didEmitContent;
@@ -11491,18 +10354,15 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               const e3 = {}, n3 = {}, h3 = Object.keys(l2), c2 = t.h.now();
               for (const t2 of h3) {
                 const i3 = l2[t2], s3 = this._tiles[t2];
-                if (!s3 || 0 !== s3.fadeEndTime && s3.fadeEndTime <= c2)
-                  continue;
+                if (!s3 || 0 !== s3.fadeEndTime && s3.fadeEndTime <= c2) continue;
                 const a3 = this.findLoadedParent(i3, o2);
                 a3 && (this._addTile(a3.tileID), e3[a3.tileID.key] = a3.tileID), n3[t2] = i3;
               }
               this._retainLoadedChildren(n3, a2, r2, l2);
-              for (const t2 in e3)
-                l2[t2] || (this._coveredTiles[t2] = true, l2[t2] = e3[t2]);
+              for (const t2 in e3) l2[t2] || (this._coveredTiles[t2] = true, l2[t2] = e3[t2]);
               if (i2) {
                 const t2 = {}, e4 = {};
-                for (const i3 of s2)
-                  this._tiles[i3.key].hasData() ? t2[i3.key] = i3 : e4[i3.key] = i3;
+                for (const i3 of s2) this._tiles[i3.key].hasData() ? t2[i3.key] = i3 : e4[i3.key] = i3;
                 for (const i3 in e4) {
                   const s3 = e4[i3].children(this._source.maxzoom);
                   this._tiles[s3[0].key] && this._tiles[s3[1].key] && this._tiles[s3[2].key] && this._tiles[s3[3].key] && (t2[s3[0].key] = l2[s3[0].key] = s3[0], t2[s3[1].key] = l2[s3[1].key] = s3[1], t2[s3[2].key] = l2[s3[2].key] = s3[2], t2[s3[3].key] = l2[s3[3].key] = s3[3], delete e4[i3]);
@@ -11511,16 +10371,13 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
                   const s3 = this.findLoadedParent(e4[i3], this._source.minzoom);
                   if (s3) {
                     t2[s3.tileID.key] = l2[s3.tileID.key] = s3.tileID;
-                    for (const e5 in t2)
-                      t2[e5].isChildOf(s3.tileID) && delete t2[e5];
+                    for (const e5 in t2) t2[e5].isChildOf(s3.tileID) && delete t2[e5];
                   }
                 }
-                for (const e5 in this._tiles)
-                  t2[e5] || (this._coveredTiles[e5] = true);
+                for (const e5 in this._tiles) t2[e5] || (this._coveredTiles[e5] = true);
               }
             }
-            for (const t2 in l2)
-              this._tiles[t2].clearFadeHold();
+            for (const t2 in l2) this._tiles[t2].clearFadeHold();
             const h2 = t.ab(this._tiles, l2);
             for (const t2 of h2) {
               const e3 = this._tiles[t2];
@@ -11529,8 +10386,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             this._updateLoadedParentTileCache();
           }
           releaseSymbolFadeTiles() {
-            for (const t2 in this._tiles)
-              this._tiles[t2].holdingForFade() && this._removeTile(t2);
+            for (const t2 in this._tiles) this._tiles[t2].holdingForFade() && this._removeTile(t2);
           }
           _updateRetainedTiles(t2, e2) {
             const i2 = {}, s2 = {}, a2 = Math.max(e2 - K.maxOverzooming, this._source.minzoom), o2 = Math.max(e2 + K.maxUnderzooming, this._source.minzoom), r2 = {};
@@ -11541,8 +10397,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             this._retainLoadedChildren(r2, e2, o2, i2);
             for (const o3 of t2) {
               let t3 = this._tiles[o3.key];
-              if (t3.hasData())
-                continue;
+              if (t3.hasData()) continue;
               if (e2 + 1 > this._source.maxzoom) {
                 const t4 = o3.children(this._source.maxzoom)[0], e3 = this.getTile(t4);
                 if (e3 && e3.hasData()) {
@@ -11551,18 +10406,15 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
                 }
               } else {
                 const t4 = o3.children(this._source.maxzoom);
-                if (i2[t4[0].key] && i2[t4[1].key] && i2[t4[2].key] && i2[t4[3].key])
-                  continue;
+                if (i2[t4[0].key] && i2[t4[1].key] && i2[t4[2].key] && i2[t4[3].key]) continue;
               }
               let r3 = t3.wasRequested();
               for (let e3 = o3.overscaledZ - 1; e3 >= a2; --e3) {
                 const a3 = o3.scaledTo(e3);
-                if (s2[a3.key])
-                  break;
+                if (s2[a3.key]) break;
                 if (s2[a3.key] = true, t3 = this.getTile(a3), !t3 && r3 && (t3 = this._addTile(a3)), t3) {
                   const e4 = t3.hasData();
-                  if ((r3 || e4) && (i2[a3.key] = a3), r3 = t3.wasRequested(), e4)
-                    break;
+                  if ((r3 || e4) && (i2[a3.key] = a3), r3 = t3.wasRequested(), e4) break;
                 }
               }
             }
@@ -11580,18 +10432,15 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
                 }
                 e2.push(s2.key);
                 const t3 = s2.scaledTo(s2.overscaledZ - 1);
-                if (i2 = this._getLoadedTile(t3), i2)
-                  break;
+                if (i2 = this._getLoadedTile(t3), i2) break;
                 s2 = t3;
               }
-              for (const t3 of e2)
-                this._loadedParentTiles[t3] = i2;
+              for (const t3 of e2) this._loadedParentTiles[t3] = i2;
             }
           }
           _addTile(e2) {
             let i2 = this._tiles[e2.key];
-            if (i2)
-              return i2;
+            if (i2) return i2;
             i2 = this._cache.getAndRemove(e2), i2 && (this._setTileReloadTimer(e2.key, i2), i2.tileID = e2, this._state.initializeTileState(i2, this.map ? this.map.painter : null), this._cacheTimers[e2.key] && (clearTimeout(this._cacheTimers[e2.key]), delete this._cacheTimers[e2.key], this._setTileReloadTimer(e2.key, i2)));
             const s2 = i2;
             return i2 || (i2 = new W(e2, this._source.tileSize * e2.overscaleFactor()), this._loadTile(i2, this._tileLoaded.bind(this, i2, e2.key, i2.state))), i2.uses++, this._tiles[e2.key] = i2, s2 || this._source.fire(new t.k("dataloading", { tile: i2, coord: i2.tileID, dataType: "source" })), i2;
@@ -11609,22 +10458,18 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }
           clearTiles() {
             this._shouldReloadOnResume = false, this._paused = false;
-            for (const t2 in this._tiles)
-              this._removeTile(t2);
+            for (const t2 in this._tiles) this._removeTile(t2);
             this._cache.reset();
           }
           tilesIn(e2, i2, s2) {
             const a2 = [], o2 = this.transform;
-            if (!o2)
-              return a2;
+            if (!o2) return a2;
             const r2 = s2 ? o2.getCameraQueryGeometry(e2) : e2, n2 = e2.map((t2) => o2.pointCoordinate(t2, this.terrain)), l2 = r2.map((t2) => o2.pointCoordinate(t2, this.terrain)), h2 = this.getIds();
             let c2 = 1 / 0, u2 = 1 / 0, d2 = -1 / 0, _2 = -1 / 0;
-            for (const t2 of l2)
-              c2 = Math.min(c2, t2.x), u2 = Math.min(u2, t2.y), d2 = Math.max(d2, t2.x), _2 = Math.max(_2, t2.y);
+            for (const t2 of l2) c2 = Math.min(c2, t2.x), u2 = Math.min(u2, t2.y), d2 = Math.max(d2, t2.x), _2 = Math.max(_2, t2.y);
             for (let e3 = 0; e3 < h2.length; e3++) {
               const s3 = this._tiles[h2[e3]];
-              if (s3.holdingForFade())
-                continue;
+              if (s3.holdingForFade()) continue;
               const r3 = s3.tileID, p2 = Math.pow(2, o2.zoom - s3.tileID.overscaledZ), m2 = i2 * s3.queryPadding * t.N / s3.tileSize / p2, f2 = [r3.getTilePoint(new t.U(c2, u2)), r3.getTilePoint(new t.U(d2, _2))];
               if (f2[0].x - m2 < t.N && f2[0].y - m2 < t.N && f2[1].x + m2 >= 0 && f2[1].y + m2 >= 0) {
                 const t2 = n2.map((t3) => r3.getTilePoint(t3)), e4 = l2.map((t3) => r3.getTilePoint(t3));
@@ -11635,18 +10480,14 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }
           getVisibleCoordinates(t2) {
             const e2 = this.getRenderableIds(t2).map((t3) => this._tiles[t3].tileID);
-            for (const t3 of e2)
-              t3.posMatrix = this.transform.calculatePosMatrix(t3.toUnwrapped());
+            for (const t3 of e2) t3.posMatrix = this.transform.calculatePosMatrix(t3.toUnwrapped());
             return e2;
           }
           hasTransition() {
-            if (this._source.hasTransition())
-              return true;
+            if (this._source.hasTransition()) return true;
             if (Y(this._source.type)) {
               const e2 = t.h.now();
-              for (const t2 in this._tiles)
-                if (this._tiles[t2].fadeEndTime >= e2)
-                  return true;
+              for (const t2 in this._tiles) if (this._tiles[t2].fadeEndTime >= e2) return true;
             }
             return false;
           }
@@ -11664,8 +10505,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             s2 && s2.setDependencies(e2, i2);
           }
           reloadTilesForDependencies(t2, e2) {
-            for (const i2 in this._tiles)
-              this._tiles[i2].hasDependency(t2, e2) && this._reloadTile(i2, "reloading");
+            for (const i2 in this._tiles) this._tiles[i2].hasDependency(t2, e2) && this._reloadTile(i2, "reloading");
             this._cache.filter((i2) => !i2.hasDependency(t2, e2));
           }
         }
@@ -11683,9 +10523,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             this.active = {};
           }
           acquire(e2) {
-            if (!this.workers)
-              for (this.workers = []; this.workers.length < tt.workerCount; )
-                this.workers.push(new Worker(t.c.WORKER_URL));
+            if (!this.workers) for (this.workers = []; this.workers.length < tt.workerCount; ) this.workers.push(new Worker(t.c.WORKER_URL));
             return this.active[e2] = true, this.workers.slice();
           }
           release(t2) {
@@ -11712,18 +10550,15 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }
           reset(t2, e2) {
             this.points = t2 || [], this._distances = [0];
-            for (let t3 = 1; t3 < this.points.length; t3++)
-              this._distances[t3] = this._distances[t3 - 1] + this.points[t3].dist(this.points[t3 - 1]);
+            for (let t3 = 1; t3 < this.points.length; t3++) this._distances[t3] = this._distances[t3 - 1] + this.points[t3].dist(this.points[t3 - 1]);
             this.length = this._distances[this._distances.length - 1], this.padding = Math.min(e2 || 0, 0.5 * this.length), this.paddedLength = this.length - 2 * this.padding;
           }
           lerp(e2) {
-            if (1 === this.points.length)
-              return this.points[0];
+            if (1 === this.points.length) return this.points[0];
             e2 = t.ad(e2, 0, 1);
             let i2 = 1, s2 = this._distances[i2];
             const a2 = e2 * this.paddedLength + this.padding;
-            for (; s2 < a2 && i2 < this._distances.length; )
-              s2 = this._distances[++i2];
+            for (; s2 < a2 && i2 < this._distances.length; ) s2 = this._distances[++i2];
             const o2 = i2 - 1, r2 = this._distances[o2], n2 = s2 - r2, l2 = n2 > 0 ? (a2 - r2) / n2 : 0;
             return this.points[o2].mult(1 - l2).add(this.points[i2].mult(l2));
           }
@@ -11736,8 +10571,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           constructor(t2, e2, i2) {
             const s2 = this.boxCells = [], a2 = this.circleCells = [];
             this.xCellCount = Math.ceil(t2 / i2), this.yCellCount = Math.ceil(e2 / i2);
-            for (let t3 = 0; t3 < this.xCellCount * this.yCellCount; t3++)
-              s2.push([]), a2.push([]);
+            for (let t3 = 0; t3 < this.xCellCount * this.yCellCount; t3++) s2.push([]), a2.push([]);
             this.circleKeys = [], this.boxKeys = [], this.bboxes = [], this.circles = [], this.width = t2, this.height = e2, this.xScale = this.xCellCount / t2, this.yScale = this.yCellCount / e2, this.boxUid = 0, this.circleUid = 0;
           }
           keysLength() {
@@ -11756,20 +10590,16 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             this.circleCells[a2].push(o2);
           }
           _query(t2, e2, i2, s2, a2, o2, r2) {
-            if (i2 < 0 || t2 > this.width || s2 < 0 || e2 > this.height)
-              return [];
+            if (i2 < 0 || t2 > this.width || s2 < 0 || e2 > this.height) return [];
             const n2 = [];
             if (t2 <= 0 && e2 <= 0 && this.width <= i2 && this.height <= s2) {
-              if (a2)
-                return [{ key: null, x1: t2, y1: e2, x2: i2, y2: s2 }];
-              for (let t3 = 0; t3 < this.boxKeys.length; t3++)
-                n2.push({ key: this.boxKeys[t3], x1: this.bboxes[4 * t3], y1: this.bboxes[4 * t3 + 1], x2: this.bboxes[4 * t3 + 2], y2: this.bboxes[4 * t3 + 3] });
+              if (a2) return [{ key: null, x1: t2, y1: e2, x2: i2, y2: s2 }];
+              for (let t3 = 0; t3 < this.boxKeys.length; t3++) n2.push({ key: this.boxKeys[t3], x1: this.bboxes[4 * t3], y1: this.bboxes[4 * t3 + 1], x2: this.bboxes[4 * t3 + 2], y2: this.bboxes[4 * t3 + 3] });
               for (let t3 = 0; t3 < this.circleKeys.length; t3++) {
                 const e3 = this.circles[3 * t3], i3 = this.circles[3 * t3 + 1], s3 = this.circles[3 * t3 + 2];
                 n2.push({ key: this.circleKeys[t3], x1: e3 - s3, y1: i3 - s3, x2: e3 + s3, y2: i3 + s3 });
               }
-            } else
-              this._forEachCell(t2, e2, i2, s2, this._queryCell, n2, { hitTest: a2, overlapMode: o2, seenUids: { box: {}, circle: {} } }, r2);
+            } else this._forEachCell(t2, e2, i2, s2, this._queryCell, n2, { hitTest: a2, overlapMode: o2, seenUids: { box: {}, circle: {} } }, r2);
             return n2;
           }
           query(t2, e2, i2, s2) {
@@ -11780,8 +10610,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }
           hitTestCircle(t2, e2, i2, s2, a2) {
             const o2 = t2 - i2, r2 = t2 + i2, n2 = e2 - i2, l2 = e2 + i2;
-            if (r2 < 0 || o2 > this.width || l2 < 0 || n2 > this.height)
-              return false;
+            if (r2 < 0 || o2 > this.width || l2 < 0 || n2 > this.height) return false;
             const h2 = [];
             return this._forEachCell(o2, n2, r2, l2, this._queryCellCircle, h2, { hitTest: true, overlapMode: s2, circle: { x: t2, y: e2, radius: i2 }, seenUids: { box: {}, circle: {} } }, a2), h2.length > 0;
           }
@@ -11789,27 +10618,23 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             const { seenUids: l2, hitTest: h2, overlapMode: c2 } = r2, u2 = this.boxCells[a2];
             if (null !== u2) {
               const a3 = this.bboxes;
-              for (const r3 of u2)
-                if (!l2.box[r3]) {
-                  l2.box[r3] = true;
-                  const u3 = 4 * r3, d3 = this.boxKeys[r3];
-                  if (t2 <= a3[u3 + 2] && e2 <= a3[u3 + 3] && i2 >= a3[u3 + 0] && s2 >= a3[u3 + 1] && (!n2 || n2(d3)) && (!h2 || !ot(c2, d3.overlapMode)) && (o2.push({ key: d3, x1: a3[u3], y1: a3[u3 + 1], x2: a3[u3 + 2], y2: a3[u3 + 3] }), h2))
-                    return true;
-                }
+              for (const r3 of u2) if (!l2.box[r3]) {
+                l2.box[r3] = true;
+                const u3 = 4 * r3, d3 = this.boxKeys[r3];
+                if (t2 <= a3[u3 + 2] && e2 <= a3[u3 + 3] && i2 >= a3[u3 + 0] && s2 >= a3[u3 + 1] && (!n2 || n2(d3)) && (!h2 || !ot(c2, d3.overlapMode)) && (o2.push({ key: d3, x1: a3[u3], y1: a3[u3 + 1], x2: a3[u3 + 2], y2: a3[u3 + 3] }), h2)) return true;
+              }
             }
             const d2 = this.circleCells[a2];
             if (null !== d2) {
               const a3 = this.circles;
-              for (const r3 of d2)
-                if (!l2.circle[r3]) {
-                  l2.circle[r3] = true;
-                  const u3 = 3 * r3, d3 = this.circleKeys[r3];
-                  if (this._circleAndRectCollide(a3[u3], a3[u3 + 1], a3[u3 + 2], t2, e2, i2, s2) && (!n2 || n2(d3)) && (!h2 || !ot(c2, d3.overlapMode))) {
-                    const t3 = a3[u3], e3 = a3[u3 + 1], i3 = a3[u3 + 2];
-                    if (o2.push({ key: d3, x1: t3 - i3, y1: e3 - i3, x2: t3 + i3, y2: e3 + i3 }), h2)
-                      return true;
-                  }
+              for (const r3 of d2) if (!l2.circle[r3]) {
+                l2.circle[r3] = true;
+                const u3 = 3 * r3, d3 = this.circleKeys[r3];
+                if (this._circleAndRectCollide(a3[u3], a3[u3 + 1], a3[u3 + 2], t2, e2, i2, s2) && (!n2 || n2(d3)) && (!h2 || !ot(c2, d3.overlapMode))) {
+                  const t3 = a3[u3], e3 = a3[u3 + 1], i3 = a3[u3 + 2];
+                  if (o2.push({ key: d3, x1: t3 - i3, y1: e3 - i3, x2: t3 + i3, y2: e3 + i3 }), h2) return true;
                 }
+              }
             }
             return false;
           }
@@ -11817,32 +10642,25 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             const { circle: l2, seenUids: h2, overlapMode: c2 } = r2, u2 = this.boxCells[a2];
             if (null !== u2) {
               const t3 = this.bboxes;
-              for (const e3 of u2)
-                if (!h2.box[e3]) {
-                  h2.box[e3] = true;
-                  const i3 = 4 * e3, s3 = this.boxKeys[e3];
-                  if (this._circleAndRectCollide(l2.x, l2.y, l2.radius, t3[i3 + 0], t3[i3 + 1], t3[i3 + 2], t3[i3 + 3]) && (!n2 || n2(s3)) && !ot(c2, s3.overlapMode))
-                    return o2.push(true), true;
-                }
+              for (const e3 of u2) if (!h2.box[e3]) {
+                h2.box[e3] = true;
+                const i3 = 4 * e3, s3 = this.boxKeys[e3];
+                if (this._circleAndRectCollide(l2.x, l2.y, l2.radius, t3[i3 + 0], t3[i3 + 1], t3[i3 + 2], t3[i3 + 3]) && (!n2 || n2(s3)) && !ot(c2, s3.overlapMode)) return o2.push(true), true;
+              }
             }
             const d2 = this.circleCells[a2];
             if (null !== d2) {
               const t3 = this.circles;
-              for (const e3 of d2)
-                if (!h2.circle[e3]) {
-                  h2.circle[e3] = true;
-                  const i3 = 3 * e3, s3 = this.circleKeys[e3];
-                  if (this._circlesCollide(t3[i3], t3[i3 + 1], t3[i3 + 2], l2.x, l2.y, l2.radius) && (!n2 || n2(s3)) && !ot(c2, s3.overlapMode))
-                    return o2.push(true), true;
-                }
+              for (const e3 of d2) if (!h2.circle[e3]) {
+                h2.circle[e3] = true;
+                const i3 = 3 * e3, s3 = this.circleKeys[e3];
+                if (this._circlesCollide(t3[i3], t3[i3 + 1], t3[i3 + 2], l2.x, l2.y, l2.radius) && (!n2 || n2(s3)) && !ot(c2, s3.overlapMode)) return o2.push(true), true;
+              }
             }
           }
           _forEachCell(t2, e2, i2, s2, a2, o2, r2, n2) {
             const l2 = this._convertToXCellCoord(t2), h2 = this._convertToYCellCoord(e2), c2 = this._convertToXCellCoord(i2), u2 = this._convertToYCellCoord(s2);
-            for (let d2 = l2; d2 <= c2; d2++)
-              for (let l3 = h2; l3 <= u2; l3++)
-                if (a2.call(this, t2, e2, i2, s2, this.xCellCount * l3 + d2, o2, r2, n2))
-                  return;
+            for (let d2 = l2; d2 <= c2; d2++) for (let l3 = h2; l3 <= u2; l3++) if (a2.call(this, t2, e2, i2, s2, this.xCellCount * l3 + d2, o2, r2, n2)) return;
           }
           _convertToXCellCoord(t2) {
             return Math.max(0, Math.min(this.xCellCount - 1, Math.floor(t2 * this.xScale)));
@@ -11856,13 +10674,10 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }
           _circleAndRectCollide(t2, e2, i2, s2, a2, o2, r2) {
             const n2 = (o2 - s2) / 2, l2 = Math.abs(t2 - (s2 + n2));
-            if (l2 > n2 + i2)
-              return false;
+            if (l2 > n2 + i2) return false;
             const h2 = (r2 - a2) / 2, c2 = Math.abs(e2 - (a2 + h2));
-            if (c2 > h2 + i2)
-              return false;
-            if (l2 <= n2 || c2 <= h2)
-              return true;
+            if (c2 > h2 + i2) return false;
+            if (l2 <= n2 || c2 <= h2) return true;
             const u2 = l2 - n2, d2 = c2 - h2;
             return u2 * u2 + d2 * d2 <= i2 * i2;
           }
@@ -11914,8 +10729,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         }
         function _t(t2, e2, i2, s2, a2, o2, r2, n2, l2, h2, c2, u2, d2) {
           const _2 = n2.glyphStartIndex + n2.numGlyphs, p2 = n2.lineStartIndex, m2 = n2.lineStartIndex + n2.lineLength, f2 = e2.getoffsetX(n2.glyphStartIndex), g2 = e2.getoffsetX(_2 - 1), v2 = yt(t2 * f2, i2, s2, a2, o2, r2, n2.segment, p2, m2, l2, h2, c2, u2, d2);
-          if (!v2)
-            return null;
+          if (!v2) return null;
           const x2 = yt(t2 * g2, i2, s2, a2, o2, r2, n2.segment, p2, m2, l2, h2, c2, u2, d2);
           return x2 ? { first: v2, last: x2 } : null;
         }
@@ -11927,31 +10741,25 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           let y2;
           if (e2.numGlyphs > 1) {
             const t2 = e2.glyphStartIndex + e2.numGlyphs, i3 = e2.lineStartIndex, o3 = e2.lineStartIndex + e2.lineLength, c3 = _t(g2, l2, v2, x2, s2, u2, d2, e2, h2, r2, _2, m2, f2);
-            if (!c3)
-              return { notEnoughRoom: true };
+            if (!c3) return { notEnoughRoom: true };
             const b2 = ht(c3.first.point, n2, f2).point, w2 = ht(c3.last.point, n2, f2).point;
             if (a2 && !s2) {
               const t3 = pt(e2.writingMode, b2, w2, p2);
-              if (t3)
-                return t3;
+              if (t3) return t3;
             }
             y2 = [c3.first];
-            for (let a3 = e2.glyphStartIndex + 1; a3 < t2 - 1; a3++)
-              y2.push(yt(g2 * l2.getoffsetX(a3), v2, x2, s2, u2, d2, e2.segment, i3, o3, h2, r2, _2, m2, f2));
+            for (let a3 = e2.glyphStartIndex + 1; a3 < t2 - 1; a3++) y2.push(yt(g2 * l2.getoffsetX(a3), v2, x2, s2, u2, d2, e2.segment, i3, o3, h2, r2, _2, m2, f2));
             y2.push(c3.last);
           } else {
             if (a2 && !s2) {
               const i4 = ht(d2, o2, f2).point, s3 = e2.lineStartIndex + e2.segment + 1, a3 = new t.P(h2.getx(s3), h2.gety(s3)), r3 = ht(a3, o2, f2), n3 = r3.signedDistanceFromCamera > 0 ? r3.point : ft(d2, a3, i4, 1, o2, f2), l3 = pt(e2.writingMode, i4, n3, p2);
-              if (l3)
-                return l3;
+              if (l3) return l3;
             }
             const i3 = yt(g2 * l2.getoffsetX(e2.glyphStartIndex), v2, x2, s2, u2, d2, e2.segment, e2.lineStartIndex, e2.lineStartIndex + e2.lineLength, h2, r2, _2, m2, f2);
-            if (!i3)
-              return { notEnoughRoom: true };
+            if (!i3) return { notEnoughRoom: true };
             y2 = [i3];
           }
-          for (const e3 of y2)
-            t.ak(c2, e3.point, e3.angle);
+          for (const e3 of y2) t.ak(c2, e3.point, e3.angle);
           return {};
         }
         function ft(t2, e2, i2, s2, a2, o2) {
@@ -11960,11 +10768,9 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         }
         function gt(e2, i2) {
           const { projectionCache: s2, lineVertexArray: a2, labelPlaneMatrix: o2, tileAnchorPoint: r2, distanceFromAnchor: n2, getElevation: l2, previousVertex: h2, direction: c2, absOffsetX: u2 } = i2;
-          if (s2.projections[e2])
-            return s2.projections[e2];
+          if (s2.projections[e2]) return s2.projections[e2];
           const d2 = new t.P(a2.getx(e2), a2.gety(e2)), _2 = ht(d2, o2, l2);
-          if (_2.signedDistanceFromCamera > 0)
-            return s2.projections[e2] = _2.point, _2.point;
+          if (_2.signedDistanceFromCamera > 0) return s2.projections[e2] = _2.point, _2.point;
           const p2 = e2 - c2;
           return ft(0 === n2 ? r2 : new t.P(a2.getx(p2), a2.gety(p2)), d2, h2, u2 - n2 + 1, o2, l2);
         }
@@ -11973,11 +10779,9 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         }
         function xt(e2, i2, s2, a2, o2, r2, n2, l2) {
           const { projectionCache: h2, direction: c2 } = l2;
-          if (h2.offsets[e2])
-            return h2.offsets[e2];
+          if (h2.offsets[e2]) return h2.offsets[e2];
           const u2 = s2.add(i2);
-          if (e2 + c2 < a2 || e2 + c2 >= o2)
-            return h2.offsets[e2] = u2, u2;
+          if (e2 + c2 < a2 || e2 + c2 >= o2) return h2.offsets[e2] = u2, u2;
           const d2 = gt(e2 + c2, l2), _2 = vt(d2.sub(s2), n2, c2), p2 = s2.add(_2), m2 = d2.add(_2);
           return h2.offsets[e2] = t.al(r2, u2, p2, m2) || u2, h2.offsets[e2];
         }
@@ -11989,12 +10793,10 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           const I2 = Math.abs(p2), E2 = [];
           let S2;
           for (; w2 + T2 <= I2; ) {
-            if (x2 += m2, x2 < n2 || x2 >= l2)
-              return null;
+            if (x2 += m2, x2 < n2 || x2 >= l2) return null;
             w2 += T2, b2 = y2, v2 = g2;
             const t3 = { projectionCache: u2, lineVertexArray: h2, labelPlaneMatrix: c2, tileAnchorPoint: o2, distanceFromAnchor: w2, getElevation: _2, previousVertex: b2, direction: m2, absOffsetX: I2 };
-            if (y2 = gt(x2, t3), 0 === i2)
-              E2.push(b2), S2 = y2.sub(b2);
+            if (y2 = gt(x2, t3), 0 === i2) E2.push(b2), S2 = y2.sub(b2);
             else {
               let e3;
               const s3 = y2.sub(b2);
@@ -12031,10 +10833,8 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             if (b2) {
               const i3 = 0.5 * d2 * v2 + _2, s3 = new t.P(-100, -100), a3 = new t.P(this.screenRightBoundary, this.screenBottomBoundary), o3 = new at(), r3 = b2.first, n3 = b2.last;
               let c3 = [];
-              for (let t2 = r3.path.length - 1; t2 >= 1; t2--)
-                c3.push(r3.path[t2]);
-              for (let t2 = 1; t2 < n3.path.length; t2++)
-                c3.push(n3.path[t2]);
+              for (let t2 = r3.path.length - 1; t2 >= 1; t2--) c3.push(r3.path[t2]);
+              for (let t2 = 1; t2 < n3.path.length; t2++) c3.push(n3.path[t2]);
               const f3 = 2.5 * i3;
               if (l2) {
                 const t2 = c3.map((t3) => ht(t3, l2, p2));
@@ -12043,8 +10843,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               let g3 = [];
               if (c3.length > 0) {
                 const e3 = c3[0].clone(), i4 = c3[0].clone();
-                for (let t2 = 1; t2 < c3.length; t2++)
-                  e3.x = Math.min(e3.x, c3[t2].x), e3.y = Math.min(e3.y, c3[t2].y), i4.x = Math.max(i4.x, c3[t2].x), i4.y = Math.max(i4.y, c3[t2].y);
+                for (let t2 = 1; t2 < c3.length; t2++) e3.x = Math.min(e3.x, c3[t2].x), e3.y = Math.min(e3.y, c3[t2].y), i4.x = Math.max(i4.x, c3[t2].x), i4.y = Math.max(i4.y, c3[t2].y);
                 g3 = e3.x >= s3.x && i4.x <= a3.x && e3.y >= s3.y && i4.y <= a3.y ? [c3] : i4.x < s3.x || e3.x > a3.x || i4.y < s3.y || e3.y > a3.y ? [] : t.am([c3], s3.x, s3.y, a3.x, a3.y);
               }
               for (const t2 of g3) {
@@ -12055,16 +10854,14 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
                   const a4 = t3 / Math.max(s4 - 1, 1), r4 = o3.lerp(a4), n4 = r4.x + It, l3 = r4.y + It;
                   m2.push(n4, l3, i3, 0);
                   const c4 = n4 - i3, d3 = l3 - i3, _3 = n4 + i3, p3 = l3 + i3;
-                  if (I2 = I2 && this.isOffscreen(c4, d3, _3, p3), T2 = T2 || this.isInsideGrid(c4, d3, _3, p3), "always" !== e2 && this.grid.hitTestCircle(n4, l3, i3, e2, u2) && (w2 = true, !h2))
-                    return { circles: [], offscreen: false, collisionDetected: w2 };
+                  if (I2 = I2 && this.isOffscreen(c4, d3, _3, p3), T2 = T2 || this.isInsideGrid(c4, d3, _3, p3), "always" !== e2 && this.grid.hitTestCircle(n4, l3, i3, e2, u2) && (w2 = true, !h2)) return { circles: [], offscreen: false, collisionDetected: w2 };
                 }
               }
             }
             return { circles: !h2 && w2 || !T2 || v2 < this.perspectiveRatioCutoff ? [] : m2, offscreen: I2, collisionDetected: w2 };
           }
           queryRenderedSymbols(e2) {
-            if (0 === e2.length || 0 === this.grid.keysLength() && 0 === this.ignoredGrid.keysLength())
-              return {};
+            if (0 === e2.length || 0 === this.grid.keysLength() && 0 === this.ignoredGrid.keysLength()) return {};
             const i2 = [];
             let s2 = 1 / 0, a2 = 1 / 0, o2 = -1 / 0, r2 = -1 / 0;
             for (const n3 of e2) {
@@ -12074,8 +10871,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             const n2 = this.grid.query(s2, a2, o2, r2).concat(this.ignoredGrid.query(s2, a2, o2, r2)), l2 = {}, h2 = {};
             for (const e3 of n2) {
               const s3 = e3.key;
-              if (void 0 === l2[s3.bucketInstanceId] && (l2[s3.bucketInstanceId] = {}), l2[s3.bucketInstanceId][s3.featureIndex])
-                continue;
+              if (void 0 === l2[s3.bucketInstanceId] && (l2[s3.bucketInstanceId] = {}), l2[s3.bucketInstanceId][s3.featureIndex]) continue;
               const a3 = [new t.P(e3.x1, e3.y1), new t.P(e3.x2, e3.y1), new t.P(e3.x2, e3.y2), new t.P(e3.x1, e3.y2)];
               t.an(i2, a3) && (l2[s3.bucketInstanceId][s3.featureIndex] = true, void 0 === h2[s3.bucketInstanceId] && (h2[s3.bucketInstanceId] = []), h2[s3.bucketInstanceId].push(s3.featureIndex));
             }
@@ -12086,8 +10882,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }
           insertCollisionCircles(t2, e2, i2, s2, a2, o2) {
             const r2 = i2 ? this.ignoredGrid : this.grid, n2 = { bucketInstanceId: s2, featureIndex: a2, collisionGroupID: o2, overlapMode: e2 };
-            for (let e3 = 0; e3 < t2.length; e3 += 4)
-              r2.insertCircle(n2, t2[e3], t2[e3 + 1], t2[e3 + 2]);
+            for (let e3 = 0; e3 < t2.length; e3 += 4) r2.insertCircle(n2, t2[e3], t2[e3 + 1], t2[e3 + 2]);
           }
           projectAndGetPerspectiveRatio(e2, i2, s2, a2) {
             let o2;
@@ -12143,8 +10938,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             this.crossSourceCollisions = t2, this.maxGroupID = 0, this.collisionGroups = {};
           }
           get(t2) {
-            if (this.crossSourceCollisions)
-              return { ID: 0, predicate: null };
+            if (this.crossSourceCollisions) return { ID: 0, predicate: null };
             if (!this.collisionGroups[t2]) {
               const e2 = ++this.maxGroupID;
               this.collisionGroups[t2] = { ID: e2, predicate: (t3) => t3.collisionGroupID === e2 };
@@ -12166,8 +10960,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }
           getBucketParts(e2, i2, s2, a2) {
             const o2 = s2.getBucket(i2), r2 = s2.latestFeatureIndex;
-            if (!o2 || !r2 || i2.id !== o2.layerIds[0])
-              return;
+            if (!o2 || !r2 || i2.id !== o2.layerIds[0]) return;
             const n2 = s2.collisionBoxArray, l2 = o2.layers[0].layout, h2 = Math.pow(2, this.transform.zoom - s2.tileID.overscaledZ), c2 = s2.tileSize / t.N, u2 = this.transform.calculatePosMatrix(s2.tileID.toUnwrapped()), d2 = "map" === l2.get("text-pitch-alignment"), _2 = "map" === l2.get("text-rotation-alignment"), p2 = St(s2, 1, this.transform.zoom), m2 = nt(u2, d2, _2, this.transform, p2);
             let f2 = null;
             if (d2) {
@@ -12176,20 +10969,17 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             }
             this.retainedQueryData[o2.bucketInstanceId] = new zt(o2.bucketInstanceId, r2, o2.sourceLayerIndex, o2.index, s2.tileID);
             const g2 = { bucket: o2, layout: l2, posMatrix: u2, textLabelPlaneMatrix: m2, labelToScreenMatrix: f2, scale: h2, textPixelRatio: c2, holdingForFade: s2.holdingForFade(), collisionBoxArray: n2, partiallyEvaluatedTextSize: t.ah(o2.textSizeData, this.transform.zoom), collisionGroup: this.collisionGroups.get(o2.sourceID) };
-            if (a2)
-              for (const t2 of o2.sortKeyRanges) {
-                const { sortKey: i3, symbolInstanceStart: s3, symbolInstanceEnd: a3 } = t2;
-                e2.push({ sortKey: i3, symbolInstanceStart: s3, symbolInstanceEnd: a3, parameters: g2 });
-              }
-            else
-              e2.push({ symbolInstanceStart: 0, symbolInstanceEnd: o2.symbolInstances.length, parameters: g2 });
+            if (a2) for (const t2 of o2.sortKeyRanges) {
+              const { sortKey: i3, symbolInstanceStart: s3, symbolInstanceEnd: a3 } = t2;
+              e2.push({ sortKey: i3, symbolInstanceStart: s3, symbolInstanceEnd: a3, parameters: g2 });
+            }
+            else e2.push({ symbolInstanceStart: 0, symbolInstanceEnd: o2.symbolInstances.length, parameters: g2 });
           }
           attemptAnchorPlacement(e2, i2, s2, a2, o2, r2, n2, l2, h2, c2, u2, d2, _2, p2, m2, f2) {
             const g2 = t.aq[e2.textAnchor], v2 = [e2.textOffset0, e2.textOffset1], x2 = At(g2, s2, a2, v2, o2), y2 = this.collisionIndex.placeCollisionBox(Rt(i2, x2.x, x2.y, r2, n2, this.transform.angle), u2, l2, h2, c2.predicate, f2);
             if ((!m2 || 0 !== this.collisionIndex.placeCollisionBox(Rt(m2, x2.x, x2.y, r2, n2, this.transform.angle), u2, l2, h2, c2.predicate, f2).box.length) && y2.box.length > 0) {
               let t2;
-              if (this.prevPlacement && this.prevPlacement.variableOffsets[d2.crossTileID] && this.prevPlacement.placements[d2.crossTileID] && this.prevPlacement.placements[d2.crossTileID].text && (t2 = this.prevPlacement.variableOffsets[d2.crossTileID].anchor), 0 === d2.crossTileID)
-                throw new Error("symbolInstance.crossTileID can't be 0");
+              if (this.prevPlacement && this.prevPlacement.variableOffsets[d2.crossTileID] && this.prevPlacement.placements[d2.crossTileID] && this.prevPlacement.placements[d2.crossTileID].text && (t2 = this.prevPlacement.variableOffsets[d2.crossTileID].anchor), 0 === d2.crossTileID) throw new Error("symbolInstance.crossTileID can't be 0");
               return this.variableOffsets[d2.crossTileID] = { textOffset: v2, width: s2, height: a2, anchor: g2, textBoxScale: o2, prevAnchor: t2 }, this.markUsedJustification(_2, g2, d2, p2), _2.allowVerticalPlacement && (this.markUsedOrientation(_2, p2, d2), this.placedOrientations[d2.crossTileID] = p2), { shift: x2, placedGlyphBoxes: y2 };
             }
           }
@@ -12198,10 +10988,8 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             !a2.collisionArrays && u2 && a2.deserializeCollisionBoxes(u2);
             const S2 = this.retainedQueryData[a2.bucketInstanceId].tileID, C2 = this.terrain ? (t2, e3) => this.terrain.getElevation(S2, t2, e3) : null, P2 = (e3, u3) => {
               var x3, T3;
-              if (i2[e3.crossTileID])
-                return;
-              if (c2)
-                return void (this.placements[e3.crossTileID] = new Dt(false, false, false));
+              if (i2[e3.crossTileID]) return;
+              if (c2) return void (this.placements[e3.crossTileID] = new Dt(false, false, false));
               let S3 = false, P3 = false, D2 = true, M2 = null, z2 = { box: null, offscreen: null }, L2 = { box: null, offscreen: null }, A2 = null, R2 = null, k2 = null, F2 = 0, B2 = 0, O2 = 0;
               u3.textFeatureIndex ? F2 = u3.textFeatureIndex : e3.useRuntimeCollisionCircles && (F2 = e3.featureIndex), u3.verticalTextFeatureIndex && (B2 = u3.verticalTextFeatureIndex);
               const N2 = u3.textBox;
@@ -12215,11 +11003,8 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
                   return s4;
                 }, s3 = (i4, s4) => {
                   if (a2.allowVerticalPlacement && e3.numVerticalGlyphVertices > 0 && u3.verticalTextBox) {
-                    for (const e4 of a2.writingModes)
-                      if (e4 === t.ai.vertical ? (z2 = s4(), L2 = z2) : z2 = i4(), z2 && z2.box && z2.box.length)
-                        break;
-                  } else
-                    z2 = i4();
+                    for (const e4 of a2.writingModes) if (e4 === t.ai.vertical ? (z2 = s4(), L2 = z2) : z2 = i4(), z2 && z2.box && z2.box.length) break;
+                  } else z2 = i4();
                 }, o3 = e3.textAnchorOffsetStartIndex, n3 = e3.textAnchorOffsetEndIndex;
                 if (n3 === o3) {
                   const o4 = (t2, i4) => {
@@ -12239,11 +11024,9 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
                     for (let i5 = 0; i5 < g3; i5++) {
                       for (let i6 = o3; i6 < n3; i6++) {
                         const o4 = a2.textAnchorOffsets.get(i6);
-                        if (l3 && o4.textAnchor !== l3)
-                          continue;
+                        if (l3 && o4.textAnchor !== l3) continue;
                         const n4 = this.attemptAnchorPlacement(o4, t2, c4, u4, d4, y2, b2, h2, r2, _2, x4, e3, a2, s4, p3, C2);
-                        if (n4 && (m3 = n4.placedGlyphBoxes, m3 && m3.box && m3.box.length))
-                          return S3 = true, M2 = n4.shift, m3;
+                        if (n4 && (m3 = n4.placedGlyphBoxes, m3 && m3.box && m3.box.length)) return S3 = true, M2 = n4.shift, m3;
                       }
                       l3 ? l3 = null : x4 = f2;
                     }
@@ -12276,26 +11059,20 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
                 const t2 = a2.bucketInstanceId;
                 let e4 = this.collisionCircleArrays[t2];
                 void 0 === e4 && (e4 = this.collisionCircleArrays[t2] = new Mt());
-                for (let t3 = 0; t3 < R2.circles.length; t3 += 4)
-                  e4.circles.push(R2.circles[t3 + 0]), e4.circles.push(R2.circles[t3 + 1]), e4.circles.push(R2.circles[t3 + 2]), e4.circles.push(R2.collisionDetected ? 1 : 0);
+                for (let t3 = 0; t3 < R2.circles.length; t3 += 4) e4.circles.push(R2.circles[t3 + 0]), e4.circles.push(R2.circles[t3 + 1]), e4.circles.push(R2.circles[t3 + 2]), e4.circles.push(R2.collisionDetected ? 1 : 0);
               }
-              if (0 === e3.crossTileID)
-                throw new Error("symbolInstance.crossTileID can't be 0");
-              if (0 === a2.bucketInstanceId)
-                throw new Error("bucket.bucketInstanceId can't be 0");
+              if (0 === e3.crossTileID) throw new Error("symbolInstance.crossTileID can't be 0");
+              if (0 === a2.bucketInstanceId) throw new Error("bucket.bucketInstanceId can't be 0");
               this.placements[e3.crossTileID] = new Dt(S3 || I2, P3 || E2, D2 || a2.justReloaded), i2[e3.crossTileID] = true;
             };
             if (T2) {
-              if (0 !== e2.symbolInstanceStart)
-                throw new Error("bucket.bucketInstanceId should be 0");
+              if (0 !== e2.symbolInstanceStart) throw new Error("bucket.bucketInstanceId should be 0");
               const t2 = a2.getSortedSymbolIndexes(this.transform.angle);
               for (let e3 = t2.length - 1; e3 >= 0; --e3) {
                 const i3 = t2[e3];
                 P2(a2.symbolInstances.get(i3), a2.collisionArrays[i3]);
               }
-            } else
-              for (let t2 = e2.symbolInstanceStart; t2 < e2.symbolInstanceEnd; t2++)
-                P2(a2.symbolInstances.get(t2), a2.collisionArrays[t2]);
+            } else for (let t2 = e2.symbolInstanceStart; t2 < e2.symbolInstanceEnd; t2++) P2(a2.symbolInstances.get(t2), a2.collisionArrays[t2]);
             if (s2 && a2.bucketInstanceId in this.collisionCircleArrays) {
               const e3 = this.collisionCircleArrays[a2.bucketInstanceId];
               t.as(e3.invProjMatrix, r2), e3.viewportMatrix = this.collisionIndex.getViewportMatrix();
@@ -12306,13 +11083,11 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             let o2;
             o2 = a2 === t.ai.vertical ? s2.verticalPlacedTextSymbolIndex : { left: s2.leftJustifiedTextSymbolIndex, center: s2.centerJustifiedTextSymbolIndex, right: s2.rightJustifiedTextSymbolIndex }[t.at(i2)];
             const r2 = [s2.leftJustifiedTextSymbolIndex, s2.centerJustifiedTextSymbolIndex, s2.rightJustifiedTextSymbolIndex, s2.verticalPlacedTextSymbolIndex];
-            for (const t2 of r2)
-              t2 >= 0 && (e2.text.placedSymbolArray.get(t2).crossTileID = o2 >= 0 && t2 !== o2 ? 0 : s2.crossTileID);
+            for (const t2 of r2) t2 >= 0 && (e2.text.placedSymbolArray.get(t2).crossTileID = o2 >= 0 && t2 !== o2 ? 0 : s2.crossTileID);
           }
           markUsedOrientation(e2, i2, s2) {
             const a2 = i2 === t.ai.horizontal || i2 === t.ai.horizontalOnly ? i2 : 0, o2 = i2 === t.ai.vertical ? i2 : 0, r2 = [s2.leftJustifiedTextSymbolIndex, s2.centerJustifiedTextSymbolIndex, s2.rightJustifiedTextSymbolIndex];
-            for (const t2 of r2)
-              e2.text.placedSymbolArray.get(t2).placedOrientation = a2;
+            for (const t2 of r2) e2.text.placedSymbolArray.get(t2).placedOrientation = a2;
             s2.verticalPlacedTextSymbolIndex && (e2.text.placedSymbolArray.get(s2.verticalPlacedTextSymbolIndex).placedOrientation = o2);
           }
           commit(t2) {
@@ -12332,12 +11107,9 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
                 a3.isHidden() || (this.opacities[t3] = a3, i2 = i2 || e3.text.placed || e3.icon.placed);
               }
             }
-            for (const t3 in o2)
-              this.variableOffsets[t3] || !this.opacities[t3] || this.opacities[t3].isHidden() || (this.variableOffsets[t3] = o2[t3]);
-            for (const t3 in r2)
-              this.placedOrientations[t3] || !this.opacities[t3] || this.opacities[t3].isHidden() || (this.placedOrientations[t3] = r2[t3]);
-            if (e2 && void 0 === e2.lastPlacementChangeTime)
-              throw new Error("Last placement time for previous placement is not defined");
+            for (const t3 in o2) this.variableOffsets[t3] || !this.opacities[t3] || this.opacities[t3].isHidden() || (this.variableOffsets[t3] = o2[t3]);
+            for (const t3 in r2) this.placedOrientations[t3] || !this.opacities[t3] || this.opacities[t3].isHidden() || (this.placedOrientations[t3] = r2[t3]);
+            if (e2 && void 0 === e2.lastPlacementChangeTime) throw new Error("Last placement time for previous placement is not defined");
             i2 ? this.lastPlacementChangeTime = t2 : "number" != typeof this.lastPlacementChangeTime && (this.lastPlacementChangeTime = e2 ? e2.lastPlacementChangeTime : t2);
           }
           updateLayerOpacities(t2, e2) {
@@ -12352,8 +11124,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             const a2 = e2.layers[0], o2 = a2.layout, r2 = new Pt(null, 0, false, false, true), n2 = o2.get("text-allow-overlap"), l2 = o2.get("icon-allow-overlap"), h2 = a2._unevaluatedLayout.hasValue("text-variable-anchor") || a2._unevaluatedLayout.hasValue("text-variable-anchor-offset"), c2 = "map" === o2.get("text-rotation-alignment"), u2 = "map" === o2.get("text-pitch-alignment"), d2 = "none" !== o2.get("icon-text-fit"), _2 = new Pt(null, 0, n2 && (l2 || !e2.hasIconData() || o2.get("icon-optional")), l2 && (n2 || !e2.hasTextData() || o2.get("text-optional")), true);
             !e2.collisionArrays && s2 && (e2.hasIconCollisionBoxData() || e2.hasTextCollisionBoxData()) && e2.deserializeCollisionBoxes(s2);
             const p2 = (t2, e3, i3) => {
-              for (let s3 = 0; s3 < e3 / 4; s3++)
-                t2.opacityVertexArray.emplaceBack(i3);
+              for (let s3 = 0; s3 < e3 / 4; s3++) t2.opacityVertexArray.emplaceBack(i3);
               t2.hasVisibleVertices = t2.hasVisibleVertices || i3 !== qt;
             };
             for (let s3 = 0; s3 < e2.symbolInstances.length; s3++) {
@@ -12394,10 +11165,8 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
                 }
               }
             }
-            if (e2.sortFeatures(this.transform.angle), this.retainedQueryData[e2.bucketInstanceId] && (this.retainedQueryData[e2.bucketInstanceId].featureSortOrder = e2.featureSortOrder), e2.hasTextData() && e2.text.opacityVertexBuffer && e2.text.opacityVertexBuffer.updateData(e2.text.opacityVertexArray), e2.hasIconData() && e2.icon.opacityVertexBuffer && e2.icon.opacityVertexBuffer.updateData(e2.icon.opacityVertexArray), e2.hasIconCollisionBoxData() && e2.iconCollisionBox.collisionVertexBuffer && e2.iconCollisionBox.collisionVertexBuffer.updateData(e2.iconCollisionBox.collisionVertexArray), e2.hasTextCollisionBoxData() && e2.textCollisionBox.collisionVertexBuffer && e2.textCollisionBox.collisionVertexBuffer.updateData(e2.textCollisionBox.collisionVertexArray), e2.text.opacityVertexArray.length !== e2.text.layoutVertexArray.length / 4)
-              throw new Error(`bucket.text.opacityVertexArray.length (= ${e2.text.opacityVertexArray.length}) !== bucket.text.layoutVertexArray.length (= ${e2.text.layoutVertexArray.length}) / 4`);
-            if (e2.icon.opacityVertexArray.length !== e2.icon.layoutVertexArray.length / 4)
-              throw new Error(`bucket.icon.opacityVertexArray.length (= ${e2.icon.opacityVertexArray.length}) !== bucket.icon.layoutVertexArray.length (= ${e2.icon.layoutVertexArray.length}) / 4`);
+            if (e2.sortFeatures(this.transform.angle), this.retainedQueryData[e2.bucketInstanceId] && (this.retainedQueryData[e2.bucketInstanceId].featureSortOrder = e2.featureSortOrder), e2.hasTextData() && e2.text.opacityVertexBuffer && e2.text.opacityVertexBuffer.updateData(e2.text.opacityVertexArray), e2.hasIconData() && e2.icon.opacityVertexBuffer && e2.icon.opacityVertexBuffer.updateData(e2.icon.opacityVertexArray), e2.hasIconCollisionBoxData() && e2.iconCollisionBox.collisionVertexBuffer && e2.iconCollisionBox.collisionVertexBuffer.updateData(e2.iconCollisionBox.collisionVertexArray), e2.hasTextCollisionBoxData() && e2.textCollisionBox.collisionVertexBuffer && e2.textCollisionBox.collisionVertexBuffer.updateData(e2.textCollisionBox.collisionVertexArray), e2.text.opacityVertexArray.length !== e2.text.layoutVertexArray.length / 4) throw new Error(`bucket.text.opacityVertexArray.length (= ${e2.text.opacityVertexArray.length}) !== bucket.text.layoutVertexArray.length (= ${e2.text.layoutVertexArray.length}) / 4`);
+            if (e2.icon.opacityVertexArray.length !== e2.icon.layoutVertexArray.length / 4) throw new Error(`bucket.icon.opacityVertexArray.length (= ${e2.icon.opacityVertexArray.length}) !== bucket.icon.layoutVertexArray.length (= ${e2.icon.layoutVertexArray.length}) / 4`);
             if (e2.bucketInstanceId in this.collisionCircleArrays) {
               const t2 = this.collisionCircleArrays[e2.bucketInstanceId];
               e2.placementInvProjMatrix = t2.invProjMatrix, e2.placementViewportMatrix = t2.viewportMatrix, e2.collisionCircleArray = t2.circles, delete this.collisionCircleArrays[e2.bucketInstanceId];
@@ -12425,10 +11194,8 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         }
         const Bt = Math.pow(2, 25), Ot = Math.pow(2, 24), Nt = Math.pow(2, 17), Ut = Math.pow(2, 16), Zt = Math.pow(2, 9), Gt = Math.pow(2, 8), jt = Math.pow(2, 1);
         function Vt(t2) {
-          if (0 === t2.opacity && !t2.placed)
-            return 0;
-          if (1 === t2.opacity && t2.placed)
-            return 4294967295;
+          if (0 === t2.opacity && !t2.placed) return 0;
+          if (1 === t2.opacity && t2.placed) return 4294967295;
           const e2 = t2.placed ? 1 : 0, i2 = Math.floor(127 * t2.opacity);
           return i2 * Bt + e2 * Ot + i2 * Nt + e2 * Ut + i2 * Zt + e2 * Gt + i2 * jt + e2;
         }
@@ -12439,12 +11206,8 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }
           continuePlacement(t2, e2, i2, s2, a2) {
             const o2 = this._bucketParts;
-            for (; this._currentTileIndex < t2.length; )
-              if (e2.getBucketParts(o2, s2, t2[this._currentTileIndex], this._sortAcrossTiles), this._currentTileIndex++, a2())
-                return true;
-            for (this._sortAcrossTiles && (this._sortAcrossTiles = false, o2.sort((t3, e3) => t3.sortKey - e3.sortKey)); this._currentPartIndex < o2.length; )
-              if (e2.placeLayerBucketPart(o2[this._currentPartIndex], this._seenCrossTileIDs, i2), this._currentPartIndex++, a2())
-                return true;
+            for (; this._currentTileIndex < t2.length; ) if (e2.getBucketParts(o2, s2, t2[this._currentTileIndex], this._sortAcrossTiles), this._currentTileIndex++, a2()) return true;
+            for (this._sortAcrossTiles && (this._sortAcrossTiles = false, o2.sort((t3, e3) => t3.sortKey - e3.sortKey)); this._currentPartIndex < o2.length; ) if (e2.placeLayerBucketPart(o2[this._currentPartIndex], this._seenCrossTileIDs, i2), this._currentPartIndex++, a2()) return true;
             return false;
           }
         }
@@ -12460,8 +11223,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             for (; this._currentPlacementIndex >= 0; ) {
               const t2 = i2[e2[this._currentPlacementIndex]], a3 = this.placement.collisionIndex.transform.zoom;
               if ("symbol" === t2.type && (!t2.minzoom || t2.minzoom <= a3) && (!t2.maxzoom || t2.maxzoom > a3)) {
-                if (this._inProgressLayer || (this._inProgressLayer = new $t(t2)), this._inProgressLayer.continuePlacement(s2[t2.source], this.placement, this._showCollisionBoxes, t2, o2))
-                  return;
+                if (this._inProgressLayer || (this._inProgressLayer = new $t(t2)), this._inProgressLayer.continuePlacement(s2[t2.source], this.placement, this._showCollisionBoxes, t2, o2)) return;
                 delete this._inProgressLayer;
               }
               this._currentPlacementIndex--;
@@ -12485,8 +11247,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               const s3 = { positions: i3.map((t2) => ({ x: Math.floor(t2.anchorX * Ht), y: Math.floor(t2.anchorY * Ht) })), crossTileIDs: i3.map((t2) => t2.crossTileID) };
               if (s3.positions.length > 128) {
                 const e4 = new t.av(s3.positions.length, 16, Uint16Array);
-                for (const { x: t2, y: i4 } of s3.positions)
-                  e4.add(t2, i4);
+                for (const { x: t2, y: i4 } of s3.positions) e4.add(t2, i4);
                 e4.finish(), delete s3.positions, s3.index = e4;
               }
               this._symbolsByKey[e3] = s3;
@@ -12500,11 +11261,9 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             const s2 = this.tileID.canonical.z < e2.canonical.z ? 1 : Math.pow(2, this.tileID.canonical.z - e2.canonical.z);
             for (let a2 = 0; a2 < t2.length; a2++) {
               const o2 = t2.get(a2);
-              if (o2.crossTileID)
-                continue;
+              if (o2.crossTileID) continue;
               const r2 = this._symbolsByKey[o2.key];
-              if (!r2)
-                continue;
+              if (!r2) continue;
               const n2 = this.getScaledCoordinates(o2, e2);
               if (r2.index) {
                 const t3 = r2.index.range(n2.x - s2, n2.y - s2, n2.x + s2, n2.y + s2).sort();
@@ -12515,14 +11274,13 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
                     break;
                   }
                 }
-              } else if (r2.positions)
-                for (let t3 = 0; t3 < r2.positions.length; t3++) {
-                  const e3 = r2.positions[t3], a3 = r2.crossTileIDs[t3];
-                  if (Math.abs(e3.x - n2.x) <= s2 && Math.abs(e3.y - n2.y) <= s2 && !i2[a3]) {
-                    i2[a3] = true, o2.crossTileID = a3;
-                    break;
-                  }
+              } else if (r2.positions) for (let t3 = 0; t3 < r2.positions.length; t3++) {
+                const e3 = r2.positions[t3], a3 = r2.crossTileIDs[t3];
+                if (Math.abs(e3.x - n2.x) <= s2 && Math.abs(e3.y - n2.y) <= s2 && !i2[a3]) {
+                  i2[a3] = true, o2.crossTileID = a3;
+                  break;
                 }
+              }
             }
           }
           getCrossTileIDsLists() {
@@ -12543,34 +11301,30 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }
           handleWrapJump(t2) {
             const e2 = Math.round((t2 - this.lng) / 360);
-            if (0 !== e2)
-              for (const t3 in this.indexes) {
-                const i2 = this.indexes[t3], s2 = {};
-                for (const t4 in i2) {
-                  const a2 = i2[t4];
-                  a2.tileID = a2.tileID.unwrapTo(a2.tileID.wrap + e2), s2[a2.tileID.key] = a2;
-                }
-                this.indexes[t3] = s2;
+            if (0 !== e2) for (const t3 in this.indexes) {
+              const i2 = this.indexes[t3], s2 = {};
+              for (const t4 in i2) {
+                const a2 = i2[t4];
+                a2.tileID = a2.tileID.unwrapTo(a2.tileID.wrap + e2), s2[a2.tileID.key] = a2;
               }
+              this.indexes[t3] = s2;
+            }
             this.lng = t2;
           }
           addBucket(t2, e2, i2) {
             if (this.indexes[t2.overscaledZ] && this.indexes[t2.overscaledZ][t2.key]) {
-              if (this.indexes[t2.overscaledZ][t2.key].bucketInstanceId === e2.bucketInstanceId)
-                return false;
+              if (this.indexes[t2.overscaledZ][t2.key].bucketInstanceId === e2.bucketInstanceId) return false;
               this.removeBucketCrossTileIDs(t2.overscaledZ, this.indexes[t2.overscaledZ][t2.key]);
             }
-            for (let t3 = 0; t3 < e2.symbolInstances.length; t3++)
-              e2.symbolInstances.get(t3).crossTileID = 0;
+            for (let t3 = 0; t3 < e2.symbolInstances.length; t3++) e2.symbolInstances.get(t3).crossTileID = 0;
             this.usedCrossTileIDs[t2.overscaledZ] || (this.usedCrossTileIDs[t2.overscaledZ] = {});
             const s2 = this.usedCrossTileIDs[t2.overscaledZ];
             for (const i3 in this.indexes) {
               const a2 = this.indexes[i3];
-              if (Number(i3) > t2.overscaledZ)
-                for (const i4 in a2) {
-                  const o2 = a2[i4];
-                  o2.tileID.isChildOf(t2) && o2.findMatches(e2.symbolInstances, t2, s2);
-                }
+              if (Number(i3) > t2.overscaledZ) for (const i4 in a2) {
+                const o2 = a2[i4];
+                o2.tileID.isChildOf(t2) && o2.findMatches(e2.symbolInstances, t2, s2);
+              }
               else {
                 const o2 = a2[t2.scaledTo(Number(i3)).key];
                 o2 && o2.findMatches(e2.symbolInstances, t2, s2);
@@ -12583,16 +11337,13 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             return void 0 === this.indexes[t2.overscaledZ] && (this.indexes[t2.overscaledZ] = {}), this.indexes[t2.overscaledZ][t2.key] = new Xt(t2, e2.symbolInstances, e2.bucketInstanceId), true;
           }
           removeBucketCrossTileIDs(t2, e2) {
-            for (const i2 of e2.getCrossTileIDsLists())
-              for (const e3 of i2)
-                delete this.usedCrossTileIDs[t2][e3];
+            for (const i2 of e2.getCrossTileIDsLists()) for (const e3 of i2) delete this.usedCrossTileIDs[t2][e3];
           }
           removeStaleBuckets(t2) {
             let e2 = false;
             for (const i2 in this.indexes) {
               const s2 = this.indexes[i2];
-              for (const a2 in s2)
-                t2[s2[a2].bucketInstanceId] || (this.removeBucketCrossTileIDs(i2, s2[a2]), delete s2[a2], e2 = true);
+              for (const a2 in s2) t2[s2[a2].bucketInstanceId] || (this.removeBucketCrossTileIDs(i2, s2[a2]), delete s2[a2], e2 = true);
             }
             return e2;
           }
@@ -12618,8 +11369,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             t2.forEach((t3) => {
               e2[t3] = true;
             });
-            for (const t3 in this.layerIndexes)
-              e2[t3] || delete this.layerIndexes[t3];
+            for (const t3 in this.layerIndexes) e2[t3] || delete this.layerIndexes[t3];
           }
         }
         const Jt = (e2, i2) => t.x(e2, i2 && i2.filter((t2) => "source.canvas" !== t2.identifier)), te = t.F(t.ax, ["addLayer", "removeLayer", "setPaintProperty", "setLayoutProperty", "setFilter", "addSource", "removeSource", "setLayerZoomRange", "setLight", "setTransition", "setGeoJSONSourceData", "setGlyphs", "setSprite"]), ee = t.F(t.ax, ["setCenter", "setZoom", "setBearing", "setPitch"]), ie = t.aw();
@@ -12629,24 +11379,20 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             const s2 = this;
             this._rtlTextPluginCallback = se.registerForPluginStateChange((e3) => {
               s2.dispatcher.broadcast("syncRTLPluginState", { pluginStatus: e3.pluginStatus, pluginURL: e3.pluginURL }, (e4, i3) => {
-                if (t.aA(e4), i3 && i3.every((t2) => t2))
-                  for (const t2 in s2.sourceCaches) {
-                    const e5 = s2.sourceCaches[t2].getSource().type;
-                    "vector" !== e5 && "geojson" !== e5 || s2.sourceCaches[t2].reload();
-                  }
+                if (t.aA(e4), i3 && i3.every((t2) => t2)) for (const t2 in s2.sourceCaches) {
+                  const e5 = s2.sourceCaches[t2].getSource().type;
+                  "vector" !== e5 && "geojson" !== e5 || s2.sourceCaches[t2].reload();
+                }
               });
             }), this.on("data", (t2) => {
-              if ("source" !== t2.dataType || "metadata" !== t2.sourceDataType)
-                return;
+              if ("source" !== t2.dataType || "metadata" !== t2.sourceDataType) return;
               const e3 = this.sourceCaches[t2.sourceId];
-              if (!e3)
-                return;
+              if (!e3) return;
               const i3 = e3.getSource();
-              if (i3 && i3.vectorLayerIds)
-                for (const t3 in this._layers) {
-                  const e4 = this._layers[t3];
-                  e4.source === i3.id && this._validateLayer(e4);
-                }
+              if (i3 && i3.vectorLayerIds) for (const t3 in this._layers) {
+                const e4 = this._layers[t3];
+                e4.source === i3.id && this._validateLayer(e4);
+              }
             });
           }
           loadURL(e2, i2 = {}, s2) {
@@ -12669,8 +11415,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             const o2 = i2.transformStyle ? i2.transformStyle(s2, e2) : e2;
             if (!i2.validate || !Jt(this, t.y(o2))) {
               this._loaded = true, this.stylesheet = o2;
-              for (const t2 in o2.sources)
-                this.addSource(t2, o2.sources[t2], { validate: false });
+              for (const t2 in o2.sources) this.addSource(t2, o2.sources[t2], { validate: false });
               o2.sprite ? this._loadSprite(o2.sprite) : this.imageManager.setLoaded(true), this.glyphManager.setURL(o2.glyphs), this._createLayers(), this.light = new P(this.stylesheet.light), this.map.setTerrain(null !== (a2 = this.stylesheet.terrain) && void 0 !== a2 ? a2 : null), this.fire(new t.k("data", { dataType: "style" })), this.fire(new t.k("style.load"));
             }
           }
@@ -12696,64 +11441,50 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
                 });
               }
               return { cancel() {
-                for (const t2 of Object.values(l2))
-                  t2.cancel();
+                for (const t2 of Object.values(l2)) t2.cancel();
               } };
             }(e2, this.map._requestManager, this.map.getPixelRatio(), (e3, a2) => {
-              if (this._spriteRequest = null, e3)
-                this.fire(new t.j(e3));
-              else if (a2)
-                for (const t2 in a2) {
-                  this._spritesImagesIds[t2] = [];
-                  const e4 = this._spritesImagesIds[t2] ? this._spritesImagesIds[t2].filter((t3) => !(t3 in a2)) : [];
-                  for (const t3 of e4)
-                    this.imageManager.removeImage(t3), this._changedImages[t3] = true;
-                  for (const e5 in a2[t2]) {
-                    const s3 = "default" === t2 ? e5 : `${t2}:${e5}`;
-                    this._spritesImagesIds[t2].push(s3), s3 in this.imageManager.images ? this.imageManager.updateImage(s3, a2[t2][e5], false) : this.imageManager.addImage(s3, a2[t2][e5]), i2 && (this._changedImages[s3] = true);
-                  }
+              if (this._spriteRequest = null, e3) this.fire(new t.j(e3));
+              else if (a2) for (const t2 in a2) {
+                this._spritesImagesIds[t2] = [];
+                const e4 = this._spritesImagesIds[t2] ? this._spritesImagesIds[t2].filter((t3) => !(t3 in a2)) : [];
+                for (const t3 of e4) this.imageManager.removeImage(t3), this._changedImages[t3] = true;
+                for (const e5 in a2[t2]) {
+                  const s3 = "default" === t2 ? e5 : `${t2}:${e5}`;
+                  this._spritesImagesIds[t2].push(s3), s3 in this.imageManager.images ? this.imageManager.updateImage(s3, a2[t2][e5], false) : this.imageManager.addImage(s3, a2[t2][e5]), i2 && (this._changedImages[s3] = true);
                 }
+              }
               this.imageManager.setLoaded(true), this._availableImages = this.imageManager.listImages(), i2 && (this._changed = true), this.dispatcher.broadcast("setImages", this._availableImages), this.fire(new t.k("data", { dataType: "style" })), s2 && s2(e3);
             });
           }
           _unloadSprite() {
-            for (const t2 of Object.values(this._spritesImagesIds).flat())
-              this.imageManager.removeImage(t2), this._changedImages[t2] = true;
+            for (const t2 of Object.values(this._spritesImagesIds).flat()) this.imageManager.removeImage(t2), this._changedImages[t2] = true;
             this._spritesImagesIds = {}, this._availableImages = this.imageManager.listImages(), this._changed = true, this.dispatcher.broadcast("setImages", this._availableImages), this.fire(new t.k("data", { dataType: "style" }));
           }
           _validateLayer(e2) {
             const i2 = this.sourceCaches[e2.source];
-            if (!i2)
-              return;
+            if (!i2) return;
             const s2 = e2.sourceLayer;
-            if (!s2)
-              return;
+            if (!s2) return;
             const a2 = i2.getSource();
             ("geojson" === a2.type || a2.vectorLayerIds && -1 === a2.vectorLayerIds.indexOf(s2)) && this.fire(new t.j(new Error(`Source layer "${s2}" does not exist on source "${a2.id}" as specified by style layer "${e2.id}".`)));
           }
           loaded() {
-            if (!this._loaded)
-              return false;
-            if (Object.keys(this._updatedSources).length)
-              return false;
-            for (const t2 in this.sourceCaches)
-              if (!this.sourceCaches[t2].loaded())
-                return false;
+            if (!this._loaded) return false;
+            if (Object.keys(this._updatedSources).length) return false;
+            for (const t2 in this.sourceCaches) if (!this.sourceCaches[t2].loaded()) return false;
             return !!this.imageManager.isLoaded();
           }
           _serializeByIds(t2) {
             const e2 = this._serializedAllLayers();
-            if (!t2 || 0 === t2.length)
-              return Object.values(e2);
+            if (!t2 || 0 === t2.length) return Object.values(e2);
             const i2 = [];
-            for (const s2 of t2)
-              e2[s2] && i2.push(e2[s2]);
+            for (const s2 of t2) e2[s2] && i2.push(e2[s2]);
             return i2;
           }
           _serializedAllLayers() {
             let t2 = this._serializedLayers;
-            if (t2)
-              return t2;
+            if (t2) return t2;
             t2 = this._serializedLayers = {};
             const e2 = Object.keys(this._layers);
             for (const i2 of e2) {
@@ -12763,40 +11494,30 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             return t2;
           }
           hasTransitions() {
-            if (this.light && this.light.hasTransition())
-              return true;
-            for (const t2 in this.sourceCaches)
-              if (this.sourceCaches[t2].hasTransition())
-                return true;
-            for (const t2 in this._layers)
-              if (this._layers[t2].hasTransition())
-                return true;
+            if (this.light && this.light.hasTransition()) return true;
+            for (const t2 in this.sourceCaches) if (this.sourceCaches[t2].hasTransition()) return true;
+            for (const t2 in this._layers) if (this._layers[t2].hasTransition()) return true;
             return false;
           }
           _checkLoaded() {
-            if (!this._loaded)
-              throw new Error("Style is not done loading.");
+            if (!this._loaded) throw new Error("Style is not done loading.");
           }
           update(e2) {
-            if (!this._loaded)
-              return;
+            if (!this._loaded) return;
             const i2 = this._changed;
             if (this._changed) {
               const t2 = Object.keys(this._updatedLayers), i3 = Object.keys(this._removedLayers);
               (t2.length || i3.length) && this._updateWorkerLayers(t2, i3);
               for (const t3 in this._updatedSources) {
                 const e3 = this._updatedSources[t3];
-                if ("reload" === e3)
-                  this._reloadSource(t3);
+                if ("reload" === e3) this._reloadSource(t3);
                 else {
-                  if ("clear" !== e3)
-                    throw new Error(`Invalid action ${e3}`);
+                  if ("clear" !== e3) throw new Error(`Invalid action ${e3}`);
                   this._clearSource(t3);
                 }
               }
               this._updateTilesForChangedImages(), this._updateTilesForChangedGlyphs();
-              for (const t3 in this._updatedPaintProps)
-                this._layers[t3].updateTransitions(e2);
+              for (const t3 in this._updatedPaintProps) this._layers[t3].updateTransitions(e2);
               this.light.updateTransitions(e2), this._resetUpdates();
             }
             const s2 = {};
@@ -12817,15 +11538,13 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           _updateTilesForChangedImages() {
             const t2 = Object.keys(this._changedImages);
             if (t2.length) {
-              for (const e2 in this.sourceCaches)
-                this.sourceCaches[e2].reloadTilesForDependencies(["icons", "patterns"], t2);
+              for (const e2 in this.sourceCaches) this.sourceCaches[e2].reloadTilesForDependencies(["icons", "patterns"], t2);
               this._changedImages = {};
             }
           }
           _updateTilesForChangedGlyphs() {
             if (this._glyphsDidChange) {
-              for (const t2 in this.sourceCaches)
-                this.sourceCaches[t2].reloadTilesForDependencies(["glyphs"], [""]);
+              for (const t2 in this.sourceCaches) this.sourceCaches[t2].reloadTilesForDependencies(["glyphs"], [""]);
               this._glyphsDidChange = false;
             }
           }
@@ -12838,22 +11557,17 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           setState(e2, i2 = {}) {
             this._checkLoaded();
             const s2 = this.serialize();
-            if (e2 = i2.transformStyle ? i2.transformStyle(s2, e2) : e2, Jt(this, t.y(e2)))
-              return false;
+            if (e2 = i2.transformStyle ? i2.transformStyle(s2, e2) : e2, Jt(this, t.y(e2))) return false;
             (e2 = t.aD(e2)).layers = t.aB(e2.layers);
             const a2 = t.aE(s2, e2).filter((t2) => !(t2.command in ee));
-            if (0 === a2.length)
-              return false;
+            if (0 === a2.length) return false;
             const o2 = a2.filter((t2) => !(t2.command in te));
-            if (o2.length > 0)
-              throw new Error(`Unimplemented: ${o2.map((t2) => t2.command).join(", ")}.`);
-            for (const t2 of a2)
-              "setTransition" !== t2.command && this[t2.command].apply(this, t2.args);
+            if (o2.length > 0) throw new Error(`Unimplemented: ${o2.map((t2) => t2.command).join(", ")}.`);
+            for (const t2 of a2) "setTransition" !== t2.command && this[t2.command].apply(this, t2.args);
             return this.stylesheet = e2, this._serializedLayers = null, true;
           }
           addImage(e2, i2) {
-            if (this.getImage(e2))
-              return this.fire(new t.j(new Error(`An image named "${e2}" already exists.`)));
+            if (this.getImage(e2)) return this.fire(new t.j(new Error(`An image named "${e2}" already exists.`)));
             this.imageManager.addImage(e2, i2), this._afterImageUpdated(e2);
           }
           updateImage(t2, e2) {
@@ -12863,8 +11577,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             return this.imageManager.getImage(t2);
           }
           removeImage(e2) {
-            if (!this.getImage(e2))
-              return this.fire(new t.j(new Error(`An image named "${e2}" does not exist.`)));
+            if (!this.getImage(e2)) return this.fire(new t.j(new Error(`An image named "${e2}" does not exist.`)));
             this.imageManager.removeImage(e2), this._afterImageUpdated(e2);
           }
           _afterImageUpdated(e2) {
@@ -12874,31 +11587,23 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             return this._checkLoaded(), this.imageManager.listImages();
           }
           addSource(e2, i2, s2 = {}) {
-            if (this._checkLoaded(), void 0 !== this.sourceCaches[e2])
-              throw new Error(`Source "${e2}" already exists.`);
-            if (!i2.type)
-              throw new Error(`The type property must be defined, but only the following properties were given: ${Object.keys(i2).join(", ")}.`);
-            if (["vector", "raster", "geojson", "video", "image"].indexOf(i2.type) >= 0 && this._validate(t.y.source, `sources.${e2}`, i2, null, s2))
-              return;
+            if (this._checkLoaded(), void 0 !== this.sourceCaches[e2]) throw new Error(`Source "${e2}" already exists.`);
+            if (!i2.type) throw new Error(`The type property must be defined, but only the following properties were given: ${Object.keys(i2).join(", ")}.`);
+            if (["vector", "raster", "geojson", "video", "image"].indexOf(i2.type) >= 0 && this._validate(t.y.source, `sources.${e2}`, i2, null, s2)) return;
             this.map && this.map._collectResourceTiming && (i2.collectResourceTiming = true);
             const a2 = this.sourceCaches[e2] = new K(e2, i2, this.dispatcher);
             a2.style = this, a2.setEventedParent(this, () => ({ isSourceLoaded: a2.loaded(), source: a2.serialize(), sourceId: e2 })), a2.onAdd(this.map), this._changed = true;
           }
           removeSource(e2) {
-            if (this._checkLoaded(), void 0 === this.sourceCaches[e2])
-              throw new Error("There is no source with this ID");
-            for (const i3 in this._layers)
-              if (this._layers[i3].source === e2)
-                return this.fire(new t.j(new Error(`Source "${e2}" cannot be removed while layer "${i3}" is using it.`)));
+            if (this._checkLoaded(), void 0 === this.sourceCaches[e2]) throw new Error("There is no source with this ID");
+            for (const i3 in this._layers) if (this._layers[i3].source === e2) return this.fire(new t.j(new Error(`Source "${e2}" cannot be removed while layer "${i3}" is using it.`)));
             const i2 = this.sourceCaches[e2];
             delete this.sourceCaches[e2], delete this._updatedSources[e2], i2.fire(new t.k("data", { sourceDataType: "metadata", dataType: "source", sourceId: e2 })), i2.setEventedParent(null), i2.onRemove(this.map), this._changed = true;
           }
           setGeoJSONSourceData(t2, e2) {
-            if (this._checkLoaded(), void 0 === this.sourceCaches[t2])
-              throw new Error(`There is no source with this ID=${t2}`);
+            if (this._checkLoaded(), void 0 === this.sourceCaches[t2]) throw new Error(`There is no source with this ID=${t2}`);
             const i2 = this.sourceCaches[t2].getSource();
-            if ("geojson" !== i2.type)
-              throw new Error(`geojsonSource.type is ${i2.type}, which is !== 'geojson`);
+            if ("geojson" !== i2.type) throw new Error(`geojsonSource.type is ${i2.type}, which is !== 'geojson`);
             i2.setData(e2), this._changed = true;
           }
           getSource(t2) {
@@ -12907,21 +11612,17 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           addLayer(e2, i2, s2 = {}) {
             this._checkLoaded();
             const a2 = e2.id;
-            if (this.getLayer(a2))
-              return void this.fire(new t.j(new Error(`Layer "${a2}" already exists on this map.`)));
+            if (this.getLayer(a2)) return void this.fire(new t.j(new Error(`Layer "${a2}" already exists on this map.`)));
             let o2;
             if ("custom" === e2.type) {
-              if (Jt(this, t.aF(e2)))
-                return;
+              if (Jt(this, t.aF(e2))) return;
               o2 = t.aC(e2);
             } else {
-              if ("source" in e2 && "object" == typeof e2.source && (this.addSource(a2, e2.source), e2 = t.aD(e2), e2 = t.e(e2, { source: a2 })), this._validate(t.y.layer, `layers.${a2}`, e2, { arrayIndex: -1 }, s2))
-                return;
+              if ("source" in e2 && "object" == typeof e2.source && (this.addSource(a2, e2.source), e2 = t.aD(e2), e2 = t.e(e2, { source: a2 })), this._validate(t.y.layer, `layers.${a2}`, e2, { arrayIndex: -1 }, s2)) return;
               o2 = t.aC(e2), this._validateLayer(o2), o2.setEventedParent(this, { layer: { id: a2 } });
             }
             const r2 = i2 ? this._order.indexOf(i2) : this._order.length;
-            if (i2 && -1 === r2)
-              this.fire(new t.j(new Error(`Cannot add layer "${a2}" before non-existing layer "${i2}".`)));
+            if (i2 && -1 === r2) this.fire(new t.j(new Error(`Cannot add layer "${a2}" before non-existing layer "${i2}".`)));
             else {
               if (this._order.splice(r2, 0, a2), this._layerOrderChanged = true, this._layers[a2] = o2, this._removedLayers[a2] && o2.source && "custom" !== o2.type) {
                 const t2 = this._removedLayers[a2];
@@ -12931,10 +11632,8 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             }
           }
           moveLayer(e2, i2) {
-            if (this._checkLoaded(), this._changed = true, !this._layers[e2])
-              return void this.fire(new t.j(new Error(`The layer '${e2}' does not exist in the map's style and cannot be moved.`)));
-            if (e2 === i2)
-              return;
+            if (this._checkLoaded(), this._changed = true, !this._layers[e2]) return void this.fire(new t.j(new Error(`The layer '${e2}' does not exist in the map's style and cannot be moved.`)));
+            if (e2 === i2) return;
             const s2 = this._order.indexOf(e2);
             this._order.splice(s2, 1);
             const a2 = i2 ? this._order.indexOf(i2) : this._order.length;
@@ -12943,8 +11642,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           removeLayer(e2) {
             this._checkLoaded();
             const i2 = this._layers[e2];
-            if (!i2)
-              return void this.fire(new t.j(new Error(`Cannot remove non-existing layer "${e2}".`)));
+            if (!i2) return void this.fire(new t.j(new Error(`Cannot remove non-existing layer "${e2}".`)));
             i2.setEventedParent(null);
             const s2 = this._order.indexOf(e2);
             this._order.splice(s2, 1), this._layerOrderChanged = true, this._changed = true, this._removedLayers[e2] = i2, delete this._layers[e2], this._serializedLayers && delete this._serializedLayers[e2], delete this._updatedLayers[e2], delete this._updatedPaintProps[e2], i2.onRemove && i2.onRemove(this.map);
@@ -12964,10 +11662,8 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             this._checkLoaded();
             const a2 = this.getLayer(e2);
             if (a2) {
-              if (!t.aG(a2.filter, i2))
-                return null == i2 ? (a2.filter = void 0, void this._updateLayer(a2)) : void (this._validate(t.y.filter, `layers.${a2.id}.filter`, i2, null, s2) || (a2.filter = t.aD(i2), this._updateLayer(a2)));
-            } else
-              this.fire(new t.j(new Error(`Cannot filter non-existing layer "${e2}".`)));
+              if (!t.aG(a2.filter, i2)) return null == i2 ? (a2.filter = void 0, void this._updateLayer(a2)) : void (this._validate(t.y.filter, `layers.${a2.id}.filter`, i2, null, s2) || (a2.filter = t.aD(i2), this._updateLayer(a2)));
+            } else this.fire(new t.j(new Error(`Cannot filter non-existing layer "${e2}".`)));
           }
           getFilter(e2) {
             return t.aD(this.getLayer(e2).filter);
@@ -12979,8 +11675,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }
           getLayoutProperty(e2, i2) {
             const s2 = this.getLayer(e2);
-            if (s2)
-              return s2.getLayoutProperty(i2);
+            if (s2) return s2.getLayoutProperty(i2);
             this.fire(new t.j(new Error(`Cannot get style of non-existing layer "${e2}".`)));
           }
           setPaintProperty(e2, i2, s2, a2 = {}) {
@@ -12994,32 +11689,28 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           setFeatureState(e2, i2) {
             this._checkLoaded();
             const s2 = e2.source, a2 = e2.sourceLayer, o2 = this.sourceCaches[s2];
-            if (void 0 === o2)
-              return void this.fire(new t.j(new Error(`The source '${s2}' does not exist in the map's style.`)));
+            if (void 0 === o2) return void this.fire(new t.j(new Error(`The source '${s2}' does not exist in the map's style.`)));
             const r2 = o2.getSource().type;
             "geojson" === r2 && a2 ? this.fire(new t.j(new Error("GeoJSON sources cannot have a sourceLayer parameter."))) : "vector" !== r2 || a2 ? (void 0 === e2.id && this.fire(new t.j(new Error("The feature id parameter must be provided."))), o2.setFeatureState(a2, e2.id, i2)) : this.fire(new t.j(new Error("The sourceLayer parameter must be provided for vector source types.")));
           }
           removeFeatureState(e2, i2) {
             this._checkLoaded();
             const s2 = e2.source, a2 = this.sourceCaches[s2];
-            if (void 0 === a2)
-              return void this.fire(new t.j(new Error(`The source '${s2}' does not exist in the map's style.`)));
+            if (void 0 === a2) return void this.fire(new t.j(new Error(`The source '${s2}' does not exist in the map's style.`)));
             const o2 = a2.getSource().type, r2 = "vector" === o2 ? e2.sourceLayer : void 0;
             "vector" !== o2 || r2 ? i2 && "string" != typeof e2.id && "number" != typeof e2.id ? this.fire(new t.j(new Error("A feature id is required to remove its specific state property."))) : a2.removeFeatureState(r2, e2.id, i2) : this.fire(new t.j(new Error("The sourceLayer parameter must be provided for vector source types.")));
           }
           getFeatureState(e2) {
             this._checkLoaded();
             const i2 = e2.source, s2 = e2.sourceLayer, a2 = this.sourceCaches[i2];
-            if (void 0 !== a2)
-              return "vector" !== a2.getSource().type || s2 ? (void 0 === e2.id && this.fire(new t.j(new Error("The feature id parameter must be provided."))), a2.getFeatureState(s2, e2.id)) : void this.fire(new t.j(new Error("The sourceLayer parameter must be provided for vector source types.")));
+            if (void 0 !== a2) return "vector" !== a2.getSource().type || s2 ? (void 0 === e2.id && this.fire(new t.j(new Error("The feature id parameter must be provided."))), a2.getFeatureState(s2, e2.id)) : void this.fire(new t.j(new Error("The sourceLayer parameter must be provided for vector source types.")));
             this.fire(new t.j(new Error(`The source '${i2}' does not exist in the map's style.`)));
           }
           getTransition() {
             return t.e({ duration: 300, delay: 0 }, this.stylesheet && this.stylesheet.transition);
           }
           serialize() {
-            if (!this._loaded)
-              return;
+            if (!this._loaded) return;
             const e2 = t.aH(this.sourceCaches, (t2) => t2.serialize()), i2 = this._serializeByIds(this._order), s2 = this.map.getTerrain() || void 0, a2 = this.stylesheet;
             return t.aI({ version: a2.version, name: a2.name, metadata: a2.metadata, light: a2.light, center: a2.center, zoom: a2.zoom, bearing: a2.bearing, pitch: a2.pitch, sprite: a2.sprite, glyphs: a2.glyphs, transition: a2.transition, sources: e2, layers: i2, terrain: s2 }, (t2) => void 0 !== t2);
           }
@@ -13034,9 +11725,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
                 i2[o2] = a3;
                 for (const e3 of t2) {
                   const t3 = e3[o2];
-                  if (t3)
-                    for (const e4 of t3)
-                      s2.push(e4);
+                  if (t3) for (const e4 of t3) s2.push(e4);
                 }
               }
             }
@@ -13044,20 +11733,15 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             const a2 = [];
             for (let o2 = this._order.length - 1; o2 >= 0; o2--) {
               const r2 = this._order[o2];
-              if (e2(r2))
-                for (let t3 = s2.length - 1; t3 >= 0; t3--) {
-                  const e3 = s2[t3].feature;
-                  if (i2[e3.layer.id] < o2)
-                    break;
-                  a2.push(e3), s2.pop();
-                }
-              else
-                for (const e3 of t2) {
-                  const t3 = e3[r2];
-                  if (t3)
-                    for (const e4 of t3)
-                      a2.push(e4.feature);
-                }
+              if (e2(r2)) for (let t3 = s2.length - 1; t3 >= 0; t3--) {
+                const e3 = s2[t3].feature;
+                if (i2[e3.layer.id] < o2) break;
+                a2.push(e3), s2.pop();
+              }
+              else for (const e3 of t2) {
+                const t3 = e3[r2];
+                if (t3) for (const e4 of t3) a2.push(e4.feature);
+              }
             }
             return a2;
           }
@@ -13065,24 +11749,20 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             i2 && i2.filter && this._validate(t.y.filter, "queryRenderedFeatures.filter", i2.filter, null, i2);
             const a2 = {};
             if (i2 && i2.layers) {
-              if (!Array.isArray(i2.layers))
-                return this.fire(new t.j(new Error("parameters.layers must be an Array."))), [];
+              if (!Array.isArray(i2.layers)) return this.fire(new t.j(new Error("parameters.layers must be an Array."))), [];
               for (const e3 of i2.layers) {
                 const i3 = this._layers[e3];
-                if (!i3)
-                  return this.fire(new t.j(new Error(`The layer '${e3}' does not exist in the map's style and cannot be queried for features.`))), [];
+                if (!i3) return this.fire(new t.j(new Error(`The layer '${e3}' does not exist in the map's style and cannot be queried for features.`))), [];
                 a2[i3.source] = true;
               }
             }
             const o2 = [];
             i2.availableImages = this._availableImages;
             const r2 = this._serializedAllLayers();
-            for (const t2 in this.sourceCaches)
-              i2.layers && !a2[t2] || o2.push(q(this.sourceCaches[t2], this._layers, r2, e2, i2, s2));
+            for (const t2 in this.sourceCaches) i2.layers && !a2[t2] || o2.push(q(this.sourceCaches[t2], this._layers, r2, e2, i2, s2));
             return this.placement && o2.push(function(t2, e3, i3, s3, a3, o3, r3) {
               const n2 = {}, l2 = o3.queryRenderedSymbols(s3), h2 = [];
-              for (const t3 of Object.keys(l2).map(Number))
-                h2.push(r3[t3]);
+              for (const t3 of Object.keys(l2).map(Number)) h2.push(r3[t3]);
               h2.sort($);
               for (const i4 of h2) {
                 const s4 = i4.featureIndex.lookupSymbolFeatures(l2[i4.bucketInstanceId], e3, i4.bucketIndex, i4.sourceLayerIndex, a3.filter, a3.layers, a3.availableImages, t2);
@@ -13096,15 +11776,13 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
                     }
                     return e5.featureIndex - t4.featureIndex;
                   });
-                  for (const t4 of a4)
-                    e4.push(t4);
+                  for (const t4 of a4) e4.push(t4);
                 }
               }
-              for (const e4 in n2)
-                n2[e4].forEach((s4) => {
-                  const a4 = s4.feature, o4 = i3[t2[e4].source].getFeatureState(a4.layer["source-layer"], a4.id);
-                  a4.source = a4.layer.source, a4.layer["source-layer"] && (a4.sourceLayer = a4.layer["source-layer"]), a4.state = o4;
-                });
+              for (const e4 in n2) n2[e4].forEach((s4) => {
+                const a4 = s4.feature, o4 = i3[t2[e4].source].getFeatureState(a4.layer["source-layer"], a4.id);
+                a4.source = a4.layer.source, a4.layer["source-layer"] && (a4.sourceLayer = a4.layer["source-layer"]), a4.state = o4;
+              });
               return n2;
             }(this._layers, r2, this.sourceCaches, e2, i2, this.placement.collisionIndex, this.placement.retainedQueryData)), this._flattenAndSortRenderedFeatures(o2);
           }
@@ -13132,13 +11810,11 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             this._checkLoaded();
             const s2 = this.light.getLight();
             let a2 = false;
-            for (const i3 in e2)
-              if (!t.aG(e2[i3], s2[i3])) {
-                a2 = true;
-                break;
-              }
-            if (!a2)
-              return;
+            for (const i3 in e2) if (!t.aG(e2[i3], s2[i3])) {
+              a2 = true;
+              break;
+            }
+            if (!a2) return;
             const o2 = { now: t.h.now(), transition: t.e({ duration: 300, delay: 0 }, this.stylesheet.transition) };
             this.light.setLight(e2, i2), this.light.updateTransitions(o2);
           }
@@ -13147,8 +11823,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }
           _remove(e2 = true) {
             this._request && (this._request.cancel(), this._request = null), this._spriteRequest && (this._spriteRequest.cancel(), this._spriteRequest = null), t.aJ.off("pluginStateChange", this._rtlTextPluginCallback);
-            for (const t2 in this._layers)
-              this._layers[t2].setEventedParent(null);
+            for (const t2 in this._layers) this._layers[t2].setEventedParent(null);
             for (const t2 in this.sourceCaches) {
               const e3 = this.sourceCaches[t2];
               e3.setEventedParent(null), e3.onRemove(this.map);
@@ -13162,20 +11837,17 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             this.sourceCaches[t2].resume(), this.sourceCaches[t2].reload();
           }
           _updateSources(t2) {
-            for (const e2 in this.sourceCaches)
-              this.sourceCaches[e2].update(t2, this.map.terrain);
+            for (const e2 in this.sourceCaches) this.sourceCaches[e2].update(t2, this.map.terrain);
           }
           _generateCollisionBoxes() {
-            for (const t2 in this.sourceCaches)
-              this._reloadSource(t2);
+            for (const t2 in this.sourceCaches) this._reloadSource(t2);
           }
           _updatePlacement(e2, i2, s2, a2, o2 = false) {
             let r2 = false, n2 = false;
             const l2 = {};
             for (const t2 of this._order) {
               const i3 = this._layers[t2];
-              if ("symbol" !== i3.type)
-                continue;
+              if ("symbol" !== i3.type) continue;
               if (!l2[i3.source]) {
                 const t3 = this.sourceCaches[i3.source];
                 l2[i3.source] = t3.getRenderableIds(true).map((e3) => t3.getTileByID(e3)).sort((t4, e3) => e3.tileID.overscaledZ - t4.tileID.overscaledZ || (t4.tileID.isLessThan(e3.tileID) ? -1 : 1));
@@ -13183,16 +11855,14 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               const s3 = this.crossTileSymbolIndex.addLayer(i3, l2[i3.source], e2.center.lng);
               r2 = r2 || s3;
             }
-            if (this.crossTileSymbolIndex.pruneUnusedLayers(this._order), ((o2 = o2 || this._layerOrderChanged || 0 === s2) || !this.pauseablePlacement || this.pauseablePlacement.isDone() && !this.placement.stillRecent(t.h.now(), e2.zoom)) && (this.pauseablePlacement = new Wt(e2, this.map.terrain, this._order, o2, i2, s2, a2, this.placement), this._layerOrderChanged = false), this.pauseablePlacement.isDone() ? this.placement.setStale() : (this.pauseablePlacement.continuePlacement(this._order, this._layers, l2), this.pauseablePlacement.isDone() && (this.placement = this.pauseablePlacement.commit(t.h.now()), n2 = true), r2 && this.pauseablePlacement.placement.setStale()), n2 || r2)
-              for (const t2 of this._order) {
-                const e3 = this._layers[t2];
-                "symbol" === e3.type && this.placement.updateLayerOpacities(e3, l2[e3.source]);
-              }
+            if (this.crossTileSymbolIndex.pruneUnusedLayers(this._order), ((o2 = o2 || this._layerOrderChanged || 0 === s2) || !this.pauseablePlacement || this.pauseablePlacement.isDone() && !this.placement.stillRecent(t.h.now(), e2.zoom)) && (this.pauseablePlacement = new Wt(e2, this.map.terrain, this._order, o2, i2, s2, a2, this.placement), this._layerOrderChanged = false), this.pauseablePlacement.isDone() ? this.placement.setStale() : (this.pauseablePlacement.continuePlacement(this._order, this._layers, l2), this.pauseablePlacement.isDone() && (this.placement = this.pauseablePlacement.commit(t.h.now()), n2 = true), r2 && this.pauseablePlacement.placement.setStale()), n2 || r2) for (const t2 of this._order) {
+              const e3 = this._layers[t2];
+              "symbol" === e3.type && this.placement.updateLayerOpacities(e3, l2[e3.source]);
+            }
             return !this.pauseablePlacement.isDone() || this.placement.hasTransitions(t.h.now());
           }
           _releaseSymbolFadeTiles() {
-            for (const t2 in this.sourceCaches)
-              this.sourceCaches[t2].releaseSymbolFadeTiles();
+            for (const t2 in this.sourceCaches) this.sourceCaches[t2].releaseSymbolFadeTiles();
           }
           getImages(t2, e2, i2) {
             this.imageManager.getImages(e2.icons, i2), this._updateTilesForChangedImages();
@@ -13222,12 +11892,9 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             this._checkLoaded();
             const i2 = g(this.stylesheet.sprite);
             if (i2.find((t2) => t2.id === e2)) {
-              if (this._spritesImagesIds[e2])
-                for (const t2 of this._spritesImagesIds[e2])
-                  this.imageManager.removeImage(t2), this._changedImages[t2] = true;
+              if (this._spritesImagesIds[e2]) for (const t2 of this._spritesImagesIds[e2]) this.imageManager.removeImage(t2), this._changedImages[t2] = true;
               i2.splice(i2.findIndex((t2) => t2.id === e2), 1), this.stylesheet.sprite = i2.length > 0 ? i2 : void 0, delete this._spritesImagesIds[e2], this._availableImages = this.imageManager.listImages(), this._changed = true, this.dispatcher.broadcast("setImages", this._availableImages), this.fire(new t.k("data", { dataType: "style" }));
-            } else
-              this.fire(new t.j(new Error(`Sprite "${e2}" doesn't exists on this map.`)));
+            } else this.fire(new t.j(new Error(`Sprite "${e2}" doesn't exists on this map.`)));
           }
           getSprite() {
             return g(this.stylesheet.sprite);
@@ -13302,18 +11969,15 @@ uniform ${i3} ${s3} u_${a3};
           bind(t2, e2, i2, s2, a2, o2, r2, n2, l2) {
             this.context = t2;
             let h2 = this.boundPaintVertexBuffers.length !== s2.length;
-            for (let t3 = 0; !h2 && t3 < s2.length; t3++)
-              this.boundPaintVertexBuffers[t3] !== s2[t3] && (h2 = true);
+            for (let t3 = 0; !h2 && t3 < s2.length; t3++) this.boundPaintVertexBuffers[t3] !== s2[t3] && (h2 = true);
             !this.vao || this.boundProgram !== e2 || this.boundLayoutVertexBuffer !== i2 || h2 || this.boundIndexBuffer !== a2 || this.boundVertexOffset !== o2 || this.boundDynamicVertexBuffer !== r2 || this.boundDynamicVertexBuffer2 !== n2 || this.boundDynamicVertexBuffer3 !== l2 ? this.freshBind(e2, i2, s2, a2, o2, r2, n2, l2) : (t2.bindVertexArray.set(this.vao), r2 && r2.bind(), a2 && a2.dynamicDraw && a2.bind(), n2 && n2.bind(), l2 && l2.bind());
           }
           freshBind(t2, e2, i2, s2, a2, o2, r2, n2) {
             const l2 = t2.numAttributes, h2 = this.context, c2 = h2.gl;
             this.vao && this.destroy(), this.vao = h2.createVertexArray(), h2.bindVertexArray.set(this.vao), this.boundProgram = t2, this.boundLayoutVertexBuffer = e2, this.boundPaintVertexBuffers = i2, this.boundIndexBuffer = s2, this.boundVertexOffset = a2, this.boundDynamicVertexBuffer = o2, this.boundDynamicVertexBuffer2 = r2, this.boundDynamicVertexBuffer3 = n2, e2.enableAttributes(c2, t2);
-            for (const e3 of i2)
-              e3.enableAttributes(c2, t2);
+            for (const e3 of i2) e3.enableAttributes(c2, t2);
             o2 && o2.enableAttributes(c2, t2), r2 && r2.enableAttributes(c2, t2), n2 && n2.enableAttributes(c2, t2), e2.bind(), e2.setVertexAttribPointers(c2, t2, a2);
-            for (const e3 of i2)
-              e3.bind(), e3.setVertexAttribPointers(c2, t2, a2);
+            for (const e3 of i2) e3.bind(), e3.setVertexAttribPointers(c2, t2, a2);
             o2 && (o2.bind(), o2.setVertexAttribPointers(c2, t2, a2)), s2 && s2.bind(), r2 && (r2.bind(), r2.setVertexAttribPointers(c2, t2, a2)), n2 && (n2.bind(), n2.setVertexAttribPointers(c2, t2, a2)), h2.currentNumAttributes = l2;
           }
           destroy() {
@@ -13323,8 +11987,7 @@ uniform ${i3} ${s3} u_${a3};
         function he(t2) {
           const e2 = [];
           for (let i2 = 0; i2 < t2.length; i2++) {
-            if (null === t2[i2])
-              continue;
+            if (null === t2[i2]) continue;
             const s2 = t2[i2].split(" ");
             e2.push(s2.pop());
           }
@@ -13335,28 +11998,21 @@ uniform ${i3} ${s3} u_${a3};
             const n2 = e2.gl;
             this.program = n2.createProgram();
             const l2 = he(i2.staticAttributes), h2 = s2 ? s2.getBinderAttributes() : [], c2 = l2.concat(h2), u2 = re.prelude.staticUniforms ? he(re.prelude.staticUniforms) : [], d2 = i2.staticUniforms ? he(i2.staticUniforms) : [], _2 = s2 ? s2.getBinderUniforms() : [], p2 = u2.concat(d2).concat(_2), m2 = [];
-            for (const t2 of p2)
-              m2.indexOf(t2) < 0 && m2.push(t2);
+            for (const t2 of p2) m2.indexOf(t2) < 0 && m2.push(t2);
             const f2 = s2 ? s2.defines() : [];
             o2 && f2.push("#define OVERDRAW_INSPECTOR;"), r2 && f2.push("#define TERRAIN3D;");
             const g2 = f2.concat(re.prelude.fragmentSource, i2.fragmentSource).join("\n"), v2 = f2.concat(re.prelude.vertexSource, i2.vertexSource).join("\n"), x2 = n2.createShader(n2.FRAGMENT_SHADER);
-            if (n2.isContextLost())
-              return void (this.failedToCreate = true);
-            if (n2.shaderSource(x2, g2), n2.compileShader(x2), !n2.getShaderParameter(x2, n2.COMPILE_STATUS))
-              throw new Error(`Could not compile fragment shader: ${n2.getShaderInfoLog(x2)}`);
+            if (n2.isContextLost()) return void (this.failedToCreate = true);
+            if (n2.shaderSource(x2, g2), n2.compileShader(x2), !n2.getShaderParameter(x2, n2.COMPILE_STATUS)) throw new Error(`Could not compile fragment shader: ${n2.getShaderInfoLog(x2)}`);
             n2.attachShader(this.program, x2);
             const y2 = n2.createShader(n2.VERTEX_SHADER);
-            if (n2.isContextLost())
-              return void (this.failedToCreate = true);
-            if (n2.shaderSource(y2, v2), n2.compileShader(y2), !n2.getShaderParameter(y2, n2.COMPILE_STATUS))
-              throw new Error(`Could not compile vertex shader: ${n2.getShaderInfoLog(y2)}`);
+            if (n2.isContextLost()) return void (this.failedToCreate = true);
+            if (n2.shaderSource(y2, v2), n2.compileShader(y2), !n2.getShaderParameter(y2, n2.COMPILE_STATUS)) throw new Error(`Could not compile vertex shader: ${n2.getShaderInfoLog(y2)}`);
             n2.attachShader(this.program, y2), this.attributes = {};
             const b2 = {};
             this.numAttributes = c2.length;
-            for (let t2 = 0; t2 < this.numAttributes; t2++)
-              c2[t2] && (n2.bindAttribLocation(this.program, t2, c2[t2]), this.attributes[c2[t2]] = t2);
-            if (n2.linkProgram(this.program), !n2.getProgramParameter(this.program, n2.LINK_STATUS))
-              throw new Error(`Program failed to link: ${n2.getProgramInfoLog(this.program)}`);
+            for (let t2 = 0; t2 < this.numAttributes; t2++) c2[t2] && (n2.bindAttribLocation(this.program, t2, c2[t2]), this.attributes[c2[t2]] = t2);
+            if (n2.linkProgram(this.program), !n2.getProgramParameter(this.program, n2.LINK_STATUS)) throw new Error(`Program failed to link: ${n2.getProgramInfoLog(this.program)}`);
             n2.deleteShader(y2), n2.deleteShader(x2);
             for (let t2 = 0; t2 < m2.length; t2++) {
               const e3 = m2[t2];
@@ -13369,15 +12025,12 @@ uniform ${i3} ${s3} u_${a3};
           }
           draw(t2, e2, i2, s2, a2, o2, r2, n2, l2, h2, c2, u2, d2, _2, p2, m2, f2, g2) {
             const v2 = t2.gl;
-            if (this.failedToCreate)
-              return;
+            if (this.failedToCreate) return;
             if (t2.program.set(this.program), t2.setDepthMode(i2), t2.setStencilMode(s2), t2.setColorMode(a2), t2.setCullFace(o2), n2) {
               t2.activeTexture.set(v2.TEXTURE2), v2.bindTexture(v2.TEXTURE_2D, n2.depthTexture), t2.activeTexture.set(v2.TEXTURE3), v2.bindTexture(v2.TEXTURE_2D, n2.texture);
-              for (const t3 in this.terrainUniforms)
-                this.terrainUniforms[t3].set(n2[t3]);
+              for (const t3 in this.terrainUniforms) this.terrainUniforms[t3].set(n2[t3]);
             }
-            for (const t3 in this.fixedUniforms)
-              this.fixedUniforms[t3].set(r2[t3]);
+            for (const t3 in this.fixedUniforms) this.fixedUniforms[t3].set(r2[t3]);
             p2 && p2.setUniforms(t2, this.binderUniforms, d2, { zoom: _2 });
             let x2 = 0;
             switch (e2) {
@@ -13420,8 +12073,7 @@ uniform ${i3} ${s3} u_${a3};
           if ("map" === s2.paint.get("circle-pitch-alignment")) {
             const t3 = St(i2, 1, a2.zoom);
             o2 = true, r2 = [t3, t3];
-          } else
-            o2 = false, r2 = a2.pixelsToGLUnits;
+          } else o2 = false, r2 = a2.pixelsToGLUnits;
           return { u_camera_to_center_distance: a2.cameraToCenterDistance, u_scale_with_map: +("map" === s2.paint.get("circle-pitch-scale")), u_matrix: t2.translatePosMatrix(e2.posMatrix, i2, s2.paint.get("circle-translate"), s2.paint.get("circle-translate-anchor")), u_pitch_with_map: +o2, u_device_pixel_ratio: t2.pixelRatio, u_extrude_scale: r2 };
         }, xe = (t2, e2, i2) => {
           const s2 = St(i2, 1, e2.zoom), a2 = Math.pow(2, e2.zoom - i2.tileID.overscaledZ), o2 = i2.tileID.overscaleFactor();
@@ -13477,8 +12129,7 @@ uniform ${i3} ${s3} u_${a3};
           }
           updateData(t2) {
             const e2 = this.context.gl;
-            if (!this.dynamicDraw)
-              throw new Error("Attempted to update data while not in dynamic mode.");
+            if (!this.dynamicDraw) throw new Error("Attempted to update data while not in dynamic mode.");
             this.context.unbindVAO(), this.bind(), e2.bufferSubData(e2.ELEMENT_ARRAY_BUFFER, 0, t2.arrayBuffer);
           }
           destroy() {
@@ -13496,8 +12147,7 @@ uniform ${i3} ${s3} u_${a3};
             this.context.bindVertexBuffer.set(this.buffer);
           }
           updateData(t2) {
-            if (t2.length !== this.length)
-              throw new Error(`Length of new data is ${t2.length}, which doesn't match current length of ${this.length}`);
+            if (t2.length !== this.length) throw new Error(`Length of new data is ${t2.length}, which doesn't match current length of ${this.length}`);
             const e2 = this.context.gl;
             this.bind(), e2.bufferSubData(e2.ARRAY_BUFFER, 0, t2.arrayBuffer);
           }
@@ -13520,8 +12170,7 @@ uniform ${i3} ${s3} u_${a3};
         const Ze = /* @__PURE__ */ new WeakMap();
         function Ge(t2) {
           var e2;
-          if (Ze.has(t2))
-            return Ze.get(t2);
+          if (Ze.has(t2)) return Ze.get(t2);
           {
             const i2 = null === (e2 = t2.getParameter(t2.VERSION)) || void 0 === e2 ? void 0 : e2.startsWith("WebGL 2.0");
             return Ze.set(t2, i2), i2;
@@ -13617,8 +12266,7 @@ uniform ${i3} ${s3} u_${a3};
             return false;
           }
           set(t2) {
-            if (t2 === this.current && !this.dirty)
-              return;
+            if (t2 === this.current && !this.dirty) return;
             const e2 = this.gl;
             t2 ? e2.enable(e2.STENCIL_TEST) : e2.disable(e2.STENCIL_TEST), this.current = t2, this.dirty = false;
           }
@@ -13637,8 +12285,7 @@ uniform ${i3} ${s3} u_${a3};
             return false;
           }
           set(t2) {
-            if (t2 === this.current && !this.dirty)
-              return;
+            if (t2 === this.current && !this.dirty) return;
             const e2 = this.gl;
             t2 ? e2.enable(e2.DEPTH_TEST) : e2.disable(e2.DEPTH_TEST), this.current = t2, this.dirty = false;
           }
@@ -13656,8 +12303,7 @@ uniform ${i3} ${s3} u_${a3};
             return false;
           }
           set(t2) {
-            if (t2 === this.current && !this.dirty)
-              return;
+            if (t2 === this.current && !this.dirty) return;
             const e2 = this.gl;
             t2 ? e2.enable(e2.BLEND) : e2.disable(e2.BLEND), this.current = t2, this.dirty = false;
           }
@@ -13694,8 +12340,7 @@ uniform ${i3} ${s3} u_${a3};
             return false;
           }
           set(t2) {
-            if (t2 === this.current && !this.dirty)
-              return;
+            if (t2 === this.current && !this.dirty) return;
             const e2 = this.gl;
             t2 ? e2.enable(e2.CULL_FACE) : e2.disable(e2.CULL_FACE), this.current = t2, this.dirty = false;
           }
@@ -13747,8 +12392,7 @@ uniform ${i3} ${s3} u_${a3};
             return null;
           }
           set(t2) {
-            if (t2 === this.current && !this.dirty)
-              return;
+            if (t2 === this.current && !this.dirty) return;
             const e2 = this.gl;
             e2.bindFramebuffer(e2.FRAMEBUFFER, t2), this.current = t2, this.dirty = false;
           }
@@ -13758,8 +12402,7 @@ uniform ${i3} ${s3} u_${a3};
             return null;
           }
           set(t2) {
-            if (t2 === this.current && !this.dirty)
-              return;
+            if (t2 === this.current && !this.dirty) return;
             const e2 = this.gl;
             e2.bindRenderbuffer(e2.RENDERBUFFER, t2), this.current = t2, this.dirty = false;
           }
@@ -13769,8 +12412,7 @@ uniform ${i3} ${s3} u_${a3};
             return null;
           }
           set(t2) {
-            if (t2 === this.current && !this.dirty)
-              return;
+            if (t2 === this.current && !this.dirty) return;
             const e2 = this.gl;
             e2.bindTexture(e2.TEXTURE_2D, t2), this.current = t2, this.dirty = false;
           }
@@ -13780,8 +12422,7 @@ uniform ${i3} ${s3} u_${a3};
             return null;
           }
           set(t2) {
-            if (t2 === this.current && !this.dirty)
-              return;
+            if (t2 === this.current && !this.dirty) return;
             const e2 = this.gl;
             e2.bindBuffer(e2.ARRAY_BUFFER, t2), this.current = t2, this.dirty = false;
           }
@@ -13801,8 +12442,7 @@ uniform ${i3} ${s3} u_${a3};
           }
           set(t2) {
             var e2;
-            if (t2 === this.current && !this.dirty)
-              return;
+            if (t2 === this.current && !this.dirty) return;
             const i2 = this.gl;
             Ge(i2) ? i2.bindVertexArray(t2) : null === (e2 = i2.getExtension("OES_vertex_array_object")) || void 0 === e2 || e2.bindVertexArrayOES(t2), this.current = t2, this.dirty = false;
           }
@@ -13812,8 +12452,7 @@ uniform ${i3} ${s3} u_${a3};
             return 4;
           }
           set(t2) {
-            if (t2 === this.current && !this.dirty)
-              return;
+            if (t2 === this.current && !this.dirty) return;
             const e2 = this.gl;
             e2.pixelStorei(e2.UNPACK_ALIGNMENT, t2), this.current = t2, this.dirty = false;
           }
@@ -13823,8 +12462,7 @@ uniform ${i3} ${s3} u_${a3};
             return false;
           }
           set(t2) {
-            if (t2 === this.current && !this.dirty)
-              return;
+            if (t2 === this.current && !this.dirty) return;
             const e2 = this.gl;
             e2.pixelStorei(e2.UNPACK_PREMULTIPLY_ALPHA_WEBGL, t2), this.current = t2, this.dirty = false;
           }
@@ -13834,8 +12472,7 @@ uniform ${i3} ${s3} u_${a3};
             return false;
           }
           set(t2) {
-            if (t2 === this.current && !this.dirty)
-              return;
+            if (t2 === this.current && !this.dirty) return;
             const e2 = this.gl;
             e2.pixelStorei(e2.UNPACK_FLIP_Y_WEBGL, t2), this.current = t2, this.dirty = false;
           }
@@ -13853,8 +12490,7 @@ uniform ${i3} ${s3} u_${a3};
             this.dirty = true;
           }
           set(t2) {
-            if (t2 === this.current && !this.dirty)
-              return;
+            if (t2 === this.current && !this.dirty) return;
             this.context.bindFramebuffer.set(this.parent);
             const e2 = this.gl;
             e2.framebufferTexture2D(e2.FRAMEBUFFER, e2.COLOR_ATTACHMENT0, e2.TEXTURE_2D, t2, 0), this.current = t2, this.dirty = false;
@@ -13862,8 +12498,7 @@ uniform ${i3} ${s3} u_${a3};
         }
         class Ti extends bi {
           set(t2) {
-            if (t2 === this.current && !this.dirty)
-              return;
+            if (t2 === this.current && !this.dirty) return;
             this.context.bindFramebuffer.set(this.parent);
             const e2 = this.gl;
             e2.framebufferRenderbuffer(e2.FRAMEBUFFER, e2.DEPTH_ATTACHMENT, e2.RENDERBUFFER, t2), this.current = t2, this.dirty = false;
@@ -13871,8 +12506,7 @@ uniform ${i3} ${s3} u_${a3};
         }
         class Ii extends bi {
           set(t2) {
-            if (t2 === this.current && !this.dirty)
-              return;
+            if (t2 === this.current && !this.dirty) return;
             this.context.bindFramebuffer.set(this.parent);
             const e2 = this.gl;
             e2.framebufferRenderbuffer(e2.FRAMEBUFFER, e2.DEPTH_STENCIL_ATTACHMENT, e2.RENDERBUFFER, t2), this.current = t2, this.dirty = false;
@@ -13882,12 +12516,9 @@ uniform ${i3} ${s3} u_${a3};
           constructor(t2, e2, i2, s2, a2) {
             this.context = t2, this.width = e2, this.height = i2;
             const o2 = t2.gl, r2 = this.framebuffer = o2.createFramebuffer();
-            if (this.colorAttachment = new wi(t2, r2), s2)
-              this.depthAttachment = a2 ? new Ii(t2, r2) : new Ti(t2, r2);
-            else if (a2)
-              throw new Error("Stencil cannot be setted without depth");
-            if (o2.checkFramebufferStatus(o2.FRAMEBUFFER) !== o2.FRAMEBUFFER_COMPLETE)
-              throw new Error("Framebuffer is not complete");
+            if (this.colorAttachment = new wi(t2, r2), s2) this.depthAttachment = a2 ? new Ii(t2, r2) : new Ti(t2, r2);
+            else if (a2) throw new Error("Stencil cannot be setted without depth");
+            if (o2.checkFramebufferStatus(o2.FRAMEBUFFER) !== o2.FRAMEBUFFER_COMPLETE) throw new Error("Framebuffer is not complete");
           }
           destroy() {
             const t2 = this.context.gl, e2 = this.colorAttachment.get();
@@ -13989,8 +12620,7 @@ uniform ${i3} ${s3} u_${a3};
           let d2 = 0, _2 = 0;
           for (let p3 = 0; p3 < a2.length; p3++) {
             const m3 = a2[p3], f3 = i2.getTile(m3), g3 = f3.getBucket(s2);
-            if (!g3)
-              continue;
+            if (!g3) continue;
             let v3 = m3.posMatrix;
             0 === o2[0] && 0 === o2[1] || (v3 = e2.translatePosMatrix(m3.posMatrix, f3, o2, r2));
             const x3 = n2 ? g3.textCollisionBox : g3.iconCollisionBox, y2 = g3.collisionCircleArray;
@@ -14000,16 +12630,14 @@ uniform ${i3} ${s3} u_${a3};
             }
             x3 && c2.draw(l2, h2.LINES, Pi.disabled, Mi.disabled, e2.colorModeForRenderPass(), zi.disabled, xe(v3, e2.transform, f3), e2.style.map.terrain && e2.style.map.terrain.getTerrainData(m3), s2.id, x3.layoutVertexBuffer, x3.indexBuffer, x3.segments, null, e2.transform.zoom, null, null, x3.collisionVertexBuffer);
           }
-          if (!n2 || !u2.length)
-            return;
+          if (!n2 || !u2.length) return;
           const p2 = e2.useProgram("collisionCircle"), m2 = new t.aV();
           m2.resize(4 * d2), m2._trim();
           let f2 = 0;
-          for (const t2 of u2)
-            for (let e3 = 0; e3 < t2.circleArray.length / 4; e3++) {
-              const i3 = 4 * e3, s3 = t2.circleArray[i3 + 0], a3 = t2.circleArray[i3 + 1], o3 = t2.circleArray[i3 + 2], r3 = t2.circleArray[i3 + 3];
-              m2.emplace(f2++, s3, a3, o3, r3, 0), m2.emplace(f2++, s3, a3, o3, r3, 1), m2.emplace(f2++, s3, a3, o3, r3, 2), m2.emplace(f2++, s3, a3, o3, r3, 3);
-            }
+          for (const t2 of u2) for (let e3 = 0; e3 < t2.circleArray.length / 4; e3++) {
+            const i3 = 4 * e3, s3 = t2.circleArray[i3 + 0], a3 = t2.circleArray[i3 + 1], o3 = t2.circleArray[i3 + 2], r3 = t2.circleArray[i3 + 3];
+            m2.emplace(f2++, s3, a3, o3, r3, 0), m2.emplace(f2++, s3, a3, o3, r3, 1), m2.emplace(f2++, s3, a3, o3, r3, 2), m2.emplace(f2++, s3, a3, o3, r3, 3);
+          }
           (!Li || Li.length < 2 * d2) && (Li = function(e3) {
             const i3 = 2 * e3, s3 = new t.aX();
             s3.resize(i3), s3._trim();
@@ -14043,26 +12671,20 @@ uniform ${i3} ${s3} u_${a3};
               let v2 = t.aj(e2.textSizeData, h2, f2) * p4 / t.ap;
               s2 && (v2 *= e2.tilePixelRatio / l2);
               const { width: x2, height: y2, anchor: b2, textOffset: w2, textBoxScale: T2 } = g2, I2 = ki(b2, x2, y2, w2, T2, v2), E2 = s2 ? ht(a3.add(I2), r2, u2).point : d3.point.add(i2 ? I2.rotate(-o2.angle) : I2), S2 = e2.allowVerticalPlacement && f2.placedOrientation === t.ai.vertical ? Math.PI / 2 : 0;
-              for (let e3 = 0; e3 < f2.numGlyphs; e3++)
-                t.ak(_2, E2, S2);
+              for (let e3 = 0; e3 < f2.numGlyphs; e3++) t.ak(_2, E2, S2);
               c2 && f2.associatedIconIndex >= 0 && (m2[f2.associatedIconIndex] = { shiftedAnchor: E2, angle: S2 });
-            } else
-              wt(f2.numGlyphs, _2);
+            } else wt(f2.numGlyphs, _2);
           }
           if (c2) {
             p2.clear();
             const i3 = e2.icon.placedSymbolArray;
             for (let e3 = 0; e3 < i3.length; e3++) {
               const s3 = i3.get(e3);
-              if (s3.hidden)
-                wt(s3.numGlyphs, p2);
+              if (s3.hidden) wt(s3.numGlyphs, p2);
               else {
                 const i4 = m2[e3];
-                if (i4)
-                  for (let e4 = 0; e4 < s3.numGlyphs; e4++)
-                    t.ak(p2, i4.shiftedAnchor, i4.angle);
-                else
-                  wt(s3.numGlyphs, p2);
+                if (i4) for (let e4 = 0; e4 < s3.numGlyphs; e4++) t.ak(p2, i4.shiftedAnchor, i4.angle);
+                else wt(s3.numGlyphs, p2);
               }
             }
             e2.icon.dynamicLayoutVertexBuffer.updateData(p2);
@@ -14078,15 +12700,12 @@ uniform ${i3} ${s3} u_${a3};
           const w2 = e2.depthModeForSublayer(0, Pi.ReadOnly), T2 = s2._unevaluatedLayout.hasValue("text-variable-anchor") || s2._unevaluatedLayout.hasValue("text-variable-anchor-offset"), I2 = [];
           for (const l3 of a2) {
             const a3 = i2.getTile(l3), h3 = a3.getBucket(s2);
-            if (!h3)
-              continue;
+            if (!h3) continue;
             const u3 = o2 ? h3.text : h3.icon;
-            if (!u3 || !u3.segments.get().length || !u3.hasVisibleVertices)
-              continue;
+            if (!u3 || !u3.segments.get().length || !u3.hasVisibleVertices) continue;
             const d3 = u3.programConfigurations.get(s2.id), _3 = o2 || h3.sdfIcons, w3 = o2 ? h3.textSizeData : h3.iconSizeData, E2 = g2 || 0 !== m2.pitch, S2 = e2.useProgram(Bi(_3, o2, h3), d3), C2 = t.ah(w3, m2.zoom), P2 = e2.style.map.terrain && e2.style.map.terrain.getTerrainData(l3);
             let D2, M2, z2, L2, A2 = [0, 0], R2 = null;
-            if (o2)
-              M2 = a3.glyphAtlasTexture, z2 = p2.LINEAR, D2 = a3.glyphAtlasTexture.size, h3.iconsInText && (A2 = a3.imageAtlasTexture.size, R2 = a3.imageAtlasTexture, L2 = E2 || e2.options.rotating || e2.options.zooming || "composite" === w3.kind || "camera" === w3.kind ? p2.LINEAR : p2.NEAREST);
+            if (o2) M2 = a3.glyphAtlasTexture, z2 = p2.LINEAR, D2 = a3.glyphAtlasTexture.size, h3.iconsInText && (A2 = a3.imageAtlasTexture.size, R2 = a3.imageAtlasTexture, L2 = E2 || e2.options.rotating || e2.options.zooming || "composite" === w3.kind || "camera" === w3.kind ? p2.LINEAR : p2.NEAREST);
             else {
               const t2 = 1 !== s2.layout.get("icon-size").constantOr(0) || h3.iconsNeedLinear;
               M2 = a3.imageAtlasTexture, z2 = _3 || e2.options.rotating || e2.options.zooming || t2 || E2 ? p2.LINEAR : p2.NEAREST, D2 = a3.imageAtlasTexture.size;
@@ -14103,10 +12722,8 @@ uniform ${i3} ${s3} u_${a3};
             if (y2 && h3.canOverlap) {
               b2 = true;
               const e3 = u3.segments.get();
-              for (const i3 of e3)
-                I2.push({ segments: new t.S([i3]), sortKey: i3.sortKey, state: q2, terrainData: P2 });
-            } else
-              I2.push({ segments: u3.segments, sortKey: 0, state: q2, terrainData: P2 });
+              for (const i3 of e3) I2.push({ segments: new t.S([i3]), sortKey: i3.sortKey, state: q2, terrainData: P2 });
+            } else I2.push({ segments: u3.segments, sortKey: 0, state: q2, terrainData: P2 });
           }
           b2 && I2.sort((t2, e3) => t2.sortKey - e3.sortKey);
           for (const t2 of I2) {
@@ -14123,8 +12740,7 @@ uniform ${i3} ${s3} u_${a3};
           a2.draw(c2, c2.gl.TRIANGLES, o2, r2, n2, zi.disabled, l2, h2, i2.id, t2.layoutVertexBuffer, t2.indexBuffer, e2, i2.paint, s2.transform.zoom, t2.programConfigurations.get(i2.id), t2.dynamicLayoutVertexBuffer, t2.opacityVertexBuffer);
         }
         function Ui(t2, e2, i2, s2, a2) {
-          if (!i2 || !s2 || !s2.imageAtlas)
-            return;
+          if (!i2 || !s2 || !s2.imageAtlas) return;
           const o2 = s2.imageAtlas.patternPositions;
           let r2 = o2[i2.to.toString()], n2 = o2[i2.from.toString()];
           if (!r2 || !n2) {
@@ -14140,11 +12756,9 @@ uniform ${i3} ${s3} u_${a3};
           const g2 = h2.constantOr(null);
           for (const h3 of s2) {
             const s3 = e2.getTile(h3);
-            if (c2 && !s3.patternsLoaded())
-              continue;
+            if (c2 && !s3.patternsLoaded()) continue;
             const v2 = s3.getBucket(i2);
-            if (!v2)
-              continue;
+            if (!v2) continue;
             const x2 = v2.programConfigurations.get(i2.id), y2 = t2.useProgram(_2, x2), b2 = t2.style.map.terrain && t2.style.map.terrain.getTerrainData(h3);
             c2 && (t2.context.activeTexture.set(n2.TEXTURE0), s3.imageAtlasTexture.bind(n2.LINEAR, n2.CLAMP_TO_EDGE), x2.updatePaintBuffers(u2)), Ui(x2, l2, g2, s3, i2);
             const w2 = b2 ? h3 : null, T2 = t2.translatePosMatrix(w2 ? w2.posMatrix : h3.posMatrix, s3, i2.paint.get("fill-translate"), i2.paint.get("fill-translate-anchor"));
@@ -14152,8 +12766,7 @@ uniform ${i3} ${s3} u_${a3};
               m2 = v2.indexBuffer2, f2 = v2.segments2;
               const e3 = [n2.drawingBufferWidth, n2.drawingBufferHeight];
               p2 = "fillOutlinePattern" === _2 && c2 ? ge(T2, t2, u2, s3, e3) : fe(T2, e3);
-            } else
-              m2 = v2.indexBuffer, f2 = v2.segments, p2 = c2 ? me(T2, t2, u2, s3) : pe(T2);
+            } else m2 = v2.indexBuffer, f2 = v2.segments, p2 = c2 ? me(T2, t2, u2, s3) : pe(T2);
             y2.draw(t2.context, d2, a2, t2.stencilModeForClipping(h3), o2, zi.disabled, p2, b2, i2.id, v2.layoutVertexBuffer, m2, f2, i2.paint, t2.transform.zoom, x2);
           }
         }
@@ -14161,8 +12774,7 @@ uniform ${i3} ${s3} u_${a3};
           const n2 = t2.context, l2 = n2.gl, h2 = "fill-extrusion-pattern", c2 = i2.paint.get(h2), u2 = c2.constantOr(1), d2 = i2.getCrossfadeParameters(), _2 = i2.paint.get("fill-extrusion-opacity"), p2 = c2.constantOr(null);
           for (const c3 of s2) {
             const s3 = e2.getTile(c3), m2 = s3.getBucket(i2);
-            if (!m2)
-              continue;
+            if (!m2) continue;
             const f2 = t2.style.map.terrain && t2.style.map.terrain.getTerrainData(c3), g2 = m2.programConfigurations.get(i2.id), v2 = t2.useProgram(u2 ? "fillExtrusionPattern" : "fillExtrusion", g2);
             u2 && (t2.context.activeTexture.set(l2.TEXTURE0), s3.imageAtlasTexture.bind(l2.LINEAR, l2.CLAMP_TO_EDGE), g2.updatePaintBuffers(d2)), Ui(g2, h2, p2, s3, i2);
             const x2 = t2.translatePosMatrix(c3.posMatrix, s3, i2.paint.get("fill-extrusion-translate"), i2.paint.get("fill-extrusion-translate-anchor")), y2 = i2.paint.get("fill-extrusion-vertical-gradient"), b2 = u2 ? _e(x2, t2, y2, _2, c3, d2, s3) : de(x2, t2, y2, _2);
@@ -14171,8 +12783,7 @@ uniform ${i3} ${s3} u_${a3};
         }
         function ji(t2, e2, i2, s2, a2, o2, r2) {
           const n2 = t2.context, l2 = n2.gl, h2 = i2.fbo;
-          if (!h2)
-            return;
+          if (!h2) return;
           const c2 = t2.useProgram("hillshade"), u2 = t2.style.map.terrain && t2.style.map.terrain.getTerrainData(e2);
           n2.activeTexture.set(l2.TEXTURE0), l2.bindTexture(l2.TEXTURE_2D, h2.colorAttachment.get()), c2.draw(n2, l2.TRIANGLES, a2, o2, r2, zi.disabled, ((t3, e3, i3, s3) => {
             const a3 = i3.paint.get("hillshade-shadow-color"), o3 = i3.paint.get("hillshade-highlight-color"), r3 = i3.paint.get("hillshade-accent-color");
@@ -14189,8 +12800,7 @@ uniform ${i3} ${s3} u_${a3};
             if (n2.activeTexture.set(l2.TEXTURE1), n2.pixelStoreUnpackPremultiplyAlpha.set(false), i2.demTexture = i2.demTexture || e2.getTileTexture(u2), i2.demTexture) {
               const t2 = i2.demTexture;
               t2.update(d2, { premultiply: false }), t2.bind(l2.NEAREST, l2.CLAMP_TO_EDGE);
-            } else
-              i2.demTexture = new x(n2, d2, l2.RGBA, { premultiply: false }), i2.demTexture.bind(l2.NEAREST, l2.CLAMP_TO_EDGE);
+            } else i2.demTexture = new x(n2, d2, l2.RGBA, { premultiply: false }), i2.demTexture.bind(l2.NEAREST, l2.CLAMP_TO_EDGE);
             n2.activeTexture.set(l2.TEXTURE0);
             let _2 = i2.fbo;
             if (!_2) {
@@ -14248,9 +12858,7 @@ uniform ${i3} ${s3} u_${a3};
             this.context = new Ci(e2), this.transform = i2, this._tileTextures = {}, this.terrainFacilitator = { dirty: true, matrix: t.Z(), renderTime: 0 }, this.setup(), this.numSublayers = K.maxUnderzooming + K.maxOverzooming + 1, this.depthEpsilon = 1 / Math.pow(2, 16), this.crossTileSymbolIndex = new Yt();
           }
           resize(t2, e2, i2) {
-            if (this.width = Math.floor(t2 * i2), this.height = Math.floor(e2 * i2), this.pixelRatio = i2, this.context.viewport.set([0, 0, this.width, this.height]), this.style)
-              for (const t3 of this.style._order)
-                this.style._layers[t3].resize();
+            if (this.width = Math.floor(t2 * i2), this.height = Math.floor(e2 * i2), this.pixelRatio = i2, this.context.viewport.set([0, 0, this.width, this.height]), this.style) for (const t3 of this.style._order) this.style._layers[t3].resize();
           }
           setup() {
             const e2 = this.context, i2 = new t.a_();
@@ -14275,8 +12883,7 @@ uniform ${i3} ${s3} u_${a3};
             t.aS(s2, 0, this.width, this.height, 0, 0, 1), t.a0(s2, s2, [i2.drawingBufferWidth, i2.drawingBufferHeight, 0]), this.useProgram("clippingMask").draw(e2, i2.TRIANGLES, Pi.disabled, this.stencilClearMode, Si.disabled, zi.disabled, be(s2), null, "$clipping", this.viewportBuffer, this.quadTriangleIndexBuffer, this.viewportSegments);
           }
           _renderTileClippingMasks(t2, e2) {
-            if (this.currentStencilSource === t2.source || !t2.isTileClipped() || !e2 || !e2.length)
-              return;
+            if (this.currentStencilSource === t2.source || !t2.isTileClipped() || !e2 || !e2.length) return;
             this.currentStencilSource = t2.source;
             const i2 = this.context, s2 = i2.gl;
             this.nextStencilID + e2.length > 256 && this.clearStencil(), i2.setColorMode(Si.disabled), i2.setDepthMode(Pi.disabled);
@@ -14301,8 +12908,7 @@ uniform ${i3} ${s3} u_${a3};
             if (a2 > 1) {
               this.currentStencilSource = void 0, this.nextStencilID + a2 > 256 && this.clearStencil();
               const t3 = {};
-              for (let i3 = 0; i3 < a2; i3++)
-                t3[i3 + s2] = new Mi({ func: e2.GEQUAL, mask: 255 }, i3 + this.nextStencilID, 255, e2.KEEP, e2.KEEP, e2.REPLACE);
+              for (let i3 = 0; i3 < a2; i3++) t3[i3 + s2] = new Mi({ func: e2.GEQUAL, mask: 255 }, i3 + this.nextStencilID, 255, e2.KEEP, e2.KEEP, e2.REPLACE);
               return this.nextStencilID += a2, [t3, i2];
             }
             return [{ [s2]: Mi.disabled }, i2];
@@ -14316,8 +12922,7 @@ uniform ${i3} ${s3} u_${a3};
             return "opaque" === this.renderPass ? Si.unblended : Si.alphaBlended;
           }
           depthModeForSublayer(t2, e2, i2) {
-            if (!this.opaquePassEnabledForLayer())
-              return Pi.disabled;
+            if (!this.opaquePassEnabledForLayer()) return Pi.disabled;
             const s2 = 1 - ((1 + this.currentLayer) * this.numSublayers + t2) * this.depthEpsilon;
             return new Pi(i2 || this.context.gl.LEQUAL, e2, [s2, s2]);
           }
@@ -14332,11 +12937,10 @@ uniform ${i3} ${s3} u_${a3};
               e3.used && e3.prepare(this.context), o2[t2] = e3.getVisibleCoordinates(), r2[t2] = o2[t2].slice().reverse(), n2[t2] = e3.getVisibleCoordinates(true).reverse();
             }
             this.opaquePassCutoff = 1 / 0;
-            for (let t2 = 0; t2 < s2.length; t2++)
-              if (this.style._layers[s2[t2]].is3D()) {
-                this.opaquePassCutoff = t2;
-                break;
-              }
+            for (let t2 = 0; t2 < s2.length; t2++) if (this.style._layers[s2[t2]].is3D()) {
+              this.opaquePassCutoff = t2;
+              break;
+            }
             if (this.renderToTexture) {
               this.renderToTexture.prepareForRender(this.style, this.transform.zoom), this.opaquePassCutoff = 0;
               const e3 = this.style.map.terrain.sourceCache.tilesAfterTime(this.terrainFacilitator.renderTime);
@@ -14363,20 +12967,17 @@ uniform ${i3} ${s3} u_${a3};
             this.renderPass = "offscreen";
             for (const t2 of s2) {
               const e3 = this.style._layers[t2];
-              if (!e3.hasOffscreenPass() || e3.isHidden(this.transform.zoom))
-                continue;
+              if (!e3.hasOffscreenPass() || e3.isHidden(this.transform.zoom)) continue;
               const i3 = r2[e3.source];
               ("custom" === e3.type || i3.length) && this.renderLayer(this, a2[e3.source], e3, i3);
             }
-            if (this.context.bindFramebuffer.set(null), this.context.clear({ color: i2.showOverdrawInspector ? t.aT.black : t.aT.transparent, depth: 1 }), this.clearStencil(), this._showOverdrawInspector = i2.showOverdrawInspector, this.depthRangeFor3D = [0, 1 - (e2._order.length + 2) * this.numSublayers * this.depthEpsilon], !this.renderToTexture)
-              for (this.renderPass = "opaque", this.currentLayer = s2.length - 1; this.currentLayer >= 0; this.currentLayer--) {
-                const t2 = this.style._layers[s2[this.currentLayer]], e3 = a2[t2.source], i3 = o2[t2.source];
-                this._renderTileClippingMasks(t2, i3), this.renderLayer(this, e3, t2, i3);
-              }
+            if (this.context.bindFramebuffer.set(null), this.context.clear({ color: i2.showOverdrawInspector ? t.aT.black : t.aT.transparent, depth: 1 }), this.clearStencil(), this._showOverdrawInspector = i2.showOverdrawInspector, this.depthRangeFor3D = [0, 1 - (e2._order.length + 2) * this.numSublayers * this.depthEpsilon], !this.renderToTexture) for (this.renderPass = "opaque", this.currentLayer = s2.length - 1; this.currentLayer >= 0; this.currentLayer--) {
+              const t2 = this.style._layers[s2[this.currentLayer]], e3 = a2[t2.source], i3 = o2[t2.source];
+              this._renderTileClippingMasks(t2, i3), this.renderLayer(this, e3, t2, i3);
+            }
             for (this.renderPass = "translucent", this.currentLayer = 0; this.currentLayer < s2.length; this.currentLayer++) {
               const t2 = this.style._layers[s2[this.currentLayer]], e3 = a2[t2.source];
-              if (this.renderToTexture && this.renderToTexture.renderLayer(t2))
-                continue;
+              if (this.renderToTexture && this.renderToTexture.renderLayer(t2)) continue;
               const i3 = ("symbol" === t2.type ? n2 : r2)[t2.source];
               this._renderTileClippingMasks(t2, o2[t2.source]), this.renderLayer(this, e3, t2, i3);
             }
@@ -14389,8 +12990,7 @@ uniform ${i3} ${s3} u_${a3};
                 return a3.forEach((t4) => r3(t4)), i3 || o3.forEach((t4) => r3(t4)), i3;
               }(this.style, this.transform.zoom);
               t2 && function(t3, e3, i3) {
-                for (let s3 = 0; s3 < i3.length; s3++)
-                  ts(t3, e3, i3[s3]);
+                for (let s3 = 0; s3 < i3.length; s3++) ts(t3, e3, i3[s3]);
               }(this, t2, t2.getVisibleCoordinates());
             }
             this.options.showPadding && function(t2) {
@@ -14403,245 +13003,215 @@ uniform ${i3} ${s3} u_${a3};
             }(this), this.context.setDefault();
           }
           renderLayer(e2, i2, s2, a2) {
-            if (!s2.isHidden(this.transform.zoom) && ("background" === s2.type || "custom" === s2.type || (a2 || []).length))
-              switch (this.id = s2.id, s2.type) {
-                case "symbol":
-                  !function(e3, i3, s3, a3, o2) {
-                    if ("translucent" !== e3.renderPass)
-                      return;
-                    const r2 = Mi.disabled, n2 = e3.colorModeForRenderPass();
-                    (s3._unevaluatedLayout.hasValue("text-variable-anchor") || s3._unevaluatedLayout.hasValue("text-variable-anchor-offset")) && function(e4, i4, s4, a4, o3, r3, n3) {
-                      const l2 = i4.transform, h2 = "map" === o3, c2 = "map" === r3;
-                      for (const o4 of e4) {
-                        const e5 = a4.getTile(o4), r4 = e5.getBucket(s4);
-                        if (!r4 || !r4.text || !r4.text.segments.get().length)
-                          continue;
-                        const u2 = t.ah(r4.textSizeData, l2.zoom), d2 = St(e5, 1, i4.transform.zoom), _2 = nt(o4.posMatrix, c2, h2, i4.transform, d2), p2 = "none" !== s4.layout.get("icon-text-fit") && r4.hasIconData();
-                        if (u2) {
-                          const t2 = Math.pow(2, l2.zoom - e5.tileID.overscaledZ);
-                          Fi(r4, h2, c2, n3, l2, _2, o4.posMatrix, t2, u2, p2, i4.style.map.terrain ? (t3, e6) => i4.style.map.terrain.getElevation(o4, t3, e6) : null);
-                        }
+            if (!s2.isHidden(this.transform.zoom) && ("background" === s2.type || "custom" === s2.type || (a2 || []).length)) switch (this.id = s2.id, s2.type) {
+              case "symbol":
+                !function(e3, i3, s3, a3, o2) {
+                  if ("translucent" !== e3.renderPass) return;
+                  const r2 = Mi.disabled, n2 = e3.colorModeForRenderPass();
+                  (s3._unevaluatedLayout.hasValue("text-variable-anchor") || s3._unevaluatedLayout.hasValue("text-variable-anchor-offset")) && function(e4, i4, s4, a4, o3, r3, n3) {
+                    const l2 = i4.transform, h2 = "map" === o3, c2 = "map" === r3;
+                    for (const o4 of e4) {
+                      const e5 = a4.getTile(o4), r4 = e5.getBucket(s4);
+                      if (!r4 || !r4.text || !r4.text.segments.get().length) continue;
+                      const u2 = t.ah(r4.textSizeData, l2.zoom), d2 = St(e5, 1, i4.transform.zoom), _2 = nt(o4.posMatrix, c2, h2, i4.transform, d2), p2 = "none" !== s4.layout.get("icon-text-fit") && r4.hasIconData();
+                      if (u2) {
+                        const t2 = Math.pow(2, l2.zoom - e5.tileID.overscaledZ);
+                        Fi(r4, h2, c2, n3, l2, _2, o4.posMatrix, t2, u2, p2, i4.style.map.terrain ? (t3, e6) => i4.style.map.terrain.getElevation(o4, t3, e6) : null);
                       }
-                    }(a3, e3, s3, i3, s3.layout.get("text-rotation-alignment"), s3.layout.get("text-pitch-alignment"), o2), 0 !== s3.paint.get("icon-opacity").constantOr(1) && Oi(e3, i3, s3, a3, false, s3.paint.get("icon-translate"), s3.paint.get("icon-translate-anchor"), s3.layout.get("icon-rotation-alignment"), s3.layout.get("icon-pitch-alignment"), s3.layout.get("icon-keep-upright"), r2, n2), 0 !== s3.paint.get("text-opacity").constantOr(1) && Oi(e3, i3, s3, a3, true, s3.paint.get("text-translate"), s3.paint.get("text-translate-anchor"), s3.layout.get("text-rotation-alignment"), s3.layout.get("text-pitch-alignment"), s3.layout.get("text-keep-upright"), r2, n2), i3.map.showCollisionBoxes && (Ai(e3, i3, s3, a3, s3.paint.get("text-translate"), s3.paint.get("text-translate-anchor"), true), Ai(e3, i3, s3, a3, s3.paint.get("icon-translate"), s3.paint.get("icon-translate-anchor"), false));
-                  }(e2, i2, s2, a2, this.style.placement.variableOffsets);
-                  break;
-                case "circle":
-                  !function(e3, i3, s3, a3) {
-                    if ("translucent" !== e3.renderPass)
-                      return;
-                    const o2 = s3.paint.get("circle-opacity"), r2 = s3.paint.get("circle-stroke-width"), n2 = s3.paint.get("circle-stroke-opacity"), l2 = !s3.layout.get("circle-sort-key").isConstant();
-                    if (0 === o2.constantOr(1) && (0 === r2.constantOr(1) || 0 === n2.constantOr(1)))
-                      return;
-                    const h2 = e3.context, c2 = h2.gl, u2 = e3.depthModeForSublayer(0, Pi.ReadOnly), d2 = Mi.disabled, _2 = e3.colorModeForRenderPass(), p2 = [];
-                    for (let o3 = 0; o3 < a3.length; o3++) {
-                      const r3 = a3[o3], n3 = i3.getTile(r3), h3 = n3.getBucket(s3);
-                      if (!h3)
-                        continue;
-                      const c3 = h3.programConfigurations.get(s3.id), u3 = e3.useProgram("circle", c3), d3 = h3.layoutVertexBuffer, _3 = h3.indexBuffer, m2 = e3.style.map.terrain && e3.style.map.terrain.getTerrainData(r3), f2 = { programConfiguration: c3, program: u3, layoutVertexBuffer: d3, indexBuffer: _3, uniformValues: ve(e3, r3, n3, s3), terrainData: m2 };
-                      if (l2) {
-                        const e4 = h3.segments.get();
-                        for (const i4 of e4)
-                          p2.push({ segments: new t.S([i4]), sortKey: i4.sortKey, state: f2 });
-                      } else
-                        p2.push({ segments: h3.segments, sortKey: 0, state: f2 });
                     }
-                    l2 && p2.sort((t2, e4) => t2.sortKey - e4.sortKey);
-                    for (const t2 of p2) {
-                      const { programConfiguration: i4, program: a4, layoutVertexBuffer: o3, indexBuffer: r3, uniformValues: n3, terrainData: l3 } = t2.state;
-                      a4.draw(h2, c2.TRIANGLES, u2, d2, _2, zi.disabled, n3, l3, s3.id, o3, r3, t2.segments, s3.paint, e3.transform.zoom, i4);
-                    }
-                  }(e2, i2, s2, a2);
-                  break;
-                case "heatmap":
-                  !function(e3, i3, s3, a3) {
-                    if (0 !== s3.paint.get("heatmap-opacity"))
-                      if ("offscreen" === e3.renderPass) {
-                        const o2 = e3.context, r2 = o2.gl, n2 = Mi.disabled, l2 = new Si([r2.ONE, r2.ONE], t.aT.transparent, [true, true, true, true]);
-                        !function(t2, e4, i4) {
-                          const s4 = t2.gl;
-                          t2.activeTexture.set(s4.TEXTURE1), t2.viewport.set([0, 0, e4.width / 4, e4.height / 4]);
-                          let a4 = i4.heatmapFbo;
-                          if (a4)
-                            s4.bindTexture(s4.TEXTURE_2D, a4.colorAttachment.get()), t2.bindFramebuffer.set(a4.framebuffer);
-                          else {
-                            const o3 = s4.createTexture();
-                            s4.bindTexture(s4.TEXTURE_2D, o3), s4.texParameteri(s4.TEXTURE_2D, s4.TEXTURE_WRAP_S, s4.CLAMP_TO_EDGE), s4.texParameteri(s4.TEXTURE_2D, s4.TEXTURE_WRAP_T, s4.CLAMP_TO_EDGE), s4.texParameteri(s4.TEXTURE_2D, s4.TEXTURE_MIN_FILTER, s4.LINEAR), s4.texParameteri(s4.TEXTURE_2D, s4.TEXTURE_MAG_FILTER, s4.LINEAR), a4 = i4.heatmapFbo = t2.createFramebuffer(e4.width / 4, e4.height / 4, false, false), function(t3, e5, i5, s5) {
-                              var a5, o4;
-                              const r3 = t3.gl, n3 = null !== (a5 = t3.HALF_FLOAT) && void 0 !== a5 ? a5 : r3.UNSIGNED_BYTE, l3 = null !== (o4 = t3.RGBA16F) && void 0 !== o4 ? o4 : r3.RGBA;
-                              r3.texImage2D(r3.TEXTURE_2D, 0, l3, e5.width / 4, e5.height / 4, 0, r3.RGBA, n3, null), s5.colorAttachment.set(i5);
-                            }(t2, e4, o3, a4);
-                          }
-                        }(o2, e3, s3), o2.clear({ color: t.aT.transparent });
-                        for (let t2 = 0; t2 < a3.length; t2++) {
-                          const h2 = a3[t2];
-                          if (i3.hasRenderableParent(h2))
-                            continue;
-                          const c2 = i3.getTile(h2), u2 = c2.getBucket(s3);
-                          if (!u2)
-                            continue;
-                          const d2 = u2.programConfigurations.get(s3.id), _2 = e3.useProgram("heatmap", d2), { zoom: p2 } = e3.transform;
-                          _2.draw(o2, r2.TRIANGLES, Pi.disabled, n2, l2, zi.disabled, we(h2.posMatrix, c2, p2, s3.paint.get("heatmap-intensity")), null, s3.id, u2.layoutVertexBuffer, u2.indexBuffer, u2.segments, s3.paint, e3.transform.zoom, d2);
-                        }
-                        o2.viewport.set([0, 0, e3.width, e3.height]);
-                      } else
-                        "translucent" === e3.renderPass && (e3.context.setColorMode(e3.colorModeForRenderPass()), function(e4, i4) {
-                          const s4 = e4.context, a4 = s4.gl, o2 = i4.heatmapFbo;
-                          if (!o2)
-                            return;
-                          s4.activeTexture.set(a4.TEXTURE0), a4.bindTexture(a4.TEXTURE_2D, o2.colorAttachment.get()), s4.activeTexture.set(a4.TEXTURE1);
-                          let r2 = i4.colorRampTexture;
-                          r2 || (r2 = i4.colorRampTexture = new x(s4, i4.colorRamp, a4.RGBA)), r2.bind(a4.LINEAR, a4.CLAMP_TO_EDGE), e4.useProgram("heatmapTexture").draw(s4, a4.TRIANGLES, Pi.disabled, Mi.disabled, e4.colorModeForRenderPass(), zi.disabled, ((e5, i5, s5, a5) => {
-                            const o3 = t.Z();
-                            t.aS(o3, 0, e5.width, e5.height, 0, 0, 1);
-                            const r3 = e5.context.gl;
-                            return { u_matrix: o3, u_world: [r3.drawingBufferWidth, r3.drawingBufferHeight], u_image: 0, u_color_ramp: 1, u_opacity: i5.paint.get("heatmap-opacity") };
-                          })(e4, i4), null, i4.id, e4.viewportBuffer, e4.quadTriangleIndexBuffer, e4.viewportSegments, i4.paint, e4.transform.zoom);
-                        }(e3, s3));
-                  }(e2, i2, s2, a2);
-                  break;
-                case "line":
-                  !function(e3, i3, s3, a3) {
-                    if ("translucent" !== e3.renderPass)
-                      return;
-                    const o2 = s3.paint.get("line-opacity"), r2 = s3.paint.get("line-width");
-                    if (0 === o2.constantOr(1) || 0 === r2.constantOr(1))
-                      return;
-                    const n2 = e3.depthModeForSublayer(0, Pi.ReadOnly), l2 = e3.colorModeForRenderPass(), h2 = s3.paint.get("line-dasharray"), c2 = s3.paint.get("line-pattern"), u2 = c2.constantOr(1), d2 = s3.paint.get("line-gradient"), _2 = s3.getCrossfadeParameters(), p2 = u2 ? "linePattern" : h2 ? "lineSDF" : d2 ? "lineGradient" : "line", m2 = e3.context, f2 = m2.gl;
-                    let g2 = true;
-                    for (const o3 of a3) {
-                      const a4 = i3.getTile(o3);
-                      if (u2 && !a4.patternsLoaded())
-                        continue;
-                      const r3 = a4.getBucket(s3);
-                      if (!r3)
-                        continue;
-                      const v2 = r3.programConfigurations.get(s3.id), y2 = e3.context.program.get(), b2 = e3.useProgram(p2, v2), w2 = g2 || b2.program !== y2, T2 = e3.style.map.terrain && e3.style.map.terrain.getTerrainData(o3), I2 = c2.constantOr(null);
-                      if (I2 && a4.imageAtlas) {
-                        const t2 = a4.imageAtlas, e4 = t2.patternPositions[I2.to.toString()], i4 = t2.patternPositions[I2.from.toString()];
-                        e4 && i4 && v2.setConstantPatternPositions(e4, i4);
-                      }
-                      const E2 = T2 ? o3 : null, S2 = u2 ? Se(e3, a4, s3, _2, E2) : h2 ? Ce(e3, a4, s3, h2, _2, E2) : d2 ? Ee(e3, a4, s3, r3.lineClipsArray.length, E2) : Ie(e3, a4, s3, E2);
-                      if (u2)
-                        m2.activeTexture.set(f2.TEXTURE0), a4.imageAtlasTexture.bind(f2.LINEAR, f2.CLAMP_TO_EDGE), v2.updatePaintBuffers(_2);
-                      else if (h2 && (w2 || e3.lineAtlas.dirty))
-                        m2.activeTexture.set(f2.TEXTURE0), e3.lineAtlas.bind(m2);
-                      else if (d2) {
-                        const a5 = r3.gradients[s3.id];
-                        let n3 = a5.texture;
-                        if (s3.gradientVersion !== a5.version) {
-                          let l3 = 256;
-                          if (s3.stepInterpolant) {
-                            const s4 = i3.getSource().maxzoom, a6 = o3.canonical.z === s4 ? Math.ceil(1 << e3.transform.maxZoom - o3.canonical.z) : 1;
-                            l3 = t.ad(t.aY(r3.maxLineLength / t.N * 1024 * a6), 256, m2.maxTextureSize);
-                          }
-                          a5.gradient = t.aZ({ expression: s3.gradientExpression(), evaluationKey: "lineProgress", resolution: l3, image: a5.gradient || void 0, clips: r3.lineClipsArray }), a5.texture ? a5.texture.update(a5.gradient) : a5.texture = new x(m2, a5.gradient, f2.RGBA), a5.version = s3.gradientVersion, n3 = a5.texture;
-                        }
-                        m2.activeTexture.set(f2.TEXTURE0), n3.bind(s3.stepInterpolant ? f2.NEAREST : f2.LINEAR, f2.CLAMP_TO_EDGE);
-                      }
-                      b2.draw(m2, f2.TRIANGLES, n2, e3.stencilModeForClipping(o3), l2, zi.disabled, S2, T2, s3.id, r3.layoutVertexBuffer, r3.indexBuffer, r3.segments, s3.paint, e3.transform.zoom, v2, r3.layoutVertexBuffer2), g2 = false;
-                    }
-                  }(e2, i2, s2, a2);
-                  break;
-                case "fill":
-                  !function(e3, i3, s3, a3) {
-                    const o2 = s3.paint.get("fill-color"), r2 = s3.paint.get("fill-opacity");
-                    if (0 === r2.constantOr(1))
-                      return;
-                    const n2 = e3.colorModeForRenderPass(), l2 = s3.paint.get("fill-pattern"), h2 = e3.opaquePassEnabledForLayer() && !l2.constantOr(1) && 1 === o2.constantOr(t.aT.transparent).a && 1 === r2.constantOr(0) ? "opaque" : "translucent";
-                    if (e3.renderPass === h2) {
-                      const t2 = e3.depthModeForSublayer(1, "opaque" === e3.renderPass ? Pi.ReadWrite : Pi.ReadOnly);
-                      Zi(e3, i3, s3, a3, t2, n2, false);
-                    }
-                    if ("translucent" === e3.renderPass && s3.paint.get("fill-antialias")) {
-                      const t2 = e3.depthModeForSublayer(s3.getPaintProperty("fill-outline-color") ? 2 : 0, Pi.ReadOnly);
-                      Zi(e3, i3, s3, a3, t2, n2, true);
-                    }
-                  }(e2, i2, s2, a2);
-                  break;
-                case "fill-extrusion":
-                  !function(t2, e3, i3, s3) {
-                    const a3 = i3.paint.get("fill-extrusion-opacity");
-                    if (0 !== a3 && "translucent" === t2.renderPass) {
-                      const o2 = new Pi(t2.context.gl.LEQUAL, Pi.ReadWrite, t2.depthRangeFor3D);
-                      if (1 !== a3 || i3.paint.get("fill-extrusion-pattern").constantOr(1))
-                        Gi(t2, e3, i3, s3, o2, Mi.disabled, Si.disabled), Gi(t2, e3, i3, s3, o2, t2.stencilModeFor3D(), t2.colorModeForRenderPass());
+                  }(a3, e3, s3, i3, s3.layout.get("text-rotation-alignment"), s3.layout.get("text-pitch-alignment"), o2), 0 !== s3.paint.get("icon-opacity").constantOr(1) && Oi(e3, i3, s3, a3, false, s3.paint.get("icon-translate"), s3.paint.get("icon-translate-anchor"), s3.layout.get("icon-rotation-alignment"), s3.layout.get("icon-pitch-alignment"), s3.layout.get("icon-keep-upright"), r2, n2), 0 !== s3.paint.get("text-opacity").constantOr(1) && Oi(e3, i3, s3, a3, true, s3.paint.get("text-translate"), s3.paint.get("text-translate-anchor"), s3.layout.get("text-rotation-alignment"), s3.layout.get("text-pitch-alignment"), s3.layout.get("text-keep-upright"), r2, n2), i3.map.showCollisionBoxes && (Ai(e3, i3, s3, a3, s3.paint.get("text-translate"), s3.paint.get("text-translate-anchor"), true), Ai(e3, i3, s3, a3, s3.paint.get("icon-translate"), s3.paint.get("icon-translate-anchor"), false));
+                }(e2, i2, s2, a2, this.style.placement.variableOffsets);
+                break;
+              case "circle":
+                !function(e3, i3, s3, a3) {
+                  if ("translucent" !== e3.renderPass) return;
+                  const o2 = s3.paint.get("circle-opacity"), r2 = s3.paint.get("circle-stroke-width"), n2 = s3.paint.get("circle-stroke-opacity"), l2 = !s3.layout.get("circle-sort-key").isConstant();
+                  if (0 === o2.constantOr(1) && (0 === r2.constantOr(1) || 0 === n2.constantOr(1))) return;
+                  const h2 = e3.context, c2 = h2.gl, u2 = e3.depthModeForSublayer(0, Pi.ReadOnly), d2 = Mi.disabled, _2 = e3.colorModeForRenderPass(), p2 = [];
+                  for (let o3 = 0; o3 < a3.length; o3++) {
+                    const r3 = a3[o3], n3 = i3.getTile(r3), h3 = n3.getBucket(s3);
+                    if (!h3) continue;
+                    const c3 = h3.programConfigurations.get(s3.id), u3 = e3.useProgram("circle", c3), d3 = h3.layoutVertexBuffer, _3 = h3.indexBuffer, m2 = e3.style.map.terrain && e3.style.map.terrain.getTerrainData(r3), f2 = { programConfiguration: c3, program: u3, layoutVertexBuffer: d3, indexBuffer: _3, uniformValues: ve(e3, r3, n3, s3), terrainData: m2 };
+                    if (l2) {
+                      const e4 = h3.segments.get();
+                      for (const i4 of e4) p2.push({ segments: new t.S([i4]), sortKey: i4.sortKey, state: f2 });
+                    } else p2.push({ segments: h3.segments, sortKey: 0, state: f2 });
+                  }
+                  l2 && p2.sort((t2, e4) => t2.sortKey - e4.sortKey);
+                  for (const t2 of p2) {
+                    const { programConfiguration: i4, program: a4, layoutVertexBuffer: o3, indexBuffer: r3, uniformValues: n3, terrainData: l3 } = t2.state;
+                    a4.draw(h2, c2.TRIANGLES, u2, d2, _2, zi.disabled, n3, l3, s3.id, o3, r3, t2.segments, s3.paint, e3.transform.zoom, i4);
+                  }
+                }(e2, i2, s2, a2);
+                break;
+              case "heatmap":
+                !function(e3, i3, s3, a3) {
+                  if (0 !== s3.paint.get("heatmap-opacity")) if ("offscreen" === e3.renderPass) {
+                    const o2 = e3.context, r2 = o2.gl, n2 = Mi.disabled, l2 = new Si([r2.ONE, r2.ONE], t.aT.transparent, [true, true, true, true]);
+                    !function(t2, e4, i4) {
+                      const s4 = t2.gl;
+                      t2.activeTexture.set(s4.TEXTURE1), t2.viewport.set([0, 0, e4.width / 4, e4.height / 4]);
+                      let a4 = i4.heatmapFbo;
+                      if (a4) s4.bindTexture(s4.TEXTURE_2D, a4.colorAttachment.get()), t2.bindFramebuffer.set(a4.framebuffer);
                       else {
-                        const a4 = t2.colorModeForRenderPass();
-                        Gi(t2, e3, i3, s3, o2, Mi.disabled, a4);
+                        const o3 = s4.createTexture();
+                        s4.bindTexture(s4.TEXTURE_2D, o3), s4.texParameteri(s4.TEXTURE_2D, s4.TEXTURE_WRAP_S, s4.CLAMP_TO_EDGE), s4.texParameteri(s4.TEXTURE_2D, s4.TEXTURE_WRAP_T, s4.CLAMP_TO_EDGE), s4.texParameteri(s4.TEXTURE_2D, s4.TEXTURE_MIN_FILTER, s4.LINEAR), s4.texParameteri(s4.TEXTURE_2D, s4.TEXTURE_MAG_FILTER, s4.LINEAR), a4 = i4.heatmapFbo = t2.createFramebuffer(e4.width / 4, e4.height / 4, false, false), function(t3, e5, i5, s5) {
+                          var a5, o4;
+                          const r3 = t3.gl, n3 = null !== (a5 = t3.HALF_FLOAT) && void 0 !== a5 ? a5 : r3.UNSIGNED_BYTE, l3 = null !== (o4 = t3.RGBA16F) && void 0 !== o4 ? o4 : r3.RGBA;
+                          r3.texImage2D(r3.TEXTURE_2D, 0, l3, e5.width / 4, e5.height / 4, 0, r3.RGBA, n3, null), s5.colorAttachment.set(i5);
+                        }(t2, e4, o3, a4);
                       }
+                    }(o2, e3, s3), o2.clear({ color: t.aT.transparent });
+                    for (let t2 = 0; t2 < a3.length; t2++) {
+                      const h2 = a3[t2];
+                      if (i3.hasRenderableParent(h2)) continue;
+                      const c2 = i3.getTile(h2), u2 = c2.getBucket(s3);
+                      if (!u2) continue;
+                      const d2 = u2.programConfigurations.get(s3.id), _2 = e3.useProgram("heatmap", d2), { zoom: p2 } = e3.transform;
+                      _2.draw(o2, r2.TRIANGLES, Pi.disabled, n2, l2, zi.disabled, we(h2.posMatrix, c2, p2, s3.paint.get("heatmap-intensity")), null, s3.id, u2.layoutVertexBuffer, u2.indexBuffer, u2.segments, s3.paint, e3.transform.zoom, d2);
                     }
-                  }(e2, i2, s2, a2);
-                  break;
-                case "hillshade":
-                  !function(t2, e3, i3, s3) {
-                    if ("offscreen" !== t2.renderPass && "translucent" !== t2.renderPass)
-                      return;
-                    const a3 = t2.context, o2 = t2.depthModeForSublayer(0, Pi.ReadOnly), r2 = t2.colorModeForRenderPass(), [n2, l2] = "translucent" === t2.renderPass ? t2.stencilConfigForOverlap(s3) : [{}, s3];
-                    for (const s4 of l2) {
-                      const a4 = e3.getTile(s4);
-                      void 0 !== a4.needsHillshadePrepare && a4.needsHillshadePrepare && "offscreen" === t2.renderPass ? Vi(t2, a4, i3, o2, Mi.disabled, r2) : "translucent" === t2.renderPass && ji(t2, s4, a4, i3, o2, n2[s4.overscaledZ], r2);
+                    o2.viewport.set([0, 0, e3.width, e3.height]);
+                  } else "translucent" === e3.renderPass && (e3.context.setColorMode(e3.colorModeForRenderPass()), function(e4, i4) {
+                    const s4 = e4.context, a4 = s4.gl, o2 = i4.heatmapFbo;
+                    if (!o2) return;
+                    s4.activeTexture.set(a4.TEXTURE0), a4.bindTexture(a4.TEXTURE_2D, o2.colorAttachment.get()), s4.activeTexture.set(a4.TEXTURE1);
+                    let r2 = i4.colorRampTexture;
+                    r2 || (r2 = i4.colorRampTexture = new x(s4, i4.colorRamp, a4.RGBA)), r2.bind(a4.LINEAR, a4.CLAMP_TO_EDGE), e4.useProgram("heatmapTexture").draw(s4, a4.TRIANGLES, Pi.disabled, Mi.disabled, e4.colorModeForRenderPass(), zi.disabled, ((e5, i5, s5, a5) => {
+                      const o3 = t.Z();
+                      t.aS(o3, 0, e5.width, e5.height, 0, 0, 1);
+                      const r3 = e5.context.gl;
+                      return { u_matrix: o3, u_world: [r3.drawingBufferWidth, r3.drawingBufferHeight], u_image: 0, u_color_ramp: 1, u_opacity: i5.paint.get("heatmap-opacity") };
+                    })(e4, i4), null, i4.id, e4.viewportBuffer, e4.quadTriangleIndexBuffer, e4.viewportSegments, i4.paint, e4.transform.zoom);
+                  }(e3, s3));
+                }(e2, i2, s2, a2);
+                break;
+              case "line":
+                !function(e3, i3, s3, a3) {
+                  if ("translucent" !== e3.renderPass) return;
+                  const o2 = s3.paint.get("line-opacity"), r2 = s3.paint.get("line-width");
+                  if (0 === o2.constantOr(1) || 0 === r2.constantOr(1)) return;
+                  const n2 = e3.depthModeForSublayer(0, Pi.ReadOnly), l2 = e3.colorModeForRenderPass(), h2 = s3.paint.get("line-dasharray"), c2 = s3.paint.get("line-pattern"), u2 = c2.constantOr(1), d2 = s3.paint.get("line-gradient"), _2 = s3.getCrossfadeParameters(), p2 = u2 ? "linePattern" : h2 ? "lineSDF" : d2 ? "lineGradient" : "line", m2 = e3.context, f2 = m2.gl;
+                  let g2 = true;
+                  for (const o3 of a3) {
+                    const a4 = i3.getTile(o3);
+                    if (u2 && !a4.patternsLoaded()) continue;
+                    const r3 = a4.getBucket(s3);
+                    if (!r3) continue;
+                    const v2 = r3.programConfigurations.get(s3.id), y2 = e3.context.program.get(), b2 = e3.useProgram(p2, v2), w2 = g2 || b2.program !== y2, T2 = e3.style.map.terrain && e3.style.map.terrain.getTerrainData(o3), I2 = c2.constantOr(null);
+                    if (I2 && a4.imageAtlas) {
+                      const t2 = a4.imageAtlas, e4 = t2.patternPositions[I2.to.toString()], i4 = t2.patternPositions[I2.from.toString()];
+                      e4 && i4 && v2.setConstantPatternPositions(e4, i4);
                     }
-                    a3.viewport.set([0, 0, t2.width, t2.height]);
-                  }(e2, i2, s2, a2);
-                  break;
-                case "raster":
-                  !function(t2, e3, i3, s3) {
-                    if ("translucent" !== t2.renderPass)
-                      return;
-                    if (0 === i3.paint.get("raster-opacity"))
-                      return;
-                    if (!s3.length)
-                      return;
-                    const a3 = t2.context, o2 = a3.gl, r2 = e3.getSource(), n2 = t2.useProgram("raster"), l2 = t2.colorModeForRenderPass(), [h2, c2] = r2 instanceof N ? [{}, s3] : t2.stencilConfigForOverlap(s3), u2 = c2[c2.length - 1].overscaledZ, d2 = !t2.options.moving;
-                    for (const s4 of c2) {
-                      const c3 = t2.depthModeForSublayer(s4.overscaledZ - u2, 1 === i3.paint.get("raster-opacity") ? Pi.ReadWrite : Pi.ReadOnly, o2.LESS), _2 = e3.getTile(s4);
-                      _2.registerFadeDuration(i3.paint.get("raster-fade-duration"));
-                      const p2 = e3.findLoadedParent(s4, 0), m2 = qi(_2, p2, e3, i3, t2.transform, t2.style.map.terrain);
-                      let f2, g2;
-                      const v2 = "nearest" === i3.paint.get("raster-resampling") ? o2.NEAREST : o2.LINEAR;
-                      a3.activeTexture.set(o2.TEXTURE0), _2.texture.bind(v2, o2.CLAMP_TO_EDGE, o2.LINEAR_MIPMAP_NEAREST), a3.activeTexture.set(o2.TEXTURE1), p2 ? (p2.texture.bind(v2, o2.CLAMP_TO_EDGE, o2.LINEAR_MIPMAP_NEAREST), f2 = Math.pow(2, p2.tileID.overscaledZ - _2.tileID.overscaledZ), g2 = [_2.tileID.canonical.x * f2 % 1, _2.tileID.canonical.y * f2 % 1]) : _2.texture.bind(v2, o2.CLAMP_TO_EDGE, o2.LINEAR_MIPMAP_NEAREST);
-                      const x2 = t2.style.map.terrain && t2.style.map.terrain.getTerrainData(s4), y2 = x2 ? s4 : null, b2 = y2 ? y2.posMatrix : t2.transform.calculatePosMatrix(s4.toUnwrapped(), d2), w2 = Me(b2, g2 || [0, 0], f2 || 1, m2, i3);
-                      r2 instanceof N ? n2.draw(a3, o2.TRIANGLES, c3, Mi.disabled, l2, zi.disabled, w2, x2, i3.id, r2.boundsBuffer, t2.quadTriangleIndexBuffer, r2.boundsSegments) : n2.draw(a3, o2.TRIANGLES, c3, h2[s4.overscaledZ], l2, zi.disabled, w2, x2, i3.id, t2.rasterBoundsBuffer, t2.quadTriangleIndexBuffer, t2.rasterBoundsSegments);
+                    const E2 = T2 ? o3 : null, S2 = u2 ? Se(e3, a4, s3, _2, E2) : h2 ? Ce(e3, a4, s3, h2, _2, E2) : d2 ? Ee(e3, a4, s3, r3.lineClipsArray.length, E2) : Ie(e3, a4, s3, E2);
+                    if (u2) m2.activeTexture.set(f2.TEXTURE0), a4.imageAtlasTexture.bind(f2.LINEAR, f2.CLAMP_TO_EDGE), v2.updatePaintBuffers(_2);
+                    else if (h2 && (w2 || e3.lineAtlas.dirty)) m2.activeTexture.set(f2.TEXTURE0), e3.lineAtlas.bind(m2);
+                    else if (d2) {
+                      const a5 = r3.gradients[s3.id];
+                      let n3 = a5.texture;
+                      if (s3.gradientVersion !== a5.version) {
+                        let l3 = 256;
+                        if (s3.stepInterpolant) {
+                          const s4 = i3.getSource().maxzoom, a6 = o3.canonical.z === s4 ? Math.ceil(1 << e3.transform.maxZoom - o3.canonical.z) : 1;
+                          l3 = t.ad(t.aY(r3.maxLineLength / t.N * 1024 * a6), 256, m2.maxTextureSize);
+                        }
+                        a5.gradient = t.aZ({ expression: s3.gradientExpression(), evaluationKey: "lineProgress", resolution: l3, image: a5.gradient || void 0, clips: r3.lineClipsArray }), a5.texture ? a5.texture.update(a5.gradient) : a5.texture = new x(m2, a5.gradient, f2.RGBA), a5.version = s3.gradientVersion, n3 = a5.texture;
+                      }
+                      m2.activeTexture.set(f2.TEXTURE0), n3.bind(s3.stepInterpolant ? f2.NEAREST : f2.LINEAR, f2.CLAMP_TO_EDGE);
                     }
-                  }(e2, i2, s2, a2);
-                  break;
-                case "background":
-                  !function(t2, e3, i3, s3) {
-                    const a3 = i3.paint.get("background-color"), o2 = i3.paint.get("background-opacity");
-                    if (0 === o2)
-                      return;
-                    const r2 = t2.context, n2 = r2.gl, l2 = t2.transform, h2 = l2.tileSize, c2 = i3.paint.get("background-pattern");
-                    if (t2.isPatternMissing(c2))
-                      return;
-                    const u2 = !c2 && 1 === a3.a && 1 === o2 && t2.opaquePassEnabledForLayer() ? "opaque" : "translucent";
-                    if (t2.renderPass !== u2)
-                      return;
-                    const d2 = Mi.disabled, _2 = t2.depthModeForSublayer(0, "opaque" === u2 ? Pi.ReadWrite : Pi.ReadOnly), p2 = t2.colorModeForRenderPass(), m2 = t2.useProgram(c2 ? "backgroundPattern" : "background"), f2 = s3 || l2.coveringTiles({ tileSize: h2, terrain: t2.style.map.terrain });
-                    c2 && (r2.activeTexture.set(n2.TEXTURE0), t2.imageManager.bind(t2.context));
-                    const g2 = i3.getCrossfadeParameters();
-                    for (const e4 of f2) {
-                      const l3 = s3 ? e4.posMatrix : t2.transform.calculatePosMatrix(e4.toUnwrapped()), u3 = c2 ? Fe(l3, o2, t2, c2, { tileID: e4, tileSize: h2 }, g2) : ke(l3, o2, a3), f3 = t2.style.map.terrain && t2.style.map.terrain.getTerrainData(e4);
-                      m2.draw(r2, n2.TRIANGLES, _2, d2, p2, zi.disabled, u3, f3, i3.id, t2.tileExtentBuffer, t2.quadTriangleIndexBuffer, t2.tileExtentSegments);
+                    b2.draw(m2, f2.TRIANGLES, n2, e3.stencilModeForClipping(o3), l2, zi.disabled, S2, T2, s3.id, r3.layoutVertexBuffer, r3.indexBuffer, r3.segments, s3.paint, e3.transform.zoom, v2, r3.layoutVertexBuffer2), g2 = false;
+                  }
+                }(e2, i2, s2, a2);
+                break;
+              case "fill":
+                !function(e3, i3, s3, a3) {
+                  const o2 = s3.paint.get("fill-color"), r2 = s3.paint.get("fill-opacity");
+                  if (0 === r2.constantOr(1)) return;
+                  const n2 = e3.colorModeForRenderPass(), l2 = s3.paint.get("fill-pattern"), h2 = e3.opaquePassEnabledForLayer() && !l2.constantOr(1) && 1 === o2.constantOr(t.aT.transparent).a && 1 === r2.constantOr(0) ? "opaque" : "translucent";
+                  if (e3.renderPass === h2) {
+                    const t2 = e3.depthModeForSublayer(1, "opaque" === e3.renderPass ? Pi.ReadWrite : Pi.ReadOnly);
+                    Zi(e3, i3, s3, a3, t2, n2, false);
+                  }
+                  if ("translucent" === e3.renderPass && s3.paint.get("fill-antialias")) {
+                    const t2 = e3.depthModeForSublayer(s3.getPaintProperty("fill-outline-color") ? 2 : 0, Pi.ReadOnly);
+                    Zi(e3, i3, s3, a3, t2, n2, true);
+                  }
+                }(e2, i2, s2, a2);
+                break;
+              case "fill-extrusion":
+                !function(t2, e3, i3, s3) {
+                  const a3 = i3.paint.get("fill-extrusion-opacity");
+                  if (0 !== a3 && "translucent" === t2.renderPass) {
+                    const o2 = new Pi(t2.context.gl.LEQUAL, Pi.ReadWrite, t2.depthRangeFor3D);
+                    if (1 !== a3 || i3.paint.get("fill-extrusion-pattern").constantOr(1)) Gi(t2, e3, i3, s3, o2, Mi.disabled, Si.disabled), Gi(t2, e3, i3, s3, o2, t2.stencilModeFor3D(), t2.colorModeForRenderPass());
+                    else {
+                      const a4 = t2.colorModeForRenderPass();
+                      Gi(t2, e3, i3, s3, o2, Mi.disabled, a4);
                     }
-                  }(e2, 0, s2, a2);
-                  break;
-                case "custom":
-                  !function(t2, e3, i3) {
-                    const s3 = t2.context, a3 = i3.implementation;
-                    if ("offscreen" === t2.renderPass) {
-                      const e4 = a3.prerender;
-                      e4 && (t2.setCustomLayerDefaults(), s3.setColorMode(t2.colorModeForRenderPass()), e4.call(a3, s3.gl, t2.transform.customLayerMatrix()), s3.setDirty(), t2.setBaseState());
-                    } else if ("translucent" === t2.renderPass) {
-                      t2.setCustomLayerDefaults(), s3.setColorMode(t2.colorModeForRenderPass()), s3.setStencilMode(Mi.disabled);
-                      const e4 = "3d" === a3.renderingMode ? new Pi(t2.context.gl.LEQUAL, Pi.ReadWrite, t2.depthRangeFor3D) : t2.depthModeForSublayer(0, Pi.ReadOnly);
-                      s3.setDepthMode(e4), a3.render(s3.gl, t2.transform.customLayerMatrix()), s3.setDirty(), t2.setBaseState(), s3.bindFramebuffer.set(null);
-                    }
-                  }(e2, 0, s2);
-              }
+                  }
+                }(e2, i2, s2, a2);
+                break;
+              case "hillshade":
+                !function(t2, e3, i3, s3) {
+                  if ("offscreen" !== t2.renderPass && "translucent" !== t2.renderPass) return;
+                  const a3 = t2.context, o2 = t2.depthModeForSublayer(0, Pi.ReadOnly), r2 = t2.colorModeForRenderPass(), [n2, l2] = "translucent" === t2.renderPass ? t2.stencilConfigForOverlap(s3) : [{}, s3];
+                  for (const s4 of l2) {
+                    const a4 = e3.getTile(s4);
+                    void 0 !== a4.needsHillshadePrepare && a4.needsHillshadePrepare && "offscreen" === t2.renderPass ? Vi(t2, a4, i3, o2, Mi.disabled, r2) : "translucent" === t2.renderPass && ji(t2, s4, a4, i3, o2, n2[s4.overscaledZ], r2);
+                  }
+                  a3.viewport.set([0, 0, t2.width, t2.height]);
+                }(e2, i2, s2, a2);
+                break;
+              case "raster":
+                !function(t2, e3, i3, s3) {
+                  if ("translucent" !== t2.renderPass) return;
+                  if (0 === i3.paint.get("raster-opacity")) return;
+                  if (!s3.length) return;
+                  const a3 = t2.context, o2 = a3.gl, r2 = e3.getSource(), n2 = t2.useProgram("raster"), l2 = t2.colorModeForRenderPass(), [h2, c2] = r2 instanceof N ? [{}, s3] : t2.stencilConfigForOverlap(s3), u2 = c2[c2.length - 1].overscaledZ, d2 = !t2.options.moving;
+                  for (const s4 of c2) {
+                    const c3 = t2.depthModeForSublayer(s4.overscaledZ - u2, 1 === i3.paint.get("raster-opacity") ? Pi.ReadWrite : Pi.ReadOnly, o2.LESS), _2 = e3.getTile(s4);
+                    _2.registerFadeDuration(i3.paint.get("raster-fade-duration"));
+                    const p2 = e3.findLoadedParent(s4, 0), m2 = qi(_2, p2, e3, i3, t2.transform, t2.style.map.terrain);
+                    let f2, g2;
+                    const v2 = "nearest" === i3.paint.get("raster-resampling") ? o2.NEAREST : o2.LINEAR;
+                    a3.activeTexture.set(o2.TEXTURE0), _2.texture.bind(v2, o2.CLAMP_TO_EDGE, o2.LINEAR_MIPMAP_NEAREST), a3.activeTexture.set(o2.TEXTURE1), p2 ? (p2.texture.bind(v2, o2.CLAMP_TO_EDGE, o2.LINEAR_MIPMAP_NEAREST), f2 = Math.pow(2, p2.tileID.overscaledZ - _2.tileID.overscaledZ), g2 = [_2.tileID.canonical.x * f2 % 1, _2.tileID.canonical.y * f2 % 1]) : _2.texture.bind(v2, o2.CLAMP_TO_EDGE, o2.LINEAR_MIPMAP_NEAREST);
+                    const x2 = t2.style.map.terrain && t2.style.map.terrain.getTerrainData(s4), y2 = x2 ? s4 : null, b2 = y2 ? y2.posMatrix : t2.transform.calculatePosMatrix(s4.toUnwrapped(), d2), w2 = Me(b2, g2 || [0, 0], f2 || 1, m2, i3);
+                    r2 instanceof N ? n2.draw(a3, o2.TRIANGLES, c3, Mi.disabled, l2, zi.disabled, w2, x2, i3.id, r2.boundsBuffer, t2.quadTriangleIndexBuffer, r2.boundsSegments) : n2.draw(a3, o2.TRIANGLES, c3, h2[s4.overscaledZ], l2, zi.disabled, w2, x2, i3.id, t2.rasterBoundsBuffer, t2.quadTriangleIndexBuffer, t2.rasterBoundsSegments);
+                  }
+                }(e2, i2, s2, a2);
+                break;
+              case "background":
+                !function(t2, e3, i3, s3) {
+                  const a3 = i3.paint.get("background-color"), o2 = i3.paint.get("background-opacity");
+                  if (0 === o2) return;
+                  const r2 = t2.context, n2 = r2.gl, l2 = t2.transform, h2 = l2.tileSize, c2 = i3.paint.get("background-pattern");
+                  if (t2.isPatternMissing(c2)) return;
+                  const u2 = !c2 && 1 === a3.a && 1 === o2 && t2.opaquePassEnabledForLayer() ? "opaque" : "translucent";
+                  if (t2.renderPass !== u2) return;
+                  const d2 = Mi.disabled, _2 = t2.depthModeForSublayer(0, "opaque" === u2 ? Pi.ReadWrite : Pi.ReadOnly), p2 = t2.colorModeForRenderPass(), m2 = t2.useProgram(c2 ? "backgroundPattern" : "background"), f2 = s3 || l2.coveringTiles({ tileSize: h2, terrain: t2.style.map.terrain });
+                  c2 && (r2.activeTexture.set(n2.TEXTURE0), t2.imageManager.bind(t2.context));
+                  const g2 = i3.getCrossfadeParameters();
+                  for (const e4 of f2) {
+                    const l3 = s3 ? e4.posMatrix : t2.transform.calculatePosMatrix(e4.toUnwrapped()), u3 = c2 ? Fe(l3, o2, t2, c2, { tileID: e4, tileSize: h2 }, g2) : ke(l3, o2, a3), f3 = t2.style.map.terrain && t2.style.map.terrain.getTerrainData(e4);
+                    m2.draw(r2, n2.TRIANGLES, _2, d2, p2, zi.disabled, u3, f3, i3.id, t2.tileExtentBuffer, t2.quadTriangleIndexBuffer, t2.tileExtentSegments);
+                  }
+                }(e2, 0, s2, a2);
+                break;
+              case "custom":
+                !function(t2, e3, i3) {
+                  const s3 = t2.context, a3 = i3.implementation;
+                  if ("offscreen" === t2.renderPass) {
+                    const e4 = a3.prerender;
+                    e4 && (t2.setCustomLayerDefaults(), s3.setColorMode(t2.colorModeForRenderPass()), e4.call(a3, s3.gl, t2.transform.customLayerMatrix()), s3.setDirty(), t2.setBaseState());
+                  } else if ("translucent" === t2.renderPass) {
+                    t2.setCustomLayerDefaults(), s3.setColorMode(t2.colorModeForRenderPass()), s3.setStencilMode(Mi.disabled);
+                    const e4 = "3d" === a3.renderingMode ? new Pi(t2.context.gl.LEQUAL, Pi.ReadWrite, t2.depthRangeFor3D) : t2.depthModeForSublayer(0, Pi.ReadOnly);
+                    s3.setDepthMode(e4), a3.render(s3.gl, t2.transform.customLayerMatrix()), s3.setDirty(), t2.setBaseState(), s3.bindFramebuffer.set(null);
+                  }
+                }(e2, 0, s2);
+            }
           }
           translatePosMatrix(e2, i2, s2, a2, o2) {
-            if (!s2[0] && !s2[1])
-              return e2;
+            if (!s2[0] && !s2[1]) return e2;
             const r2 = o2 ? "map" === a2 ? this.transform.angle : 0 : "viewport" === a2 ? -this.transform.angle : 0;
             if (r2) {
               const t2 = Math.sin(r2), e3 = Math.cos(r2);
@@ -14659,10 +13229,8 @@ uniform ${i3} ${s3} u_${a3};
             return e2 && e2.length > 0 ? e2.pop() : null;
           }
           isPatternMissing(t2) {
-            if (!t2)
-              return false;
-            if (!t2.from || !t2.to)
-              return true;
+            if (!t2) return false;
+            if (!t2.from || !t2.to) return true;
             const e2 = this.imageManager.getPattern(t2.from.toString()), i2 = this.imageManager.getPattern(t2.to.toString());
             return !e2 || !i2;
           }
@@ -14721,8 +13289,7 @@ uniform ${i3} ${s3} u_${a3};
           }
           quadrant(t2) {
             const e2 = [t2 % 2 == 0, t2 < 2], i2 = _(this.min), s2 = _(this.max);
-            for (let t3 = 0; t3 < e2.length; t3++)
-              i2[t3] = e2[t3] ? this.min[t3] : this.center[t3], s2[t3] = e2[t3] ? this.center[t3] : this.max[t3];
+            for (let t3 = 0; t3 < e2.length; t3++) i2[t3] = e2[t3] ? this.min[t3] : this.center[t3], s2[t3] = e2[t3] ? this.center[t3] : this.max[t3];
             return s2[2] = this.max[2], new as(i2, s2);
           }
           distanceX(t2) {
@@ -14737,30 +13304,25 @@ uniform ${i3} ${s3} u_${a3};
             for (let a2 = 0; a2 < e2.planes.length; a2++) {
               const o2 = e2.planes[a2];
               let r2 = 0;
-              for (let e3 = 0; e3 < i2.length; e3++)
-                t.b4(o2, i2[e3]) >= 0 && r2++;
-              if (0 === r2)
-                return 0;
+              for (let e3 = 0; e3 < i2.length; e3++) t.b4(o2, i2[e3]) >= 0 && r2++;
+              if (0 === r2) return 0;
               r2 !== i2.length && (s2 = false);
             }
-            if (s2)
-              return 2;
+            if (s2) return 2;
             for (let t2 = 0; t2 < 3; t2++) {
               let i3 = Number.MAX_VALUE, s3 = -Number.MAX_VALUE;
               for (let a2 = 0; a2 < e2.points.length; a2++) {
                 const o2 = e2.points[a2][t2] - this.min[t2];
                 i3 = Math.min(i3, o2), s3 = Math.max(s3, o2);
               }
-              if (s3 < 0 || i3 > this.max[t2] - this.min[t2])
-                return 0;
+              if (s3 < 0 || i3 > this.max[t2] - this.min[t2]) return 0;
             }
             return 1;
           }
         }
         class os {
           constructor(t2 = 0, e2 = 0, i2 = 0, s2 = 0) {
-            if (isNaN(t2) || t2 < 0 || isNaN(e2) || e2 < 0 || isNaN(i2) || i2 < 0 || isNaN(s2) || s2 < 0)
-              throw new Error("Invalid value for edge-insets, top, bottom, left and right must all be numbers");
+            if (isNaN(t2) || t2 < 0 || isNaN(e2) || e2 < 0 || isNaN(i2) || i2 < 0 || isNaN(s2) || s2 < 0) throw new Error("Invalid value for edge-insets, top, bottom, left and right must all be numbers");
             this.top = t2, this.bottom = e2, this.left = i2, this.right = s2;
           }
           interpolate(e2, i2, s2) {
@@ -14898,8 +13460,7 @@ uniform ${i3} ${s3} u_${a3};
             const i2 = [new t.b6(0, e2)];
             if (this._renderWorldCopies) {
               const s2 = this.pointCoordinate(new t.P(0, 0)), a2 = this.pointCoordinate(new t.P(this.width, 0)), o2 = this.pointCoordinate(new t.P(this.width, this.height)), r2 = this.pointCoordinate(new t.P(0, this.height)), n2 = Math.floor(Math.min(s2.x, a2.x, o2.x, r2.x)), l2 = Math.floor(Math.max(s2.x, a2.x, o2.x, r2.x)), h2 = 1;
-              for (let s3 = n2 - h2; s3 <= l2 + h2; s3++)
-                0 !== s3 && i2.push(new t.b6(s3, e2));
+              for (let s3 = n2 - h2; s3 <= l2 + h2; s3++) 0 !== s3 && i2.push(new t.b6(s3, e2));
             }
             return i2;
           }
@@ -14907,39 +13468,34 @@ uniform ${i3} ${s3} u_${a3};
             var i2, s2;
             let a2 = this.coveringZoomLevel(e2);
             const o2 = a2;
-            if (void 0 !== e2.minzoom && a2 < e2.minzoom)
-              return [];
+            if (void 0 !== e2.minzoom && a2 < e2.minzoom) return [];
             void 0 !== e2.maxzoom && a2 > e2.maxzoom && (a2 = e2.maxzoom);
             const r2 = this.pointCoordinate(this.getCameraPoint()), n2 = t.U.fromLngLat(this.center), l2 = Math.pow(2, a2), h2 = [l2 * r2.x, l2 * r2.y, 0], c2 = [l2 * n2.x, l2 * n2.y, 0], u2 = ss.fromInvProjectionMatrix(this.invProjMatrix, this.worldSize, a2);
             let d2 = e2.minzoom || 0;
             !e2.terrain && this.pitch <= 60 && this._edgeInsets.top < 0.1 && (d2 = a2);
             const _2 = e2.terrain ? 2 / Math.min(this.tileSize, e2.tileSize) * this.tileSize : 3, p2 = (t2) => ({ aabb: new as([t2 * l2, 0, 0], [(t2 + 1) * l2, l2, 0]), zoom: 0, x: 0, y: 0, wrap: t2, fullyVisible: false }), m2 = [], g2 = [], v2 = a2, x2 = e2.reparseOverscaled ? o2 : a2;
-            if (this._renderWorldCopies)
-              for (let t2 = 1; t2 <= 3; t2++)
-                m2.push(p2(-t2)), m2.push(p2(t2));
+            if (this._renderWorldCopies) for (let t2 = 1; t2 <= 3; t2++) m2.push(p2(-t2)), m2.push(p2(t2));
             for (m2.push(p2(0)); m2.length > 0; ) {
               const a3 = m2.pop(), o3 = a3.x, r3 = a3.y;
               let n3 = a3.fullyVisible;
               if (!n3) {
                 const t2 = a3.aabb.intersects(u2);
-                if (0 === t2)
-                  continue;
+                if (0 === t2) continue;
                 n3 = 2 === t2;
               }
               const l3 = e2.terrain ? h2 : c2, p3 = a3.aabb.distanceX(l3), y2 = a3.aabb.distanceY(l3), b2 = Math.max(Math.abs(p3), Math.abs(y2));
               if (a3.zoom === v2 || b2 > _2 + (1 << v2 - a3.zoom) - 2 && a3.zoom >= d2) {
                 const e3 = v2 - a3.zoom, i3 = h2[0] - 0.5 - (o3 << e3), s3 = h2[1] - 0.5 - (r3 << e3);
                 g2.push({ tileID: new t.O(a3.zoom === v2 ? x2 : a3.zoom, a3.wrap, a3.zoom, o3, r3), distanceSq: f([c2[0] - 0.5 - o3, c2[1] - 0.5 - r3]), tileDistanceToCamera: Math.sqrt(i3 * i3 + s3 * s3) });
-              } else
-                for (let l4 = 0; l4 < 4; l4++) {
-                  const h3 = (o3 << 1) + l4 % 2, c3 = (r3 << 1) + (l4 >> 1), u3 = a3.zoom + 1;
-                  let d3 = a3.aabb.quadrant(l4);
-                  if (e2.terrain) {
-                    const o4 = new t.O(u3, a3.wrap, u3, h3, c3), r4 = e2.terrain.getMinMaxElevation(o4), n4 = null !== (i2 = r4.minElevation) && void 0 !== i2 ? i2 : this.elevation, l5 = null !== (s2 = r4.maxElevation) && void 0 !== s2 ? s2 : this.elevation;
-                    d3 = new as([d3.min[0], d3.min[1], n4], [d3.max[0], d3.max[1], l5]);
-                  }
-                  m2.push({ aabb: d3, zoom: u3, x: h3, y: c3, wrap: a3.wrap, fullyVisible: n3 });
+              } else for (let l4 = 0; l4 < 4; l4++) {
+                const h3 = (o3 << 1) + l4 % 2, c3 = (r3 << 1) + (l4 >> 1), u3 = a3.zoom + 1;
+                let d3 = a3.aabb.quadrant(l4);
+                if (e2.terrain) {
+                  const o4 = new t.O(u3, a3.wrap, u3, h3, c3), r4 = e2.terrain.getMinMaxElevation(o4), n4 = null !== (i2 = r4.minElevation) && void 0 !== i2 ? i2 : this.elevation, l5 = null !== (s2 = r4.maxElevation) && void 0 !== s2 ? s2 : this.elevation;
+                  d3 = new as([d3.min[0], d3.min[1], n4], [d3.max[0], d3.max[1], l5]);
                 }
+                m2.push({ aabb: d3, zoom: u3, x: h3, y: c3, wrap: a3.wrap, fullyVisible: n3 });
+              }
             }
             return g2.sort((t2, e3) => t2.distanceSq - e3.distanceSq).map((t2) => t2.tileID);
           }
@@ -14970,8 +13526,7 @@ uniform ${i3} ${s3} u_${a3};
           }
           recalculateZoom(e2) {
             const i2 = this.pointLocation(this.centerPoint, e2), s2 = e2.getElevationForLngLatZoom(i2, this.tileZoom);
-            if (!(this.elevation - s2))
-              return;
+            if (!(this.elevation - s2)) return;
             const a2 = this.getCameraPosition(), o2 = t.U.fromLngLat(a2.lngLat, a2.altitude), r2 = t.U.fromLngLat(i2, s2), n2 = o2.x - r2.x, l2 = o2.y - r2.y, h2 = o2.z - r2.z, c2 = Math.sqrt(n2 * n2 + l2 * l2 + h2 * h2), u2 = this.scaleZoom(this.cameraToCenterDistance / c2 / this.tileSize);
             this._elevation = s2, this._center = i2, this.zoom = u2;
           }
@@ -14994,8 +13549,7 @@ uniform ${i3} ${s3} u_${a3};
           pointCoordinate(e2, i2) {
             if (i2) {
               const t2 = i2.pointCoordinate(e2);
-              if (null != t2)
-                return t2;
+              if (null != t2) return t2;
             }
             const s2 = [e2.x, e2.y, 0, 1], a2 = [e2.x, e2.y, 1, 1];
             t.ag(s2, s2, this.pixelMatrixInverse), t.ag(a2, a2, this.pixelMatrixInverse);
@@ -15021,8 +13575,7 @@ uniform ${i3} ${s3} u_${a3};
           }
           calculatePosMatrix(e2, i2 = false) {
             const s2 = e2.key, a2 = i2 ? this._alignedPosMatrixCache : this._posMatrixCache;
-            if (a2[s2])
-              return a2[s2];
+            if (a2[s2]) return a2[s2];
             const o2 = e2.canonical, r2 = this.worldSize / this.zoomScale(o2.z), n2 = o2.x + Math.pow(2, o2.z) * e2.wrap, l2 = t.ao(new Float64Array(16));
             return t.$(l2, l2, [n2 * r2, o2.y * r2, 0]), t.a0(l2, l2, [r2 / t.N, r2 / t.N, 1]), t.a1(l2, i2 ? this.alignedProjMatrix : this.projMatrix, l2), a2[s2] = new Float32Array(l2), a2[s2];
           }
@@ -15030,8 +13583,7 @@ uniform ${i3} ${s3} u_${a3};
             return this.mercatorMatrix.slice();
           }
           _constrain() {
-            if (!this.center || !this.width || !this.height || this._constraining)
-              return;
+            if (!this.center || !this.width || !this.height || this._constraining) return;
             this._constraining = true;
             let e2, i2, s2, a2, o2 = -90, r2 = 90, n2 = -180, l2 = 180;
             const h2 = this.size, c2 = this._unmodified;
@@ -15044,8 +13596,7 @@ uniform ${i3} ${s3} u_${a3};
               n2 = t.b5(t.G(e3[0]) * this.worldSize, 0, this.worldSize), l2 = t.b5(t.G(e3[1]) * this.worldSize, 0, this.worldSize), l2 < n2 && (l2 += this.worldSize), i2 = l2 - n2 < h2.x ? h2.x / (l2 - n2) : 0;
             }
             const u2 = this.point, d2 = Math.max(i2 || 0, e2 || 0);
-            if (d2)
-              return this.center = this.unproject(new t.P(i2 ? (l2 + n2) / 2 : u2.x, e2 ? (r2 + o2) / 2 : u2.y)), this.zoom += this.scaleZoom(d2), this._unmodified = c2, void (this._constraining = false);
+            if (d2) return this.center = this.unproject(new t.P(i2 ? (l2 + n2) / 2 : u2.x, e2 ? (r2 + o2) / 2 : u2.y)), this.zoom += this.scaleZoom(d2), this._unmodified = c2, void (this._constraining = false);
             if (this.latRange) {
               const t2 = u2.y, e3 = h2.y / 2;
               t2 - e3 < o2 && (a2 = o2 + e3), t2 + e3 > r2 && (a2 = r2 - e3);
@@ -15057,8 +13608,7 @@ uniform ${i3} ${s3} u_${a3};
             void 0 === s2 && void 0 === a2 || (this.center = this.unproject(new t.P(void 0 !== s2 ? s2 : u2.x, void 0 !== a2 ? a2 : u2.y)).wrap()), this._unmodified = c2, this._constraining = false;
           }
           _calcMatrices() {
-            if (!this.height)
-              return;
+            if (!this.height) return;
             const e2 = this.centerOffset, i2 = this.point.x, s2 = this.point.y;
             this.cameraToCenterDistance = 0.5 / Math.tan(this._fov / 2) * this.height, this._pixelPerMeter = t.b7(1, this.center.lat) * this.worldSize;
             let a2 = t.ao(new Float64Array(16));
@@ -15066,13 +13616,11 @@ uniform ${i3} ${s3} u_${a3};
             const o2 = this.cameraToCenterDistance + this._elevation * this._pixelPerMeter / Math.cos(this._pitch), r2 = Math.min(this.elevation, this._minEleveationForCurrentTile), n2 = o2 - r2 * this._pixelPerMeter / Math.cos(this._pitch), l2 = r2 < 0 ? n2 : o2, h2 = Math.PI / 2 + this._pitch, c2 = this._fov * (0.5 + e2.y / this.height), u2 = Math.sin(c2) * l2 / Math.sin(t.ad(Math.PI - h2 - c2, 0.01, Math.PI - 0.01)), d2 = this.getHorizon(), _2 = 2 * Math.atan(d2 / this.cameraToCenterDistance) * (0.5 + e2.y / (2 * d2)), p2 = Math.sin(_2) * l2 / Math.sin(t.ad(Math.PI - h2 - _2, 0.01, Math.PI - 0.01)), m2 = Math.min(u2, p2), f2 = 1.01 * (Math.cos(Math.PI / 2 - this._pitch) * m2 + l2), g2 = this.height / 50;
             a2 = new Float64Array(16), t.b8(a2, this._fov, this.width / this.height, g2, f2), a2[8] = 2 * -e2.x / this.width, a2[9] = 2 * e2.y / this.height, t.a0(a2, a2, [1, -1, 1]), t.$(a2, a2, [0, 0, -this.cameraToCenterDistance]), t.b9(a2, a2, this._pitch), t.ae(a2, a2, this.angle), t.$(a2, a2, [-i2, -s2, 0]), this.mercatorMatrix = t.a0([], a2, [this.worldSize, this.worldSize, this.worldSize]), t.a0(a2, a2, [1, 1, this._pixelPerMeter]), this.pixelMatrix = t.a1(new Float64Array(16), this.labelPlaneMatrix, a2), t.$(a2, a2, [0, 0, -this.elevation]), this.projMatrix = a2, this.invProjMatrix = t.as([], a2), this.pixelMatrix3D = t.a1(new Float64Array(16), this.labelPlaneMatrix, a2);
             const v2 = this.width % 2 / 2, x2 = this.height % 2 / 2, y2 = Math.cos(this.angle), b2 = Math.sin(this.angle), w2 = i2 - Math.round(i2) + y2 * v2 + b2 * x2, T2 = s2 - Math.round(s2) + y2 * x2 + b2 * v2, I2 = new Float64Array(a2);
-            if (t.$(I2, I2, [w2 > 0.5 ? w2 - 1 : w2, T2 > 0.5 ? T2 - 1 : T2, 0]), this.alignedProjMatrix = I2, a2 = t.as(new Float64Array(16), this.pixelMatrix), !a2)
-              throw new Error("failed to invert matrix");
+            if (t.$(I2, I2, [w2 > 0.5 ? w2 - 1 : w2, T2 > 0.5 ? T2 - 1 : T2, 0]), this.alignedProjMatrix = I2, a2 = t.as(new Float64Array(16), this.pixelMatrix), !a2) throw new Error("failed to invert matrix");
             this.pixelMatrixInverse = a2, this._posMatrixCache = {}, this._alignedPosMatrixCache = {};
           }
           maxPitchScaleFactor() {
-            if (!this.pixelMatrixInverse)
-              return 1;
+            if (!this.pixelMatrixInverse) return 1;
             const e2 = this.pointCoordinate(new t.P(0, 0)), i2 = [e2.x * this.worldSize, e2.y * this.worldSize, 0, 1];
             return t.ag(i2, i2, this.pixelMatrix)[3] / this.cameraToCenterDistance;
           }
@@ -15082,12 +13630,10 @@ uniform ${i3} ${s3} u_${a3};
           }
           getCameraQueryGeometry(e2) {
             const i2 = this.getCameraPoint();
-            if (1 === e2.length)
-              return [e2[0], i2];
+            if (1 === e2.length) return [e2[0], i2];
             {
               let s2 = i2.x, a2 = i2.y, o2 = i2.x, r2 = i2.y;
-              for (const t2 of e2)
-                s2 = Math.min(s2, t2.x), a2 = Math.min(a2, t2.y), o2 = Math.max(o2, t2.x), r2 = Math.max(r2, t2.y);
+              for (const t2 of e2) s2 = Math.min(s2, t2.x), a2 = Math.min(a2, t2.y), o2 = Math.max(o2, t2.x), r2 = Math.max(r2, t2.y);
               return [new t.P(s2, a2), new t.P(o2, a2), new t.P(o2, r2), new t.P(s2, r2), new t.P(s2, a2)];
             }
           }
@@ -15159,15 +13705,12 @@ uniform ${i3} ${s3} u_${a3};
           }
           _drainInertiaBuffer() {
             const e2 = this._inertiaBuffer, i2 = t.h.now();
-            for (; e2.length > 0 && i2 - e2[0].time > 160; )
-              e2.shift();
+            for (; e2.length > 0 && i2 - e2[0].time > 160; ) e2.shift();
           }
           _onMoveEnd(e2) {
-            if (this._drainInertiaBuffer(), this._inertiaBuffer.length < 2)
-              return;
+            if (this._drainInertiaBuffer(), this._inertiaBuffer.length < 2) return;
             const i2 = { zoom: 0, bearing: 0, pitch: 0, pan: new t.P(0, 0), pinchAround: void 0, around: void 0 };
-            for (const { settings: t2 } of this._inertiaBuffer)
-              i2.zoom += t2.zoomDelta || 0, i2.bearing += t2.bearingDelta || 0, i2.pitch += t2.pitchDelta || 0, t2.panDelta && i2.pan._add(t2.panDelta), t2.around && (i2.around = t2.around), t2.pinchAround && (i2.pinchAround = t2.pinchAround);
+            for (const { settings: t2 } of this._inertiaBuffer) i2.zoom += t2.zoomDelta || 0, i2.bearing += t2.bearingDelta || 0, i2.pitch += t2.pitchDelta || 0, t2.panDelta && i2.pan._add(t2.panDelta), t2.around && (i2.around = t2.around), t2.pinchAround && (i2.pinchAround = t2.pinchAround);
             const s2 = this._inertiaBuffer[this._inertiaBuffer.length - 1].time - this._inertiaBuffer[0].time, a2 = {};
             if (i2.pan.mag()) {
               const o2 = fs(i2.pan.mag(), s2, t.e({}, cs, e2 || {}));
@@ -15275,8 +13818,7 @@ uniform ${i3} ${s3} u_${a3};
             this._map.fire(new vs(t2.type, this._map, t2));
           }
           _firePreventable(t2) {
-            if (this._map.fire(t2), t2.defaultPrevented)
-              return {};
+            if (this._map.fire(t2), t2.defaultPrevented) return {};
           }
           isEnabled() {
             return true;
@@ -15362,24 +13904,19 @@ uniform ${i3} ${s3} u_${a3};
             this.isEnabled() && t2.shiftKey && 0 === t2.button && (i.disableDrag(), this._startPos = this._lastPos = e2, this._active = true);
           }
           mousemoveWindow(t2, e2) {
-            if (!this._active)
-              return;
+            if (!this._active) return;
             const s2 = e2;
-            if (this._lastPos.equals(s2) || !this._box && s2.dist(this._startPos) < this._clickTolerance)
-              return;
+            if (this._lastPos.equals(s2) || !this._box && s2.dist(this._startPos) < this._clickTolerance) return;
             const a2 = this._startPos;
             this._lastPos = s2, this._box || (this._box = i.create("div", "maplibregl-boxzoom", this._container), this._container.classList.add("maplibregl-crosshair"), this._fireEvent("boxzoomstart", t2));
             const o2 = Math.min(a2.x, s2.x), r2 = Math.max(a2.x, s2.x), n2 = Math.min(a2.y, s2.y), l2 = Math.max(a2.y, s2.y);
             i.setTransform(this._box, `translate(${o2}px,${n2}px)`), this._box.style.width = r2 - o2 + "px", this._box.style.height = l2 - n2 + "px";
           }
           mouseupWindow(e2, s2) {
-            if (!this._active)
-              return;
-            if (0 !== e2.button)
-              return;
+            if (!this._active) return;
+            if (0 !== e2.button) return;
             const a2 = this._startPos, o2 = s2;
-            if (this.reset(), i.suppressClick(), a2.x !== o2.x || a2.y !== o2.y)
-              return this._map.fire(new t.k("boxzoomend", { originalEvent: e2 })), { cameraAnimation: (t2) => t2.fitScreenCoordinates(a2, o2, this._tr.bearing, { linear: true }) };
+            if (this.reset(), i.suppressClick(), a2.x !== o2.x || a2.y !== o2.y) return this._map.fire(new t.k("boxzoomend", { originalEvent: e2 })), { cameraAnimation: (t2) => t2.fitScreenCoordinates(a2, o2, this._tr.bearing, { linear: true }) };
             this._fireEvent("boxzoomcancel", e2);
           }
           keydown(t2) {
@@ -15393,11 +13930,9 @@ uniform ${i3} ${s3} u_${a3};
           }
         }
         function Is(t2, e2) {
-          if (t2.length !== e2.length)
-            throw new Error(`The number of touches and points are not equal - touches ${t2.length}, points ${e2.length}`);
+          if (t2.length !== e2.length) throw new Error(`The number of touches and points are not equal - touches ${t2.length}, points ${e2.length}`);
           const i2 = {};
-          for (let s2 = 0; s2 < t2.length; s2++)
-            i2[t2[s2].identifier] = e2[s2];
+          for (let s2 = 0; s2 < t2.length; s2++) i2[t2[s2].identifier] = e2[s2];
           return i2;
         }
         class Es {
@@ -15410,14 +13945,12 @@ uniform ${i3} ${s3} u_${a3};
           touchstart(e2, i2, s2) {
             (this.centroid || s2.length > this.numTouches) && (this.aborted = true), this.aborted || (void 0 === this.startTime && (this.startTime = e2.timeStamp), s2.length === this.numTouches && (this.centroid = function(e3) {
               const i3 = new t.P(0, 0);
-              for (const t2 of e3)
-                i3._add(t2);
+              for (const t2 of e3) i3._add(t2);
               return i3.div(e3.length);
             }(i2), this.touches = Is(s2, i2)));
           }
           touchmove(t2, e2, i2) {
-            if (this.aborted || !this.centroid)
-              return;
+            if (this.aborted || !this.centroid) return;
             const s2 = Is(i2, e2);
             for (const t3 in this.touches) {
               const e3 = s2[t3];
@@ -15427,8 +13960,7 @@ uniform ${i3} ${s3} u_${a3};
           touchend(t2, e2, i2) {
             if ((!this.centroid || t2.timeStamp - this.startTime > 500) && (this.aborted = true), 0 === i2.length) {
               const t3 = !this.aborted && this.centroid;
-              if (this.reset(), t3)
-                return t3;
+              if (this.reset(), t3) return t3;
             }
           }
         }
@@ -15449,8 +13981,7 @@ uniform ${i3} ${s3} u_${a3};
             const s2 = this.singleTap.touchend(t2, e2, i2);
             if (s2) {
               const e3 = t2.timeStamp - this.lastTime < 500, i3 = !this.lastTap || this.lastTap.dist(s2) < 30;
-              if (e3 && i3 || this.reset(), this.count++, this.lastTime = t2.timeStamp, this.lastTap = s2, this.count === this.numTaps)
-                return this.reset(), s2;
+              if (e3 && i3 || this.reset(), this.count++, this.lastTime = t2.timeStamp, this.lastTap = s2, this.count === this.numTaps) return this.reset(), s2;
             }
           }
         }
@@ -15496,20 +14027,16 @@ uniform ${i3} ${s3} u_${a3};
           }
           _move(...t2) {
             const e2 = this._moveFunction(...t2);
-            if (e2.bearingDelta || e2.pitchDelta || e2.around || e2.panDelta)
-              return this._active = true, e2;
+            if (e2.bearingDelta || e2.pitchDelta || e2.around || e2.panDelta) return this._active = true, e2;
           }
           dragStart(t2, e2) {
             this.isEnabled() && !this._lastPoint && this._moveStateManager.isValidStartEvent(t2) && (this._moveStateManager.startMove(t2), this._lastPoint = e2.length ? e2[0] : e2, this._activateOnStart && this._lastPoint && (this._active = true));
           }
           dragMove(t2, e2) {
-            if (!this.isEnabled())
-              return;
+            if (!this.isEnabled()) return;
             const i2 = this._lastPoint;
-            if (!i2)
-              return;
-            if (t2.preventDefault(), !this._moveStateManager.isValidMoveEvent(t2))
-              return void this.reset(t2);
+            if (!i2) return;
+            if (t2.preventDefault(), !this._moveStateManager.isValidMoveEvent(t2)) return void this.reset(t2);
             const s2 = e2.length ? e2[0] : e2;
             return !this._moved && s2.dist(i2) < this._clickTolerance ? void 0 : (this._moved = true, this._lastPoint = s2, this._move(i2, s2));
           }
@@ -15607,8 +14134,7 @@ uniform ${i3} ${s3} u_${a3};
             return this._calculateTransform(t2, e2, i2);
           }
           touchmove(t2, e2, i2) {
-            if (this._map._cooperativeGestures && (2 === this._minTouches && i2.length < 2 && !this._cancelCooperativeMessage ? this._map._onCooperativeGesture(t2, false, i2.length) : this._cancelCooperativeMessage || (this._cancelCooperativeMessage = true)), this._active && !(i2.length < this._minTouches))
-              return t2.preventDefault(), this._calculateTransform(t2, e2, i2);
+            if (this._map._cooperativeGestures && (2 === this._minTouches && i2.length < 2 && !this._cancelCooperativeMessage ? this._map._onCooperativeGesture(t2, false, i2.length) : this._cancelCooperativeMessage || (this._cancelCooperativeMessage = true)), this._active && !(i2.length < this._minTouches)) return t2.preventDefault(), this._calculateTransform(t2, e2, i2);
           }
           touchend(t2, e2, i2) {
             this._calculateTransform(t2, e2, i2), this._active && i2.length < this._minTouches && this.reset();
@@ -15624,8 +14150,7 @@ uniform ${i3} ${s3} u_${a3};
               const e3 = a2[t2], i3 = this._touches[t2];
               i3 && (o2._add(e3), r2._add(e3.sub(i3)), n2++, a2[t2] = e3);
             }
-            if (this._touches = a2, n2 < this._minTouches || !r2.mag())
-              return;
+            if (this._touches = a2, n2 < this._minTouches || !r2.mag()) return;
             const l2 = r2.div(n2);
             return this._sum._add(l2), this._sum.mag() < this._clickTolerance ? void 0 : { around: o2.div(n2), panDelta: l2 };
           }
@@ -15653,18 +14178,15 @@ uniform ${i3} ${s3} u_${a3};
             this._firstTwoTouches || i2.length < 2 || (this._firstTwoTouches = [i2[0].identifier, i2[1].identifier], this._start([e2[0], e2[1]]));
           }
           touchmove(t2, e2, i2) {
-            if (!this._firstTwoTouches)
-              return;
+            if (!this._firstTwoTouches) return;
             t2.preventDefault();
             const [s2, a2] = this._firstTwoTouches, o2 = Bs(i2, e2, s2), r2 = Bs(i2, e2, a2);
-            if (!o2 || !r2)
-              return;
+            if (!o2 || !r2) return;
             const n2 = this._aroundCenter ? null : o2.add(r2).div(2);
             return this._move([o2, r2], n2, t2);
           }
           touchend(t2, e2, s2) {
-            if (!this._firstTwoTouches)
-              return;
+            if (!this._firstTwoTouches) return;
             const [a2, o2] = this._firstTwoTouches, r2 = Bs(s2, e2, a2), n2 = Bs(s2, e2, o2);
             r2 && n2 || (this._active && i.suppressClick(), this.reset());
           }
@@ -15685,9 +14207,7 @@ uniform ${i3} ${s3} u_${a3};
           }
         }
         function Bs(t2, e2, i2) {
-          for (let s2 = 0; s2 < t2.length; s2++)
-            if (t2[s2].identifier === i2)
-              return e2[s2];
+          for (let s2 = 0; s2 < t2.length; s2++) if (t2[s2].identifier === i2) return e2[s2];
         }
         function Os(t2, e2) {
           return Math.log(t2 / e2) / Math.LN2;
@@ -15701,8 +14221,7 @@ uniform ${i3} ${s3} u_${a3};
           }
           _move(t2, e2) {
             const i2 = this._distance;
-            if (this._distance = t2[0].dist(t2[1]), this._active || !(Math.abs(Os(this._distance, this._startDistance)) < 0.1))
-              return this._active = true, { zoomDelta: Os(this._distance, i2), pinchAround: e2 };
+            if (this._distance = t2[0].dist(t2[1]), this._active || !(Math.abs(Os(this._distance, this._startDistance)) < 0.1)) return this._active = true, { zoomDelta: Os(this._distance, i2), pinchAround: e2 };
           }
         }
         function Us(t2, e2) {
@@ -15717,8 +14236,7 @@ uniform ${i3} ${s3} u_${a3};
           }
           _move(t2, e2) {
             const i2 = this._vector;
-            if (this._vector = t2[0].sub(t2[1]), this._active || !this._isBelowThreshold(this._vector))
-              return this._active = true, { bearingDelta: Us(this._vector, i2), pinchAround: e2 };
+            if (this._vector = t2[0].sub(t2[1]), this._active || !this._isBelowThreshold(this._vector)) return this._active = true, { bearingDelta: Us(this._vector, i2), pinchAround: e2 };
           }
           _isBelowThreshold(t2) {
             this._minDiameter = Math.min(this._minDiameter, t2.mag());
@@ -15743,19 +14261,15 @@ uniform ${i3} ${s3} u_${a3};
             this._lastPoints = t2, Gs(t2[0].sub(t2[1])) && (this._valid = false);
           }
           _move(t2, e2, i2) {
-            if (this._map._cooperativeGestures && this._currentTouchCount < 3)
-              return;
+            if (this._map._cooperativeGestures && this._currentTouchCount < 3) return;
             const s2 = t2[0].sub(this._lastPoints[0]), a2 = t2[1].sub(this._lastPoints[1]);
             return this._valid = this.gestureBeginsVertically(s2, a2, i2.timeStamp), this._valid ? (this._lastPoints = t2, this._active = true, { pitchDelta: (s2.y + a2.y) / 2 * -0.5 }) : void 0;
           }
           gestureBeginsVertically(t2, e2, i2) {
-            if (void 0 !== this._valid)
-              return this._valid;
+            if (void 0 !== this._valid) return this._valid;
             const s2 = t2.mag() >= 2, a2 = e2.mag() >= 2;
-            if (!s2 && !a2)
-              return;
-            if (!s2 || !a2)
-              return void 0 === this._firstMove && (this._firstMove = i2), i2 - this._firstMove < 100 && void 0;
+            if (!s2 && !a2) return;
+            if (!s2 || !a2) return void 0 === this._firstMove && (this._firstMove = i2), i2 - this._firstMove < 100 && void 0;
             const o2 = t2.y > 0 == e2.y > 0;
             return Gs(t2) && Gs(e2) && o2;
           }
@@ -15771,8 +14285,7 @@ uniform ${i3} ${s3} u_${a3};
             this._active = false;
           }
           keydown(t2) {
-            if (t2.altKey || t2.ctrlKey || t2.metaKey)
-              return;
+            if (t2.altKey || t2.ctrlKey || t2.metaKey) return;
             let e2 = 0, i2 = 0, s2 = 0, a2 = 0, o2 = 0;
             switch (t2.keyCode) {
               case 61:
@@ -15857,11 +14370,9 @@ uniform ${i3} ${s3} u_${a3};
             this.isEnabled() && (this._enabled = false);
           }
           wheel(e2) {
-            if (!this.isEnabled())
-              return;
+            if (!this.isEnabled()) return;
             if (this._map._cooperativeGestures) {
-              if (!e2[this._map._metaKey])
-                return;
+              if (!e2[this._map._metaKey]) return;
               e2.preventDefault();
             }
             let i2 = e2.deltaMode === WheelEvent.DOM_DELTA_LINE ? 40 * e2.deltaY : e2.deltaY;
@@ -15869,17 +14380,14 @@ uniform ${i3} ${s3} u_${a3};
             this._lastWheelEventTime = s2, 0 !== i2 && i2 % Ws == 0 ? this._type = "wheel" : 0 !== i2 && Math.abs(i2) < 4 ? this._type = "trackpad" : a2 > 400 ? (this._type = null, this._lastValue = i2, this._timeout = setTimeout(this._onTimeout, 40, e2)) : this._type || (this._type = Math.abs(a2 * i2) < 200 ? "trackpad" : "wheel", this._timeout && (clearTimeout(this._timeout), this._timeout = null, i2 += this._lastValue)), e2.shiftKey && i2 && (i2 /= 4), this._type && (this._lastWheelEvent = e2, this._delta -= i2, this._active || this._start(e2)), e2.preventDefault();
           }
           _start(e2) {
-            if (!this._delta)
-              return;
+            if (!this._delta) return;
             this._frameId && (this._frameId = null), this._active = true, this.isZooming() || (this._zooming = true), this._finishTimeout && (clearTimeout(this._finishTimeout), delete this._finishTimeout);
             const s2 = i.mousePos(this._el, e2), a2 = this._tr;
             this._around = t.L.convert(this._aroundCenter ? a2.center : a2.unproject(s2)), this._aroundPoint = a2.transform.locationPoint(this._around), this._frameId || (this._frameId = true, this._triggerRenderFrame());
           }
           renderFrame() {
-            if (!this._frameId)
-              return;
-            if (this._frameId = null, !this.isActive())
-              return;
+            if (!this._frameId) return;
+            if (this._frameId = null, !this.isActive()) return;
             const e2 = this._tr.transform;
             if (0 !== this._delta) {
               const t2 = "wheel" === this._type && Math.abs(this._delta) > Ws ? this._wheelZoomRate : this._defaultZoomRate;
@@ -15893,8 +14401,7 @@ uniform ${i3} ${s3} u_${a3};
             if ("wheel" === this._type && s2 && a2) {
               const e3 = Math.min((t.h.now() - this._lastWheelEventTime) / 200, 1), n2 = a2(e3);
               o2 = t.B.number(s2, i2, n2), e3 < 1 ? this._frameId || (this._frameId = true) : r2 = true;
-            } else
-              o2 = i2, r2 = true;
+            } else o2 = i2, r2 = true;
             return this._active = true, r2 && (this._active = false, this._finishTimeout = setTimeout(() => {
               this._zooming = false, this._triggerRenderFrame(), delete this._targetZoom, delete this._finishTimeout;
             }, 200)), { noInertia: true, needsRenderFrame: !r2, zoomDelta: o2 - e2.zoom, around: this._aroundPoint, originalEvent: this._lastWheelEvent };
@@ -15961,27 +14468,22 @@ uniform ${i3} ${s3} u_${a3};
             this._active = false, delete this._swipePoint, delete this._swipeTouch, delete this._tapTime, delete this._tapPoint, this._tap.reset();
           }
           touchstart(t2, e2, i2) {
-            if (!this._swipePoint)
-              if (this._tapTime) {
-                const s2 = e2[0], a2 = t2.timeStamp - this._tapTime < 500, o2 = this._tapPoint.dist(s2) < 30;
-                a2 && o2 ? i2.length > 0 && (this._swipePoint = s2, this._swipeTouch = i2[0].identifier) : this.reset();
-              } else
-                this._tap.touchstart(t2, e2, i2);
+            if (!this._swipePoint) if (this._tapTime) {
+              const s2 = e2[0], a2 = t2.timeStamp - this._tapTime < 500, o2 = this._tapPoint.dist(s2) < 30;
+              a2 && o2 ? i2.length > 0 && (this._swipePoint = s2, this._swipeTouch = i2[0].identifier) : this.reset();
+            } else this._tap.touchstart(t2, e2, i2);
           }
           touchmove(t2, e2, i2) {
             if (this._tapTime) {
               if (this._swipePoint) {
-                if (i2[0].identifier !== this._swipeTouch)
-                  return;
+                if (i2[0].identifier !== this._swipeTouch) return;
                 const s2 = e2[0], a2 = s2.y - this._swipePoint.y;
                 return this._swipePoint = s2, t2.preventDefault(), this._active = true, { zoomDelta: a2 / 128 };
               }
-            } else
-              this._tap.touchmove(t2, e2, i2);
+            } else this._tap.touchmove(t2, e2, i2);
           }
           touchend(t2, e2, i2) {
-            if (this._tapTime)
-              this._swipePoint && 0 === i2.length && this.reset();
+            if (this._tapTime) this._swipePoint && 0 === i2.length && this.reset();
             else {
               const s2 = this._tap.touchend(t2, e2, i2);
               s2 && (this._tapTime = t2.timeStamp, this._tapPoint = s2);
@@ -16071,31 +14573,26 @@ uniform ${i3} ${s3} u_${a3};
             this.handleWindowEvent = (t3) => {
               this.handleEvent(t3, `${t3.type}Window`);
             }, this.handleEvent = (t3, e3) => {
-              if ("blur" === t3.type)
-                return void this.stop(true);
+              if ("blur" === t3.type) return void this.stop(true);
               this._updatingCamera = true;
               const s3 = "renderFrame" === t3.type ? void 0 : t3, a2 = { needsRenderFrame: false }, o2 = {}, r2 = {}, n2 = t3.touches, l2 = n2 ? this._getMapTouches(n2) : void 0, h2 = l2 ? i.touchPos(this._el, l2) : i.mousePos(this._el, t3);
               for (const { handlerName: i2, handler: n3, allowed: c3 } of this._handlers) {
-                if (!n3.isEnabled())
-                  continue;
+                if (!n3.isEnabled()) continue;
                 let u3;
                 this._blockedByActive(r2, c3, i2) ? n3.reset() : n3[e3 || t3.type] && (u3 = n3[e3 || t3.type](t3, h2, l2), this.mergeHandlerResult(a2, o2, u3, i2, s3), u3 && u3.needsRenderFrame && this._triggerRenderFrame()), (u3 || n3.isActive()) && (r2[i2] = n3);
               }
               const c2 = {};
-              for (const t4 in this._previousActiveHandlers)
-                r2[t4] || (c2[t4] = s3);
+              for (const t4 in this._previousActiveHandlers) r2[t4] || (c2[t4] = s3);
               this._previousActiveHandlers = r2, (Object.keys(c2).length || sa(a2)) && (this._changes.push([a2, o2, c2]), this._triggerRenderFrame()), (Object.keys(r2).length || sa(a2)) && this._map._stop(true), this._updatingCamera = false;
               const { cameraAnimation: u2 } = a2;
               u2 && (this._inertia.clear(), this._fireEvents({}, {}, true), this._changes = [], u2(this._map));
             }, this._map = t2, this._el = this._map.getCanvasContainer(), this._handlers = [], this._handlersById = {}, this._changes = [], this._inertia = new ps(t2), this._bearingSnap = e2.bearingSnap, this._previousActiveHandlers = {}, this._eventsInProgress = {}, this._addDefaultHandlers(e2);
             const s2 = this._el;
             this._listeners = [[s2, "touchstart", { passive: true }], [s2, "touchmove", { passive: false }], [s2, "touchend", void 0], [s2, "touchcancel", void 0], [s2, "mousedown", void 0], [s2, "mousemove", void 0], [s2, "mouseup", void 0], [document, "mousemove", { capture: true }], [document, "mouseup", void 0], [s2, "mouseover", void 0], [s2, "mouseout", void 0], [s2, "dblclick", void 0], [s2, "click", void 0], [s2, "keydown", { capture: false }], [s2, "keyup", void 0], [s2, "wheel", { passive: false }], [s2, "contextmenu", void 0], [window, "blur", void 0]];
-            for (const [t3, e3, s3] of this._listeners)
-              i.addEventListener(t3, e3, t3 === document ? this.handleWindowEvent : this.handleEvent, s3);
+            for (const [t3, e3, s3] of this._listeners) i.addEventListener(t3, e3, t3 === document ? this.handleWindowEvent : this.handleEvent, s3);
           }
           destroy() {
-            for (const [t2, e2, s2] of this._listeners)
-              i.removeEventListener(t2, e2, t2 === document ? this.handleWindowEvent : this.handleEvent, s2);
+            for (const [t2, e2, s2] of this._listeners) i.removeEventListener(t2, e2, t2 === document ? this.handleWindowEvent : this.handleEvent, s2);
           }
           _addDefaultHandlers(t2) {
             const e2 = this._map, s2 = e2.getCanvasContainer();
@@ -16127,15 +14624,12 @@ uniform ${i3} ${s3} u_${a3};
           }
           stop(t2) {
             if (!this._updatingCamera) {
-              for (const { handler: t3 } of this._handlers)
-                t3.reset();
+              for (const { handler: t3 } of this._handlers) t3.reset();
               this._inertia.clear(), this._fireEvents({}, {}, t2), this._changes = [];
             }
           }
           isActive() {
-            for (const { handler: t2 } of this._handlers)
-              if (t2.isActive())
-                return true;
+            for (const { handler: t2 } of this._handlers) if (t2.isActive()) return true;
             return false;
           }
           isZooming() {
@@ -16148,34 +14642,28 @@ uniform ${i3} ${s3} u_${a3};
             return Boolean(ea(this._eventsInProgress)) || this.isZooming();
           }
           _blockedByActive(t2, e2, i2) {
-            for (const s2 in t2)
-              if (s2 !== i2 && (!e2 || e2.indexOf(s2) < 0))
-                return true;
+            for (const s2 in t2) if (s2 !== i2 && (!e2 || e2.indexOf(s2) < 0)) return true;
             return false;
           }
           _getMapTouches(t2) {
             const e2 = [];
-            for (const i2 of t2)
-              this._el.contains(i2.target) && e2.push(i2);
+            for (const i2 of t2) this._el.contains(i2.target) && e2.push(i2);
             return e2;
           }
           mergeHandlerResult(e2, i2, s2, a2, o2) {
-            if (!s2)
-              return;
+            if (!s2) return;
             t.e(e2, s2);
             const r2 = { handlerName: a2, originalEvent: s2.originalEvent || o2 };
             void 0 !== s2.zoomDelta && (i2.zoom = r2), void 0 !== s2.panDelta && (i2.drag = r2), void 0 !== s2.pitchDelta && (i2.pitch = r2), void 0 !== s2.bearingDelta && (i2.rotate = r2);
           }
           _applyChanges() {
             const e2 = {}, i2 = {}, s2 = {};
-            for (const [a2, o2, r2] of this._changes)
-              a2.panDelta && (e2.panDelta = (e2.panDelta || new t.P(0, 0))._add(a2.panDelta)), a2.zoomDelta && (e2.zoomDelta = (e2.zoomDelta || 0) + a2.zoomDelta), a2.bearingDelta && (e2.bearingDelta = (e2.bearingDelta || 0) + a2.bearingDelta), a2.pitchDelta && (e2.pitchDelta = (e2.pitchDelta || 0) + a2.pitchDelta), void 0 !== a2.around && (e2.around = a2.around), void 0 !== a2.pinchAround && (e2.pinchAround = a2.pinchAround), a2.noInertia && (e2.noInertia = a2.noInertia), t.e(i2, o2), t.e(s2, r2);
+            for (const [a2, o2, r2] of this._changes) a2.panDelta && (e2.panDelta = (e2.panDelta || new t.P(0, 0))._add(a2.panDelta)), a2.zoomDelta && (e2.zoomDelta = (e2.zoomDelta || 0) + a2.zoomDelta), a2.bearingDelta && (e2.bearingDelta = (e2.bearingDelta || 0) + a2.bearingDelta), a2.pitchDelta && (e2.pitchDelta = (e2.pitchDelta || 0) + a2.pitchDelta), void 0 !== a2.around && (e2.around = a2.around), void 0 !== a2.pinchAround && (e2.pinchAround = a2.pinchAround), a2.noInertia && (e2.noInertia = a2.noInertia), t.e(i2, o2), t.e(s2, r2);
             this._updateMapTransform(e2, i2, s2), this._changes = [];
           }
           _updateMapTransform(t2, e2, i2) {
             const s2 = this._map, a2 = s2._getTransformForUpdate(), o2 = s2.terrain;
-            if (!(sa(t2) || o2 && this._terrainMovement))
-              return this._fireEvents(e2, i2, true);
+            if (!(sa(t2) || o2 && this._terrainMovement)) return this._fireEvents(e2, i2, true);
             let { panDelta: r2, zoomDelta: n2, bearingDelta: l2, pitchDelta: h2, around: c2, pinchAround: u2 } = t2;
             void 0 !== u2 && (c2 = u2), s2._stop(true), c2 = c2 || s2.transform.centerPoint;
             const d2 = a2.pointLocation(r2 ? c2.sub(r2) : c2);
@@ -16190,8 +14678,7 @@ uniform ${i3} ${s3} u_${a3};
               this._eventsInProgress[t2] || (r2[`${t2}start`] = i3), this._eventsInProgress[t2] = e2[t2];
             }
             !a2 && o2 && this._fireEvent("movestart", o2.originalEvent);
-            for (const t2 in r2)
-              this._fireEvent(t2, r2[t2]);
+            for (const t2 in r2) this._fireEvent(t2, r2[t2]);
             o2 && this._fireEvent("move", o2.originalEvent);
             for (const t2 in e2) {
               const { originalEvent: i3 } = e2[t2];
@@ -16203,8 +14690,7 @@ uniform ${i3} ${s3} u_${a3};
               const { handlerName: e3, originalEvent: s3 } = this._eventsInProgress[t2];
               this._handlersById[e3].isActive() || (delete this._eventsInProgress[t2], l2 = i2[e3] || s3, n2[`${t2}end`] = l2);
             }
-            for (const t2 in n2)
-              this._fireEvent(t2, n2[t2]);
+            for (const t2 in n2) this._fireEvent(t2, n2[t2]);
             const h2 = ea(this._eventsInProgress);
             if (s2 && (a2 || o2) && !h2) {
               this._updatingCamera = true;
@@ -16303,8 +14789,7 @@ uniform ${i3} ${s3} u_${a3};
             }
             a2.padding = t.e(o2, a2.padding);
             const r2 = this.transform, n2 = r2.padding, l2 = r2.project(t.L.convert(e2)), h2 = r2.project(t.L.convert(i2)), c2 = l2.rotate(-s2 * Math.PI / 180), u2 = h2.rotate(-s2 * Math.PI / 180), d2 = new t.P(Math.max(c2.x, u2.x), Math.max(c2.y, u2.y)), _2 = new t.P(Math.min(c2.x, u2.x), Math.min(c2.y, u2.y)), p2 = d2.sub(_2), m2 = (r2.width - (n2.left + n2.right + a2.padding.left + a2.padding.right)) / p2.x, f2 = (r2.height - (n2.top + n2.bottom + a2.padding.top + a2.padding.bottom)) / p2.y;
-            if (f2 < 0 || m2 < 0)
-              return void t.w("Map cannot fit within canvas with the given bounds, padding, and/or offset.");
+            if (f2 < 0 || m2 < 0) return void t.w("Map cannot fit within canvas with the given bounds, padding, and/or offset.");
             const g2 = Math.min(r2.scaleZoom(r2.scale * Math.min(m2, f2)), a2.maxZoom), v2 = t.P.convert(a2.offset), x2 = new t.P((a2.padding.left - a2.padding.right) / 2, (a2.padding.top - a2.padding.bottom) / 2).rotate(s2 * Math.PI / 180), y2 = v2.add(x2).mult(r2.scale / r2.zoomScale(g2));
             return { center: r2.unproject(l2.add(h2).div(2).sub(y2)), zoom: g2, bearing: s2 };
           }
@@ -16325,8 +14810,7 @@ uniform ${i3} ${s3} u_${a3};
           }
           calculateCameraOptionsFromTo(e2, i2, s2, a2 = 0) {
             const o2 = t.U.fromLngLat(e2, i2), r2 = t.U.fromLngLat(s2, a2), n2 = r2.x - o2.x, l2 = r2.y - o2.y, h2 = r2.z - o2.z, c2 = Math.hypot(n2, l2, h2);
-            if (0 === c2)
-              throw new Error("Can't calculate camera options with same From and To");
+            if (0 === c2) throw new Error("Can't calculate camera options with same From and To");
             const u2 = Math.hypot(n2, l2), d2 = this.transform.scaleZoom(this.transform.cameraToCenterDistance / c2 / this.transform.tileSize), _2 = 180 * Math.atan2(n2, -l2) / Math.PI;
             let p2 = 180 * Math.acos(u2 / c2) / Math.PI;
             return p2 = h2 < 0 ? 90 - p2 : 90 + p2, { center: r2.toLngLat(), zoom: d2, pitch: p2, bearing: _2 };
@@ -16342,8 +14826,7 @@ uniform ${i3} ${s3} u_${a3};
             e2.around && (x2 = t.L.convert(e2.around), y2 = s2.locationPoint(x2));
             const b2 = { moving: this._moving, zooming: this._zooming, rotating: this._rotating, pitching: this._pitching };
             return this._zooming = this._zooming || l2 !== a2, this._rotating = this._rotating || o2 !== h2, this._pitching = this._pitching || c2 !== r2, this._padding = !s2.isPaddingEqual(u2), this._easeId = e2.easeId, this._prepareEase(i2, e2.noMoveStart, b2), this.terrain && this._prepareElevation(m2), this._ease((p3) => {
-              if (this._zooming && (s2.zoom = t.B.number(a2, l2, p3)), this._rotating && (s2.bearing = t.B.number(o2, h2, p3)), this._pitching && (s2.pitch = t.B.number(r2, c2, p3)), this._padding && (s2.interpolatePadding(n2, u2, p3), _2 = s2.centerPoint.add(d2)), this.terrain && !e2.freezeElevation && this._updateElevation(p3), x2)
-                s2.setLocationAtPoint(x2, y2);
+              if (this._zooming && (s2.zoom = t.B.number(a2, l2, p3)), this._rotating && (s2.bearing = t.B.number(o2, h2, p3)), this._pitching && (s2.pitch = t.B.number(r2, c2, p3)), this._padding && (s2.interpolatePadding(n2, u2, p3), _2 = s2.centerPoint.add(d2)), this.terrain && !e2.freezeElevation && this._updateElevation(p3), x2) s2.setLocationAtPoint(x2, y2);
               else {
                 const t2 = s2.zoomScale(s2.zoom - a2), e3 = l2 > a2 ? Math.min(2, v2) : Math.max(0.5, v2), i3 = Math.pow(e3, 1 - p3), o3 = s2.unproject(f2.add(g2.mult(p3 * i3)).mult(t2));
                 s2.setLocationAtPoint(s2.renderWorldCopies ? o3.wrap() : o3, _2);
@@ -16375,8 +14858,7 @@ uniform ${i3} ${s3} u_${a3};
             return this.transformCameraUpdate ? (this._requestedCameraState || (this._requestedCameraState = this.transform.clone()), this._requestedCameraState) : this.transform;
           }
           _applyUpdatedTransform(t2) {
-            if (!this.transformCameraUpdate)
-              return;
+            if (!this.transformCameraUpdate) return;
             const e2 = t2.clone(), { center: i2, zoom: s2, pitch: a2, bearing: o2, elevation: r2 } = this.transformCameraUpdate(e2);
             i2 && (e2.center = i2), void 0 !== s2 && (e2.zoom = s2), void 0 !== a2 && (e2.pitch = a2), void 0 !== o2 && (e2.bearing = o2), void 0 !== r2 && (e2.elevation = r2), this.transform.apply(e2);
           }
@@ -16384,8 +14866,7 @@ uniform ${i3} ${s3} u_${a3};
             this.fire(new t.k("move", e2)), this._zooming && this.fire(new t.k("zoom", e2)), this._rotating && this.fire(new t.k("rotate", e2)), this._pitching && this.fire(new t.k("pitch", e2));
           }
           _afterEase(e2, i2) {
-            if (this._easeId && i2 && this._easeId === i2)
-              return;
+            if (this._easeId && i2 && this._easeId === i2) return;
             delete this._easeId;
             const s2 = this._zooming, a2 = this._rotating, o2 = this._pitching;
             this._moving = false, this._zooming = false, this._rotating = false, this._pitching = false, this._padding = false, s2 && this.fire(new t.k("zoomend", e2)), a2 && this.fire(new t.k("rotateend", e2)), o2 && this.fire(new t.k("pitchend", e2)), this.fire(new t.k("moveend", e2));
@@ -16426,8 +14907,7 @@ uniform ${i3} ${s3} u_${a3};
               var e3;
             }, M2 = (I2(true) - C2) / x2;
             if (Math.abs(w2) < 1e-6 || !isFinite(M2)) {
-              if (Math.abs(y2 - b2) < 1e-6)
-                return this.easeTo(e2, i2);
+              if (Math.abs(y2 - b2) < 1e-6) return this.easeTo(e2, i2);
               const t2 = b2 < y2 ? -1 : 1;
               M2 = Math.abs(Math.log(b2 / y2)) / x2, D2 = function() {
                 return 0;
@@ -16471,8 +14951,7 @@ uniform ${i3} ${s3} u_${a3};
           }
           _normalizeCenter(t2) {
             const e2 = this.transform;
-            if (!e2.renderWorldCopies || e2.lngRange)
-              return;
+            if (!e2.renderWorldCopies || e2.lngRange) return;
             const i2 = t2.lng - e2.center.lng;
             t2.lng += i2 > 180 ? -360 : i2 < -180 ? 360 : 0;
           }
@@ -16506,8 +14985,7 @@ uniform ${i3} ${s3} u_${a3};
             t2.title = i2, t2.setAttribute("aria-label", i2);
           }
           _updateAttributions() {
-            if (!this._map.style)
-              return;
+            if (!this._map.style) return;
             let t2 = [];
             if (this.options.customAttribution && (Array.isArray(this.options.customAttribution) ? t2 = t2.concat(this.options.customAttribution.map((t3) => "string" != typeof t3 ? "" : t3)) : "string" == typeof this.options.customAttribution && t2.push(this.options.customAttribution)), this._map.style.stylesheet) {
               const t3 = this._map.style.stylesheet;
@@ -16522,9 +15000,7 @@ uniform ${i3} ${s3} u_${a3};
               }
             }
             t2 = t2.filter((t3) => String(t3).trim()), t2.sort((t3, e3) => t3.length - e3.length), t2 = t2.filter((e3, i3) => {
-              for (let s2 = i3 + 1; s2 < t2.length; s2++)
-                if (t2[s2].indexOf(e3) >= 0)
-                  return false;
+              for (let s2 = i3 + 1; s2 < t2.length; s2++) if (t2[s2].indexOf(e3) >= 0) return false;
               return true;
             });
             const i2 = t2.join(" | ");
@@ -16563,18 +15039,13 @@ uniform ${i3} ${s3} u_${a3};
           }
           remove(t2) {
             const e2 = this._currentlyRunning, i2 = e2 ? this._queue.concat(e2) : this._queue;
-            for (const e3 of i2)
-              if (e3.id === t2)
-                return void (e3.cancelled = true);
+            for (const e3 of i2) if (e3.id === t2) return void (e3.cancelled = true);
           }
           run(t2 = 0) {
-            if (this._currentlyRunning)
-              throw new Error("Attempting to run(), but is already running.");
+            if (this._currentlyRunning) throw new Error("Attempting to run(), but is already running.");
             const e2 = this._currentlyRunning = this._queue;
             this._queue = [];
-            for (const i2 of e2)
-              if (!i2.cancelled && (i2.callback(t2), this._cleared))
-                break;
+            for (const i2 of e2) if (!i2.cancelled && (i2.callback(t2), this._cleared)) break;
             this._cleared = false, this._currentlyRunning = false;
           }
           clear() {
@@ -16593,10 +15064,8 @@ uniform ${i3} ${s3} u_${a3};
           update(e2, i2) {
             this.sourceCache.update(e2, i2), this._renderableTilesKeys = [];
             const s2 = {};
-            for (const a2 of e2.coveringTiles({ tileSize: this.tileSize, minzoom: this.minzoom, maxzoom: this.maxzoom, reparseOverscaled: false, terrain: i2 }))
-              s2[a2.key] = true, this._renderableTilesKeys.push(a2.key), this._tiles[a2.key] || (a2.posMatrix = new Float64Array(16), t.aS(a2.posMatrix, 0, t.N, 0, t.N, 0, 1), this._tiles[a2.key] = new W(a2, this.tileSize));
-            for (const t2 in this._tiles)
-              s2[t2] || delete this._tiles[t2];
+            for (const a2 of e2.coveringTiles({ tileSize: this.tileSize, minzoom: this.minzoom, maxzoom: this.maxzoom, reparseOverscaled: false, terrain: i2 })) s2[a2.key] = true, this._renderableTilesKeys.push(a2.key), this._tiles[a2.key] || (a2.posMatrix = new Float64Array(16), t.aS(a2.posMatrix, 0, t.N, 0, t.N, 0, 1), this._tiles[a2.key] = new W(a2, this.tileSize));
+            for (const t2 in this._tiles) s2[t2] || delete this._tiles[t2];
           }
           freeRtt(t2) {
             for (const e2 in this._tiles) {
@@ -16634,13 +15103,10 @@ uniform ${i3} ${s3} u_${a3};
           getSourceTile(t2, e2) {
             const i2 = this.sourceCache._source;
             let s2 = t2.overscaledZ - this.deltaZoom;
-            if (s2 > i2.maxzoom && (s2 = i2.maxzoom), s2 < i2.minzoom)
-              return null;
+            if (s2 > i2.maxzoom && (s2 = i2.maxzoom), s2 < i2.minzoom) return null;
             this._sourceTileCache[t2.key] || (this._sourceTileCache[t2.key] = t2.scaledTo(s2).key);
             let a2 = this.sourceCache.getTileByID(this._sourceTileCache[t2.key]);
-            if ((!a2 || !a2.dem) && e2)
-              for (; s2 >= i2.minzoom && (!a2 || !a2.dem); )
-                a2 = this.sourceCache.getTileByID(t2.scaledTo(s2--).key);
+            if ((!a2 || !a2.dem) && e2) for (; s2 >= i2.minzoom && (!a2 || !a2.dem); ) a2 = this.sourceCache.getTileByID(t2.scaledTo(s2--).key);
             return a2;
           }
           tilesAfterTime(t2 = Date.now()) {
@@ -16653,11 +15119,9 @@ uniform ${i3} ${s3} u_${a3};
           }
           getDEMElevation(e2, i2, s2, a2 = t.N) {
             var o2;
-            if (!(i2 >= 0 && i2 < a2 && s2 >= 0 && s2 < a2))
-              return 0;
+            if (!(i2 >= 0 && i2 < a2 && s2 >= 0 && s2 < a2)) return 0;
             const r2 = this.getTerrainData(e2), n2 = null === (o2 = r2.tile) || void 0 === o2 ? void 0 : o2.dem;
-            if (!n2)
-              return 0;
+            if (!n2) return 0;
             const l2 = function(t2, e3, i3) {
               var s3 = e3[0], a3 = e3[1];
               return t2[0] = i3[0] * s3 + i3[4] * a3 + i3[12], t2[1] = i3[1] * s3 + i3[5] * a3 + i3[13], t2;
@@ -16697,12 +15161,9 @@ uniform ${i3} ${s3} u_${a3};
           }
           getCoordsTexture() {
             const e2 = this.painter.context;
-            if (this._coordsTexture)
-              return this._coordsTexture;
+            if (this._coordsTexture) return this._coordsTexture;
             const i2 = new Uint8Array(this._coordsTextureSize * this._coordsTextureSize * 4);
-            for (let t2 = 0, e3 = 0; t2 < this._coordsTextureSize; t2++)
-              for (let s3 = 0; s3 < this._coordsTextureSize; s3++, e3 += 4)
-                i2[e3 + 0] = 255 & s3, i2[e3 + 1] = 255 & t2, i2[e3 + 2] = s3 >> 8 << 4 | t2 >> 8, i2[e3 + 3] = 0;
+            for (let t2 = 0, e3 = 0; t2 < this._coordsTextureSize; t2++) for (let s3 = 0; s3 < this._coordsTextureSize; s3++, e3 += 4) i2[e3 + 0] = 255 & s3, i2[e3 + 1] = 255 & t2, i2[e3 + 2] = s3 >> 8 << 4 | t2 >> 8, i2[e3 + 3] = 0;
             const s2 = new t.R({ width: this._coordsTextureSize, height: this._coordsTextureSize }, new Uint8Array(i2.buffer)), a2 = new x(e2, s2, e2.gl.RGBA, { premultiply: false });
             return a2.bind(e2.gl.NEAREST, e2.gl.CLAMP_TO_EDGE), this._coordsTexture = a2, a2;
           }
@@ -16710,35 +15171,21 @@ uniform ${i3} ${s3} u_${a3};
             const i2 = new Uint8Array(4), s2 = this.painter.context, a2 = s2.gl;
             s2.bindFramebuffer.set(this.getFramebuffer("coords").framebuffer), a2.readPixels(e2.x, this.painter.height / devicePixelRatio - e2.y - 1, 1, 1, a2.RGBA, a2.UNSIGNED_BYTE, i2), s2.bindFramebuffer.set(null);
             const o2 = i2[0] + (i2[2] >> 4 << 8), r2 = i2[1] + ((15 & i2[2]) << 8), n2 = this.coordsIndex[255 - i2[3]], l2 = n2 && this.sourceCache.getTileByID(n2);
-            if (!l2)
-              return null;
+            if (!l2) return null;
             const h2 = this._coordsTextureSize, c2 = (1 << l2.tileID.canonical.z) * h2;
             return new t.U((l2.tileID.canonical.x * h2 + o2) / c2, (l2.tileID.canonical.y * h2 + r2) / c2, this.getElevation(l2.tileID, o2, r2, h2));
           }
           getTerrainMesh() {
-            if (this._mesh)
-              return this._mesh;
+            if (this._mesh) return this._mesh;
             const e2 = this.painter.context, i2 = new t.bd(), s2 = new t.b0(), a2 = this.meshSize, o2 = t.N / a2, r2 = a2 * a2;
-            for (let t2 = 0; t2 <= a2; t2++)
-              for (let e3 = 0; e3 <= a2; e3++)
-                i2.emplaceBack(e3 * o2, t2 * o2, 0);
-            for (let t2 = 0; t2 < r2; t2 += a2 + 1)
-              for (let e3 = 0; e3 < a2; e3++)
-                s2.emplaceBack(e3 + t2, a2 + e3 + t2 + 1, a2 + e3 + t2 + 2), s2.emplaceBack(e3 + t2, a2 + e3 + t2 + 2, e3 + t2 + 1);
+            for (let t2 = 0; t2 <= a2; t2++) for (let e3 = 0; e3 <= a2; e3++) i2.emplaceBack(e3 * o2, t2 * o2, 0);
+            for (let t2 = 0; t2 < r2; t2 += a2 + 1) for (let e3 = 0; e3 < a2; e3++) s2.emplaceBack(e3 + t2, a2 + e3 + t2 + 1, a2 + e3 + t2 + 2), s2.emplaceBack(e3 + t2, a2 + e3 + t2 + 2, e3 + t2 + 1);
             const n2 = i2.length, l2 = n2 + 2 * (a2 + 1);
-            for (const e3 of [0, 1])
-              for (let s3 = 0; s3 <= a2; s3++)
-                for (const a3 of [0, 1])
-                  i2.emplaceBack(s3 * o2, e3 * t.N, a3);
-            for (let t2 = 0; t2 < 2 * a2; t2 += 2)
-              s2.emplaceBack(l2 + t2, l2 + t2 + 1, l2 + t2 + 3), s2.emplaceBack(l2 + t2, l2 + t2 + 3, l2 + t2 + 2), s2.emplaceBack(n2 + t2, n2 + t2 + 3, n2 + t2 + 1), s2.emplaceBack(n2 + t2, n2 + t2 + 2, n2 + t2 + 3);
+            for (const e3 of [0, 1]) for (let s3 = 0; s3 <= a2; s3++) for (const a3 of [0, 1]) i2.emplaceBack(s3 * o2, e3 * t.N, a3);
+            for (let t2 = 0; t2 < 2 * a2; t2 += 2) s2.emplaceBack(l2 + t2, l2 + t2 + 1, l2 + t2 + 3), s2.emplaceBack(l2 + t2, l2 + t2 + 3, l2 + t2 + 2), s2.emplaceBack(n2 + t2, n2 + t2 + 3, n2 + t2 + 1), s2.emplaceBack(n2 + t2, n2 + t2 + 2, n2 + t2 + 3);
             const h2 = i2.length, c2 = h2 + 2 * (a2 + 1);
-            for (const e3 of [0, 1])
-              for (let s3 = 0; s3 <= a2; s3++)
-                for (const a3 of [0, 1])
-                  i2.emplaceBack(e3 * t.N, s3 * o2, a3);
-            for (let t2 = 0; t2 < 2 * a2; t2 += 2)
-              s2.emplaceBack(h2 + t2, h2 + t2 + 1, h2 + t2 + 3), s2.emplaceBack(h2 + t2, h2 + t2 + 3, h2 + t2 + 2), s2.emplaceBack(c2 + t2, c2 + t2 + 3, c2 + t2 + 1), s2.emplaceBack(c2 + t2, c2 + t2 + 2, c2 + t2 + 3);
+            for (const e3 of [0, 1]) for (let s3 = 0; s3 <= a2; s3++) for (const a3 of [0, 1]) i2.emplaceBack(e3 * t.N, s3 * o2, a3);
+            for (let t2 = 0; t2 < 2 * a2; t2 += 2) s2.emplaceBack(h2 + t2, h2 + t2 + 1, h2 + t2 + 3), s2.emplaceBack(h2 + t2, h2 + t2 + 3, h2 + t2 + 2), s2.emplaceBack(c2 + t2, c2 + t2 + 3, c2 + t2 + 1), s2.emplaceBack(c2 + t2, c2 + t2 + 2, c2 + t2 + 3);
             return this._mesh = { indexBuffer: e2.createIndexBuffer(s2), vertexBuffer: e2.createVertexBuffer(i2, ca.members), segments: t.S.simpleSegment(0, 0, i2.length, s2.length) }, this._mesh;
           }
           getMeshFrameDelta(e2) {
@@ -16763,8 +15210,7 @@ uniform ${i3} ${s3} u_${a3};
             this._context = t2, this._size = e2, this._tileSize = i2, this._objects = [], this._recentlyUsed = [], this._stamp = 0;
           }
           destruct() {
-            for (const t2 of this._objects)
-              t2.texture.destroy(), t2.fbo.destroy();
+            for (const t2 of this._objects) t2.texture.destroy(), t2.fbo.destroy();
           }
           _createObject(t2) {
             const e2 = this._context.createFramebuffer(this._tileSize, this._tileSize, true, true), i2 = new x(this._context, { width: this._tileSize, height: this._tileSize, data: null }, this._context.gl.RGBA);
@@ -16780,11 +15226,8 @@ uniform ${i3} ${s3} u_${a3};
             t2.stamp = ++this._stamp;
           }
           getOrCreateFreeObject() {
-            for (const t3 of this._recentlyUsed)
-              if (!this._objects[t3].inUse)
-                return this._objects[t3];
-            if (this._objects.length >= this._size)
-              throw new Error("No free RenderPool available, call freeAllObjects() required!");
+            for (const t3 of this._recentlyUsed) if (!this._objects[t3].inUse) return this._objects[t3];
+            if (this._objects.length >= this._size) throw new Error("No free RenderPool available, call freeAllObjects() required!");
             const t2 = this._createObject(this._objects.length);
             return this._objects.push(t2), t2;
           }
@@ -16792,8 +15235,7 @@ uniform ${i3} ${s3} u_${a3};
             t2.inUse = false;
           }
           freeAllObjects() {
-            for (const t2 of this._objects)
-              this.freeObject(t2);
+            for (const t2 of this._objects) this.freeObject(t2);
           }
           isFull() {
             return !(this._objects.length < this._size) && false === this._objects.some((t2) => !t2.inUse);
@@ -16817,8 +15259,7 @@ uniform ${i3} ${s3} u_${a3};
               const i2 = t2.sourceCaches[e3].getVisibleCoordinates();
               for (const t3 of i2) {
                 const i3 = this.terrain.sourceCache.getTerrainCoords(t3);
-                for (const t4 in i3)
-                  this._coordsDescendingInv[e3][t4] || (this._coordsDescendingInv[e3][t4] = []), this._coordsDescendingInv[e3][t4].push(i3[t4]);
+                for (const t4 in i3) this._coordsDescendingInv[e3][t4] || (this._coordsDescendingInv[e3][t4] = []), this._coordsDescendingInv[e3][t4].push(i3[t4]);
               }
             }
             this._coordsDescendingInvStr = {};
@@ -16826,22 +15267,18 @@ uniform ${i3} ${s3} u_${a3};
               const i2 = t2._layers[e3], s2 = i2.source;
               if (pa[i2.type] && !this._coordsDescendingInvStr[s2]) {
                 this._coordsDescendingInvStr[s2] = {};
-                for (const t3 in this._coordsDescendingInv[s2])
-                  this._coordsDescendingInvStr[s2][t3] = this._coordsDescendingInv[s2][t3].map((t4) => t4.key).sort().join();
+                for (const t3 in this._coordsDescendingInv[s2]) this._coordsDescendingInvStr[s2][t3] = this._coordsDescendingInv[s2][t3].map((t4) => t4.key).sort().join();
               }
             }
-            for (const t3 of this._renderableTiles)
-              for (const e3 in this._coordsDescendingInvStr) {
-                const i2 = this._coordsDescendingInvStr[e3][t3.tileID.key];
-                i2 && i2 !== t3.rttCoords[e3] && (t3.rtt = []);
-              }
+            for (const t3 of this._renderableTiles) for (const e3 in this._coordsDescendingInvStr) {
+              const i2 = this._coordsDescendingInvStr[e3][t3.tileID.key];
+              i2 && i2 !== t3.rttCoords[e3] && (t3.rtt = []);
+            }
           }
           renderLayer(e2) {
-            if (e2.isHidden(this.painter.transform.zoom))
-              return false;
+            if (e2.isHidden(this.painter.transform.zoom)) return false;
             const i2 = e2.type, s2 = this.painter, a2 = this._renderableLayerIds[this._renderableLayerIds.length - 1] === e2.id;
-            if (pa[i2] && (this._prevType && pa[this._prevType] || this._stacks.push([]), this._prevType = i2, this._stacks[this._stacks.length - 1].push(e2.id), !a2))
-              return true;
+            if (pa[i2] && (this._prevType && pa[this._prevType] || this._stacks.push([]), this._prevType = i2, this._stacks[this._stacks.length - 1].push(e2.id), !a2)) return true;
             if (pa[this._prevType] || pa[i2] && a2) {
               this._prevType = i2;
               const e3 = this._stacks.length - 1, a3 = this._stacks[e3] || [];
@@ -16930,8 +15367,7 @@ uniform ${i3} ${s3} u_${a3};
           }
           for (; Math.abs(e2.lng - s2.center.lng) > 180; ) {
             const t2 = s2.locationPoint(e2);
-            if (t2.x >= 0 && t2.y >= 0 && t2.x <= s2.width && t2.y <= s2.height)
-              break;
+            if (t2.x >= 0 && t2.y >= 0 && t2.x <= s2.width && t2.y <= s2.height) break;
             e2.lng > s2.center.lng ? e2.lng -= 360 : e2.lng += 360;
           }
           return e2;
@@ -16939,8 +15375,7 @@ uniform ${i3} ${s3} u_${a3};
         const Ta = { center: "translate(-50%,-50%)", top: "translate(-50%,0)", "top-left": "translate(0,0)", "top-right": "translate(-100%,0)", bottom: "translate(-50%,-100%)", "bottom-left": "translate(0,-100%)", "bottom-right": "translate(-100%,-100%)", left: "translate(0,-50%)", right: "translate(-100%,-50%)" };
         function Ia(t2, e2, i2) {
           const s2 = t2.classList;
-          for (const t3 in Ta)
-            s2.remove(`maplibregl-${i2}-anchor-${t3}`);
+          for (const t3 in Ta) s2.remove(`maplibregl-${i2}-anchor-${t3}`);
           s2.add(`maplibregl-${i2}-anchor-${e2}`);
         }
         class Ea extends t.E {
@@ -16952,8 +15387,7 @@ uniform ${i3} ${s3} u_${a3};
               const e3 = t2.originalEvent.target, i2 = this._element;
               this._popup && (e3 === i2 || i2.contains(e3)) && this.togglePopup();
             }, this._update = (t2) => {
-              if (!this._map)
-                return;
+              if (!this._map) return;
               const e3 = this._map.loaded() && !this._map.isMoving();
               ("terrain" === (null == t2 ? void 0 : t2.type) || "render" === (null == t2 ? void 0 : t2.type) && !e3) && this._map.once("render", this._update), this._map.transform.renderWorldCopies && (this._lngLat = wa(this._lngLat, this._pos, this._map.transform)), this._pos = this._map.project(this._lngLat)._add(this._offset);
               let s2 = "";
@@ -16973,8 +15407,7 @@ uniform ${i3} ${s3} u_${a3};
               this._element.style.pointerEvents = "auto", this._positionDelta = null, this._pointerdownPos = null, this._isDragging = false, this._map.off("mousemove", this._onMove), this._map.off("touchmove", this._onMove), "active" === this._state && this.fire(new t.k("dragend")), this._state = "inactive";
             }, this._addDragHandler = (t2) => {
               this._element.contains(t2.originalEvent.target) && (t2.preventDefault(), this._positionDelta = t2.point.sub(this._pos).add(this._offset), this._pointerdownPos = t2.point, this._state = "pending", this._map.on("mousemove", this._onMove), this._map.on("touchmove", this._onMove), this._map.once("mouseup", this._onUp), this._map.once("touchend", this._onUp));
-            }, this._anchor = e2 && e2.anchor || "center", this._color = e2 && e2.color || "#3FB1CE", this._scale = e2 && e2.scale || 1, this._draggable = e2 && e2.draggable || false, this._clickTolerance = e2 && e2.clickTolerance || 0, this._isDragging = false, this._state = "inactive", this._rotation = e2 && e2.rotation || 0, this._rotationAlignment = e2 && e2.rotationAlignment || "auto", this._pitchAlignment = e2 && e2.pitchAlignment && "auto" !== e2.pitchAlignment ? e2.pitchAlignment : this._rotationAlignment, e2 && e2.element)
-              this._element = e2.element, this._offset = t.P.convert(e2 && e2.offset || [0, 0]);
+            }, this._anchor = e2 && e2.anchor || "center", this._color = e2 && e2.color || "#3FB1CE", this._scale = e2 && e2.scale || 1, this._draggable = e2 && e2.draggable || false, this._clickTolerance = e2 && e2.clickTolerance || 0, this._isDragging = false, this._state = "inactive", this._rotation = e2 && e2.rotation || 0, this._rotationAlignment = e2 && e2.rotationAlignment || "auto", this._pitchAlignment = e2 && e2.pitchAlignment && "auto" !== e2.pitchAlignment ? e2.pitchAlignment : this._rotationAlignment, e2 && e2.element) this._element = e2.element, this._offset = t.P.convert(e2 && e2.offset || [0, 0]);
             else {
               this._defaultMarker = true, this._element = i.create("div"), this._element.setAttribute("aria-label", "Map marker");
               const s2 = i.createNS("http://www.w3.org/2000/svg", "svg"), a2 = 41, o2 = 27;
@@ -17011,9 +15444,7 @@ uniform ${i3} ${s3} u_${a3};
               t2.preventDefault();
             }), this._element.addEventListener("mousedown", (t2) => {
               t2.preventDefault();
-            }), Ia(this._element, this._anchor, "marker"), e2 && e2.className)
-              for (const t2 of e2.className.split(" "))
-                this._element.classList.add(t2);
+            }), Ia(this._element, this._anchor, "marker"), e2 && e2.className) for (const t2 of e2.className.split(" ")) this._element.classList.add(t2);
             this._popup = null;
           }
           addTo(t2) {
@@ -17096,8 +15527,7 @@ uniform ${i3} ${s3} u_${a3};
           if (i2 && "imperial" === i2.unit) {
             const i3 = 3.2808 * n2;
             i3 > 5280 ? za(e2, s2, i3 / 5280, t2._getUIString("ScaleControl.Miles")) : za(e2, s2, i3, t2._getUIString("ScaleControl.Feet"));
-          } else
-            i2 && "nautical" === i2.unit ? za(e2, s2, n2 / 1852, t2._getUIString("ScaleControl.NauticalMiles")) : n2 >= 1e3 ? za(e2, s2, n2 / 1e3, t2._getUIString("ScaleControl.Kilometers")) : za(e2, s2, n2, t2._getUIString("ScaleControl.Meters"));
+          } else i2 && "nautical" === i2.unit ? za(e2, s2, n2 / 1852, t2._getUIString("ScaleControl.NauticalMiles")) : n2 >= 1e3 ? za(e2, s2, n2 / 1e3, t2._getUIString("ScaleControl.Kilometers")) : za(e2, s2, n2, t2._getUIString("ScaleControl.Meters"));
         }
         function za(t2, e2, i2, s2) {
           const a2 = function(t3) {
@@ -17162,14 +15592,10 @@ uniform ${i3} ${s3} u_${a3};
         }
         return Ba.Map = class extends oa {
           constructor(e2) {
-            if (t.bf.mark(t.bg.create), null != (e2 = t.e({}, ga, e2)).minZoom && null != e2.maxZoom && e2.minZoom > e2.maxZoom)
-              throw new Error("maxZoom must be greater than or equal to minZoom");
-            if (null != e2.minPitch && null != e2.maxPitch && e2.minPitch > e2.maxPitch)
-              throw new Error("maxPitch must be greater than or equal to minPitch");
-            if (null != e2.minPitch && e2.minPitch < 0)
-              throw new Error("minPitch must be greater than or equal to 0");
-            if (null != e2.maxPitch && e2.maxPitch > 85)
-              throw new Error("maxPitch must be less than or equal to 85");
+            if (t.bf.mark(t.bg.create), null != (e2 = t.e({}, ga, e2)).minZoom && null != e2.maxZoom && e2.minZoom > e2.maxZoom) throw new Error("maxZoom must be greater than or equal to minZoom");
+            if (null != e2.minPitch && null != e2.maxPitch && e2.minPitch > e2.maxPitch) throw new Error("maxPitch must be greater than or equal to minPitch");
+            if (null != e2.minPitch && e2.minPitch < 0) throw new Error("minPitch must be greater than or equal to 0");
+            if (null != e2.maxPitch && e2.maxPitch > 85) throw new Error("maxPitch must be less than or equal to 85");
             if (super(new rs(e2.minZoom, e2.maxZoom, e2.minPitch, e2.maxPitch, e2.renderWorldCopies), { bearingSnap: e2.bearingSnap }), this._cooperativeGesturesOnWheel = (t2) => {
               this._onCooperativeGesture(t2, t2[this._metaKey], 1);
             }, this._contextLost = (e3) => {
@@ -17177,16 +15603,13 @@ uniform ${i3} ${s3} u_${a3};
             }, this._contextRestored = (e3) => {
               this._setupPainter(), this.resize(), this._update(), this.fire(new t.k("webglcontextrestored", { originalEvent: e3 }));
             }, this._onMapScroll = (t2) => {
-              if (t2.target === this._container)
-                return this._container.scrollTop = 0, this._container.scrollLeft = 0, false;
+              if (t2.target === this._container) return this._container.scrollTop = 0, this._container.scrollLeft = 0, false;
             }, this._onWindowOnline = () => {
               this._update();
             }, this._interactive = e2.interactive, this._cooperativeGestures = e2.cooperativeGestures, this._metaKey = 0 === navigator.platform.indexOf("Mac") ? "metaKey" : "ctrlKey", this._maxTileCacheSize = e2.maxTileCacheSize, this._maxTileCacheZoomLevels = e2.maxTileCacheZoomLevels, this._failIfMajorPerformanceCaveat = e2.failIfMajorPerformanceCaveat, this._preserveDrawingBuffer = e2.preserveDrawingBuffer, this._antialias = e2.antialias, this._trackResize = e2.trackResize, this._bearingSnap = e2.bearingSnap, this._refreshExpiredTiles = e2.refreshExpiredTiles, this._fadeDuration = e2.fadeDuration, this._crossSourceCollisions = e2.crossSourceCollisions, this._crossFadingFactor = 1, this._collectResourceTiming = e2.collectResourceTiming, this._renderTaskQueue = new la(), this._controls = [], this._mapId = t.a2(), this._locale = t.e({}, ha, e2.locale), this._clickTolerance = e2.clickTolerance, this._overridePixelRatio = e2.pixelRatio, this._maxCanvasSize = e2.maxCanvasSize, this.transformCameraUpdate = e2.transformCameraUpdate, this._imageQueueHandle = h.addThrottleControl(() => this.isMoving()), this._requestManager = new u(e2.transformRequest), "string" == typeof e2.container) {
-              if (this._container = document.getElementById(e2.container), !this._container)
-                throw new Error(`Container '${e2.container}' not found.`);
+              if (this._container = document.getElementById(e2.container), !this._container) throw new Error(`Container '${e2.container}' not found.`);
             } else {
-              if (!(e2.container instanceof HTMLElement))
-                throw new Error("Invalid type: 'container' must be a String or HTMLElement.");
+              if (!(e2.container instanceof HTMLElement)) throw new Error("Invalid type: 'container' must be a String or HTMLElement.");
               this._container = e2.container;
             }
             if (e2.maxBounds && this.setMaxBounds(e2.maxBounds), this._setupContainer(), this._setupPainter(), this.on("move", () => this._update(false)), this.on("moveend", () => this._update(false)), this.on("zoom", () => this._update(true)), this.on("terrain", () => {
@@ -17217,16 +15640,14 @@ uniform ${i3} ${s3} u_${a3};
             return this._mapId;
           }
           addControl(e2, i2) {
-            if (void 0 === i2 && (i2 = e2.getDefaultPosition ? e2.getDefaultPosition() : "top-right"), !e2 || !e2.onAdd)
-              return this.fire(new t.j(new Error("Invalid argument to map.addControl(). Argument must be a control with onAdd and onRemove methods.")));
+            if (void 0 === i2 && (i2 = e2.getDefaultPosition ? e2.getDefaultPosition() : "top-right"), !e2 || !e2.onAdd) return this.fire(new t.j(new Error("Invalid argument to map.addControl(). Argument must be a control with onAdd and onRemove methods.")));
             const s2 = e2.onAdd(this);
             this._controls.push(e2);
             const a2 = this._controlPositions[i2];
             return -1 !== i2.indexOf("bottom") ? a2.insertBefore(s2, a2.firstChild) : a2.appendChild(s2), this;
           }
           removeControl(e2) {
-            if (!e2 || !e2.onRemove)
-              return this.fire(new t.j(new Error("Invalid argument to map.removeControl(). Argument must be a control with onAdd and onRemove methods.")));
+            if (!e2 || !e2.onRemove) return this.fire(new t.j(new Error("Invalid argument to map.removeControl(). Argument must be a control with onAdd and onRemove methods.")));
             const i2 = this._controls.indexOf(e2);
             return i2 > -1 && this._controls.splice(i2, 1), e2.onRemove(this), this;
           }
@@ -17270,36 +15691,30 @@ uniform ${i3} ${s3} u_${a3};
             return this.transform.setMaxBounds(L.convert(t2)), this._update();
           }
           setMinZoom(t2) {
-            if ((t2 = null == t2 ? -2 : t2) >= -2 && t2 <= this.transform.maxZoom)
-              return this.transform.minZoom = t2, this._update(), this.getZoom() < t2 && this.setZoom(t2), this;
+            if ((t2 = null == t2 ? -2 : t2) >= -2 && t2 <= this.transform.maxZoom) return this.transform.minZoom = t2, this._update(), this.getZoom() < t2 && this.setZoom(t2), this;
             throw new Error("minZoom must be between -2 and the current maxZoom, inclusive");
           }
           getMinZoom() {
             return this.transform.minZoom;
           }
           setMaxZoom(t2) {
-            if ((t2 = null == t2 ? 22 : t2) >= this.transform.minZoom)
-              return this.transform.maxZoom = t2, this._update(), this.getZoom() > t2 && this.setZoom(t2), this;
+            if ((t2 = null == t2 ? 22 : t2) >= this.transform.minZoom) return this.transform.maxZoom = t2, this._update(), this.getZoom() > t2 && this.setZoom(t2), this;
             throw new Error("maxZoom must be greater than the current minZoom");
           }
           getMaxZoom() {
             return this.transform.maxZoom;
           }
           setMinPitch(t2) {
-            if ((t2 = null == t2 ? 0 : t2) < 0)
-              throw new Error("minPitch must be greater than or equal to 0");
-            if (t2 >= 0 && t2 <= this.transform.maxPitch)
-              return this.transform.minPitch = t2, this._update(), this.getPitch() < t2 && this.setPitch(t2), this;
+            if ((t2 = null == t2 ? 0 : t2) < 0) throw new Error("minPitch must be greater than or equal to 0");
+            if (t2 >= 0 && t2 <= this.transform.maxPitch) return this.transform.minPitch = t2, this._update(), this.getPitch() < t2 && this.setPitch(t2), this;
             throw new Error("minPitch must be between 0 and the current maxPitch, inclusive");
           }
           getMinPitch() {
             return this.transform.minPitch;
           }
           setMaxPitch(t2) {
-            if ((t2 = null == t2 ? 60 : t2) > 85)
-              throw new Error("maxPitch must be less than or equal to 85");
-            if (t2 >= this.transform.minPitch)
-              return this.transform.maxPitch = t2, this._update(), this.getPitch() > t2 && this.setPitch(t2), this;
+            if ((t2 = null == t2 ? 60 : t2) > 85) throw new Error("maxPitch must be less than or equal to 85");
+            if (t2 >= this.transform.minPitch) return this.transform.maxPitch = t2, this._update(), this.getPitch() > t2 && this.setPitch(t2), this;
             throw new Error("maxPitch must be greater than the current minPitch");
           }
           getMaxPitch() {
@@ -17364,20 +15779,16 @@ uniform ${i3} ${s3} u_${a3};
             }
           }
           on(t2, e2, i2) {
-            if (void 0 === i2)
-              return super.on(t2, e2);
+            if (void 0 === i2) return super.on(t2, e2);
             const s2 = this._createDelegatedListener(t2, e2, i2);
             this._delegatedListeners = this._delegatedListeners || {}, this._delegatedListeners[t2] = this._delegatedListeners[t2] || [], this._delegatedListeners[t2].push(s2);
-            for (const t3 in s2.delegates)
-              this.on(t3, s2.delegates[t3]);
+            for (const t3 in s2.delegates) this.on(t3, s2.delegates[t3]);
             return this;
           }
           once(t2, e2, i2) {
-            if (void 0 === i2)
-              return super.once(t2, e2);
+            if (void 0 === i2) return super.once(t2, e2);
             const s2 = this._createDelegatedListener(t2, e2, i2);
-            for (const t3 in s2.delegates)
-              this.once(t3, s2.delegates[t3]);
+            for (const t3 in s2.delegates) this.once(t3, s2.delegates[t3]);
             return this;
           }
           off(t2, e2, i2) {
@@ -17386,20 +15797,17 @@ uniform ${i3} ${s3} u_${a3};
               for (let t3 = 0; t3 < a2.length; t3++) {
                 const s3 = a2[t3];
                 if (s3.layer === e2 && s3.listener === i2) {
-                  for (const t4 in s3.delegates)
-                    this.off(t4, s3.delegates[t4]);
+                  for (const t4 in s3.delegates) this.off(t4, s3.delegates[t4]);
                   return a2.splice(t3, 1), this;
                 }
               }
             })(), this);
           }
           queryRenderedFeatures(e2, i2) {
-            if (!this.style)
-              return [];
+            if (!this.style) return [];
             let s2;
             const a2 = e2 instanceof t.P || Array.isArray(e2), o2 = a2 ? e2 : [[0, 0], [this.transform.width, this.transform.height]];
-            if (i2 = i2 || (a2 ? {} : e2) || {}, o2 instanceof t.P || "number" == typeof o2[0])
-              s2 = [t.P.convert(o2)];
+            if (i2 = i2 || (a2 ? {} : e2) || {}, o2 instanceof t.P || "number" == typeof o2[0]) s2 = [t.P.convert(o2)];
             else {
               const e3 = t.P.convert(o2[0]), i3 = t.P.convert(o2[1]);
               s2 = [e3, new t.P(i3.x, e3.y), i3, new t.P(e3.x, i3.y), e3];
@@ -17417,13 +15825,11 @@ uniform ${i3} ${s3} u_${a3};
           }
           _getUIString(t2) {
             const e2 = this._locale[t2];
-            if (null == e2)
-              throw new Error(`Missing UI string '${t2}'`);
+            if (null == e2) throw new Error(`Missing UI string '${t2}'`);
             return e2;
           }
           _updateStyle(t2, e2) {
-            if (e2.transformStyle && this.style && !this.style._loaded)
-              return void this.style.once("style.load", () => this._updateStyle(t2, e2));
+            if (e2.transformStyle && this.style && !this.style._loaded) return void this.style.once("style.load", () => this._updateStyle(t2, e2));
             const i2 = this.style && e2.transformStyle ? this.style.serialize() : void 0;
             return this.style && (this.style.setEventedParent(null), this.style._remove(!t2)), t2 ? (this.style = new se(this, e2 || {}), this.style.setEventedParent(this, { style: this.style }), "string" == typeof t2 ? this.style.loadURL(t2, e2, i2) : this.style.loadJSON(t2, e2, i2), this) : (delete this.style, this);
           }
@@ -17436,8 +15842,7 @@ uniform ${i3} ${s3} u_${a3};
               t.f(s2, (e3, s3) => {
                 e3 ? this.fire(new t.j(e3)) : s3 && this._updateDiff(s3, i2);
               });
-            } else
-              "object" == typeof e2 && this._updateDiff(e2, i2);
+            } else "object" == typeof e2 && this._updateDiff(e2, i2);
           }
           _updateDiff(e2, i2) {
             try {
@@ -17447,8 +15852,7 @@ uniform ${i3} ${s3} u_${a3};
             }
           }
           getStyle() {
-            if (this.style)
-              return this.style.serialize();
+            if (this.style) return this.style.serialize();
           }
           isStyleLoaded() {
             return this.style ? this.style.loaded() : t.w("There is no style added to the map.");
@@ -17458,15 +15862,13 @@ uniform ${i3} ${s3} u_${a3};
           }
           isSourceLoaded(e2) {
             const i2 = this.style && this.style.sourceCaches[e2];
-            if (void 0 !== i2)
-              return i2.loaded();
+            if (void 0 !== i2) return i2.loaded();
             this.fire(new t.j(new Error(`There is no source with ID '${e2}'`)));
           }
           setTerrain(e2) {
             if (this.style._checkLoaded(), this._terrainDataCallback && this.style.off("data", this._terrainDataCallback), e2) {
               const i2 = this.style.sourceCaches[e2.source];
-              if (!i2)
-                throw new Error(`cannot load terrain, because there exists no source with ID: ${e2.source}`);
+              if (!i2) throw new Error(`cannot load terrain, because there exists no source with ID: ${e2.source}`);
               for (const i3 in this.style._layers) {
                 const s2 = this.style._layers[i3];
                 "hillshade" === s2.type && s2.source === e2.source && t.w("You are using the same source for a hillshade layer and for 3D terrain. Please consider using two separate sources to improve rendering quality.");
@@ -17474,8 +15876,7 @@ uniform ${i3} ${s3} u_${a3};
               this.terrain = new da(this.painter, i2, e2), this.painter.renderToTexture = new ma(this.painter, this.terrain), this.transform._minEleveationForCurrentTile = this.terrain.getMinTileElevationForLngLatZoom(this.transform.center, this.transform.tileZoom), this.transform.elevation = this.terrain.getElevationForLngLatZoom(this.transform.center, this.transform.tileZoom), this._terrainDataCallback = (t2) => {
                 "style" === t2.dataType ? this.terrain.sourceCache.freeRtt() : "source" === t2.dataType && t2.tile && (t2.sourceId !== e2.source || this._elevationFreeze || (this.transform._minEleveationForCurrentTile = this.terrain.getMinTileElevationForLngLatZoom(this.transform.center, this.transform.tileZoom), this.transform.elevation = this.terrain.getElevationForLngLatZoom(this.transform.center, this.transform.tileZoom)), this.terrain.sourceCache.freeRtt(t2.tile.tileID));
               }, this.style.on("data", this._terrainDataCallback);
-            } else
-              this.terrain && this.terrain.sourceCache.destruct(), this.terrain = null, this.painter.renderToTexture && this.painter.renderToTexture.destruct(), this.painter.renderToTexture = null, this.transform._minEleveationForCurrentTile = 0, this.transform.elevation = 0;
+            } else this.terrain && this.terrain.sourceCache.destruct(), this.terrain = null, this.painter.renderToTexture && this.painter.renderToTexture.destruct(), this.painter.renderToTexture = null, this.transform._minEleveationForCurrentTile = 0, this.transform.elevation = 0;
             return this.fire(new t.k("terrain", { terrain: e2 })), this;
           }
           getTerrain() {
@@ -17488,8 +15889,7 @@ uniform ${i3} ${s3} u_${a3};
               const i2 = t2[e2]._tiles;
               for (const t3 in i2) {
                 const e3 = i2[t3];
-                if ("loaded" !== e3.state && "errored" !== e3.state)
-                  return false;
+                if ("loaded" !== e3.state && "errored" !== e3.state) return false;
               }
             }
             return true;
@@ -17506,8 +15906,7 @@ uniform ${i3} ${s3} u_${a3};
           addImage(e2, i2, s2 = {}) {
             const { pixelRatio: a2 = 1, sdf: o2 = false, stretchX: r2, stretchY: n2, content: l2 } = s2;
             if (this._lazyInitEmptyStyle(), !(i2 instanceof HTMLImageElement || t.a(i2))) {
-              if (void 0 === i2.width || void 0 === i2.height)
-                return this.fire(new t.j(new Error("Invalid arguments to map.addImage(). The second argument must be an `HTMLImageElement`, `ImageData`, `ImageBitmap`, or object with `width`, `height`, and `data` properties with the same format as `ImageData`")));
+              if (void 0 === i2.width || void 0 === i2.height) return this.fire(new t.j(new Error("Invalid arguments to map.addImage(). The second argument must be an `HTMLImageElement`, `ImageData`, `ImageBitmap`, or object with `width`, `height`, and `data` properties with the same format as `ImageData`")));
               {
                 const { width: s3, height: h2, data: c2 } = i2, u2 = i2;
                 return this.style.addImage(e2, { data: new t.R({ width: s3, height: h2 }, new Uint8Array(c2)), pixelRatio: a2, stretchX: r2, stretchY: n2, content: l2, sdf: o2, version: 0, userImage: u2 }), u2.onAdd && u2.onAdd(this, e2), this;
@@ -17520,13 +15919,10 @@ uniform ${i3} ${s3} u_${a3};
           }
           updateImage(e2, i2) {
             const s2 = this.style.getImage(e2);
-            if (!s2)
-              return this.fire(new t.j(new Error("The map has no image with that id. If you are adding a new image use `map.addImage(...)` instead.")));
+            if (!s2) return this.fire(new t.j(new Error("The map has no image with that id. If you are adding a new image use `map.addImage(...)` instead.")));
             const a2 = i2 instanceof HTMLImageElement || t.a(i2) ? t.h.getImageData(i2) : i2, { width: o2, height: r2, data: n2 } = a2;
-            if (void 0 === o2 || void 0 === r2)
-              return this.fire(new t.j(new Error("Invalid arguments to map.updateImage(). The second argument must be an `HTMLImageElement`, `ImageData`, `ImageBitmap`, or object with `width`, `height`, and `data` properties with the same format as `ImageData`")));
-            if (o2 !== s2.data.width || r2 !== s2.data.height)
-              return this.fire(new t.j(new Error("The width and height of the updated image must be that same as the previous version of the image")));
+            if (void 0 === o2 || void 0 === r2) return this.fire(new t.j(new Error("Invalid arguments to map.updateImage(). The second argument must be an `HTMLImageElement`, `ImageData`, `ImageBitmap`, or object with `width`, `height`, and `data` properties with the same format as `ImageData`")));
+            if (o2 !== s2.data.width || r2 !== s2.data.height) return this.fire(new t.j(new Error("The width and height of the updated image must be that same as the previous version of the image")));
             const l2 = !(i2 instanceof HTMLImageElement || t.a(i2));
             return s2.data.replace(n2, l2), this.style.updateImage(e2, s2), this;
           }
@@ -17686,8 +16082,7 @@ uniform ${i3} ${s3} u_${a3};
           }
           _render(e2) {
             const i2 = this._idleTriggered ? this._fadeDuration : 0;
-            if (this.painter.context.setDirty(), this.painter.setBaseState(), this._renderTaskQueue.run(e2), this._removed)
-              return;
+            if (this.painter.context.setDirty(), this.painter.setBaseState(), this._renderTaskQueue.run(e2), this._removed) return;
             let s2 = false;
             if (this.style && this._styleDirty) {
               this._styleDirty = false;
@@ -17706,8 +16101,7 @@ uniform ${i3} ${s3} u_${a3};
           remove() {
             var e2;
             this._hash && this._hash.remove();
-            for (const t2 of this._controls)
-              t2.onRemove(this);
+            for (const t2 of this._controls) t2.onRemove(this);
             this._controls = [], this._frame && (this._frame.cancel(), this._frame = null), this._renderTaskQueue.clear(), this.painter.destroy(), this.handlers.destroy(), delete this.handlers, this.setStyle(null), "undefined" != typeof window && removeEventListener("online", this._onWindowOnline, false), h.removeThrottleControl(this._imageQueueHandle), null === (e2 = this._resizeObserver) || void 0 === e2 || e2.disconnect();
             const s2 = this.painter.context.gl.getExtension("WEBGL_lose_context");
             s2 && s2.loseContext(), this._canvas.removeEventListener("webglcontextrestored", this._contextRestored, false), this._canvas.removeEventListener("webglcontextlost", this._contextLost, false), i.remove(this._canvasContainer), i.remove(this._controlContainer), this._cooperativeGestures && this._destroyCooperativeGestures(), this._container.classList.remove("maplibregl-map"), t.bf.clearMetrics(), this._removed = true, this.fire(new t.k("remove"));
@@ -17788,22 +16182,20 @@ uniform ${i3} ${s3} u_${a3};
           constructor(e2) {
             super(), this._onSuccess = (e3) => {
               if (this._map) {
-                if (this._isOutOfMapMaxBounds(e3))
-                  return this._setErrorState(), this.fire(new t.k("outofmaxbounds", e3)), this._updateMarker(), void this._finish();
-                if (this.options.trackUserLocation)
-                  switch (this._lastKnownPosition = e3, this._watchState) {
-                    case "WAITING_ACTIVE":
-                    case "ACTIVE_LOCK":
-                    case "ACTIVE_ERROR":
-                      this._watchState = "ACTIVE_LOCK", this._geolocateButton.classList.remove("maplibregl-ctrl-geolocate-waiting"), this._geolocateButton.classList.remove("maplibregl-ctrl-geolocate-active-error"), this._geolocateButton.classList.add("maplibregl-ctrl-geolocate-active");
-                      break;
-                    case "BACKGROUND":
-                    case "BACKGROUND_ERROR":
-                      this._watchState = "BACKGROUND", this._geolocateButton.classList.remove("maplibregl-ctrl-geolocate-waiting"), this._geolocateButton.classList.remove("maplibregl-ctrl-geolocate-background-error"), this._geolocateButton.classList.add("maplibregl-ctrl-geolocate-background");
-                      break;
-                    default:
-                      throw new Error(`Unexpected watchState ${this._watchState}`);
-                  }
+                if (this._isOutOfMapMaxBounds(e3)) return this._setErrorState(), this.fire(new t.k("outofmaxbounds", e3)), this._updateMarker(), void this._finish();
+                if (this.options.trackUserLocation) switch (this._lastKnownPosition = e3, this._watchState) {
+                  case "WAITING_ACTIVE":
+                  case "ACTIVE_LOCK":
+                  case "ACTIVE_ERROR":
+                    this._watchState = "ACTIVE_LOCK", this._geolocateButton.classList.remove("maplibregl-ctrl-geolocate-waiting"), this._geolocateButton.classList.remove("maplibregl-ctrl-geolocate-active-error"), this._geolocateButton.classList.add("maplibregl-ctrl-geolocate-active");
+                    break;
+                  case "BACKGROUND":
+                  case "BACKGROUND_ERROR":
+                    this._watchState = "BACKGROUND", this._geolocateButton.classList.remove("maplibregl-ctrl-geolocate-waiting"), this._geolocateButton.classList.remove("maplibregl-ctrl-geolocate-background-error"), this._geolocateButton.classList.add("maplibregl-ctrl-geolocate-background");
+                    break;
+                  default:
+                    throw new Error(`Unexpected watchState ${this._watchState}`);
+                }
                 this.options.showUserLocation && "OFF" !== this._watchState && this._updateMarker(e3), this.options.trackUserLocation && "ACTIVE_LOCK" !== this._watchState || this._updateCamera(e3), this.options.showUserLocation && this._dotElement.classList.remove("maplibregl-user-location-dot-stale"), this.fire(new t.k("geolocate", e3)), this._finish();
               }
             }, this._updateCamera = (e3) => {
@@ -17813,22 +16205,19 @@ uniform ${i3} ${s3} u_${a3};
               if (e3) {
                 const i2 = new t.L(e3.coords.longitude, e3.coords.latitude);
                 this._accuracyCircleMarker.setLngLat(i2).addTo(this._map), this._userLocationDotMarker.setLngLat(i2).addTo(this._map), this._accuracy = e3.coords.accuracy, this.options.showUserLocation && this.options.showAccuracyCircle && this._updateCircleRadius();
-              } else
-                this._userLocationDotMarker.remove(), this._accuracyCircleMarker.remove();
+              } else this._userLocationDotMarker.remove(), this._accuracyCircleMarker.remove();
             }, this._onZoom = () => {
               this.options.showUserLocation && this.options.showAccuracyCircle && this._updateCircleRadius();
             }, this._onError = (e3) => {
               if (this._map) {
-                if (this.options.trackUserLocation)
-                  if (1 === e3.code) {
-                    this._watchState = "OFF", this._geolocateButton.classList.remove("maplibregl-ctrl-geolocate-waiting"), this._geolocateButton.classList.remove("maplibregl-ctrl-geolocate-active"), this._geolocateButton.classList.remove("maplibregl-ctrl-geolocate-active-error"), this._geolocateButton.classList.remove("maplibregl-ctrl-geolocate-background"), this._geolocateButton.classList.remove("maplibregl-ctrl-geolocate-background-error"), this._geolocateButton.disabled = true;
-                    const t2 = this._map._getUIString("GeolocateControl.LocationNotAvailable");
-                    this._geolocateButton.title = t2, this._geolocateButton.setAttribute("aria-label", t2), void 0 !== this._geolocationWatchID && this._clearWatch();
-                  } else {
-                    if (3 === e3.code && Pa)
-                      return;
-                    this._setErrorState();
-                  }
+                if (this.options.trackUserLocation) if (1 === e3.code) {
+                  this._watchState = "OFF", this._geolocateButton.classList.remove("maplibregl-ctrl-geolocate-waiting"), this._geolocateButton.classList.remove("maplibregl-ctrl-geolocate-active"), this._geolocateButton.classList.remove("maplibregl-ctrl-geolocate-active-error"), this._geolocateButton.classList.remove("maplibregl-ctrl-geolocate-background"), this._geolocateButton.classList.remove("maplibregl-ctrl-geolocate-background-error"), this._geolocateButton.disabled = true;
+                  const t2 = this._map._getUIString("GeolocateControl.LocationNotAvailable");
+                  this._geolocateButton.title = t2, this._geolocateButton.setAttribute("aria-label", t2), void 0 !== this._geolocationWatchID && this._clearWatch();
+                } else {
+                  if (3 === e3.code && Pa) return;
+                  this._setErrorState();
+                }
                 "OFF" !== this._watchState && this.options.showUserLocation && this._dotElement.classList.add("maplibregl-user-location-dot-stale"), this.fire(new t.k("error", e3)), this._finish();
               }
             }, this._finish = () => {
@@ -17887,8 +16276,7 @@ uniform ${i3} ${s3} u_${a3};
             this._circleElement.style.width = `${a2}px`, this._circleElement.style.height = `${a2}px`;
           }
           trigger() {
-            if (!this._setup)
-              return t.w("Geolocate control triggered before added to a map"), false;
+            if (!this._setup) return t.w("Geolocate control triggered before added to a map"), false;
             if (this.options.trackUserLocation) {
               switch (this._watchState) {
                 case "OFF":
@@ -17918,14 +16306,12 @@ uniform ${i3} ${s3} u_${a3};
                 default:
                   throw new Error(`Unexpected watchState ${this._watchState}`);
               }
-              if ("OFF" === this._watchState && void 0 !== this._geolocationWatchID)
-                this._clearWatch();
+              if ("OFF" === this._watchState && void 0 !== this._geolocationWatchID) this._clearWatch();
               else if (void 0 === this._geolocationWatchID) {
                 let t2;
                 this._geolocateButton.classList.add("maplibregl-ctrl-geolocate-waiting"), this._geolocateButton.setAttribute("aria-pressed", "true"), Ca++, Ca > 1 ? (t2 = { maximumAge: 6e5, timeout: 0 }, Pa = true) : (t2 = this.options.positionOptions, Pa = false), this._geolocationWatchID = window.navigator.geolocation.watchPosition(this._onSuccess, this._onError, t2);
               }
-            } else
-              window.navigator.geolocation.getCurrentPosition(this._onSuccess, this._onError, this.options.positionOptions), this._timeoutId = setTimeout(this._finish, 1e4);
+            } else window.navigator.geolocation.getCurrentPosition(this._onSuccess, this._onError, this.options.positionOptions), this._timeoutId = setTimeout(this._finish, 1e4);
             return true;
           }
           _clearWatch() {
@@ -18011,16 +16397,12 @@ uniform ${i3} ${s3} u_${a3};
             }, this._onDrag = (t2) => {
               this._update(t2.point);
             }, this._update = (t2) => {
-              if (!this._map || !this._lngLat && !this._trackPointer || !this._content)
-                return;
+              if (!this._map || !this._lngLat && !this._trackPointer || !this._content) return;
               if (!this._container) {
-                if (this._container = i.create("div", "maplibregl-popup", this._map.getContainer()), this._tip = i.create("div", "maplibregl-popup-tip", this._container), this._container.appendChild(this._content), this.options.className)
-                  for (const t3 of this.options.className.split(" "))
-                    this._container.classList.add(t3);
+                if (this._container = i.create("div", "maplibregl-popup", this._map.getContainer()), this._tip = i.create("div", "maplibregl-popup-tip", this._container), this._container.appendChild(this._content), this.options.className) for (const t3 of this.options.className.split(" ")) this._container.classList.add(t3);
                 this._trackPointer && this._container.classList.add("maplibregl-popup-track-pointer");
               }
-              if (this.options.maxWidth && this._container.style.maxWidth !== this.options.maxWidth && (this._container.style.maxWidth = this.options.maxWidth), this._map.transform.renderWorldCopies && !this._trackPointer && (this._lngLat = wa(this._lngLat, this._pos, this._map.transform)), this._trackPointer && !t2)
-                return;
+              if (this.options.maxWidth && this._container.style.maxWidth !== this.options.maxWidth && (this._container.style.maxWidth = this.options.maxWidth), this._map.transform.renderWorldCopies && !this._trackPointer && (this._lngLat = wa(this._lngLat, this._pos, this._map.transform)), this._trackPointer && !t2) return;
               const e3 = this._pos = this._trackPointer && t2 ? t2 : this._map.project(this._lngLat);
               let s2 = this.options.anchor;
               const a2 = Ra(this.options.offset);
@@ -18059,8 +16441,7 @@ uniform ${i3} ${s3} u_${a3};
           setHTML(t2) {
             const e2 = document.createDocumentFragment(), i2 = document.createElement("body");
             let s2;
-            for (i2.innerHTML = t2; s2 = i2.firstChild, s2; )
-              e2.appendChild(s2);
+            for (i2.innerHTML = t2; s2 = i2.firstChild, s2; ) e2.appendChild(s2);
             return this.setDOMContent(e2);
           }
           getMaxWidth() {
@@ -18071,11 +16452,8 @@ uniform ${i3} ${s3} u_${a3};
             return this.options.maxWidth = t2, this._update(), this;
           }
           setDOMContent(t2) {
-            if (this._content)
-              for (; this._content.hasChildNodes(); )
-                this._content.firstChild && this._content.removeChild(this._content.firstChild);
-            else
-              this._content = i.create("div", "maplibregl-popup-content", this._container);
+            if (this._content) for (; this._content.hasChildNodes(); ) this._content.firstChild && this._content.removeChild(this._content.firstChild);
+            else this._content = i.create("div", "maplibregl-popup-content", this._container);
             return this._content.appendChild(t2), this._createCloseButton(), this._update(), this._focusFirstElement(), this;
           }
           addClassName(t2) {
@@ -18088,15 +16466,13 @@ uniform ${i3} ${s3} u_${a3};
             return this.options.offset = t2, this._update(), this;
           }
           toggleClassName(t2) {
-            if (this._container)
-              return this._container.classList.toggle(t2);
+            if (this._container) return this._container.classList.toggle(t2);
           }
           _createCloseButton() {
             this.options.closeButton && (this._closeButton = i.create("button", "maplibregl-popup-close-button", this._content), this._closeButton.type = "button", this._closeButton.setAttribute("aria-label", "Close popup"), this._closeButton.innerHTML = "&#215;", this._closeButton.addEventListener("click", this._onClose));
           }
           _focusFirstElement() {
-            if (!this.options.focusAfterOpen || !this._container)
-              return;
+            if (!this.options.focusAfterOpen || !this._container) return;
             const t2 = this._container.querySelector(Aa);
             t2 && t2.focus();
           }
@@ -18116,9 +16492,8 @@ uniform ${i3} ${s3} u_${a3};
 // src/BlazorMap.ts
 var import_maplibre_gl = __toESM(require_maplibre_gl(), 1);
 var BlazorMap = class {
-  constructor(_dotnetRef, _rootElement, _mapId, center, zoom, baselayerurl, maxBounds, pathPrefix) {
+  constructor(_dotnetRef, _rootElement, center, zoom, baselayerurl, maxBounds, pathPrefix) {
     this._dotnetRef = _dotnetRef;
-    this._mapId = _mapId;
     this.$isInitialized = () => {
     };
     this._initializationCompleted = false;
@@ -18129,11 +16504,8 @@ var BlazorMap = class {
       this._initializationCompleted = true;
       this.$isInitialized();
     };
-    this.setMap = (map) => {
-      window[this._mapId] = map;
-    };
     this.getMap = () => {
-      return window[this._mapId];
+      return this._map;
     };
     this.onMapClick = (e) => {
       let map = this.getMap();
@@ -18159,13 +16531,21 @@ var BlazorMap = class {
       this._dotnetRef.invokeMethodAsync("JSOnMapClicked", eArgs);
       return false;
     };
-    this.addStyleLayerFromUrl = (url) => __async(this, null, function* () {
-      yield this._isInitialized;
+    this.addStyleLayerFromUrl = async (url) => {
+      await this._isInitialized;
       let map = this.getMap();
-      let response = yield fetch(url);
-      let jsonData = yield response.json();
+      let response = await fetch(url);
+      let jsonData = await response.json();
       if (jsonData.images) {
         for (let image of jsonData.images) {
+          if (!image.id) {
+            console.warn("Image without 'id' can not be added!");
+            continue;
+          }
+          if (!image.imgUrl) {
+            console.warn(`Image definition ${image.id} is missing required properties. (Required properties: imgUrl).`);
+            continue;
+          }
           map.loadImage(this.buildUrl(image.imgUrl), function(error, icon) {
             if (error) {
               console.error(`Image: ${image.id} could not load!`, error);
@@ -18180,12 +16560,6 @@ var BlazorMap = class {
               console.warn("Image" + image.id + " already added");
             }
           });
-          if (!image.id) {
-            console.warn("Image without 'id' can not be added!");
-          }
-          if (!image.imgUrl) {
-            console.warn(`Image definition ${image.id} is missing required properties. (Required properties: imgUrl).`);
-          }
         }
       } else {
         console.debug("No images were found!");
@@ -18218,7 +16592,7 @@ var BlazorMap = class {
           if (!!jsonData.sources[key].data && typeof jsonData.sources[key].data == "string") {
             jsonData.sources[key].data = this.buildUrl(jsonData.sources[key].data);
           }
-          yield this.setSourceData(key, jsonData.sources[key].data);
+          await this.setSourceData(key, jsonData.sources[key].data);
         }
       } else {
         console.debug("No sources were found!");
@@ -18238,9 +16612,9 @@ var BlazorMap = class {
       } else {
         console.debug("No layers were found!");
       }
-    });
-    this.setSourceData = (id, data) => __async(this, null, function* () {
-      yield this._isInitialized;
+    };
+    this.setSourceData = async (id, data) => {
+      await this._isInitialized;
       let map = this.getMap();
       if (!data) {
         console.debug(`Source data for ${id} is missing and therefore created.`);
@@ -18264,34 +16638,33 @@ var BlazorMap = class {
           console.error(`Source: ${id} could not be added!`, error);
         }
       }
-    });
-    this.removeLayer = (id) => __async(this, null, function* () {
-      yield this._isInitialized;
+    };
+    this.removeLayer = async (id) => {
+      await this._isInitialized;
       let map = this.getMap();
       let layer = map.getLayer(id);
       if (layer)
         map.removeLayer(id);
-    });
-    this.addLayer = (layer) => __async(this, null, function* () {
-      yield this._isInitialized;
+    };
+    this.addLayer = async (layer) => {
+      await this._isInitialized;
       let map = this.getMap();
       map.addLayer(layer);
-    });
-    this.removeSource = (id) => __async(this, null, function* () {
-      yield this._isInitialized;
+    };
+    this.removeSource = async (id) => {
+      await this._isInitialized;
       let map = this.getMap();
       map.removeSource(id);
-    });
-    this.pantoLocation = (bounds) => __async(this, null, function* () {
-      yield this._isInitialized;
+    };
+    this.pantoLocation = async (bounds) => {
+      await this._isInitialized;
       let map = this.getMap();
       map.fitBounds(bounds);
-    });
-    this.Dispose = () => __async(this, null, function* () {
+    };
+    this.Dispose = async () => {
       let map = this.getMap();
       this.completeInitialization();
       if (!map) {
-        delete window[this._mapId];
         return;
       }
       if (this._dotnetRef) {
@@ -18300,8 +16673,7 @@ var BlazorMap = class {
         map.off("contextmenu", this.onMapClick);
       }
       map.remove();
-      delete window[this._mapId];
-    });
+    };
     this.buildUrl = (path) => {
       if (path.startsWith("http://") || path.startsWith("https://")) {
         return path;
@@ -18335,21 +16707,20 @@ var BlazorMap = class {
       this.completeInitialization();
     });
     map.on("error", (e) => {
-      var _a, _b;
       if (this._initializationCompleted) {
         return;
       }
       if (_dotnetRef) {
-        this._dotnetRef.invokeMethodAsync("JSInitializationFailed", (_b = (_a = e == null ? void 0 : e.error) == null ? void 0 : _a.message) != null ? _b : "Map initialization failed.");
+        this._dotnetRef.invokeMethodAsync("JSInitializationFailed", e?.error?.message ?? "Map initialization failed.");
       }
       this.completeInitialization();
     });
-    this.setMap(map);
+    this._map = map;
   }
 };
 function createMap(_dotnetRef, _rootElement, center, zoom, baselayerurl, maxBounds, spritePathPrefix) {
   console.debug("Creating Map ...");
-  return new BlazorMap(_dotnetRef, _rootElement, `map_${Math.random()}`, center, zoom, baselayerurl, maxBounds, spritePathPrefix);
+  return new BlazorMap(_dotnetRef, _rootElement, center, zoom, baselayerurl, maxBounds, spritePathPrefix);
 }
 export {
   createMap

@@ -1,11 +1,13 @@
 ﻿@using GeoJSON.Text.Feature;
 @using Microsoft.AspNetCore.Components;
 @using Microsoft.AspNetCore.Components.Web
+@using Microsoft.Extensions.Logging
 @using Microsoft.JSInterop;
 @using System.Text.Json;
 @implements IAsyncDisposable
 
 @inject IJSRuntime JSRuntime;
+@inject ILogger<BlazorMap> Logger;
 
 @code {
     private readonly string _instanceId = Guid.NewGuid().ToString("N");
@@ -119,8 +121,9 @@
                 }
             }
         }
-        catch
+        catch (Exception ex)
         {
+            Logger.LogError(ex, "BlazorMap initialization failed while importing JS module or creating map instance.");
             _initialize.TrySetResult();
             await MapIsInitialized.InvokeAsync(false);
         }
@@ -129,6 +132,7 @@
     [JSInvokable("JSInitializationFailed")]
     public async Task InitializationFailed(string? error)
     {
+        Logger.LogError("BlazorMap reported initialization failure from JavaScript. Details: {Error}", error);
         _initialize.TrySetResult();
         await MapIsInitialized.InvokeAsync(false);
     }
@@ -143,8 +147,9 @@
             await Task.WhenAll(_initializedTasks);
             await MapIsInitialized.InvokeAsync(true);
         }
-        catch
+        catch (Exception ex)
         {
+            Logger.LogError(ex, "BlazorMap post-initialization task execution failed.");
             await MapIsInitialized.InvokeAsync(false);
         }
     }
@@ -265,10 +270,7 @@
         <div id="@ObjectsElementId">@JsonSerializer.Serialize(blazorMapObjects, options)</div>
     </div>
 
-    <script type="module">
-        import { initializeBlazorMap } from "./_content/JGUZDV.Blazor.Components.Map/js/BlazorMap/BlazorMapInitialize.js";
-        await initializeBlazorMap("@MapElementId", "@ObjectsElementId");
-    </script>
+    <script type="module" src="@($"./_content/JGUZDV.Blazor.Components.Map/js/BlazorMap/BlazorMapInitialize.js?mapElementId={MapElementId}&objectsElementId={ObjectsElementId}")"></script>
 }
 
 <link href='./_content/JGUZDV.Blazor.Components.Map/css/maplibre-gl.css' rel='stylesheet' />

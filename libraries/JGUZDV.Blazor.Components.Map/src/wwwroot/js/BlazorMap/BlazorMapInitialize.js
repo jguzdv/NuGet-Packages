@@ -28,3 +28,11 @@ export async function initializeBlazorMap(mapElementId, objectsElementId) {
         await map.setSourceData(key, additionalSourceData[key]);
     }
 }
+
+const params = new URL(import.meta.url).searchParams;
+const mapElementId = params.get("mapElementId");
+const objectsElementId = params.get("objectsElementId");
+
+if (mapElementId && objectsElementId) {
+    await initializeBlazorMap(mapElementId, objectsElementId);
+}

@@ -70,15 +70,3 @@ Hinweis: Diese Methoden sind nur im interaktiven Modus verfügbar (`IsServerRend
                AdditionalSourceData="_sourceData" />
 </div>
 ```
-
-## Frontend-Build (TypeScript)
-
-Manuell:
-
-```powershell
-cd libraries/JGUZDV.Blazor.Components.Map/src/typescript
-npm ci
-npm run build:Debug
-```
-
-`dotnet build` des Projekts führt den TypeScript-Build ebenfalls über die Targets in der `.csproj` aus.

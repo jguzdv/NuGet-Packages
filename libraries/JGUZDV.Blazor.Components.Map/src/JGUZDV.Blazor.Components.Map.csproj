@@ -1,50 +1,45 @@
 <Project Sdk="Microsoft.NET.Sdk.Razor">
 
-	<PropertyGroup>
-		<TargetFramework>net10.0</TargetFramework>
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
 
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>enable</Nullable>
-		<RootNamespace>JGUZDV.Blazor.Components.Map</RootNamespace>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>JGUZDV.Blazor.Components.Map</RootNamespace>
 
-		<PackageId>JGUZDV.Blazor.Components.Map</PackageId>
-		<IsPackable>true</IsPackable>
-		<Version>1.0.0-beta1.0.0</Version>
-		<Authors>Aylin Siebel</Authors>
-		<Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
-		<PackageDescription>Blazor-Komponentenbibliothek zur Darstellung einer Karte</PackageDescription>
+        <PackageId>JGUZDV.Blazor.Components.Map</PackageId>
+        <IsPackable>true</IsPackable>
+        <Version>1.0.0-beta1.0.0</Version>
+        <Authors>Aylin Siebel</Authors>
+        <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
+        <PackageDescription>Blazor-Komponentenbibliothek zur Darstellung einer Karte</PackageDescription>
 
-		<AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
-	</PropertyGroup>
+        <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    </PropertyGroup>
 
-	<ItemGroup>
-		<Content Remove="typescript/*.json" />
-	    <None Include="typescript/*.json" />
-	</ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="GeoJSON.Text" Version="1.1.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="10.0.4" />
+    </ItemGroup>
 
-	<ItemGroup>
-		<PackageReference Include="GeoJSON.Text" Version="1.1.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.4" />
-		<PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.4" />	
-	</ItemGroup>
-	
-	<ItemGroup>
-		<JSBundleInputs Include="typescript/**/*.ts" Exclude="node_modules/**; **/*.d.ts" />
-	</ItemGroup>
+    <ItemGroup>
+        <Content Remove="typescript/*.json" />
+        <None Include="typescript/*.json" />
+        <JSBundleInputs Include="typescript/**/*.ts" Exclude="node_modules/**; **/*.d.ts" />
+        <JSBundleConfigInputs Include="typescript/package.json;typescript/package-lock.json" />
+    </ItemGroup>
 
-	<ItemGroup>
-		<JSBundleConfigInputs Include="typescript/package.json;typescript/package-lock.json" />
-	</ItemGroup>
-	
-   <Target Name="EnsureNpmRestored" Condition="!Exists('typescript/node_modules')">
-		<Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />
-      <Exec Command="npm install" WorkingDirectory="typescript" />
-	</Target>
-	
-   <Target Name="RunJSBundler" BeforeTargets="GenerateStaticWebAssetsManifest" Inputs="@(JSBundleInputs);@(JSBundleConfigInputs)" Outputs="wwwroot/js/BlazorMap/BlazorMap.js;wwwroot/js/BlazorMap/BlazorMap.js.map" DependsOnTargets="EnsureNpmRestored">
-		<Delete Files="wwwroot/js/BlazorMap/BlazorMap.js;wwwroot/js/BlazorMap/BlazorMap.js.map" ContinueOnError="true" />
-		<Message Importance="normal" Text="Bundling JS files ..." />
-		<Exec Command="npm run build:$(Configuration)" WorkingDirectory="typescript" />
-	</Target>
+    <Target Name="EnsureNpmRestored" Inputs="typescript/package.json;typescript/package-lock.json" Outputs="typescript/node_modules/.package-lock.json;obj/npm/restore.stamp">
+        <Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />
+        <Exec Command="npm ci" WorkingDirectory="typescript" />
+        <MakeDir Directories="obj/npm" />
+        <Touch Files="obj/npm/restore.stamp" AlwaysCreate="true" />
+    </Target>
+
+    <Target Name="RunJSBundler" BeforeTargets="GenerateStaticWebAssetsManifest" Inputs="@(JSBundleInputs);@(JSBundleConfigInputs)" Outputs="wwwroot/js/BlazorMap/BlazorMap.js;wwwroot/js/BlazorMap/BlazorMap.js.map" DependsOnTargets="EnsureNpmRestored">
+        <Delete Files="wwwroot/js/BlazorMap/BlazorMap.js;wwwroot/js/BlazorMap/BlazorMap.js.map" ContinueOnError="true" />
+        <Message Importance="normal" Text="Bundling JS files ..." />
+        <Exec Command="npm run build:$(Configuration)" WorkingDirectory="typescript" />
+    </Target>
 
 </Project>
