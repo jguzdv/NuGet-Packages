@@ -12,6 +12,8 @@ class BlazorMap {
     constructor(
         private _dotnetRef,
         _rootElement: HTMLElement,
+        private _mapId: string,
+        isStatic: boolean,
         center: LngLatLike,
         zoom: number,
         baselayerurl: string,
@@ -38,7 +40,16 @@ class BlazorMap {
             map.on('dblclick', this.onMapClick);
             map.on('contextmenu', this.onMapClick);
 
+        } else {
+            map["scrollZoom"].disable();
+            map["boxZoom"].disable();
+            map["dragRotate"].disable();
+            map["dragPan"].disable();
+            map["keyboard"].disable();
+            map["doubleClickZoom"].disable();
+            map["touchZoomRotate"].disable();
         }
+
 
         map.on('load', () => {
             if (_dotnetRef) {
@@ -50,7 +61,7 @@ class BlazorMap {
         map.on('error', (e: any) => {
             if (this._initializationCompleted) {
                 return;
-            }
+    }
 
             if (_dotnetRef) {
                 this._dotnetRef.invokeMethodAsync("JSInitializationFailed", e?.error?.message ?? "Map initialization failed.");
@@ -133,6 +144,13 @@ class BlazorMap {
                         console.warn("Image" + image.id + " already added");
                     }
                 });
+
+                if (!image.id) {
+                    console.warn("Image without 'id' can not be added!");
+                }
+                if (!image.imgUrl) {
+                    console.warn(`Image definition ${image.id} is missing required properties. (Required properties: imgUrl).`);
+                }
             }
         } else {
             console.debug("No images were found!");
@@ -288,4 +306,5 @@ export function createMap(_dotnetRef, _rootElement: HTMLElement, center: LngLatL
     console.debug("Creating Map ...")
     return new BlazorMap(_dotnetRef, _rootElement, center, zoom, baselayerurl, maxBounds, spritePathPrefix);
 }
+
 

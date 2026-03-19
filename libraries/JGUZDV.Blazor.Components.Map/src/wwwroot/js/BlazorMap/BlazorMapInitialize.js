@@ -20,7 +20,7 @@ export async function initializeBlazorMap(mapElementId, objectsElementId) {
     let map = createMap(null, htmlwrapper, blazormapobjects.center, blazormapobjects.zoom, blazormapobjects.baseLayerStyleUrl, blazormapobjects.maxBounds, blazormapobjects.spritePathPrefix || "");
 
     for (let layer of blazormapobjects.additionalLayerStyleUrls || []) {
-        await map.addStyleLayerFromUrl(layer);
+    await map.addStyleLayerFromUrl(layer);
     }
 
     let additionalSourceData = blazormapobjects.additionalSourceData || {};

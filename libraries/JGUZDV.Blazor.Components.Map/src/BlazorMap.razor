@@ -97,20 +97,20 @@
             _jsModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/JGUZDV.Blazor.Components.Map/js/BlazorMap/BlazorMap.js").AsTask();
             _jsInstance = await _jsModule.InvokeAsync<IJSObjectReference>("createMap", _dotNetObjectRef, HtmlWrapper, Center, Zoom, BaseLayerStyleUrl, MaxBounds, PathPrefix);
 
-            if (AdditionalLayerStyleUrls != null)
+        if (AdditionalLayerStyleUrls != null)
+        {
+            foreach (var additionalLayerUrl in AdditionalLayerStyleUrls)
             {
-                foreach (var additionalLayerUrl in AdditionalLayerStyleUrls)
-                {
-                    _initializedTasks.Add(AddStyleLayerFromUrl(additionalLayerUrl));
-                }
+                _initializedTasks.Add(AddStyleLayerFromUrl(additionalLayerUrl));
             }
+        }
 
-            if (AdditionalSourceData != null)
+        if (AdditionalSourceData != null)
+        {
+            foreach (var additionalSourceData in AdditionalSourceData)
             {
-                foreach (var additionalSourceData in AdditionalSourceData)
-                {
-                    _initializedTasks.Add(SetSourceData(additionalSourceData.Key, additionalSourceData.Value));
-                }
+                _initializedTasks.Add(SetSourceData(additionalSourceData.Key, additionalSourceData.Value));
+            }
             }
         }
         catch (Exception ex)
@@ -137,7 +137,7 @@
         }
 
         await MapIsInitialized.InvokeAsync(initialized);
-    }
+        }
 
     [JSInvokable("JSInitializationFailed")]
     public async Task InitializationFailed(string? error)
@@ -267,6 +267,7 @@
         await _initialize.Task;
         await _jsInstance!.InvokeVoidAsync("removeLayer", layerId);
     }
+
 }
 
 @if (IsServerRendered)

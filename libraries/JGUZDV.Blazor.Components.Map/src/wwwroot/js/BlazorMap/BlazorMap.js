@@ -23,6 +23,26 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
   mod
 ));
+var __async = (__this, __arguments, generator) => {
+  return new Promise((resolve, reject) => {
+    var fulfilled = (value) => {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var rejected = (value) => {
+      try {
+        step(generator.throw(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+    step((generator = generator.apply(__this, __arguments)).next());
+  });
+};
 
 // node_modules/maplibre-gl/dist/maplibre-gl.js
 var require_maplibre_gl = __commonJS({
@@ -197,9 +217,9 @@ var require_maplibre_gl = __commonJS({
               }
               const r2 = e2.getImageData(0, 0, t2, t2).data;
               for (let e3 = 0; e3 < t2 * t2 * 4; e3++) if (e3 % 4 != 3 && r2[e3] !== e3) {
-                c = true;
-                break;
-              }
+                  c = true;
+                  break;
+                }
             }
           }
           return c || false;
@@ -268,9 +288,9 @@ var require_maplibre_gl = __commonJS({
                 const a3 = 4 * Math.max(-e3, 0), s3 = (Math.max(0, r3) - r3) * n3 * 4 + a3, o3 = 4 * n3, l3 = Math.max(0, e3), u2 = Math.max(0, r3);
                 return { rect: { x: l3, y: u2, width: Math.min(t3.width, e3 + n3) - l3, height: Math.min(t3.height, r3 + i3) - u2 }, layout: [{ offset: s3, stride: o3 }] };
               }(t2, r2, n2, i2, a2)), o2) for (let t3 = 0; t3 < l2.length; t3 += 4) {
-                const e3 = l2[t3];
-                l2[t3] = l2[t3 + 2], l2[t3 + 2] = e3;
-              }
+                  const e3 = l2[t3];
+                  l2[t3] = l2[t3 + 2], l2[t3 + 2] = e3;
+                }
               return l2;
             } finally {
               e2.close();
@@ -332,10 +352,10 @@ var require_maplibre_gl = __commonJS({
               if ((r3.status >= 200 && r3.status < 300 || 0 === r3.status) && null !== r3.response) {
                 let n2 = r3.response;
                 if ("json" === t3.type) try {
-                  n2 = JSON.parse(r3.response);
-                } catch (t4) {
-                  return e3(t4);
-                }
+                    n2 = JSON.parse(r3.response);
+                  } catch (t4) {
+                    return e3(t4);
+                  }
                 e3(null, n2, r3.getResponseHeader("Cache-Control"), r3.getResponseHeader("Expires"));
               } else {
                 const n2 = new Blob([r3.response], { type: r3.getResponseHeader("Content-Type") });
@@ -594,12 +614,12 @@ var require_maplibre_gl = __commonJS({
                 if ("  " === c2 || "  /" === c2 || ",," === c2 || ",,," === c2) {
                   const t5 = [+e4, Gt(+i2, 0, 100), Gt(+s2, 0, 100), l2 ? Kt(+l2, u2) : 1];
                   if (Jt(t5)) return function([t6, e5, r3, n3]) {
-                    function i3(n4) {
-                      const i4 = (n4 + t6 / 30) % 12, a3 = e5 * Math.min(r3, 1 - r3);
-                      return r3 - a3 * Math.max(-1, Math.min(i4 - 3, 9 - i4, 1));
-                    }
-                    return t6 = Dt(t6), e5 /= 100, r3 /= 100, [i3(0), i3(8), i3(4), n3];
-                  }(t5);
+                      function i3(n4) {
+                        const i4 = (n4 + t6 / 30) % 12, a3 = e5 * Math.min(r3, 1 - r3);
+                        return r3 - a3 * Math.max(-1, Math.min(i4 - 3, 9 - i4, 1));
+                      }
+                      return t6 = Dt(t6), e5 /= 100, r3 /= 100, [i3(0), i3(8), i3(4), n3];
+                    }(t5);
                 }
               }
             }(t2);
@@ -1100,9 +1120,9 @@ var require_maplibre_gl = __commonJS({
         function Ve(t2, e2, r2, n2) {
           const i2 = Math.pow(2, n2.z) * xe, a2 = [n2.x * xe, n2.y * xe], s2 = [];
           for (const n3 of t2) for (const t3 of n3) {
-            const n4 = [t3.x + a2[0], t3.y + a2[1]];
-            Pe(n4, e2, r2, i2), s2.push(n4);
-          }
+              const n4 = [t3.x + a2[0], t3.y + a2[1]];
+              Pe(n4, e2, r2, i2), s2.push(n4);
+            }
           return s2;
         }
         function Ee(t2, e2, r2, n2) {
@@ -1131,9 +1151,9 @@ var require_maplibre_gl = __commonJS({
             if (ae(t2[1])) {
               const e3 = t2[1];
               if ("FeatureCollection" === e3.type) for (let t3 = 0; t3 < e3.features.length; ++t3) {
-                const r2 = e3.features[t3].geometry.type;
+                  const r2 = e3.features[t3].geometry.type;
                 if ("Polygon" === r2 || "MultiPolygon" === r2) return new Fe(e3, e3.features[t3].geometry);
-              }
+                }
               else if ("Feature" === e3.type) {
                 const t3 = e3.geometry.type;
                 if ("Polygon" === t3 || "MultiPolygon" === t3) return new Fe(e3, e3.geometry);
@@ -1144,33 +1164,33 @@ var require_maplibre_gl = __commonJS({
           evaluate(t2) {
             if (null != t2.geometry() && null != t2.canonicalID()) {
               if ("Point" === t2.geometryType()) return function(t3, e2) {
-                const r2 = [1 / 0, 1 / 0, -1 / 0, -1 / 0], n2 = [1 / 0, 1 / 0, -1 / 0, -1 / 0], i2 = t3.canonicalID();
-                if ("Polygon" === e2.type) {
-                  const a2 = Ce(e2.coordinates, n2, i2), s2 = Ve(t3.geometry(), r2, n2, i2);
+                  const r2 = [1 / 0, 1 / 0, -1 / 0, -1 / 0], n2 = [1 / 0, 1 / 0, -1 / 0, -1 / 0], i2 = t3.canonicalID();
+                  if ("Polygon" === e2.type) {
+                    const a2 = Ce(e2.coordinates, n2, i2), s2 = Ve(t3.geometry(), r2, n2, i2);
                   if (!be(r2, n2)) return false;
                   for (const t4 of s2) if (!Ae(t4, a2)) return false;
-                }
-                if ("MultiPolygon" === e2.type) {
-                  const a2 = Be(e2.coordinates, n2, i2), s2 = Ve(t3.geometry(), r2, n2, i2);
+                  }
+                  if ("MultiPolygon" === e2.type) {
+                    const a2 = Be(e2.coordinates, n2, i2), s2 = Ve(t3.geometry(), r2, n2, i2);
                   if (!be(r2, n2)) return false;
                   for (const t4 of s2) if (!Se(t4, a2)) return false;
-                }
-                return true;
-              }(t2, this.geometries);
+                  }
+                  return true;
+                }(t2, this.geometries);
               if ("LineString" === t2.geometryType()) return function(t3, e2) {
-                const r2 = [1 / 0, 1 / 0, -1 / 0, -1 / 0], n2 = [1 / 0, 1 / 0, -1 / 0, -1 / 0], i2 = t3.canonicalID();
-                if ("Polygon" === e2.type) {
-                  const a2 = Ce(e2.coordinates, n2, i2), s2 = Ee(t3.geometry(), r2, n2, i2);
+                  const r2 = [1 / 0, 1 / 0, -1 / 0, -1 / 0], n2 = [1 / 0, 1 / 0, -1 / 0, -1 / 0], i2 = t3.canonicalID();
+                  if ("Polygon" === e2.type) {
+                    const a2 = Ce(e2.coordinates, n2, i2), s2 = Ee(t3.geometry(), r2, n2, i2);
                   if (!be(r2, n2)) return false;
                   for (const t4 of s2) if (!ze(t4, a2)) return false;
-                }
-                if ("MultiPolygon" === e2.type) {
-                  const a2 = Be(e2.coordinates, n2, i2), s2 = Ee(t3.geometry(), r2, n2, i2);
+                  }
+                  if ("MultiPolygon" === e2.type) {
+                    const a2 = Be(e2.coordinates, n2, i2), s2 = Ee(t3.geometry(), r2, n2, i2);
                   if (!be(r2, n2)) return false;
                   for (const t4 of s2) if (!Me(t4, a2)) return false;
-                }
-                return true;
-              }(t2, this.geometries);
+                  }
+                  return true;
+                }(t2, this.geometries);
             }
             return false;
           }
@@ -1229,13 +1249,13 @@ var require_maplibre_gl = __commonJS({
                 s3.push(a4);
               }
               if (!l2) if (Array.isArray(n3) && n3.length !== s3.length) o2.error(`Expected ${n3.length} arguments, but found ${s3.length} instead.`);
-              else {
-                for (let t3 = 0; t3 < s3.length; t3++) {
-                  const e3 = Array.isArray(n3) ? n3[t3] : n3.type, r3 = s3[t3];
-                  o2.concat(t3 + 1).checkSubtype(e3, r3.type);
-                }
+                else {
+                  for (let t3 = 0; t3 < s3.length; t3++) {
+                    const e3 = Array.isArray(n3) ? n3[t3] : n3.type, r3 = s3[t3];
+                    o2.concat(t3 + 1).checkSubtype(e3, r3.type);
+                  }
                 if (0 === o2.errors.length) return new $e(r2, i2, a3, s3);
-              }
+                }
             }
             if (1 === s2.length) e2.errors.push(...o2.errors);
             else {
@@ -1301,11 +1321,11 @@ var require_maplibre_gl = __commonJS({
           let n2, i2, a2 = 0, s2 = r2, o2 = 0;
           for (; a2 <= s2; ) if (o2 = Math.floor((a2 + s2) / 2), n2 = t2[o2], i2 = t2[o2 + 1], n2 <= e2) {
             if (o2 === r2 || e2 < i2) return o2;
-            a2 = o2 + 1;
-          } else {
+              a2 = o2 + 1;
+            } else {
             if (!(n2 > e2)) throw new ue("Input is not a number.");
-            s2 = o2 - 1;
-          }
+              s2 = o2 - 1;
+            }
           return 0;
         }
         class qe {
@@ -2221,6 +2241,12 @@ var require_maplibre_gl = __commonJS({
           if (!Array.isArray(t2)) return false;
           if ("within" === t2[0]) return true;
           for (let e2 = 1; e2 < t2.length; e2++) if (Kr(t2[e2])) return true;
+            return false;
+          if ("within" === t2[0])
+            return true;
+          for (let e2 = 1; e2 < t2.length; e2++)
+            if (Kr(t2[e2]))
+              return true;
           return false;
         }
         function Gr(t2) {
@@ -2469,8 +2495,8 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               en(e3.id) === o2 && (t3 = e3);
             }), t3 ? t3.ref ? e2.push(new ot(n2, r2.ref, "ref cannot reference another ref layer")) : s2 = en(t3.type) : e2.push(new ot(n2, r2.ref, `ref layer "${o2}" not found`));
           } else if ("background" !== s2) if (r2.source) {
-            const t3 = i2.sources && i2.sources[r2.source], a3 = t3 && en(t3.type);
-            t3 ? "vector" === a3 && "raster" === s2 ? e2.push(new ot(n2, r2.source, `layer "${r2.id}" requires a raster source`)) : "raster-dem" !== a3 && "hillshade" === s2 ? e2.push(new ot(n2, r2.source, `layer "${r2.id}" requires a raster-dem source`)) : "raster" === a3 && "raster" !== s2 ? e2.push(new ot(n2, r2.source, `layer "${r2.id}" requires a vector source`)) : "vector" !== a3 || r2["source-layer"] ? "raster-dem" === a3 && "hillshade" !== s2 ? e2.push(new ot(n2, r2.source, "raster-dem source can only be used with layer type 'hillshade'.")) : "line" !== s2 || !r2.paint || !r2.paint["line-gradient"] || "geojson" === a3 && t3.lineMetrics || e2.push(new ot(n2, r2, `layer "${r2.id}" specifies a line-gradient, which requires a GeoJSON source with \`lineMetrics\` enabled.`)) : e2.push(new ot(n2, r2, `layer "${r2.id}" must specify a "source-layer"`)) : e2.push(new ot(n2, r2.source, `source "${r2.source}" not found`));
+              const t3 = i2.sources && i2.sources[r2.source], a3 = t3 && en(t3.type);
+              t3 ? "vector" === a3 && "raster" === s2 ? e2.push(new ot(n2, r2.source, `layer "${r2.id}" requires a raster source`)) : "raster-dem" !== a3 && "hillshade" === s2 ? e2.push(new ot(n2, r2.source, `layer "${r2.id}" requires a raster-dem source`)) : "raster" === a3 && "raster" !== s2 ? e2.push(new ot(n2, r2.source, `layer "${r2.id}" requires a vector source`)) : "vector" !== a3 || r2["source-layer"] ? "raster-dem" === a3 && "hillshade" !== s2 ? e2.push(new ot(n2, r2.source, "raster-dem source can only be used with layer type 'hillshade'.")) : "line" !== s2 || !r2.paint || !r2.paint["line-gradient"] || "geojson" === a3 && t3.lineMetrics || e2.push(new ot(n2, r2, `layer "${r2.id}" specifies a line-gradient, which requires a GeoJSON source with \`lineMetrics\` enabled.`)) : e2.push(new ot(n2, r2, `layer "${r2.id}" must specify a "source-layer"`)) : e2.push(new ot(n2, r2.source, `source "${r2.source}" not found`));
           } else e2.push(new ot(n2, r2, 'missing required property "source"'));
           return e2 = e2.concat(nn({ key: n2, value: r2, valueSpec: a2.layer, style: t2.style, styleSpec: t2.styleSpec, validateSpec: t2.validateSpec, objectElementValidators: { "*": () => [], type: () => t2.validateSpec({ key: `${n2}.type`, value: r2.type, valueSpec: a2.layer.type, style: t2.style, styleSpec: t2.styleSpec, validateSpec: t2.validateSpec, object: r2, objectKey: "type" }), filter: cn, layout: (t3) => nn({ layer: r2, key: t3.key, value: t3.value, style: t3.style, styleSpec: t3.styleSpec, validateSpec: t3.validateSpec, objectElementValidators: { "*": (t4) => dn(lt({ layerType: s2 }, t4)) } }), paint: (t3) => nn({ layer: r2, key: t3.key, value: t3.value, style: t3.style, styleSpec: t3.styleSpec, validateSpec: t3.validateSpec, objectElementValidators: { "*": (t4) => fn(lt({ layerType: s2 }, t4)) } }) } })), e2;
         }
@@ -2509,9 +2535,9 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               }({ sourceName: r2, value: e2, style: t2.style, styleSpec: n2, validateSpec: a2 }), o2;
             case "geojson":
               if (o2 = nn({ key: r2, value: e2, valueSpec: n2.source_geojson, style: i2, styleSpec: n2, validateSpec: a2, objectElementValidators: gn }), e2.cluster) for (const t3 in e2.clusterProperties) {
-                const [n3, i3] = e2.clusterProperties[t3], s3 = "string" == typeof n3 ? [n3, ["accumulated"], ["get", t3]] : n3;
-                o2.push(...ln({ key: `${r2}.${t3}.map`, value: i3, validateSpec: a2, expressionContext: "cluster-map" })), o2.push(...ln({ key: `${r2}.${t3}.reduce`, value: s3, validateSpec: a2, expressionContext: "cluster-reduce" }));
-              }
+                  const [n3, i3] = e2.clusterProperties[t3], s3 = "string" == typeof n3 ? [n3, ["accumulated"], ["get", t3]] : n3;
+                  o2.push(...ln({ key: `${r2}.${t3}.map`, value: i3, validateSpec: a2, expressionContext: "cluster-map" })), o2.push(...ln({ key: `${r2}.${t3}.reduce`, value: s3, validateSpec: a2, expressionContext: "cluster-reduce" }));
+                }
               return o2;
             case "video":
               return nn({ key: r2, value: e2, valueSpec: n2.source_video, style: i2, validateSpec: a2, styleSpec: n2 });
@@ -2542,6 +2568,11 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           if (void 0 === e2) return a2;
           if ("object" !== s2) return a2 = a2.concat([new ot("terrain", e2, `object expected, ${s2} found`)]), a2;
           for (const s3 in e2) a2 = a2.concat(n2[s3] ? t2.validateSpec({ key: s3, value: e2[s3], valueSpec: n2[s3], validateSpec: t2.validateSpec, style: i2, styleSpec: r2 }) : [new ot(s3, e2[s3], `unknown property "${s3}"`)]);
+            return a2;
+          if ("object" !== s2)
+            return a2 = a2.concat([new ot("terrain", e2, `object expected, ${s2} found`)]), a2;
+          for (const s3 in e2)
+            a2 = a2.concat(n2[s3] ? t2.validateSpec({ key: s3, value: e2[s3], valueSpec: n2[s3], validateSpec: t2.validateSpec, style: i2, styleSpec: r2 }) : [new ot(s3, e2[s3], `unknown property "${s3}"`)]);
           return a2;
         }
         function wn(t2) {
@@ -2668,9 +2699,9 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           _forEachCell(t2, e2, r2, n2, i2, a2, s2, o2) {
             const l2 = this._convertToCellCoord(t2), u2 = this._convertToCellCoord(e2), c2 = this._convertToCellCoord(r2), h2 = this._convertToCellCoord(n2);
             for (let p2 = l2; p2 <= c2; p2++) for (let l3 = u2; l3 <= h2; l3++) {
-              const u3 = this.d * l3 + p2;
+                const u3 = this.d * l3 + p2;
               if ((!o2 || o2(this._convertFromCellCoord(p2), this._convertFromCellCoord(l3), this._convertFromCellCoord(p2 + 1), this._convertFromCellCoord(l3 + 1))) && i2.call(this, t2, e2, r2, n2, u3, a2, s2, o2)) return;
-            }
+              }
           }
           _convertFromCellCoord(t2) {
             return (t2 - this.padding) / this.scale;
@@ -4173,9 +4204,9 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               const i2 = this.binders[n2];
               if (i2 instanceof Ga || i2 instanceof Ja || i2 instanceof Ya) {
                 for (const a2 of i2.uniformNames) if (e2[a2]) {
-                  const s2 = i2.getBinding(t2, e2[a2], a2);
-                  r2.push({ name: a2, property: n2, binding: s2 });
-                }
+                    const s2 = i2.getBinding(t2, e2[a2], a2);
+                    r2.push({ name: a2, property: n2, binding: s2 });
+                  }
               }
             }
             return r2;
@@ -4298,11 +4329,11 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }
           addFeature(t2, e2, r2, n2) {
             for (const r3 of e2) for (const e3 of r3) {
-              const r4 = e3.x, n3 = e3.y;
+                const r4 = e3.x, n3 = e3.y;
               if (r4 < 0 || r4 >= rs || n3 < 0 || n3 >= rs) continue;
-              const i2 = this.segments.prepareSegment(4, this.layoutVertexArray, this.indexArray, t2.sortKey), a2 = i2.vertexLength;
-              os(this.layoutVertexArray, r4, n3, -1, -1), os(this.layoutVertexArray, r4, n3, 1, -1), os(this.layoutVertexArray, r4, n3, 1, 1), os(this.layoutVertexArray, r4, n3, -1, 1), this.indexArray.emplaceBack(a2, a2 + 1, a2 + 2), this.indexArray.emplaceBack(a2, a2 + 3, a2 + 2), i2.vertexLength += 4, i2.primitiveLength += 2;
-            }
+                const i2 = this.segments.prepareSegment(4, this.layoutVertexArray, this.indexArray, t2.sortKey), a2 = i2.vertexLength;
+                os(this.layoutVertexArray, r4, n3, -1, -1), os(this.layoutVertexArray, r4, n3, 1, -1), os(this.layoutVertexArray, r4, n3, 1, 1), os(this.layoutVertexArray, r4, n3, -1, 1), this.indexArray.emplaceBack(a2, a2 + 1, a2 + 2), this.indexArray.emplaceBack(a2, a2 + 3, a2 + 2), i2.vertexLength += 4, i2.primitiveLength += 2;
+              }
             this.programConfigurations.populatePaintArrays(this.layoutVertexArray.length, t2, r2, {}, n2);
           }
         }
@@ -4432,11 +4463,11 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               return t3.map((t4) => Fs(t4, e3));
             }(l2, o2), p2 = c2 ? u2 * s2 : u2;
             for (const t3 of n2) for (const e3 of t3) {
-              const t4 = c2 ? e3 : Fs(e3, o2);
-              let r3 = p2;
-              const n3 = Vs([], [e3.x, e3.y, 0, 1], o2);
+                const t4 = c2 ? e3 : Fs(e3, o2);
+                let r3 = p2;
+                const n3 = Vs([], [e3.x, e3.y, 0, 1], o2);
               if ("viewport" === this.paint.get("circle-pitch-scale") && "map" === this.paint.get("circle-pitch-alignment") ? r3 *= n3[3] / a2.cameraToCenterDistance : "map" === this.paint.get("circle-pitch-scale") && "viewport" === this.paint.get("circle-pitch-alignment") && (r3 *= a2.cameraToCenterDistance / n3[3]), cs(h2, t4, r3)) return true;
-            }
+              }
             return false;
           }
         }
@@ -4515,9 +4546,9 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             i2.data[r3 + n3 + 0] = Math.floor(255 * s2.r / s2.a), i2.data[r3 + n3 + 1] = Math.floor(255 * s2.g / s2.a), i2.data[r3 + n3 + 2] = Math.floor(255 * s2.b / s2.a), i2.data[r3 + n3 + 3] = Math.floor(255 * s2.a);
           };
           if (t2.clips) for (let e3 = 0, i3 = 0; e3 < n2; ++e3, i3 += 4 * r2) for (let n3 = 0, s2 = 0; n3 < r2; n3++, s2 += 4) {
-            const o2 = n3 / (r2 - 1), { start: l2, end: u2 } = t2.clips[e3];
-            a2(i3, s2, l2 * (1 - o2) + u2 * o2);
-          }
+                const o2 = n3 / (r2 - 1), { start: l2, end: u2 } = t2.clips[e3];
+                a2(i3, s2, l2 * (1 - o2) + u2 * o2);
+              }
           else for (let t3 = 0, e3 = 0; t3 < r2; t3++, e3 += 4) a2(0, e3, t3 / (r2 - 1));
           return i2;
         }
@@ -4617,10 +4648,10 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               }(i3);
             }(t2, n2, i2, a2);
             for (var o2, l2, u2 = t2; t2.prev !== t2.next; ) if (o2 = t2.prev, l2 = t2.next, a2 ? ro(t2, n2, i2, a2) : eo(t2)) e2.push(o2.i / r2 | 0), e2.push(t2.i / r2 | 0), e2.push(l2.i / r2 | 0), wo(t2), t2 = l2.next, u2 = l2.next;
-            else if ((t2 = l2) === u2) {
-              s2 ? 1 === s2 ? to(t2 = no(Qs(t2), e2, r2), e2, r2, n2, i2, a2, 2) : 2 === s2 && io(t2, e2, r2, n2, i2, a2) : to(Qs(t2), e2, r2, n2, i2, a2, 1);
-              break;
-            }
+              else if ((t2 = l2) === u2) {
+                s2 ? 1 === s2 ? to(t2 = no(Qs(t2), e2, r2), e2, r2, n2, i2, a2, 2) : 2 === s2 && io(t2, e2, r2, n2, i2, a2) : to(Qs(t2), e2, r2, n2, i2, a2, 1);
+                break;
+              }
           }
         }
         function eo(t2) {
@@ -5103,12 +5134,12 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               if (n3.vertexLength + e3 > za.MAX_VERTEX_ARRAY_LENGTH && (n3 = this.segments.prepareSegment(e3, this.layoutVertexArray, this.indexArray)), "Polygon" !== Qo[t2.type]) continue;
               const i3 = [], s2 = [], o2 = n3.vertexLength;
               for (const t3 of r3) if (0 !== t3.length) {
-                t3 !== r3[0] && s2.push(i3.length / 2);
-                for (let e4 = 0; e4 < t3.length; e4++) {
-                  const r4 = t3[e4];
-                  el(this.layoutVertexArray, r4.x, r4.y, 0, 0, 1, 1, 0), a2.x += r4.x, a2.y += r4.y, a2.vertexCount += 1, i3.push(r4.x), i3.push(r4.y);
+                  t3 !== r3[0] && s2.push(i3.length / 2);
+                  for (let e4 = 0; e4 < t3.length; e4++) {
+                    const r4 = t3[e4];
+                    el(this.layoutVertexArray, r4.x, r4.y, 0, 0, 1, 1, 0), a2.x += r4.x, a2.y += r4.y, a2.vertexCount += 1, i3.push(r4.x), i3.push(r4.y);
+                  }
                 }
-              }
               const l2 = So(i3, s2);
               for (let t3 = 0; t3 < l2.length; t3 += 3) this.indexArray.emplaceBack(o2 + l2[t3], o2 + l2[t3 + 2], o2 + l2[t3 + 1]);
               n3.primitiveLength += l2.length / 3, n3.vertexLength += e3;
@@ -5741,15 +5772,15 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           const n2 = [{ x: 0, y: 0, w: Math.max(Math.ceil(Math.sqrt(e2 / 0.95)), r2), h: 1 / 0 }];
           let i2 = 0, a2 = 0;
           for (const e3 of t2) for (let t3 = n2.length - 1; t3 >= 0; t3--) {
-            const r3 = n2[t3];
-            if (!(e3.w > r3.w || e3.h > r3.h)) {
-              if (e3.x = r3.x, e3.y = r3.y, a2 = Math.max(a2, e3.y + e3.h), i2 = Math.max(i2, e3.x + e3.w), e3.w === r3.w && e3.h === r3.h) {
-                const e4 = n2.pop();
-                t3 < n2.length && (n2[t3] = e4);
+              const r3 = n2[t3];
+              if (!(e3.w > r3.w || e3.h > r3.h)) {
+                if (e3.x = r3.x, e3.y = r3.y, a2 = Math.max(a2, e3.y + e3.h), i2 = Math.max(i2, e3.x + e3.w), e3.w === r3.w && e3.h === r3.h) {
+                  const e4 = n2.pop();
+                  t3 < n2.length && (n2[t3] = e4);
               } else e3.h === r3.h ? (r3.x += e3.w, r3.w -= e3.w) : e3.w === r3.w ? (r3.y += e3.h, r3.h -= e3.h) : (n2.push({ x: r3.x + e3.w, y: r3.y, w: r3.w - e3.w, h: e3.h }), r3.y += e3.h, r3.h -= e3.h);
-              break;
+                break;
+              }
             }
-          }
           return { w: i2, h: a2, fill: e2 / (i2 * a2) || 0 };
         }
         const lu = 1;
@@ -5909,11 +5940,11 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               t3.text = e3[0], t3.sectionIndex = e3[1], t3.sections = g2.sections, x2.push(t3);
             }
           } else x2 = function(t2, e3) {
-            const r3 = [], n3 = t2.text;
-            let i3 = 0;
+              const r3 = [], n3 = t2.text;
+              let i3 = 0;
             for (const n4 of e3) r3.push(t2.substring(i3, n4)), i3 = n4;
-            return i3 < n3.length && r3.push(t2.substring(i3, n3.length)), r3;
-          }(g2, Au(g2, c2, s2, r2, i2, d2, y2));
+              return i3 < n3.length && r3.push(t2.substring(i3, n3.length)), r3;
+            }(g2, Au(g2, c2, s2, r2, i2, d2, y2));
           const w2 = [], _2 = { positionedLines: w2, text: g2.toString(), top: h2[1], bottom: h2[1], left: h2[0], right: h2[0], writingMode: p2, iconsInText: false, verticalizable: false };
           return function(e3, r3, n3, i3, a3, s3, o3, l3, u3, c3, h3, p3) {
             let f3 = 0, d3 = pu, y3 = 0, m3 = 0;
@@ -6144,9 +6175,9 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }
           calculateGlyphDependencies(t2, e2, r2, n2, i2) {
             for (let a2 = 0; a2 < t2.length; a2++) if (e2[t2.charCodeAt(a2)] = true, (r2 || n2) && i2) {
-              const r3 = Pl[t2.charAt(a2)];
-              r3 && (e2[r3.charCodeAt(0)] = true);
-            }
+                const r3 = Pl[t2.charAt(a2)];
+                r3 && (e2[r3.charCodeAt(0)] = true);
+              }
           }
           populate(e2, r2, n2) {
             const i2 = this.layers[0], a2 = i2.layout, s2 = a2.get("text-font"), o2 = a2.get("text-field"), l2 = a2.get("icon-image"), u2 = ("constant" !== o2.value.kind || o2.value.value instanceof Qt && !o2.value.value.isEmpty() || o2.value.value.toString().length > 0) && ("constant" !== s2.value.kind || s2.value.value.length > 0), c2 = "constant" !== l2.value.kind || !!l2.value.value || Object.keys(l2.parameters).length > 0, h2 = a2.get("symbol-sort-key");
@@ -6170,10 +6201,10 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
                 const e4 = s2.evaluate(g2, {}, n2).join(","), r4 = "viewport" !== a2.get("text-rotation-alignment") && "point" !== a2.get("symbol-placement");
                 this.allowVerticalPlacement = this.writingModes && this.writingModes.indexOf(t.ai.vertical) >= 0;
                 for (const t2 of x2.sections) if (t2.image) p2[t2.image.name] = true;
-                else {
-                  const n3 = qn(x2.toString()), i3 = t2.fontStack || e4, a3 = f2[i3] = f2[i3] || {};
-                  this.calculateGlyphDependencies(t2.text, a3, r4, this.allowVerticalPlacement, n3);
-                }
+                  else {
+                    const n3 = qn(x2.toString()), i3 = t2.fontStack || e4, a3 = f2[i3] = f2[i3] || {};
+                    this.calculateGlyphDependencies(t2.text, a3, r4, this.allowVerticalPlacement, n3);
+                  }
               }
             }
             "line" === a2.get("symbol-placement") && (this.features = function(t2) {
@@ -6534,6 +6565,9 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           return t2 / nc(e2);
         }
         function oc(t2) {
+          return 360 * t2 - 180;
+        }
+        function lc(t2) {
           return 360 / Math.PI * Math.atan(Math.exp((180 - 360 * t2) * Math.PI / 180)) - 90;
         }
         class lc {
@@ -6672,9 +6706,9 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             for (let t3 = 0; t3 < o2; t3++) this.data[this._idx(-1, t3)] = this.data[this._idx(0, t3)], this.data[this._idx(o2, t3)] = this.data[this._idx(o2 - 1, t3)], this.data[this._idx(t3, -1)] = this.data[this._idx(t3, 0)], this.data[this._idx(t3, o2)] = this.data[this._idx(t3, o2 - 1)];
             this.data[this._idx(-1, -1)] = this.data[this._idx(0, 0)], this.data[this._idx(o2, -1)] = this.data[this._idx(o2 - 1, 0)], this.data[this._idx(-1, o2)] = this.data[this._idx(0, o2 - 1)], this.data[this._idx(o2, o2)] = this.data[this._idx(o2 - 1, o2 - 1)], this.min = Number.MAX_SAFE_INTEGER, this.max = Number.MIN_SAFE_INTEGER;
             for (let t3 = 0; t3 < o2; t3++) for (let e3 = 0; e3 < o2; e3++) {
-              const r3 = this.get(t3, e3);
-              r3 > this.max && (this.max = r3), r3 < this.min && (this.min = r3);
-            }
+                const r3 = this.get(t3, e3);
+                r3 > this.max && (this.max = r3), r3 < this.min && (this.min = r3);
+              }
           }
           get(t2, e2) {
             const r2 = new Uint8Array(this.data.buffer), n2 = 4 * this._idx(t2, e2);
@@ -7231,9 +7265,9 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               const W2 = Kc(l4, w3, k3), [Q2, tt2] = function(e4, r4) {
                 const n4 = e4.length, i4 = null == r4 ? void 0 : r4.values;
                 if ((null == i4 ? void 0 : i4.length) > 0) for (let r5 = 0; r5 < i4.length; r5 += 2) {
-                  const n5 = i4[r5 + 1];
-                  e4.emplaceBack(t.aq[i4[r5]], n5[0], n5[1]);
-                }
+                    const n5 = i4[r5 + 1];
+                    e4.emplaceBack(t.aq[i4[r5]], n5[0], n5[1]);
+                  }
                 return [n4, e4.length];
               }(e3.textAnchorOffsets, W2);
               e3.symbolInstances.emplaceBack(r3.x, r3.y, D2.right >= 0 ? D2.right : -1, D2.center >= 0 ? D2.center : -1, D2.left >= 0 ? D2.left : -1, D2.vertical || -1, $2, L2, O2, R2, q2, j2, N2, Z2, K2, G2, J2, c3, F2, T2, V2, E2, H2, 0, f3, X2, Q2, tt2);
@@ -7242,16 +7276,16 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           if ("line" === z2) for (const t2 of wc(r2.geometry, 0, 0, rs, rs)) {
             const r3 = Mc(t2, b2, S2, n2.vertical || y2, i2, 24, x2, e2.overscaling, rs);
             for (const n3 of r3) y2 && Hc(e2, y2.text, M2, n3) || P2(t2, n3);
-          }
+            }
           else if ("line-center" === z2) {
             for (const t2 of r2.geometry) if (t2.length > 1) {
               const e3 = zc(t2, S2, n2.vertical || y2, i2, 24, x2);
-              e3 && P2(t2, e3);
-            }
+                e3 && P2(t2, e3);
+              }
           } else if ("Polygon" === r2.type) for (const t2 of Co(r2.geometry, 0)) {
             const e3 = Oc(t2, 16);
             P2(t2[0], new _c(e3.x, e3.y, 0));
-          }
+            }
           else if ("LineString" === r2.type) for (const t2 of r2.geometry) P2(t2, new _c(t2[0].x, t2[0].y, 0));
           else if ("Point" === r2.type) for (const t2 of r2.geometry) for (const e3 of t2) P2([e3], new _c(e3.x, e3.y, 0));
         }
@@ -7260,28 +7294,28 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             const u3 = n3.layout.get("text-rotate").evaluate(s3, {}) * Math.PI / 180, c3 = [];
             for (const t4 of e3.positionedLines) for (const n4 of t4.positionedGlyphs) {
               if (!n4.rect) continue;
-              const s4 = n4.rect || {};
-              let h3 = su + 1, p3 = true, f3 = 1, d3 = 0;
-              const y3 = (i3 || l3) && n4.vertical, m3 = n4.metrics.advance * n4.scale / 2;
-              if (l3 && e3.verticalizable && (d3 = t4.lineOffset / 2 - (n4.imageName ? -(Vl - n4.metrics.width * n4.scale) / 2 : (n4.scale - 1) * Vl)), n4.imageName) {
-                const t5 = o3[n4.imageName];
-                p3 = t5.sdf, f3 = t5.pixelRatio, h3 = lu / f3;
+                const s4 = n4.rect || {};
+                let h3 = su + 1, p3 = true, f3 = 1, d3 = 0;
+                const y3 = (i3 || l3) && n4.vertical, m3 = n4.metrics.advance * n4.scale / 2;
+                if (l3 && e3.verticalizable && (d3 = t4.lineOffset / 2 - (n4.imageName ? -(Vl - n4.metrics.width * n4.scale) / 2 : (n4.scale - 1) * Vl)), n4.imageName) {
+                  const t5 = o3[n4.imageName];
+                  p3 = t5.sdf, f3 = t5.pixelRatio, h3 = lu / f3;
+                }
+                const g3 = i3 ? [n4.x + m3, n4.y] : [0, 0];
+                let x3 = i3 ? [0, 0] : [n4.x + m3 + r3[0], n4.y + r3[1] - d3], v2 = [0, 0];
+                y3 && (v2 = x3, x3 = [0, 0]);
+                const b2 = n4.metrics.isDoubleResolution ? 2 : 1, w2 = (n4.metrics.left - h3) * n4.scale - m3 + x3[0], _2 = (-n4.metrics.top - h3) * n4.scale + x3[1], A2 = w2 + s4.w / b2 * n4.scale / f3, S2 = _2 + s4.h / b2 * n4.scale / f3, k2 = new a(w2, _2), I2 = new a(A2, _2), z2 = new a(w2, S2), M2 = new a(A2, S2);
+                if (y3) {
+                  const t5 = new a(-m3, m3 - pu), e4 = -Math.PI / 2, r4 = Vl / 2 - m3, i4 = new a(5 - pu - r4, -(n4.imageName ? r4 : 0)), s5 = new a(...v2);
+                  k2._rotateAround(e4, t5)._add(i4)._add(s5), I2._rotateAround(e4, t5)._add(i4)._add(s5), z2._rotateAround(e4, t5)._add(i4)._add(s5), M2._rotateAround(e4, t5)._add(i4)._add(s5);
+                }
+                if (u3) {
+                  const t5 = Math.sin(u3), e4 = Math.cos(u3), r4 = [e4, -t5, t5, e4];
+                  k2._matMult(r4), I2._matMult(r4), z2._matMult(r4), M2._matMult(r4);
+                }
+                const C2 = new a(0, 0), B2 = new a(0, 0);
+                c3.push({ tl: k2, tr: I2, bl: z2, br: M2, tex: s4, writingMode: e3.writingMode, glyphOffset: g3, sectionIndex: n4.sectionIndex, isSDF: p3, pixelOffsetTL: C2, pixelOffsetBR: B2, minFontScaleX: 0, minFontScaleY: 0 });
               }
-              const g3 = i3 ? [n4.x + m3, n4.y] : [0, 0];
-              let x3 = i3 ? [0, 0] : [n4.x + m3 + r3[0], n4.y + r3[1] - d3], v2 = [0, 0];
-              y3 && (v2 = x3, x3 = [0, 0]);
-              const b2 = n4.metrics.isDoubleResolution ? 2 : 1, w2 = (n4.metrics.left - h3) * n4.scale - m3 + x3[0], _2 = (-n4.metrics.top - h3) * n4.scale + x3[1], A2 = w2 + s4.w / b2 * n4.scale / f3, S2 = _2 + s4.h / b2 * n4.scale / f3, k2 = new a(w2, _2), I2 = new a(A2, _2), z2 = new a(w2, S2), M2 = new a(A2, S2);
-              if (y3) {
-                const t5 = new a(-m3, m3 - pu), e4 = -Math.PI / 2, r4 = Vl / 2 - m3, i4 = new a(5 - pu - r4, -(n4.imageName ? r4 : 0)), s5 = new a(...v2);
-                k2._rotateAround(e4, t5)._add(i4)._add(s5), I2._rotateAround(e4, t5)._add(i4)._add(s5), z2._rotateAround(e4, t5)._add(i4)._add(s5), M2._rotateAround(e4, t5)._add(i4)._add(s5);
-              }
-              if (u3) {
-                const t5 = Math.sin(u3), e4 = Math.cos(u3), r4 = [e4, -t5, t5, e4];
-                k2._matMult(r4), I2._matMult(r4), z2._matMult(r4), M2._matMult(r4);
-              }
-              const C2 = new a(0, 0), B2 = new a(0, 0);
-              c3.push({ tl: k2, tr: I2, bl: z2, br: M2, tex: s4, writingMode: e3.writingMode, glyphOffset: g3, sectionIndex: n4.sectionIndex, isSDF: p3, pixelOffsetTL: C2, pixelOffsetBR: B2, minFontScaleX: 0, minFontScaleY: 0 });
-            }
             return c3;
           }(0, r2, l2, i2, s2, o2, n2, t2.allowVerticalPlacement), g2 = t2.textSizeData;
           let x2 = null;
@@ -7417,9 +7451,9 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             this.receive = (t3) => {
               const e3 = t3.data, r3 = e3.id;
               if (r3 && (!e3.targetMapId || this.mapId === e3.targetMapId)) if ("<cancel>" === e3.type) {
-                delete this.tasks[r3];
-                const t4 = this.cancelCallbacks[r3];
-                delete this.cancelCallbacks[r3], t4 && t4();
+                  delete this.tasks[r3];
+                  const t4 = this.cancelCallbacks[r3];
+                  delete this.cancelCallbacks[r3], t4 && t4();
               } else I() || e3.mustQueue ? (this.tasks[r3] = e3, this.taskQueue.push(r3), this.invoker.trigger()) : this.processTask(r3, e3);
             }, this.process = () => {
               if (!this.taskQueue.length) return;
@@ -7581,9 +7615,9 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           set(t2) {
             if (t2[12] !== this.current[12] || t2[0] !== this.current[0]) return this.current = t2, void this.gl.uniformMatrix4fv(this.location, false, t2);
             for (let e2 = 1; e2 < 16; e2++) if (t2[e2] !== this.current[e2]) {
-              this.current = t2, this.gl.uniformMatrix4fv(this.location, false, t2);
-              break;
-            }
+                this.current = t2, this.gl.uniformMatrix4fv(this.location, false, t2);
+                break;
+              }
           }
         }, t.aO = ja, t.aP = class extends Ra {
           constructor(t2, e2) {
@@ -7730,10 +7764,10 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
                 else r3.add(v3);
                 let n3 = false;
                 for (const i4 of r3) if (!d2.horizontal[i4]) if (n3) d2.horizontal[i4] = d2.horizontal[0];
-                else {
-                  const r4 = yu(y2, e2.glyphMap, e2.glyphPositions, e2.imagePositions, c2, w2, s2, "center", i4, f3, g2, t.ai.horizontal, false, b2, p2, h2);
-                  r4 && (d2.horizontal[i4] = r4, n3 = 1 === r4.positionedLines.length);
-                }
+                    else {
+                      const r4 = yu(y2, e2.glyphMap, e2.glyphPositions, e2.imagePositions, c2, w2, s2, "center", i4, f3, g2, t.ai.horizontal, false, b2, p2, h2);
+                      r4 && (d2.horizontal[i4] = r4, n3 = 1 === r4.positionedLines.length);
+                    }
                 _2();
               } else {
                 "auto" === v3 && (v3 = Gc(m3));
@@ -7762,9 +7796,9 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         }, t.bu = eu, t.bv = Ro, t.bw = function(t2, r2, n2, i2, a2) {
           return e(this, void 0, void 0, function* () {
             if (p()) try {
-              return yield B(t2, r2, n2, i2, a2);
-            } catch (t3) {
-            }
+                return yield B(t2, r2, n2, i2, a2);
+              } catch (t3) {
+              }
             return function(t3, e2, r3, n3, i3) {
               const a3 = t3.width, s2 = t3.height;
               P && V || (P = new OffscreenCanvas(a3, s2), V = P.getContext("2d", { willReadFrequently: true })), P.width = a3, P.height = s2, V.drawImage(t3, 0, 0, a3, s2);
@@ -7915,12 +7949,12 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             if (o3) i2(o3);
             else if (r2) try {
               const t3 = new e.bv.VectorTile(new e.bu(r2));
-              i2(null, { vectorTile: t3, rawData: r2, cacheControl: s2, expires: n2 });
-            } catch (e2) {
-              const o4 = new Uint8Array(r2);
-              let s3 = `Unable to parse the tile at ${t2.request.url}, `;
-              s3 += 31 === o4[0] && 139 === o4[1] ? "please make sure the data is not gzipped and that you have configured the relevant header in the server" : `got error: ${e2.messge}`, i2(new Error(s3));
-            }
+                i2(null, { vectorTile: t3, rawData: r2, cacheControl: s2, expires: n2 });
+              } catch (e2) {
+                const o4 = new Uint8Array(r2);
+                let s3 = `Unable to parse the tile at ${t2.request.url}, `;
+                s3 += 31 === o4[0] && 139 === o4[1] ? "please make sure the data is not gzipped and that you have configured the relevant header in the server" : `got error: ${e2.messge}`, i2(new Error(s3));
+              }
           });
           return () => {
             o2.cancel(), i2();
@@ -8031,9 +8065,9 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         }, y.prototype.bbox = function() {
           this.geometry || this.loadGeometry();
           for (var e2 = this.geometry, t2 = 1 / 0, i2 = -1 / 0, o2 = 1 / 0, r2 = -1 / 0, s2 = 0; s2 < e2.length; s2++) for (var n2 = e2[s2], a2 = 0; a2 < n2.length; a2++) {
-            var l2 = n2[a2];
-            t2 = Math.min(t2, l2.x), i2 = Math.max(i2, l2.x), o2 = Math.min(o2, l2.y), r2 = Math.max(r2, l2.y);
-          }
+              var l2 = n2[a2];
+              t2 = Math.min(t2, l2.x), i2 = Math.max(i2, l2.x), o2 = Math.min(o2, l2.y), r2 = Math.max(r2, l2.y);
+            }
           return [t2, o2, i2, r2];
         }, y.prototype.toGeoJSON = f.prototype.toGeoJSON;
         var v = e.bA, w = g;
@@ -8230,12 +8264,12 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               } else {
                 for (let e3 = 0; e3 < c2; e3++) l2.push(a2[i3 + e3]);
                 if (p2 > 1) for (const e3 of u2) {
-                  const i4 = e3 * c2;
-                  if (!(a2[i4 + 2] <= t2)) {
-                    a2[i4 + 2] = t2;
+                    const i4 = e3 * c2;
+                    if (!(a2[i4 + 2] <= t2)) {
+                      a2[i4 + 2] = t2;
                     for (let e4 = 0; e4 < c2; e4++) l2.push(a2[i4 + e4]);
+                    }
                   }
-                }
               }
             }
             return l2;
@@ -8371,9 +8405,9 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               else if ("MultiLineString" === d2) te(u2, g2, i2, o2, r2, false);
               else if ("Polygon" === d2) te(u2, g2, i2, o2, r2, true);
               else if ("MultiPolygon" === d2) for (var m2 = 0; m2 < u2.length; m2++) {
-                var y2 = [];
-                te(u2[m2], y2, i2, o2, r2, true), y2.length && g2.push(y2);
-              }
+                  var y2 = [];
+                  te(u2[m2], y2, i2, o2, r2, true), y2.length && g2.push(y2);
+                }
               if (g2.length) {
                 if (a2.lineMetrics && "LineString" === d2) {
                   for (m2 = 0; m2 < g2.length; m2++) l2.push(A(h2.id, d2, g2[m2], h2.tags));
@@ -8426,8 +8460,8 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               for (var a2 = 0; a2 < s2.geometry.length; a2++) r2.push(ne(s2.geometry[a2], t2));
             } else if ("MultiPolygon" === n2) for (r2 = [], a2 = 0; a2 < s2.geometry.length; a2++) {
               for (var l2 = [], c2 = 0; c2 < s2.geometry[a2].length; c2++) l2.push(ne(s2.geometry[a2][c2], t2));
-              r2.push(l2);
-            }
+                r2.push(l2);
+              }
             i2.push(A(s2.id, n2, r2, s2.tags));
           }
           return i2;
@@ -8445,10 +8479,10 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             var l2 = e2.features[i2], c2 = l2.geometry, h2 = l2.type;
             if (l2.geometry = [], 1 === h2) for (o2 = 0; o2 < c2.length; o2 += 2) l2.geometry.push(le(c2[o2], c2[o2 + 1], t2, s2, n2, a2));
             else for (o2 = 0; o2 < c2.length; o2++) {
-              var u2 = [];
+                var u2 = [];
               for (r2 = 0; r2 < c2[o2].length; r2 += 2) u2.push(le(c2[o2][r2], c2[o2][r2 + 1], t2, s2, n2, a2));
-              l2.geometry.push(u2);
-            }
+                l2.geometry.push(u2);
+              }
           }
           return e2.transformed = true, e2;
         }
@@ -8469,9 +8503,9 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           else if ("LineString" === s2) ue(n2, r2, e2, i2, false, false);
           else if ("MultiLineString" === s2 || "Polygon" === s2) for (a2 = 0; a2 < r2.length; a2++) ue(n2, r2[a2], e2, i2, "Polygon" === s2, 0 === a2);
           else if ("MultiPolygon" === s2) for (var l2 = 0; l2 < r2.length; l2++) {
-            var c2 = r2[l2];
+              var c2 = r2[l2];
             for (a2 = 0; a2 < c2.length; a2++) ue(n2, c2[a2], e2, i2, true, 0 === a2);
-          }
+            }
           if (n2.length) {
             var h2 = t2.tags || null;
             if ("LineString" === s2 && o2.lineMetrics) {
@@ -8490,9 +8524,9 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             r2 && function(e3, t3) {
               for (var i3 = 0, o3 = 0, r3 = e3.length, s3 = r3 - 2; o3 < r3; s3 = o3, o3 += 2) i3 += (e3[o3] - e3[s3]) * (e3[o3 + 1] + e3[s3 + 1]);
               if (i3 > 0 === t3) for (o3 = 0, r3 = e3.length; o3 < r3 / 2; o3 += 2) {
-                var n3 = e3[o3], a3 = e3[o3 + 1];
-                e3[o3] = e3[r3 - 2 - o3], e3[o3 + 1] = e3[r3 - 1 - o3], e3[r3 - 2 - o3] = n3, e3[r3 - 1 - o3] = a3;
-              }
+                  var n3 = e3[o3], a3 = e3[o3 + 1];
+                  e3[o3] = e3[r3 - 2 - o3], e3[o3 + 1] = e3[r3 - 1 - o3], e3[r3 - 2 - o3] = n3, e3[r3 - 1 - o3] = a3;
+                }
             }(a2, s2), e2.push(a2);
           }
         }
@@ -8576,30 +8610,30 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             super(t2, i2, o2), this._dataUpdateable = /* @__PURE__ */ new Map(), this.loadGeoJSON = (t3, i3) => {
               const { promoteId: o3 } = t3;
               if (t3.request) return e.f(t3.request, (e2, t4, r3, s2) => {
-                this._dataUpdateable = ge(t4, o3) ? me(t4, o3) : void 0, i3(e2, t4, r3, s2);
-              });
+                  this._dataUpdateable = ge(t4, o3) ? me(t4, o3) : void 0, i3(e2, t4, r3, s2);
+                });
               if ("string" == typeof t3.data) try {
-                const e2 = JSON.parse(t3.data);
-                this._dataUpdateable = ge(e2, o3) ? me(e2, o3) : void 0, i3(null, e2);
-              } catch (e2) {
-                i3(new Error(`Input data given to '${t3.source}' is not a valid GeoJSON object.`));
-              }
+                  const e2 = JSON.parse(t3.data);
+                  this._dataUpdateable = ge(e2, o3) ? me(e2, o3) : void 0, i3(null, e2);
+                } catch (e2) {
+                  i3(new Error(`Input data given to '${t3.source}' is not a valid GeoJSON object.`));
+                }
               else t3.dataDiff ? this._dataUpdateable ? (function(e2, t4, i4) {
-                var o4, r3, s2, n2;
+                  var o4, r3, s2, n2;
                 if (t4.removeAll && e2.clear(), t4.remove) for (const i5 of t4.remove) e2.delete(i5);
                 if (t4.add) for (const o5 of t4.add) {
-                  const t5 = fe(o5, i4);
-                  null != t5 && e2.set(t5, o5);
-                }
+                      const t5 = fe(o5, i4);
+                      null != t5 && e2.set(t5, o5);
+                    }
                 if (t4.update) for (const i5 of t4.update) {
-                  let t5 = e2.get(i5.id);
+                      let t5 = e2.get(i5.id);
                   if (null == t5) continue;
-                  const a2 = !i5.removeAllProperties && ((null === (o4 = i5.removeProperties) || void 0 === o4 ? void 0 : o4.length) > 0 || (null === (r3 = i5.addOrUpdateProperties) || void 0 === r3 ? void 0 : r3.length) > 0);
+                      const a2 = !i5.removeAllProperties && ((null === (o4 = i5.removeProperties) || void 0 === o4 ? void 0 : o4.length) > 0 || (null === (r3 = i5.addOrUpdateProperties) || void 0 === r3 ? void 0 : r3.length) > 0);
                   if ((i5.newGeometry || i5.removeAllProperties || a2) && (t5 = Object.assign({}, t5), e2.set(i5.id, t5), a2 && (t5.properties = Object.assign({}, t5.properties))), i5.newGeometry && (t5.geometry = i5.newGeometry), i5.removeAllProperties) t5.properties = {};
                   else if ((null === (s2 = i5.removeProperties) || void 0 === s2 ? void 0 : s2.length) > 0) for (const e3 of i5.removeProperties) Object.prototype.hasOwnProperty.call(t5.properties, e3) && delete t5.properties[e3];
                   if ((null === (n2 = i5.addOrUpdateProperties) || void 0 === n2 ? void 0 : n2.length) > 0) for (const { key: e3, value: o5 } of i5.addOrUpdateProperties) t5.properties[e3] = o5;
-                }
-              }(this._dataUpdateable, t3.dataDiff, o3), i3(null, { type: "FeatureCollection", features: Array.from(this._dataUpdateable.values()) })) : i3(new Error(`Cannot update existing geojson data in ${t3.source}`)) : i3(new Error(`Input data given to '${t3.source}' is not a valid GeoJSON object.`));
+                    }
+                }(this._dataUpdateable, t3.dataDiff, o3), i3(null, { type: "FeatureCollection", features: Array.from(this._dataUpdateable.values()) })) : i3(new Error(`Cannot update existing geojson data in ${t3.source}`)) : i3(new Error(`Input data given to '${t3.source}' is not a valid GeoJSON object.`));
               return { cancel: () => {
               } };
             }, this.loadVectorData = this.loadGeoJSONTile, r2 && (this.loadGeoJSON = r2);
@@ -8816,6 +8850,10 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           static testProp(t2) {
             if (!i.docStyle) return t2[0];
             for (let e2 = 0; e2 < t2.length; e2++) if (t2[e2] in i.docStyle) return t2[e2];
+              return t2[0];
+            for (let e2 = 0; e2 < t2.length; e2++)
+              if (t2[e2] in i.docStyle)
+                return t2[e2];
             return t2[0];
           }
           static create(t2, e2, i2) {
@@ -9256,15 +9294,15 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             const v2 = p2.getImageData(m2, m2, n2, l2);
             g2.fill(w, 0, u2), f2.fill(0, 0, u2);
             for (let t3 = 0; t3 < l2; t3++) for (let e3 = 0; e3 < n2; e3++) {
-              const i3 = v2.data[4 * (t3 * n2 + e3) + 3] / 255;
+                const i3 = v2.data[4 * (t3 * n2 + e3) + 3] / 255;
               if (0 === i3) continue;
-              const s3 = (t3 + m2) * h2 + e3 + m2;
+                const s3 = (t3 + m2) * h2 + e3 + m2;
               if (1 === i3) g2[s3] = 0, f2[s3] = w;
-              else {
-                const t4 = 0.5 - i3;
-                g2[s3] = t4 > 0 ? t4 * t4 : 0, f2[s3] = t4 < 0 ? t4 * t4 : 0;
+                else {
+                  const t4 = 0.5 - i3;
+                  g2[s3] = t4 > 0 ? t4 * t4 : 0, f2[s3] = t4 < 0 ? t4 * t4 : 0;
+                }
               }
-            }
             T(g2, 0, 0, h2, c2, h2, this.f, this.v, this.z), T(f2, m2, m2, n2, l2, h2, this.f, this.v, this.z);
             for (let t3 = 0; t3 < u2; t3++) {
               const e3 = Math.sqrt(g2[t3]) - Math.sqrt(f2[t3]);
@@ -9294,9 +9332,9 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }
           setLight(e2, i2 = {}) {
             if (!this._validate(t.t, e2, i2)) for (const t2 in e2) {
-              const i3 = e2[t2];
-              t2.endsWith("-transition") ? this._transitionable.setTransition(t2.slice(0, -11), i3) : this._transitionable.setValue(t2, i3);
-            }
+                const i3 = e2[t2];
+                t2.endsWith("-transition") ? this._transitionable.setTransition(t2.slice(0, -11), i3) : this._transitionable.setValue(t2, i3);
+              }
           }
           updateTransitions(t2) {
             this._transitioning = this._transitionable.transitioned(t2, this._transitioning);
@@ -9867,13 +9905,13 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
         function q(t2, e2, i2, s2, a2, o2) {
           const r2 = function(t3, e3, i3) {
             if (t3) for (const s3 of t3) {
-              const t4 = e3[s3];
+                const t4 = e3[s3];
               if (t4 && t4.source === i3 && "fill-extrusion" === t4.type) return true;
-            }
+              }
             else for (const t4 in e3) {
-              const s3 = e3[t4];
+                const s3 = e3[t4];
               if (s3.source === i3 && "fill-extrusion" === s3.type) return true;
-            }
+              }
             return false;
           }(a2 && a2.layers, e2, t2.id), n2 = o2.maxPitchScaleFactor(), l2 = t2.tilesIn(s2, n2, r2);
           l2.sort($);
@@ -9891,9 +9929,9 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             return e3;
           }(h2);
           for (const e3 in c2) c2[e3].forEach((e4) => {
-            const i3 = e4.feature, s3 = t2.getFeatureState(i3.layer["source-layer"], i3.id);
-            i3.source = i3.layer.source, i3.layer["source-layer"] && (i3.sourceLayer = i3.layer["source-layer"]), i3.state = s3;
-          });
+              const i3 = e4.feature, s3 = t2.getFeatureState(i3.layer["source-layer"], i3.id);
+              i3.source = i3.layer.source, i3.layer["source-layer"] && (i3.sourceLayer = i3.layer["source-layer"]), i3.state = s3;
+            });
           return c2;
         }
         function $(t2, e2) {
@@ -9936,12 +9974,12 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
                 }
               }
               if (this.hasRTLText = false, this.hasSymbolBuckets) for (const e3 in this.buckets) {
-                const i3 = this.buckets[e3];
-                if (i3 instanceof t.a4 && i3.hasRTLText) {
-                  this.hasRTLText = true, t.a5();
-                  break;
+                  const i3 = this.buckets[e3];
+                  if (i3 instanceof t.a4 && i3.hasRTLText) {
+                    this.hasRTLText = true, t.a5();
+                    break;
+                  }
                 }
-              }
               this.queryPadding = 0;
               for (const t2 in this.buckets) {
                 const e3 = this.buckets[t2];
@@ -10004,10 +10042,10 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               let e3 = false;
               if (this.expirationTime > t2) e3 = false;
               else if (i2) if (this.expirationTime < i2) e3 = true;
-              else {
-                const s2 = this.expirationTime - i2;
-                s2 ? this.expirationTime = t2 + Math.max(s2, 3e4) : e3 = true;
-              }
+                else {
+                  const s2 = this.expirationTime - i2;
+                  s2 ? this.expirationTime = t2 + Math.max(s2, 3e4) : e3 = true;
+                }
               else e3 = true;
               e3 ? (this.expiredRequestCount++, this.state = "expired") : this.expiredRequestCount = 0;
             }
@@ -10159,8 +10197,8 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               else for (const t2 in this.deletedStates[e3]) {
                 if (null === this.deletedStates[e3][t2]) this.state[e3][t2] = {};
                 else for (const i4 of Object.keys(this.deletedStates[e3][t2])) delete this.state[e3][t2][i4];
-                i3[t2] = this.state[e3][t2];
-              }
+                  i3[t2] = this.state[e3][t2];
+                }
               s2[e3] = s2[e3] || {}, t.e(s2[e3], i3);
             }
             if (this.stateChanges = {}, this.deletedStates = {}, 0 !== Object.keys(s2).length) for (const t2 in e2) e2[t2].setFeatureState(s2, i2);
@@ -10214,7 +10252,7 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           }
           _unloadTile(t2) {
             if (this._source.unloadTile) return this._source.unloadTile(t2, () => {
-            });
+              });
           }
           _abortTile(e2) {
             this._source.abortTile && this._source.abortTile(e2, () => {
@@ -10296,9 +10334,9 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               }
               let n2 = r2;
               for (; n2.overscaledZ > e2; ) if (n2 = n2.scaledTo(n2.overscaledZ - 1), t2[n2.key]) {
-                s2[r2.key] = r2;
-                break;
-              }
+                  s2[r2.key] = r2;
+                  break;
+                }
             }
           }
           findLoadedParent(t2, e2) {
@@ -10340,11 +10378,11 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             if (this.usedForTerrain) {
               const t2 = {};
               for (const e3 of s2) if (e3.canonical.z > this._source.minzoom) {
-                const i3 = e3.scaledTo(e3.canonical.z - 1);
-                t2[i3.key] = i3;
-                const s3 = e3.scaledTo(Math.max(this._source.minzoom, Math.min(e3.canonical.z, 5)));
-                t2[s3.key] = s3;
-              }
+                  const i3 = e3.scaledTo(e3.canonical.z - 1);
+                  t2[i3.key] = i3;
+                  const s3 = e3.scaledTo(Math.max(this._source.minzoom, Math.min(e3.canonical.z, 5)));
+                  t2[s3.key] = s3;
+                }
               s2 = s2.concat(Object.values(t2));
             }
             const n2 = 0 === s2.length && !this._updated && this._didEmitContent;
@@ -10619,22 +10657,22 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             if (null !== u2) {
               const a3 = this.bboxes;
               for (const r3 of u2) if (!l2.box[r3]) {
-                l2.box[r3] = true;
-                const u3 = 4 * r3, d3 = this.boxKeys[r3];
+                  l2.box[r3] = true;
+                  const u3 = 4 * r3, d3 = this.boxKeys[r3];
                 if (t2 <= a3[u3 + 2] && e2 <= a3[u3 + 3] && i2 >= a3[u3 + 0] && s2 >= a3[u3 + 1] && (!n2 || n2(d3)) && (!h2 || !ot(c2, d3.overlapMode)) && (o2.push({ key: d3, x1: a3[u3], y1: a3[u3 + 1], x2: a3[u3 + 2], y2: a3[u3 + 3] }), h2)) return true;
-              }
+                }
             }
             const d2 = this.circleCells[a2];
             if (null !== d2) {
               const a3 = this.circles;
               for (const r3 of d2) if (!l2.circle[r3]) {
-                l2.circle[r3] = true;
-                const u3 = 3 * r3, d3 = this.circleKeys[r3];
-                if (this._circleAndRectCollide(a3[u3], a3[u3 + 1], a3[u3 + 2], t2, e2, i2, s2) && (!n2 || n2(d3)) && (!h2 || !ot(c2, d3.overlapMode))) {
-                  const t3 = a3[u3], e3 = a3[u3 + 1], i3 = a3[u3 + 2];
+                  l2.circle[r3] = true;
+                  const u3 = 3 * r3, d3 = this.circleKeys[r3];
+                  if (this._circleAndRectCollide(a3[u3], a3[u3 + 1], a3[u3 + 2], t2, e2, i2, s2) && (!n2 || n2(d3)) && (!h2 || !ot(c2, d3.overlapMode))) {
+                    const t3 = a3[u3], e3 = a3[u3 + 1], i3 = a3[u3 + 2];
                   if (o2.push({ key: d3, x1: t3 - i3, y1: e3 - i3, x2: t3 + i3, y2: e3 + i3 }), h2) return true;
+                  }
                 }
-              }
             }
             return false;
           }
@@ -10643,19 +10681,19 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             if (null !== u2) {
               const t3 = this.bboxes;
               for (const e3 of u2) if (!h2.box[e3]) {
-                h2.box[e3] = true;
-                const i3 = 4 * e3, s3 = this.boxKeys[e3];
+                  h2.box[e3] = true;
+                  const i3 = 4 * e3, s3 = this.boxKeys[e3];
                 if (this._circleAndRectCollide(l2.x, l2.y, l2.radius, t3[i3 + 0], t3[i3 + 1], t3[i3 + 2], t3[i3 + 3]) && (!n2 || n2(s3)) && !ot(c2, s3.overlapMode)) return o2.push(true), true;
-              }
+                }
             }
             const d2 = this.circleCells[a2];
             if (null !== d2) {
               const t3 = this.circles;
               for (const e3 of d2) if (!h2.circle[e3]) {
-                h2.circle[e3] = true;
-                const i3 = 3 * e3, s3 = this.circleKeys[e3];
+                  h2.circle[e3] = true;
+                  const i3 = 3 * e3, s3 = this.circleKeys[e3];
                 if (this._circlesCollide(t3[i3], t3[i3 + 1], t3[i3 + 2], l2.x, l2.y, l2.radius) && (!n2 || n2(s3)) && !ot(c2, s3.overlapMode)) return o2.push(true), true;
-              }
+                }
             }
           }
           _forEachCell(t2, e2, i2, s2, a2, o2, r2, n2) {
@@ -10970,9 +11008,9 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             this.retainedQueryData[o2.bucketInstanceId] = new zt(o2.bucketInstanceId, r2, o2.sourceLayerIndex, o2.index, s2.tileID);
             const g2 = { bucket: o2, layout: l2, posMatrix: u2, textLabelPlaneMatrix: m2, labelToScreenMatrix: f2, scale: h2, textPixelRatio: c2, holdingForFade: s2.holdingForFade(), collisionBoxArray: n2, partiallyEvaluatedTextSize: t.ah(o2.textSizeData, this.transform.zoom), collisionGroup: this.collisionGroups.get(o2.sourceID) };
             if (a2) for (const t2 of o2.sortKeyRanges) {
-              const { sortKey: i3, symbolInstanceStart: s3, symbolInstanceEnd: a3 } = t2;
-              e2.push({ sortKey: i3, symbolInstanceStart: s3, symbolInstanceEnd: a3, parameters: g2 });
-            }
+                const { sortKey: i3, symbolInstanceStart: s3, symbolInstanceEnd: a3 } = t2;
+                e2.push({ sortKey: i3, symbolInstanceStart: s3, symbolInstanceEnd: a3, parameters: g2 });
+              }
             else e2.push({ symbolInstanceStart: 0, symbolInstanceEnd: o2.symbolInstances.length, parameters: g2 });
           }
           attemptAnchorPlacement(e2, i2, s2, a2, o2, r2, n2, l2, h2, c2, u2, d2, _2, p2, m2, f2) {
@@ -11275,12 +11313,12 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
                   }
                 }
               } else if (r2.positions) for (let t3 = 0; t3 < r2.positions.length; t3++) {
-                const e3 = r2.positions[t3], a3 = r2.crossTileIDs[t3];
-                if (Math.abs(e3.x - n2.x) <= s2 && Math.abs(e3.y - n2.y) <= s2 && !i2[a3]) {
-                  i2[a3] = true, o2.crossTileID = a3;
-                  break;
+                  const e3 = r2.positions[t3], a3 = r2.crossTileIDs[t3];
+                  if (Math.abs(e3.x - n2.x) <= s2 && Math.abs(e3.y - n2.y) <= s2 && !i2[a3]) {
+                    i2[a3] = true, o2.crossTileID = a3;
+                    break;
+                  }
                 }
-              }
             }
           }
           getCrossTileIDsLists() {
@@ -11302,13 +11340,13 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           handleWrapJump(t2) {
             const e2 = Math.round((t2 - this.lng) / 360);
             if (0 !== e2) for (const t3 in this.indexes) {
-              const i2 = this.indexes[t3], s2 = {};
-              for (const t4 in i2) {
-                const a2 = i2[t4];
-                a2.tileID = a2.tileID.unwrapTo(a2.tileID.wrap + e2), s2[a2.tileID.key] = a2;
+                const i2 = this.indexes[t3], s2 = {};
+                for (const t4 in i2) {
+                  const a2 = i2[t4];
+                  a2.tileID = a2.tileID.unwrapTo(a2.tileID.wrap + e2), s2[a2.tileID.key] = a2;
+                }
+                this.indexes[t3] = s2;
               }
-              this.indexes[t3] = s2;
-            }
             this.lng = t2;
           }
           addBucket(t2, e2, i2) {
@@ -11322,9 +11360,9 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             for (const i3 in this.indexes) {
               const a2 = this.indexes[i3];
               if (Number(i3) > t2.overscaledZ) for (const i4 in a2) {
-                const o2 = a2[i4];
-                o2.tileID.isChildOf(t2) && o2.findMatches(e2.symbolInstances, t2, s2);
-              }
+                  const o2 = a2[i4];
+                  o2.tileID.isChildOf(t2) && o2.findMatches(e2.symbolInstances, t2, s2);
+                }
               else {
                 const o2 = a2[t2.scaledTo(Number(i3)).key];
                 o2 && o2.findMatches(e2.symbolInstances, t2, s2);
@@ -11380,9 +11418,9 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             this._rtlTextPluginCallback = se.registerForPluginStateChange((e3) => {
               s2.dispatcher.broadcast("syncRTLPluginState", { pluginStatus: e3.pluginStatus, pluginURL: e3.pluginURL }, (e4, i3) => {
                 if (t.aA(e4), i3 && i3.every((t2) => t2)) for (const t2 in s2.sourceCaches) {
-                  const e5 = s2.sourceCaches[t2].getSource().type;
-                  "vector" !== e5 && "geojson" !== e5 || s2.sourceCaches[t2].reload();
-                }
+                    const e5 = s2.sourceCaches[t2].getSource().type;
+                    "vector" !== e5 && "geojson" !== e5 || s2.sourceCaches[t2].reload();
+                  }
               });
             }), this.on("data", (t2) => {
               if ("source" !== t2.dataType || "metadata" !== t2.sourceDataType) return;
@@ -11390,9 +11428,9 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               if (!e3) return;
               const i3 = e3.getSource();
               if (i3 && i3.vectorLayerIds) for (const t3 in this._layers) {
-                const e4 = this._layers[t3];
-                e4.source === i3.id && this._validateLayer(e4);
-              }
+                  const e4 = this._layers[t3];
+                  e4.source === i3.id && this._validateLayer(e4);
+                }
             });
           }
           loadURL(e2, i2 = {}, s2) {
@@ -11446,14 +11484,14 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             }(e2, this.map._requestManager, this.map.getPixelRatio(), (e3, a2) => {
               if (this._spriteRequest = null, e3) this.fire(new t.j(e3));
               else if (a2) for (const t2 in a2) {
-                this._spritesImagesIds[t2] = [];
-                const e4 = this._spritesImagesIds[t2] ? this._spritesImagesIds[t2].filter((t3) => !(t3 in a2)) : [];
+                  this._spritesImagesIds[t2] = [];
+                  const e4 = this._spritesImagesIds[t2] ? this._spritesImagesIds[t2].filter((t3) => !(t3 in a2)) : [];
                 for (const t3 of e4) this.imageManager.removeImage(t3), this._changedImages[t3] = true;
-                for (const e5 in a2[t2]) {
-                  const s3 = "default" === t2 ? e5 : `${t2}:${e5}`;
-                  this._spritesImagesIds[t2].push(s3), s3 in this.imageManager.images ? this.imageManager.updateImage(s3, a2[t2][e5], false) : this.imageManager.addImage(s3, a2[t2][e5]), i2 && (this._changedImages[s3] = true);
+                  for (const e5 in a2[t2]) {
+                    const s3 = "default" === t2 ? e5 : `${t2}:${e5}`;
+                    this._spritesImagesIds[t2].push(s3), s3 in this.imageManager.images ? this.imageManager.updateImage(s3, a2[t2][e5], false) : this.imageManager.addImage(s3, a2[t2][e5]), i2 && (this._changedImages[s3] = true);
+                  }
                 }
-              }
               this.imageManager.setLoaded(true), this._availableImages = this.imageManager.listImages(), i2 && (this._changed = true), this.dispatcher.broadcast("setImages", this._availableImages), this.fire(new t.k("data", { dataType: "style" })), s2 && s2(e3);
             });
           }
@@ -11650,6 +11688,9 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
           getLayer(t2) {
             return this._layers[t2];
           }
+          getLayersOrder() {
+            return [...this._order];
+          }
           hasLayer(t2) {
             return t2 in this._layers;
           }
@@ -11734,14 +11775,14 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             for (let o2 = this._order.length - 1; o2 >= 0; o2--) {
               const r2 = this._order[o2];
               if (e2(r2)) for (let t3 = s2.length - 1; t3 >= 0; t3--) {
-                const e3 = s2[t3].feature;
+                  const e3 = s2[t3].feature;
                 if (i2[e3.layer.id] < o2) break;
-                a2.push(e3), s2.pop();
-              }
+                  a2.push(e3), s2.pop();
+                }
               else for (const e3 of t2) {
-                const t3 = e3[r2];
+                  const t3 = e3[r2];
                 if (t3) for (const e4 of t3) a2.push(e4.feature);
-              }
+                }
             }
             return a2;
           }
@@ -11780,9 +11821,9 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
                 }
               }
               for (const e4 in n2) n2[e4].forEach((s4) => {
-                const a4 = s4.feature, o4 = i3[t2[e4].source].getFeatureState(a4.layer["source-layer"], a4.id);
-                a4.source = a4.layer.source, a4.layer["source-layer"] && (a4.sourceLayer = a4.layer["source-layer"]), a4.state = o4;
-              });
+                  const a4 = s4.feature, o4 = i3[t2[e4].source].getFeatureState(a4.layer["source-layer"], a4.id);
+                  a4.source = a4.layer.source, a4.layer["source-layer"] && (a4.sourceLayer = a4.layer["source-layer"]), a4.state = o4;
+                });
               return n2;
             }(this._layers, r2, this.sourceCaches, e2, i2, this.placement.collisionIndex, this.placement.retainedQueryData)), this._flattenAndSortRenderedFeatures(o2);
           }
@@ -11811,9 +11852,9 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
             const s2 = this.light.getLight();
             let a2 = false;
             for (const i3 in e2) if (!t.aG(e2[i3], s2[i3])) {
-              a2 = true;
-              break;
-            }
+                a2 = true;
+                break;
+              }
             if (!a2) return;
             const o2 = { now: t.h.now(), transition: t.e({ duration: 300, delay: 0 }, this.stylesheet.transition) };
             this.light.setLight(e2, i2), this.light.updateTransitions(o2);
@@ -11856,9 +11897,9 @@ Use an identity property function instead: \`{ "type": "identity", "property": $
               r2 = r2 || s3;
             }
             if (this.crossTileSymbolIndex.pruneUnusedLayers(this._order), ((o2 = o2 || this._layerOrderChanged || 0 === s2) || !this.pauseablePlacement || this.pauseablePlacement.isDone() && !this.placement.stillRecent(t.h.now(), e2.zoom)) && (this.pauseablePlacement = new Wt(e2, this.map.terrain, this._order, o2, i2, s2, a2, this.placement), this._layerOrderChanged = false), this.pauseablePlacement.isDone() ? this.placement.setStale() : (this.pauseablePlacement.continuePlacement(this._order, this._layers, l2), this.pauseablePlacement.isDone() && (this.placement = this.pauseablePlacement.commit(t.h.now()), n2 = true), r2 && this.pauseablePlacement.placement.setStale()), n2 || r2) for (const t2 of this._order) {
-              const e3 = this._layers[t2];
-              "symbol" === e3.type && this.placement.updateLayerOpacities(e3, l2[e3.source]);
-            }
+                const e3 = this._layers[t2];
+                "symbol" === e3.type && this.placement.updateLayerOpacities(e3, l2[e3.source]);
+              }
             return !this.pauseablePlacement.isDone() || this.placement.hasTransitions(t.h.now());
           }
           _releaseSymbolFadeTiles() {
@@ -12635,9 +12676,9 @@ uniform ${i3} ${s3} u_${a3};
           m2.resize(4 * d2), m2._trim();
           let f2 = 0;
           for (const t2 of u2) for (let e3 = 0; e3 < t2.circleArray.length / 4; e3++) {
-            const i3 = 4 * e3, s3 = t2.circleArray[i3 + 0], a3 = t2.circleArray[i3 + 1], o3 = t2.circleArray[i3 + 2], r3 = t2.circleArray[i3 + 3];
-            m2.emplace(f2++, s3, a3, o3, r3, 0), m2.emplace(f2++, s3, a3, o3, r3, 1), m2.emplace(f2++, s3, a3, o3, r3, 2), m2.emplace(f2++, s3, a3, o3, r3, 3);
-          }
+              const i3 = 4 * e3, s3 = t2.circleArray[i3 + 0], a3 = t2.circleArray[i3 + 1], o3 = t2.circleArray[i3 + 2], r3 = t2.circleArray[i3 + 3];
+              m2.emplace(f2++, s3, a3, o3, r3, 0), m2.emplace(f2++, s3, a3, o3, r3, 1), m2.emplace(f2++, s3, a3, o3, r3, 2), m2.emplace(f2++, s3, a3, o3, r3, 3);
+            }
           (!Li || Li.length < 2 * d2) && (Li = function(e3) {
             const i3 = 2 * e3, s3 = new t.aX();
             s3.resize(i3), s3._trim();
@@ -12938,9 +12979,9 @@ uniform ${i3} ${s3} u_${a3};
             }
             this.opaquePassCutoff = 1 / 0;
             for (let t2 = 0; t2 < s2.length; t2++) if (this.style._layers[s2[t2]].is3D()) {
-              this.opaquePassCutoff = t2;
-              break;
-            }
+                this.opaquePassCutoff = t2;
+                break;
+              }
             if (this.renderToTexture) {
               this.renderToTexture.prepareForRender(this.style, this.transform.zoom), this.opaquePassCutoff = 0;
               const e3 = this.style.map.terrain.sourceCache.tilesAfterTime(this.terrainFacilitator.renderTime);
@@ -12972,9 +13013,9 @@ uniform ${i3} ${s3} u_${a3};
               ("custom" === e3.type || i3.length) && this.renderLayer(this, a2[e3.source], e3, i3);
             }
             if (this.context.bindFramebuffer.set(null), this.context.clear({ color: i2.showOverdrawInspector ? t.aT.black : t.aT.transparent, depth: 1 }), this.clearStencil(), this._showOverdrawInspector = i2.showOverdrawInspector, this.depthRangeFor3D = [0, 1 - (e2._order.length + 2) * this.numSublayers * this.depthEpsilon], !this.renderToTexture) for (this.renderPass = "opaque", this.currentLayer = s2.length - 1; this.currentLayer >= 0; this.currentLayer--) {
-              const t2 = this.style._layers[s2[this.currentLayer]], e3 = a2[t2.source], i3 = o2[t2.source];
-              this._renderTileClippingMasks(t2, i3), this.renderLayer(this, e3, t2, i3);
-            }
+                const t2 = this.style._layers[s2[this.currentLayer]], e3 = a2[t2.source], i3 = o2[t2.source];
+                this._renderTileClippingMasks(t2, i3), this.renderLayer(this, e3, t2, i3);
+              }
             for (this.renderPass = "translucent", this.currentLayer = 0; this.currentLayer < s2.length; this.currentLayer++) {
               const t2 = this.style._layers[s2[this.currentLayer]], e3 = a2[t2.source];
               if (this.renderToTexture && this.renderToTexture.renderLayer(t2)) continue;
@@ -13004,211 +13045,211 @@ uniform ${i3} ${s3} u_${a3};
           }
           renderLayer(e2, i2, s2, a2) {
             if (!s2.isHidden(this.transform.zoom) && ("background" === s2.type || "custom" === s2.type || (a2 || []).length)) switch (this.id = s2.id, s2.type) {
-              case "symbol":
-                !function(e3, i3, s3, a3, o2) {
+                case "symbol":
+                  !function(e3, i3, s3, a3, o2) {
                   if ("translucent" !== e3.renderPass) return;
-                  const r2 = Mi.disabled, n2 = e3.colorModeForRenderPass();
-                  (s3._unevaluatedLayout.hasValue("text-variable-anchor") || s3._unevaluatedLayout.hasValue("text-variable-anchor-offset")) && function(e4, i4, s4, a4, o3, r3, n3) {
-                    const l2 = i4.transform, h2 = "map" === o3, c2 = "map" === r3;
-                    for (const o4 of e4) {
-                      const e5 = a4.getTile(o4), r4 = e5.getBucket(s4);
+                    const r2 = Mi.disabled, n2 = e3.colorModeForRenderPass();
+                    (s3._unevaluatedLayout.hasValue("text-variable-anchor") || s3._unevaluatedLayout.hasValue("text-variable-anchor-offset")) && function(e4, i4, s4, a4, o3, r3, n3) {
+                      const l2 = i4.transform, h2 = "map" === o3, c2 = "map" === r3;
+                      for (const o4 of e4) {
+                        const e5 = a4.getTile(o4), r4 = e5.getBucket(s4);
                       if (!r4 || !r4.text || !r4.text.segments.get().length) continue;
-                      const u2 = t.ah(r4.textSizeData, l2.zoom), d2 = St(e5, 1, i4.transform.zoom), _2 = nt(o4.posMatrix, c2, h2, i4.transform, d2), p2 = "none" !== s4.layout.get("icon-text-fit") && r4.hasIconData();
-                      if (u2) {
-                        const t2 = Math.pow(2, l2.zoom - e5.tileID.overscaledZ);
-                        Fi(r4, h2, c2, n3, l2, _2, o4.posMatrix, t2, u2, p2, i4.style.map.terrain ? (t3, e6) => i4.style.map.terrain.getElevation(o4, t3, e6) : null);
+                        const u2 = t.ah(r4.textSizeData, l2.zoom), d2 = St(e5, 1, i4.transform.zoom), _2 = nt(o4.posMatrix, c2, h2, i4.transform, d2), p2 = "none" !== s4.layout.get("icon-text-fit") && r4.hasIconData();
+                        if (u2) {
+                          const t2 = Math.pow(2, l2.zoom - e5.tileID.overscaledZ);
+                          Fi(r4, h2, c2, n3, l2, _2, o4.posMatrix, t2, u2, p2, i4.style.map.terrain ? (t3, e6) => i4.style.map.terrain.getElevation(o4, t3, e6) : null);
+                        }
                       }
-                    }
-                  }(a3, e3, s3, i3, s3.layout.get("text-rotation-alignment"), s3.layout.get("text-pitch-alignment"), o2), 0 !== s3.paint.get("icon-opacity").constantOr(1) && Oi(e3, i3, s3, a3, false, s3.paint.get("icon-translate"), s3.paint.get("icon-translate-anchor"), s3.layout.get("icon-rotation-alignment"), s3.layout.get("icon-pitch-alignment"), s3.layout.get("icon-keep-upright"), r2, n2), 0 !== s3.paint.get("text-opacity").constantOr(1) && Oi(e3, i3, s3, a3, true, s3.paint.get("text-translate"), s3.paint.get("text-translate-anchor"), s3.layout.get("text-rotation-alignment"), s3.layout.get("text-pitch-alignment"), s3.layout.get("text-keep-upright"), r2, n2), i3.map.showCollisionBoxes && (Ai(e3, i3, s3, a3, s3.paint.get("text-translate"), s3.paint.get("text-translate-anchor"), true), Ai(e3, i3, s3, a3, s3.paint.get("icon-translate"), s3.paint.get("icon-translate-anchor"), false));
-                }(e2, i2, s2, a2, this.style.placement.variableOffsets);
-                break;
-              case "circle":
-                !function(e3, i3, s3, a3) {
+                    }(a3, e3, s3, i3, s3.layout.get("text-rotation-alignment"), s3.layout.get("text-pitch-alignment"), o2), 0 !== s3.paint.get("icon-opacity").constantOr(1) && Oi(e3, i3, s3, a3, false, s3.paint.get("icon-translate"), s3.paint.get("icon-translate-anchor"), s3.layout.get("icon-rotation-alignment"), s3.layout.get("icon-pitch-alignment"), s3.layout.get("icon-keep-upright"), r2, n2), 0 !== s3.paint.get("text-opacity").constantOr(1) && Oi(e3, i3, s3, a3, true, s3.paint.get("text-translate"), s3.paint.get("text-translate-anchor"), s3.layout.get("text-rotation-alignment"), s3.layout.get("text-pitch-alignment"), s3.layout.get("text-keep-upright"), r2, n2), i3.map.showCollisionBoxes && (Ai(e3, i3, s3, a3, s3.paint.get("text-translate"), s3.paint.get("text-translate-anchor"), true), Ai(e3, i3, s3, a3, s3.paint.get("icon-translate"), s3.paint.get("icon-translate-anchor"), false));
+                  }(e2, i2, s2, a2, this.style.placement.variableOffsets);
+                  break;
+                case "circle":
+                  !function(e3, i3, s3, a3) {
                   if ("translucent" !== e3.renderPass) return;
-                  const o2 = s3.paint.get("circle-opacity"), r2 = s3.paint.get("circle-stroke-width"), n2 = s3.paint.get("circle-stroke-opacity"), l2 = !s3.layout.get("circle-sort-key").isConstant();
+                    const o2 = s3.paint.get("circle-opacity"), r2 = s3.paint.get("circle-stroke-width"), n2 = s3.paint.get("circle-stroke-opacity"), l2 = !s3.layout.get("circle-sort-key").isConstant();
                   if (0 === o2.constantOr(1) && (0 === r2.constantOr(1) || 0 === n2.constantOr(1))) return;
-                  const h2 = e3.context, c2 = h2.gl, u2 = e3.depthModeForSublayer(0, Pi.ReadOnly), d2 = Mi.disabled, _2 = e3.colorModeForRenderPass(), p2 = [];
-                  for (let o3 = 0; o3 < a3.length; o3++) {
-                    const r3 = a3[o3], n3 = i3.getTile(r3), h3 = n3.getBucket(s3);
+                    const h2 = e3.context, c2 = h2.gl, u2 = e3.depthModeForSublayer(0, Pi.ReadOnly), d2 = Mi.disabled, _2 = e3.colorModeForRenderPass(), p2 = [];
+                    for (let o3 = 0; o3 < a3.length; o3++) {
+                      const r3 = a3[o3], n3 = i3.getTile(r3), h3 = n3.getBucket(s3);
                     if (!h3) continue;
-                    const c3 = h3.programConfigurations.get(s3.id), u3 = e3.useProgram("circle", c3), d3 = h3.layoutVertexBuffer, _3 = h3.indexBuffer, m2 = e3.style.map.terrain && e3.style.map.terrain.getTerrainData(r3), f2 = { programConfiguration: c3, program: u3, layoutVertexBuffer: d3, indexBuffer: _3, uniformValues: ve(e3, r3, n3, s3), terrainData: m2 };
-                    if (l2) {
-                      const e4 = h3.segments.get();
+                      const c3 = h3.programConfigurations.get(s3.id), u3 = e3.useProgram("circle", c3), d3 = h3.layoutVertexBuffer, _3 = h3.indexBuffer, m2 = e3.style.map.terrain && e3.style.map.terrain.getTerrainData(r3), f2 = { programConfiguration: c3, program: u3, layoutVertexBuffer: d3, indexBuffer: _3, uniformValues: ve(e3, r3, n3, s3), terrainData: m2 };
+                      if (l2) {
+                        const e4 = h3.segments.get();
                       for (const i4 of e4) p2.push({ segments: new t.S([i4]), sortKey: i4.sortKey, state: f2 });
                     } else p2.push({ segments: h3.segments, sortKey: 0, state: f2 });
-                  }
-                  l2 && p2.sort((t2, e4) => t2.sortKey - e4.sortKey);
-                  for (const t2 of p2) {
-                    const { programConfiguration: i4, program: a4, layoutVertexBuffer: o3, indexBuffer: r3, uniformValues: n3, terrainData: l3 } = t2.state;
-                    a4.draw(h2, c2.TRIANGLES, u2, d2, _2, zi.disabled, n3, l3, s3.id, o3, r3, t2.segments, s3.paint, e3.transform.zoom, i4);
-                  }
-                }(e2, i2, s2, a2);
-                break;
-              case "heatmap":
-                !function(e3, i3, s3, a3) {
+                    }
+                    l2 && p2.sort((t2, e4) => t2.sortKey - e4.sortKey);
+                    for (const t2 of p2) {
+                      const { programConfiguration: i4, program: a4, layoutVertexBuffer: o3, indexBuffer: r3, uniformValues: n3, terrainData: l3 } = t2.state;
+                      a4.draw(h2, c2.TRIANGLES, u2, d2, _2, zi.disabled, n3, l3, s3.id, o3, r3, t2.segments, s3.paint, e3.transform.zoom, i4);
+                    }
+                  }(e2, i2, s2, a2);
+                  break;
+                case "heatmap":
+                  !function(e3, i3, s3, a3) {
                   if (0 !== s3.paint.get("heatmap-opacity")) if ("offscreen" === e3.renderPass) {
-                    const o2 = e3.context, r2 = o2.gl, n2 = Mi.disabled, l2 = new Si([r2.ONE, r2.ONE], t.aT.transparent, [true, true, true, true]);
-                    !function(t2, e4, i4) {
-                      const s4 = t2.gl;
-                      t2.activeTexture.set(s4.TEXTURE1), t2.viewport.set([0, 0, e4.width / 4, e4.height / 4]);
-                      let a4 = i4.heatmapFbo;
+                        const o2 = e3.context, r2 = o2.gl, n2 = Mi.disabled, l2 = new Si([r2.ONE, r2.ONE], t.aT.transparent, [true, true, true, true]);
+                        !function(t2, e4, i4) {
+                          const s4 = t2.gl;
+                          t2.activeTexture.set(s4.TEXTURE1), t2.viewport.set([0, 0, e4.width / 4, e4.height / 4]);
+                          let a4 = i4.heatmapFbo;
                       if (a4) s4.bindTexture(s4.TEXTURE_2D, a4.colorAttachment.get()), t2.bindFramebuffer.set(a4.framebuffer);
-                      else {
-                        const o3 = s4.createTexture();
-                        s4.bindTexture(s4.TEXTURE_2D, o3), s4.texParameteri(s4.TEXTURE_2D, s4.TEXTURE_WRAP_S, s4.CLAMP_TO_EDGE), s4.texParameteri(s4.TEXTURE_2D, s4.TEXTURE_WRAP_T, s4.CLAMP_TO_EDGE), s4.texParameteri(s4.TEXTURE_2D, s4.TEXTURE_MIN_FILTER, s4.LINEAR), s4.texParameteri(s4.TEXTURE_2D, s4.TEXTURE_MAG_FILTER, s4.LINEAR), a4 = i4.heatmapFbo = t2.createFramebuffer(e4.width / 4, e4.height / 4, false, false), function(t3, e5, i5, s5) {
-                          var a5, o4;
-                          const r3 = t3.gl, n3 = null !== (a5 = t3.HALF_FLOAT) && void 0 !== a5 ? a5 : r3.UNSIGNED_BYTE, l3 = null !== (o4 = t3.RGBA16F) && void 0 !== o4 ? o4 : r3.RGBA;
-                          r3.texImage2D(r3.TEXTURE_2D, 0, l3, e5.width / 4, e5.height / 4, 0, r3.RGBA, n3, null), s5.colorAttachment.set(i5);
-                        }(t2, e4, o3, a4);
-                      }
-                    }(o2, e3, s3), o2.clear({ color: t.aT.transparent });
-                    for (let t2 = 0; t2 < a3.length; t2++) {
-                      const h2 = a3[t2];
+                          else {
+                            const o3 = s4.createTexture();
+                            s4.bindTexture(s4.TEXTURE_2D, o3), s4.texParameteri(s4.TEXTURE_2D, s4.TEXTURE_WRAP_S, s4.CLAMP_TO_EDGE), s4.texParameteri(s4.TEXTURE_2D, s4.TEXTURE_WRAP_T, s4.CLAMP_TO_EDGE), s4.texParameteri(s4.TEXTURE_2D, s4.TEXTURE_MIN_FILTER, s4.LINEAR), s4.texParameteri(s4.TEXTURE_2D, s4.TEXTURE_MAG_FILTER, s4.LINEAR), a4 = i4.heatmapFbo = t2.createFramebuffer(e4.width / 4, e4.height / 4, false, false), function(t3, e5, i5, s5) {
+                              var a5, o4;
+                              const r3 = t3.gl, n3 = null !== (a5 = t3.HALF_FLOAT) && void 0 !== a5 ? a5 : r3.UNSIGNED_BYTE, l3 = null !== (o4 = t3.RGBA16F) && void 0 !== o4 ? o4 : r3.RGBA;
+                              r3.texImage2D(r3.TEXTURE_2D, 0, l3, e5.width / 4, e5.height / 4, 0, r3.RGBA, n3, null), s5.colorAttachment.set(i5);
+                            }(t2, e4, o3, a4);
+                          }
+                        }(o2, e3, s3), o2.clear({ color: t.aT.transparent });
+                        for (let t2 = 0; t2 < a3.length; t2++) {
+                          const h2 = a3[t2];
                       if (i3.hasRenderableParent(h2)) continue;
-                      const c2 = i3.getTile(h2), u2 = c2.getBucket(s3);
+                          const c2 = i3.getTile(h2), u2 = c2.getBucket(s3);
                       if (!u2) continue;
-                      const d2 = u2.programConfigurations.get(s3.id), _2 = e3.useProgram("heatmap", d2), { zoom: p2 } = e3.transform;
-                      _2.draw(o2, r2.TRIANGLES, Pi.disabled, n2, l2, zi.disabled, we(h2.posMatrix, c2, p2, s3.paint.get("heatmap-intensity")), null, s3.id, u2.layoutVertexBuffer, u2.indexBuffer, u2.segments, s3.paint, e3.transform.zoom, d2);
-                    }
-                    o2.viewport.set([0, 0, e3.width, e3.height]);
+                          const d2 = u2.programConfigurations.get(s3.id), _2 = e3.useProgram("heatmap", d2), { zoom: p2 } = e3.transform;
+                          _2.draw(o2, r2.TRIANGLES, Pi.disabled, n2, l2, zi.disabled, we(h2.posMatrix, c2, p2, s3.paint.get("heatmap-intensity")), null, s3.id, u2.layoutVertexBuffer, u2.indexBuffer, u2.segments, s3.paint, e3.transform.zoom, d2);
+                        }
+                        o2.viewport.set([0, 0, e3.width, e3.height]);
                   } else "translucent" === e3.renderPass && (e3.context.setColorMode(e3.colorModeForRenderPass()), function(e4, i4) {
-                    const s4 = e4.context, a4 = s4.gl, o2 = i4.heatmapFbo;
+                          const s4 = e4.context, a4 = s4.gl, o2 = i4.heatmapFbo;
                     if (!o2) return;
-                    s4.activeTexture.set(a4.TEXTURE0), a4.bindTexture(a4.TEXTURE_2D, o2.colorAttachment.get()), s4.activeTexture.set(a4.TEXTURE1);
-                    let r2 = i4.colorRampTexture;
-                    r2 || (r2 = i4.colorRampTexture = new x(s4, i4.colorRamp, a4.RGBA)), r2.bind(a4.LINEAR, a4.CLAMP_TO_EDGE), e4.useProgram("heatmapTexture").draw(s4, a4.TRIANGLES, Pi.disabled, Mi.disabled, e4.colorModeForRenderPass(), zi.disabled, ((e5, i5, s5, a5) => {
-                      const o3 = t.Z();
-                      t.aS(o3, 0, e5.width, e5.height, 0, 0, 1);
-                      const r3 = e5.context.gl;
-                      return { u_matrix: o3, u_world: [r3.drawingBufferWidth, r3.drawingBufferHeight], u_image: 0, u_color_ramp: 1, u_opacity: i5.paint.get("heatmap-opacity") };
-                    })(e4, i4), null, i4.id, e4.viewportBuffer, e4.quadTriangleIndexBuffer, e4.viewportSegments, i4.paint, e4.transform.zoom);
-                  }(e3, s3));
-                }(e2, i2, s2, a2);
-                break;
-              case "line":
-                !function(e3, i3, s3, a3) {
+                          s4.activeTexture.set(a4.TEXTURE0), a4.bindTexture(a4.TEXTURE_2D, o2.colorAttachment.get()), s4.activeTexture.set(a4.TEXTURE1);
+                          let r2 = i4.colorRampTexture;
+                          r2 || (r2 = i4.colorRampTexture = new x(s4, i4.colorRamp, a4.RGBA)), r2.bind(a4.LINEAR, a4.CLAMP_TO_EDGE), e4.useProgram("heatmapTexture").draw(s4, a4.TRIANGLES, Pi.disabled, Mi.disabled, e4.colorModeForRenderPass(), zi.disabled, ((e5, i5, s5, a5) => {
+                            const o3 = t.Z();
+                            t.aS(o3, 0, e5.width, e5.height, 0, 0, 1);
+                            const r3 = e5.context.gl;
+                            return { u_matrix: o3, u_world: [r3.drawingBufferWidth, r3.drawingBufferHeight], u_image: 0, u_color_ramp: 1, u_opacity: i5.paint.get("heatmap-opacity") };
+                          })(e4, i4), null, i4.id, e4.viewportBuffer, e4.quadTriangleIndexBuffer, e4.viewportSegments, i4.paint, e4.transform.zoom);
+                        }(e3, s3));
+                  }(e2, i2, s2, a2);
+                  break;
+                case "line":
+                  !function(e3, i3, s3, a3) {
                   if ("translucent" !== e3.renderPass) return;
-                  const o2 = s3.paint.get("line-opacity"), r2 = s3.paint.get("line-width");
+                    const o2 = s3.paint.get("line-opacity"), r2 = s3.paint.get("line-width");
                   if (0 === o2.constantOr(1) || 0 === r2.constantOr(1)) return;
-                  const n2 = e3.depthModeForSublayer(0, Pi.ReadOnly), l2 = e3.colorModeForRenderPass(), h2 = s3.paint.get("line-dasharray"), c2 = s3.paint.get("line-pattern"), u2 = c2.constantOr(1), d2 = s3.paint.get("line-gradient"), _2 = s3.getCrossfadeParameters(), p2 = u2 ? "linePattern" : h2 ? "lineSDF" : d2 ? "lineGradient" : "line", m2 = e3.context, f2 = m2.gl;
-                  let g2 = true;
-                  for (const o3 of a3) {
-                    const a4 = i3.getTile(o3);
+                    const n2 = e3.depthModeForSublayer(0, Pi.ReadOnly), l2 = e3.colorModeForRenderPass(), h2 = s3.paint.get("line-dasharray"), c2 = s3.paint.get("line-pattern"), u2 = c2.constantOr(1), d2 = s3.paint.get("line-gradient"), _2 = s3.getCrossfadeParameters(), p2 = u2 ? "linePattern" : h2 ? "lineSDF" : d2 ? "lineGradient" : "line", m2 = e3.context, f2 = m2.gl;
+                    let g2 = true;
+                    for (const o3 of a3) {
+                      const a4 = i3.getTile(o3);
                     if (u2 && !a4.patternsLoaded()) continue;
-                    const r3 = a4.getBucket(s3);
+                      const r3 = a4.getBucket(s3);
                     if (!r3) continue;
-                    const v2 = r3.programConfigurations.get(s3.id), y2 = e3.context.program.get(), b2 = e3.useProgram(p2, v2), w2 = g2 || b2.program !== y2, T2 = e3.style.map.terrain && e3.style.map.terrain.getTerrainData(o3), I2 = c2.constantOr(null);
-                    if (I2 && a4.imageAtlas) {
-                      const t2 = a4.imageAtlas, e4 = t2.patternPositions[I2.to.toString()], i4 = t2.patternPositions[I2.from.toString()];
-                      e4 && i4 && v2.setConstantPatternPositions(e4, i4);
-                    }
-                    const E2 = T2 ? o3 : null, S2 = u2 ? Se(e3, a4, s3, _2, E2) : h2 ? Ce(e3, a4, s3, h2, _2, E2) : d2 ? Ee(e3, a4, s3, r3.lineClipsArray.length, E2) : Ie(e3, a4, s3, E2);
+                      const v2 = r3.programConfigurations.get(s3.id), y2 = e3.context.program.get(), b2 = e3.useProgram(p2, v2), w2 = g2 || b2.program !== y2, T2 = e3.style.map.terrain && e3.style.map.terrain.getTerrainData(o3), I2 = c2.constantOr(null);
+                      if (I2 && a4.imageAtlas) {
+                        const t2 = a4.imageAtlas, e4 = t2.patternPositions[I2.to.toString()], i4 = t2.patternPositions[I2.from.toString()];
+                        e4 && i4 && v2.setConstantPatternPositions(e4, i4);
+                      }
+                      const E2 = T2 ? o3 : null, S2 = u2 ? Se(e3, a4, s3, _2, E2) : h2 ? Ce(e3, a4, s3, h2, _2, E2) : d2 ? Ee(e3, a4, s3, r3.lineClipsArray.length, E2) : Ie(e3, a4, s3, E2);
                     if (u2) m2.activeTexture.set(f2.TEXTURE0), a4.imageAtlasTexture.bind(f2.LINEAR, f2.CLAMP_TO_EDGE), v2.updatePaintBuffers(_2);
                     else if (h2 && (w2 || e3.lineAtlas.dirty)) m2.activeTexture.set(f2.TEXTURE0), e3.lineAtlas.bind(m2);
-                    else if (d2) {
-                      const a5 = r3.gradients[s3.id];
-                      let n3 = a5.texture;
-                      if (s3.gradientVersion !== a5.version) {
-                        let l3 = 256;
-                        if (s3.stepInterpolant) {
-                          const s4 = i3.getSource().maxzoom, a6 = o3.canonical.z === s4 ? Math.ceil(1 << e3.transform.maxZoom - o3.canonical.z) : 1;
-                          l3 = t.ad(t.aY(r3.maxLineLength / t.N * 1024 * a6), 256, m2.maxTextureSize);
+                      else if (d2) {
+                        const a5 = r3.gradients[s3.id];
+                        let n3 = a5.texture;
+                        if (s3.gradientVersion !== a5.version) {
+                          let l3 = 256;
+                          if (s3.stepInterpolant) {
+                            const s4 = i3.getSource().maxzoom, a6 = o3.canonical.z === s4 ? Math.ceil(1 << e3.transform.maxZoom - o3.canonical.z) : 1;
+                            l3 = t.ad(t.aY(r3.maxLineLength / t.N * 1024 * a6), 256, m2.maxTextureSize);
+                          }
+                          a5.gradient = t.aZ({ expression: s3.gradientExpression(), evaluationKey: "lineProgress", resolution: l3, image: a5.gradient || void 0, clips: r3.lineClipsArray }), a5.texture ? a5.texture.update(a5.gradient) : a5.texture = new x(m2, a5.gradient, f2.RGBA), a5.version = s3.gradientVersion, n3 = a5.texture;
                         }
-                        a5.gradient = t.aZ({ expression: s3.gradientExpression(), evaluationKey: "lineProgress", resolution: l3, image: a5.gradient || void 0, clips: r3.lineClipsArray }), a5.texture ? a5.texture.update(a5.gradient) : a5.texture = new x(m2, a5.gradient, f2.RGBA), a5.version = s3.gradientVersion, n3 = a5.texture;
+                        m2.activeTexture.set(f2.TEXTURE0), n3.bind(s3.stepInterpolant ? f2.NEAREST : f2.LINEAR, f2.CLAMP_TO_EDGE);
                       }
-                      m2.activeTexture.set(f2.TEXTURE0), n3.bind(s3.stepInterpolant ? f2.NEAREST : f2.LINEAR, f2.CLAMP_TO_EDGE);
+                      b2.draw(m2, f2.TRIANGLES, n2, e3.stencilModeForClipping(o3), l2, zi.disabled, S2, T2, s3.id, r3.layoutVertexBuffer, r3.indexBuffer, r3.segments, s3.paint, e3.transform.zoom, v2, r3.layoutVertexBuffer2), g2 = false;
                     }
-                    b2.draw(m2, f2.TRIANGLES, n2, e3.stencilModeForClipping(o3), l2, zi.disabled, S2, T2, s3.id, r3.layoutVertexBuffer, r3.indexBuffer, r3.segments, s3.paint, e3.transform.zoom, v2, r3.layoutVertexBuffer2), g2 = false;
-                  }
-                }(e2, i2, s2, a2);
-                break;
-              case "fill":
-                !function(e3, i3, s3, a3) {
-                  const o2 = s3.paint.get("fill-color"), r2 = s3.paint.get("fill-opacity");
+                  }(e2, i2, s2, a2);
+                  break;
+                case "fill":
+                  !function(e3, i3, s3, a3) {
+                    const o2 = s3.paint.get("fill-color"), r2 = s3.paint.get("fill-opacity");
                   if (0 === r2.constantOr(1)) return;
-                  const n2 = e3.colorModeForRenderPass(), l2 = s3.paint.get("fill-pattern"), h2 = e3.opaquePassEnabledForLayer() && !l2.constantOr(1) && 1 === o2.constantOr(t.aT.transparent).a && 1 === r2.constantOr(0) ? "opaque" : "translucent";
-                  if (e3.renderPass === h2) {
-                    const t2 = e3.depthModeForSublayer(1, "opaque" === e3.renderPass ? Pi.ReadWrite : Pi.ReadOnly);
-                    Zi(e3, i3, s3, a3, t2, n2, false);
-                  }
-                  if ("translucent" === e3.renderPass && s3.paint.get("fill-antialias")) {
-                    const t2 = e3.depthModeForSublayer(s3.getPaintProperty("fill-outline-color") ? 2 : 0, Pi.ReadOnly);
-                    Zi(e3, i3, s3, a3, t2, n2, true);
-                  }
-                }(e2, i2, s2, a2);
-                break;
-              case "fill-extrusion":
-                !function(t2, e3, i3, s3) {
-                  const a3 = i3.paint.get("fill-extrusion-opacity");
-                  if (0 !== a3 && "translucent" === t2.renderPass) {
-                    const o2 = new Pi(t2.context.gl.LEQUAL, Pi.ReadWrite, t2.depthRangeFor3D);
-                    if (1 !== a3 || i3.paint.get("fill-extrusion-pattern").constantOr(1)) Gi(t2, e3, i3, s3, o2, Mi.disabled, Si.disabled), Gi(t2, e3, i3, s3, o2, t2.stencilModeFor3D(), t2.colorModeForRenderPass());
-                    else {
-                      const a4 = t2.colorModeForRenderPass();
-                      Gi(t2, e3, i3, s3, o2, Mi.disabled, a4);
+                    const n2 = e3.colorModeForRenderPass(), l2 = s3.paint.get("fill-pattern"), h2 = e3.opaquePassEnabledForLayer() && !l2.constantOr(1) && 1 === o2.constantOr(t.aT.transparent).a && 1 === r2.constantOr(0) ? "opaque" : "translucent";
+                    if (e3.renderPass === h2) {
+                      const t2 = e3.depthModeForSublayer(1, "opaque" === e3.renderPass ? Pi.ReadWrite : Pi.ReadOnly);
+                      Zi(e3, i3, s3, a3, t2, n2, false);
                     }
-                  }
-                }(e2, i2, s2, a2);
-                break;
-              case "hillshade":
-                !function(t2, e3, i3, s3) {
+                    if ("translucent" === e3.renderPass && s3.paint.get("fill-antialias")) {
+                      const t2 = e3.depthModeForSublayer(s3.getPaintProperty("fill-outline-color") ? 2 : 0, Pi.ReadOnly);
+                      Zi(e3, i3, s3, a3, t2, n2, true);
+                    }
+                  }(e2, i2, s2, a2);
+                  break;
+                case "fill-extrusion":
+                  !function(t2, e3, i3, s3) {
+                    const a3 = i3.paint.get("fill-extrusion-opacity");
+                    if (0 !== a3 && "translucent" === t2.renderPass) {
+                      const o2 = new Pi(t2.context.gl.LEQUAL, Pi.ReadWrite, t2.depthRangeFor3D);
+                    if (1 !== a3 || i3.paint.get("fill-extrusion-pattern").constantOr(1)) Gi(t2, e3, i3, s3, o2, Mi.disabled, Si.disabled), Gi(t2, e3, i3, s3, o2, t2.stencilModeFor3D(), t2.colorModeForRenderPass());
+                      else {
+                        const a4 = t2.colorModeForRenderPass();
+                        Gi(t2, e3, i3, s3, o2, Mi.disabled, a4);
+                      }
+                    }
+                  }(e2, i2, s2, a2);
+                  break;
+                case "hillshade":
+                  !function(t2, e3, i3, s3) {
                   if ("offscreen" !== t2.renderPass && "translucent" !== t2.renderPass) return;
-                  const a3 = t2.context, o2 = t2.depthModeForSublayer(0, Pi.ReadOnly), r2 = t2.colorModeForRenderPass(), [n2, l2] = "translucent" === t2.renderPass ? t2.stencilConfigForOverlap(s3) : [{}, s3];
-                  for (const s4 of l2) {
-                    const a4 = e3.getTile(s4);
-                    void 0 !== a4.needsHillshadePrepare && a4.needsHillshadePrepare && "offscreen" === t2.renderPass ? Vi(t2, a4, i3, o2, Mi.disabled, r2) : "translucent" === t2.renderPass && ji(t2, s4, a4, i3, o2, n2[s4.overscaledZ], r2);
-                  }
-                  a3.viewport.set([0, 0, t2.width, t2.height]);
-                }(e2, i2, s2, a2);
-                break;
-              case "raster":
-                !function(t2, e3, i3, s3) {
+                    const a3 = t2.context, o2 = t2.depthModeForSublayer(0, Pi.ReadOnly), r2 = t2.colorModeForRenderPass(), [n2, l2] = "translucent" === t2.renderPass ? t2.stencilConfigForOverlap(s3) : [{}, s3];
+                    for (const s4 of l2) {
+                      const a4 = e3.getTile(s4);
+                      void 0 !== a4.needsHillshadePrepare && a4.needsHillshadePrepare && "offscreen" === t2.renderPass ? Vi(t2, a4, i3, o2, Mi.disabled, r2) : "translucent" === t2.renderPass && ji(t2, s4, a4, i3, o2, n2[s4.overscaledZ], r2);
+                    }
+                    a3.viewport.set([0, 0, t2.width, t2.height]);
+                  }(e2, i2, s2, a2);
+                  break;
+                case "raster":
+                  !function(t2, e3, i3, s3) {
                   if ("translucent" !== t2.renderPass) return;
                   if (0 === i3.paint.get("raster-opacity")) return;
                   if (!s3.length) return;
-                  const a3 = t2.context, o2 = a3.gl, r2 = e3.getSource(), n2 = t2.useProgram("raster"), l2 = t2.colorModeForRenderPass(), [h2, c2] = r2 instanceof N ? [{}, s3] : t2.stencilConfigForOverlap(s3), u2 = c2[c2.length - 1].overscaledZ, d2 = !t2.options.moving;
-                  for (const s4 of c2) {
-                    const c3 = t2.depthModeForSublayer(s4.overscaledZ - u2, 1 === i3.paint.get("raster-opacity") ? Pi.ReadWrite : Pi.ReadOnly, o2.LESS), _2 = e3.getTile(s4);
-                    _2.registerFadeDuration(i3.paint.get("raster-fade-duration"));
-                    const p2 = e3.findLoadedParent(s4, 0), m2 = qi(_2, p2, e3, i3, t2.transform, t2.style.map.terrain);
-                    let f2, g2;
-                    const v2 = "nearest" === i3.paint.get("raster-resampling") ? o2.NEAREST : o2.LINEAR;
-                    a3.activeTexture.set(o2.TEXTURE0), _2.texture.bind(v2, o2.CLAMP_TO_EDGE, o2.LINEAR_MIPMAP_NEAREST), a3.activeTexture.set(o2.TEXTURE1), p2 ? (p2.texture.bind(v2, o2.CLAMP_TO_EDGE, o2.LINEAR_MIPMAP_NEAREST), f2 = Math.pow(2, p2.tileID.overscaledZ - _2.tileID.overscaledZ), g2 = [_2.tileID.canonical.x * f2 % 1, _2.tileID.canonical.y * f2 % 1]) : _2.texture.bind(v2, o2.CLAMP_TO_EDGE, o2.LINEAR_MIPMAP_NEAREST);
-                    const x2 = t2.style.map.terrain && t2.style.map.terrain.getTerrainData(s4), y2 = x2 ? s4 : null, b2 = y2 ? y2.posMatrix : t2.transform.calculatePosMatrix(s4.toUnwrapped(), d2), w2 = Me(b2, g2 || [0, 0], f2 || 1, m2, i3);
-                    r2 instanceof N ? n2.draw(a3, o2.TRIANGLES, c3, Mi.disabled, l2, zi.disabled, w2, x2, i3.id, r2.boundsBuffer, t2.quadTriangleIndexBuffer, r2.boundsSegments) : n2.draw(a3, o2.TRIANGLES, c3, h2[s4.overscaledZ], l2, zi.disabled, w2, x2, i3.id, t2.rasterBoundsBuffer, t2.quadTriangleIndexBuffer, t2.rasterBoundsSegments);
-                  }
-                }(e2, i2, s2, a2);
-                break;
-              case "background":
-                !function(t2, e3, i3, s3) {
-                  const a3 = i3.paint.get("background-color"), o2 = i3.paint.get("background-opacity");
+                    const a3 = t2.context, o2 = a3.gl, r2 = e3.getSource(), n2 = t2.useProgram("raster"), l2 = t2.colorModeForRenderPass(), [h2, c2] = r2 instanceof N ? [{}, s3] : t2.stencilConfigForOverlap(s3), u2 = c2[c2.length - 1].overscaledZ, d2 = !t2.options.moving;
+                    for (const s4 of c2) {
+                      const c3 = t2.depthModeForSublayer(s4.overscaledZ - u2, 1 === i3.paint.get("raster-opacity") ? Pi.ReadWrite : Pi.ReadOnly, o2.LESS), _2 = e3.getTile(s4);
+                      _2.registerFadeDuration(i3.paint.get("raster-fade-duration"));
+                      const p2 = e3.findLoadedParent(s4, 0), m2 = qi(_2, p2, e3, i3, t2.transform, t2.style.map.terrain);
+                      let f2, g2;
+                      const v2 = "nearest" === i3.paint.get("raster-resampling") ? o2.NEAREST : o2.LINEAR;
+                      a3.activeTexture.set(o2.TEXTURE0), _2.texture.bind(v2, o2.CLAMP_TO_EDGE, o2.LINEAR_MIPMAP_NEAREST), a3.activeTexture.set(o2.TEXTURE1), p2 ? (p2.texture.bind(v2, o2.CLAMP_TO_EDGE, o2.LINEAR_MIPMAP_NEAREST), f2 = Math.pow(2, p2.tileID.overscaledZ - _2.tileID.overscaledZ), g2 = [_2.tileID.canonical.x * f2 % 1, _2.tileID.canonical.y * f2 % 1]) : _2.texture.bind(v2, o2.CLAMP_TO_EDGE, o2.LINEAR_MIPMAP_NEAREST);
+                      const x2 = t2.style.map.terrain && t2.style.map.terrain.getTerrainData(s4), y2 = x2 ? s4 : null, b2 = y2 ? y2.posMatrix : t2.transform.calculatePosMatrix(s4.toUnwrapped(), d2), w2 = Me(b2, g2 || [0, 0], f2 || 1, m2, i3);
+                      r2 instanceof N ? n2.draw(a3, o2.TRIANGLES, c3, Mi.disabled, l2, zi.disabled, w2, x2, i3.id, r2.boundsBuffer, t2.quadTriangleIndexBuffer, r2.boundsSegments) : n2.draw(a3, o2.TRIANGLES, c3, h2[s4.overscaledZ], l2, zi.disabled, w2, x2, i3.id, t2.rasterBoundsBuffer, t2.quadTriangleIndexBuffer, t2.rasterBoundsSegments);
+                    }
+                  }(e2, i2, s2, a2);
+                  break;
+                case "background":
+                  !function(t2, e3, i3, s3) {
+                    const a3 = i3.paint.get("background-color"), o2 = i3.paint.get("background-opacity");
                   if (0 === o2) return;
-                  const r2 = t2.context, n2 = r2.gl, l2 = t2.transform, h2 = l2.tileSize, c2 = i3.paint.get("background-pattern");
+                    const r2 = t2.context, n2 = r2.gl, l2 = t2.transform, h2 = l2.tileSize, c2 = i3.paint.get("background-pattern");
                   if (t2.isPatternMissing(c2)) return;
-                  const u2 = !c2 && 1 === a3.a && 1 === o2 && t2.opaquePassEnabledForLayer() ? "opaque" : "translucent";
+                    const u2 = !c2 && 1 === a3.a && 1 === o2 && t2.opaquePassEnabledForLayer() ? "opaque" : "translucent";
                   if (t2.renderPass !== u2) return;
-                  const d2 = Mi.disabled, _2 = t2.depthModeForSublayer(0, "opaque" === u2 ? Pi.ReadWrite : Pi.ReadOnly), p2 = t2.colorModeForRenderPass(), m2 = t2.useProgram(c2 ? "backgroundPattern" : "background"), f2 = s3 || l2.coveringTiles({ tileSize: h2, terrain: t2.style.map.terrain });
-                  c2 && (r2.activeTexture.set(n2.TEXTURE0), t2.imageManager.bind(t2.context));
-                  const g2 = i3.getCrossfadeParameters();
-                  for (const e4 of f2) {
-                    const l3 = s3 ? e4.posMatrix : t2.transform.calculatePosMatrix(e4.toUnwrapped()), u3 = c2 ? Fe(l3, o2, t2, c2, { tileID: e4, tileSize: h2 }, g2) : ke(l3, o2, a3), f3 = t2.style.map.terrain && t2.style.map.terrain.getTerrainData(e4);
-                    m2.draw(r2, n2.TRIANGLES, _2, d2, p2, zi.disabled, u3, f3, i3.id, t2.tileExtentBuffer, t2.quadTriangleIndexBuffer, t2.tileExtentSegments);
-                  }
-                }(e2, 0, s2, a2);
-                break;
-              case "custom":
-                !function(t2, e3, i3) {
-                  const s3 = t2.context, a3 = i3.implementation;
-                  if ("offscreen" === t2.renderPass) {
-                    const e4 = a3.prerender;
-                    e4 && (t2.setCustomLayerDefaults(), s3.setColorMode(t2.colorModeForRenderPass()), e4.call(a3, s3.gl, t2.transform.customLayerMatrix()), s3.setDirty(), t2.setBaseState());
-                  } else if ("translucent" === t2.renderPass) {
-                    t2.setCustomLayerDefaults(), s3.setColorMode(t2.colorModeForRenderPass()), s3.setStencilMode(Mi.disabled);
-                    const e4 = "3d" === a3.renderingMode ? new Pi(t2.context.gl.LEQUAL, Pi.ReadWrite, t2.depthRangeFor3D) : t2.depthModeForSublayer(0, Pi.ReadOnly);
-                    s3.setDepthMode(e4), a3.render(s3.gl, t2.transform.customLayerMatrix()), s3.setDirty(), t2.setBaseState(), s3.bindFramebuffer.set(null);
-                  }
-                }(e2, 0, s2);
-            }
+                    const d2 = Mi.disabled, _2 = t2.depthModeForSublayer(0, "opaque" === u2 ? Pi.ReadWrite : Pi.ReadOnly), p2 = t2.colorModeForRenderPass(), m2 = t2.useProgram(c2 ? "backgroundPattern" : "background"), f2 = s3 || l2.coveringTiles({ tileSize: h2, terrain: t2.style.map.terrain });
+                    c2 && (r2.activeTexture.set(n2.TEXTURE0), t2.imageManager.bind(t2.context));
+                    const g2 = i3.getCrossfadeParameters();
+                    for (const e4 of f2) {
+                      const l3 = s3 ? e4.posMatrix : t2.transform.calculatePosMatrix(e4.toUnwrapped()), u3 = c2 ? Fe(l3, o2, t2, c2, { tileID: e4, tileSize: h2 }, g2) : ke(l3, o2, a3), f3 = t2.style.map.terrain && t2.style.map.terrain.getTerrainData(e4);
+                      m2.draw(r2, n2.TRIANGLES, _2, d2, p2, zi.disabled, u3, f3, i3.id, t2.tileExtentBuffer, t2.quadTriangleIndexBuffer, t2.tileExtentSegments);
+                    }
+                  }(e2, 0, s2, a2);
+                  break;
+                case "custom":
+                  !function(t2, e3, i3) {
+                    const s3 = t2.context, a3 = i3.implementation;
+                    if ("offscreen" === t2.renderPass) {
+                      const e4 = a3.prerender;
+                      e4 && (t2.setCustomLayerDefaults(), s3.setColorMode(t2.colorModeForRenderPass()), e4.call(a3, s3.gl, t2.transform.customLayerMatrix()), s3.setDirty(), t2.setBaseState());
+                    } else if ("translucent" === t2.renderPass) {
+                      t2.setCustomLayerDefaults(), s3.setColorMode(t2.colorModeForRenderPass()), s3.setStencilMode(Mi.disabled);
+                      const e4 = "3d" === a3.renderingMode ? new Pi(t2.context.gl.LEQUAL, Pi.ReadWrite, t2.depthRangeFor3D) : t2.depthModeForSublayer(0, Pi.ReadOnly);
+                      s3.setDepthMode(e4), a3.render(s3.gl, t2.transform.customLayerMatrix()), s3.setDirty(), t2.setBaseState(), s3.bindFramebuffer.set(null);
+                    }
+                  }(e2, 0, s2);
+              }
           }
           translatePosMatrix(e2, i2, s2, a2, o2) {
             if (!s2[0] && !s2[1]) return e2;
@@ -13488,14 +13529,14 @@ uniform ${i3} ${s3} u_${a3};
                 const e3 = v2 - a3.zoom, i3 = h2[0] - 0.5 - (o3 << e3), s3 = h2[1] - 0.5 - (r3 << e3);
                 g2.push({ tileID: new t.O(a3.zoom === v2 ? x2 : a3.zoom, a3.wrap, a3.zoom, o3, r3), distanceSq: f([c2[0] - 0.5 - o3, c2[1] - 0.5 - r3]), tileDistanceToCamera: Math.sqrt(i3 * i3 + s3 * s3) });
               } else for (let l4 = 0; l4 < 4; l4++) {
-                const h3 = (o3 << 1) + l4 % 2, c3 = (r3 << 1) + (l4 >> 1), u3 = a3.zoom + 1;
-                let d3 = a3.aabb.quadrant(l4);
-                if (e2.terrain) {
-                  const o4 = new t.O(u3, a3.wrap, u3, h3, c3), r4 = e2.terrain.getMinMaxElevation(o4), n4 = null !== (i2 = r4.minElevation) && void 0 !== i2 ? i2 : this.elevation, l5 = null !== (s2 = r4.maxElevation) && void 0 !== s2 ? s2 : this.elevation;
-                  d3 = new as([d3.min[0], d3.min[1], n4], [d3.max[0], d3.max[1], l5]);
+                  const h3 = (o3 << 1) + l4 % 2, c3 = (r3 << 1) + (l4 >> 1), u3 = a3.zoom + 1;
+                  let d3 = a3.aabb.quadrant(l4);
+                  if (e2.terrain) {
+                    const o4 = new t.O(u3, a3.wrap, u3, h3, c3), r4 = e2.terrain.getMinMaxElevation(o4), n4 = null !== (i2 = r4.minElevation) && void 0 !== i2 ? i2 : this.elevation, l5 = null !== (s2 = r4.maxElevation) && void 0 !== s2 ? s2 : this.elevation;
+                    d3 = new as([d3.min[0], d3.min[1], n4], [d3.max[0], d3.max[1], l5]);
+                  }
+                  m2.push({ aabb: d3, zoom: u3, x: h3, y: c3, wrap: a3.wrap, fullyVisible: n3 });
                 }
-                m2.push({ aabb: d3, zoom: u3, x: h3, y: c3, wrap: a3.wrap, fullyVisible: n3 });
-              }
             }
             return g2.sort((t2, e3) => t2.distanceSq - e3.distanceSq).map((t2) => t2.tileID);
           }
@@ -14469,8 +14510,8 @@ uniform ${i3} ${s3} u_${a3};
           }
           touchstart(t2, e2, i2) {
             if (!this._swipePoint) if (this._tapTime) {
-              const s2 = e2[0], a2 = t2.timeStamp - this._tapTime < 500, o2 = this._tapPoint.dist(s2) < 30;
-              a2 && o2 ? i2.length > 0 && (this._swipePoint = s2, this._swipeTouch = i2[0].identifier) : this.reset();
+                const s2 = e2[0], a2 = t2.timeStamp - this._tapTime < 500, o2 = this._tapPoint.dist(s2) < 30;
+                a2 && o2 ? i2.length > 0 && (this._swipePoint = s2, this._swipeTouch = i2[0].identifier) : this.reset();
             } else this._tap.touchstart(t2, e2, i2);
           }
           touchmove(t2, e2, i2) {
@@ -15204,6 +15245,12 @@ uniform ${i3} ${s3} u_${a3};
             const s2 = t.U.fromLngLat(e2.wrap()), a2 = (1 << i2) * t.N, o2 = s2.x * a2, r2 = s2.y * a2, n2 = Math.floor(o2 / t.N), l2 = Math.floor(r2 / t.N);
             return { tileID: new t.O(i2, 0, i2, n2, l2), mercatorX: o2, mercatorY: r2 };
           }
+          _allowMercatorOverflow(e2, i2) {
+            const s2 = e2.x < this.painter.width / 2;
+            let a2 = t.bf(i2);
+            const o2 = this.painter.transform.center.lng;
+            return s2 && Math.sign(a2) > 0 && Math.sign(o2) < 0 || !s2 && Math.sign(a2) < 0 && Math.sign(o2) > 0 ? (a2 = 360 * Math.sign(o2) + a2, t.G(a2)) : i2;
+          }
         }
         class _a {
           constructor(t2, e2, i2) {
@@ -15271,9 +15318,9 @@ uniform ${i3} ${s3} u_${a3};
               }
             }
             for (const t3 of this._renderableTiles) for (const e3 in this._coordsDescendingInvStr) {
-              const i2 = this._coordsDescendingInvStr[e3][t3.tileID.key];
-              i2 && i2 !== t3.rttCoords[e3] && (t3.rtt = []);
-            }
+                const i2 = this._coordsDescendingInvStr[e3][t3.tileID.key];
+                i2 && i2 !== t3.rttCoords[e3] && (t3.rtt = []);
+              }
           }
           renderLayer(e2) {
             if (e2.isHidden(this.painter.transform.zoom)) return false;
@@ -15953,6 +16000,9 @@ uniform ${i3} ${s3} u_${a3};
           getLayer(t2) {
             return this.style.getLayer(t2);
           }
+          getLayersOrder() {
+            return this.style.getLayersOrder();
+          }
           setLayerZoomRange(t2, e2, i2) {
             return this.style.setLayerZoomRange(t2, e2, i2), this._update(true);
           }
@@ -16184,18 +16234,18 @@ uniform ${i3} ${s3} u_${a3};
               if (this._map) {
                 if (this._isOutOfMapMaxBounds(e3)) return this._setErrorState(), this.fire(new t.k("outofmaxbounds", e3)), this._updateMarker(), void this._finish();
                 if (this.options.trackUserLocation) switch (this._lastKnownPosition = e3, this._watchState) {
-                  case "WAITING_ACTIVE":
-                  case "ACTIVE_LOCK":
-                  case "ACTIVE_ERROR":
-                    this._watchState = "ACTIVE_LOCK", this._geolocateButton.classList.remove("maplibregl-ctrl-geolocate-waiting"), this._geolocateButton.classList.remove("maplibregl-ctrl-geolocate-active-error"), this._geolocateButton.classList.add("maplibregl-ctrl-geolocate-active");
-                    break;
-                  case "BACKGROUND":
-                  case "BACKGROUND_ERROR":
-                    this._watchState = "BACKGROUND", this._geolocateButton.classList.remove("maplibregl-ctrl-geolocate-waiting"), this._geolocateButton.classList.remove("maplibregl-ctrl-geolocate-background-error"), this._geolocateButton.classList.add("maplibregl-ctrl-geolocate-background");
-                    break;
-                  default:
-                    throw new Error(`Unexpected watchState ${this._watchState}`);
-                }
+                    case "WAITING_ACTIVE":
+                    case "ACTIVE_LOCK":
+                    case "ACTIVE_ERROR":
+                      this._watchState = "ACTIVE_LOCK", this._geolocateButton.classList.remove("maplibregl-ctrl-geolocate-waiting"), this._geolocateButton.classList.remove("maplibregl-ctrl-geolocate-active-error"), this._geolocateButton.classList.add("maplibregl-ctrl-geolocate-active");
+                      break;
+                    case "BACKGROUND":
+                    case "BACKGROUND_ERROR":
+                      this._watchState = "BACKGROUND", this._geolocateButton.classList.remove("maplibregl-ctrl-geolocate-waiting"), this._geolocateButton.classList.remove("maplibregl-ctrl-geolocate-background-error"), this._geolocateButton.classList.add("maplibregl-ctrl-geolocate-background");
+                      break;
+                    default:
+                      throw new Error(`Unexpected watchState ${this._watchState}`);
+                  }
                 this.options.showUserLocation && "OFF" !== this._watchState && this._updateMarker(e3), this.options.trackUserLocation && "ACTIVE_LOCK" !== this._watchState || this._updateCamera(e3), this.options.showUserLocation && this._dotElement.classList.remove("maplibregl-user-location-dot-stale"), this.fire(new t.k("geolocate", e3)), this._finish();
               }
             }, this._updateCamera = (e3) => {
@@ -16211,13 +16261,13 @@ uniform ${i3} ${s3} u_${a3};
             }, this._onError = (e3) => {
               if (this._map) {
                 if (this.options.trackUserLocation) if (1 === e3.code) {
-                  this._watchState = "OFF", this._geolocateButton.classList.remove("maplibregl-ctrl-geolocate-waiting"), this._geolocateButton.classList.remove("maplibregl-ctrl-geolocate-active"), this._geolocateButton.classList.remove("maplibregl-ctrl-geolocate-active-error"), this._geolocateButton.classList.remove("maplibregl-ctrl-geolocate-background"), this._geolocateButton.classList.remove("maplibregl-ctrl-geolocate-background-error"), this._geolocateButton.disabled = true;
-                  const t2 = this._map._getUIString("GeolocateControl.LocationNotAvailable");
-                  this._geolocateButton.title = t2, this._geolocateButton.setAttribute("aria-label", t2), void 0 !== this._geolocationWatchID && this._clearWatch();
-                } else {
+                    this._watchState = "OFF", this._geolocateButton.classList.remove("maplibregl-ctrl-geolocate-waiting"), this._geolocateButton.classList.remove("maplibregl-ctrl-geolocate-active"), this._geolocateButton.classList.remove("maplibregl-ctrl-geolocate-active-error"), this._geolocateButton.classList.remove("maplibregl-ctrl-geolocate-background"), this._geolocateButton.classList.remove("maplibregl-ctrl-geolocate-background-error"), this._geolocateButton.disabled = true;
+                    const t2 = this._map._getUIString("GeolocateControl.LocationNotAvailable");
+                    this._geolocateButton.title = t2, this._geolocateButton.setAttribute("aria-label", t2), void 0 !== this._geolocationWatchID && this._clearWatch();
+                  } else {
                   if (3 === e3.code && Pa) return;
-                  this._setErrorState();
-                }
+                    this._setErrorState();
+                  }
                 "OFF" !== this._watchState && this.options.showUserLocation && this._dotElement.classList.add("maplibregl-user-location-dot-stale"), this.fire(new t.k("error", e3)), this._finish();
               }
             }, this._finish = () => {
@@ -16494,6 +16544,7 @@ var import_maplibre_gl = __toESM(require_maplibre_gl(), 1);
 var BlazorMap = class {
   constructor(_dotnetRef, _rootElement, center, zoom, baselayerurl, maxBounds, pathPrefix) {
     this._dotnetRef = _dotnetRef;
+    this._mapId = _mapId;
     this.$isInitialized = () => {
     };
     this._initializationCompleted = false;
@@ -16560,6 +16611,12 @@ var BlazorMap = class {
               console.warn("Image" + image.id + " already added");
             }
           });
+          if (!image.id) {
+            console.warn("Image without 'id' can not be added!");
+          }
+          if (!image.imgUrl) {
+            console.warn(`Image definition ${image.id} is missing required properties. (Required properties: imgUrl).`);
+          }
         }
       } else {
         console.debug("No images were found!");
@@ -16699,6 +16756,14 @@ var BlazorMap = class {
       map.on("click", this.onMapClick);
       map.on("dblclick", this.onMapClick);
       map.on("contextmenu", this.onMapClick);
+    } else {
+      map["scrollZoom"].disable();
+      map["boxZoom"].disable();
+      map["dragRotate"].disable();
+      map["dragPan"].disable();
+      map["keyboard"].disable();
+      map["doubleClickZoom"].disable();
+      map["touchZoomRotate"].disable();
     }
     map.on("load", () => {
       if (_dotnetRef) {
