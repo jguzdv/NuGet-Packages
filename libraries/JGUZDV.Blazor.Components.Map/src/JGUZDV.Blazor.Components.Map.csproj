@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<RootNamespace>JGUZDV.Blazor.Components.Map</RootNamespace>
+
+		<PackageId>JGUZDV.Blazor.Components.Map</PackageId>
+		<IsPackable>true</IsPackable>
+		<Version>1.0.0-beta1.0.0</Version>
+		<Authors>Aylin Siebel</Authors>
+		<Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
+		<PackageDescription>Blazor-Komponentenbibliothek zur Darstellung einer Karte</PackageDescription>
+
+		<AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Content Remove="typescript/*.json" />
+	    <None Include="typescript/*.json" />
+		<Content Remove="package*.json" />
+	    <None Include="package*.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="GeoJSON.Text" Version="1.1.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.14" />
+		<PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.14" />	
+	</ItemGroup>
+	
+	<ItemGroup>
+		<JSBundleInputs Include="typescript/**/*.ts" Exclude="node_modules/**; **/*.d.ts" />
+	</ItemGroup>
+	
+	<Target Name="EnsureNpmRestored" Condition="!Exists('node_modules')">
+		<Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />
+		<Exec Command="npm install" />
+	</Target>
+	
+	<Target Name="RunJSBundler" AfterTargets="ResolveReferences" Inputs="@(JSBundleInputs)" Outputs="wwwroot/js/typescript.js" DependsOnTargets="EnsureNpmRestored">
+		<RemoveDir Directories="wwwroot/js/BlazorMap/**" />
+		<Message Importance="normal" Text="Bundling JS files ..." />
+		<Exec Command="npm run build:$(Configuration)" WorkingDirectory="typescript" />
+	</Target>
+
+</Project>
