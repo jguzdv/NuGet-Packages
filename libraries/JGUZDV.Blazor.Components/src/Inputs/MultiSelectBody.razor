@@ -24,7 +24,7 @@
             }
             <div @onkeypress="e => e.OnEnter(ToggleAll)" @onclick="ToggleAll"
                  tabindex="0"
-                 class="bg-body button border px-2 py-1  d-flex justify-content-between @selectedClass">
+                 class="bg-body button border p-2 small d-flex justify-content-between @selectedClass">
                 <span class="text-truncate" title="@AllOptionLabel">@AllOptionLabel</span>
                 @if (Values.Count == Items.Count)
                 {
@@ -45,7 +45,7 @@
             }
             <div tabindex="0"
                  @onkeypress="e => e.OnEnter(() => HandleItemClicked(item))" @onclick="() => HandleItemClicked(item)"
-                 class="border bg-body button px-2 py-1  d-flex justify-content-between @selectedClass">
+                 class="border bg-body button p-2 small d-flex justify-content-between @selectedClass">
                 <span class="text-truncate">@ItemTemplate(item)</span>
                 @if (isSelected)
                 {

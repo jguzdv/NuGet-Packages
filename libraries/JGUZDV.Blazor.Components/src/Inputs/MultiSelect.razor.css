@@ -44,26 +44,3 @@
 .mw-0 {
     min-width: 0;
 }
-
-.multi-select {
-    position: relative;
-    anchor-name: --multi-select-anchor;
-    anchor-scope: --multi-select-anchor;
-}
-
-.multi-select-overlay {
-    position: fixed;
-    position-anchor: --multi-select-anchor;
-    top: anchor(bottom);
-    left: anchor(left);
-    width: anchor-size(width);
-    position-try-fallbacks: --multi-select-overlay-above;
-    z-index: 1000;
-    box-shadow: var(--bs-box-shadow);
-    max-height: 20rem;
-}
-
-@position-try --multi-select-overlay-above {
-    top: auto;
-    bottom: anchor(top);
-}

@@ -1,7 +1,6 @@
 {
   "compileOnSave": true,
   "compilerOptions": {
-
     "module": "ES6",
     "removeComments": true,
     "allowSyntheticDefaultImports": true,
@@ -12,7 +11,5 @@
     "noImplicitAny": false,
     "moduleResolution": "Node"
   },
-
   "exclude": [ "node_modules" ]
-
 }

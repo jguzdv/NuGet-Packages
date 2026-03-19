@@ -17,13 +17,9 @@ namespace JGUZDV.JobHost
 
         public async Task Execute(IJobExecutionContext context)
         {
-            var scheduler = await _schedulerFactory.GetScheduler(context.CancellationToken);
             var jobs = await _reporter.GetPendingJobsAsync(context.CancellationToken);
-            var runningKeys = (await scheduler.GetCurrentlyExecutingJobs(context.CancellationToken))
-                .Select(x => x.JobDetail.Key)
-                .ToHashSet();
 
-            jobs = jobs.Where(x => !runningKeys.Contains(new JobKey(x.Name))).ToList();
+            var scheduler = await _schedulerFactory.GetScheduler(context.CancellationToken);
 
             foreach (var job in jobs)
             {

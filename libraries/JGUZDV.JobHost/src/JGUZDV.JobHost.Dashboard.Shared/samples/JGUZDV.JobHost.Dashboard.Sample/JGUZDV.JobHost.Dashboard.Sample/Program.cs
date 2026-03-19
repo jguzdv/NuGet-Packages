@@ -55,6 +55,4 @@ app.MapRazorComponents<App>()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(typeof(JGUZDV.JobHost.Dashboard.Sample.Client._Imports).Assembly);
 
-app.MapStaticAssets();
-
 app.Run();
