@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import { Map as GlMap } from "maplibre-gl";
 class BlazorMap {
-    constructor(_dotnetRef, _rootElement, _mapId, isStatic, center, zoom, baselayerurl, maxBounds, pathPrefix) {
+    constructor(_dotnetRef, _rootElement, _mapId, center, zoom, baselayerurl, maxBounds, pathPrefix) {
         this._dotnetRef = _dotnetRef;
         this._mapId = _mapId;
         this.$isInitialized = () => { };
@@ -197,19 +197,10 @@ class BlazorMap {
             style: baselayerurl,
             maxBounds: maxBounds,
         });
-        if (!isStatic && _dotnetRef) {
+        if (_dotnetRef) {
             map.on('click', this.onMapClick);
             map.on('dblclick', this.onMapClick);
             map.on('contextmenu', this.onMapClick);
-        }
-        else {
-            map["scrollZoom"].disable();
-            map["boxZoom"].disable();
-            map["dragRotate"].disable();
-            map["dragPan"].disable();
-            map["keyboard"].disable();
-            map["doubleClickZoom"].disable();
-            map["touchZoomRotate"].disable();
         }
         map.on('load', () => {
             if (_dotnetRef) {
@@ -220,12 +211,9 @@ class BlazorMap {
         this.setMap(map);
     }
 }
-export function createMap(_dotnetRef, _rootElement, clickable, center, zoom, baselayerurl, maxBounds, spritePathPrefix) {
+export function createMap(_dotnetRef, _rootElement, center, zoom, baselayerurl, maxBounds, spritePathPrefix) {
     console.debug("Creating Map ...");
-    return new BlazorMap(_dotnetRef, _rootElement, `map_${Math.random()}`, clickable, center, zoom, baselayerurl, maxBounds, spritePathPrefix);
+    return new BlazorMap(_dotnetRef, _rootElement, `map_${Math.random()}`, center, zoom, baselayerurl, maxBounds, spritePathPrefix);
 }
-export function createStaticMap(_dotnetRef, _rootElement, center, zoom, baselayerurl, maxBounds, spritePathPrefix) {
-    console.debug("Creating StaticMap ...");
-    return new BlazorMap(_dotnetRef, _rootElement, `map_${Math.random()}`, false, center, zoom, baselayerurl, maxBounds, spritePathPrefix);
-}
+
 //# sourceMappingURL=BlazorMap.js.map

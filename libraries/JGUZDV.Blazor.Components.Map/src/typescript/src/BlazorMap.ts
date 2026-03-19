@@ -1,4 +1,4 @@
-﻿import { GeoJSONSource, LngLatBounds, LngLatLike, Map as GlMap, MapGeoJSONFeature, MapMouseEvent } from "maplibre-gl";
+﻿import { GeoJSONSource, LngLatBounds, LngLatLike, Map as GlMap, MapMouseEvent } from "maplibre-gl";
 
 class BlazorMap {
 
@@ -11,7 +11,6 @@ class BlazorMap {
         private _dotnetRef,
         _rootElement: HTMLElement,
         private _mapId: string,
-        isStatic: boolean,
         center: LngLatLike,
         zoom: number,
         baselayerurl: string,
@@ -33,21 +32,12 @@ class BlazorMap {
             maxBounds: maxBounds,
         })
 
-        if (!isStatic && _dotnetRef) {
+        if ( _dotnetRef) {
             map.on('click', this.onMapClick);
             map.on('dblclick', this.onMapClick);
             map.on('contextmenu', this.onMapClick);
 
-        } else {
-            map["scrollZoom"].disable();
-            map["boxZoom"].disable();
-            map["dragRotate"].disable();
-            map["dragPan"].disable();
-            map["keyboard"].disable();
-            map["doubleClickZoom"].disable();
-            map["touchZoomRotate"].disable();
         }
-
 
         map.on('load', () => {
             if (_dotnetRef) {
@@ -241,6 +231,20 @@ class BlazorMap {
         map.fitBounds(bounds);
     }
 
+    public Dispose = async () => {
+        await this._isInitialized;
+        let map: GlMap = this.getMap();
+
+        if (this._dotnetRef) {
+            map.off('click', this.onMapClick);
+            map.off('dblclick', this.onMapClick);
+            map.off('contextmenu', this.onMapClick);
+        }
+
+        map.remove();
+        delete (window as any)[this._mapId];
+    }
+
     public buildUrl = (path: string) => {
         if (path.startsWith("http://") || path.startsWith("https://")) {
             return path;
@@ -254,14 +258,8 @@ class BlazorMap {
 }
 
 
-export function createMap(_dotnetRef, _rootElement: HTMLElement, clickable: boolean, center: LngLatLike, zoom: number, baselayerurl: string, maxBounds: LngLatBounds, spritePathPrefix: string) {
+export function createMap(_dotnetRef, _rootElement: HTMLElement, center: LngLatLike, zoom: number, baselayerurl: string, maxBounds: LngLatBounds, spritePathPrefix: string) {
     console.debug("Creating Map ...")
-    return new BlazorMap(_dotnetRef, _rootElement, `map_${Math.random()}`, clickable, center, zoom, baselayerurl, maxBounds, spritePathPrefix);
+    return new BlazorMap(_dotnetRef, _rootElement, `map_${Math.random()}`, center, zoom, baselayerurl, maxBounds, spritePathPrefix);
 }
-
-export function createStaticMap(_dotnetRef, _rootElement: HTMLElement, center: LngLatLike, zoom: number, baselayerurl: string, maxBounds: LngLatBounds, spritePathPrefix: string) {
-    console.debug("Creating StaticMap ...")
-    return new BlazorMap(_dotnetRef, _rootElement, `map_${Math.random()}`, false, center, zoom, baselayerurl, maxBounds, spritePathPrefix);
-}
-
 

@@ -1,18 +1,30 @@
 ﻿import { createMap } from "./BlazorMap.js"
 
-let htmlwrapper = document.getElementById("jgu-zdv-blazormap-htmlwrapper");
+export async function initializeBlazorMap(mapElementId, objectsElementId) {
+    let htmlwrapper = document.getElementById(mapElementId);
+    let objectsElement = document.getElementById(objectsElementId);
 
-let blazormapobjects = document.getElementById("jgu-zdv-blazormap-blazormapobjects").innerHTML;
-blazormapobjects = JSON.parse(blazormapobjects);
+    if (!htmlwrapper || !objectsElement) {
+        console.error("BlazorMap initialization failed: required elements not found.");
+        return;
+    }
 
-let map = createMap(null, htmlwrapper, blazormapobjects.isStatic, blazormapobjects.center, blazormapobjects.zoom, blazormapobjects.baseLayerStyleUrl, blazormapobjects.maxBounds, blazormapobjects.spritePathPrefix || "");
+    let blazormapobjects;
+    try {
+        blazormapobjects = JSON.parse(objectsElement.textContent || "{}");
+    } catch (error) {
+        console.error("BlazorMap initialization failed: invalid JSON payload.", error);
+        return;
+    }
 
-for (let layer of blazormapobjects.additionalLayerStyleUrls) {
-    await map.addStyleLayerFromUrl(layer);
-    console.debug(`layerstyleurls`);
-}
+    let map = createMap(null, htmlwrapper, blazormapobjects.center, blazormapobjects.zoom, blazormapobjects.baseLayerStyleUrl, blazormapobjects.maxBounds, blazormapobjects.spritePathPrefix || "");
 
-for (let key in blazormapobjects.additionalSourceData) {
-    console.debug(`additionalSourceData`);
-    map.setSourceData(key, blazormapobjects.additionalSourceData[key]);
+    for (let layer of blazormapobjects.additionalLayerStyleUrls || []) {
+        await map.addStyleLayerFromUrl(layer);
+    }
+
+    let additionalSourceData = blazormapobjects.additionalSourceData || {};
+    for (let key in additionalSourceData) {
+        await map.setSourceData(key, additionalSourceData[key]);
+    }
 }
