@@ -18121,6 +18121,14 @@ var BlazorMap = class {
     this._mapId = _mapId;
     this.$isInitialized = () => {
     };
+    this._initializationCompleted = false;
+    this.completeInitialization = () => {
+      if (this._initializationCompleted) {
+        return;
+      }
+      this._initializationCompleted = true;
+      this.$isInitialized();
+    };
     this.setMap = (map) => {
       window[this._mapId] = map;
     };
@@ -18279,6 +18287,21 @@ var BlazorMap = class {
       let map = this.getMap();
       map.fitBounds(bounds);
     });
+    this.Dispose = () => __async(this, null, function* () {
+      let map = this.getMap();
+      this.completeInitialization();
+      if (!map) {
+        delete window[this._mapId];
+        return;
+      }
+      if (this._dotnetRef) {
+        map.off("click", this.onMapClick);
+        map.off("dblclick", this.onMapClick);
+        map.off("contextmenu", this.onMapClick);
+      }
+      map.remove();
+      delete window[this._mapId];
+    });
     this.buildUrl = (path) => {
       if (path.startsWith("http://") || path.startsWith("https://")) {
         return path;
@@ -18309,7 +18332,17 @@ var BlazorMap = class {
       if (_dotnetRef) {
         this._dotnetRef.invokeMethodAsync("JSInitialized");
       }
-      this.$isInitialized();
+      this.completeInitialization();
+    });
+    map.on("error", (e) => {
+      var _a, _b;
+      if (this._initializationCompleted) {
+        return;
+      }
+      if (_dotnetRef) {
+        this._dotnetRef.invokeMethodAsync("JSInitializationFailed", (_b = (_a = e == null ? void 0 : e.error) == null ? void 0 : _a.message) != null ? _b : "Map initialization failed.");
+      }
+      this.completeInitialization();
     });
     this.setMap(map);
   }

@@ -5,6 +5,7 @@ class BlazorMap {
     private _isInitialized;
     private $isInitialized: (value: void | PromiseLike<void>) => void = () => { };
     private _pathPrefix: string;
+    private _initializationCompleted: boolean = false;
 
 
     constructor(
@@ -43,9 +44,29 @@ class BlazorMap {
             if (_dotnetRef) {
                 this._dotnetRef.invokeMethodAsync("JSInitialized");
             }
-            this.$isInitialized();
+            this.completeInitialization();
+        });
+
+        map.on('error', (e: any) => {
+            if (this._initializationCompleted) {
+                return;
+            }
+
+            if (_dotnetRef) {
+                this._dotnetRef.invokeMethodAsync("JSInitializationFailed", e?.error?.message ?? "Map initialization failed.");
+            }
+            this.completeInitialization();
         });
         this.setMap(map);
+    }
+
+    private completeInitialization = () => {
+        if (this._initializationCompleted) {
+            return;
+        }
+
+        this._initializationCompleted = true;
+        this.$isInitialized();
     }
 
     private setMap = (map: any) => { (window as any)[this._mapId] = map; }
@@ -232,8 +253,14 @@ class BlazorMap {
     }
 
     public Dispose = async () => {
-        await this._isInitialized;
         let map: GlMap = this.getMap();
+
+        this.completeInitialization();
+
+        if (!map) {
+            delete (window as any)[this._mapId];
+            return;
+        }
 
         if (this._dotnetRef) {
             map.off('click', this.onMapClick);

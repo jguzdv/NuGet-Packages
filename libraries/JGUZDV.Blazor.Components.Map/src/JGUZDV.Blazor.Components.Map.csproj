@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Razor">
 
 	<PropertyGroup>
-		<TargetFramework>net9.0</TargetFramework>
+		<TargetFramework>net10.0</TargetFramework>
 
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
@@ -20,27 +20,29 @@
 	<ItemGroup>
 		<Content Remove="typescript/*.json" />
 	    <None Include="typescript/*.json" />
-		<Content Remove="package*.json" />
-	    <None Include="package*.json" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="GeoJSON.Text" Version="1.1.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.14" />
-		<PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.14" />	
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.4" />
+		<PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.4" />	
 	</ItemGroup>
 	
 	<ItemGroup>
 		<JSBundleInputs Include="typescript/**/*.ts" Exclude="node_modules/**; **/*.d.ts" />
 	</ItemGroup>
+
+	<ItemGroup>
+		<JSBundleConfigInputs Include="typescript/package.json;typescript/package-lock.json" />
+	</ItemGroup>
 	
-	<Target Name="EnsureNpmRestored" Condition="!Exists('node_modules')">
+   <Target Name="EnsureNpmRestored" Condition="!Exists('typescript/node_modules')">
 		<Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />
-		<Exec Command="npm install" />
+      <Exec Command="npm install" WorkingDirectory="typescript" />
 	</Target>
 	
-	<Target Name="RunJSBundler" AfterTargets="ResolveReferences" Inputs="@(JSBundleInputs)" Outputs="wwwroot/js/typescript.js" DependsOnTargets="EnsureNpmRestored">
-		<RemoveDir Directories="wwwroot/js/BlazorMap/**" />
+   <Target Name="RunJSBundler" BeforeTargets="GenerateStaticWebAssetsManifest" Inputs="@(JSBundleInputs);@(JSBundleConfigInputs)" Outputs="wwwroot/js/BlazorMap/BlazorMap.js;wwwroot/js/BlazorMap/BlazorMap.js.map" DependsOnTargets="EnsureNpmRestored">
+		<Delete Files="wwwroot/js/BlazorMap/BlazorMap.js;wwwroot/js/BlazorMap/BlazorMap.js.map" ContinueOnError="true" />
 		<Message Importance="normal" Text="Bundling JS files ..." />
 		<Exec Command="npm run build:$(Configuration)" WorkingDirectory="typescript" />
 	</Target>
