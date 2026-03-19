@@ -51,7 +51,6 @@ namespace JGUZDV.Blazor.Components.Map
         }   
     }
 
-
     /// <summary>
     /// Represents a GeoJSON feature returned from a rendered map layer.
     /// </summary>

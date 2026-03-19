@@ -10,11 +10,6 @@
 @inject ILogger<BlazorMap> Logger;
 
 @code {
-    private readonly string _instanceId = Guid.NewGuid().ToString("N");
-
-    private string MapElementId => $"jgu-zdv-blazormap-htmlwrapper-{_instanceId}";
-    private string ObjectsElementId => $"jgu-zdv-blazormap-blazormapobjects-{_instanceId}";
-
     /// <summary>
     /// Gets or sets the initial map center as longitude and latitude.
     /// </summary>
@@ -69,27 +64,24 @@
 
     private ElementReference HtmlWrapper { get; set; }
 
-    public static string DefaultBasemapStyle = @"https://sgx.geodatenzentrum.de/gdz_basemapde_vektor/styles/bm_web_col.json";
+    public const string DefaultBasemapStyle = "https://sgx.geodatenzentrum.de/gdz_basemapde_vektor/styles/bm_web_col.json";
 
     private IJSObjectReference? _jsModule = null!;
     private IJSObjectReference? _jsInstance = null!;
 
     private readonly TaskCompletionSource _initialize = new();
     private readonly List<Task> _initializedTasks = new();
+    private int _mapInitializationCallbackInvoked;
 
-    private void EnsureInteractiveMode(string methodName)
-    {
-        if (IsServerRendered)
-        {
-            throw new InvalidOperationException($"'{methodName}' is not available when IsServerRendered is true.");
-        }
-    }
-
+    private readonly string _instanceId = Guid.NewGuid().ToString("N");
+    private string MapElementId => $"jgu-zdv-blazormap-htmlwrapper-{_instanceId}";
+    private string ObjectsElementId => $"jgu-zdv-blazormap-blazormapobjects-{_instanceId}";
 
     public BlazorMap()
     {
         _dotNetObjectRef = DotNetObjectReference.Create(this);
     }
+
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -129,12 +121,30 @@
         }
     }
 
+    private void EnsureInteractiveMode(string methodName)
+    {
+        if (IsServerRendered)
+        {
+            throw new InvalidOperationException($"'{methodName}' is not available when IsServerRendered is true.");
+        }
+    }
+
+    private async Task NotifyMapInitializedAsync(bool initialized)
+    {
+        if (System.Threading.Interlocked.Exchange(ref _mapInitializationCallbackInvoked, 1) == 1)
+        {
+            return;
+        }
+
+        await MapIsInitialized.InvokeAsync(initialized);
+    }
+
     [JSInvokable("JSInitializationFailed")]
     public async Task InitializationFailed(string? error)
     {
         Logger.LogError("BlazorMap reported initialization failure from JavaScript. Details: {Error}", error);
         _initialize.TrySetResult();
-        await MapIsInitialized.InvokeAsync(false);
+        await NotifyMapInitializedAsync(false);
     }
 
     [JSInvokable("JSInitialized")]
@@ -145,12 +155,12 @@
         try
         {
             await Task.WhenAll(_initializedTasks);
-            await MapIsInitialized.InvokeAsync(true);
+            await NotifyMapInitializedAsync(true);
         }
         catch (Exception ex)
         {
             Logger.LogError(ex, "BlazorMap post-initialization task execution failed.");
-            await MapIsInitialized.InvokeAsync(false);
+            await NotifyMapInitializedAsync(false);
         }
     }
 
@@ -257,7 +267,6 @@
         await _initialize.Task;
         await _jsInstance!.InvokeVoidAsync("removeLayer", layerId);
     }
-
 }
 
 @if (IsServerRendered)
