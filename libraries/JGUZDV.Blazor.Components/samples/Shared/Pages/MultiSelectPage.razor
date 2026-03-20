@@ -8,8 +8,8 @@
     </div>
     <div class="mb-2">
         <MultiSelect Items="_items!"
-                     UseOverlayMode=true
                      Title="Wähle ein Land aus"
+                     UseOverlayMode=true
         @bind-Value="_selectedCountry"
                      UseSingleSelectionMode=true ItemKey="(x) => x?.Id"
                      ItemName="x => x?.Name">
@@ -86,8 +86,8 @@
     </div>
 
     <MultiSelect HostClass="mb-2 form-control" Items="_manyItems"
-    UseOverlayMode="true"
-    FilterLabel="search"
+                 UseOverlayMode="true"
+                 FilterLabel="search"
                  Title="Wähle Länder aus"
                  AllOptionLabel="Alle"
     @bind-Values="_selectedCounties"

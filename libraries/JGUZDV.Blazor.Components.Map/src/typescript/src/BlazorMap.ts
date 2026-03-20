@@ -1,17 +1,17 @@
-﻿import { GeoJSONSource, LngLatBounds, LngLatLike, Map as GlMap, MapGeoJSONFeature, MapMouseEvent } from "maplibre-gl";
+﻿import { GeoJSONSource, LngLatBounds, LngLatLike, Map as GlMap, MapMouseEvent } from "maplibre-gl";
 
 class BlazorMap {
 
     private _isInitialized;
     private $isInitialized: (value: void | PromiseLike<void>) => void = () => { };
     private _pathPrefix: string;
+    private _initializationCompleted: boolean = false;
+    private _map: GlMap;
 
 
     constructor(
         private _dotnetRef,
         _rootElement: HTMLElement,
-        private _mapId: string,
-        isStatic: boolean,
         center: LngLatLike,
         zoom: number,
         baselayerurl: string,
@@ -33,33 +33,43 @@ class BlazorMap {
             maxBounds: maxBounds,
         })
 
-        if (!isStatic && _dotnetRef) {
+        if ( _dotnetRef) {
             map.on('click', this.onMapClick);
             map.on('dblclick', this.onMapClick);
             map.on('contextmenu', this.onMapClick);
 
-        } else {
-            map["scrollZoom"].disable();
-            map["boxZoom"].disable();
-            map["dragRotate"].disable();
-            map["dragPan"].disable();
-            map["keyboard"].disable();
-            map["doubleClickZoom"].disable();
-            map["touchZoomRotate"].disable();
         }
-
 
         map.on('load', () => {
             if (_dotnetRef) {
                 this._dotnetRef.invokeMethodAsync("JSInitialized");
             }
-            this.$isInitialized();
+            this.completeInitialization();
         });
-        this.setMap(map);
+
+        map.on('error', (e: any) => {
+            if (this._initializationCompleted) {
+                return;
+            }
+
+            if (_dotnetRef) {
+                this._dotnetRef.invokeMethodAsync("JSInitializationFailed", e?.error?.message ?? "Map initialization failed.");
+            }
+            this.completeInitialization();
+        });
+        this._map = map;
     }
 
-    private setMap = (map: any) => { (window as any)[this._mapId] = map; }
-    private getMap = () => { return (window as any)[this._mapId]; }
+    private completeInitialization = () => {
+        if (this._initializationCompleted) {
+            return;
+        }
+
+        this._initializationCompleted = true;
+        this.$isInitialized();
+    }
+
+    private getMap = () => { return this._map; }
 
     private onMapClick = (e: MapMouseEvent) => {
         let map: GlMap = this.getMap();
@@ -99,6 +109,15 @@ class BlazorMap {
 
         if (jsonData.images) {
             for (let image of jsonData.images) {
+                if (!image.id) {
+                    console.warn("Image without 'id' can not be added!");
+                    continue;
+                }
+                if (!image.imgUrl) {
+                    console.warn(`Image definition ${image.id} is missing required properties. (Required properties: imgUrl).`);
+                    continue;
+                }
+
                 map.loadImage(this.buildUrl(image.imgUrl), function (error, icon) {
                     if (error) {
                         console.error(`Image: ${image.id} could not load!`, error);
@@ -114,13 +133,6 @@ class BlazorMap {
                         console.warn("Image" + image.id + " already added");
                     }
                 });
-
-                if (!image.id) {
-                    console.warn("Image without 'id' can not be added!");
-                }
-                if (!image.imgUrl) {
-                    console.warn(`Image definition ${image.id} is missing required properties. (Required properties: imgUrl).`);
-                }
             }
         } else {
             console.debug("No images were found!");
@@ -241,6 +253,24 @@ class BlazorMap {
         map.fitBounds(bounds);
     }
 
+    public Dispose = async () => {
+        let map: GlMap = this.getMap();
+
+        this.completeInitialization();
+
+        if (!map) {
+            return;
+        }
+
+        if (this._dotnetRef) {
+            map.off('click', this.onMapClick);
+            map.off('dblclick', this.onMapClick);
+            map.off('contextmenu', this.onMapClick);
+        }
+
+        map.remove();
+    }
+
     public buildUrl = (path: string) => {
         if (path.startsWith("http://") || path.startsWith("https://")) {
             return path;
@@ -254,14 +284,8 @@ class BlazorMap {
 }
 
 
-export function createMap(_dotnetRef, _rootElement: HTMLElement, clickable: boolean, center: LngLatLike, zoom: number, baselayerurl: string, maxBounds: LngLatBounds, spritePathPrefix: string) {
+export function createMap(_dotnetRef, _rootElement: HTMLElement, center: LngLatLike, zoom: number, baselayerurl: string, maxBounds: LngLatBounds, spritePathPrefix: string) {
     console.debug("Creating Map ...")
-    return new BlazorMap(_dotnetRef, _rootElement, `map_${Math.random()}`, clickable, center, zoom, baselayerurl, maxBounds, spritePathPrefix);
+    return new BlazorMap(_dotnetRef, _rootElement, center, zoom, baselayerurl, maxBounds, spritePathPrefix);
 }
-
-export function createStaticMap(_dotnetRef, _rootElement: HTMLElement, center: LngLatLike, zoom: number, baselayerurl: string, maxBounds: LngLatBounds, spritePathPrefix: string) {
-    console.debug("Creating StaticMap ...")
-    return new BlazorMap(_dotnetRef, _rootElement, `map_${Math.random()}`, false, center, zoom, baselayerurl, maxBounds, spritePathPrefix);
-}
-
 
