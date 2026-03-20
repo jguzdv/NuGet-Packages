@@ -49,39 +49,38 @@
                     }
                 </div>
             }
+
+            <div class="@(UseOverlayMode ? "my-2" : "fade-in my-2")">
+                @{
+#pragma warning disable 8601 // warning is wrong
+                }
+                <MultiSelectBody Items="@Items"
+                                 Values="@Values"
+                                 ValuesChanged="@ValuesChanged"
+                                 Value="@Value"
+                                 ValueChanged="@ValueChanged"
+                                 FilterLabel="@FilterLabel"
+                                 Filter="@Filter"
+                                 ItemsContainerClass="@ItemsContainerClass"
+                                 ItemKey="@ItemKey"
+                                 ItemTemplate="@ItemTemplate"
+                                 AllOptionLabel="@AllOptionLabel"
+                                 UseSingleSelectionMode="@UseSingleSelectionMode"
+                                 T="T"
+                                 TKey="TKey">
+                </MultiSelectBody>
+                @{
+#pragma warning restore
+                }
+            </div>
+            <div role="button" tabindex="0" @onclick="ToggleSelection" @onkeypress="e => e.OnEnter(ToggleSelection)">
+                @CloseButton
+            </div>
         </div>
     }
-
-    <div class="@(UseOverlayMode ? "my-2" : "fade-in my-2")">
-        @{
-#pragma warning disable 8601 // warning is wrong
-        }
-        <MultiSelectBody Items="@Items"
-                         Values="@Values"
-                         ValuesChanged="@ValuesChanged"
-                         Value="@Value"
-                         ValueChanged="@ValueChanged"
-                         FilterLabel="@FilterLabel"
-                         Filter="@Filter"
-                         ItemsContainerClass="@ItemsContainerClass"
-                         ItemKey="@ItemKey"
-                         ItemTemplate="@ItemTemplate"
-                         AllOptionLabel="@AllOptionLabel"
-                         UseSingleSelectionMode="@UseSingleSelectionMode"
-                         T="T"
-                         TKey="TKey">
-        </MultiSelectBody>
-        @{
-#pragma warning restore
-        }
-    </div>
-    <div role="button" tabindex="0" @onclick="ToggleSelection" @onkeypress="e => e.OnEnter(ToggleSelection)">
-        @CloseButton
-    </div>
-    }
 </div>
-@code {
 
+@code {
     /// <summary>
     /// The list of items to display in the selection dropdown.
     /// </summary>
