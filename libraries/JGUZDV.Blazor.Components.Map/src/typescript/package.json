@@ -1,0 +1,24 @@
+{
+  "name": "typescript",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "BlazorMap.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "es-build": "esbuild src/BlazorMap.ts --outdir=../wwwroot/js/BlazorMap --bundle --format=esm",
+    "build:Debug": "npm run es-build",
+    "build:Release": "npm run es-build -- --minify --target=chrome58,firefox57,safari11",
+    "serve": "npm run es-build -- --servedir=../wwwroot"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "esbuild": "^0.14.49",
+    "typescript": "^4.7.4"
+  },
+  "dependencies": {
+    "esm": "^3.2.25",
+    "maplibre-gl": "^3.5.2"
+  }
+}

@@ -1,0 +1,4 @@
+﻿.btn-none:hover {
+    background-color: var(--bs-tertiary-bg);
+    border: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color) !important;
+}

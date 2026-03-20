@@ -1,0 +1,1935 @@
+{
+  "sources": {
+    "ArisSource": {
+      "type": "geojson",
+      "data": "v2/geo-json"
+    },
+    "SelectedBuildingSource": {
+      "type": "geojson",
+      "data": ""
+    },
+    "SelectedBuildingDoorwaysSource": {
+      "type": "geojson",
+      "data": ""
+    }
+  },
+  "sprite": [
+    {
+      "id": "osm",
+      "url": "/sprite/osm-liberty"
+    }
+  ],
+  "layers": [
+    {
+      "id": "BuildingOutlineLayer",
+      "type": "line",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": "rgb(193,0, 42)",
+        "line-opacity": 1,
+        "line-width": 2
+      },
+      "filter": [
+        "all",
+        [ "==", "type", "BuildingOutline" ],
+        [ "==", "isNotable", true ]
+      ]
+    },
+    {
+      "id": "BuildingLayer",
+      "type": "fill",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "fill-color": "rgb(193,0, 42)",
+        "fill-opacity": 0.4
+      },
+      "filter": [ "==", "type", "BuildingOutline" ]
+    },
+    {
+      "id": "TestBuildingPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "bluemarker",
+        "icon-size": 1,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [ "==", "type", "Building" ]
+    },
+    {
+      "id": "BuildingLayerSelected",
+      "type": "fill",
+      "source": "SelectedBuildingSource",
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "fill-color": "rgb(193,0, 42)"
+      }
+    },
+    {
+      "id": "DoorwayLayer",
+      "type": "symbol",
+      "source": "SelectedBuildingDoorwaysSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:prison",
+        "text-size": 12,
+        "icon-anchor": "bottom",
+        "text-field": "{name}",
+        "text-anchor": "top",
+        "text-offset": [ 0, -3 ]
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "Doorway" ]
+      ]
+    },
+    {
+      "id": "alcohol_shopTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:alcohol_shop",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "alcohol_shop" ]
+      ]
+    },
+    {
+      "id": "american_footballTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:american_football",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "american_football" ]
+      ]
+    },
+    {
+      "id": "amusement_parkTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:amusement_park",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "amusement_park" ]
+      ]
+    },
+    {
+      "id": "aquariumTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:aquarium",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "aquarium" ]
+      ]
+    },
+    {
+      "id": "art_galleryTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:art_gallery",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "art_gallery" ]
+      ]
+    },
+    {
+      "id": "attractionTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:attraction",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "attraction" ]
+      ]
+    },
+    {
+      "id": "bakeryTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:bakery",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "bakery" ]
+      ]
+    },
+    {
+      "id": "bankTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:bank",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "bank" ]
+      ]
+    },
+    {
+      "id": "barTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:bar",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "bar" ]
+      ]
+    },
+    {
+      "id": "baseballTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:baseball",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "baseball" ]
+      ]
+    },
+    {
+      "id": "basketballTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:basketball",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "basketball" ]
+      ]
+    },
+    {
+      "id": "beerTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:beer",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "beer" ]
+      ]
+    },
+    {
+      "id": "bicycleTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:bicycle",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "bicycle" ]
+      ]
+    },
+    {
+      "id": "bicycle_rentalTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:bicycle_rental",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "bicycle_rental" ]
+      ]
+    },
+    {
+      "id": "busTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:bus",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "bus" ]
+      ]
+    },
+    {
+      "id": "butcherTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:butcher",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "butcher" ]
+      ]
+    },
+    {
+      "id": "cafeTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:cafe",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "cafe" ]
+      ]
+    },
+    {
+      "id": "campsiteTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:campsite",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "campsite" ]
+      ]
+    },
+    {
+      "id": "carTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:car",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "car" ]
+      ]
+    },
+    {
+      "id": "castleTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:castle",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "castle" ]
+      ]
+    },
+    {
+      "id": "cemeteryTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:cemetery",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "cemetery" ]
+      ]
+    },
+    {
+      "id": "cinemaTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:cinema",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "cinema" ]
+      ]
+    },
+    {
+      "id": "clothing_storeTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:clothing_store",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "clothing_store" ]
+      ]
+    },
+    {
+      "id": "collegeTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:college",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "college" ]
+      ]
+    },
+    {
+      "id": "cricketTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:cricket",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "cricket" ]
+      ]
+    },
+    {
+      "id": "dangerTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:danger",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "danger" ]
+      ]
+    },
+    {
+      "id": "dentistTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:dentist",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "dentist" ]
+      ]
+    },
+    {
+      "id": "doctorsTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:doctors",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "doctors" ]
+      ]
+    },
+    {
+      "id": "dog_parkTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:dog_park",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "dog_park" ]
+      ]
+    },
+    {
+      "id": "drinking_waterTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:drinking_water",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "drinking_water" ]
+      ]
+    },
+    {
+      "id": "embassyTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:embassy",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "embassy" ]
+      ]
+    },
+    {
+      "id": "entranceTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:entrance",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "entrance" ]
+      ]
+    },
+    {
+      "id": "fast_foodTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:fast_food",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "fast_food" ]
+      ]
+    },
+    {
+      "id": "ferryTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:ferry",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "ferry" ]
+      ]
+    },
+    {
+      "id": "fire_stationTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:fire_station",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "fire_station" ]
+      ]
+    },
+    {
+      "id": "fuelTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:fuel",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "fuel" ]
+      ]
+    },
+    {
+      "id": "gardenTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:garden",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "garden" ]
+      ]
+    },
+    {
+      "id": "giftTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:gift",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "gift" ]
+      ]
+    },
+    {
+      "id": "golfTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:golf",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "golf" ]
+      ]
+    },
+    {
+      "id": "groceryTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:grocery",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "grocery" ]
+      ]
+    },
+    {
+      "id": "hairdresserTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:hairdresser",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "hairdresser" ]
+      ]
+    },
+    {
+      "id": "harborTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:harbor",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "harbor" ]
+      ]
+    },
+    {
+      "id": "heartTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:heart",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "heart" ]
+      ]
+    },
+    {
+      "id": "heliportTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:heliport",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "heliport" ]
+      ]
+    },
+    {
+      "id": "hospitalTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:hospital",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "hospital" ]
+      ]
+    },
+    {
+      "id": "ice_creamTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:ice_cream",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "ice_cream" ]
+      ]
+    },
+    {
+      "id": "industryTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:industry",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "industry" ]
+      ]
+    },
+    {
+      "id": "informationTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:information",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "information" ]
+      ]
+    },
+    {
+      "id": "laundryTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:laundry",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "laundry" ]
+      ]
+    },
+    {
+      "id": "libraryTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:library",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "library" ]
+      ]
+    },
+    {
+      "id": "lighthouseTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:lighthouse",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "lighthouse" ]
+      ]
+    },
+    {
+      "id": "lodgingTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:lodging",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "lodging" ]
+      ]
+    },
+    {
+      "id": "markerTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:marker",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "marker" ]
+      ]
+    },
+    {
+      "id": "monumentTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:monument",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "monument" ]
+      ]
+    },
+    {
+      "id": "mountainTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:mountain",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "mountain" ]
+      ]
+    },
+    {
+      "id": "museumTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:museum",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "museum" ]
+      ]
+    },
+    {
+      "id": "musicTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:music",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "music" ]
+      ]
+    },
+    {
+      "id": "parkTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:park",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "park" ]
+      ]
+    },
+    {
+      "id": "parkingTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:parking",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "parking" ]
+      ]
+    },
+    {
+      "id": "parking_garageTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:parking_garage",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "parking_garage" ]
+      ]
+    },
+    {
+      "id": "pharmacyTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:pharmacy",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "pharmacy" ]
+      ]
+    },
+    {
+      "id": "picnic_siteTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:picnic_site",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "picnic_site" ]
+      ]
+    },
+    {
+      "id": "pitchTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:pitch",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "pitch" ]
+      ]
+    },
+    {
+      "id": "place_of_worshipTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:place_of_worship",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "place_of_worship" ]
+      ]
+    },
+    {
+      "id": "playgroundTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:playground",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "playground" ]
+      ]
+    },
+    {
+      "id": "policeTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:police",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "police" ]
+      ]
+    },
+    {
+      "id": "postTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:post",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "post" ]
+      ]
+    },
+    {
+      "id": "railwayTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:railway",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "railway" ]
+      ]
+    },
+    {
+      "id": "railway_lightTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:railway_light",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "railway_light" ]
+      ]
+    },
+    {
+      "id": "railway_metroTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:railway_metro",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "railway_metro" ]
+      ]
+    },
+    {
+      "id": "ranger_stationTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:ranger_station",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "ranger_station" ]
+      ]
+    },
+    {
+      "id": "religious_christianTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:religious_christian",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "religious_christian" ]
+      ]
+    },
+    {
+      "id": "religious_jewishTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:religious_jewish",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "religious_jewish" ]
+      ]
+    },
+    {
+      "id": "religious_muslimTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:religious_muslim",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "religious_muslim" ]
+      ]
+    },
+    {
+      "id": "restaurantTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:restaurant",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "restaurant" ]
+      ]
+    },
+    {
+      "id": "roadblockTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:roadblock",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "roadblock" ]
+      ]
+    },
+    {
+      "id": "rocketTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:rocket",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "rocket" ]
+      ]
+    },
+    {
+      "id": "schoolTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:school",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "school" ]
+      ]
+    },
+    {
+      "id": "shelterTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:shelter",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "shelter" ]
+      ]
+    },
+    {
+      "id": "shopTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:shop",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "shop" ]
+      ]
+    },
+    {
+      "id": "skiingTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:skiing",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "skiing" ]
+      ]
+    },
+    {
+      "id": "soccerTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:soccer",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "soccer" ]
+      ]
+    },
+    {
+      "id": "stadiumTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:stadium",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "stadium" ]
+      ]
+    },
+    {
+      "id": "suitcaseTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:suitcase",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "suitcase" ]
+      ]
+    },
+    {
+      "id": "sushiTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:sushi",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "sushi" ]
+      ]
+    },
+    {
+      "id": "swimmingTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:swimming",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "swimming" ]
+      ]
+    },
+    {
+      "id": "telephoneTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:telephone",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "telephone" ]
+      ]
+    },
+    {
+      "id": "tennisTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:tennis",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "tennis" ]
+      ]
+    },
+    {
+      "id": "theatreTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:theatre",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "theatre" ]
+      ]
+    },
+    {
+      "id": "toiletsTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:toilets",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "toilets" ]
+      ]
+    },
+    {
+      "id": "town_hallTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:town_hall",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "town_hall" ]
+      ]
+    },
+    {
+      "id": "veterinaryTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:veterinary",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "veterinary" ]
+      ]
+    },
+    {
+      "id": "volcanoTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:volcano",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "volcano" ]
+      ]
+    },
+    {
+      "id": "warehouseTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:warehouse",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "warehouse" ]
+      ]
+    },
+    {
+      "id": "waste_basketTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:waste_basket",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "waste_basket" ]
+      ]
+    },
+    {
+      "id": "waterTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:water",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "water" ]
+      ]
+    },
+    {
+      "id": "wetlandTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:wetland",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "wetland" ]
+      ]
+    },
+    {
+      "id": "wheelchairTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:wheelchair",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "wheelchair" ]
+      ]
+    },
+    {
+      "id": "zooTestPOIPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "osm:zoo",
+        "text-size": 12,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [ "==", "type", "PointOfInterest" ],
+        [ "==", "glyphName", "zoo" ]
+      ]
+    },
+    {
+      "id": "TestWheelchairDoorPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "greenmarker",
+        "icon-size": 1,
+        "icon-anchor": "bottom"
+      },
+      "maxzoom": 24,
+      "minzoom": 16,
+      "filter": [
+        "all",
+        [ "==", "type", "Doorway" ],
+        [ "==", "isWheelchairAccessible", "true" ]
+      ]
+    },
+    {
+      "id": "TestNotWheelchairDoorPointLayer",
+      "type": "symbol",
+      "source": "ArisSource",
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "redmarker",
+        "icon-size": 1
+      },
+      "maxzoom": 24,
+      "minzoom": 16,
+      "filter": [
+        "all",
+        [ "==", "type", "Doorway" ],
+        [ "==", "isWheelchairAccessible", "false" ]
+      ]
+    }
+  ],
+  "images": [
+    {
+      "id": "bluemarker",
+      "imgUrl": "/map-assets/bluemarker.png"
+    },
+    {
+      "id": "redmarker",
+      "imgUrl": "/map-assets/redmarker.png"
+    },
+    {
+      "id": "greenmarker",
+      "imgUrl": "/map-assets/greenmarker.png"
+    },
+    {
+      "id": "yellowmarker",
+      "imgUrl": "/map-assets/yellowmarker.png"
+    }
+  ]
+}

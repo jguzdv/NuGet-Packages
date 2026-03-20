@@ -4,28 +4,61 @@ using System.Security.Claims;
 
 namespace JGUZDV.CQRS.Commands;
 
+/// <summary>
+/// Handles a command of type TCommand and provides a context of type TContext for the execution steps of the command.
+/// </summary>
 public abstract partial class CommandHandler<TCommand, TContext> : ICommandHandler<TCommand>
     where TCommand : ICommand
 {
+    /// <summary>
+    /// A logger for this command handler. This should be implemented by the inheriting class to provide a logger instance, e.g. via dependency injection.
+    /// </summary>
     public abstract ILogger Logger { get; }
 
+    /// <summary>
+    /// If set to true, authorization will be skipped.
+    /// </summary>
     protected bool SkipAuthorization { get; set; } = false;
 
+    /// <summary>
+    /// Initializes the command context.
+    /// Throw CommandExceptions with appropriate CommandResults to return specific results from the command handler, e.g. NotFound, without executing the command.
+    /// </summary>
     protected abstract Task<TContext> InitializeAsync(TCommand command, ClaimsPrincipal? principal, CancellationToken ct);
 
+    /// <summary>
+    /// Normalizes the command object before anything else runs. Can be used for trimming or default values.
+    /// </summary>
     protected virtual TCommand NormalizeCommand(TCommand command, TContext context, ClaimsPrincipal? principal)
         => command;
 
+    /// <summary>
+    /// Authorizes the usage of the command.
+    /// If this is not overriden or explicitly skipped, the command will fail with a NotAllowed result.
+    /// </summary>
     protected virtual Task<bool> AuthorizeAsync(TCommand command, TContext context, ClaimsPrincipal? principal, CancellationToken ct)
-        => Task.FromResult(false);
+    {
+        Log.AuthorizeNotImplemented(Logger);
+        return Task.FromResult(false);
+    }
 
+    /// <summary>
+    /// Validates the command object before execution.
+    /// If this is not overriden, the command will be considered valid by default.
+    /// </summary>
     protected virtual Task<List<ValidationResult>> ValidateAsync(TCommand command, TContext context, ClaimsPrincipal? principal, CancellationToken ct)
         => Task.FromResult(new List<ValidationResult>());
 
-
+    /// <summary>
+    /// Executes the specified command asynchronously within the given context and returns the result of the operation.
+    /// </summary>
+    /// <remarks>Override this method in a derived class to implement custom command execution logic. The
+    /// result may depend on the provided context and principal.</remarks>
     protected abstract Task<HandlerResult> ExecuteInternalAsync(TCommand command, TContext context, ClaimsPrincipal? principal, CancellationToken ct);
 
-
+    /// <summary>
+    /// Executes the default command pipeline.
+    /// </summary>
     public async Task<HandlerResult> ExecuteAsync(TCommand command, ClaimsPrincipal? principal, CancellationToken ct)
     {
         TContext? context = default;
@@ -43,7 +76,7 @@ public abstract partial class CommandHandler<TCommand, TContext> : ICommandHandl
             if (!SkipAuthorization)
             {
                 var isAuthorized = await AuthorizeAsync(command, context, principal, ct);
-                Log.AuthorizationResult(Logger, isAuthorized);
+                Log.AuthorizationResult(Logger, isAuthorized? LogLevel.Debug : LogLevel.Information, isAuthorized);
 
                 if (!isAuthorized)
                     return HandlerResult.NotAllowed();
@@ -64,7 +97,7 @@ public abstract partial class CommandHandler<TCommand, TContext> : ICommandHandl
                 return result;
             }
 
-            Log.ValidationResult(Logger, true);
+            Log.ValidationResult(Logger, LogLevel.Debug, true);
 
             if (ct.IsCancellationRequested)
             {
@@ -98,6 +131,9 @@ public abstract partial class CommandHandler<TCommand, TContext> : ICommandHandl
         }
     }
 
+    /// <summary>
+    /// Provides Logging methods for the CommandHandler.
+    /// </summary>
     protected static partial class Log
     {
         [LoggerMessage(4990, LogLevel.Debug, "Command has been cancelled.")]
@@ -107,20 +143,24 @@ public abstract partial class CommandHandler<TCommand, TContext> : ICommandHandl
         internal static partial void StepCancelled(ILogger logger, string step);
 
 
-        [LoggerMessage(4000, LogLevel.Information, "Command validation result was: {valid}", EventName = "CommandValidation")]
-        internal static partial void ValidationResult(ILogger logger, bool valid);
+        [LoggerMessage(EventId = 4000, Message = "Command validation result was: {valid}", EventName = "CommandValidation")]
+        internal static partial void ValidationResult(ILogger logger, LogLevel logLevel, bool valid);
 
-        [LoggerMessage(4001, LogLevel.Debug, "Command validation result for {memberNames}: {message}", EventName = "CommandValidation", SkipEnabledCheck = true)]
+        [LoggerMessage(4001, LogLevel.Debug, "Command validation result for {memberNames}: {message}", EventName = "CommandValidationDetail", SkipEnabledCheck = true)]
         internal static partial void ValidationResultDetail(ILogger logger, string memberNames, string message);
 
         [LoggerMessage(4002, LogLevel.Information, "Command execution detected a conflict: {conflict}", EventName = "CommandExecution")]
         internal static partial void Conflict(ILogger logger, string conflict);
 
 
-        [LoggerMessage(4030, LogLevel.Information, "Command authorization result was: {authorized}", EventName = "CommandAuthorization")]
-        internal static partial void AuthorizationResult(ILogger logger, bool authorized);
-        
-        [LoggerMessage(4040, LogLevel.Information, "Command did not find an object to act on (NotFound).", EventName = "CommandExecution")]
+        [LoggerMessage(EventId = 4030, Message = "Command authorization result was: {authorized}", EventName = "CommandAuthorization")]
+        internal static partial void AuthorizationResult(ILogger logger, LogLevel loglevel, bool authorized);
+
+
+        [LoggerMessage(4031, LogLevel.Warning, "Command authorization failed due to method not being overriden.", EventName = "CommandAuthorizationMissing")]
+        internal static partial void AuthorizeNotImplemented(ILogger logger);
+
+        [LoggerMessage(4040, LogLevel.Information, "Command did not find an object to act on (NotFound).", EventName = "CommandExecutionObjectNotFound")]
         internal static partial void NotFound(ILogger logger);
 
 
@@ -139,7 +179,7 @@ public abstract partial class CommandHandler<TCommand, TContext> : ICommandHandl
             else if (result is ConflictResult cfr)
                 Conflict(logger, cfr.FailureCode);
             else if (result is UnauthorizedResult)
-                AuthorizationResult(logger, false);
+                AuthorizationResult(logger, LogLevel.Information, false);
             else if (result is NotFoundResult)
                 NotFound(logger);
             else if (result is CanceledResult)
@@ -149,7 +189,7 @@ public abstract partial class CommandHandler<TCommand, TContext> : ICommandHandl
 
         internal static void ValidationErrorResult(ILogger logger, ValidationErrorResult result)
         {
-            ValidationResult(logger, false);
+            ValidationResult(logger, LogLevel.Information, false);
 
             if (logger.IsEnabled(LogLevel.Debug))
             {
@@ -160,33 +200,71 @@ public abstract partial class CommandHandler<TCommand, TContext> : ICommandHandl
     }
 }
 
-
+/// <summary>
+/// A context-less command handler that simply uses object as context and ignores it. 
+/// This can be used for simple commands that don't require a context, to avoid the boilerplate of providing a context type and returning a dummy context object in the InitializeAsync method.
+/// </summary>
 public abstract class CommandHandler<TCommand> : CommandHandler<TCommand, object>
     where TCommand : ICommand
 {
+    /// <summary>
+    /// Overriden and sealed to provide a dummy context object for the command execution pipeline. The context is not used in this implementation, so it simply returns a new object instance.
+    /// </summary>
     protected sealed override Task<object> InitializeAsync(TCommand command, ClaimsPrincipal? principal, CancellationToken ct)
         => Task.FromResult(new object());
 
 
+    /// <summary>
+    /// Executes the specified command asynchronously within the given context and returns the result of the operation.
+    /// </summary>
     protected sealed override Task<HandlerResult> ExecuteInternalAsync(TCommand command, object context, ClaimsPrincipal? principal, CancellationToken ct)
         => ExecuteInternalAsync(command, principal, ct);
+
+    /// <summary>
+    /// Executes the specified command asynchronously within the given context and returns the result of the operation.
+    /// </summary>
     protected abstract Task<HandlerResult> ExecuteInternalAsync(TCommand command, ClaimsPrincipal? principal, CancellationToken ct);
 
 
+
+    /// <summary>
+    /// Normalizes the command object before anything else runs. Can be used for trimming or default values.
+    /// </summary>
     protected sealed override TCommand NormalizeCommand(TCommand command, object context, ClaimsPrincipal? principal)
         => NormalizeCommand(command, principal);
+
+    /// <summary>
+    /// Normalizes the command object before anything else runs. Can be used for trimming or default values.
+    /// </summary>
     protected virtual TCommand NormalizeCommand(TCommand command, ClaimsPrincipal? principal)
         => command;
 
-
+    /// <summary>
+    /// Authorizes the usage of the command.
+    /// If this is not overriden or explicitly skipped, the command will fail with a NotAllowed result.
+    /// </summary>
     protected sealed override Task<bool> AuthorizeAsync(TCommand command, object context, ClaimsPrincipal? principal, CancellationToken ct)
         => AuthorizeAsync(command, principal, ct);
+
+    /// <summary>
+    /// Authorizes the usage of the command.
+    /// If this is not overriden or explicitly skipped, the command will fail with a NotAllowed result.
+    /// </summary>
     protected virtual Task<bool> AuthorizeAsync(TCommand command, ClaimsPrincipal? principal, CancellationToken ct)
         => Task.FromResult(false);
 
 
+    /// <summary>
+    /// Validates the command object before execution.
+    /// If this is not overriden, the command will be considered valid by default.
+    /// </summary>
     protected sealed override Task<List<ValidationResult>> ValidateAsync(TCommand command, object context, ClaimsPrincipal? principal, CancellationToken ct)
         => ValidateAsync(command, principal, ct);
+
+    /// <summary>
+    /// Validates the command object before execution.
+    /// If this is not overriden, the command will be considered valid by default.
+    /// </summary>
     protected virtual Task<List<ValidationResult>> ValidateAsync(TCommand command, ClaimsPrincipal? principal, CancellationToken ct)
         => Task.FromResult(new List<ValidationResult>());
 }

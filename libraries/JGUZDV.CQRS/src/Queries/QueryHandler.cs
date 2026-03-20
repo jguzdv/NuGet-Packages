@@ -38,7 +38,7 @@ namespace JGUZDV.CQRS.Queries
         public async Task ExecuteAsync(TQuery query, ClaimsPrincipal? principal, CancellationToken ct)
         {
             // We need to keep the original query reference to set the result later.
-            // If we fail to do so, records in combination with NormalizeQuery will potentially cause issues
+            // If we fail to do so, records in combination with NormalizeQuery might cause issues
             var originalQuery = query;
 
             try
@@ -53,7 +53,7 @@ namespace JGUZDV.CQRS.Queries
                 query = NormalizeQuery(query, principal);
                 
                 var isAuthorized = await AuthorizeExecuteAsync(query, principal, ct);
-                Log.QueryExecutionAuthorizationResult(Logger, isAuthorized);
+                Log.QueryExecutionAuthorizationResult(Logger, isAuthorized? LogLevel.Debug : LogLevel.Information, isAuthorized);
 
                 if (!isAuthorized)
                 {
@@ -68,9 +68,10 @@ namespace JGUZDV.CQRS.Queries
                 }
 
                 var validationResult = await ValidateAsync(query, principal, ct);
-                Log.ValidationResult(Logger, !validationResult.Any());
+                var isValid = !validationResult.Any();
+                Log.ValidationResult(Logger, isValid ? LogLevel.Debug : LogLevel.Information, isValid);
 
-                if (validationResult.Any())
+                if (!isValid)
                 {
                     if (Logger.IsEnabled(LogLevel.Debug))
                     {
@@ -96,7 +97,7 @@ namespace JGUZDV.CQRS.Queries
                 if (executionResult.HasValue)
                 {
                     var isResultAuthorized = await AuthorizeValueAsync(query, executionResult.Value, principal, ct);
-                    Log.QueryValueAuthorizationResult(Logger, isResultAuthorized);
+                    Log.QueryValueAuthorizationResult(Logger, isResultAuthorized? LogLevel.Debug : LogLevel.Information, isResultAuthorized);
                     
                     if (!isResultAuthorized)
                     {
@@ -122,6 +123,9 @@ namespace JGUZDV.CQRS.Queries
             }
         }
 
+        /// <summary>
+        /// Log methods for QueryHandler.
+        /// </summary>
         protected static partial class Log
         {
             [LoggerMessage(1, LogLevel.Debug, "Query has been cancelled after {step}.")]
@@ -131,17 +135,17 @@ namespace JGUZDV.CQRS.Queries
             internal static partial void Cancelled(ILogger logger);
 
 
-            [LoggerMessage(3, LogLevel.Information, "Query execution authorization result was: {authorized}", EventName = "QueryAuthorization")]
-            internal static partial void QueryExecutionAuthorizationResult(ILogger logger, bool authorized);
+            [LoggerMessage(EventId = 3, Message = "Query execution authorization result was: {authorized}", EventName = "QueryExecutionAuthorization")]
+            internal static partial void QueryExecutionAuthorizationResult(ILogger logger, LogLevel logLevel, bool authorized);
 
-            [LoggerMessage(4, LogLevel.Information, "Query value authorization result was: {authorized}", EventName = "QueryAuthorization")]
-            internal static partial void QueryValueAuthorizationResult(ILogger logger, bool authorized);
+            [LoggerMessage(EventId = 4, Message = "Query value authorization result was: {authorized}", EventName = "QueryValueAuthorization")]
+            internal static partial void QueryValueAuthorizationResult(ILogger logger, LogLevel logLevel, bool authorized);
 
 
-            [LoggerMessage(5, LogLevel.Information, "Query validation result was: {valid}", EventName = "QueryValidation")]
-            internal static partial void ValidationResult(ILogger logger, bool valid);
+            [LoggerMessage(EventId = 5, Message = "Query validation result was: {valid}", EventName = "QueryValidation")]
+            internal static partial void ValidationResult(ILogger logger, LogLevel logLevel, bool valid);
 
-            [LoggerMessage(6, LogLevel.Debug, "Query validation result for {memberNames}: {message}", EventName = "QueryValidation", SkipEnabledCheck = true)]
+            [LoggerMessage(6, LogLevel.Debug, "Query validation result for {memberNames}: {message}", EventName = "QueryValidationDetails", SkipEnabledCheck = true)]
             internal static partial void ValidationResultDetail(ILogger logger, string memberNames, string message);
 
 

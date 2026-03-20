@@ -7,7 +7,7 @@
 
         <PackageId>JGUZDV.Blazor.Components</PackageId>
         <IsPackable>true</IsPackable>
-        <Version>1.13.08</Version>
+        <Version>1.13.13</Version>
         <Authors>Thomas Ottenhus, Aylin Siebel, Aaron Puhl</Authors>
         <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
         <PackageDescription>Blazor component library - build for Bootstrap 5</PackageDescription>

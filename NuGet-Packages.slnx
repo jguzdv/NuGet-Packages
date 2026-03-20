@@ -45,6 +45,10 @@
     <Project Path="libraries/JGUZDV.Blazor.Components.L10n/src/JGUZDV.Blazor.Components.L10n.csproj" />
     <Project Path="libraries/JGUZDV.Blazor.Components.L10n/test/JGUZDV.Blazor.Components.L10n.Tests.csproj" />
   </Folder>
+  <Folder Name="/libraries/JGUZDV.Blazor.Components.Map/">
+    <Project Path="libraries/JGUZDV.Blazor.Components.Map/src/JGUZDV.Blazor.Components.Map.csproj" />
+    <Project Path="libraries/JGUZDV.Blazor.Components.Map/test/JGUZDV.Blazor.Components.Map.Tests.csproj" />
+  </Folder>
   <Folder Name="/libraries/JGUZDV.Blazor.Components/">
     <Project Path="libraries/JGUZDV.Blazor.Components/samples/Shared/JGUZDV.Blazor.Components.Samples.csproj" />
     <Project Path="libraries/JGUZDV.Blazor.Components/samples/Static/JGUZDV.Blazor.Components.Samples.Static.csproj" />
