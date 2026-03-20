@@ -23,6 +23,11 @@ public class ChoiceOption : IValidatableObject
     public L10nString Name { get; set; } = new();
 
     /// <summary>
+    /// Gets or sets the sort key of the choice option. Lower values sorted first.
+    /// </summary>
+    public double SortKey { get; set; }
+
+    /// <summary>
     /// Validates the choice option.
     /// </summary>
     /// <param name="validationContext">The validation context.</param>
