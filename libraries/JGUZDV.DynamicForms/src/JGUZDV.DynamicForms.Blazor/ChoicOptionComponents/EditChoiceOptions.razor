@@ -99,15 +99,15 @@
 
     protected override void OnParametersSet()
     {
-        if (Field.ChoiceOptions.Select(x => x.SortWeight).ToHashSet().Count != Field.ChoiceOptions.Count)
+        if (Field.ChoiceOptions.Select(x => x.SortKey).ToHashSet().Count != Field.ChoiceOptions.Count)
         {
             foreach (var item in Field.ChoiceOptions)
             {
-                item.SortWeight = InitialSortWeight - Field.ChoiceOptions.IndexOf(item) * SortWeightStep;
+                item.SortKey = InitialSortWeight + Field.ChoiceOptions.IndexOf(item) * SortWeightStep;
             }
         }
 
-        _sortedOptions = Field.ChoiceOptions.OrderByDescending(x => x.SortWeight).ToList();
+        _sortedOptions = Field.ChoiceOptions.OrderBy(x => x.SortKey).ToList();
         _newChoiceOption = new()
         {
             Index = Field.ChoiceOptions.Count + 1,
@@ -118,7 +118,7 @@
     {
         Field.ChoiceOptions.Remove(option);
         FieldChanged.InvokeAsync(Field);
-        _sortedOptions = Field.ChoiceOptions.OrderByDescending(x => x.SortWeight).ToList();
+        _sortedOptions = Field.ChoiceOptions.OrderBy(x => x.SortKey).ToList();
     }
 
     private async Task HandleEditChoiceOption(ChoiceOption option)
@@ -183,7 +183,7 @@
 
         int insertIndex = insertIndexParam.Value;
 
-        var sortedList = Field.ChoiceOptions.OrderByDescending(x => x.SortWeight).ToList();
+        var sortedList = Field.ChoiceOptions.OrderBy(x => x.SortKey).ToList();
 
         int draggedIndex = sortedList.IndexOf(option);
 
@@ -198,22 +198,22 @@
 
         if (sortedList.Count == 1)
         {
-            option.SortWeight = InitialSortWeight;
+            option.SortKey = InitialSortWeight;
         }
         else if (insertIndex == 0)
         {
-            option.SortWeight = sortedList[0].SortWeight + SortWeightStep;
+            option.SortKey = sortedList[0].SortKey - SortWeightStep;
         }
         else if (insertIndex == sortedList.Count)
         {
-            option.SortWeight = sortedList[^1].SortWeight - SortWeightStep;
+            option.SortKey = sortedList[^1].SortKey + SortWeightStep;
         }
         else
         {
-            option.SortWeight = (sortedList[insertIndex - 1].SortWeight + sortedList[insertIndex].SortWeight) / 2.0;
+            option.SortKey = (sortedList[insertIndex - 1].SortKey + sortedList[insertIndex].SortKey) / 2.0;
         }
 
         FieldChanged.InvokeAsync(Field);
-        _sortedOptions = Field.ChoiceOptions.OrderByDescending(x => x.SortWeight).ToList();
+        _sortedOptions = Field.ChoiceOptions.OrderBy(x => x.SortKey).ToList();
     }
 }
