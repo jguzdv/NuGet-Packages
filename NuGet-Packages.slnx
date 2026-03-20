@@ -177,7 +177,4 @@
     <Project Path="tools/JGUZDV.JsonMerge/src/JGUZDV.JsonMerge.csproj" />
     <Project Path="tools/JGUZDV.JsonMerge/test/JGUZDV.JsonMerge.Tests.csproj" />
   </Folder>
-  <Properties Name="ExtensibilityGlobals" Scope="PostLoad">
-    <Property Name="RESX_SortFileContentOnSave" Value="True" />
-  </Properties>
 </Solution>

@@ -1,6 +1,6 @@
-﻿@using JGUZDV.DynamicForms.Blazor.Resources
+﻿@using JGUZDV.Blazor.Components.L10n
+@using JGUZDV.DynamicForms.Blazor.Resources
 @using JGUZDV.DynamicForms.Model
-
 
 <label for="@_guid">@SL["ChoiceOptionInput.NewValue"]</label>
 <input id="@_guid"
@@ -11,16 +11,15 @@
 
 <div class="pt-1">
     <label for="AllowedValueName@_guid">@SL["ChoiceOptionInput.NewName"]</label>
-    <JGUZDV.Blazor.Components.L10n.L10nEditor 
-        @bind-L10n="ChoiceOption.Name"
-        @bind-L10n:after="() => ChoiceOptionChanged.InvokeAsync(ChoiceOption)"/>
+    <L10nEditor @bind-L10n="ChoiceOption.Name"
+                @bind-L10n:after="() => ChoiceOptionChanged.InvokeAsync(ChoiceOption)" />
 </div>
 <div class="pt-1">
-    <label for="SortWeight@_guid">@SL["ChoiceOptionInput.SortWeight"]</label>
-    <input id="SortWeight@_guid"
+    <label for="Index@_guid">@SL["ChoiceOptionInput.Index"]</label>
+    <input id="Index@_guid"
            type="number"
            class="form-control"
-           @bind="ChoiceOption.SortWeight"
+           @bind="ChoiceOption.Index"
            @bind:after="() => ChoiceOptionChanged.InvokeAsync(ChoiceOption)" />
 </div>
 
@@ -28,13 +27,19 @@
 @code {
     [Parameter]
     [EditorRequired]
-    public ChoiceOption ChoiceOption { get; set; } = default!;
+    public ChoiceOptionEditModel ChoiceOption { get; set; } = default!;
 
     [Parameter]
-    public EventCallback<ChoiceOption> ChoiceOptionChanged { get; set; }
+    public EventCallback<ChoiceOptionEditModel> ChoiceOptionChanged { get; set; }
 
     [Inject]
     public required IStringLocalizer<ComponentStrings> SL { get; set; }
 
     private Guid _guid = Guid.NewGuid();
+
+    override protected void OnParametersSet()
+    {
+        base.OnParametersSet();
+        _guid = Guid.NewGuid();
+    }
 }

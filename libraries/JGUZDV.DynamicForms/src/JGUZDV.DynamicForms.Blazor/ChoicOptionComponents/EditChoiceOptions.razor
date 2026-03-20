@@ -38,7 +38,7 @@
         <small class="text-muted fw-normal">@SL["EditChoiceOptions.DragAndDropHint"]</small>
     </div>
     <ul class="list-group" @ondragend="() => { _draggedOption = null; }">
-        <DropSpacer OnDrop="() => HandleDropAt(0)" />
+        <DropSpacer OnDrop="() => InsertAt(_draggedOption, 0)" />
 
         @foreach (var (option, i) in _sortedOptions.Select((o, i) => (o, i)))
         {
@@ -57,12 +57,12 @@
                 @option.Name: @option.Value
             </li>
 
-            <DropSpacer OnDrop="() => HandleDropAt(dropIndex)" />
+            <DropSpacer OnDrop="() => InsertAt(_draggedOption, dropIndex)" />
         }
     </ul>
 }
 
-<Modal @ref=_editChoiceOptionModal TModel="ChoiceOption" Title="@SL["EditChoiceOptions.Edit"]">
+<Modal @ref=_editChoiceOptionModal TModel="ChoiceOptionEditModel" Title="@SL["EditChoiceOptions.Edit"]">
     <Body>
         <ChoiceOptionInput @bind-ChoiceOption="context.Model" />
         <div class="mt-2">
@@ -86,17 +86,32 @@
     [Inject]
     public required IStringLocalizer<ComponentStrings> SL { get; set; }
 
-    private Modal<ChoiceOption>? _editChoiceOptionModal = new();
-    private ChoiceOption _newChoiceOption = new();
+    private Modal<ChoiceOptionEditModel>? _editChoiceOptionModal = new();
+    private ChoiceOptionEditModel _newChoiceOption = new();
 
     private List<ValidationResult> _errors = [];
 
     private ChoiceOption? _draggedOption;
     private List<ChoiceOption> _sortedOptions = new();
 
+    private readonly int InitialSortWeight = 1000;
+    private readonly int SortWeightStep = 10;
+
     protected override void OnParametersSet()
     {
+        if (Field.ChoiceOptions.Select(x => x.SortWeight).ToHashSet().Count != Field.ChoiceOptions.Count)
+        {
+            foreach (var item in Field.ChoiceOptions)
+            {
+                item.SortWeight = InitialSortWeight - Field.ChoiceOptions.IndexOf(item) * SortWeightStep;
+            }
+        }
+
         _sortedOptions = Field.ChoiceOptions.OrderByDescending(x => x.SortWeight).ToList();
+        _newChoiceOption = new()
+        {
+            Index = Field.ChoiceOptions.Count + 1,
+        };
     }
 
     private void RemoveChoiceOption(ChoiceOption option)
@@ -108,26 +123,25 @@
 
     private async Task HandleEditChoiceOption(ChoiceOption option)
     {
-        var copy = new ChoiceOption
+        var copy = new ChoiceOptionEditModel
         {
             Name = new L10n.L10nString(option.Name),
             Value = option.Value,
-            SortWeight = option.SortWeight
+            Index = _sortedOptions.IndexOf(option) + 1,
         };
 
         var modalResult = await _editChoiceOptionModal!.ShowModal(copy);
 
         if (modalResult == ModalResult.Accepted)
         {
+
             option.Name = copy.Name;
             option.Value = copy.Value;
-            option.SortWeight = copy.SortWeight;
-            await FieldChanged.InvokeAsync(Field);
-            _sortedOptions = Field.ChoiceOptions.OrderByDescending(x => x.SortWeight).ToList();
+            InsertAt(option, copy.Index - 1);
         }
     }
 
-    private void AddChoiceOption(ChoiceOption option)
+    private void AddChoiceOption(ChoiceOptionEditModel option)
     {
         _errors = [];
         try
@@ -143,11 +157,16 @@
             return;
         }
 
+        var newOption = new ChoiceOption
+        {
+            Name = option.Name,
+            Value = option.Value,
+        };
 
-        Field.ChoiceOptions.Add(option);
-        FieldChanged.InvokeAsync(Field);
+        Field.ChoiceOptions.Add(newOption);
+        InsertAt(newOption, option.Index - 1);
+
         _newChoiceOption = new();
-        _sortedOptions = Field.ChoiceOptions.OrderByDescending(x => x.SortWeight).ToList();
     }
 
     private void HandleDragStart(ChoiceOption option)
@@ -155,9 +174,9 @@
         _draggedOption = option;
     }
 
-    private void HandleDropAt(int? insertIndexParam)
+    private void InsertAt(ChoiceOption? option, int? insertIndexParam)
     {
-        if (_draggedOption is null || insertIndexParam is null)
+        if (option is null || insertIndexParam is null)
         {
             return;
         }
@@ -166,9 +185,9 @@
 
         var sortedList = Field.ChoiceOptions.OrderByDescending(x => x.SortWeight).ToList();
 
-        int draggedIndex = sortedList.IndexOf(_draggedOption);
+        int draggedIndex = sortedList.IndexOf(option);
 
-        sortedList.Remove(_draggedOption);
+        sortedList.Remove(option);
 
         if (draggedIndex < insertIndex)
         {
@@ -177,24 +196,23 @@
 
         insertIndex = Math.Clamp(insertIndex, 0, sortedList.Count);
 
-        if (sortedList.Count == 0)
+        if (sortedList.Count == 1)
         {
-
+            option.SortWeight = InitialSortWeight;
         }
         else if (insertIndex == 0)
         {
-            _draggedOption.SortWeight = sortedList[0].SortWeight + 1000;
+            option.SortWeight = sortedList[0].SortWeight + SortWeightStep;
         }
         else if (insertIndex == sortedList.Count)
         {
-            _draggedOption.SortWeight = sortedList[^1].SortWeight - 1000;
+            option.SortWeight = sortedList[^1].SortWeight - SortWeightStep;
         }
         else
         {
-            _draggedOption.SortWeight = (sortedList[insertIndex - 1].SortWeight + sortedList[insertIndex].SortWeight) / 2.0;
+            option.SortWeight = (sortedList[insertIndex - 1].SortWeight + sortedList[insertIndex].SortWeight) / 2.0;
         }
 
-        _draggedOption = null;
         FieldChanged.InvokeAsync(Field);
         _sortedOptions = Field.ChoiceOptions.OrderByDescending(x => x.SortWeight).ToList();
     }
