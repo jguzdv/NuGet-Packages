@@ -30,10 +30,11 @@ namespace JGUZDV.JobHost.Dashboard.Sample
                     {
                         Host = host,
                         LastExecutedAt = DateTime.UtcNow,
+                        NextExecutionAt = DateTime.UtcNow + TimeSpan.FromSeconds(15),
                         LastResult = i % mod == 0 ? Job.Success : Job.Error,
                         FailMessage = i % mod == 0 ? null : "Critical error during execution - uh OH",
                         Name = $"Job-{i}",
-                        Schedule = "* 0/15 * * *",
+                        Schedule = "0/15 * * * *",
                         ShouldExecuteAt = null,
                     })
                     .ToList();
