@@ -116,16 +116,8 @@
         catch (Exception ex)
         {
             Logger.LogError(ex, "BlazorMap initialization failed while importing JS module or creating map instance.");
-            _initialize.TrySetResult();
-            await MapIsInitialized.InvokeAsync(false);
-        }
-    }
-
-    private void EnsureInteractiveMode(string methodName)
-    {
-        if (IsServerRendered)
-        {
-            throw new InvalidOperationException($"'{methodName}' is not available when IsServerRendered is true.");
+            _initialize.TrySetException(ex);
+            await NotifyMapInitializedAsync(false);
         }
     }
 
@@ -143,7 +135,7 @@
     public async Task InitializationFailed(string? error)
     {
         Logger.LogError("BlazorMap reported initialization failure from JavaScript. Details: {Error}", error);
-        _initialize.TrySetResult();
+        _initialize.TrySetException(new InvalidOperationException($"BlazorMap JavaScript initialization failed: {error ?? "unknown error"}"));
         await NotifyMapInitializedAsync(false);
     }
 
@@ -206,7 +198,6 @@
     /// <param name="bounds">The geographic bounds to fit.</param>
     public async Task PanToPolygon(List<LngLat> bounds)
     {
-        EnsureInteractiveMode(nameof(PanToPolygon));
         await _initialize.Task;
         await _jsInstance!.InvokeVoidAsync("pantoLocation", bounds);
     }
@@ -217,7 +208,6 @@
     /// <param name="url">The style definition URL.</param>
     public async Task AddStyleLayerFromUrl(string url)
     {
-        EnsureInteractiveMode(nameof(AddStyleLayerFromUrl));
         await _initialize.Task;
         await _jsInstance!.InvokeVoidAsync("addStyleLayerFromUrl", url);
     }
@@ -229,7 +219,6 @@
     /// <param name="data">The source data payload.</param>
     public async Task SetSourceDataFromUrl(string sourceId, string data)
     {
-        EnsureInteractiveMode(nameof(SetSourceDataFromUrl));
         await _initialize.Task;
         await _jsInstance!.InvokeVoidAsync("setSourceData", sourceId, data);
     }
@@ -241,7 +230,6 @@
     /// <param name="data">The GeoJSON feature collection.</param>
     public async Task SetSourceData(string sourceId, FeatureCollection data)
     {
-        EnsureInteractiveMode(nameof(SetSourceData));
         await _initialize.Task;
         await _jsInstance!.InvokeVoidAsync("setSourceData", sourceId, data);
     }
@@ -252,7 +240,6 @@
     /// <param name="data">The layer definition object.</param>
     public async Task AddLayer(object data)
     {
-        EnsureInteractiveMode(nameof(AddLayer));
         await _initialize.Task;
         await _jsInstance!.InvokeVoidAsync("addLayer", data);
     }
@@ -263,7 +250,6 @@
     /// <param name="layerId">The layer id.</param>
     public async Task RemoveLayer(string layerId)
     {
-        EnsureInteractiveMode(nameof(RemoveLayer));
         await _initialize.Task;
         await _jsInstance!.InvokeVoidAsync("removeLayer", layerId);
     }

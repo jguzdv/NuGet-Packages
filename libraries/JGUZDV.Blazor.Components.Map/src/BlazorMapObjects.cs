@@ -20,7 +20,7 @@ namespace JGUZDV.Blazor.Components.Map
             Zoom = zoom;
             BaseLayerStyleUrl = baseLayerStyleUrl;
             MaxBounds = maxBounds;
-            AdditionalLayerStyleUrls = additionalLayerStyleUrls ?? [];
+            AdditionalLayerStyleUrls = additionalLayerStyleUrls;
             AdditionalSourceData = additionalSourceData;
             SpritePathPrefix = spritePathPrefix;
         }
