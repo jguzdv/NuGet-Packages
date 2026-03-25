@@ -72,6 +72,10 @@ public class JGUZDVHostApplicationBuilder
     /// </summary>
     public bool HasRequestLocalization { get; internal set; }
 
+    /// <summary>
+    /// Gets a value indicating whether Cross-Origin Resource Sharing (CORS) is enabled for the application.
+    /// </summary>
+    public bool HasCORS { get; internal set; }
 
     /// <summary>
     /// Gets a value indicating whether the application has session configured.
@@ -380,7 +384,11 @@ public class JGUZDVHostApplicationBuilder
                 LogMessages.MissingOptionalConfig(logger, "JwtBearerAuthentication", Constants.ConfigSections.JwtBearerAuthentication);
             }
 
-
+            this.AddCORS();
+            if(HasCORS)
+            {
+                LogMessages.FeatureAdded(logger, "CORS");
+            }
             this.AddHealthChecks();
             LogMessages.FeatureAdded(logger, "HealthChecks");
         }
@@ -588,9 +596,19 @@ public class JGUZDVHostApplicationBuilder
 
         app.UseRouting();
 
+        if(HasCORS)
+        {
+            app.UseCors();
+        }
+
         if (HasOpenApi)
         {
             app.MapOpenApi();
+        }
+        
+        if (HasRequestLocalization)
+        {
+            app.UseRequestLocalization();
         }
 
         if (HasHealthChecks)
@@ -605,16 +623,10 @@ public class JGUZDVHostApplicationBuilder
             // TODO app.MapPrometheus();
         }
 
-
         if (HasAuthentication)
         {
             app.UseAuthentication();
             app.UseAuthorization();
-        }
-
-        if (HasRequestLocalization)
-        {
-            app.UseRequestLocalization();
         }
 
         if (HasInteractiveWebAssemblyComponents)

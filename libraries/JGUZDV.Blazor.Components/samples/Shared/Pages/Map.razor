@@ -1,0 +1,135 @@
+﻿@page "/map"
+
+@using System.Text.Json
+@using GeoJSON.Text.Feature
+@using GeoJSON.Text.Geometry
+@using Newtonsoft.Json
+@using Newtonsoft.Json.Linq
+@using System.IO
+@using JGUZDV.Blazor.Components.Map
+
+<PageTitle>Map</PageTitle>
+
+@if (@SiteDataIsLoaded)
+{
+    <div> <button @onclick="() => _Map.PanToPolygon(new List<LngLat> { new LngLat(8.038996433872427, 49.7305909333372), new LngLat(8.522101, 50.125861) })">PanToTest</button></div>
+
+    <div style="height: 300px;">
+        <BlazorMap MapClicked="(args) => MapClicked(args)"
+                   BaseLayerStyleUrl="https://openstreetmap.zdv.uni-mainz.de/styles/basic-preview/style.json"
+                   AdditionalLayerStyleUrls="@(new string[]{"map-assets/jgu_default_map_style.json"})"
+                   @ref="_MapApp"
+                   Center="@(new LngLat(8.24,49.992863))"
+                   PathPrefix="https://maps.webapi.jgu.net/"
+                   MapIsInitialized="SetGeoJsonForApp"></BlazorMap>
+    </div>
+
+    <div style="height: 300px;">
+        <BlazorMap AdditionalLayerStyleUrls="@(new[] { "map-assets/Sources_Layers_Images.json" })"
+                   Center="new LngLat(8.237723256218402, 49.993415841344046)"
+                   MaxBounds="new List<LngLat> {new LngLat(8.033148, 49.182152), new LngLat(8.522101, 50.125861)}"
+                   MapClicked="(args)=> MapClicked(args)"
+                   @ref="_Map" />
+    </div>
+
+    <div style="height: 300px;">
+        <BlazorMap AdditionalLayerStyleUrls="@(new[] { "map-assets/Sources_Layers_Images.json" })"
+                   Center="new LngLat(8.237723256218402, 49.993415841344046)"
+                   MaxBounds="new List<LngLat> {new LngLat(8.033148, 49.182152), new LngLat(8.522101, 50.125861)}"
+                   MapClicked="(args)=> MapClicked(args)"
+                   MapIsInitialized="SetMapsForRoomLeaflet"
+                   @ref="_MapTwo" />
+    </div>
+
+
+}
+
+@code {
+    public bool SiteDataIsLoaded { get; set; } = false;
+    private BlazorMap _Map { get; set; }
+
+    private BlazorMap _MapTwo { get; set; }
+
+    private BlazorMap _MapApp { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        //Merge 2 Json Files
+        // await MergeJson(@"JSON/Basemap_Data.json", "JSON/OwnMapStyleansSource.json", "JSON/Merged_Data");
+        InitializeData();
+    }
+
+    public Task MergeJson(string filePath1, string filePath2, string outputpath, MergeArrayHandling handler = MergeArrayHandling.Union)
+    {
+        JObject file1 = JObject.Parse(File.ReadAllText(filePath1));
+        JObject file2 = JObject.Parse(File.ReadAllText(filePath2));
+
+        file1.Merge(file2, new JsonMergeSettings() { MergeArrayHandling = handler });
+
+        using (StreamWriter file = File.CreateText(outputpath))
+        using (JsonTextWriter writer = new JsonTextWriter(file))
+        {
+            file1.WriteTo(writer);
+        }
+
+        return Task.CompletedTask;
+    }
+
+    public void InitializeData()
+    {
+        SiteDataIsLoaded = true;
+    }
+
+    public async Task SetMapsForRoomLeaflet()
+    {
+        var options = new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        };
+
+        var renderData = new FeatureCollection();
+        renderData.Features.Add(new Feature(new Point(new Position(49.993415841344046, 8.237723256218402)))
+        {
+            Properties = {
+                    { "Name", "Gebäude diesdas" },
+                    { "type", "Building2" },
+                    { "SiteId", 1 }
+                    }
+        });
+
+        await _MapTwo!.SetSourceData("TestSource", renderData);
+    }
+
+    public async Task SetGeoJsonForApp()
+    {
+        
+        //await _MapApp!.SetSourceData("ArisSource", features!);
+
+        var layer = new Dictionary<string, object>
+        {
+            {"id", "TestTestBuildingPointLayer" },
+            {"type", "symbol" },
+            {"source", "ArisSource" },
+            {"layout", new Dictionary<string,object>
+                {
+                    {"visibility", "visible" },
+                    {"icon-image", "bluemarker" },
+                    {"icon-size", 1 },
+                    {"icon-anchor", "bottom" }
+                }
+            },
+            {"maxzoom", 24 },
+            {"minzoom", 13 },
+            {"filter", new string[] {"==", "type", "BuildingOutline" } }
+        };
+
+        await _MapApp!.AddLayer(layer);
+    }
+
+    private void MapClicked(MapMouseEventArgs args)
+    {
+        Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(args));
+
+    }
+
+}
