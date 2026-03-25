@@ -10,7 +10,7 @@
             <span class="me-1">@Title </span>
             @if (!UseSingleSelectionMode && Values!.Any() && !_isOpen)
             {
-                <span class="text-muted small text-truncate align-self-center" title="@(Values!.Select(x => ItemName(x)).Aggregate((a,b) => $"{a}, {b}"))">
+                <span class="text-muted small text-truncate align-self-center" title="@(Values!.Select(x => ItemName(x)).Aggregate((a, b) => $"{a}, {b}"))">
                     <span> (@Values!.Select(x => ItemName(x)).Aggregate((a, b) => $"{a}, {b}"))</span>
                 </span>
             }
@@ -42,8 +42,8 @@
                     @foreach (var item in Values!)
                     {
                         <div class="badge button d-flex justify-content-between gap-1 mw-0 text-bg-secondary" tabindex="0"
-                              @onkeypress="e => e.OnEnter(() => HandleBadgeClick(item))"
-                              @onclick="() => HandleBadgeClick(item)">
+                             @onkeypress="e => e.OnEnter(() => HandleBadgeClick(item))"
+                             @onclick="() => HandleBadgeClick(item)">
                             <span class="text-truncate">@ItemName(item)</span> @BadgeIcon("")
                         </div>
                     }
@@ -79,8 +79,8 @@
         </div>
     }
 </div>
-@code {
 
+@code {
     /// <summary>
     /// The list of items to display in the selection dropdown.
     /// </summary>
@@ -196,7 +196,7 @@
         @<div class="btn btn-outline-secondary w-100">
             @Icons.Collapsed("")
         </div>
-    ;
+;
 
     /// <summary>
     /// The icon to display when the dropdown is open.
