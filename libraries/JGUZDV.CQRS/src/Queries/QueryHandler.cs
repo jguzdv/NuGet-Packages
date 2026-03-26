@@ -112,6 +112,13 @@ namespace JGUZDV.CQRS.Queries
             catch (TaskCanceledException tcex)
             {
                 Log.Cancelled(Logger);
+                
+                // If the caller cancels the operation, it can handle the exception itself.
+                if (tcex.CancellationToken == ct)
+                {
+                    throw;
+                }
+
                 originalQuery.Result = HandlerResult.Canceled(tcex.CancellationToken);
                 return;
             }
