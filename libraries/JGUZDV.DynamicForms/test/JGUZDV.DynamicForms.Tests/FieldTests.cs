@@ -152,7 +152,7 @@ namespace JGUZDV.DynamicForms.Tests
             // Assert
             Assert.NotNull(deserializedField);
             Assert.Equal(field.Value, deserializedField.Value);
-            Assert.Equal(field.FieldDefinition.Type.ToJson(), deserializedField.FieldDefinition.Type.ToJson());
+            Assert.Equal(field.FieldDefinition.Type!.ToJson(), deserializedField.FieldDefinition.Type!.ToJson());
             Assert.Equal(field.FieldDefinition.InputDefinition.Label["en"], deserializedField.FieldDefinition.InputDefinition.Label["en"]);
             Assert.Equal(field.FieldDefinition.Description["en"], deserializedField.FieldDefinition.Description["en"]);
             Assert.Equal(field.FieldDefinition.IsList, deserializedField.FieldDefinition.IsList);
@@ -204,7 +204,7 @@ namespace JGUZDV.DynamicForms.Tests
             // Assert
             Assert.NotNull(deserializedField);
             Assert.Equal(field.Value, deserializedField.Value);
-            Assert.Equal(field.FieldDefinition.Type.ToJson(), deserializedField.FieldDefinition.Type.ToJson());
+            Assert.Equal(field.FieldDefinition.Type!.ToJson(), deserializedField.FieldDefinition.Type!.ToJson());
             Assert.Equal(field.FieldDefinition.InputDefinition.Label["en"], deserializedField.FieldDefinition.InputDefinition.Label["en"]);
             Assert.Equal(field.FieldDefinition.Description["en"], deserializedField.FieldDefinition.Description["en"]);
             Assert.Equal(field.FieldDefinition.IsList, deserializedField.FieldDefinition.IsList);
@@ -419,7 +419,7 @@ namespace JGUZDV.DynamicForms.Tests
 
             // Assert
             Assert.NotNull(deserializedField);
-            Assert.Equal(((FileFieldType.FileType)field.Value).FileName, ((FileFieldType.FileType)deserializedField.Value).FileName);
+            Assert.Equal(((FileFieldType.FileType)field.Value).FileName, ((FileFieldType.FileType)deserializedField.Value!).FileName);
             Assert.Equal(((FileFieldType.FileType)field.Value).FileSize, ((FileFieldType.FileType)deserializedField.Value).FileSize);
 
             // Compare the content of the streams
@@ -434,7 +434,7 @@ namespace JGUZDV.DynamicForms.Tests
             var deserializedContent = deserializedReader.ReadToEnd();
             Assert.Equal(originalContent, deserializedContent);
 
-            Assert.Equal(field.FieldDefinition.Type.ToJson(), deserializedField.FieldDefinition.Type.ToJson());
+            Assert.Equal(field.FieldDefinition.Type!.ToJson(), deserializedField.FieldDefinition.Type!.ToJson());
             Assert.Equal(field.FieldDefinition.InputDefinition.Label["en"], deserializedField.FieldDefinition.InputDefinition.Label["en"]);
             Assert.Equal(field.FieldDefinition.Description["en"], deserializedField.FieldDefinition.Description["en"]);
             Assert.Equal(field.FieldDefinition.IsList, deserializedField.FieldDefinition.IsList);
