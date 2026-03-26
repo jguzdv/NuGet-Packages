@@ -115,6 +115,13 @@ public abstract partial class CommandHandler<TCommand, TContext> : ICommandHandl
         catch (TaskCanceledException tcex)
         {
             Log.Cancelled(Logger);
+
+            // If the caller cancels the operation, it can handle the exception itself.
+            if (tcex.CancellationToken == ct)
+            {
+                throw;
+            }
+
             return HandlerResult.Canceled(tcex.CancellationToken);
         }
         catch (Exception ex)
