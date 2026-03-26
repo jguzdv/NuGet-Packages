@@ -16,5 +16,16 @@ namespace JGUZDV.CQRS.AspNetCore.Http
             await queryHandler.ExecuteQuery(query, httpContext.User, httpContext.RequestAborted);
             return query.Result ?? HandlerResult.Indeterminate();
         }
+
+        /// <summary>
+        /// Executes the given query and converts the result to IResult.
+        /// </summary>
+        public static async Task<IResult> ExecuteQueryAsHttpResult<TQuery, TValue>(
+            this IQueryHandler<TQuery> queryHandler, IQuery<TValue> query, HttpContext httpContext)
+            where TQuery : IQuery<TValue>
+        {
+            await queryHandler.ExecuteQuery(query, httpContext.User, httpContext.RequestAborted);
+            return (query.Result ?? HandlerResult.Indeterminate()).ToHttpResult();
+        }
     }
 }
