@@ -27,8 +27,8 @@ namespace JGUZDV.CQRS.AspNetCore.Http
             where TCommand : ICommand
         {
             var stringLocalizer = httpContext.RequestServices.GetService<IStringLocalizer>();
-            await commandHandler.ExecuteAsync(command, httpContext.User, httpContext.RequestAborted);
-            return HandlerResult.Indeterminate().ToHttpResult(stringLocalizer);
+            var commandResult = await commandHandler.ExecuteAsync(command, httpContext.User, httpContext.RequestAborted);
+            return commandResult.ToHttpResult(stringLocalizer);
         }
     }
 }
