@@ -97,6 +97,15 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ChoiceOptionInput.Edit.Cancel" xml:space="preserve">
+    <value>Abbrechen</value>
+  </data>
+  <data name="ChoiceOptionInput.Edit.Save" xml:space="preserve">
+    <value>Speichern</value>
+  </data>
+  <data name="ChoiceOptionInput.Index" xml:space="preserve">
+    <value>Index (Sortierung)</value>
+  </data>
   <data name="ChoiceOptionInput.NewName" xml:space="preserve">
     <value>Name</value>
   </data>
@@ -106,14 +115,23 @@
   <data name="ChoiceOptionInput.Save" xml:space="preserve">
     <value>hinzufügen</value>
   </data>
+  <data name="ChoiceOptionInput.SortWeight" xml:space="preserve">
+    <value>Sortiergewicht</value>
+  </data>
   <data name="EditChoiceOptions.Add" xml:space="preserve">
     <value>Neue Wahlmöglichkeit</value>
   </data>
+  <data name="EditChoiceOptions.DragAndDropHint" xml:space="preserve">
+    <value>(Ziehen zum Neuordnen)</value>
+  </data>
   <data name="EditChoiceOptions.Edit" xml:space="preserve">
-    <value>Wahlmöglichkeiten</value>
+    <value>Wahlmöglichkeit bearbeiten</value>
   </data>
   <data name="EditChoiceOptions.InvalidValue" xml:space="preserve">
     <value>Wert kann nicht in Zieltyp übersetzt werden</value>
+  </data>
+  <data name="EditChoiceOptions.Plural" xml:space="preserve">
+    <value>Wahlmöglichkeiten</value>
   </data>
   <data name="EditConstraints.Add" xml:space="preserve">
     <value>hinzufügen</value>

@@ -1,0 +1,14 @@
+﻿<li class="drop-spacer @(_isActive ? "active" : "")"
+    @ondragover:preventDefault
+    @ondragenter="() => { _isActive = true; }"
+    @ondragleave="() => { _isActive = false; }"
+    @ondrop="() => { _isActive = false; OnDrop.InvokeAsync(); }"
+    @ondrop:preventDefault>
+</li>
+
+@code {
+    [Parameter]
+    public EventCallback OnDrop { get; set; }
+
+    private bool _isActive { get; set; }
+}
