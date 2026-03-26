@@ -8,6 +8,10 @@ namespace JGUZDV.CQRS.AspNetCore.Http
 {
     public static class CommandHandlerExtensions
     {
+        /// <summary>
+        /// Executes the given command and converts the result to IResult.
+        /// A common string localizer will be passed into ToHttpResult if available, so that the result can be localized.
+        /// </summary>
         public static async Task<IResult> ExecuteCommandAsHttpResult<TCommand>(
             this ICommandHandler<TCommand> commandHandler, TCommand command, HttpContext httpContext)
             where TCommand : ICommand
