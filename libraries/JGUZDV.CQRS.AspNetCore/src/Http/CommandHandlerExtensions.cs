@@ -11,11 +11,11 @@ namespace JGUZDV.CQRS.AspNetCore.Http
         /// <summary>
         /// Executes the given command and returns the result using the User and CancellationToken from the HttpContext.
         /// </summary>
-        public static async Task ExecuteCommand<TCommand>(
+        public static Task<HandlerResult> ExecuteCommand<TCommand>(
             this ICommandHandler<TCommand> commandHandler, TCommand command, HttpContext httpContext)
             where TCommand : ICommand
         {
-            await commandHandler.ExecuteAsync(command, httpContext.User, httpContext.RequestAborted);
+            return commandHandler.ExecuteAsync(command, httpContext.User, httpContext.RequestAborted);
         }
 
         /// <summary>
