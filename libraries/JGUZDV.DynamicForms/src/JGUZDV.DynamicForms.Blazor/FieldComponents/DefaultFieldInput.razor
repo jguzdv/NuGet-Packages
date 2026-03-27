@@ -44,7 +44,9 @@
                                  Values="@(Field.Values?.Select(x => GetChoiceOption(x)).ToList())"
                                  ValuesChanged="(value) => SetValue(value.Select(x => ConvertToValue(x.Value)).ToList())"
                                  TKey="string"
-                                 T="ChoiceOption"></MultiSelect>
+                                 T="ChoiceOption"
+                                 FilterLabel="@SL["DefaultFieldInput.FilterLabel"]"
+                                 UseOverlayMode="@true"></MultiSelect>
                 }
                 else
                 {
@@ -56,7 +58,9 @@
                                  Value="@GetChoiceOption(Field.Value)"
                                  ValueChanged="(value) => SetValue(ConvertToValue(value.Value))"
                                  TKey="string"
-                                 T="ChoiceOption"></MultiSelect>
+                                 T="ChoiceOption"
+                                 FilterLabel="@SL["DefaultFieldInput.FilterLabel"]"
+                                 UseOverlayMode="@true"></MultiSelect>
                 }
 
             }
