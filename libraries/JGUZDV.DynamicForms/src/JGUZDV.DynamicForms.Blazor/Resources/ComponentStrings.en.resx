@@ -138,6 +138,9 @@
   <data name="ChoiceOptionInput.SortWeight" xml:space="preserve">
     <value>Sort Weight</value>
   </data>
+  <data name="DefaultFieldInput.FilterLabel" xml:space="preserve">
+    <value>Search...</value>
+  </data>
   <data name="EditChoiceOptions.Add" xml:space="preserve">
     <value>New Choice</value>
   </data>
