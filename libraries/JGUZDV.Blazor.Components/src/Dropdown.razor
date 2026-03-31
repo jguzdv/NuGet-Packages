@@ -1,20 +1,25 @@
 <jgu-dropdown class="dropdown">
-
-    <button id="dropdown-button-@_guid" tabindex="0"
+    <!-- Der Button wird zum Popover-Controller -->
+    <button id="dropdown-button-@_guid"
             class="dropdown-label"
             type="button"
-            aria-haspopup="true"
-            aria-expanded="false"
-            aria-controls="dropdown-menu-@_guid">
+            popovertarget="dropdown-menu-@_guid"
+            popovertargetaction="toggle"
+            style="anchor-name: --anchor-@_guid;">
         @DropdownLabelContent
     </button>
 
-    <div class="dropdown-menu @DropDownMenuClass" role="menu" id="dropdown-menu-@_guid" aria-labelledby="dropdown-button-@_guid" hidden>
+    <!-- Das Menü wird zum Popover-Element -->
+    <div class="dropdown-menu @DropDownMenuClass"
+         id="dropdown-menu-@_guid"
+         popover="auto"
+         role="menu"
+         aria-labelledby="dropdown-button-@_guid"
+         style="position-anchor: --anchor-@_guid;">
         @DropdownContent
     </div>
 
 </jgu-dropdown>
-
 @code {
     private string _guid = Guid.NewGuid().ToString();
 
