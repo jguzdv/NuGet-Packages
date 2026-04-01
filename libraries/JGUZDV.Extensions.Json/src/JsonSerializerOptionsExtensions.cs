@@ -15,7 +15,6 @@ public static class JsonSerializerOptionsExtensions
     ///   - Add DateOnlyConverter
     ///   - Add TimeOnlyConverter
     /// - always:
-    /// - Add StringTrimmingJsonConverter
     /// - Set DefaultIgnoreCondition to "WhenWritingNull"
     /// - PropertyNamingPolicy to 'null'
     /// - DictonaryKeyPolicy to 'null'
@@ -26,8 +25,6 @@ public static class JsonSerializerOptionsExtensions
         opt.Converters.Add(new DateOnlyConverter());
         opt.Converters.Add(new TimeOnlyConverter());
 #endif
-        opt.Converters.Add(new StringTrimmingJsonConverter());
-
         opt.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
         opt.PropertyNamingPolicy = null;
         opt.DictionaryKeyPolicy = null;
