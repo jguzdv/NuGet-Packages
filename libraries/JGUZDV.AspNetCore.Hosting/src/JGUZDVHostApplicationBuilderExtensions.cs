@@ -4,7 +4,6 @@ using JGUZDV.AspNetCore.Hosting.Extensions;
 using JGUZDV.AspNetCore.Hosting.FeatureManagement;
 using JGUZDV.AspNetCore.Hosting.ForwardedHeaders;
 using JGUZDV.AspNetCore.Hosting.Localization;
-using JGUZDV.Extensions.Json;
 using JGUZDV.WebApiHost.FeatureManagement;
 using JGUZDV.YARP.SimpleReverseProxy;
 using JGUZDV.YARP.SimpleReverseProxy.Configuration;
