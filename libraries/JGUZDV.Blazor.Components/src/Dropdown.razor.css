@@ -1,15 +1,17 @@
 ﻿.dropdown {
     display: inline-block;
     position: relative;
-    anchor-name: --dropdown-anchor;
+    anchor-scope: --anchor;
 }
 .dropdown-label {
     border: none;
     background: none;
     cursor: pointer;
+    anchor-name: --anchor;
 }
 
 .dropdown-menu {
+    position-anchor: --anchor;
     margin: 0;
     border: 1px solid #ccc;
     padding: 0;

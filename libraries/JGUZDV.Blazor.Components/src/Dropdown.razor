@@ -3,8 +3,7 @@
             class="dropdown-label"
             type="button"
             popovertarget="dropdown-menu-@_guid"
-            popovertargetaction="toggle"
-            style="anchor-name: --anchor-@_guid;">
+            popovertargetaction="toggle">
         @DropdownLabelContent
     </button>
 
@@ -12,12 +11,11 @@
          id="dropdown-menu-@_guid"
          popover="auto"
          role="menu"
-         aria-labelledby="dropdown-button-@_guid"
-         style="position-anchor: --anchor-@_guid;">
+         aria-labelledby="dropdown-button-@_guid">
         @DropdownContent
     </div>
-
 </jgu-dropdown>
+
 @code {
     private string _guid = Guid.NewGuid().ToString();
 
