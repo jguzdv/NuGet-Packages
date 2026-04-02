@@ -1,34 +1,25 @@
 ﻿.dropdown {
     display: inline-block;
     position: relative;
+    anchor-name: --dropdown-anchor;
 }
-/* 1. Button als Anchor definieren */
 .dropdown-label {
-  /*  anchor-name: --dropdown-anchor;*/
     border: none;
     background: none;
     cursor: pointer;
 }
 
-/* 2. Dropdown-Menü positionieren */
 .dropdown-menu {
     margin: 0;
     border: 1px solid #ccc;
     padding: 0;
     min-width: 150px;
-    position: fixed;
     top: anchor(bottom);
     left: anchor(left);
     display: none;
 }
 
-    /* Popover-Open-Zustand */
-    .dropdown-menu:popover-open {
-        opacity: 1;
-        display: block;
-    }
-
-    /* Backdrop für Auto-Popover */
-    .dropdown-menu::backdrop {
-        background-color: rgba(0, 0, 0, 0);
-    }
+.dropdown-menu:popover-open {
+    opacity: 1;
+    display: block;
+}
