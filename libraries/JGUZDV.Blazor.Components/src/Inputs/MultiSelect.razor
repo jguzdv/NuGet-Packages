@@ -4,7 +4,7 @@
 @using Microsoft.AspNetCore.Components.Web;
 @using JGUZDV.Blazor.Components.Extensions;
 
-<div class="multi-select @(HostClass == null ? "px-2 py-1 border" : $"{HostClass}")">
+<div @ref="_multiSelect" class="multi-select @(HostClass == null ? "px-2 py-1 border" : $"{HostClass}")">
     <div @ref="_anchor" class="d-flex justify-content-between clickable" role="button" tabindex="0" @onkeypress="e => e.OnEnter(ToggleSelection)" @onclick="ToggleSelection">
         <div class="d-flex flex-nowrap overflow-hidden text-nowrap text-truncate">
             <span class="me-1">@Title </span>
@@ -35,7 +35,7 @@
 
     @if (_isOpen)
     {
-        <div class="@(UseOverlayMode ? "multi-select-overlay fade-in overflow-auto bg-body border px-2 py-1" : null)">
+        <div  class="@(UseOverlayMode ? "multi-select-overlay fade-in overflow-auto bg-body border px-2 py-1" : null)">
             @if (!UseSingleSelectionMode && Values!.Any())
             {
                 <div class="d-flex gap-2 flex-wrap my-2">
@@ -81,6 +81,10 @@
 </div>
 
 @code {
+    [Inject, NotNull]
+    private IJSRuntime? JSRuntime { get; set; }
+    private IJSObjectReference? _jsModule;
+
     /// <summary>
     /// The list of items to display in the selection dropdown.
     /// </summary>
@@ -219,6 +223,7 @@
     private bool _isOpen;
 
     private ElementReference _anchor;
+    private ElementReference _multiSelect;
 
     /// <inheritdoc />
     protected override void OnParametersSet()
@@ -237,12 +242,36 @@
         if (UseSingleSelectionMode && Values != null)
             throw new InvalidOperationException($"Parameter {nameof(Values)} may not be set if only one value is allowed");
     }
+    /// <inheritdoc />
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _jsModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/JGUZDV.Blazor.Components/MultiSelect.js");
+        }
 
-    private void ToggleSelection()
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    /// <summary>
+    /// Only for internal javascript usage.
+    /// </summary>
+    /// <returns></returns>
+    [JSInvokable]
+    public async Task ToggleSelection()
     {
         _isOpen = !_isOpen;
-        if (!_isOpen)
-            _anchor.FocusAsync();
+        if (_isOpen)
+        {
+            await _jsModule!.InvokeVoidAsync("registerMultiSelectListener", DotNetObjectReference.Create(this), _multiSelect);
+        }
+        else
+        {
+            await _anchor.FocusAsync();
+            await _jsModule!.InvokeVoidAsync("deregisterMultiSelectListener");
+        }
+
+        await InvokeAsync(StateHasChanged);
     }
 
     private void HandleBadgeClick(T item)
