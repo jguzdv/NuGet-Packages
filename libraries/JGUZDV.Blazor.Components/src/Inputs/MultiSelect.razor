@@ -35,7 +35,7 @@
 
     @if (_isOpen)
     {
-        <div  class="@(UseOverlayMode ? "multi-select-overlay fade-in overflow-auto bg-body border px-2 py-1" : null)">
+        <div class="@(UseOverlayMode ? "multi-select-overlay fade-in overflow-auto bg-body border px-2 py-1" : null)">
             @if (!UseSingleSelectionMode && Values!.Any())
             {
                 <div class="d-flex gap-2 flex-wrap my-2">
