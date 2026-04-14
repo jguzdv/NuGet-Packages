@@ -37,7 +37,7 @@
                 if (Field.FieldDefinition.IsList)
                 {
                     <MultiSelect UseSingleSelectionMode="@false"
-                                 Items="@Field.FieldDefinition.ChoiceOptions"
+                                 Items="@Field.FieldDefinition.ChoiceOptions.OrderBy(x => x.SortKey).ToList()"
                                  ItemName="x => x.Name.ToString()"
                                  ItemKey="x => x.Value"
                                  Title="@InputDefinition.Label.ToString()"
@@ -51,7 +51,7 @@
                 else
                 {
                     <MultiSelect UseSingleSelectionMode="@true"
-                                 Items="@Field.FieldDefinition.ChoiceOptions"
+                                 Items="@Field.FieldDefinition.ChoiceOptions.OrderBy(x => x.SortKey).ToList()"
                                  ItemName="x => x.Name.ToString()"
                                  ItemKey="x => x?.Value"
                                  Title="@InputDefinition.Label.ToString()"
