@@ -1,6 +1,5 @@
 ﻿.dropdown {
     display: inline-block;
-    position: relative;
     anchor-scope: --anchor;
 }
 .dropdown-label {
@@ -18,7 +17,6 @@
     min-width: 150px;
     top: anchor(bottom);
     left: anchor(left);
-    display: none;
 }
 
 .dropdown-menu:popover-open {
