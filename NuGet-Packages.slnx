@@ -119,6 +119,13 @@
     <Project Path="libraries/JGUZDV.Extensions.OpenTelemetry/src/JGUZDV.Extensions.OpenTelemetry.csproj" />
     <Project Path="libraries/JGUZDV.Extensions.OpenTelemetry/test/JGUZDV.Extensions.OpenTelemetry.Tests.csproj" />
   </Folder>
+  <Folder Name="/libraries/JGUZDV.Extensions.SAML2/" />
+  <Folder Name="/libraries/JGUZDV.Extensions.SAML2/src/">
+    <Project Path="libraries/JGUZDV.Extensions.SAML2/src/JGUZDV.Extensions.SAML2.csproj" />
+  </Folder>
+  <Folder Name="/libraries/JGUZDV.Extensions.SAML2/test/">
+    <Project Path="libraries/JGUZDV.Extensions.SAML2/test/JGUZDV.Extensions.SAML2.Tests.csproj" />
+  </Folder>
   <Folder Name="/libraries/JGUZDV.JobHost/">
     <File Path="libraries/JGUZDV.JobHost/Directory.Build.props" />
     <Project Path="libraries/JGUZDV.JobHost/src/JGUZDV.JobHost.Dashboard.Api/src/JGUZDV.JobHost.Dashboard.Api.csproj" />
