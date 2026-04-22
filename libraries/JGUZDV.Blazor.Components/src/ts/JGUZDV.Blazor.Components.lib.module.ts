@@ -1,166 +1,194 @@
-﻿export type Theme = 'light' | 'dark' | 'auto';
+﻿export function registerThemeButtons(): void {
+    customElements.define('jgu-theme-button', class extends HTMLElement {
+        connectedCallback(): void {
+            this.addEventListener('click', this.handleClick);
 
-export function registerThemeButtons(): void {
-    document.querySelectorAll<HTMLElement>('[data-set-theme]').forEach(el => {
-        el.addEventListener('click', (event: Event) => {
-            const target = event.currentTarget as HTMLElement;
-            const theme = target.getAttribute('data-set-theme') as Theme | null;
-            if (theme) {
-                applyTheme(theme, false);
-            }
+            const currentTheme = localStorage.getItem("theme") ?? "auto";
 
-            const dropdownMenu = target.closest('.dropdown-menu') as HTMLElement;
-            if (dropdownMenu) {
-                dropdownMenu.hidden = true;
+            this.classList.toggle(
+                "active",
+                this.getAttribute("theme") === currentTheme
+            );
+        }
 
-                const buttonId = dropdownMenu.getAttribute('aria-labelledby');
-                if (buttonId) {
-                    const button = document.getElementById(buttonId);
-                    if (button) {
-                        button.setAttribute('aria-expanded', 'false');
-                    }
-                }
-            }
-        });
-    });
+        disconnectedCallback(): void {
+            this.removeEventListener('click', this.handleClick);
+        }
 
-    console.debug('theme buttons registered');
-}
+        handleClick = (): void => {
+            const theme = this.getAttribute('theme');
+            if (!theme) return;
 
-export function applyTheme(theme: Theme, isInit: Boolean): void {
-    if (theme === 'auto') {
-        const preferred = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-        document.documentElement.setAttribute('data-bs-theme', preferred);
-        localStorage.removeItem("theme");
-    } else {
-        document.documentElement.setAttribute('data-bs-theme', theme);
-        if (!isInit) {
+            applyTheme(theme);
             localStorage.setItem("theme", theme);
+        };
+    });
+
+    console.debug('web component (jgu-theme-button) registered');
+
+    customElements.define('jgu-theme-icon', class extends HTMLElement {
+        observer?: MutationObserver;
+
+        connectedCallback(): void {
+            this.render();
+
+            applyTheme(localStorage.getItem("theme") ?? "auto");
+
+            this.observer = new MutationObserver(() => this.render());
+            this.observer.observe(document.documentElement, {
+                attributes: true,
+                attributeFilter: ['data-bs-theme']
+            });
         }
-    }
 
-    console.debug('theme set to: ', theme);
+        disconnectedCallback(): void {
+            this.observer?.disconnect();
+        }
 
-    updateThemeIcon(theme);
-    updateActiveThemeButton(theme);
-}
+        render(): void {
+            const theme = localStorage.getItem("theme") ?? "auto";
+            const map: Record<string, string> = {
+                light: "fa-sun",
+                dark: "fa-moon",
+                auto: "fa-adjust"
+            };
 
-export function setStoredTheme(): Theme {
-    const stored = localStorage.getItem("theme") as Theme | null;
-    const theme: Theme = stored ?? 'light';
-
-    applyTheme(theme, true);
-    return theme;
-}
-
-export function updateThemeIcon(theme: Theme): void {
-    const iconElement = document.querySelector<HTMLElement>("#jgu-current-theme-icon i");
-    if (!iconElement) return;
-
-    const themeClass = {
-        light: "fa-sun",
-        dark: "fa-moon",
-        auto: "fa-adjust"
-    }[theme] ?? "fa-adjust";
-
-    iconElement.className = `fas ${themeClass}`;
-}
-
-export function updateActiveThemeButton(theme: Theme): void {
-    const themes: Theme[] = ["light", "dark", "auto"];
-    themes.forEach(t => {
-        const btn = document.getElementById(`jgu-${t}-theme-icon`);
-        if (btn) {
-            btn.classList.toggle("active", t === theme);
+            this.innerHTML = `<i class="fas ${map[theme] ?? "fa-adjust"}"></i>`;
         }
     });
+
+    console.debug('web component (jgu-theme-icon) registered');
+}
+
+export function registerThemeGuard(): void {
+    const observer = new MutationObserver(() => {
+        if (!document.documentElement.hasAttribute("data-bs-theme")) {
+            setStoredTheme();
+        }
+    });
+
+    observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ["data-bs-theme"]
+    });
+}
+
+export function applyTheme(theme: string): void {
+    const isAuto = theme === 'auto';
+
+    const resolved = isAuto
+        ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+        : theme;
+
+    document.documentElement.setAttribute('data-bs-theme', resolved);
+
+    document.querySelectorAll("jgu-theme-button").forEach(btn => {
+        btn.classList.toggle("active", btn.getAttribute("theme") === theme);
+    });
+
+    console.debug('theme is set to: ', theme);
+}
+
+export function setStoredTheme(): void {
+    const stored = localStorage.getItem("theme");
+    if (stored == null) {
+        return;
+    }
+    applyTheme(stored);
 }
 
 export function registerWebComponents(): void {
-    customElements.define('jgu-dropdown',
-        class extends HTMLElement {
-            constructor() {
-                super();
+    customElements.define('jgu-dropdown', class extends HTMLElement {
+        constructor() {
+            super();
+        }
+
+        connectedCallback(): void {
+            this.addEventListener('click', this.toggleHandler);
+            console.debug("jgu-dropdown connected: ", this);
+        }
+
+        disconnectedCallback(): void {
+            const button = this.getElementsByTagName("button")[0];
+            button?.removeEventListener('click', this.toggleHandler);
+        }
+
+        toggleHandler = (event: Event): void => {
+            const button = this.getElementsByTagName("button")[0];
+            const target = event.target as Node;
+
+            if (!button?.contains(target)) {
+                return;
             }
 
-            connectedCallback() {
-                this.addEventListener('click', this.toggleHandler);
-                console.debug("jgu-dropdown connected: ", this);
-            }
+            const menu = this.getElementsByTagName("div")[0];
 
-            disconnectedCallback() {
-                const button = this.getElementsByTagName("button")[0];
-                button.removeEventListener('click', this.toggleHandler);
-            }
+            console.debug("toggleHandler triggered", this);
 
-            toggleHandler = (event: MouseEvent) => {
-                const button = this.getElementsByTagName("button")[0];
+            const shouldClose =
+                button.getAttribute('aria-expanded') === 'true';
 
-                const target = event.target as Node;
-                if (!button.contains(target)) {
-                    return;
-                }
-
-                const menu = this.getElementsByTagName("div")[0];
-
-                console.debug("toggleHandler triggered", this);
-
-                const shouldClose = button.getAttribute('aria-expanded') === 'true';
-                button.setAttribute('aria-expanded', String(!shouldClose));
+            button.setAttribute('aria-expanded', String(!shouldClose));
+            if (menu) {
                 menu.hidden = shouldClose;
-
-                if (!shouldClose) {
-                    menu.querySelector<HTMLElement>('[role="menuitem"]')?.focus();
-                    setTimeout(() => document.addEventListener('click', this.globalCloseHandler), 0);
-                } else {
-                    document.removeEventListener('click', this.globalCloseHandler);
-                }
             }
 
-            globalCloseHandler = (event: MouseEvent) => {
-                const button = this.getElementsByTagName("button")[0];
-                const menu = this.getElementsByTagName("div")[0];
-
-                console.debug("globalCloseHandler triggered", this);
-
-                button.setAttribute('aria-expanded', 'false');
-                menu.hidden = true;
-
+            if (!shouldClose) {
+                (menu?.querySelector('[role="menuitem"]') as HTMLElement | null)?.focus();
+                setTimeout(
+                    () => document.addEventListener('click', this.globalCloseHandler),
+                    0
+                );
+            } else {
                 document.removeEventListener('click', this.globalCloseHandler);
             }
-        }
-    );
+        };
+
+        globalCloseHandler = (_event: Event): void => {
+            const button = this.getElementsByTagName("button")[0];
+            const menu = this.getElementsByTagName("div")[0];
+
+            console.debug("globalCloseHandler triggered", this);
+
+            if (button) {
+                button.setAttribute('aria-expanded', 'false');
+            }
+            if (menu) {
+                menu.hidden = true;
+            }
+
+            document.removeEventListener('click', this.globalCloseHandler);
+        };
+    });
 
     console.debug('web component (jgu-dropdown) registered');
 
-    customElements.define('jgu-toggle',
-        class extends HTMLElement {
-            constructor() {
-                super();
-            }
-            connectedCallback() {
-                this.addEventListener("click", () => {
-                    const targetId = this.getAttribute('target-id');
-                    if (!targetId) {
-                        console.warn("no target-id provided for <jgu-toggle>");
-                        return;
-                    }
-
-                    const toggleClass = this.getAttribute('toggle-class') || "toggled";
-                    document.getElementById(targetId)?.classList.toggle(toggleClass);
-                });
-            }
+    customElements.define('jgu-toggle', class extends HTMLElement {
+        constructor() {
+            super();
         }
-    );
+
+        connectedCallback(): void {
+            this.addEventListener("click", () => {
+                const targetId = this.getAttribute('target-id');
+                if (!targetId) {
+                    console.warn("no target-id provided for <jgu-toggle>");
+                    return;
+                }
+
+                const toggleClass =
+                    this.getAttribute('toggle-class') || "toggled";
+
+                document.getElementById(targetId)?.classList.toggle(toggleClass);
+            });
+        }
+    });
 
     console.debug('web component (jgu-toggle) registered');
 }
 
-export function afterWebStarted(blazor: any): void {
-    registerThemeButtons();
-}
-
-export function beforeWebStart(options: any): void {
-    setStoredTheme();
+export function beforeWebStart(options?: unknown): void {
     registerWebComponents();
-} 
+    registerThemeButtons();
+    registerThemeGuard();
+}

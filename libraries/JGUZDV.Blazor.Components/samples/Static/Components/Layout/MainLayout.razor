@@ -4,8 +4,13 @@
 
 
 <div class="container p-0">
-    <div class="jbs-page jbs-grid jbs-container border">
+    <div class="jbs-page jbs-grid jbs-container border-start border-end">
         <AppHeader Title="@Title" Logo="@Logo" HelpUrl="@Logo.Href" ShowDarkModeSelector="@true" ShowLoginButton="@false">
+            <ChildContent>
+                <span class="ms-auto border p-1">
+                    test
+                </span>
+            </ChildContent>
             <NavItems>
                 <AppHeaderNavItem Name="Diesdas">
                     <AppHeaderNavItem Name="Image Cropper">
@@ -44,7 +49,8 @@
                 <SidebarNavItem Name="Home">
                     <SidebarNavItem Name="L10nEdit" NavUrl="/" />
                 </SidebarNavItem>
-               
+                <SidebarNavItem Name="Einzelner Link" NavUrl="/" />
+                <SidebarNavItem Name="Zweiter Einzelner Link" NavUrl="/image-cropper" />
             </NavItems>
         </Sidebar>
 

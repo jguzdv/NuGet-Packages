@@ -1,12 +1,18 @@
 ﻿@using JGUZDV.Blazor.Components.JGOO
 @using JGUZDV.Blazor.Components.JGOO.AppHeader
+@using JGUZDV.Blazor.Components.JGOO.Footer
 @using Microsoft.AspNetCore.Components.Routing
 @using JGUZDV.Blazor.Components.JGOO.Sidebar
 @inherits LayoutComponentBase
 
 <div class="container p-0">
-    <div class="jbs-page jbs-grid jbs-container border">
-        <AppHeader Title="@Title" Logo="@Logo" HelpUrl="@Logo.Href" ShowLanguageSelector="@true" ShowLoginButton="@true">
+    <div class="jbs-page jbs-grid jbs-container border-start border-end">
+        <AppHeader Title="@Title" Logo="@Logo" HelpUrl="@Logo.Href" ShowLanguageSelector="@true" ShowLoginButton="@true" ShowDarkModeSelector="@true">
+            <ChildContent>
+                <span class="ms-auto border p-1">
+                    test
+                </span>
+            </ChildContent>
             <NavItems>
                 <AppHeaderNavItem Name="Dropdowns" NavUrl="/dropdown" Match="NavLinkMatch.All">
                     <NameTemplate><i class="fas fa-caret-square-down pe-2"></i> @context</NameTemplate>
@@ -80,8 +86,14 @@
                 @Body
             </div>
         </main>
+
+        <AppFooter></AppFooter>
     </div>
+
 </div>
+
+<WebFooter></WebFooter>
+
 
 @code {
     private AppHeader.LogoSpecs Logo { get; } = new()

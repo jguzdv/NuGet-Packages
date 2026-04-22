@@ -14,7 +14,7 @@
         @if (_errors.Any())
         {
             <ul class="text-danger">
-                @foreach(var error in _errors)
+                @foreach (var error in _errors)
                 {
                     <li>@error.ErrorMessage</li>
                 }
@@ -33,26 +33,46 @@
 <hr />
 @if (Field.ChoiceOptions.Any())
 {
-    <div class="fw-bold">@SL["EditChoiceOptions.Edit"]</div>
-    <ul class="list-group">
-        @foreach (var option in Field.ChoiceOptions)
+    <div class="fw-bold">
+        @SL["EditChoiceOptions.Plural"]
+        <small class="text-muted fw-normal">@SL["EditChoiceOptions.DragAndDropHint"]</small>
+    </div>
+    <ul class="list-group" @ondragend="() => { _draggedOption = null; }">
+        <DropSpacer OnDrop="() => InsertAt(_draggedOption, 0)" />
+
+        @foreach (var (option, i) in _sortedOptions.Select((o, i) => (o, i)))
         {
-            <li class="list-group-item">
-                @* <i class="fa fa-edit clickable"
+            var dropIndex = i + 1;
+            <li class="list-group-item choice-option-item"
+                draggable="true"
+                @ondragstart="() => HandleDragStart(option)"
+                @ondragover:preventDefault
+                @ondrop:preventDefault>
+                <i class="fa fa-edit clickable"
                    role="button"
-                   @onclick="() => HandleEditChoiceOption(option)"></i> *@
+                   @onclick="() => HandleEditChoiceOption(option)"></i>
                 <i class="fa fa-trash pe-2 clickable"
-                role="button"
-                @onclick="() => RemoveChoiceOption(option)"></i>
+                   role="button"
+                   @onclick="() => RemoveChoiceOption(option)"></i>
                 @option.Name: @option.Value
             </li>
+
+            <DropSpacer OnDrop="() => InsertAt(_draggedOption, dropIndex)" />
         }
     </ul>
 }
 
-<Modal @ref=_editChoiceOptionModal TModel="ChoiceOption" Title="@SL["EditChoiceOptions.Edit"]">
+<Modal @ref=_editChoiceOptionModal TModel="ChoiceOptionEditModel" Title="@SL["EditChoiceOptions.Edit"]">
     <Body>
-        <ChoiceOptionInput ChoiceOption="@context.Model" ChoiceOptionChanged="() => _editChoiceOptionModal!.Close()"></ChoiceOptionInput>
+        <ChoiceOptionInput @bind-ChoiceOption="context.Model" />
+        <div class="mt-2">
+            <button type="button" class="btn btn-primary" @onclick="() => context.Modal.Accept()">
+                @SL["ChoiceOptionInput.Edit.Save"]
+            </button>
+            <button type="button" class="btn btn-danger ms-2" @onclick="() => context.Modal.Dismiss()">
+                @SL["ChoiceOptionInput.Edit.Cancel"]
+            </button>
+        </div>
     </Body>
 </Modal>
 
@@ -66,24 +86,62 @@
     [Inject]
     public required IStringLocalizer<ComponentStrings> SL { get; set; }
 
-    private Modal<ChoiceOption>? _editChoiceOptionModal = new();
-    private ChoiceOption _newChoiceOption = new();
+    private Modal<ChoiceOptionEditModel>? _editChoiceOptionModal = new();
+    private ChoiceOptionEditModel _newChoiceOption = new();
 
     private List<ValidationResult> _errors = [];
+
+    private ChoiceOption? _draggedOption;
+    private List<ChoiceOption> _sortedOptions = new();
+
+    private readonly int InitialSortWeight = 1000;
+    private readonly int SortWeightStep = 10;
+
+    protected override void OnParametersSet()
+    {
+        if (Field.ChoiceOptions.Select(x => x.SortKey).ToHashSet().Count != Field.ChoiceOptions.Count)
+        {
+            foreach (var item in Field.ChoiceOptions)
+            {
+                item.SortKey = InitialSortWeight + Field.ChoiceOptions.IndexOf(item) * SortWeightStep;
+            }
+        }
+
+        _sortedOptions = Field.ChoiceOptions.OrderBy(x => x.SortKey).ToList();
+        _newChoiceOption = new()
+        {
+            Index = Field.ChoiceOptions.Count + 1,
+        };
+    }
 
     private void RemoveChoiceOption(ChoiceOption option)
     {
         Field.ChoiceOptions.Remove(option);
         FieldChanged.InvokeAsync(Field);
+        _sortedOptions = Field.ChoiceOptions.OrderBy(x => x.SortKey).ToList();
     }
 
     private async Task HandleEditChoiceOption(ChoiceOption option)
     {
-        var modal = await _editChoiceOptionModal!.ShowModal(option);
-        await FieldChanged.InvokeAsync(Field);
+        var copy = new ChoiceOptionEditModel
+        {
+            Name = new L10n.L10nString(option.Name),
+            Value = option.Value,
+            Index = _sortedOptions.IndexOf(option) + 1,
+        };
+
+        var modalResult = await _editChoiceOptionModal!.ShowModal(copy);
+
+        if (modalResult == ModalResult.Accepted)
+        {
+
+            option.Name = copy.Name;
+            option.Value = copy.Value;
+            InsertAt(option, copy.Index - 1);
+        }
     }
 
-    private void AddChoiceOption(ChoiceOption option)
+    private void AddChoiceOption(ChoiceOptionEditModel option)
     {
         _errors = [];
         try
@@ -99,9 +157,63 @@
             return;
         }
 
+        var newOption = new ChoiceOption
+        {
+            Name = option.Name,
+            Value = option.Value,
+        };
 
-        Field.ChoiceOptions.Add(option);
-        FieldChanged.InvokeAsync(Field);
+        Field.ChoiceOptions.Add(newOption);
+        InsertAt(newOption, option.Index - 1);
+
         _newChoiceOption = new();
+    }
+
+    private void HandleDragStart(ChoiceOption option)
+    {
+        _draggedOption = option;
+    }
+
+    private void InsertAt(ChoiceOption? option, int? insertIndexParam)
+    {
+        if (option is null || insertIndexParam is null)
+        {
+            return;
+        }
+
+        int insertIndex = insertIndexParam.Value;
+
+        var sortedList = Field.ChoiceOptions.OrderBy(x => x.SortKey).ToList();
+
+        int draggedIndex = sortedList.IndexOf(option);
+
+        sortedList.Remove(option);
+
+        if (draggedIndex < insertIndex)
+        {
+            insertIndex--;
+        }
+
+        insertIndex = Math.Clamp(insertIndex, 0, sortedList.Count);
+
+        if (sortedList.Count == 1)
+        {
+            option.SortKey = InitialSortWeight;
+        }
+        else if (insertIndex == 0)
+        {
+            option.SortKey = sortedList[0].SortKey - SortWeightStep;
+        }
+        else if (insertIndex == sortedList.Count)
+        {
+            option.SortKey = sortedList[^1].SortKey + SortWeightStep;
+        }
+        else
+        {
+            option.SortKey = (sortedList[insertIndex - 1].SortKey + sortedList[insertIndex].SortKey) / 2.0;
+        }
+
+        FieldChanged.InvokeAsync(Field);
+        _sortedOptions = Field.ChoiceOptions.OrderBy(x => x.SortKey).ToList();
     }
 }

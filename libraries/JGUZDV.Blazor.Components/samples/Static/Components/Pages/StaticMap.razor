@@ -1,0 +1,46 @@
+﻿@page "/map"
+
+@using System.Text.Json
+@using GeoJSON.Text.Feature
+@using GeoJSON.Text.Geometry
+@using Newtonsoft.Json
+@using Newtonsoft.Json.Linq
+@using System.IO
+@using JGUZDV.Blazor.Components.Map
+
+
+<div style="height: 300px;">
+    <BlazorMap AdditionalLayerStyleUrls="@(new []{"map-assets/Sources_Layers_Images.json"})"
+               Center="new LngLat(8.237723256218402, 49.993415841344046)"
+               MaxBounds="new List<LngLat> {new LngLat(8.033148, 49.182152), new LngLat(8.522101, 50.125861)}"
+               IsServerRendered="true" 
+               AdditionalSourceData="_sourceData"
+               @ref=_Map/>
+</div>
+
+@code {
+
+    private BlazorMap _Map { get; set; }
+    private Dictionary<string, FeatureCollection> _sourceData = new();
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        var options = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            };
+
+        var renderData = new FeatureCollection();
+        renderData.Features.Add(new Feature(new Point(new Position(49.993415841344046, 8.237723256218402)))
+            {
+                Properties = {
+                    { "Name", "Gebäude diesdas" },
+                    { "type", "Building2" },
+                    { "SiteId", 1 }
+                    }
+            });
+
+        _sourceData.Add("TestSource", renderData);
+    }
+}

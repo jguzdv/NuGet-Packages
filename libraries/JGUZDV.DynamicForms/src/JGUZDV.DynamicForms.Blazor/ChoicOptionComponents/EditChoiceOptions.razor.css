@@ -1,0 +1,7 @@
+﻿.choice-option-item {
+    cursor: grab;
+}
+
+    .choice-option-item:active {
+        cursor: grabbing;
+    }

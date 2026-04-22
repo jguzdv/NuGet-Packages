@@ -150,4 +150,19 @@
   <data name="ToggleSidebar" xml:space="preserve">
     <value>Seitennavigation ausklappen</value>
   </data>
+  <data name="Dataprotection" xml:space="preserve">
+    <value>Datenschutz</value>
+  </data>
+  <data name="Imprint" xml:space="preserve">
+    <value>Impressum</value>
+  </data>
+  <data name="Contact" xml:space="preserve">
+    <value>Kontakt</value>
+  </data>
+  <data name="Accessibility" xml:space="preserve">
+    <value>Barrierefreiheit</value>
+  </data>
+  <data name="EasyLanguage" xml:space="preserve">
+    <value>Leichte Sprache</value>
+  </data>
 </root>

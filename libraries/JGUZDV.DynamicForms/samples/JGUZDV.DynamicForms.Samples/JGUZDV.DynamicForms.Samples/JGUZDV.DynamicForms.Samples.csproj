@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
 
@@ -12,9 +12,9 @@
     <ProjectReference Include="..\..\..\..\JGUZDV.Blazor.Components\src\JGUZDV.Blazor.Components.csproj" />
     <ProjectReference Include="..\..\..\src\JGUZDV.DynamicForms.Extensions\JGUZDV.DynamicForms.Extensions.csproj" />
     <ProjectReference Include="..\JGUZDV.DynamicForms.Samples.Client\JGUZDV.DynamicForms.Samples.Client.csproj" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="9.0.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="10.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.5" />
   </ItemGroup>
 
 </Project>

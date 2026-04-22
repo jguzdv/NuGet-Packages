@@ -1,0 +1,272 @@
+﻿@using GeoJSON.Text.Feature;
+@using Microsoft.AspNetCore.Components;
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.Extensions.Logging
+@using Microsoft.JSInterop;
+@using System.Text.Json;
+@implements IAsyncDisposable
+
+@inject IJSRuntime JSRuntime;
+@inject ILogger<BlazorMap> Logger;
+
+@code {
+    /// <summary>
+    /// Gets or sets the initial map center as longitude and latitude.
+    /// </summary>
+    [Parameter][EditorRequired] public LngLat Center { get; set; } = default!;
+
+    /// <summary>
+    /// Gets or sets the initial zoom level.
+    /// </summary>
+    [Parameter] public int Zoom { get; set; } = 15;
+
+    /// <summary>
+    /// Gets or sets the maximum map bounds.
+    /// </summary>
+    [Parameter] public List<LngLat>? MaxBounds { get; set; }
+
+    /// <summary>
+    /// Gets or sets the style URL of the base layer.
+    /// </summary>
+    [Parameter] public string BaseLayerStyleUrl { get; set; } = DefaultBasemapStyle;
+
+    /// <summary>
+    /// Gets or sets additional layer style URLs loaded after map initialization.
+    /// </summary>
+    [Parameter] public IEnumerable<string>? AdditionalLayerStyleUrls { get; set; }
+
+    /// <summary>
+    /// Gets or sets the callback that is invoked when the map is clicked.
+    /// </summary>
+    [Parameter] public EventCallback<MapMouseEventArgs> MapClicked { get; set; }
+
+    /// <summary>
+    /// Gets or sets the callback that is invoked when the map is fully initialized.
+    /// </summary>
+    [Parameter] public EventCallback<bool> MapIsInitialized { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether server-rendered initialization is used.
+    /// </summary>
+    [Parameter] public bool IsServerRendered { get; set; } = false;
+
+    /// <summary>
+    /// Gets or sets additional GeoJSON source data keyed by source id.
+    /// </summary>
+    [Parameter] public Dictionary<string, FeatureCollection>? AdditionalSourceData { get; set; }
+
+    /// <summary>
+    /// The path prefix to be used for loading resources (images, sprites, sources).
+    /// </summary>
+    [Parameter] public string PathPrefix { get; set; } = String.Empty;
+
+    private DotNetObjectReference<BlazorMap> _dotNetObjectRef;
+
+    private ElementReference HtmlWrapper { get; set; }
+
+    public const string DefaultBasemapStyle = "https://sgx.geodatenzentrum.de/gdz_basemapde_vektor/styles/bm_web_col.json";
+
+    private IJSObjectReference? _jsModule = null!;
+    private IJSObjectReference? _jsInstance = null!;
+
+    private readonly TaskCompletionSource _initialize = new();
+    private readonly List<Task> _initializedTasks = new();
+    private int _mapInitializationCallbackInvoked;
+
+    private readonly string _instanceId = Guid.NewGuid().ToString("N");
+    private string MapElementId => $"jgu-zdv-blazormap-htmlwrapper-{_instanceId}";
+    private string ObjectsElementId => $"jgu-zdv-blazormap-blazormapobjects-{_instanceId}";
+
+    public BlazorMap()
+    {
+        _dotNetObjectRef = DotNetObjectReference.Create(this);
+    }
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (!firstRender || IsServerRendered)
+        {
+            return;
+        }
+
+        try
+        {
+            _jsModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/JGUZDV.Blazor.Components.Map/js/BlazorMap/BlazorMap.js").AsTask();
+            _jsInstance = await _jsModule.InvokeAsync<IJSObjectReference>("createMap", _dotNetObjectRef, HtmlWrapper, Center, Zoom, BaseLayerStyleUrl, MaxBounds, PathPrefix);
+
+            if (AdditionalLayerStyleUrls != null)
+            {
+                foreach (var additionalLayerUrl in AdditionalLayerStyleUrls)
+                {
+                    _initializedTasks.Add(AddStyleLayerFromUrl(additionalLayerUrl));
+                }
+            }
+
+            if (AdditionalSourceData != null)
+            {
+                foreach (var additionalSourceData in AdditionalSourceData)
+                {
+                    _initializedTasks.Add(SetSourceData(additionalSourceData.Key, additionalSourceData.Value));
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "BlazorMap initialization failed while importing JS module or creating map instance.");
+            _initialize.TrySetException(ex);
+            await NotifyMapInitializedAsync(false);
+        }
+    }
+
+    private async Task NotifyMapInitializedAsync(bool initialized)
+    {
+        if (System.Threading.Interlocked.Exchange(ref _mapInitializationCallbackInvoked, 1) == 1)
+        {
+            return;
+        }
+
+        await MapIsInitialized.InvokeAsync(initialized);
+    }
+
+    [JSInvokable("JSInitializationFailed")]
+    public async Task InitializationFailed(string? error)
+    {
+        Logger.LogError("BlazorMap reported initialization failure from JavaScript. Details: {Error}", error);
+        _initialize.TrySetException(new InvalidOperationException($"BlazorMap JavaScript initialization failed: {error ?? "unknown error"}"));
+        await NotifyMapInitializedAsync(false);
+    }
+
+    [JSInvokable("JSInitialized")]
+    public async Task Initialized()
+    {
+        _initialize.TrySetResult();
+
+        try
+        {
+            await Task.WhenAll(_initializedTasks);
+            await NotifyMapInitializedAsync(true);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "BlazorMap post-initialization task execution failed.");
+            await NotifyMapInitializedAsync(false);
+        }
+    }
+
+    /// <summary>
+    /// Called from JavaScript when a map click event occurs.
+    /// </summary>
+    /// <param name="e">The map mouse event payload.</param>
+    [JSInvokable("JSOnMapClicked")]
+    public async Task JSOnMapClicked(MapMouseEventArgs e)
+    {
+        await MapClicked.InvokeAsync(e);
+    }
+
+    /// <summary>
+    /// Disposes JavaScript resources used by this component.
+    /// </summary>
+    public async ValueTask DisposeAsync()
+    {
+        if (_jsInstance != null)
+        {
+            try
+            {
+                await _jsInstance.InvokeVoidAsync("Dispose");
+            }
+            catch (JSDisconnectedException)
+            {
+            }
+
+            await _jsInstance.DisposeAsync();
+        }
+
+        if (_jsModule != null)
+        {
+            await _jsModule.DisposeAsync();
+        }
+
+        _dotNetObjectRef.Dispose();
+    }
+
+    /// <summary>
+    /// Pans and zooms the map to fit the specified bounds.
+    /// </summary>
+    /// <param name="bounds">The geographic bounds to fit.</param>
+    public async Task PanToPolygon(List<LngLat> bounds)
+    {
+        await _initialize.Task;
+        await _jsInstance!.InvokeVoidAsync("pantoLocation", bounds);
+    }
+
+    /// <summary>
+    /// Loads and adds map styles from a style definition URL.
+    /// </summary>
+    /// <param name="url">The style definition URL.</param>
+    public async Task AddStyleLayerFromUrl(string url)
+    {
+        await _initialize.Task;
+        await _jsInstance!.InvokeVoidAsync("addStyleLayerFromUrl", url);
+    }
+
+    /// <summary>
+    /// Sets source data from a URL or URL-like payload for the given source id.
+    /// </summary>
+    /// <param name="sourceId">The map source id.</param>
+    /// <param name="data">The source data payload.</param>
+    public async Task SetSourceDataFromUrl(string sourceId, string data)
+    {
+        await _initialize.Task;
+        await _jsInstance!.InvokeVoidAsync("setSourceData", sourceId, data);
+    }
+
+    /// <summary>
+    /// Sets GeoJSON source data for the given source id.
+    /// </summary>
+    /// <param name="sourceId">The map source id.</param>
+    /// <param name="data">The GeoJSON feature collection.</param>
+    public async Task SetSourceData(string sourceId, FeatureCollection data)
+    {
+        await _initialize.Task;
+        await _jsInstance!.InvokeVoidAsync("setSourceData", sourceId, data);
+    }
+
+    /// <summary>
+    /// Adds a map layer.
+    /// </summary>
+    /// <param name="data">The layer definition object.</param>
+    public async Task AddLayer(object data)
+    {
+        await _initialize.Task;
+        await _jsInstance!.InvokeVoidAsync("addLayer", data);
+    }
+
+    /// <summary>
+    /// Removes a map layer by id.
+    /// </summary>
+    /// <param name="layerId">The layer id.</param>
+    public async Task RemoveLayer(string layerId)
+    {
+        await _initialize.Task;
+        await _jsInstance!.InvokeVoidAsync("removeLayer", layerId);
+    }
+}
+
+@if (IsServerRendered)
+{
+    var options = new JsonSerializerOptions();
+    options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+    var blazorMapObjects = new BlazorMapObjects(Center, Zoom, BaseLayerStyleUrl, MaxBounds, AdditionalLayerStyleUrls, AdditionalSourceData, PathPrefix);
+
+    <div class="d-none">
+        <div id="@ObjectsElementId">@JsonSerializer.Serialize(blazorMapObjects, options)</div>
+    </div>
+
+    <script type="module" src="@($"./_content/JGUZDV.Blazor.Components.Map/js/BlazorMap/BlazorMapInitialize.js?mapElementId={MapElementId}&objectsElementId={ObjectsElementId}")"></script>
+}
+
+<link href='./_content/JGUZDV.Blazor.Components.Map/css/maplibre-gl.css' rel='stylesheet' />
+<div @ref="HtmlWrapper" class="map" id="@MapElementId"></div>

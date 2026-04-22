@@ -1,0 +1,1785 @@
+﻿{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.241346646970522, 49.99433422257329 ]
+      },
+      "properties": {
+        "id": "Georg-Forster-Geb\u00E4ude (Sowi)",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.240426241037811, 49.99405288595222 ]
+      },
+      "properties": {
+        "id": "Schule des Sehens",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.2396013, 49.9942983 ]
+      },
+      "properties": {
+        "id": "Philosophisches Seminargeb\u00E4ude",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.237779046587567, 49.99440664286232 ]
+      },
+      "properties": {
+        "id": "Trafostation Philosophicum",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.237507861096423, 49.9941287552676 ]
+      },
+      "properties": {
+        "id": "Wohnhaus Pfeiffer-Weg 1",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 17.0310321312, 9.312313213 ]
+      },
+      "properties": {
+        "id": "Wohnhaus Pfeiffer-Weg 3/5",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.237937032115346, 49.99362525666321 ]
+      },
+      "properties": {
+        "id": "Wohnhaus Pfeiffer-Weg 7/9",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.23882, 49.99355 ]
+      },
+      "properties": {
+        "id": "Philosophicum II",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.23811947254715, 49.99332177550594 ]
+      },
+      "properties": {
+        "id": "Molekulare Biophysik",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.236853409629603, 49.99408737201951 ]
+      },
+      "properties": {
+        "id": "Wohnhaus Pfeiffer-Weg 2/4",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.237368459044882, 49.993356262097535 ]
+      },
+      "properties": {
+        "id": "Wohnhaus Pfeiffer-Weg 10",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.237432756733055, 49.993239007585196 ]
+      },
+      "properties": {
+        "id": "Wohnhaus Pfeiffer-Weg 12",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.236274067548017, 49.993832174535974 ]
+      },
+      "properties": {
+        "id": "Gastprofessorenhaus",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 0, 0 ]
+      },
+      "properties": {
+        "id": "WheeliAccess",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.2366817, 49.993396 ]
+      },
+      "properties": {
+        "id": "Hochschule f\u00FCr Musik",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.23435, 49.99338 ]
+      },
+      "properties": {
+        "id": "Inter I",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.234099433269325, 49.993696229600225 ]
+      },
+      "properties": {
+        "id": "Studentisches Gemeinschaftshaus",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.234782416807251, 49.99385414227399 ]
+      },
+      "properties": {
+        "id": "Trafostation Studentenhaus",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.235033145020761, 49.993879006830596 ]
+      },
+      "properties": {
+        "id": "Kindertagesst\u00E4tte (ehemals LBB)",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.235156247893016, 49.99336515964048 ]
+      },
+      "properties": {
+        "id": "Studentenwohnheimgruppe 1",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.23480755277364, 49.9927099102921 ]
+      },
+      "properties": {
+        "id": "Studentenwohnheimgruppe 2",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.235664832934857, 49.993041984883476 ]
+      },
+      "properties": {
+        "id": "Studentenwohnheimgruppe 3",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.234801135964075, 49.9938368991598 ]
+      },
+      "properties": {
+        "id": "Strom\u00FCbernahmestation Campus",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.2462598, 49.995764 ]
+      },
+      "properties": {
+        "id": "Kolonnaden / Torgeb\u00E4ude",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.2434874, 49.9945995 ]
+      },
+      "properties": {
+        "id": "Trafostation Torgeb\u00E4ude",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.246261946009708, 49.99512883959964 ]
+      },
+      "properties": {
+        "id": "Poststelle der Universit\u00E4t",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.246232733553814, 49.99609741869993 ]
+      },
+      "properties": {
+        "id": "Geldautomat der Sparkasse",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.243862923808855, 49.99456102704211 ]
+      },
+      "properties": {
+        "id": "Ausstellungs-Pavillion",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.243390521626603, 49.994013502839444 ]
+      },
+      "properties": {
+        "id": "Haus Recht und Wirtschaft I",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.241595545124168, 49.99348041362253 ]
+      },
+      "properties": {
+        "id": "Physikalische Chemie",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.240940998241674, 49.99355628384111 ]
+      },
+      "properties": {
+        "id": "Physikalische Chemie",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.237357652369687, 49.99237683327329 ]
+      },
+      "properties": {
+        "id": "Reaktor der Kernchemie",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.237035790515117, 49.992597551369215 ]
+      },
+      "properties": {
+        "id": "Notstromerzeuger Kernchemie",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.237379248143455, 49.992845858016196 ]
+      },
+      "properties": {
+        "id": "Laborr\u00E4ume Kernchemie (Neubau)",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.23638126802575, 49.99209403673243 ]
+      },
+      "properties": {
+        "id": "GENterprise",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.236116432296203, 49.99245470549848 ]
+      },
+      "properties": {
+        "id": "Biochemie",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.23586639939806, 49.99206644673696 ]
+      },
+      "properties": {
+        "id": "Genetik",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.235126282964758, 49.99206644673696 ]
+      },
+      "properties": {
+        "id": "Verf\u00FCgungsbau I",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.234716363251826, 49.99220984557204 ]
+      },
+      "properties": {
+        "id": "Flaschenlager am Verf\u00FCgungsbau I",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.234716343490671, 49.99221674305183 ]
+      },
+      "properties": {
+        "id": "Umweltbox SB I",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.246326931695181, 49.994680528505675 ]
+      },
+      "properties": {
+        "id": "Zentraldruckerei",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.245608215182358, 49.99422397495998 ]
+      },
+      "properties": {
+        "id": "Aulageb\u00E4ude/Mensa I",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.24603730082941, 49.99377699652362 ]
+      },
+      "properties": {
+        "id": "Heizwerk II",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.243825310668411, 49.99339619754602 ]
+      },
+      "properties": {
+        "id": "Nat. u. Med. Bau",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.243548260160077, 49.992590653944035 ]
+      },
+      "properties": {
+        "id": "Gew\u00E4chshaus Nat. \u002B Med-Bau",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.245093350880564, 49.99243201289223 ]
+      },
+      "properties": {
+        "id": "Bienenhaus",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.243269376579368, 49.99289413971534 ]
+      },
+      "properties": {
+        "id": "Anatomische Pr\u00E4paration und Konservierung",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.2427082264321, 49.99290921050241 ]
+      },
+      "properties": {
+        "id": "Tierhaus Zoologie",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.244849675972914, 49.993413440818244 ]
+      },
+      "properties": {
+        "id": "Umweltbox Botanik",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.242797154675308, 49.99246650012194 ]
+      },
+      "properties": {
+        "id": "Verf\u00FCgungsbau SB II-IV",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.241498930358981, 49.99201816420683 ]
+      },
+      "properties": {
+        "id": "Naturwissenschaftliches Institutsgeb\u00E4ude",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.240736776226655, 49.99249408988788 ]
+      },
+      "properties": {
+        "id": "Naturwissenschaftliches H\u00F6rsaalgeb\u00E4ude",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.240340527420967, 49.99181123852858 ]
+      },
+      "properties": {
+        "id": "Zahntechnisches Labor",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.24082301852296, 49.992245781424515 ]
+      },
+      "properties": {
+        "id": "Interimsgeb\u00E4ude III ZDV",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.2376916, 49.9917282 ]
+      },
+      "properties": {
+        "id": "Ausweichgeb\u00E4ude",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.237786970135424, 49.99114907037487 ]
+      },
+      "properties": {
+        "id": "5\u00B0 Halle",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.236186256357977, 49.991747712173016 ]
+      },
+      "properties": {
+        "id": "Kernphysik Verwaltung",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.2367355004033, 49.99089385729815 ]
+      },
+      "properties": {
+        "id": "MAMI",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.237156123426555, 49.991940118852575 ]
+      },
+      "properties": {
+        "id": "Trafostation Kernphysik",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.237167915393917, 49.99161320982703 ]
+      },
+      "properties": {
+        "id": "Werkstatt\u002BLager Kernphysik",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.236091707466262, 49.99098352691187 ]
+      },
+      "properties": {
+        "id": "Ersatzgeb\u00E4ude Kernphysik",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.23427855396684, 49.99166639002401 ]
+      },
+      "properties": {
+        "id": "Geldautomat der Mainzer Volksbank",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.23518846204976, 49.99139593601191 ]
+      },
+      "properties": {
+        "id": "Helmholtz-Institut Mainz 1.BA",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.245997751981655, 49.993213418480515 ]
+      },
+      "properties": {
+        "id": "Pf\u00F6rtnerhaus Bretzenheimer Tor",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.245396677123567, 49.99286165304086 ]
+      },
+      "properties": {
+        "id": "Allgemeine Zoologie",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.245479300916735, 49.99250788476493 ]
+      },
+      "properties": {
+        "id": "Gew\u00E4chshaus Ost",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.24527572992423, 49.99258375651789 ]
+      },
+      "properties": {
+        "id": "Gew\u00E4chsh\u00E4user Nord",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.24503962851493, 49.99210783172421 ]
+      },
+      "properties": {
+        "id": "Gew\u00E4chsh\u00E4user S\u00FCd",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.2449537827908, 49.992590653944035 ]
+      },
+      "properties": {
+        "id": "Gew\u00E4chshaus der Botanik",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.244664104217192, 49.9925009873269 ]
+      },
+      "properties": {
+        "id": "Gew\u00E4chshaus Nord",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.24485721897038, 49.99232165359102 ]
+      },
+      "properties": {
+        "id": "Gew\u00E4chshaus Mitte",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.2442384, 49.9922162 ]
+      },
+      "properties": {
+        "id": "Anthropologie",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.24368764304639, 49.9919698816282 ]
+      },
+      "properties": {
+        "id": "Spezielle Botanik",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.2433766254177, 49.99199747167906 ]
+      },
+      "properties": {
+        "id": "Gew\u00E4chshaus Spezielle Botanik",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.245106737412328, 49.992468500386806 ]
+      },
+      "properties": {
+        "id": "Gemeinschaftshaus Botanik",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.243180375398984, 49.991783200040146 ]
+      },
+      "properties": {
+        "id": "Schuppen und Lager Botanik",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.243269287654261, 49.9916387997832 ]
+      },
+      "properties": {
+        "id": "Ger\u00E4telager Botanik",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.2426214, 49.9920506 ]
+      },
+      "properties": {
+        "id": "Trafostation Botanik",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.24231443542146, 49.99181813606551 ]
+      },
+      "properties": {
+        "id": "Gr\u00FCne Schule",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.23566259916429, 49.990342040610415 ]
+      },
+      "properties": {
+        "id": "Abfall-Lagerplatz Kernphysik/Pharmazie",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.245171541054699, 49.99154423411905 ]
+      },
+      "properties": {
+        "id": "Doppelturnhalle",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.245458042381522, 49.9915077459232 ]
+      },
+      "properties": {
+        "id": "Gymnastikhalle",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.244127162708816, 49.991312440530756 ]
+      },
+      "properties": {
+        "id": "Kleine Sporthalle",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.243108496818056, 49.99096973159758 ]
+      },
+      "properties": {
+        "id": "Gymnastik und Schwimmhalle",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.244921373821331, 49.990914550300786 ]
+      },
+      "properties": {
+        "id": "Sportinstitut",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.244406625718709, 49.990886959628654 ]
+      },
+      "properties": {
+        "id": "H\u00F6rsaalgeb\u00E4ude Sportinstitut",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.2438051, 49.9890252 ]
+      },
+      "properties": {
+        "id": "Wohnhaus  Albert-Schweitzer-Str.",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.24366645477729, 49.98989368488956 ]
+      },
+      "properties": {
+        "id": "Stadion",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.24475304488662, 49.99075100636679 ]
+      },
+      "properties": {
+        "id": "Gendopinglabor",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.241660121526554, 49.989804013243784 ]
+      },
+      "properties": {
+        "id": "Gro\u00DFe Sporthalle",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.242400299188317, 49.98992127613152 ]
+      },
+      "properties": {
+        "id": "Berno-Wischmann-Haus",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.242260273458024, 49.98946601861474 ]
+      },
+      "properties": {
+        "id": "Interimsgeb\u00E4ude II Sport",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.240887838672567, 49.99009372103529 ]
+      },
+      "properties": {
+        "id": "Samenhaus",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.23456079405498, 49.989212797006836 ]
+      },
+      "properties": {
+        "id": "Wasser\u00FCbernahmestation Campus",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.236703123063771, 49.98928667356125 ]
+      },
+      "properties": {
+        "id": "TARC Zentrale Versuchstiereinrichtung (ZVTE)",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.23375294926316, 49.99304588188278 ]
+      },
+      "properties": {
+        "id": "Haus Mainusch",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.230961244855594, 49.99226502538258 ]
+      },
+      "properties": {
+        "id": "Lagerhalle Chemie",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.232323567786537, 49.992171909415546 ]
+      },
+      "properties": {
+        "id": "Physikalische Chemie (PC)",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.231385044469716, 49.99222364053059 ]
+      },
+      "properties": {
+        "id": "Werkstatt Chemie",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.2313335, 49.9909259 ]
+      },
+      "properties": {
+        "id": "Werkstatt PC",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.232572322816672, 49.99100421987591 ]
+      },
+      "properties": {
+        "id": "Lehrgeb\u00E4ude Chemie / Bereichsbibliothek",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.232044699654471, 49.991623556174694 ]
+      },
+      "properties": {
+        "id": "Verwaltung Chemie",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.231642507659362, 49.9911683147718 ]
+      },
+      "properties": {
+        "id": "Forschungsgeb\u00E4ude S\u00FCd",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.231481578884896, 49.99149250227316 ]
+      },
+      "properties": {
+        "id": "Forschungsgeb\u00E4ude Mitte",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.231309940106387, 49.99185462402584 ]
+      },
+      "properties": {
+        "id": "Forschungsgeb\u00E4ude Nord",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.233871, 49.9917967 ]
+      },
+      "properties": {
+        "id": "Mensageb\u00E4ude",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.2332695339495, 49.99101801518033 ]
+      },
+      "properties": {
+        "id": "Schulz-Horner-Geb\u00E4ude",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.231886076794664, 49.990342040610415 ]
+      },
+      "properties": {
+        "id": "Umweltbox Physiologie",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.231894697410926, 49.99036128533028 ]
+      },
+      "properties": {
+        "id": "Umweltbox Physiologie",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.235136901319475, 49.98989368488956 ]
+      },
+      "properties": {
+        "id": "Pharmazie",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.234589730680437, 49.990486893103835 ]
+      },
+      "properties": {
+        "id": "Institut f\u00FCr Physik",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.2335341, 49.9902495 ]
+      },
+      "properties": {
+        "id": "Institut f\u00FCr Physik/Mathematik/Informatik",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.231900032367003, 49.99033369434073 ]
+      },
+      "properties": {
+        "id": "Biomedizinisches Forschungszentrum (BFZ)",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.232841093613771, 49.98931426515148 ]
+      },
+      "properties": {
+        "id": "Institut f\u00FCr Molekulare Biologie",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.235372921449875, 49.98900385884889 ]
+      },
+      "properties": {
+        "id": "Heizwerk 3 - Kesselbau",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.235327907766374, 49.98932316344226 ]
+      },
+      "properties": {
+        "id": "Heizwerk 3 - Werkstattgeb\u00E4ude",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.234836458167397, 49.988983165024166 ]
+      },
+      "properties": {
+        "id": "Heizwerk 3 - Schwer\u00F6lbunker",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.2339539, 49.9892269 ]
+      },
+      "properties": {
+        "id": "Gas\u00FCbernahmestation",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.235147668732155, 49.989052144405335 ]
+      },
+      "properties": {
+        "id": "Zentrale K\u00E4lteanlage",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.234063894677536, 49.988955573244 ]
+      },
+      "properties": {
+        "id": "LBB Bauleitung Campus",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.233589808980756, 49.98854024606702 ]
+      },
+      "properties": {
+        "id": "ZTL/TBZ Halle G",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.233477164990422, 49.98880581858737 ]
+      },
+      "properties": {
+        "id": "TBZ Halle F",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.232776647780181, 49.98868655255786 ]
+      },
+      "properties": {
+        "id": "TBZ Verwaltung",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.231371529320636, 49.988114016345115 ]
+      },
+      "properties": {
+        "id": "TBZ Halle A",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.231896304245351, 49.988711971637585 ]
+      },
+      "properties": {
+        "id": "Pf\u00F6rtnerhaus Ackermannweg",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.235821405625671, 49.98849195999667 ]
+      },
+      "properties": {
+        "id": "Kita Weltentdecker - Erweiterungsbau",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.235834273152435, 49.98831405989289 ]
+      },
+      "properties": {
+        "id": "Kita Weltentdecker Studierendenwerk",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.236928694780557, 49.98692063582553 ]
+      },
+      "properties": {
+        "id": "Umkleidegeb\u00E4ude",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.2715, 50.00007 ]
+      },
+      "properties": {
+        "id": "Domus Universitatis",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.266247307812426, 49.99891645320129 ]
+      },
+      "properties": {
+        "id": "Sch\u00F6nborner Hof",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.266644378950595, 49.9985905916067 ]
+      },
+      "properties": {
+        "id": "Wichernhaus",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.253751361576548, 49.99830827987787 ]
+      },
+      "properties": {
+        "id": "Akademie f\u00FCr bildende K\u00FCnste",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.254255496346277, 49.99819103744056 ]
+      },
+      "properties": {
+        "id": "Akademie Nebengeb\u00E4ude",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.239107979461552, 49.99555914092129 ]
+      },
+      "properties": {
+        "id": "Bausparkasse Mainz",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.228596815055843, 49.994195888925816 ]
+      },
+      "properties": {
+        "id": "Aareongeb\u00E4ude",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.2273249, 49.9940752 ]
+      },
+      "properties": {
+        "id": "HDI-Geb\u00E4ude",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.2590869, 50.004981 ]
+      },
+      "properties": {
+        "id": "Boppstra\u00DFe 26a",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.2560221, 50.0007781 ]
+      },
+      "properties": {
+        "id": "Medienhaus",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.257504333083272, 49.99996543667253 ]
+      },
+      "properties": {
+        "id": "Taubertsberg II",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.257621330525648, 49.99948196437708 ]
+      },
+      "properties": {
+        "id": "Taubertsberg I",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.2689741, 50.0068793 ]
+      },
+      "properties": {
+        "id": "Diether-von-Isenburg-Stra\u00DFe 9-11",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.234761390252594, 50.01567079666469 ]
+      },
+      "properties": {
+        "id": "Alte Waggonfabrik",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.259714655354605, 50.0032721313304 ]
+      },
+      "properties": {
+        "id": "Bonifaziusturm A",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.237252699295496, 49.994259353677286 ]
+      },
+      "properties": {
+        "id": "Garage Pfeifferweg 1",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.237660347357922, 49.992609173537836 ]
+      },
+      "properties": {
+        "id": "Kernchemie",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.236567149977382, 49.992575410637215 ]
+      },
+      "properties": {
+        "id": "Container Biochemie",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.238353369726852, 49.99146491193259 ]
+      },
+      "properties": {
+        "id": "Garagen MPI",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.241155768811483, 49.98882451207205 ]
+      },
+      "properties": {
+        "id": "Garagen am Sportgel\u00E4nde S\u00FCd",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.230384057076382, 49.99154223381574 ]
+      },
+      "properties": {
+        "id": "Container Chemie",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.37014859689159, 49.21681515216012 ]
+      },
+      "properties": {
+        "id": "FTSK Hauptgeb\u00E4ude",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.370234407492536, 49.2160933168444 ]
+      },
+      "properties": {
+        "id": "FTSK H\u00F6rsaalgeb\u00E4ude",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.371146145127804, 49.215427537062304 ]
+      },
+      "properties": {
+        "id": "FTSK Mensageb\u00E4ude",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.3668146, 49.2140244 ]
+      },
+      "properties": {
+        "id": "Kindertagesst\u00E4tte",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.3668146, 49.2140244 ]
+      },
+      "properties": {
+        "id": "Studentenwohnheim Block 1",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.3668146, 49.2140244 ]
+      },
+      "properties": {
+        "id": "Studentenwohnheim Block 2",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.3668146, 49.2140244 ]
+      },
+      "properties": {
+        "id": "Studentenwohnheim Block 3",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.241574197284113, 49.9918940089067 ]
+      },
+      "properties": {
+        "id": "Naturwissenschaftliches Institutsgeb\u00E4ude",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.222702591094611, 49.99391463107281 ]
+      },
+      "properties": {
+        "id": "Am Kisselberg",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [ 8.241565236707872, 49.99188203022212 ]
+      },
+      "properties": {
+        "id": "Stiftungshaus",
+        "type": "Building2"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "TestSite",
+        "type": "Site"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              8.231356143951416,
+              49.997022597494215
+            ],
+          
+            [
+              8.233480453491211,
+              49.98914581825916
+            ],
+            [
+              8.248479366302488,
+              49.99360166798181
+            ],
+            [
+              8.231356143951416,
+              49.997022597494215
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

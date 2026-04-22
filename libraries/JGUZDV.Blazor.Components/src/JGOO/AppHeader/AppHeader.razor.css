@@ -2,6 +2,11 @@
     height: 40px;
 }
 
+::deep .btn-none:hover {
+    background-color: var(--bs-tertiary-bg);
+    border: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color) !important;
+}
+
 header {
     container: header / inline-size;
     padding-inline: 0.5rem;
@@ -14,7 +19,7 @@ header {
         "logo title controls"
         ". content content"
         "navigation navigation navigation";
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: min-content minmax(0, auto) min-content;
     column-gap: 0.5rem;
     row-gap: 0.25rem;
     align-items: center;
@@ -27,7 +32,11 @@ header {
 
 .header-content {
     grid-area: content;
-    justify-self: start;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: start;
 }
 
 .header-controls {
@@ -63,7 +72,15 @@ header {
     font-weight: bold;
     border-left: 2px solid #c1002a;
     color: inherit;
-    background-color: white;
+    background-color: var(--header-dropdown-color);
+}
+
+::deep [data-bs-theme="light"] {
+    --header-dropdown-color: --bs-light-rgb;
+}
+
+::deep [data-bs-theme="dark"] {
+    --header-dropdown-color: --bs-dark-rgb;
 }
 
 /* Active dropdown parent detection using CSS :has() selector */
@@ -79,15 +96,12 @@ header {
 
 .header-app-title {
     grid-area: title;
-    display: block;
-    text-overflow: ellipsis;
-    margin: 0;
 }
 
 @container (min-width: 940px) {
     .header-grid {
         grid-template-areas: "logo title content controls" "navigation navigation navigation navigation";
-        grid-template-columns: auto auto 1fr auto;
+        grid-template-columns: min-content minmax(0, auto) 1fr minmax(min-content, max-content);
     }
 
     .header-app-title {

@@ -23,6 +23,9 @@ namespace JGUZDV.DynamicForms.Tests
                 "StringFieldType" => new StringFieldType(),
                 "IntFieldType" => new IntFieldType(),
                 "DateOnlyFieldType" => new DateOnlyFieldType(),
+                "FileFieldType" => new FileFieldType(),
+                "BoolFieldType" => new BoolFieldType(),
+                "TimeFieldType" => new TimeFieldType(),
                 _ => throw new ArgumentException("Invalid field type name", nameof(typeName))
             };
         }
@@ -149,7 +152,7 @@ namespace JGUZDV.DynamicForms.Tests
             // Assert
             Assert.NotNull(deserializedField);
             Assert.Equal(field.Value, deserializedField.Value);
-            Assert.Equal(field.FieldDefinition.Type.ToJson(), deserializedField.FieldDefinition.Type.ToJson());
+            Assert.Equal(field.FieldDefinition.Type!.ToJson(), deserializedField.FieldDefinition.Type!.ToJson());
             Assert.Equal(field.FieldDefinition.InputDefinition.Label["en"], deserializedField.FieldDefinition.InputDefinition.Label["en"]);
             Assert.Equal(field.FieldDefinition.Description["en"], deserializedField.FieldDefinition.Description["en"]);
             Assert.Equal(field.FieldDefinition.IsList, deserializedField.FieldDefinition.IsList);
@@ -201,7 +204,7 @@ namespace JGUZDV.DynamicForms.Tests
             // Assert
             Assert.NotNull(deserializedField);
             Assert.Equal(field.Value, deserializedField.Value);
-            Assert.Equal(field.FieldDefinition.Type.ToJson(), deserializedField.FieldDefinition.Type.ToJson());
+            Assert.Equal(field.FieldDefinition.Type!.ToJson(), deserializedField.FieldDefinition.Type!.ToJson());
             Assert.Equal(field.FieldDefinition.InputDefinition.Label["en"], deserializedField.FieldDefinition.InputDefinition.Label["en"]);
             Assert.Equal(field.FieldDefinition.Description["en"], deserializedField.FieldDefinition.Description["en"]);
             Assert.Equal(field.FieldDefinition.IsList, deserializedField.FieldDefinition.IsList);
@@ -416,7 +419,7 @@ namespace JGUZDV.DynamicForms.Tests
 
             // Assert
             Assert.NotNull(deserializedField);
-            Assert.Equal(((FileFieldType.FileType)field.Value).FileName, ((FileFieldType.FileType)deserializedField.Value).FileName);
+            Assert.Equal(((FileFieldType.FileType)field.Value).FileName, ((FileFieldType.FileType)deserializedField.Value!).FileName);
             Assert.Equal(((FileFieldType.FileType)field.Value).FileSize, ((FileFieldType.FileType)deserializedField.Value).FileSize);
 
             // Compare the content of the streams
@@ -431,7 +434,7 @@ namespace JGUZDV.DynamicForms.Tests
             var deserializedContent = deserializedReader.ReadToEnd();
             Assert.Equal(originalContent, deserializedContent);
 
-            Assert.Equal(field.FieldDefinition.Type.ToJson(), deserializedField.FieldDefinition.Type.ToJson());
+            Assert.Equal(field.FieldDefinition.Type!.ToJson(), deserializedField.FieldDefinition.Type!.ToJson());
             Assert.Equal(field.FieldDefinition.InputDefinition.Label["en"], deserializedField.FieldDefinition.InputDefinition.Label["en"]);
             Assert.Equal(field.FieldDefinition.Description["en"], deserializedField.FieldDefinition.Description["en"]);
             Assert.Equal(field.FieldDefinition.IsList, deserializedField.FieldDefinition.IsList);
@@ -565,6 +568,142 @@ namespace JGUZDV.DynamicForms.Tests
             var addedContent = await streamContent.ReadAsStringAsync();
 
             Assert.Equal(originalContent, addedContent);
+        }
+
+        [Fact]
+        public async Task Field_WithDateOnlyFieldTypeAndNullValue_ShouldSerializeAndDeserializeCorrectly()
+        {
+            // Arrange
+            var fieldDefinition = new FieldDefinition
+            {
+                InputDefinition = new InputDefinition
+                {
+                    Label = new L10nString { ["en"] = "Test Date Label" }
+                },
+                Type = GetFieldType("DateOnlyFieldType"),
+                Description = new L10nString { ["en"] = "Test Date Description" },
+                IsList = false,
+                SortKey = 1,
+                IsRequired = true
+            };
+
+            var field = new Field(fieldDefinition);
+
+            var options = new JsonSerializerOptions
+            {
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault
+            };
+
+
+            // Act
+            var json = JsonSerializer.Serialize(field, options);
+            var deserializedField = JsonSerializer.Deserialize<Field>(json, options);
+
+            // Assert
+            Assert.NotNull(deserializedField);
+            Assert.Null(deserializedField.Value);
+        }
+
+        [Fact]
+        public async Task Field_WithIntFieldTypeAndNullValue_ShouldSerializeAndDeserializeCorrectly()
+        {
+            // Arrange
+            var fieldDefinition = new FieldDefinition
+            {
+                InputDefinition = new InputDefinition
+                {
+                    Label = new L10nString { ["en"] = "Test Int Label" }
+                },
+                Type = GetFieldType("IntFieldType"),
+                Description = new L10nString { ["en"] = "Test Int Description" },
+                IsList = false,
+                SortKey = 1,
+                IsRequired = true
+            };
+
+            var field = new Field(fieldDefinition);
+
+            var options = new JsonSerializerOptions
+            {
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault
+            };
+
+
+            // Act
+            var json = JsonSerializer.Serialize(field, options);
+            var deserializedField = JsonSerializer.Deserialize<Field>(json, options);
+
+            // Assert
+            Assert.NotNull(deserializedField);
+            Assert.Null(deserializedField.Value);
+        }
+
+        [Fact]
+        public async Task Field_WithBoolFieldTypeAndNullValue_ShouldSerializeAndDeserializeCorrectly()
+        {
+            // Arrange
+            var fieldDefinition = new FieldDefinition
+            {
+                InputDefinition = new InputDefinition
+                {
+                    Label = new L10nString { ["en"] = "Test Bool Label" }
+                },
+                Type = GetFieldType("BoolFieldType"),
+                Description = new L10nString { ["en"] = "Test Bool Description" },
+                IsList = false,
+                SortKey = 1,
+                IsRequired = true
+            };
+
+            var field = new Field(fieldDefinition);
+
+            var options = new JsonSerializerOptions
+            {
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault
+            };
+
+
+            // Act
+            var json = JsonSerializer.Serialize(field, options);
+            var deserializedField = JsonSerializer.Deserialize<Field>(json, options);
+
+            // Assert
+            Assert.NotNull(deserializedField);
+            Assert.Null(deserializedField.Value);
+        }
+
+        [Fact]
+        public async Task Field_WithTimeFieldTypeAndNullValue_ShouldSerializeAndDeserializeCorrectly()
+        {
+            // Arrange
+            var fieldDefinition = new FieldDefinition
+            {
+                InputDefinition = new InputDefinition
+                {
+                    Label = new L10nString { ["en"] = "Test Time Label" }
+                },
+                Type = GetFieldType("TimeFieldType"),
+                Description = new L10nString { ["en"] = "Test Time Description" },
+                IsList = false,
+                SortKey = 1,
+                IsRequired = true
+            };
+
+            var field = new Field(fieldDefinition);
+
+            var options = new JsonSerializerOptions
+            {
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault
+            };
+
+
+            // Act
+            var json = JsonSerializer.Serialize(field, options);
+            var deserializedField = JsonSerializer.Deserialize<Field>(json, options);
+
+            // Assert
+            Assert.NotNull(deserializedField);
+            Assert.Null(deserializedField.Value);
         }
     }
 }

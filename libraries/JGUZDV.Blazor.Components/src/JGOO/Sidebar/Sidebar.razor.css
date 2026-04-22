@@ -36,3 +36,19 @@
 ::deep .padding-5 {
     padding-inline-start: 2.5rem;
 }
+
+::deep .header-navigation-sidebar {
+    color: var(--sidebar-link-color);
+}
+
+::deep .header-navigation-sidebar:hover {
+    color: var(--bs-link-hover-color);
+}
+
+::deep [data-bs-theme="light"] {
+    --sidebar-link-color: --bs-dark-rgb;
+}
+
+::deep [data-bs-theme="dark"] {
+    --sidebar-link-color: --bs-light-rgb;
+}

@@ -5,7 +5,7 @@
 
 @inject NavigationManager NavManager
 
-<header class="jbs-header bg-body @AdditonalClasses">
+<header class="jbs-header bg-body border-bottom @AdditonalClasses">
     <div class="header-grid">
         @if (Logo != null)
         {
@@ -16,7 +16,9 @@
             </div>
         }
 
-        <h1 class="header-app-title">@Title</h1>
+        <div>
+            <h1 class="header-app-title text-truncate w-100 mb-0">@Title</h1>
+        </div>
 
         @if (ChildContent != null)
         {
@@ -27,7 +29,7 @@
 
         @if (ShowButtons)
         {
-            <div class="header-controls">
+            <div class="header-controls gap-1">
                 @if (ShowLoginButton)
                 {
                     <LoginButton />
@@ -60,9 +62,9 @@
                 @if (ShowSidebarToggle)
                 {
                     <jgu-toggle target-id="jbs-sidebar" class="btn btn-none d-lg-none sidebar-toggle-button" role="button" aria-label="@LR["ToggleSidebar"]">
-                            @Icons.Menu(null)
+                        @Icons.Menu(null)
                     </jgu-toggle>
-                    
+
                 }
             </div>
         }

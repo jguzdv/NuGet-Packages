@@ -37,26 +37,30 @@
                 if (Field.FieldDefinition.IsList)
                 {
                     <MultiSelect UseSingleSelectionMode="@false"
-                                 Items="@Field.FieldDefinition.ChoiceOptions"
+                                 Items="@Field.FieldDefinition.ChoiceOptions.OrderBy(x => x.SortKey).ToList()"
                                  ItemName="x => x.Name.ToString()"
                                  ItemKey="x => x.Value"
                                  Title="@InputDefinition.Label.ToString()"
                                  Values="@(Field.Values?.Select(x => GetChoiceOption(x)).ToList())"
                                  ValuesChanged="(value) => SetValue(value.Select(x => ConvertToValue(x.Value)).ToList())"
                                  TKey="string"
-                                 T="ChoiceOption"></MultiSelect>
+                                 T="ChoiceOption"
+                                 FilterLabel="@SL["DefaultFieldInput.FilterLabel"]"
+                                 UseOverlayMode="@true"></MultiSelect>
                 }
                 else
                 {
                     <MultiSelect UseSingleSelectionMode="@true"
-                                 Items="@Field.FieldDefinition.ChoiceOptions"
+                                 Items="@Field.FieldDefinition.ChoiceOptions.OrderBy(x => x.SortKey).ToList()"
                                  ItemName="x => x.Name.ToString()"
                                  ItemKey="x => x?.Value"
                                  Title="@InputDefinition.Label.ToString()"
                                  Value="@GetChoiceOption(Field.Value)"
                                  ValueChanged="(value) => SetValue(ConvertToValue(value.Value))"
                                  TKey="string"
-                                 T="ChoiceOption"></MultiSelect>
+                                 T="ChoiceOption"
+                                 FilterLabel="@SL["DefaultFieldInput.FilterLabel"]"
+                                 UseOverlayMode="@true"></MultiSelect>
                 }
 
             }

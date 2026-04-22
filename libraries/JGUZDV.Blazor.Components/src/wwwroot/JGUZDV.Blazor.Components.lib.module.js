@@ -1,67 +1,76 @@
 export function registerThemeButtons() {
-    document.querySelectorAll('[data-set-theme]').forEach(el => {
-        el.addEventListener('click', (event) => {
-            const target = event.currentTarget;
-            const theme = target.getAttribute('data-set-theme');
-            if (theme) {
-                applyTheme(theme, false);
-            }
-            const dropdownMenu = target.closest('.dropdown-menu');
-            if (dropdownMenu) {
-                dropdownMenu.hidden = true;
-                const buttonId = dropdownMenu.getAttribute('aria-labelledby');
-                if (buttonId) {
-                    const button = document.getElementById(buttonId);
-                    if (button) {
-                        button.setAttribute('aria-expanded', 'false');
-                    }
-                }
-            }
-        });
-    });
-    console.debug('theme buttons registered');
-}
-export function applyTheme(theme, isInit) {
-    if (theme === 'auto') {
-        const preferred = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-        document.documentElement.setAttribute('data-bs-theme', preferred);
-        localStorage.removeItem("theme");
-    }
-    else {
-        document.documentElement.setAttribute('data-bs-theme', theme);
-        if (!isInit) {
-            localStorage.setItem("theme", theme);
+    customElements.define('jgu-theme-button', class extends HTMLElement {
+        connectedCallback() {
+            this.addEventListener('click', this.handleClick);
+            const currentTheme = localStorage.getItem("theme") ?? "auto";
+            this.classList.toggle("active", this.getAttribute("theme") === currentTheme);
         }
-    }
-    console.debug('theme set to: ', theme);
-    updateThemeIcon(theme);
-    updateActiveThemeButton(theme);
+        disconnectedCallback() {
+            this.removeEventListener('click', this.handleClick);
+        }
+        handleClick = () => {
+            const theme = this.getAttribute('theme');
+            if (!theme)
+                return;
+            applyTheme(theme);
+            localStorage.setItem("theme", theme);
+        };
+    });
+    console.debug('web component (jgu-theme-button) registered');
+    customElements.define('jgu-theme-icon', class extends HTMLElement {
+        observer;
+        connectedCallback() {
+            this.render();
+            applyTheme(localStorage.getItem("theme") ?? "auto");
+            this.observer = new MutationObserver(() => this.render());
+            this.observer.observe(document.documentElement, {
+                attributes: true,
+                attributeFilter: ['data-bs-theme']
+            });
+        }
+        disconnectedCallback() {
+            this.observer?.disconnect();
+        }
+        render() {
+            const theme = localStorage.getItem("theme") ?? "auto";
+            const map = {
+                light: "fa-sun",
+                dark: "fa-moon",
+                auto: "fa-adjust"
+            };
+            this.innerHTML = `<i class="fas ${map[theme] ?? "fa-adjust"}"></i>`;
+        }
+    });
+    console.debug('web component (jgu-theme-icon) registered');
+}
+export function registerThemeGuard() {
+    const observer = new MutationObserver(() => {
+        if (!document.documentElement.hasAttribute("data-bs-theme")) {
+            setStoredTheme();
+        }
+    });
+    observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ["data-bs-theme"]
+    });
+}
+export function applyTheme(theme) {
+    const isAuto = theme === 'auto';
+    const resolved = isAuto
+        ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+        : theme;
+    document.documentElement.setAttribute('data-bs-theme', resolved);
+    document.querySelectorAll("jgu-theme-button").forEach(btn => {
+        btn.classList.toggle("active", btn.getAttribute("theme") === theme);
+    });
+    console.debug('theme is set to: ', theme);
 }
 export function setStoredTheme() {
     const stored = localStorage.getItem("theme");
-    const theme = stored ?? 'light';
-    applyTheme(theme, true);
-    return theme;
-}
-export function updateThemeIcon(theme) {
-    const iconElement = document.querySelector("#jgu-current-theme-icon i");
-    if (!iconElement)
+    if (stored == null) {
         return;
-    const themeClass = {
-        light: "fa-sun",
-        dark: "fa-moon",
-        auto: "fa-adjust"
-    }[theme] ?? "fa-adjust";
-    iconElement.className = `fas ${themeClass}`;
-}
-export function updateActiveThemeButton(theme) {
-    const themes = ["light", "dark", "auto"];
-    themes.forEach(t => {
-        const btn = document.getElementById(`jgu-${t}-theme-icon`);
-        if (btn) {
-            btn.classList.toggle("active", t === theme);
-        }
-    });
+    }
+    applyTheme(stored);
 }
 export function registerWebComponents() {
     customElements.define('jgu-dropdown', class extends HTMLElement {
@@ -74,33 +83,39 @@ export function registerWebComponents() {
         }
         disconnectedCallback() {
             const button = this.getElementsByTagName("button")[0];
-            button.removeEventListener('click', this.toggleHandler);
+            button?.removeEventListener('click', this.toggleHandler);
         }
         toggleHandler = (event) => {
             const button = this.getElementsByTagName("button")[0];
             const target = event.target;
-            if (!button.contains(target)) {
+            if (!button?.contains(target)) {
                 return;
             }
             const menu = this.getElementsByTagName("div")[0];
             console.debug("toggleHandler triggered", this);
             const shouldClose = button.getAttribute('aria-expanded') === 'true';
             button.setAttribute('aria-expanded', String(!shouldClose));
-            menu.hidden = shouldClose;
+            if (menu) {
+                menu.hidden = shouldClose;
+            }
             if (!shouldClose) {
-                menu.querySelector('[role="menuitem"]')?.focus();
+                menu?.querySelector('[role="menuitem"]')?.focus();
                 setTimeout(() => document.addEventListener('click', this.globalCloseHandler), 0);
             }
             else {
                 document.removeEventListener('click', this.globalCloseHandler);
             }
         };
-        globalCloseHandler = (event) => {
+        globalCloseHandler = (_event) => {
             const button = this.getElementsByTagName("button")[0];
             const menu = this.getElementsByTagName("div")[0];
             console.debug("globalCloseHandler triggered", this);
-            button.setAttribute('aria-expanded', 'false');
-            menu.hidden = true;
+            if (button) {
+                button.setAttribute('aria-expanded', 'false');
+            }
+            if (menu) {
+                menu.hidden = true;
+            }
             document.removeEventListener('click', this.globalCloseHandler);
         };
     });
@@ -123,10 +138,8 @@ export function registerWebComponents() {
     });
     console.debug('web component (jgu-toggle) registered');
 }
-export function afterWebStarted(blazor) {
-    registerThemeButtons();
-}
 export function beforeWebStart(options) {
-    setStoredTheme();
     registerWebComponents();
+    registerThemeButtons();
+    registerThemeGuard();
 }
