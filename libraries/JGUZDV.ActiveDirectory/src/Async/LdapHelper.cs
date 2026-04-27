@@ -40,4 +40,14 @@ public static class LdapHelper
         var res = await conn.SendRequestAsync<SearchResponse>(req, ct);
         return res?.Entries.Count > 0 ? res.Entries[0] : null;
     }
+
+    public static async Task<SearchResultEntry?> DirectBind(LdapConnection conn, string? baseDn, Guid guid, string[] attributes, CancellationToken ct)
+    {
+        var entry = await FindByGuidAsync(conn, baseDn, guid, [], ct);
+
+        var bindDn = entry?.DistinguishedName;
+        var req = new SearchRequest(bindDn, "(objectClass=*)", SearchScope.Base, attributes);
+        var res = await conn.SendRequestAsync<SearchResponse>(req, ct);
+        return res?.Entries.Count > 0 ? res.Entries[0] : null;
+    }
 }
