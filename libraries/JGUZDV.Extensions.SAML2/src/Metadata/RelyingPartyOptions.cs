@@ -1,4 +1,4 @@
-namespace JGUZDV.Extensions.SAML2.SPMetadata;
+namespace JGUZDV.Extensions.SAML2.Metadata;
 
 
 /// <summary>

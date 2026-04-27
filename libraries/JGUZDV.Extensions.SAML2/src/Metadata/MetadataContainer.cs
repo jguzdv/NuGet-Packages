@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace JGUZDV.Extensions.SAML2.SPMetadata;
+namespace JGUZDV.Extensions.SAML2.Metadata;
 
 /// <summary>
 /// Encapsulates logic/data to handle EntityDescriptor's. An EntityDescriptor describes a

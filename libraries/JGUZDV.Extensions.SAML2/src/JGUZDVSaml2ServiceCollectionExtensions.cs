@@ -1,4 +1,5 @@
-﻿using JGUZDV.Extensions.SAML2.SPMetadata;
+﻿using JGUZDV.Extensions.SAML2.Certificates;
+using JGUZDV.Extensions.SAML2.Metadata;
 
 using Microsoft.Extensions.Options;
 
@@ -24,6 +25,19 @@ public static class JGUZDVSaml2ServiceCollectionExtensions
             services.AddSingleton<MetadataContainer<TSPMetadata>>();
 
             return services.AddOptions<RelyingPartyOptions>(typeof(TSPMetadata).FullName);
+        }
+
+        /// <summary>
+        /// Adds a certificate manager and returns the service collection. 
+        /// The certificate manager will be used to manage the certificates used for signing and encryption in SAML2.
+        /// </summary>
+        /// <returns></returns>
+        public IServiceCollection AddSaml2CertificateManager()
+        {
+            services.AddSingleton<CertificateContainer>();
+            services.AddHostedService<CertificateManager>();
+
+            return services;
         }
     }
 }

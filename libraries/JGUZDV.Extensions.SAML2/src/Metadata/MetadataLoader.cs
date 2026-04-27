@@ -1,4 +1,4 @@
-﻿namespace JGUZDV.Extensions.SAML2.SPMetadata;
+﻿namespace JGUZDV.Extensions.SAML2.Metadata;
 
 /// <summary>
 /// Base class for metadata loaders. A metadata loader is responsible for fetching/parsing the EntityDescriptor for a given RelyingPartyEntry.

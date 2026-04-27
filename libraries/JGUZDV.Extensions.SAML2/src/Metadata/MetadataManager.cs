@@ -2,7 +2,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace JGUZDV.Extensions.SAML2.SPMetadata;
+namespace JGUZDV.Extensions.SAML2.Metadata;
 
 
 /// <summary>
