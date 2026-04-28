@@ -1,18 +1,19 @@
 <jgu-dropdown class="dropdown">
-
-    <button id="dropdown-button-@_guid" tabindex="0"
+    <button id="dropdown-button-@_guid"
             class="dropdown-label"
             type="button"
-            aria-haspopup="true"
-            aria-expanded="false"
-            aria-controls="dropdown-menu-@_guid">
+            popovertarget="dropdown-menu-@_guid"
+            popovertargetaction="toggle">
         @DropdownLabelContent
     </button>
 
-    <div class="dropdown-menu @DropDownMenuClass" role="menu" id="dropdown-menu-@_guid" aria-labelledby="dropdown-button-@_guid" hidden>
+    <div class="dropdown-menu @DropDownMenuClass"
+         id="dropdown-menu-@_guid"
+         popover="auto"
+         role="menu"
+         aria-labelledby="dropdown-button-@_guid">
         @DropdownContent
     </div>
-
 </jgu-dropdown>
 
 @code {
