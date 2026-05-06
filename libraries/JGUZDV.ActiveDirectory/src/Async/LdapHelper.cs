@@ -51,6 +51,13 @@ public static class LdapHelper
         return res?.Entries.Count > 0 ? res.Entries[0] : null;
     }
 
+    public static async Task<SearchResultEntry?> DirectBind(LdapConnection conn, string distinguishedName, string[] attributes, CancellationToken ct)
+    {
+        var req = new SearchRequest(distinguishedName, "(objectClass=*)", SearchScope.Base, attributes);
+        var res = await conn.SendRequestAsync<SearchResponse>(req, ct);
+        return res?.Entries.Count > 0 ? res.Entries[0] : null;
+    }
+
     static string ToOctetFilter(byte[] bytes) => string.Concat(bytes.Select(b => $"\\{b:X2}"));
 
     public static string CombineFilter(char op, string filter1, string? filter2)

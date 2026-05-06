@@ -100,6 +100,23 @@ namespace JGUZDV.ActiveDirectory.Async
 
                 return attribute.Cast<object>().FirstOrDefault() as byte[] ?? Array.Empty<byte>();
             }
+
+            public Guid? GetGuid(string attributeName)
+            {
+                var attribute = entry.Attributes[attributeName];
+                if (attribute is null)
+                {
+                    return null;
+                }
+
+                var value = attribute.Cast<object>().FirstOrDefault();
+                return value switch
+                {
+                    byte[] bytes when bytes.Length == 16 => new Guid(bytes),
+                    string s when Guid.TryParse(s, out var guid) => guid,
+                    _ => null,
+                };
+            }
         }
     }
 }
