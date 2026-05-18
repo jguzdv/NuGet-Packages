@@ -34,7 +34,12 @@ namespace JGUZDV.ActiveDirectory.Async
         {
             public string? GetString(string attributeName)
             {
-                return entry.Attributes[attributeName].Cast<string>().FirstOrDefault();
+                var attribute = entry.Attributes[attributeName];
+                if (attribute is null)
+                {
+                    return null;
+                }
+                return attribute.GetValues(typeof(string)).Cast<string>().FirstOrDefault();
             }
 
             public string[] GetStrings(string attributeName)
@@ -44,7 +49,7 @@ namespace JGUZDV.ActiveDirectory.Async
                 {
                     return Array.Empty<string>();
                 }
-                return attribute.Cast<string>().ToArray();
+                return attribute.GetValues(typeof(string)).Cast<string>().ToArray();
             }
 
             public int? GetInt(string attributeName)
