@@ -1,4 +1,5 @@
-﻿using System.DirectoryServices.Protocols;
+﻿using System.ComponentModel;
+using System.DirectoryServices.Protocols;
 using System.Net;
 using System.Text;
 
@@ -30,7 +31,7 @@ public static class LdapHelper
 
     public static async Task<SearchResultEntry?> FindByGuidAsync(LdapConnection conn, string? baseDn, Guid guid, string[] attributes, CancellationToken ct)
     {
-        if(string.IsNullOrWhiteSpace(baseDn))
+        if (string.IsNullOrWhiteSpace(baseDn))
         {
             baseDn = await GetDefaultNamingContextAsync(conn, ct);
         }
@@ -43,19 +44,24 @@ public static class LdapHelper
 
     public static async Task<SearchResultEntry?> DirectBind(LdapConnection conn, string? baseDn, Guid guid, string[] attributes, CancellationToken ct)
     {
-        var entry = await FindByGuidAsync(conn, baseDn, guid, [], ct);
-
+        var entry = await FindByGuidAsync(conn, baseDn, guid, ["distinguishedName"], ct);
         var bindDn = entry?.DistinguishedName;
-        var req = new SearchRequest(bindDn, "(objectClass=*)", SearchScope.Base, attributes);
-        var res = await conn.SendRequestAsync<SearchResponse>(req, ct);
-        return res?.Entries.Count > 0 ? res.Entries[0] : null;
+
+        if (string.IsNullOrWhiteSpace(bindDn))
+        {
+            return null;
+        }
+
+        return await DirectBind(conn, bindDn, attributes, ct);
     }
 
     public static async Task<SearchResultEntry?> DirectBind(LdapConnection conn, string distinguishedName, string[] attributes, CancellationToken ct)
     {
         var req = new SearchRequest(distinguishedName, "(objectClass=*)", SearchScope.Base, attributes);
         var res = await conn.SendRequestAsync<SearchResponse>(req, ct);
-        return res?.Entries.Count > 0 ? res.Entries[0] : null;
+
+        var result = res?.Entries.Count > 0 ? res.Entries[0] : null;
+        return string.IsNullOrWhiteSpace(result?.DistinguishedName) ? null : result;
     }
 
     static string ToOctetFilter(byte[] bytes) => string.Concat(bytes.Select(b => $"\\{b:X2}"));
