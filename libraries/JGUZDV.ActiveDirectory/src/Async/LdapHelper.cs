@@ -83,7 +83,7 @@ public static class LdapHelper
     /// <param name="attributes">The list of attributes to load from the resolved entry.</param>
     /// <param name="ct">A cancellation token for asynchronous LDAP requests.</param>
     /// <returns>A task that resolves to the entry read by distinguished name, or <see langword="null"/> if the entry cannot be resolved.</returns>
-    public static async Task<SearchResultEntry?> DirectBind(LdapConnection conn, string? baseDn, Guid guid, string[] attributes, CancellationToken ct)
+    public static async Task<SearchResultEntry?> DirectBindAsync(LdapConnection conn, string? baseDn, Guid guid, string[] attributes, CancellationToken ct)
     {
         var entry = await FindByGuidAsync(conn, baseDn, guid, ["distinguishedName"], ct);
         var bindDn = entry?.DistinguishedName;
@@ -93,7 +93,7 @@ public static class LdapHelper
             return null;
         }
 
-        return await DirectBind(conn, bindDn, attributes, ct);
+        return await DirectBindAsync(conn, bindDn, attributes, ct);
     }
 
     /// <summary>
@@ -104,7 +104,7 @@ public static class LdapHelper
     /// <param name="attributes">The list of attributes to load from the entry.</param>
     /// <param name="ct">A cancellation token for the asynchronous LDAP request.</param>
     /// <returns>A task that resolves to the matching <see cref="SearchResultEntry"/>, or <see langword="null"/> when no valid entry is returned.</returns>
-    public static async Task<SearchResultEntry?> DirectBind(LdapConnection conn, string distinguishedName, string[] attributes, CancellationToken ct)
+    public static async Task<SearchResultEntry?> DirectBindAsync(LdapConnection conn, string distinguishedName, string[] attributes, CancellationToken ct)
     {
         var req = new SearchRequest(distinguishedName, "(objectClass=*)", SearchScope.Base, attributes);
         var res = await conn.SendRequestAsync<SearchResponse>(req, ct);
@@ -145,7 +145,7 @@ public static class LdapHelper
     /// <returns>An LDAP OR filter expression containing one clause per provided value.</returns>
     public static string BuildOrFilterExpression(string property, IEnumerable<string> values)
     {
-        var orQuery = string.Join(null, values.Select(x => $"({property}={x})"));
+        var orQuery = string.Join(null, values.Select(x => $"({property}={EncodeForFilter(x)})"));
         return $"(|{orQuery})";
     }
 
@@ -183,39 +183,26 @@ public static class LdapHelper
     /// <returns>A sanitized filter-safe string, or an empty string when the input has no usable content.</returns>
     public static string EncodeForFilter(string? input)
     {
-        var result = SanitizeString(input);
-
-        if (result == null)
+        if (input == null)
             return "";
 
-        return result;
-    }
-
-    private readonly static char[] _simpleEncodedChars = ['"', '#', '+', ',', ';', '<', '=', '>', '\\'];
-    /// <summary>
-    /// Normalizes a string by trimming, collapsing whitespace, removing control characters,
-    /// and escaping LDAP-special ASCII characters.
-    /// </summary>
-    /// <param name="input">The input string to sanitize.</param>
-    /// <returns>The sanitized string, or <see langword="null"/> when the sanitized result is empty.</returns>
-    public static string? SanitizeString(string? input)
-    {
-        if (input == null)
-            return null;
-
         var sb = new StringBuilder(input.Length * 2);
-
         var previousWasWhitespace = false;
-        // UTF8 aware enumeration
+
         foreach (var rune in input.Trim().EnumerateRunes())
         {
-            // Skip control characters
+            if (rune.Value == 0)
+            {
+                sb.Append("\\00");
+                previousWasWhitespace = false;
+                continue;
+            }
+
             if (Rune.IsControl(rune))
             {
                 continue;
             }
 
-            // All whitespace characters are replaced with a single space
             if (Rune.IsWhiteSpace(rune))
             {
                 if (!previousWasWhitespace)
@@ -229,15 +216,23 @@ public static class LdapHelper
 
             previousWasWhitespace = false;
 
-            // Escape special characters
-            if (rune.IsAscii && _simpleEncodedChars.Contains((char)rune.Value))
+            if (rune.IsAscii)
             {
-                sb.Append('\\');
+                sb.Append((char)rune.Value switch
+                {
+                    '*' => "\\2a",
+                    '(' => "\\28",
+                    ')' => "\\29",
+                    '\\' => "\\5c",
+                    _ => rune.ToString(),
+                });
+                continue;
             }
+
             sb.Append(rune);
         }
 
         var result = sb.ToString();
-        return string.IsNullOrWhiteSpace(result) ? null : result;
+        return string.IsNullOrWhiteSpace(result) ? "" : result;
     }
 }
