@@ -3,17 +3,20 @@ using System.Globalization;
 
 namespace JGUZDV.ActiveDirectory.Async
 {
+    /// <summary>
+    /// Provides asynchronous helper methods for <see cref="LdapConnection"/> operations.
+    /// </summary>
     public static class LdapConnectionExtensions
     {
         extension(LdapConnection connection)
         {
             /// <summary>
-            /// 
+            /// Sends an LDAP request asynchronously and returns a strongly typed directory response.
             /// </summary>
-            /// <typeparam name="T"></typeparam>
-            /// <param name="request"></param>
-            /// <param name="ct"></param>
-            /// <returns></returns>
+            /// <typeparam name="T">The expected response type.</typeparam>
+            /// <param name="request">The LDAP request to send.</param>
+            /// <param name="ct">A token used to cancel the underlying LDAP operation.</param>
+            /// <returns>The LDAP response cast to <typeparamref name="T"/>.</returns>
             public async Task<T> SendRequestAsync<T>(DirectoryRequest request, CancellationToken ct)
                 where T : DirectoryResponse
             {
@@ -28,10 +31,18 @@ namespace JGUZDV.ActiveDirectory.Async
         }
     }
 
+    /// <summary>
+    /// Provides typed attribute access helpers for <see cref="SearchResultEntry"/> values.
+    /// </summary>
     public static class SearchResultEntryExtensions
     {
         extension(SearchResultEntry entry)
         {
+            /// <summary>
+            /// Gets the first string value of the specified LDAP attribute.
+            /// </summary>
+            /// <param name="attributeName">The name of the attribute to read.</param>
+            /// <returns>The first string value, or <see langword="null"/> if the attribute is missing or has no string values.</returns>
             public string? GetString(string attributeName)
             {
                 var attribute = entry.Attributes[attributeName];
@@ -42,6 +53,11 @@ namespace JGUZDV.ActiveDirectory.Async
                 return attribute.GetValues(typeof(string)).Cast<string>().FirstOrDefault();
             }
 
+            /// <summary>
+            /// Gets all string values of the specified LDAP attribute.
+            /// </summary>
+            /// <param name="attributeName">The name of the attribute to read.</param>
+            /// <returns>An array containing all string values, or an empty array if the attribute is missing.</returns>
             public string[] GetStrings(string attributeName)
             {
                 var attribute = entry.Attributes[attributeName];
@@ -52,6 +68,11 @@ namespace JGUZDV.ActiveDirectory.Async
                 return attribute.GetValues(typeof(string)).Cast<string>().ToArray();
             }
 
+            /// <summary>
+            /// Gets the first value of the specified LDAP attribute as an integer.
+            /// </summary>
+            /// <param name="attributeName">The name of the attribute to read.</param>
+            /// <returns>The parsed integer value, or <see langword="null"/> if the attribute is missing or cannot be parsed as an integer.</returns>
             public int? GetInt(string attributeName)
             {
                 var attribute = entry.Attributes[attributeName];
@@ -74,6 +95,11 @@ namespace JGUZDV.ActiveDirectory.Async
                 return null;
             }
 
+            /// <summary>
+            /// Gets all values of the specified LDAP attribute that can be represented as integers.
+            /// </summary>
+            /// <param name="attributeName">The name of the attribute to read.</param>
+            /// <returns>An array of successfully converted integer values, or an empty array if the attribute is missing.</returns>
             public int[] GetInts(string attributeName)
             {
                 var attribute = entry.Attributes[attributeName];
@@ -95,6 +121,11 @@ namespace JGUZDV.ActiveDirectory.Async
                     .ToArray();
             }
 
+            /// <summary>
+            /// Gets the first value of the specified LDAP attribute as a byte array.
+            /// </summary>
+            /// <param name="attributeName">The name of the attribute to read.</param>
+            /// <returns>The first byte array value, or an empty array if the attribute is missing or not binary.</returns>
             public byte[] GetBytes(string attributeName)
             {
                 var attribute = entry.Attributes[attributeName];
@@ -106,6 +137,11 @@ namespace JGUZDV.ActiveDirectory.Async
                 return attribute.Cast<object>().FirstOrDefault() as byte[] ?? Array.Empty<byte>();
             }
 
+            /// <summary>
+            /// Gets the first value of the specified LDAP attribute as a <see cref="Guid"/>.
+            /// </summary>
+            /// <param name="attributeName">The name of the attribute to read.</param>
+            /// <returns>A GUID parsed from a 16-byte binary value or string value, or <see langword="null"/> if conversion is not possible.</returns>
             public Guid? GetGuid(string attributeName)
             {
                 var attribute = entry.Attributes[attributeName];

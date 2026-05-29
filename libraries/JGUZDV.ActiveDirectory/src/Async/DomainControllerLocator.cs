@@ -2,10 +2,31 @@ using DnsClient;
 
 namespace JGUZDV.ActiveDirectory.Async;
 
+/// <summary>
+/// Represents a domain controller endpoint discovered via DNS SRV records.
+/// </summary>
+/// <param name="HostName">The fully qualified host name of the domain controller.</param>
+/// <param name="Port">The LDAP service port of the domain controller.</param>
+/// <param name="Priority">The SRV priority value for the endpoint.</param>
+/// <param name="Weight">The SRV weight value used for load balancing within the same priority.</param>
 public sealed record DomainControllerEndpoint(string HostName, int Port, int Priority, int Weight);
 
+/// <summary>
+/// Provides asynchronous DNS-based discovery for Active Directory domain controllers.
+/// </summary>
 public static class DomainControllerLocator
 {
+    /// <summary>
+    /// Resolves domain controller LDAP endpoints for the specified domain, optionally preferring a specific site.
+    /// </summary>
+    /// <param name="domainName">The Active Directory domain name to query.</param>
+    /// <param name="siteName">An optional Active Directory site name used for site-aware lookup.</param>
+    /// <param name="cancellationToken">A token that can be used to cancel the lookup operation.</param>
+    /// <returns>
+    /// A read-only list of discovered domain controller endpoints ordered by SRV priority and weight,
+    /// or an empty list if none are found.
+    /// </returns>
+    /// <exception cref="ArgumentException"><paramref name="domainName"/> is null, empty, or whitespace.</exception>
     public static async Task<IReadOnlyList<DomainControllerEndpoint>> GetDomainControllersAsync(
         string domainName,
         string? siteName = null,
@@ -50,6 +71,12 @@ public static class DomainControllerLocator
         return Array.Empty<DomainControllerEndpoint>();
     }
 
+    /// <summary>
+    /// Builds DNS SRV query names in lookup order, preferring a site-specific query when a site is provided.
+    /// </summary>
+    /// <param name="domainName">The normalized Active Directory domain name.</param>
+    /// <param name="siteName">The normalized Active Directory site name, if available.</param>
+    /// <returns>The ordered set of DNS SRV query names to execute.</returns>
     private static IEnumerable<string> GetQueryNames(string domainName, string? siteName)
     {
         if (!string.IsNullOrWhiteSpace(siteName))
