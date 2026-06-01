@@ -17,7 +17,7 @@ public sealed record DomainControllerEndpoint(string HostName, int Port, int Pri
 public static class DomainControllerLocator
 {
     /// <summary>
-    /// Resolves domain controller LDAP endpoints for the specified domain, optionally preferring a specific site.
+    /// Resolves domain controller LDAP endpoints for the specified domain, optionally by a specific site.
     /// </summary>
     /// <param name="domainName">The Active Directory domain name to query.</param>
     /// <param name="siteName">An optional Active Directory site name used for site-aware lookup.</param>
