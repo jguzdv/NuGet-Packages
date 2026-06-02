@@ -55,6 +55,18 @@
     }
 
     /// <summary>
+    /// Creates and shows a new toast message that auto-dismisses after the specified delay.
+    /// The countdown pauses while the user hovers or focuses the toast (WCAG 2.2.1).
+    /// </summary>
+    public ToastMessage Show(ToastLevel toastLevel, string message, string? title, TimeSpan autoDismissAfter)
+    {
+        var toastMessage = new ToastMessage(toastLevel, message, title, autoDismissAfter);
+        Show(toastMessage);
+
+        return toastMessage;
+    }
+
+    /// <summary>
     /// Shows the given toast message.
     /// </summary>
     public void Show(ToastMessage toast)

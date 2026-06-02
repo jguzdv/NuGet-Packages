@@ -23,11 +23,12 @@
         /// <summary>
         /// Creates a new ToastMessage with the specified level, message, and title.
         /// </summary>
-        public ToastMessage(ToastLevel toastLevel, string message, string? title)
+        public ToastMessage(ToastLevel toastLevel, string message, string? title, TimeSpan? autoDismissAfter = null)
         {
             ToastLevel = toastLevel;
             Message = message;
             Title = title;
+            AutoDismissAfter = autoDismissAfter;
         }
 
         /// <summary>
@@ -44,6 +45,12 @@
         /// The title of the toast message, if any.
         /// </summary>
         public string? Title { get; }
+
+        /// <summary>
+        /// The duration after which the toast will be automatically dismissed.
+        /// When set, the countdown pauses while the user hovers or focuses the toast (WCAG 2.2.1).
+        /// </summary>
+        public TimeSpan? AutoDismissAfter { get; }
 
 
         /// <summary>

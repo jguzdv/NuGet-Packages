@@ -1,9 +1,14 @@
 ﻿@using Microsoft.AspNetCore.Components.Web
+@implements IDisposable
 
 @code {
     [Parameter] public ToastMessage? Toast { get; set; }
 
     [Parameter] public EventCallback OnDismiss { get; set; }
+
+    private CancellationTokenSource? _cts;
+    private double _remainingMs;
+    private DateTime _startedAt;
 
     private string? ToastIcon { get; set; }
     private string? ContextClass { get; set; }
@@ -35,20 +40,73 @@
         };
     }
 
-    private void HideToast() {
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender && Toast?.AutoDismissAfter is { } delay)
+        {
+            _remainingMs = delay.TotalMilliseconds;
+            StartTimer();
+        }
+    }
+
+    private void StartTimer()
+    {
+        _cts = new CancellationTokenSource();
+        _startedAt = DateTime.UtcNow;
+        var token = _cts.Token;
+
+        _ = Task.Delay(TimeSpan.FromMilliseconds(_remainingMs), token).ContinueWith(async t =>
+        {
+            if (!t.IsCanceled)
+            {
+                await InvokeAsync(OnDismiss.InvokeAsync);
+            }
+        }, TaskScheduler.Current);
+    }
+
+    private void PauseTimer()
+    {
+        if (_cts is { IsCancellationRequested: false })
+        {
+            _remainingMs -= (DateTime.UtcNow - _startedAt).TotalMilliseconds;
+            if (_remainingMs < 0) _remainingMs = 0;
+            _cts.Cancel();
+            _cts.Dispose();
+            _cts = null;
+        }
+    }
+
+    private void ResumeTimer()
+    {
+        if (_remainingMs > 0 && _cts is null)
+        {
+            StartTimer();
+        }
+    }
+
+    private void HideToast()
+    {
+        _cts?.Cancel();
         _ = OnDismiss.InvokeAsync();
-        Toast?.Hide();
+    }
+
+    public void Dispose()
+    {
+        _cts?.Cancel();
+        _cts?.Dispose();
     }
 }
 
 @if (Toast != null)
 {
-    <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true"
+         @onmouseenter="PauseTimer" @onmouseleave="ResumeTimer"
+         @onfocusin="PauseTimer" @onfocusout="ResumeTimer">
         <div class="toast-header text-@ContextClass">
             <i class="fs-3 fa fa-fw @ToastIcon me-2"></i>
             <strong class="me-auto">@Toast.Title</strong>
             <small class="text-secondary">@Time</small>
-            <button @onclick="() => HideToast()" class="btn-close"></button>
+            <button @onclick="HideToast" class="btn-close" aria-label="Close"></button>
         </div>
         <div class="toast-body p-0">
             <div class="alert alert-@ContextClass m-0 ws-pre-wrap">
