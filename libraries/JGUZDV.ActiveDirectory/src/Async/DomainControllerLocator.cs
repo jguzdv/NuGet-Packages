@@ -12,10 +12,41 @@ namespace JGUZDV.ActiveDirectory.Async;
 public sealed record DomainControllerEndpoint(string HostName, int Port, int Priority, int Weight);
 
 /// <summary>
+/// Defines an interface for asynchronously locating Active Directory domain controllers using DNS SRV records.
+/// </summary>
+public interface IDomainControllerLocator
+{
+    /// <summary>
+    /// Asynchronously retrieves a list of domain controller endpoints for the specified Active Directory domain.
+    /// </summary>
+    /// <param name="domainName">The Active Directory domain name to query.</param>
+    /// <param name="siteName">An optional Active Directory site name for site-aware discovery.</param>
+    /// <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
+    /// <returns>A read-only list of discovered domain controller endpoints, or an empty list if none are found.</returns>
+    Task<IReadOnlyList<DomainControllerEndpoint>> GetDomainControllersAsync(
+        string domainName,
+        string? siteName = null,
+        CancellationToken cancellationToken = default);
+}
+
+
+/// <summary>
 /// Provides asynchronous DNS-based discovery for Active Directory domain controllers.
 /// </summary>
-public static class DomainControllerLocator
+public class DomainControllerLocator : IDomainControllerLocator
 {
+    private readonly ILookupClient _lookupClient;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="DomainControllerLocator"/> class with the specified DNS lookup client.
+    /// </summary>
+    /// <param name="lookupClient">The DNS lookup client to use for querying SRV records.</param>
+    public DomainControllerLocator(ILookupClient lookupClient)
+    {
+        _lookupClient = lookupClient;
+    }
+
+
     /// <summary>
     /// Resolves domain controller LDAP endpoints for the specified domain, optionally by a specific site.
     /// </summary>
@@ -27,7 +58,7 @@ public static class DomainControllerLocator
     /// or an empty list if none are found.
     /// </returns>
     /// <exception cref="ArgumentException"><paramref name="domainName"/> is null, empty, or whitespace.</exception>
-    public static async Task<IReadOnlyList<DomainControllerEndpoint>> GetDomainControllersAsync(
+    public async Task<IReadOnlyList<DomainControllerEndpoint>> GetDomainControllersAsync(
         string domainName,
         string? siteName = null,
         CancellationToken cancellationToken = default)
@@ -39,13 +70,12 @@ public static class DomainControllerLocator
 
         var normalizedDomain = domainName.Trim().TrimEnd('.');
         var normalizedSite = siteName?.Trim();
-        var lookupClient = new LookupClient();
 
         foreach (var queryName in GetQueryNames(normalizedDomain, normalizedSite))
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var queryResult = await lookupClient.QueryAsync(
+            var queryResult = await _lookupClient.QueryAsync(
                 queryName,
                 QueryType.SRV,
                 cancellationToken: cancellationToken);
