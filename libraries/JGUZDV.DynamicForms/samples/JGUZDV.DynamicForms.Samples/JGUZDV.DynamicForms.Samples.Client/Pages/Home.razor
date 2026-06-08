@@ -5,8 +5,6 @@
 @using JGUZDV.DynamicForms.Blazor.FieldDefinitionComponents
 @using JGUZDV.DynamicForms.Model
 @using System.Text.Json
-@using JGUZDV.DynamicForms.Serialization
-@using JGUZDV.L10n
 @using System.ComponentModel.DataAnnotations
 
 <PageTitle>Home</PageTitle>
@@ -24,9 +22,11 @@ Welcome to your new app.
     </Button>
     <ModalBody>
         <FieldDefinitionForm @bind-FieldDefinition="context.Model"
-                             @bind-FieldDefinition:after="() => {
-                                                                                                                       _fieldDefinitions.Add(context.Model);
-                             context.Modal.Accept();}"
+                             @bind-FieldDefinition:after="() =>
+                             {
+                                 _fieldDefinitions.Add(context.Model);
+                                 context.Modal.Accept();
+                             }"
                              SubmitLabel="Validieren">
             <FormSection Model="_myModel">
                 <div class="my-2">
@@ -82,9 +82,6 @@ Welcome to your new app.
 
     [Inject]
     public required IServiceProvider ServiceProvider { get; set; }
-
-    [Inject]
-    public required IToastService Toasts { get; set; }
 
     [Inject]
     public required HttpClient Client { get; set; }
