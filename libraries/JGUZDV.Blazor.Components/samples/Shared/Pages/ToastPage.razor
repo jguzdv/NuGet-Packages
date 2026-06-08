@@ -1,0 +1,43 @@
+@rendermode InteractiveWebAssembly
+
+@page "/toasts"
+@using JGUZDV.Blazor.Components.Toasts
+
+<h3>Toast Samples</h3>
+
+<div class="d-flex gap-2 flex-wrap mb-3">
+    <button class="btn btn-info" @onclick="ShowInfo">Info (no auto-dismiss)</button>
+    <button class="btn btn-success" @onclick="ShowSuccess">Success (5s auto-dismiss)</button>
+    <button class="btn btn-warning" @onclick="ShowWarning">Warning (10s auto-dismiss)</button>
+    <button class="btn btn-danger" @onclick="ShowDanger">Danger (3s auto-dismiss)</button>
+</div>
+
+<p class="text-muted">
+    Hover or focus a toast to pause the auto-dismiss countdown (WCAG 2.2.1).
+</p>
+
+<ToastMessages @ref="_toastMessages" />
+
+@code {
+    private ToastMessages _toastMessages = default!;
+
+    private void ShowInfo()
+    {
+        _toastMessages.Show(ToastLevel.Info, "This is an info toast without auto-dismiss.", "Info");
+    }
+
+    private void ShowSuccess()
+    {
+        _toastMessages.Show(ToastLevel.Success, "This toast will auto-dismiss after 5 seconds. Hover to pause.", "Success", TimeSpan.FromSeconds(5));
+    }
+
+    private void ShowWarning()
+    {
+        _toastMessages.Show(ToastLevel.Warning, "This toast will auto-dismiss after 10 seconds. Hover to pause.", "Warning", TimeSpan.FromSeconds(10));
+    }
+
+    private void ShowDanger()
+    {
+        _toastMessages.Show(ToastLevel.Danger, "This toast will auto-dismiss after 3 seconds. Hover to pause.", "Error", TimeSpan.FromSeconds(3));
+    }
+}
