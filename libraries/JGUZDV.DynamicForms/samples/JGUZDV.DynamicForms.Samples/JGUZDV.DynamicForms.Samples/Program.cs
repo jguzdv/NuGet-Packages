@@ -34,8 +34,6 @@ builder.Services.ConfigureHttpJsonOptions(options =>
     options.SerializerOptions.PropertyNameCaseInsensitive = true;
 });
 
-builder.Services.AddToasts();
-
 builder.Services.AddDynamicForms();
 
 var app = builder.Build();
