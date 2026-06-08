@@ -33,7 +33,7 @@
 
         /// <summary>
         /// The duration after which the toast will be automatically dismissed.
-        /// When set, the countdown pauses while the user hovers or focuses the toast (WCAG 2.2.1).
+        /// When set, the countdown pauses while the user hovers or focuses the toast.
         /// </summary>
         public TimeSpan? AutoDismissAfter { get; }
     }
