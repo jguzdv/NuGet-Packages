@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Server;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
@@ -167,7 +168,7 @@ public static class JGUZDVHostApplicationBuilderExtensions
                     var headers = policySection.GetSection("Headers").Get<string[]>() ?? [];
                     var methods = policySection.GetSection("Methods").Get<string[]>() ?? [];
                     var origins = policySection.GetSection("Origins").Get<string[]>() ?? [];
-                    
+
                     var supportsCredentials = policySection.GetValue<bool>("SupportsCredentials");
 
                     opt.AddPolicy(policySection.Key, policyBuilder =>
@@ -175,14 +176,14 @@ public static class JGUZDVHostApplicationBuilderExtensions
                         policyBuilder.WithHeaders(headers)
                                      .WithMethods(methods)
                                      .WithOrigins(origins);
-                        
+
                         if (supportsCredentials)
                         {
                             policyBuilder.AllowCredentials();
                         }
                     });
                 }
-            
+
                 configure?.Invoke(opt);
             });
             appBuilder.HasCORS = true;
@@ -608,11 +609,39 @@ public static class JGUZDVHostApplicationBuilderExtensions
 
                 foreach (var scope in scopes)
                     opt.Scope.Add(scope);
+
             })
             .AddCookie(opt =>
             {
                 opt.Cookie.Name = appBuilder.Environment.ApplicationName;
                 opt.SlidingExpiration = false;
+
+                // For API calls, we don't want to redirect to the login page, but instead return a 403 or 401 status code.
+                opt.Events.OnRedirectToLogin = context =>
+                {
+                    if (context.HttpContext.Request.Headers["Sec-Fetch-Mode"] == "cors")
+                    {
+                        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                    }
+                    else
+                    {
+                        context.Response.Redirect(context.RedirectUri);
+                    }
+                    return Task.CompletedTask;
+                };
+                opt.Events.OnRedirectToAccessDenied = opt.Events.OnRedirectToLogin = context =>
+                {
+                    if (context.HttpContext.Request.Headers["Sec-Fetch-Mode"] == "cors")
+                    {
+                        context.Response.StatusCode = StatusCodes.Status403Forbidden;
+                    }
+                    else
+                    {
+                        context.Response.Redirect(context.RedirectUri);
+                    }
+
+                    return Task.CompletedTask;
+                };
 
                 if (appBuilder.Configuration.HasConfigSection(cookieConfigSection))
                 {

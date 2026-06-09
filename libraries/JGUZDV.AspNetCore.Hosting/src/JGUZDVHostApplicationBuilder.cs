@@ -576,14 +576,20 @@ public class JGUZDVHostApplicationBuilder
 
             app.UseStatusCodePages(async context =>
             {
-                var statusCode = context.HttpContext.Response.StatusCode;
-                var localizer = context.HttpContext.RequestServices.GetRequiredService<IStringLocalizer<ErrorResource>>();
+                // We only want to return the custom error page for browser requests, for API requests we want to return the status code with an empty body and let the client handle it.
+                var isNoCorsRequest = context.HttpContext.Request.Headers["Sec-Fetch-Mode"] == "no-cors";
 
-                var html = GenerateErrorPageHtml(localizer, statusCode, context.HttpContext);
+                if (!isNoCorsRequest)
+                {
+                    var statusCode = context.HttpContext.Response.StatusCode;
+                    var localizer = context.HttpContext.RequestServices.GetRequiredService<IStringLocalizer<ErrorResource>>();
 
-                context.HttpContext.Response.ContentType = "text/html";
-                context.HttpContext.Response.Headers.ContentLength = null;
-                await context.HttpContext.Response.WriteAsync(html);
+                    var html = GenerateErrorPageHtml(localizer, statusCode, context.HttpContext);
+
+                    context.HttpContext.Response.ContentType = "text/html";
+                    context.HttpContext.Response.Headers.ContentLength = null;
+                    await context.HttpContext.Response.WriteAsync(html);
+                }
             });
 
             app.UseHttpsRedirection();
