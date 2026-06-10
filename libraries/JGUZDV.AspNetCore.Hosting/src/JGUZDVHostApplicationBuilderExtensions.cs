@@ -616,33 +616,6 @@ public static class JGUZDVHostApplicationBuilderExtensions
                 opt.Cookie.Name = appBuilder.Environment.ApplicationName;
                 opt.SlidingExpiration = false;
 
-                // For API calls, we don't want to redirect to the login page, but instead return a 403 or 401 status code.
-                opt.Events.OnRedirectToLogin = context =>
-                {
-                    if (context.HttpContext.Request.Headers["Sec-Fetch-Mode"] == "cors")
-                    {
-                        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                    }
-                    else
-                    {
-                        context.Response.Redirect(context.RedirectUri);
-                    }
-                    return Task.CompletedTask;
-                };
-                opt.Events.OnRedirectToAccessDenied = opt.Events.OnRedirectToLogin = context =>
-                {
-                    if (context.HttpContext.Request.Headers["Sec-Fetch-Mode"] == "cors")
-                    {
-                        context.Response.StatusCode = StatusCodes.Status403Forbidden;
-                    }
-                    else
-                    {
-                        context.Response.Redirect(context.RedirectUri);
-                    }
-
-                    return Task.CompletedTask;
-                };
-
                 if (appBuilder.Configuration.HasConfigSection(cookieConfigSection))
                 {
                     var cookieConfig = appBuilder.Configuration.GetSection(cookieConfigSection);
