@@ -1,7 +1,7 @@
 <div id="@EffectiveComponentId" popover="manual" class="toast-container position-fixed bottom-0 end-0 p-0 m-3">
     @foreach (var toast in Toasts)
     {
-        <ToastMessageView Toast="@toast" OnDismiss="() => DismissToast(toast)" />
+        <ToastMessageView @key="@toast" Toast="@toast" OnDismiss="() => DismissToast(toast)" />
     }
 </div>
 
