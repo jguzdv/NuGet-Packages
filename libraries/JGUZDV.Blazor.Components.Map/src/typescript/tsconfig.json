@@ -1,6 +1,7 @@
 {
   "compileOnSave": true,
   "compilerOptions": {
+    "outDir": "wwwroot",
     "module": "ES6",
     "removeComments": true,
     "allowSyntheticDefaultImports": true,
