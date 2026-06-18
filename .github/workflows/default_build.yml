@@ -8,6 +8,10 @@ on:
         required: false
         type: boolean
         default: false
+      build-npm: 
+        required: false
+        type: boolean
+        default: false
     secrets:
       NUGET_API_KEY:
         required: true    
@@ -17,6 +21,7 @@ env:
     src-proj: ./libraries/${{ inputs.library-name }}/src/${{ inputs.library-name }}.csproj
     test-proj: ./libraries/${{ inputs.library-name }}/test/${{ inputs.library-name }}.Tests.csproj
     publish-path: ./publish/${{ inputs.library-name }}
+    npm-path: libraries/${{ inputs.library-name }}/src
 
 jobs:
   build_test_pack:
@@ -34,6 +39,16 @@ jobs:
         run: dotnet restore ${{ env.src-proj }}
       - name: Restore test project
         run: dotnet restore ${{ env.test-proj }}
+
+      - name: Install dependencies
+        if: inputs.build-npm
+        working-directory: ${{ env.npm-path }}
+        run: npm ci
+
+      - name: Build npm
+        if: inputs.build-npm 
+        working-directory: ${{ env.npm-path }}
+        run: npm run build:Release
 
       - name: Build library project
         run: dotnet build ${{ env.src-proj }} --no-restore -c Release
