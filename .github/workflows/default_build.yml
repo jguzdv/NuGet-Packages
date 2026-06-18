@@ -21,7 +21,7 @@ env:
     src-proj: ./libraries/${{ inputs.library-name }}/src/${{ inputs.library-name }}.csproj
     test-proj: ./libraries/${{ inputs.library-name }}/test/${{ inputs.library-name }}.Tests.csproj
     publish-path: ./publish/${{ inputs.library-name }}
-    npm-path: ./libraries/${{ inputs.library-name }}/src/${{ inputs.library-name }}
+    npm-path: libraries/${{ inputs.library-name }}/src/${{ inputs.library-name }}
 
 jobs:
   build_test_pack:
