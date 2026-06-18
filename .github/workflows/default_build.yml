@@ -42,6 +42,7 @@ jobs:
 
       - name: Install dependencies
         if: inputs.build-npm
+        working-directory: ${{ env.npm-path }}
         run: npm ci
 
       - name: Build npm
