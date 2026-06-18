@@ -19,5 +19,6 @@ jobs:
     with:
       library-name: JGUZDV.Blazor.Components.Map
       push-to-nuget: ${{ inputs.push-to-nuget != '' && inputs.push-to-nuget }}
+      build-npm: true
     secrets:
       NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}

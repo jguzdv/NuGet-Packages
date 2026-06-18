@@ -6,10 +6,10 @@
   "main": "BlazorMap.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "es-build": "esbuild src/BlazorMap.ts --outdir=../wwwroot/js/BlazorMap --bundle --format=esm",
+    "es-build": "esbuild typescript/src/BlazorMap.ts --outdir=wwwroot/js/BlazorMap --bundle --format=esm",
     "build:Debug": "npm run es-build",
     "build:Release": "npm run es-build -- --minify --target=chrome58,firefox57,safari11",
-    "serve": "npm run es-build -- --servedir=../wwwroot"
+    "serve": "npm run es-build -- --servedir=wwwroot"
   },
   "author": "",
   "license": "ISC",

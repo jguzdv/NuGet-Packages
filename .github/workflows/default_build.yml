@@ -8,6 +8,10 @@ on:
         required: false
         type: boolean
         default: false
+      build-npm: 
+        required: false
+        type: boolean
+        default: false
     secrets:
       NUGET_API_KEY:
         required: true    
@@ -34,6 +38,10 @@ jobs:
         run: dotnet restore ${{ env.src-proj }}
       - name: Restore test project
         run: dotnet restore ${{ env.test-proj }}
+
+      - name: Build npm
+        if: inputs.build-npm
+        run: npm run build:Release
 
       - name: Build library project
         run: dotnet build ${{ env.src-proj }} --no-restore -c Release
