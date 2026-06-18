@@ -41,7 +41,7 @@ jobs:
 
       - name: Build npm
         if: inputs.build-npm
-        run: npm run build:Release
+        run: npm run build:Release -- ${{ env.src-proj }}
 
       - name: Build library project
         run: dotnet build ${{ env.src-proj }} --no-restore -c Release
