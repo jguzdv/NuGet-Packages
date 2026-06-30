@@ -142,16 +142,25 @@
         SearchIsOpen = false;
     }
 
+    private static readonly HashSet<string> _supportedKeyCodes = new() { "Enter", "ArrowDown", "ArrowUp" };
     private async Task HandleKeyPress(KeyboardEventArgs args)
     {
-        if (SearchTask?.IsCompletedSuccessfully != true)
+        if (!_supportedKeyCodes.Contains(args.Code)) {
             return;
+        }
 
-
-        var searchResult = await SearchTask;
-
-        if (searchResult.Items?.Any() != true)
+        // we need to capture the SearchTask, since it might change while we're here.
+        var searchTask = SearchTask;
+        if (searchTask?.IsCompletedSuccessfully != true) 
+        {
             return;
+        }
+
+        var searchResult = searchTask.Result;
+        if (searchResult.Items?.Any() != true) 
+        {
+            return;
+        }
 
 
         if (args.Code == "Enter")
