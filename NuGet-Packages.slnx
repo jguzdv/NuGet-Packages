@@ -37,6 +37,13 @@
     <Project Path="libraries/JGUZDV.AspNetCore.Logging/src/JGUZDV.AspNetCore.Logging.csproj" />
     <Project Path="libraries/JGUZDV.AspNetCore.Logging/test/JGUZDV.AspNetCore.Logging.Tests.csproj" />
   </Folder>
+  <Folder Name="/libraries/JGUZDV.AspNetCore.TestTools/" />
+  <Folder Name="/libraries/JGUZDV.AspNetCore.TestTools/src/">
+    <Project Path="libraries/JGUZDV.AspNetCore.TestTools/src/JGUZDV.AspNetCore.TestTools.csproj" />
+  </Folder>
+  <Folder Name="/libraries/JGUZDV.AspNetCore.TestTools/test/">
+    <Project Path="libraries/JGUZDV.AspNetCore.TestTools/test/JGUZDV.AspNetCore.TestTools.Tests.csproj" />
+  </Folder>
   <Folder Name="/libraries/JGUZDV.Blazor.Components.ClaimRequirements/">
     <Project Path="libraries/JGUZDV.Blazor.Components.ClaimRequirements/src/JGUZDV.Blazor.Components.ClaimRequirements.csproj" />
     <Project Path="libraries/JGUZDV.Blazor.Components.ClaimRequirements/test/JGUZDV.Blazor.Components.ClaimRequirements.Tests.csproj" />
