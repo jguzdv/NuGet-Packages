@@ -47,20 +47,37 @@
 
 .multi-select {
     position: relative;
-    anchor-name: --multi-select-anchor;
-    anchor-scope: --multi-select-anchor;
+}
+
+.multi-select-trigger {
+    border: none;
+    background: none;
+    cursor: pointer;
 }
 
 .multi-select-overlay {
     position: fixed;
-    position-anchor: --multi-select-anchor;
+    inset: unset;
     top: anchor(bottom);
     left: anchor(left);
     width: anchor-size(width);
     position-try-fallbacks: --multi-select-overlay-above;
+    margin: 0;
     z-index: 1000;
     box-shadow: var(--bs-box-shadow);
     max-height: 20rem;
+    overflow-y: auto;
+    background-color: var(--bs-body-bg);
+    color: var(--bs-body-color);
+    border: 1px solid var(--bs-border-color);
+    padding: .5rem;
+}
+
+.multi-select-trigger,
+.badge {
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
 }
 
 @position-try --multi-select-overlay-above {

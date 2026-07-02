@@ -8,3 +8,10 @@
 .filter-input {
     padding-left: 2rem
 }
+
+
+.button {
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+}

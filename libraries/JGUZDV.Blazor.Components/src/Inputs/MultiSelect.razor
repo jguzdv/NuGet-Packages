@@ -1,41 +1,44 @@
 ﻿@typeparam T
 @typeparam TKey
 
+@using JGUZDV.Blazor.Components.Forms
 @using Microsoft.AspNetCore.Components.Web;
 @using JGUZDV.Blazor.Components.Extensions;
 
-<div @ref="_multiSelect" class="multi-select @(HostClass == null ? "px-2 py-1 border" : $"{HostClass}")">
-    <div @ref="_anchor" class="d-flex justify-content-between clickable" role="button" tabindex="0" @onkeypress="e => e.OnEnter(ToggleSelection)" @onclick="ToggleSelection">
-        <div class="d-flex flex-nowrap overflow-hidden text-nowrap text-truncate">
+<div class="multi-select @(HostClass == null ? "px-2 py-1 border" : $"{HostClass}")">
+
+    <button
+            type="button"
+            class="multi-select-trigger d-flex justify-content-between w-100 p-0"
+            style="anchor-name: @AnchorName;"
+            popovertarget="ms-overlay-@_id"
+            popovertargetaction="toggle">
+
+        <span class="d-flex flex-nowrap overflow-hidden text-nowrap text-truncate">
             <span class="me-1">@Title </span>
-            @if (!UseSingleSelectionMode && Values!.Any() && !_isOpen)
+
+            @if (!UseSingleSelectionMode && Values!.Any())
             {
-                <span class="text-muted small text-truncate align-self-center" title="@(Values!.Select(x => ItemName(x)).Aggregate((a, b) => $"{a}, {b}"))">
+                <span class="text-muted small text-truncate align-self-center"
+                      title="@(Values!.Select(x => ItemName(x)).Aggregate((a, b) => $"{a}, {b}"))">
                     <span> (@Values!.Select(x => ItemName(x)).Aggregate((a, b) => $"{a}, {b}"))</span>
                 </span>
             }
             else if (Value != null && UseSingleSelectionMode)
             {
-                <span class="text-muted small text-truncate align-self-center" title="@ItemName(Value)">
+                <span class="text-muted small text-truncate align-self-center"
+                      title="@ItemName(Value)">
                     <span> (@ItemName(Value))</span>
                 </span>
             }
-        </div>
-        <div class="ms-1">
-            @if (_isOpen)
-            {
-                @CloseIcon("align-self-center")
-            }
-            else
-            {
-                @OpenIcon("align-self-center")
-            }
-        </div>
-    </div>
+        </span>
 
-    @if (_isOpen)
-    {
-        <div class="@(UseOverlayMode ? "multi-select-overlay fade-in overflow-auto bg-body border px-2 py-1" : null)">
+        <span class="ms-1">
+            @OpenIcon("align-self-center")
+        </span>
+    </button>
+
+        <div id="ms-overlay-@_id" popover class="multi-select-overlay fade-in overflow-auto bg-body border px-2 py-1" style="position-anchor: @AnchorName;">
             @if (!UseSingleSelectionMode && Values!.Any())
             {
                 <div class="d-flex gap-2 flex-wrap my-2">
@@ -50,7 +53,7 @@
                 </div>
             }
 
-            <div class="@(UseOverlayMode ? "my-2" : "fade-in my-2")">
+            <div class="my-2">
                 @{
 #pragma warning disable 8601 // warning is wrong
                 }
@@ -73,18 +76,16 @@
 #pragma warning restore
                 }
             </div>
-            <div role="button" tabindex="0" @onclick="ToggleSelection" @onkeypress="e => e.OnEnter(ToggleSelection)">
-                @CloseButton
-            </div>
-        </div>
-    }
-</div>
+        <button type="button"
+                class="btn btn-outline-secondary w-100"
+                popovertarget="ms-overlay-@_id"
+                popovertargetaction="hide">
+            @Icons.Collapsed("")
+        </button>
+    </div>
+    </div>
 
-@code {
-    [Inject, NotNull]
-    private IJSRuntime? JSRuntime { get; set; }
-    private IJSObjectReference? _jsModule;
-
+ @code {
     /// <summary>
     /// The list of items to display in the selection dropdown.
     /// </summary>
@@ -135,7 +136,7 @@
     /// Event callback triggered when the selected value changes.
     /// </summary>
     [Parameter]
-    public EventCallback<T> ValueChanged { get; set; }
+    public EventCallback<T?> ValueChanged { get; set; }
 
     /// <summary>
     /// The title displayed in the selection control.
@@ -220,10 +221,8 @@
     [Parameter]
     public RenderFragment<string?> BadgeIcon { get; set; } = Icons.RemoveCircle;
 
-    private bool _isOpen;
-
-    private ElementReference _anchor;
-    private ElementReference _multiSelect;
+    private readonly string _id = Guid.NewGuid().ToString("N");
+    private string AnchorName => $"--multi-select-anchor-{_id}";
 
     /// <inheritdoc />
     protected override void OnParametersSet()
@@ -243,35 +242,7 @@
             throw new InvalidOperationException($"Parameter {nameof(Values)} may not be set if only one value is allowed");
     }
     /// <inheritdoc />
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            _jsModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/JGUZDV.Blazor.Components/MultiSelect.js");
-        }
-
-        await base.OnAfterRenderAsync(firstRender);
-    }
-
-    /// <summary>
-    /// Only for internal javascript usage.
-    /// </summary>
-    [JSInvokable]
-    public async Task ToggleSelection()
-    {
-        _isOpen = !_isOpen;
-        if (_isOpen)
-        {
-            await _jsModule!.InvokeVoidAsync("registerMultiSelectListener", DotNetObjectReference.Create(this), _multiSelect);
-        }
-        else
-        {
-            await _anchor.FocusAsync();
-            await _jsModule!.InvokeVoidAsync("deregisterMultiSelectListener");
-        }
-
-        await InvokeAsync(StateHasChanged);
-    }
+ 
 
     private void HandleBadgeClick(T item)
     {

@@ -74,12 +74,12 @@
     /// </summary>
     [Parameter, EditorRequired]
     public Func<T?, TKey> ItemKey { get; set; } = default!;
-    
+
     /// <summary>
     /// The currently selected value (for single selection mode).
     /// </summary>
     [Parameter]
-    public T? Value { get; set; } = default!;
+    public T? Value { get; set; } = default;
 
     /// <summary>
     /// The currently selected values (for multi-selection mode).
@@ -91,7 +91,7 @@
     /// Event callback triggered when the selected value changes.
     /// </summary>
     [Parameter]
-    public EventCallback<T> ValueChanged { get; set; }
+    public EventCallback<T?> ValueChanged { get; set; }
 
     /// <summary>
     /// Event callback triggered when the selected values change.
@@ -157,8 +157,18 @@
     {
         if (UseSingleSelectionMode)
         {
-            Value = item;
-            await ValueChanged.InvokeAsync(item);
+            var isAlreadySelected = Value != null && ItemKey(Value)!.Equals(ItemKey(item));
+
+            if (isAlreadySelected)
+            {
+                Value = default!;
+                await ValueChanged.InvokeAsync(Value);
+            }
+
+            else {
+                Value = item;
+                await ValueChanged.InvokeAsync(item);
+            }
             return;
         }
 
