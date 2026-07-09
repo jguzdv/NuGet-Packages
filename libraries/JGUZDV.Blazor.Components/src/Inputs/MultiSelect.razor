@@ -5,8 +5,7 @@
 @using Microsoft.AspNetCore.Components.Web;
 @using JGUZDV.Blazor.Components.Extensions;
 
-<div class="multi-select @(HostClass == null ? "px-2 py-1 border" : $"{HostClass}")">
-
+<div class="multi-select @(HostClass ?? "px-2 py-1 border")">
     <button
             type="button"
             class="multi-select-trigger d-flex justify-content-between w-100 p-0"
@@ -37,7 +36,7 @@
         </span>
     </button>
 
-        <div id="ms-overlay-@_id" popover class="multi-select-overlay fade-in overflow-auto bg-body border px-2 py-1">
+     <div id="ms-overlay-@_id" popover class="multi-select-overlay fade-in overflow-auto bg-body border px-2 py-1">
             @if (!UseSingleSelectionMode && Values!.Any())
             {
                 <div class="d-flex gap-2 flex-wrap my-2">
@@ -62,7 +61,7 @@
                                  Value="@Value"
                                  ValueChanged="@ValueChanged"
                                  FilterLabel="@FilterLabel"
-                             FilterIcon="@FilterIcon"
+                                 FilterIcon="@FilterIcon"
                                  Filter="@Filter"
                                  ItemsContainerClass="@ItemsContainerClass"
                                  ItemKey="@ItemKey"
@@ -83,7 +82,7 @@
             @CloseIcon("")
         </button>
     </div>
-    </div>
+</div>
 
  @code {
     /// <summary>
