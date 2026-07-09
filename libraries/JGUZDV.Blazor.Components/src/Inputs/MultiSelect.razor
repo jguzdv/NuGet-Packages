@@ -10,7 +10,6 @@
     <button
             type="button"
             class="multi-select-trigger d-flex justify-content-between w-100 p-0"
-            style="anchor-name: @AnchorName;"
             popovertarget="ms-overlay-@_id"
             popovertargetaction="toggle">
 
@@ -38,7 +37,7 @@
         </span>
     </button>
 
-        <div id="ms-overlay-@_id" popover class="multi-select-overlay fade-in overflow-auto bg-body border px-2 py-1" style="position-anchor: @AnchorName;">
+        <div id="ms-overlay-@_id" popover class="multi-select-overlay fade-in overflow-auto bg-body border px-2 py-1">
             @if (!UseSingleSelectionMode && Values!.Any())
             {
                 <div class="d-flex gap-2 flex-wrap my-2">
@@ -63,6 +62,7 @@
                                  Value="@Value"
                                  ValueChanged="@ValueChanged"
                                  FilterLabel="@FilterLabel"
+                             FilterIcon="@FilterIcon"
                                  Filter="@Filter"
                                  ItemsContainerClass="@ItemsContainerClass"
                                  ItemKey="@ItemKey"
@@ -80,7 +80,7 @@
                 class="btn btn-outline-secondary w-100"
                 popovertarget="ms-overlay-@_id"
                 popovertargetaction="hide">
-            @Icons.Collapsed("")
+            @CloseIcon("")
         </button>
     </div>
     </div>
@@ -222,7 +222,6 @@
     public RenderFragment<string?> BadgeIcon { get; set; } = Icons.RemoveCircle;
 
     private readonly string _id = Guid.NewGuid().ToString("N");
-    private string AnchorName => $"--multi-select-anchor-{_id}";
 
     /// <inheritdoc />
     protected override void OnParametersSet()
