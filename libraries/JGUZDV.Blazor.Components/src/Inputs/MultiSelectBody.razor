@@ -13,7 +13,17 @@
     </div>
 }
 
-<div class="@ItemsContainerClass g-2">
+
+@{
+    var visibleItems = Items
+        .Where(x => Filter == null || string.IsNullOrWhiteSpace(_filter) || Filter((x, _filter)))
+        .ToList();
+
+    if (_activeIndex >= visibleItems.Count)
+        _activeIndex = Math.Max(0, visibleItems.Count - 1);
+}
+
+<div class="@ItemsContainerClass g-2" tabindex="0" autofocus @onkeydown="e => HandleKeyDown(e, visibleItems)" @onkeydown:preventDefault="true">
     @if (!string.IsNullOrWhiteSpace(AllOptionLabel) && string.IsNullOrWhiteSpace(_filter) && !UseSingleSelectionMode)
     {
         <div class="col-12">
@@ -33,19 +43,26 @@
             </div>
         </div>
     }
-    @foreach (var item in Items.Where(x => Filter == null || string.IsNullOrWhiteSpace(_filter) || Filter((x, _filter))))
-    {
+
+    @foreach (var pair in visibleItems.Select((item, index) => new { item, index }))
+       {
         <div class="col">
             @{
+                var item = pair.item;
+                var index = pair.index;
                 var isSelected = ((!UseSingleSelectionMode && Values.Any(x => ItemKey(x)!.Equals(ItemKey(item))))
                 || UseSingleSelectionMode && ItemKey(item)!.Equals(ItemKey(Value)));
                 var selectedClass = isSelected
                 ? "border-success text-success "
                 : "";
+
+                var isActive = index == _activeIndex;
+
+                var activeClass = isActive ? "keyboard-active" : "";
             }
             <div tabindex="0"
-                 @onkeypress="e => e.OnEnter(() => HandleItemClicked(item))" @onclick="() => HandleItemClicked(item)"
-                 class="border bg-body button px-2 py-1 d-flex justify-content-between @selectedClass">
+                 @onfocus="() => _activeIndex = index" @onkeypress="e => e.OnEnter(() => HandleItemClicked(item))" @onclick="() => HandleItemClicked(item)"
+                 class="border bg-body button px-2 py-1 d-flex justify-content-between @selectedClass @activeClass">
                 <span class="text-truncate">@ItemTemplate(item)</span>
                 @if (isSelected)
                 {
@@ -135,6 +152,8 @@
     [Parameter]
     public bool UseSingleSelectionMode { get; set; }
 
+    private int _activeIndex;
+
     private string? _filter;
 
 
@@ -196,6 +215,29 @@
         {
             Values = Items.Union(Values).ToList();
             await ValuesChanged.InvokeAsync(Values);
+        }
+    }
+
+    private async Task HandleKeyDown(KeyboardEventArgs e, List<T> visibleItems)
+    {
+        if (visibleItems.Count == 0)
+            return;
+
+        switch (e.Key)
+        {
+            case "ArrowDown":
+                _activeIndex = (_activeIndex + 1) % visibleItems.Count;
+                break;
+            
+            case "ArrowUp":
+                _activeIndex = (_activeIndex - 1 + visibleItems.Count) % visibleItems.Count;
+                break;
+
+            case "Enter":
+            case " ":
+            case "Spacebar":
+                await HandleItemClicked(visibleItems[_activeIndex]);
+                break;
         }
     }
 }
