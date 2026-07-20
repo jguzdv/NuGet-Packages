@@ -60,6 +60,9 @@
     top: anchor(bottom);
     left: anchor(left);
     width: anchor-size(width);
+    box-sizing: border-box;
+    max-width: calc(100vw - 1rem);
+    overflow-x: clip;
     position-try-fallbacks: --multi-select-overlay-above;
     margin: 0;
 }

@@ -58,10 +58,10 @@
 
                 var isActive = index == _activeIndex;
 
-                var activeClass = isActive ? "keyboard-active" : "";
+                var activeClass = _showKeyboardHighlight && isActive ? "keyboard-active" : "";
             }
             <div tabindex="0"
-                 @onfocus="() => _activeIndex = index" @onkeypress="e => e.OnEnter(() => HandleItemClicked(item))" @onclick="() => HandleItemClicked(item)"
+                 @onpointerdown="HideKeyboardHighlight" @onfocus="() => _activeIndex = index" @onkeypress="e => e.OnEnter(() => HandleItemClicked(item))" @onclick="() => HandleItemClicked(item)"
                  class="border bg-body button px-2 py-1 d-flex justify-content-between @selectedClass @activeClass">
                 <span class="text-truncate">@ItemTemplate(item)</span>
                 @if (isSelected)
@@ -152,14 +152,24 @@
     [Parameter]
     public bool UseSingleSelectionMode { get; set; }
 
+    [Parameter]
+    public int KeyboardResetVersion { get; set; }
+    private int _lastKeyboardResetVersion;
     private int _activeIndex;
-
+    private bool _showKeyboardHighlight;
     private string? _filter;
 
 
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
+
+        if (_lastKeyboardResetVersion != KeyboardResetVersion)
+        {
+            _showKeyboardHighlight = false;
+            _activeIndex = 0;
+            _lastKeyboardResetVersion = KeyboardResetVersion;
+        }
 
         if (!UseSingleSelectionMode && Values == null)
             throw new InvalidOperationException($"Parameter {nameof(Values)} may not be null if multiple values are allowed");
@@ -218,6 +228,11 @@
         }
     }
 
+    private void HideKeyboardHighlight()
+    {
+        _showKeyboardHighlight = false;
+    }
+
     private async Task HandleKeyDown(KeyboardEventArgs e)
     {
         var visibleItems = Items
@@ -231,11 +246,24 @@
         {
             case "ArrowRight":
             case "ArrowDown":
+                if (!_showKeyboardHighlight)
+                {
+                    _showKeyboardHighlight = true;
+                    _activeIndex = 0;
+                    break;
+                }
                 _activeIndex = (_activeIndex + 1) % visibleItems.Count;
                 break;
-        
+
             case "ArrowLeft":
             case "ArrowUp":
+                if (!_showKeyboardHighlight)
+                {
+                    _showKeyboardHighlight = true;
+                    _activeIndex = 0;
+                    break;
+                }
+                _showKeyboardHighlight = true;
                 _activeIndex = (_activeIndex - 1 + visibleItems.Count) % visibleItems.Count;
                 break;
 
@@ -243,9 +271,9 @@
             case " ":
                 await HandleItemClicked(visibleItems[_activeIndex]);
                 break;
-        
+
             case "Escape":
-                // Nichts tun - JS kümmert sich darum
+                _showKeyboardHighlight = false;
                 break;
         }
     }

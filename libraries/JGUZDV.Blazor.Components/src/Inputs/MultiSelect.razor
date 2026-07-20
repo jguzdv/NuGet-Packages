@@ -12,7 +12,8 @@
             type="button"
             class="multi-select-trigger d-flex justify-content-between w-100 p-0"
             popovertarget="ms-overlay-@_id"
-            popovertargetaction="toggle">
+            popovertargetaction="toggle"
+            @onclick="ResetKeyboardHighlight">
 
         <span class="d-flex flex-nowrap overflow-hidden text-nowrap text-truncate">
             <span class="me-1">@Title </span>
@@ -70,6 +71,7 @@
                                  ItemTemplate="@ItemTemplate"
                                  AllOptionLabel="@AllOptionLabel"
                                  UseSingleSelectionMode="@UseSingleSelectionMode"
+                                 KeyboardResetVersion="@_keyboardResetVersion"
                                  T="T"
                                  TKey="TKey">
                 </MultiSelectBody>
@@ -271,5 +273,11 @@
     {
         Values = Values?.Where(x => !ItemKey(x)!.Equals(ItemKey(item))).ToList();
         ValuesChanged.InvokeAsync(Values);
+    }
+    private int _keyboardResetVersion;
+
+    private void ResetKeyboardHighlight()
+    {
+        _keyboardResetVersion++;
     }
 }
