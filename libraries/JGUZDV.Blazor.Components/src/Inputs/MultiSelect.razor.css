@@ -44,11 +44,11 @@
 
 .multi-select {
     anchor-scope: --multi-select-anchor;
+    anchor-name: --multi-select-anchor;
 }
 
 .multi-select-trigger {
-    anchor-name: --multi-select-anchor;
-    border: none;
+    border: none;  
     background: none;
     cursor: pointer;
 }
