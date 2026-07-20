@@ -224,11 +224,13 @@
             return;
 
         switch (e.Key)
-        {
+        {   
+            case "ArrowRight":
             case "ArrowDown":
                 _activeIndex = (_activeIndex + 1) % visibleItems.Count;
                 break;
             
+            case "ArrowLeft":
             case "ArrowUp":
                 _activeIndex = (_activeIndex - 1 + visibleItems.Count) % visibleItems.Count;
                 break;
