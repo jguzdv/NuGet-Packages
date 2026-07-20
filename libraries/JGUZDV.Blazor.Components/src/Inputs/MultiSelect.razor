@@ -1,5 +1,7 @@
 ﻿@typeparam T
 @typeparam TKey
+@implements IAsyncDisposable
+@inject IJSRuntime JSRuntime
 
 @using JGUZDV.Blazor.Components.Forms
 @using Microsoft.AspNetCore.Components.Web;
@@ -221,6 +223,29 @@
     public RenderFragment<string?> BadgeIcon { get; set; } = Icons.RemoveCircle;
 
     private readonly string _id = Guid.NewGuid().ToString("N");
+    private IJSObjectReference? _jsModule;
+    private IJSObjectReference? _escapeHandler;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _jsModule = await JSRuntime.InvokeAsync<IJSObjectReference>(
+                "import", "./_content/JGUZDV.Blazor.Components/multiSelect.js");
+            _escapeHandler = await _jsModule.InvokeAsync<IJSObjectReference>(
+                "initEscapeHandler", $"ms-overlay-{_id}");
+        }
+    }
+
+    async ValueTask IAsyncDisposable.DisposeAsync()
+    {
+        if (_jsModule != null && _escapeHandler != null)
+        {
+            await _jsModule.InvokeVoidAsync("disposeEscapeHandler", _escapeHandler);
+            await _escapeHandler.DisposeAsync();
+            await _jsModule.DisposeAsync();
+        }
+    }
 
     /// <inheritdoc />
     protected override void OnParametersSet()

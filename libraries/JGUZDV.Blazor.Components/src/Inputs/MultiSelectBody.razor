@@ -23,7 +23,7 @@
         _activeIndex = Math.Max(0, visibleItems.Count - 1);
 }
 
-<div class="@ItemsContainerClass g-2" tabindex="0" autofocus @onkeydown="e => HandleKeyDown(e, visibleItems)" @onkeydown:preventDefault="true">
+<div class="@ItemsContainerClass g-2" tabindex="0" autofocus @onkeydown="HandleKeyDown" @onkeydown:preventDefault>
     @if (!string.IsNullOrWhiteSpace(AllOptionLabel) && string.IsNullOrWhiteSpace(_filter) && !UseSingleSelectionMode)
     {
         <div class="col-12">
@@ -218,18 +218,22 @@
         }
     }
 
-    private async Task HandleKeyDown(KeyboardEventArgs e, List<T> visibleItems)
+    private async Task HandleKeyDown(KeyboardEventArgs e)
     {
+        var visibleItems = Items
+            .Where(x => Filter == null || string.IsNullOrWhiteSpace(_filter) || Filter((x, _filter)))
+            .ToList();
+
         if (visibleItems.Count == 0)
             return;
 
         switch (e.Key)
-        {   
+        {
             case "ArrowRight":
             case "ArrowDown":
                 _activeIndex = (_activeIndex + 1) % visibleItems.Count;
                 break;
-            
+        
             case "ArrowLeft":
             case "ArrowUp":
                 _activeIndex = (_activeIndex - 1 + visibleItems.Count) % visibleItems.Count;
@@ -238,6 +242,10 @@
             case "Enter":
             case " ":
                 await HandleItemClicked(visibleItems[_activeIndex]);
+                break;
+        
+            case "Escape":
+                // Nichts tun - JS kümmert sich darum
                 break;
         }
     }
