@@ -1,4 +1,4 @@
-﻿export function initEscapeHandler(popoverId) {
+export function initEscapeHandler(popoverId) {
     const handler = (e) => {
         if (e.key === 'Escape') {
             const popover = document.getElementById(popoverId);
@@ -8,10 +8,9 @@
         }
     };
     document.addEventListener('keydown', handler);
-    return DotNet.createJSObjectReference(handler);
+    return window.DotNet.createJSObjectReference(handler);
 }
-
 export function disposeEscapeHandler(handlerRef) {
-    const handler = DotNet.getJSObjectReference(handlerRef);
+    const handler = window.DotNet.getJSObjectReference(handlerRef);
     document.removeEventListener('keydown', handler);
 }
