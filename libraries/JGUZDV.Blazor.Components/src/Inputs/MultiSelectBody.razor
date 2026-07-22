@@ -4,6 +4,9 @@
 @using JGUZDV.Blazor.Components.Util;
 @using JGUZDV.Blazor.Components.Extensions;
 @using Microsoft.AspNetCore.Components.Web;
+@using Microsoft.JSInterop;
+@inject IJSRuntime JSRuntime;
+@implements IAsyncDisposable
 
 @if (Filter != null)
 {
@@ -13,7 +16,17 @@
     </div>
 }
 
-<div class="@ItemsContainerClass g-2">
+
+@{
+    var visibleItems = Items
+        .Where(x => Filter == null || string.IsNullOrWhiteSpace(_filter) || Filter((x, _filter)))
+        .ToList();
+
+    if (_activeIndex >= visibleItems.Count)
+        _activeIndex = Math.Max(0, visibleItems.Count - 1);
+}
+
+<div @ref="_itemsContainer" class="@ItemsContainerClass g-2" tabindex="0" autofocus @onkeydown="HandleKeyDown">
     @if (!string.IsNullOrWhiteSpace(AllOptionLabel) && string.IsNullOrWhiteSpace(_filter) && !UseSingleSelectionMode)
     {
         <div class="col-12">
@@ -33,19 +46,26 @@
             </div>
         </div>
     }
-    @foreach (var item in Items.Where(x => Filter == null || string.IsNullOrWhiteSpace(_filter) || Filter((x, _filter))))
-    {
+
+    @foreach (var pair in visibleItems.Select((item, index) => new { item, index }))
+       {
         <div class="col">
             @{
+                var item = pair.item;
+                var index = pair.index;
                 var isSelected = ((!UseSingleSelectionMode && Values.Any(x => ItemKey(x)!.Equals(ItemKey(item))))
                 || UseSingleSelectionMode && ItemKey(item)!.Equals(ItemKey(Value)));
                 var selectedClass = isSelected
                 ? "border-success text-success "
                 : "";
+
+                var isActive = index == _activeIndex;
+
+                var activeClass = _showKeyboardHighlight && isActive ? "keyboard-active" : "";
             }
             <div tabindex="0"
-                 @onkeypress="e => e.OnEnter(() => HandleItemClicked(item))" @onclick="() => HandleItemClicked(item)"
-                 class="border bg-body button px-2 py-1 d-flex justify-content-between @selectedClass">
+                 @onpointerdown="HideKeyboardHighlight" @onfocus="() => _activeIndex = index" @onkeypress="e => e.OnEnter(() => HandleItemClicked(item))" @onclick="() => HandleItemClicked(item)"
+                 class="border bg-body button px-2 py-1 d-flex justify-content-between @selectedClass @activeClass">
                 <span class="text-truncate">@ItemTemplate(item)</span>
                 @if (isSelected)
                 {
@@ -74,12 +94,12 @@
     /// </summary>
     [Parameter, EditorRequired]
     public Func<T?, TKey> ItemKey { get; set; } = default!;
-    
+
     /// <summary>
     /// The currently selected value (for single selection mode).
     /// </summary>
     [Parameter]
-    public T? Value { get; set; } = default!;
+    public T? Value { get; set; } = default;
 
     /// <summary>
     /// The currently selected values (for multi-selection mode).
@@ -91,7 +111,7 @@
     /// Event callback triggered when the selected value changes.
     /// </summary>
     [Parameter]
-    public EventCallback<T> ValueChanged { get; set; }
+    public EventCallback<T?> ValueChanged { get; set; }
 
     /// <summary>
     /// Event callback triggered when the selected values change.
@@ -135,12 +155,48 @@
     [Parameter]
     public bool UseSingleSelectionMode { get; set; }
 
+    [Parameter]
+    public int KeyboardResetVersion { get; set; }
+    private int _lastKeyboardResetVersion;
+    private int _activeIndex;
+    private bool _showKeyboardHighlight;
     private string? _filter;
+    private ElementReference _itemsContainer;
+    private IJSObjectReference? _jsModule;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _jsModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import",
+            "./_content/JGUZDV.Blazor.Components/multiSelect.js");
+
+            await _jsModule.InvokeVoidAsync(
+                "preventArrowKeyScrolling",
+                _itemsContainer);
+        }
+    }
+    public async ValueTask DisposeAsync()
+    {
+        if (_jsModule != null)
+        {
+            await _jsModule.DisposeAsync();
+        }
+    }
+        
+    
 
 
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
+
+        if (_lastKeyboardResetVersion != KeyboardResetVersion)
+        {
+            _showKeyboardHighlight = false;
+            _activeIndex = 0;
+            _lastKeyboardResetVersion = KeyboardResetVersion;
+        }
 
         if (!UseSingleSelectionMode && Values == null)
             throw new InvalidOperationException($"Parameter {nameof(Values)} may not be null if multiple values are allowed");
@@ -157,8 +213,18 @@
     {
         if (UseSingleSelectionMode)
         {
-            Value = item;
-            await ValueChanged.InvokeAsync(item);
+            var isAlreadySelected = Value != null && ItemKey(Value)!.Equals(ItemKey(item));
+
+            if (isAlreadySelected)
+            {
+                Value = default!;
+                await ValueChanged.InvokeAsync(Value);
+            }
+
+            else {
+                Value = item;
+                await ValueChanged.InvokeAsync(item);
+            }
             return;
         }
 
@@ -186,6 +252,56 @@
         {
             Values = Items.Union(Values).ToList();
             await ValuesChanged.InvokeAsync(Values);
+        }
+    }
+
+    private void HideKeyboardHighlight()
+    {
+        _showKeyboardHighlight = false;
+    }
+
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        var visibleItems = Items
+            .Where(x => Filter == null || string.IsNullOrWhiteSpace(_filter) || Filter((x, _filter)))
+            .ToList();
+
+        if (visibleItems.Count == 0)
+            return;
+
+        switch (e.Key)
+        {
+            case "ArrowRight":
+            case "ArrowDown":
+                if (!_showKeyboardHighlight)
+                {
+                    _showKeyboardHighlight = true;
+                    _activeIndex = 0;
+                    break;
+                }
+                _activeIndex = (_activeIndex + 1) % visibleItems.Count;
+                break;
+
+            case "ArrowLeft":
+            case "ArrowUp":
+                if (!_showKeyboardHighlight)
+                {
+                    _showKeyboardHighlight = true;
+                    _activeIndex = 0;
+                    break;
+                }
+                _showKeyboardHighlight = true;
+                _activeIndex = (_activeIndex - 1 + visibleItems.Count) % visibleItems.Count;
+                break;
+
+            case "Enter":
+            case " ":
+                await HandleItemClicked(visibleItems[_activeIndex]);
+                break;
+
+            case "Escape":
+                _showKeyboardHighlight = false;
+                break;
         }
     }
 }
