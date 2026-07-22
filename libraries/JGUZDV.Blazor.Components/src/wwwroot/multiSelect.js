@@ -1,16 +1,13 @@
-export function initEscapeHandler(popoverId) {
-    const handler = (e) => {
-        if (e.key === 'Escape') {
-            const popover = document.getElementById(popoverId);
-            if (popover && popover.matches(':popover-open')) {
-                popover.hidePopover();
-            }
+const navigationKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
+export function preventArrowKeyScrolling(element) {
+    console.log('preventArrowKeyScrolling registered', element);
+    if (!element) {
+        return;
+    }
+    element.addEventListener('keydown', (event) => {
+        console.log('keydown on items container', event.key);
+        if (navigationKeys.includes(event.key)) {
+            event.preventDefault();
         }
-    };
-    document.addEventListener('keydown', handler);
-    return window.DotNet.createJSObjectReference(handler);
-}
-export function disposeEscapeHandler(handlerRef) {
-    const handler = window.DotNet.getJSObjectReference(handlerRef);
-    document.removeEventListener('keydown', handler);
+    });
 }

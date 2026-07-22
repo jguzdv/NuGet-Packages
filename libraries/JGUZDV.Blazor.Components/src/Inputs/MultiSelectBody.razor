@@ -4,6 +4,9 @@
 @using JGUZDV.Blazor.Components.Util;
 @using JGUZDV.Blazor.Components.Extensions;
 @using Microsoft.AspNetCore.Components.Web;
+@using Microsoft.JSInterop;
+@inject IJSRuntime JSRuntime;
+@implements IAsyncDisposable
 
 @if (Filter != null)
 {
@@ -23,7 +26,7 @@
         _activeIndex = Math.Max(0, visibleItems.Count - 1);
 }
 
-<div class="@ItemsContainerClass g-2" tabindex="0" autofocus @onkeydown="HandleKeyDown" @onkeydown:preventDefault>
+<div @ref="_itemsContainer" class="@ItemsContainerClass g-2" tabindex="0" autofocus @onkeydown="HandleKeyDown">
     @if (!string.IsNullOrWhiteSpace(AllOptionLabel) && string.IsNullOrWhiteSpace(_filter) && !UseSingleSelectionMode)
     {
         <div class="col-12">
@@ -158,6 +161,30 @@
     private int _activeIndex;
     private bool _showKeyboardHighlight;
     private string? _filter;
+    private ElementReference _itemsContainer;
+    private IJSObjectReference? _jsModule;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _jsModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import",
+            "./_content/JGUZDV.Blazor.Components/multiSelect.js");
+
+            await _jsModule.InvokeVoidAsync(
+                "preventArrowKeyScrolling",
+                _itemsContainer);
+        }
+    }
+    public async ValueTask DisposeAsync()
+    {
+        if (_jsModule != null)
+        {
+            await _jsModule.DisposeAsync();
+        }
+    }
+        
+    
 
 
     protected override void OnParametersSet()
