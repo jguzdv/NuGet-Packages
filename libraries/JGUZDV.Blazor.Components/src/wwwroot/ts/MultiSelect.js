@@ -1,33 +1,24 @@
-﻿
 export class MultiSelect {
-    public Component: any;
-    public HtmlElement: HTMLElement;
-
-    constructor(htmlElement: HTMLElement, component: any) {
+    Component;
+    HtmlElement;
+    constructor(htmlElement, component) {
         this.HtmlElement = htmlElement;
         this.Component = component;
     }
 }
-
-let multiSelect: MultiSelect | null = null;
-export function registerMultiSelectListener(multiSelectComponent: any, htmlElement: HTMLElement): void {
-
+let multiSelect = null;
+export function registerMultiSelectListener(multiSelectComponent, htmlElement) {
     multiSelect = new MultiSelect(htmlElement, multiSelectComponent);
     document.addEventListener('click', globalCloseHandler);
 }
-
 // 1. Webcomponent 2. Popover !
-const globalCloseHandler = (_event: Event): void => {
-    let target = _event.target as Node
-
+const globalCloseHandler = (_event) => {
+    let target = _event.target;
     if (multiSelect?.HtmlElement.contains(target)) {
         return;
     }
-
     multiSelect?.Component.invokeMethodAsync("ToggleSelection", true);
 };
-
-export function deregisterMultiSelectListener(): void {
+export function deregisterMultiSelectListener() {
     document.removeEventListener('click', globalCloseHandler);
 }
-
