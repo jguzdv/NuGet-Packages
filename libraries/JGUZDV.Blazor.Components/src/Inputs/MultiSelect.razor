@@ -253,11 +253,13 @@
         await base.OnAfterRenderAsync(firstRender);
     }
 
+    private Task ToggleSelection() => ToggleSelection(false);
+
     /// <summary>
     /// Only for internal javascript usage.
     /// </summary>
     [JSInvokable]
-    public async Task ToggleSelection()
+    public async Task ToggleSelection(bool fromGlobalClose)
     {
         _isOpen = !_isOpen;
         if (_isOpen)
@@ -266,7 +268,10 @@
         }
         else
         {
-            await _anchor.FocusAsync();
+            if (!fromGlobalClose)
+            {
+                await _anchor.FocusAsync();
+            }
             await _jsModule!.InvokeVoidAsync("deregisterMultiSelectListener");
         }
 
