@@ -4,8 +4,6 @@
 @typeparam TResult
 
 @code {
-    public static ActivityIndicator.IndicatorStyle DefaultIndicatorStyle { get; set; } = ActivityIndicator.IndicatorStyle.Marquee;
-
     [Inject, NotNull] 
     private IStringLocalizer<ComponentStrings>? LR { get; set; }
 
@@ -37,7 +35,7 @@
     /// By default this will be &lt;ActivityIndicator /&gt;
     /// </summary>
     [Parameter]
-    public RenderFragment? Running { get; set; } =@<ActivityIndicator Style="@DefaultIndicatorStyle" />;
+    public RenderFragment? Running { get; set; } =@<ActivityIndicator Style="@Await.DefaultIndicatorStyle" />;
 
     /// <summary>
     /// The render fragment that will be shown, when the task failed.
