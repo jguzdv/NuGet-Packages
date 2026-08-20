@@ -9,9 +9,29 @@
 }
 
 .dropdown-menu {
+    margin: 0;
+    position: absolute;
     position-anchor: --anchor;
     top: anchor(bottom);
     left: anchor(left);
+    position-try-fallbacks: --above, --left, --above-right;
+}
+
+@position-try --above {
+    bottom: anchor(top);
+    top: auto;
+}
+
+@position-try --left {
+    right: anchor(right);
+    left: auto;
+}
+
+@position-try --above-right {
+    top: auto;
+    bottom: anchor(top);
+    left: auto;
+    right: anchor(right);
 }
 
 .dropdown-menu:popover-open {
