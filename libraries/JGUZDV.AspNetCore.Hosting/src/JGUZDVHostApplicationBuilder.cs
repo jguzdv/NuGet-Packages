@@ -590,9 +590,6 @@ public class JGUZDVHostApplicationBuilder
                     await context.HttpContext.Response.WriteAsync(html);
                 });
             });
-
-
-            app.UseHttpsRedirection();
         }
 
         if (HasSession)
