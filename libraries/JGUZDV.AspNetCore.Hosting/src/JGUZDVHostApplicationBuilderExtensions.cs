@@ -567,8 +567,9 @@ public static class JGUZDVHostApplicationBuilderExtensions
         opt.TokenValidationParameters.ValidateAudience = validateAudience;
         opt.TokenValidationParameters.ValidAudiences = validAudiences;
 
-        if (opt.TokenValidationParameters.ValidAudiences?.Any() != true)
-            LogMessages.NoValidAudiences(logger);
+        // TODO: The logger may be disposed already when this is called, so we can't log here. We should find a better way to log this.
+        //if (opt.TokenValidationParameters.ValidAudiences?.Any() != true)
+        //    LogMessages.NoValidAudiences(logger);
 
         opt.MapInboundClaims = false;
     }
