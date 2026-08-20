@@ -167,6 +167,13 @@
     <Project Path="libraries/JGUZDV.OpenIddict.KeyManager/src/JGUZDV.OpenIddict.KeyManager.csproj" />
     <Project Path="libraries/JGUZDV.OpenIddict.KeyManager/test/JGUZDV.OpenIddict.KeyManager.Tests.csproj" />
   </Folder>
+  <Folder Name="/libraries/JGUZDV.StringLocalizerExtensions/" />
+  <Folder Name="/libraries/JGUZDV.StringLocalizerExtensions/src/">
+    <Project Path="libraries/JGUZDV.StringLocalizerExtensions/src/JGUZDV.StringLocalizerExtensions.csproj" />
+  </Folder>
+  <Folder Name="/libraries/JGUZDV.StringLocalizerExtensions/test/">
+    <Project Path="libraries/JGUZDV.StringLocalizerExtensions/test/JGUZDV.StringLocalizerExtensions.Tests.csproj" />
+  </Folder>
   <Folder Name="/libraries/JGUZDV.WebApiHost/">
     <Project Path="libraries/JGUZDV.WebApiHost/src/JGUZDV.WebApiHost.csproj" />
     <Project Path="libraries/JGUZDV.WebApiHost/test/JGUZDV.WebApiHost.Tests.csproj" />
