@@ -14,7 +14,7 @@
     position-anchor: --anchor;
     top: anchor(bottom);
     left: anchor(left);
-    position-try-fallbacks: --above, --left, --above-right;
+    position-try-fallbacks: --right, --above, --above-right;
 }
 
 @position-try --above {
@@ -22,7 +22,7 @@
     top: auto;
 }
 
-@position-try --left {
+@position-try --right {
     right: anchor(right);
     left: auto;
 }
