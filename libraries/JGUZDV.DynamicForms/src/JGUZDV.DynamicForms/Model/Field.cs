@@ -2,19 +2,15 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
+using JGUZDV.DynamicForms.Model.FieldTypes;
+
 namespace JGUZDV.DynamicForms.Model;
 
 
 /// <summary>
 /// Represents a collection of fields.
 /// </summary>
-public class FieldCollection
-{
-    /// <summary>
-    /// Gets or sets the list of fields.
-    /// </summary>
-    public required List<Field> Fields { get; set; }
-}
+public record FieldCollection(List<Field> Fields);
 
 /// <summary>
 /// Represents a form field and provides validation functionality.

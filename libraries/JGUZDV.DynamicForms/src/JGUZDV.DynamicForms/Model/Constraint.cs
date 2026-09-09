@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
+using JGUZDV.DynamicForms.Model.FieldTypes;
 using JGUZDV.DynamicForms.Serialization;
 namespace JGUZDV.DynamicForms.Model;
 

@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 
 using JGUZDV.DynamicForms.Model;
+using JGUZDV.DynamicForms.Model.FieldTypes;
 using JGUZDV.DynamicForms.Resources;
 using JGUZDV.L10n;
 

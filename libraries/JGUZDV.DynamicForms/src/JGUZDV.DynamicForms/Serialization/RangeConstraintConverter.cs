@@ -2,6 +2,7 @@
 using System.Text.Json.Serialization;
 
 using JGUZDV.DynamicForms.Model;
+using JGUZDV.DynamicForms.Model.FieldTypes;
 
 namespace JGUZDV.DynamicForms.Serialization;
 

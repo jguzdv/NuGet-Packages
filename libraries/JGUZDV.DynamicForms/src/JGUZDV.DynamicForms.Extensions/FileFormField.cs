@@ -1,5 +1,6 @@
 using System.Collections.Generic;
-using JGUZDV.DynamicForms.Model;
+
+using JGUZDV.DynamicForms.Model.FieldTypes;
 
 namespace JGUZDV.DynamicForms.Extensions.Models;
 
@@ -16,5 +17,5 @@ public class FileFormField
     /// <summary>
     /// Gets or sets the list of files associated with the field.
     /// </summary>
-    public required List<FileFieldType.FileType> Files { get; set; }
+    public required List<FileFieldType.FileInfo> Files { get; set; }
 }

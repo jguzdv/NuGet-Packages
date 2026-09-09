@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 
 using JGUZDV.DynamicForms.Model;
+using JGUZDV.DynamicForms.Model.FieldTypes;
 
 namespace JGUZDV.DynamicForms.Tests
 {
@@ -152,8 +153,8 @@ namespace JGUZDV.DynamicForms.Tests
             var fileSizeConstraint = new FileSizeConstraint { MaxFileSize = 1024 };
             var values = new List<object>
             {
-                new FileFieldType.FileType { FileName = "file1.txt", FileSize = 512 },
-                new FileFieldType.FileType { FileName = "file2.txt", FileSize = 1024 }
+                new FileFieldType.FileInfo { FileName = "file1.txt", FileSize = 512 },
+                new FileFieldType.FileInfo { FileName = "file2.txt", FileSize = 1024 }
             };
             var context = new ValidationContext(new FieldDefinition());
 
@@ -171,7 +172,7 @@ namespace JGUZDV.DynamicForms.Tests
             var fileSizeConstraint = new FileSizeConstraint { MaxFileSize = 1024 };
             var values = new List<object>
             {
-                new FileFieldType.FileType { FileName = "file1.txt", FileSize = 2048 }
+                new FileFieldType.FileInfo { FileName = "file1.txt", FileSize = 2048 }
             };
             var context = new ValidationContext(new FieldDefinition());
 

@@ -1,4 +1,4 @@
-﻿using JGUZDV.DynamicForms.Model;
+﻿using JGUZDV.DynamicForms.Model.FieldTypes;
 using JGUZDV.L10n;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -28,9 +28,9 @@ public class DynamicFormsBuilder
     /// <param name="type"></param>
     /// <param name="allowedConstraints"></param>
     /// <returns></returns>
-    public DynamicFormsBuilder AddFieldType(FieldType type, List<Type> allowedConstraints)
+    public DynamicFormsBuilder AddFieldType(FieldType type, Func<FieldType> factoryMethod, List<Type> allowedConstraints)
     {
-        DynamicFormsConfiguration.AddFieldType(type, allowedConstraints);
+        DynamicFormsConfiguration.AddFieldType(type, factoryMethod, allowedConstraints);
         return this;
     }
 

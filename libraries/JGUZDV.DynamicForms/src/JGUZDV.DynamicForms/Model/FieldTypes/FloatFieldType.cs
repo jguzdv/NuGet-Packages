@@ -1,5 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
+using JGUZDV.DynamicForms.Model.FieldTypes;
 using JGUZDV.L10n;
 
 namespace JGUZDV.DynamicForms.Model;
@@ -9,15 +10,13 @@ namespace JGUZDV.DynamicForms.Model;
 /// </summary>
 public record FloatFieldType : FieldType
 {
-    /// <summary>
-    /// Gets the CLR type of the field.
-    /// </summary>
-    [JsonIgnore]
-    public override Type ClrType => typeof(decimal);
+    /// <inheritdoc/>
+    public override string TypeDiscriminator => "Float";
 
-    /// <summary>
-    /// Gets the display name of the field type.
-    /// </summary>
+    /// <inheritdoc/>
+    public override Type ClrType => typeof(float);
+
+    /// <inheritdoc/>
     public override L10nString DisplayName => new L10nString()
     {
         ["de"] = "Gleitkommazahl",
@@ -28,5 +27,5 @@ public record FloatFieldType : FieldType
     /// Gets the input type of the field.
     /// </summary>
     [JsonIgnore]
-    public override string InputType => "number";
+    public override string HtmlInputType => "number";
 }

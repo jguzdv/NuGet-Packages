@@ -1,6 +1,7 @@
 ﻿using JGUZDV.DynamicForms.Blazor;
 using JGUZDV.DynamicForms.Blazor.Fields;
 using JGUZDV.DynamicForms.Model;
+using JGUZDV.DynamicForms.Model.FieldTypes;
 
 using Microsoft.AspNetCore.Components;
 

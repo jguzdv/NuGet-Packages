@@ -13,7 +13,7 @@
     <input id="MinValue"
            class="form-control @(!string.IsNullOrWhiteSpace(_error) ? "border-danger" : "")"
            value="@GetMinValue()"
-           type="@FieldDefinition.Type!.InputType"
+           type="@FieldDefinition.Type!.HtmlInputType"
            @onchange="async (e) => await HandleChange(e, x => _constraint.MinValue = x)" />
 </div>
 
@@ -22,7 +22,7 @@
     <input id="MinValue" name="MinValue"
            class="form-control @(!string.IsNullOrWhiteSpace(_error) ? "border-danger" : "")"
            value="@GetMaxValue()"
-           type="@FieldDefinition.Type.InputType"
+           type="@FieldDefinition.Type.HtmlInputType"
            @onchange="async (e) => await HandleChange(e, x => _constraint.MaxValue = x)" />
 </div>
 

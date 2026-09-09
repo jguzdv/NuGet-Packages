@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 
 using JGUZDV.DynamicForms.Model;
+using JGUZDV.DynamicForms.Model.FieldTypes;
 using JGUZDV.L10n;
 
 namespace JGUZDV.DynamicForms
@@ -14,14 +15,25 @@ namespace JGUZDV.DynamicForms
     {
         private static readonly HashSet<FieldType> _knownFieldTypes = new()
             {
+                new BoolFieldType(),
                 new DateOnlyFieldType(),
+                new FileFieldType(),
+                new FloatFieldType(),
                 new IntFieldType(),
                 new StringFieldType(),
-                new FileFieldType(),
-                new BoolFieldType(),
                 new TimeFieldType(),
-                new FloatFieldType()
             };
+
+        internal static readonly Dictionary<string, Func<FieldType>> FieldTypeFactories = new(StringComparer.OrdinalIgnoreCase)
+        {
+            ["Bool"] = () => new BoolFieldType(),
+            ["DateOnly"] = () => new DateOnlyFieldType(),
+            ["File"] = () => new FileFieldType(),
+            ["Float"] = () => new FloatFieldType(),
+            ["Int32"] = () => new IntFieldType(),
+            ["String"] = () => new StringFieldType(),
+            ["TimeOnly"] = () => new TimeFieldType()
+        };
 
         /// <summary>
         /// Removes a FieldType from the known field types.
@@ -38,10 +50,11 @@ namespace JGUZDV.DynamicForms
         /// </summary>
         /// <param name="type">The FieldType to add.</param>
         /// <param name="allowedConstraints">The list of allowed constraints for the FieldType.</param>
-        public static void AddFieldType(FieldType type, List<Type> allowedConstraints)
+        public static void AddFieldType(FieldType type, Func<FieldType> factoryMethod, List<Type> allowedConstraints)
         {
             SetConstraintTypes(type, allowedConstraints);
             _knownFieldTypes.Add(type);
+            FieldTypeFactories[type.TypeDiscriminator] = factoryMethod;
         }
 
         /// <summary>
