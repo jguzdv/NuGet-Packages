@@ -535,7 +535,7 @@ public static class JGUZDVHostApplicationBuilderExtensions
 
         if (scopes.Length == 0)
         {
-            //TODO: LogMessages.NoRequiredScopes(logger);
+            // TODO: LogMessages.NoRequiredScopes(logger);
         }
         else
         {
