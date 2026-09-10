@@ -1,4 +1,5 @@
 using JGUZDV.DynamicForms.Extensions.Models;
+using JGUZDV.DynamicForms.Model;
 using JGUZDV.DynamicForms.Model.FieldTypes;
 
 using Microsoft.AspNetCore.Http;
@@ -21,7 +22,7 @@ public static class FormFieldsExtractor
             .Where(x => x.Name.StartsWith(DynamicFormsConfiguration.FormFieldPrefix))
             .GroupBy(x => x.Name))
         {
-            var identifier = group.First().Name.Replace(DynamicFormsConfiguration.FormFieldPrefix, "");
+            var identifier = new FieldId(group.First().Name.Replace(DynamicFormsConfiguration.FormFieldPrefix, ""));
             var files = new List<FileFieldType.FileInfo>();
 
             foreach (var file in group)
