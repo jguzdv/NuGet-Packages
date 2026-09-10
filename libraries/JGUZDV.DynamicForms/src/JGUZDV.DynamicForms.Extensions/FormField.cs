@@ -14,7 +14,7 @@ public class FormField
     /// <summary>
     /// Gets or sets the field identifier.
     /// </summary>
-    public required string FieldIdentifier { get; set; }
+    public required FieldId FieldIdentifier { get; set; }
 
     /// <summary>
     /// The value of the <see cref="Field"/> as json

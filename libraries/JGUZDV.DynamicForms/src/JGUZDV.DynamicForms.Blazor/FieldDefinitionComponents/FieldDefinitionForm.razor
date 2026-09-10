@@ -5,9 +5,8 @@
 @using JGUZDV.Blazor.Components.L10n
 @using JGUZDV.DynamicForms.Blazor.Resources
 @using JGUZDV.DynamicForms.Model
-@using JGUZDV.L10n
+@using JGUZDV.DynamicForms.Model.FieldTypes
 @using Microsoft.Extensions.DependencyInjection
-@using System.ComponentModel.DataAnnotations
 
 @inject NavigationManager Navigation
 @inject IStringLocalizer<ComponentStrings> SL
@@ -19,7 +18,8 @@
 
     <div class="mb-2">
         <label for="identifier">@SL["EditFieldDefinition.Identifier"]</label>
-        <InputText id="identifier" @bind-Value="_fieldDefinition!.Identifier" class="form-control" />
+        <input type="text" id="identifier" class="form-control" value="@_fieldDefinition!.Identifier.Value"
+            @onchange="@(e => _fieldDefinition.Identifier = new FieldId(e.Value as string ?? ""))" />
     </div>
 
     <div class="mb-2">
@@ -42,9 +42,9 @@
             {
                 <option value="" selected>@SL["EditFieldDefinition.SelectType"]</option>
             }
-            @foreach (var type in DynamicFormsConfiguration.KnownFieldTypes)
+            @foreach (var type in DynamicFormsConfiguration.RegisteredFieldTypes)
             {
-                <option value="@type.ToJson()">@type.DisplayName</option>
+                <option value="@type.Value.ToJson()">@type.Value.DisplayName</option>
             }
         </select>
     </div>

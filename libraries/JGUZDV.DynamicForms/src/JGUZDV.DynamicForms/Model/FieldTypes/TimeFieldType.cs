@@ -1,35 +1,35 @@
 ﻿using System.Text.Json;
-using System.Text.Json.Serialization;
 
+using JGUZDV.DynamicForms.Model.FieldTypes;
 using JGUZDV.L10n;
 
 namespace JGUZDV.DynamicForms.Model;
 
 /// <summary>
-/// Represents a field type for integer values.
+/// Represents a field type for TimeOnly values.
 /// </summary>
-public record TimeFieldType : FieldType
+public record TimeOnlyFieldType : FieldType
 {
     /// <summary>
-    /// Gets the CLR type of the field.
+    /// Gets the type discriminator for the <see cref="TimeOnlyFieldType"/>.
     /// </summary>
-    [JsonIgnore]
+    public static FieldTypeId FieldTypeId { get; } = new("TimeOnly");
+
+    /// <inheritdoc/>
+    public override FieldTypeId TypeDiscriminator => FieldTypeId;
+
+    /// <inheritdoc/>
     public override Type ClrType => typeof(TimeOnly);
 
-    /// <summary>
-    /// Gets the display name of the field type.
-    /// </summary>
+    /// <inheritdoc/>
     public override L10nString DisplayName => new L10nString()
     {
         ["de"] = "Uhrzeit",
         ["en"] = "Time"
     };
 
-    /// <summary>
-    /// Gets the input type of the field.
-    /// </summary>
-    [JsonIgnore]
-    public override string InputType => "time";
+    /// <inheritdoc/>
+    public override string HtmlInputType => "time";
 
     /// <inheritdoc/>
     public override string ConvertFromValue(object value)

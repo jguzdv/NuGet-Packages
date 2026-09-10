@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 
 using JGUZDV.DynamicForms.Model;
+using JGUZDV.DynamicForms.Model.FieldTypes;
 using JGUZDV.DynamicForms.Resources;
 using JGUZDV.L10n;
 
@@ -25,7 +26,7 @@ namespace JGUZDV.DynamicForms.Tests
                 "DateOnlyFieldType" => new DateOnlyFieldType(),
                 "FileFieldType" => new FileFieldType(),
                 "BoolFieldType" => new BoolFieldType(),
-                "TimeFieldType" => new TimeFieldType(),
+                "TimeFieldType" => new TimeOnlyFieldType(),
                 _ => throw new ArgumentException("Invalid field type name", nameof(typeName))
             };
         }
@@ -319,7 +320,7 @@ namespace JGUZDV.DynamicForms.Tests
 
             var field = new Field(fieldDefinition)
             {
-                Value = new FileFieldType.FileType { FileName = "file1.txt", FileSize = 512 }
+                Value = new FileFieldType.FileInfo { FileName = "file1.txt", FileSize = 512 }
             };
 
             var mockSupportedCultureService = new Mock<ISupportedCultureService>();
@@ -362,7 +363,7 @@ namespace JGUZDV.DynamicForms.Tests
 
             var field = new Field(fieldDefinition)
             {
-                Value = new FileFieldType.FileType { FileName = "file1.txt", FileSize = 2048 }
+                Value = new FileFieldType.FileInfo { FileName = "file1.txt", FileSize = 2048 }
             };
 
             var mockSupportedCultureService = new Mock<ISupportedCultureService>();
@@ -405,7 +406,7 @@ namespace JGUZDV.DynamicForms.Tests
             var fileContent = new MemoryStream(Encoding.UTF8.GetBytes("Test file content"));
             var field = new Field(fieldDefinition)
             {
-                Value = new FileFieldType.FileType { FileName = "file1.txt", FileSize = fileContent.Length, Stream = fileContent }
+                Value = new FileFieldType.FileInfo { FileName = "file1.txt", FileSize = fileContent.Length, Stream = fileContent }
             };
 
             var options = new JsonSerializerOptions
@@ -419,12 +420,12 @@ namespace JGUZDV.DynamicForms.Tests
 
             // Assert
             Assert.NotNull(deserializedField);
-            Assert.Equal(((FileFieldType.FileType)field.Value).FileName, ((FileFieldType.FileType)deserializedField.Value!).FileName);
-            Assert.Equal(((FileFieldType.FileType)field.Value).FileSize, ((FileFieldType.FileType)deserializedField.Value).FileSize);
+            Assert.Equal(((FileFieldType.FileInfo)field.Value).FileName, ((FileFieldType.FileInfo)deserializedField.Value!).FileName);
+            Assert.Equal(((FileFieldType.FileInfo)field.Value).FileSize, ((FileFieldType.FileInfo)deserializedField.Value).FileSize);
 
             // Compare the content of the streams
-            using var originalStream = ((FileFieldType.FileType)field.Value).Stream;
-            using var deserializedStream = ((FileFieldType.FileType)deserializedField.Value).Stream;
+            using var originalStream = ((FileFieldType.FileInfo)field.Value).Stream;
+            using var deserializedStream = ((FileFieldType.FileInfo)deserializedField.Value).Stream;
             Assert.NotNull(originalStream);
             Assert.NotNull(deserializedStream);
 
@@ -463,7 +464,7 @@ namespace JGUZDV.DynamicForms.Tests
             var fileContent = new MemoryStream(new byte[512]);
             var field = new Field(fieldDefinition)
             {
-                Value = new FileFieldType.FileType { FileName = "file1.txt", FileSize = fileContent.Length, Stream = fileContent }
+                Value = new FileFieldType.FileInfo { FileName = "file1.txt", FileSize = fileContent.Length, Stream = fileContent }
             };
 
             var mockSupportedCultureService = new Mock<ISupportedCultureService>();
@@ -507,7 +508,7 @@ namespace JGUZDV.DynamicForms.Tests
             var fileContent = new MemoryStream(new byte[2048]);
             var field = new Field(fieldDefinition)
             {
-                Value = new FileFieldType.FileType { FileName = "file1.txt", FileSize = fileContent.Length, Stream = fileContent }
+                Value = new FileFieldType.FileInfo { FileName = "file1.txt", FileSize = fileContent.Length, Stream = fileContent }
             };
 
             var mockSupportedCultureService = new Mock<ISupportedCultureService>();
@@ -552,7 +553,7 @@ namespace JGUZDV.DynamicForms.Tests
             var fileContent = new MemoryStream(Encoding.UTF8.GetBytes(originalContent));
             var field = new Field(fieldDefinition)
             {
-                Value = new FileFieldType.FileType { FileName = "file1.txt", FileSize = fileContent.Length, Stream = fileContent }
+                Value = new FileFieldType.FileInfo { FileName = "file1.txt", FileSize = fileContent.Length, Stream = fileContent }
             };
 
             var content = new MultipartFormDataContent();

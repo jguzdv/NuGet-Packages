@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 
+using JGUZDV.DynamicForms.Model.FieldTypes;
 using JGUZDV.DynamicForms.Resources;
 using JGUZDV.L10n;
 
@@ -16,7 +17,7 @@ public class FieldDefinition : IValidatableObject
     /// <summary>
     /// Gets or sets the identifier of the field.
     /// </summary>
-    public string Identifier { get; set; } = Guid.NewGuid().ToString();
+    public FieldId Identifier { get; set; } = new(Guid.NewGuid().ToString());
 
     /// <summary>
     /// Gets or sets the input definition of the field.
@@ -114,7 +115,7 @@ public class FieldDefinition : IValidatableObject
         if (SortKey < 0)
             errors = errors.Append(new ValidationResult(SL[$"{nameof(FieldDefinition)}.{nameof(SortKey)}"], new string[] { nameof(SortKey) })).ToList();
 
-        if (string.IsNullOrWhiteSpace(Identifier))
+        if (!Identifier.IsValid)
         {
             errors.Add(new(SL[$"{nameof(FieldDefinition)}.{nameof(Identifier)}"], new string[] { nameof(Identifier) }));
         }

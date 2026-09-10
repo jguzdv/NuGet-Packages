@@ -1,4 +1,4 @@
-﻿using JGUZDV.DynamicForms.Model;
+﻿using JGUZDV.DynamicForms.Model.FieldTypes;
 using JGUZDV.L10n;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -75,12 +75,10 @@ public class DynamicFormsBuilder
     /// <summary>
     /// Removes a FieldType from the dynamic forms configuration.
     /// </summary>
-    /// <typeparam name="TFieldType"></typeparam>
     /// <returns></returns>
-    public DynamicFormsBuilder RemoveFieldType<TFieldType>()
-        where TFieldType : FieldType
+    public DynamicFormsBuilder RemoveFieldType(FieldTypeId fieldTypeId)
     {
-        DynamicFormsConfiguration.RemoveFieldType<TFieldType>();
+        DynamicFormsConfiguration.RemoveFieldType(fieldTypeId);
         return this;
     }
 

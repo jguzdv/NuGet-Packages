@@ -1,5 +1,6 @@
 ﻿@using JGUZDV.DynamicForms.Blazor.Resources
 @using JGUZDV.DynamicForms.Model
+@using JGUZDV.DynamicForms.Model.FieldTypes
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.Extensions.Logging
 
@@ -73,9 +74,9 @@
     {
         _errors.Clear();
 
-        List<FileFieldType.FileType?> valueList = Field.FieldDefinition.IsList
-            ? Field.Value as List<FileFieldType.FileType?> ?? new()
-            : [Field.Value as FileFieldType.FileType];
+        List<FileFieldType.FileInfo?> valueList = Field.FieldDefinition.IsList
+            ? Field.Value as List<FileFieldType.FileInfo?> ?? new()
+            : [Field.Value as FileFieldType.FileInfo];
 
         foreach (var file in valueList)
         {
@@ -86,7 +87,7 @@
         if (!selectedFiles.Any())
         {
             Field.Value = Field.FieldDefinition.IsList
-                ? new List<FileFieldType.FileType>()
+                ? new List<FileFieldType.FileInfo>()
                 : null;
 
             _ = FieldChanged.InvokeAsync(Field);
@@ -95,13 +96,13 @@
         }
 
         valueList = selectedFiles
-            .Select(x => new FileFieldType.FileType
+            .Select(x => new FileFieldType.FileInfo
                 {
                     FileName = x.Name,
                     FileSize = x.Size,
                     Stream = x.OpenReadStream(x.Size)
                 })
-            .OfType<FileFieldType.FileType?>()
+            .OfType<FileFieldType.FileInfo?>()
             .ToList();
 
         var vals = valueList.Cast<object>().ToList();

@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
+using JGUZDV.DynamicForms.Model.FieldTypes;
+
 namespace JGUZDV.DynamicForms.Model;
 
 /// <summary>
@@ -40,9 +42,9 @@ public class FileSizeConstraint : Constraint
 
         foreach (var value in values)
         {
-            if (value is FileFieldType.FileType file && file.FileSize > MaxFileSize)
+            if (value is FileFieldType.FileInfo file && file.FileSize > MaxFileSize)
             {
-                results.Add(new ValidationResult($"File size exceeds the maximum allowed size of {MaxFileSize} bytes.", [nameof(FileFieldType.FileType.FileSize)]));
+                results.Add(new ValidationResult($"File size exceeds the maximum allowed size of {MaxFileSize} bytes.", [nameof(FileFieldType.FileInfo.FileSize)]));
             }
         }
 

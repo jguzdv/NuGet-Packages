@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 
 using JGUZDV.DynamicForms.Model;
+using JGUZDV.DynamicForms.Model.FieldTypes;
 using JGUZDV.DynamicForms.Resources;
 using JGUZDV.L10n;
 
@@ -24,7 +25,7 @@ namespace JGUZDV.DynamicForms.Tests
                 "DateOnlyFieldType" => new DateOnlyFieldType(),
                 "FileFieldType" => new FileFieldType(),
                 "BoolFieldType" => new BoolFieldType(),
-                "TimeFieldType" => new TimeFieldType(),
+                "TimeFieldType" => new TimeOnlyFieldType(),
                 _ => throw new ArgumentException("Invalid field type name", nameof(typeName))
             };
         }
