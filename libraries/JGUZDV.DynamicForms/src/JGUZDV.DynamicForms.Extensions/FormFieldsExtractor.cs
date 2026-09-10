@@ -56,7 +56,7 @@ public static class FormFieldsExtractor
 
             jsonFields.Add(new FormField
             {
-                FieldIdentifier = formField.Key.Replace(DynamicFormsConfiguration.FormFieldPrefix, ""),
+                FieldIdentifier = new (formField.Key.Replace(DynamicFormsConfiguration.FormFieldPrefix, "")),
                 Json = formField.Value.ToString()
             });
         }

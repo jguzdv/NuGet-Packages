@@ -1,5 +1,4 @@
-using System.Collections.Generic;
-
+using JGUZDV.DynamicForms.Model;
 using JGUZDV.DynamicForms.Model.FieldTypes;
 
 namespace JGUZDV.DynamicForms.Extensions.Models;
@@ -12,7 +11,7 @@ public class FileFormField
     /// <summary>
     /// Gets or sets the field identifier.
     /// </summary>
-    public required string FieldIdentifier { get; set; }
+    public required FieldId FieldIdentifier { get; set; }
 
     /// <summary>
     /// Gets or sets the list of files associated with the field.
