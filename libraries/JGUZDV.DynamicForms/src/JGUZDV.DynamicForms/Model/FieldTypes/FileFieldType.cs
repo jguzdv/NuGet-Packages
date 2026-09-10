@@ -10,8 +10,13 @@ namespace JGUZDV.DynamicForms.Model.FieldTypes;
 /// </summary>
 public record FileFieldType : FieldType
 {
+    /// <summary>
+    /// Gets the type discriminator for the <see cref="FileFieldType"/>.
+    /// </summary>
+    public static FieldTypeId FieldTypeId { get; } = new("File");
+
     /// <inheritdoc/>
-    public override string TypeDiscriminator => "File";
+    public override FieldTypeId TypeDiscriminator => FieldTypeId;
 
     /// <inheritdoc/>
     public override Type ClrType => typeof(FileInfo);

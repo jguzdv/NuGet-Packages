@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using System.Text.Json.Serialization;
 
 using JGUZDV.DynamicForms.Model.FieldTypes;
 using JGUZDV.L10n;
@@ -7,11 +6,17 @@ using JGUZDV.L10n;
 namespace JGUZDV.DynamicForms.Model;
 
 /// <summary>
-/// Represents a field type for integer values.
+/// Represents a field type for TimeOnly values.
 /// </summary>
-public record TimeFieldType : FieldType
+public record TimeOnlyFieldType : FieldType
 {
-    public override string TypeDiscriminator => "TimeOnly";
+    /// <summary>
+    /// Gets the type discriminator for the <see cref="TimeOnlyFieldType"/>.
+    /// </summary>
+    public static FieldTypeId FieldTypeId { get; } = new("TimeOnly");
+
+    /// <inheritdoc/>
+    public override FieldTypeId TypeDiscriminator => FieldTypeId;
 
     /// <inheritdoc/>
     public override Type ClrType => typeof(TimeOnly);

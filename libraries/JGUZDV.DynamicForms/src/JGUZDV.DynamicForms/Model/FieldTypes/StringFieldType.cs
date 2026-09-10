@@ -9,8 +9,13 @@ namespace JGUZDV.DynamicForms.Model.FieldTypes;
 /// </summary>
 public record StringFieldType : FieldType
 {
+    /// <summary>
+    /// Gets the type discriminator for the <see cref="StringFieldType"/>.
+    /// </summary>
+    public static FieldTypeId FieldTypeId { get; } = new("String");
+
     /// <inheritdoc/>
-    public override string TypeDiscriminator => "String";
+    public override FieldTypeId TypeDiscriminator => FieldTypeId;
 
     /// <inheritdoc/>
     public override Type ClrType => typeof(string);

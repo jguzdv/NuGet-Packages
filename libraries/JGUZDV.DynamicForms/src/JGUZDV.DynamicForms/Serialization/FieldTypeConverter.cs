@@ -14,14 +14,14 @@ public class FieldTypeConverter : JsonConverter<FieldType>
         var typeDiscriminator = reader.GetString() 
             ?? throw new JsonException("Unable to determine the type of the field type.");
 
-        return DynamicFormsConfiguration.FieldTypeFactories.TryGetValue(typeDiscriminator, out var factoryMethod)
-            ? factoryMethod()
+        return DynamicFormsConfiguration.RegisteredFieldTypes.TryGetValue(new(typeDiscriminator), out var fieldType)
+            ? fieldType
             : throw new JsonException($"Unknown field type discriminator: {typeDiscriminator}");
     }
 
     /// <inheritdoc />
     public override void Write(Utf8JsonWriter writer, FieldType value, JsonSerializerOptions options)
     {
-        writer.WriteStringValue(value.TypeDiscriminator);
+        writer.WriteStringValue(value.TypeDiscriminator.Value);
     }
 }

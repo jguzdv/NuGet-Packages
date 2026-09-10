@@ -31,7 +31,7 @@ public abstract record FieldType
     /// Gets the type discriminator for the field type.
     /// This will be used to identify the field type during serialization and deserialization.
     /// </summary>
-    public abstract string TypeDiscriminator { get; }
+    public abstract FieldTypeId TypeDiscriminator { get; }
 
     /// <summary>
     /// Converts the specified value to a string.
@@ -92,10 +92,5 @@ public abstract record FieldType
             : name;
 
         content.Add(new StringContent(json), name);
-    }
-
-    public static FieldType Create()
-    {
-        throw new NotImplementedException();
     }
 }

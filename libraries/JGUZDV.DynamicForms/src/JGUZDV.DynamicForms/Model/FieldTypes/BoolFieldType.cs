@@ -10,8 +10,13 @@ namespace JGUZDV.DynamicForms.Model;
 /// </summary>
 public record BoolFieldType : FieldType
 {
+    /// <summary>
+    /// Gets the type discriminator for the <see cref="BoolFieldType"/>.
+    /// </summary>
+    public static FieldTypeId FieldTypeId { get; } = new("Bool");
+
     /// <inheritdoc/>
-    public override string TypeDiscriminator => "Bool";
+    public override FieldTypeId TypeDiscriminator => FieldTypeId;
 
     /// <inheritdoc/>
     public override Type ClrType => typeof(bool);

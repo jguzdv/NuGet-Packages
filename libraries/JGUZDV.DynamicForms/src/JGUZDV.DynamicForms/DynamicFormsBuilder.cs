@@ -28,9 +28,9 @@ public class DynamicFormsBuilder
     /// <param name="type"></param>
     /// <param name="allowedConstraints"></param>
     /// <returns></returns>
-    public DynamicFormsBuilder AddFieldType(FieldType type, Func<FieldType> factoryMethod, List<Type> allowedConstraints)
+    public DynamicFormsBuilder AddFieldType(FieldType type, List<Type> allowedConstraints)
     {
-        DynamicFormsConfiguration.AddFieldType(type, factoryMethod, allowedConstraints);
+        DynamicFormsConfiguration.AddFieldType(type, allowedConstraints);
         return this;
     }
 
@@ -75,12 +75,10 @@ public class DynamicFormsBuilder
     /// <summary>
     /// Removes a FieldType from the dynamic forms configuration.
     /// </summary>
-    /// <typeparam name="TFieldType"></typeparam>
     /// <returns></returns>
-    public DynamicFormsBuilder RemoveFieldType<TFieldType>()
-        where TFieldType : FieldType
+    public DynamicFormsBuilder RemoveFieldType(FieldTypeId fieldTypeId)
     {
-        DynamicFormsConfiguration.RemoveFieldType<TFieldType>();
+        DynamicFormsConfiguration.RemoveFieldType(fieldTypeId);
         return this;
     }
 

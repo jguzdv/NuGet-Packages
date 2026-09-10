@@ -13,74 +13,64 @@ namespace JGUZDV.DynamicForms
     /// </summary>
     public static class DynamicFormsConfiguration
     {
-        private static readonly HashSet<FieldType> _knownFieldTypes = new()
-            {
+        static DynamicFormsConfiguration()
+        {
+            _registeredFieldTypes = new FieldType[] {
                 new BoolFieldType(),
                 new DateOnlyFieldType(),
                 new FileFieldType(),
                 new FloatFieldType(),
                 new IntFieldType(),
                 new StringFieldType(),
-                new TimeFieldType(),
-            };
+                new TimeOnlyFieldType()
+            }.ToDictionary(x => x.TypeDiscriminator);
+        }
 
-        internal static readonly Dictionary<string, Func<FieldType>> FieldTypeFactories = new(StringComparer.OrdinalIgnoreCase)
-        {
-            ["Bool"] = () => new BoolFieldType(),
-            ["DateOnly"] = () => new DateOnlyFieldType(),
-            ["File"] = () => new FileFieldType(),
-            ["Float"] = () => new FloatFieldType(),
-            ["Int32"] = () => new IntFieldType(),
-            ["String"] = () => new StringFieldType(),
-            ["TimeOnly"] = () => new TimeFieldType()
-        };
+        private static readonly Dictionary<FieldTypeId, FieldType> _registeredFieldTypes;
+        
+        /// <summary>
+        /// Gets the list of registered FieldTypes.
+        /// </summary>
+        public static IReadOnlyDictionary<FieldTypeId, FieldType> RegisteredFieldTypes => _registeredFieldTypes;
 
         /// <summary>
-        /// Removes a FieldType from the known field types.
+        /// Removes a FieldType from the registered field types.
         /// </summary>
-        /// <typeparam name="TFieldType"></typeparam>
-        public static void RemoveFieldType<TFieldType>()
-            where TFieldType : FieldType
+        public static void RemoveFieldType(FieldTypeId fieldTypeId)
         {
-            _knownFieldTypes.RemoveWhere(x => x.GetType() == typeof(TFieldType));
+            _registeredFieldTypes.Remove(fieldTypeId);
         }
 
         /// <summary>
-        /// Adds a new FieldType to the known field types and sets the allowed constraints for it.
+        /// Adds a new FieldType to the registered field types and sets the allowed constraints for it.
         /// </summary>
         /// <param name="type">The FieldType to add.</param>
         /// <param name="allowedConstraints">The list of allowed constraints for the FieldType.</param>
-        public static void AddFieldType(FieldType type, Func<FieldType> factoryMethod, List<Type> allowedConstraints)
+        public static void AddFieldType(FieldType type, List<Type> allowedConstraints)
         {
             SetConstraintTypes(type, allowedConstraints);
-            _knownFieldTypes.Add(type);
-            FieldTypeFactories[type.TypeDiscriminator] = factoryMethod;
+            _registeredFieldTypes.Add(type.TypeDiscriminator, type);
         }
 
-        /// <summary>
-        /// Gets the list of known FieldTypes.
-        /// </summary>
-        public static List<FieldType> KnownFieldTypes => _knownFieldTypes.ToList();
-
         private static readonly Dictionary<FieldType, List<Type>> _fieldConstraints = new()
-            {
-                    { new StringFieldType(), [ typeof(RegexConstraint), typeof(StringLengthConstraint), typeof(RangeConstraint) ] },
-                    { new DateOnlyFieldType(), [ typeof(RangeConstraint) ] },
-                    { new IntFieldType(), [typeof(RangeConstraint)] },
-                    { new FileFieldType(), [typeof(FileSizeConstraint)] },
-                    { new BoolFieldType(), [ ] },
-                    { new TimeFieldType(), [ typeof(RangeConstraint) ] },
-                    { new FloatFieldType(), [typeof(RangeConstraint)] }
-            };
+        {
+                { new StringFieldType(), [ typeof(RegexConstraint), typeof(StringLengthConstraint), typeof(RangeConstraint) ] },
+                { new DateOnlyFieldType(), [ typeof(RangeConstraint) ] },
+                { new IntFieldType(), [typeof(RangeConstraint)] },
+                { new FileFieldType(), [typeof(FileSizeConstraint)] },
+                { new BoolFieldType(), [ ] },
+                { new TimeOnlyFieldType(), [ typeof(RangeConstraint) ] },
+                { new FloatFieldType(), [typeof(RangeConstraint)] }
+        };
 
         private static readonly HashSet<Type> _allConstraints = new()
-            {
-                typeof(RegexConstraint),
-                typeof(StringLengthConstraint),
-                typeof(RangeConstraint),
-                typeof(SizeConstraint),
-                typeof(FileSizeConstraint)
-            };
+        {
+            typeof(RegexConstraint),
+            typeof(StringLengthConstraint),
+            typeof(RangeConstraint),
+            typeof(SizeConstraint),
+            typeof(FileSizeConstraint)
+        };
 
         /// <summary>
         /// Sets the allowed constraint types for a given FieldType.

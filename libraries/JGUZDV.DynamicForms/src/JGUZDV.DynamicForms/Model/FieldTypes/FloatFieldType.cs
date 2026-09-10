@@ -10,8 +10,13 @@ namespace JGUZDV.DynamicForms.Model;
 /// </summary>
 public record FloatFieldType : FieldType
 {
+    /// <summary>
+    /// Gets the type discriminator for the <see cref="FloatFieldType"/>.
+    /// </summary>
+    public static FieldTypeId FieldTypeId { get; } = new("Float");
+
     /// <inheritdoc/>
-    public override string TypeDiscriminator => "Float";
+    public override FieldTypeId TypeDiscriminator => FieldTypeId;
 
     /// <inheritdoc/>
     public override Type ClrType => typeof(float);

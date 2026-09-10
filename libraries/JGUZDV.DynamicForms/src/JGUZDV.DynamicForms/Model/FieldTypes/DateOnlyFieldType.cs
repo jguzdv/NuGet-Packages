@@ -10,8 +10,13 @@ namespace JGUZDV.DynamicForms.Model.FieldTypes;
 /// </summary>
 public record DateOnlyFieldType : FieldType
 {
+    /// <summary>
+    /// Gets the type discriminator for the <see cref="DateOnlyFieldType"/>.
+    /// </summary>
+    public static FieldTypeId FieldTypeId { get; } = new("DateOnly");
+
     /// <inheritdoc/>
-    override public string TypeDiscriminator => "DateOnly";
+    public override FieldTypeId TypeDiscriminator => FieldTypeId;
 
     /// <inheritdoc/>
     public override Type ClrType => typeof(DateOnly);

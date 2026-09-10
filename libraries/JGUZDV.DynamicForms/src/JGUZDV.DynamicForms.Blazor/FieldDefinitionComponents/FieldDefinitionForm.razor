@@ -42,9 +42,9 @@
             {
                 <option value="" selected>@SL["EditFieldDefinition.SelectType"]</option>
             }
-            @foreach (var type in DynamicFormsConfiguration.KnownFieldTypes)
+            @foreach (var type in DynamicFormsConfiguration.RegisteredFieldTypes)
             {
-                <option value="@type.ToJson()">@type.DisplayName</option>
+                <option value="@type.Value.ToJson()">@type.Value.DisplayName</option>
             }
         </select>
     </div>
