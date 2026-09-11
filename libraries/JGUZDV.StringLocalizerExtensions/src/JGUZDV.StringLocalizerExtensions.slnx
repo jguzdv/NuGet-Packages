@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="../TestApp/TestApp.csproj" />
+  <Project Path="JGUZDV.StringLocalizerExtensions.csproj" />
+</Solution>
