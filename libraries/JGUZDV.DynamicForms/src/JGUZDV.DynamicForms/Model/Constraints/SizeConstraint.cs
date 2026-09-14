@@ -20,6 +20,8 @@ public class SizeConstraint : IConstraint
     /// <inheritdoc />
     public static L10nString DisplayName => new() { ["de"] = "Listenlänge", ["en"] = "List length" };
 
+    /// <inheritdoc />
+    public L10nString GetDisplayName() => DisplayName;
 
 
 

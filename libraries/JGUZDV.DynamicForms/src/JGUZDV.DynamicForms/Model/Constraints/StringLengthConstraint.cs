@@ -20,6 +20,9 @@ public class StringLengthConstraint : IConstraint
     /// <inheritdoc />
     public static L10nString DisplayName => new() { ["de"] = "Textlänge", ["en"] = "Text length" };
 
+    /// <inheritdoc />
+    public L10nString GetDisplayName() => DisplayName;
+
 
 
     /// <summary>

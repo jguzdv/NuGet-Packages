@@ -23,6 +23,10 @@ public class RangeConstraint : IConstraint
     /// <inheritdoc />
     public static L10nString DisplayName => new() { ["de"] = "Intervall", ["en"] = "Range" };
 
+    /// <inheritdoc />
+    public L10nString GetDisplayName() => DisplayName;
+
+
     /// <summary>
     /// Range constraints can only operate, when they know their field type.
     /// </summary>
