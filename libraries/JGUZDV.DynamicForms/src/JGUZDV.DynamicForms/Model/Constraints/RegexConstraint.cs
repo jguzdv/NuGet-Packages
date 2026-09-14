@@ -20,6 +20,9 @@ public class RegexConstraint : IConstraint
     /// <inheritdoc />
     public static L10nString DisplayName => new() { ["de"] = "Regulärer Ausdruck", ["en"] = "Regular Expression" };
 
+    /// <inheritdoc />
+    public L10nString GetDisplayName() => DisplayName;
+
 
 
     /// <summary>

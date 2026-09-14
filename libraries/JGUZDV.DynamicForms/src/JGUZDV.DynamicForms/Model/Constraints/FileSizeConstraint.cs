@@ -19,6 +19,8 @@ public class FileSizeConstraint : IConstraint
     /// <inheritdoc />
     public static L10nString DisplayName => new() { ["de"] = "Dateigröße", ["en"] = "File size" };
 
+    /// <inheritdoc />
+    public L10nString GetDisplayName() => DisplayName;
 
 
 

@@ -28,6 +28,12 @@ public interface IConstraint : IValidatableObject
     ConstraintId GetConstraintId();
 
     /// <summary>
+    /// Returns the display name of the constraint. This will be used for localization and user-friendly representation of the constraint.
+    /// </summary>
+    L10nString GetDisplayName();
+
+
+    /// <summary>
     /// Gets the unique identifier of the constraint. This will be used as discriminator during serialization and deserialization of constraints.
     /// </summary>
     virtual static ConstraintId ConstraintId { get; } = new();

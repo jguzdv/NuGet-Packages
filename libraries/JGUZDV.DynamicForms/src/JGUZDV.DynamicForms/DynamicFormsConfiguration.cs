@@ -112,16 +112,26 @@ namespace JGUZDV.DynamicForms
         /// <summary>
         /// Gets the localized name of a given constraint type.
         /// </summary>
-        /// <param name="constraintType">The constraint type to get the name for.</param>
-        /// <returns>The localized name of the constraint type.</returns>
-        /// <exception cref="InvalidOperationException">Thrown if the type is not of type Constraint.</exception>
-        public static L10nString GetConstraintName(Type constraintType)
+        public static L10nString GetConstraintName(ConstraintId constraintId)
         {
-            return typeof(IConstraint).IsAssignableFrom(constraintType)
+            return _registeredConstraintTypes.TryGetValue(constraintId, out var constraintType)
                 ? (L10nString)constraintType.GetProperty("DisplayName")!.GetValue(null)!
-                : throw new InvalidOperationException("Type must be of type IConstraint");
+                : throw new InvalidOperationException($"Constraint type {constraintId} is not registered.");
         }
 
+        /// <summary>
+        /// Adds a constraint to a given FieldDefinition.
+        /// </summary>
+        public static void AddConstraintToFieldDefinition(FieldDefinition fieldDefinition, ConstraintId constraintId)
+        {
+            if (!_registeredConstraintTypes.ContainsKey(constraintId))
+            {
+                throw new InvalidOperationException($"Constraint type {constraintId} is not registered.");
+            }
+
+            var constraint = (IConstraint)Activator.CreateInstance(_registeredConstraintTypes[constraintId])!;
+            fieldDefinition.Constraints.Add(constraint);
+        }
 
 
         /// <summary>

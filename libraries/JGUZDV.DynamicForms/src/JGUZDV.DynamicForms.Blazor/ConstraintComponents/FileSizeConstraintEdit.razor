@@ -1,5 +1,6 @@
-﻿@using JGUZDV.DynamicForms.Model
-@using System.ComponentModel.DataAnnotations
+﻿@using System.ComponentModel.DataAnnotations
+@using JGUZDV.DynamicForms.Model
+@using JGUZDV.DynamicForms.Model.Constraints
 
 <div>
     <label for="maxFileSize@_id">Max File Size (bytes)</label>
@@ -11,10 +12,10 @@
 
 @code {
     [Parameter]
-    public required Constraint Constraint { get; set; }
+    public required IConstraint Constraint { get; set; }
 
     [Parameter]
-    public required EventCallback<Constraint> ConstraintChanged { get; set; }
+    public required EventCallback<IConstraint> ConstraintChanged { get; set; }
 
     [Parameter]
     public required FieldDefinition FieldDefinition { get; set; }
