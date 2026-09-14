@@ -24,17 +24,20 @@ public class ConstraintConverter : JsonConverter<IConstraint>
             throw new JsonException("Expected $Type property.");
         }
 
+        reader.Read();
         if (reader.TokenType != JsonTokenType.String) {
             throw new JsonException("Expected string value for $Type property.");
         }
 
         var constraintId = new ConstraintId(reader.GetString()!);
 
+        reader.Read();
         if (reader.TokenType != JsonTokenType.PropertyName || reader.GetString() != "$Value")
         {
             throw new JsonException("Expected $Value property.");
         }
 
+        reader.Read();
         var valueElement = JsonElement.ParseValue(ref reader);
         if (!DynamicFormsConfiguration.RegisteredConstraintTypes.TryGetValue(constraintId, out var constraintType))
         {
