@@ -51,24 +51,6 @@ public class ConstraintConverter : JsonConverter<IConstraint>
         reader.Read();
 
         return (IConstraint?)JsonSerializer.Deserialize(valueElement, constraintType, options);
-
-        //using (JsonDocument doc = JsonDocument.ParseValue(ref reader))
-        //{
-        //    if (doc.RootElement.TryGetProperty("$Type", out JsonElement typeElement))
-        //    {
-        //        string typeName = typeElement.GetString()!;
-        //        Type? constraintType = Type.GetType(typeName);
-
-        //        if (constraintType == null || !typeof(IConstraint).IsAssignableFrom(constraintType))
-        //        {
-        //            throw new InvalidOperationException("Unable to determine the type of the constraint.");
-        //        }
-
-        //        return (IConstraint?)JsonSerializer.Deserialize(doc.RootElement.GetProperty("$Value"), constraintType, options);
-        //    }
-        //}
-
-        //throw new JsonException("Unable to determine the type of the constraint.");
     }
 
     /// <inheritdoc />
