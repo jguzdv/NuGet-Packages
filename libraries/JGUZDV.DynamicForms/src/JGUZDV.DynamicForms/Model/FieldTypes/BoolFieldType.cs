@@ -1,33 +1,25 @@
-﻿using System.Text.Json.Serialization;
-
-using JGUZDV.DynamicForms.Model.FieldTypes;
-using JGUZDV.L10n;
+﻿using JGUZDV.DynamicForms.Model.FieldTypes;
 
 namespace JGUZDV.DynamicForms.Model;
 
 /// <summary>
 /// Represents a field type for boolean values.
 /// </summary>
-public record BoolFieldType : FieldType
+public class BoolFieldType : BaseFieldType
 {
-    /// <summary>
-    /// Gets the type discriminator for the <see cref="BoolFieldType"/>.
-    /// </summary>
-    public static FieldTypeId FieldTypeId { get; } = new("Bool");
-
-    /// <inheritdoc/>
-    public override FieldTypeId TypeDiscriminator => FieldTypeId;
-
-    /// <inheritdoc/>
-    public override Type ClrType => typeof(bool);
-
-    /// <inheritdoc/>
-    public override L10nString DisplayName => new L10nString()
+    private BoolFieldType() : base(
+        typeof(bool), 
+        new()
+        {
+            ["de"] = "Boolesch",
+            ["en"] = "Boolean"
+        })
     {
-        ["de"] = "Boolesch",
-        ["en"] = "Boolean"
-    };
+        HtmlInputType = "checkbox";
+    }
 
-    /// <inheritdoc/>
-    public override string HtmlInputType => "checkbox";
+    /// <summary>
+    /// Gets the singleton instance of the <see cref="BoolFieldType"/>.
+    /// </summary>
+    public static BoolFieldType Instance { get; } = new();
 }

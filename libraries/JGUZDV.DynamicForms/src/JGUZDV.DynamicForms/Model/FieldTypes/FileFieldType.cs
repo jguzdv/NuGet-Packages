@@ -1,5 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
+using JGUZDV.DynamicForms.Model.Constraints;
 using JGUZDV.DynamicForms.Serialization;
 using JGUZDV.L10n;
 
@@ -8,25 +9,24 @@ namespace JGUZDV.DynamicForms.Model.FieldTypes;
 /// <summary>
 /// Represents a field type for file values.
 /// </summary>
-public record FileFieldType : FieldType
+public class FileFieldType : BaseFieldType
 {
+    private FileFieldType() : base(
+        typeof(FileInfo),
+        new L10nString()
+        {
+            ["de"] = "Datei",
+            ["en"] = "File"
+        },
+        [FileSizeConstraint.ConstraintId])
+    { }
+
+
     /// <summary>
-    /// Gets the type discriminator for the <see cref="FileFieldType"/>.
+    /// Gets the singleton instance of the <see cref="FileFieldType"/>.
     /// </summary>
-    public static FieldTypeId FieldTypeId { get; } = new("File");
+    public static FileFieldType Instance { get; } = new FileFieldType();
 
-    /// <inheritdoc/>
-    public override FieldTypeId TypeDiscriminator => FieldTypeId;
-
-    /// <inheritdoc/>
-    public override Type ClrType => typeof(FileInfo);
-
-    /// <inheritdoc/>
-    public override L10nString DisplayName => new L10nString()
-    {
-        ["de"] = "Datei",
-        ["en"] = "File"
-    };
 
     /// <inheritdoc/>
     /// <exception cref="InvalidOperationException"></exception>
@@ -82,9 +82,6 @@ public record FileFieldType : FieldType
         /// <summary>
         /// <inheritdoc />
         /// </summary>
-        public void Dispose()
-        {
-            Stream?.Dispose();
-        }
+        public void Dispose() => Stream?.Dispose();
     }
 }
