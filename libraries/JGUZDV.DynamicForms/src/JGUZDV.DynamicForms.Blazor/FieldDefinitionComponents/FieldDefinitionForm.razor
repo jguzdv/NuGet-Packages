@@ -177,7 +177,7 @@
 
     private async Task HandleTypeChanged(ChangeEventArgs e)
     {
-        _fieldDefinition!.Type = BaseFieldType.FromJson(e.Value!.ToString()!);
+        _fieldDefinition!.Type = FieldType.FromJson(e.Value!.ToString()!);
 
 
         var metadataService = ServiceProvider

@@ -13,24 +13,24 @@ namespace JGUZDV.DynamicForms.Model.FieldTypes;
 /// These field types are meant to be used as a singleton, so make the ctor private and provide a Instance field.
 /// </summary>
 /// <remarks>
-/// Initializes a new instance of the <see cref="BaseFieldType"/> class with the specified CLR type, display name, and allowed constraints.
+/// Initializes a new instance of the <see cref="FieldType"/> class with the specified CLR type, display name, and allowed constraints.
 /// </remarks>
 /// <param name="clrType"></param>
 /// <param name="displayName"></param>
 /// <param name="allowedConstraints"></param>
 [JsonConverter(typeof(FieldTypeConverter))]
-public abstract class BaseFieldType(
+public abstract class FieldType(
     Type clrType,
     L10nString displayName,
     HashSet<ConstraintId> allowedConstraints)
 {
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="BaseFieldType"/> class with the specified CLR type and display name.
+    /// Initializes a new instance of the <see cref="FieldType"/> class with the specified CLR type and display name.
     /// </summary>
     /// <param name="clrType"></param>
     /// <param name="displayName"></param>
-    protected BaseFieldType(Type clrType, L10nString displayName)
+    protected FieldType(Type clrType, L10nString displayName)
         : this(clrType, displayName, [])
     { }
 
@@ -111,9 +111,9 @@ public abstract class BaseFieldType(
     /// </summary>
     /// <param name="json">The JSON string to parse.</param>
     /// <returns>A field type object.</returns>
-    public static BaseFieldType FromJson(string json)
+    public static FieldType FromJson(string json)
     {
-        return JsonSerializer.Deserialize<BaseFieldType>(json, DynamicFormsConfiguration.JsonSerializerOptions) 
+        return JsonSerializer.Deserialize<FieldType>(json, DynamicFormsConfiguration.JsonSerializerOptions) 
             ?? throw new InvalidOperationException($"Could not parse json: {json}");
     }
 

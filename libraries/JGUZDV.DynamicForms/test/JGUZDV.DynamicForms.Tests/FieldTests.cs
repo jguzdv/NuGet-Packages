@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 
 using JGUZDV.DynamicForms.Model;
+using JGUZDV.DynamicForms.Model.Constraints;
 using JGUZDV.DynamicForms.Model.FieldTypes;
 using JGUZDV.DynamicForms.Resources;
 using JGUZDV.L10n;
@@ -17,20 +18,6 @@ namespace JGUZDV.DynamicForms.Tests
 {
     public class FieldTests
     {
-        private static BaseFieldType GetFieldType(string typeName)
-        {
-            return typeName switch
-            {
-                "StringFieldType" => new StringFieldType(),
-                "IntFieldType" => new IntFieldType(),
-                "DateOnlyFieldType" => new DateOnlyFieldType(),
-                "FileFieldType" => new FileFieldType(),
-                "BoolFieldType" => new BoolFieldType(),
-                "TimeFieldType" => new TimeOnlyFieldType(),
-                _ => throw new ArgumentException("Invalid field type name", nameof(typeName))
-            };
-        }
-
         [Fact]
         public void Field_ShouldValidateCorrectly()
         {
@@ -41,12 +28,12 @@ namespace JGUZDV.DynamicForms.Tests
                 {
                     Label = new L10nString { ["en"] = "Test Label" }
                 },
-                Type = GetFieldType("StringFieldType"),
+                Type = StringFieldType.Instance,
                 Description = new L10nString { ["en"] = "Test Description" },
                 IsList = false,
                 SortKey = 1,
                 IsRequired = true,
-                Constraints = new List<Constraint> { new StringLengthConstraint { MaxLength = 5 } }
+                Constraints = new List<IConstraint> { new StringLengthConstraint { MaxLength = 5 } }
             };
 
             var field = new Field(fieldDefinition)
@@ -84,12 +71,12 @@ namespace JGUZDV.DynamicForms.Tests
                 {
                     Label = new L10nString { ["en"] = "Test Label" }
                 },
-                Type = GetFieldType("StringFieldType"),
+                Type = StringFieldType.Instance,
                 Description = new L10nString { ["en"] = "Test Description" },
                 IsList = false,
                 SortKey = 1,
                 IsRequired = true,
-                Constraints = new List<Constraint> { new StringLengthConstraint { MaxLength = 5 } }
+                Constraints = new List<IConstraint> { new StringLengthConstraint { MaxLength = 5 } }
             };
 
             var field = new Field(fieldDefinition)
@@ -128,7 +115,7 @@ namespace JGUZDV.DynamicForms.Tests
                 {
                     Label = new L10nString { ["en"] = "Test Label" }
                 },
-                Type = GetFieldType("StringFieldType"),
+                Type = StringFieldType.Instance,
                 Description = new L10nString { ["en"] = "Test Description" },
                 IsList = true,
                 SortKey = 1,
@@ -171,20 +158,20 @@ namespace JGUZDV.DynamicForms.Tests
                 {
                     Label = new L10nString { ["en"] = "Test Date Label" }
                 },
-                Type = GetFieldType("DateOnlyFieldType"),
+                Type = DateOnlyFieldType.Instance,
                 Description = new L10nString { ["en"] = "Test Date Description" },
                 IsList = false,
                 SortKey = 2,
                 IsRequired = true,
-                Constraints = new List<Constraint>
-                        {
-                            new RangeConstraint
-                            {
-                                MinValue = new DateOnly(2020, 1, 1),
-                                MaxValue = new DateOnly(2025, 12, 31),
-                                FieldType = new DateOnlyFieldType()
-                            }
-                        }
+                Constraints = new List<IConstraint>
+                {
+                    new RangeConstraint
+                    {
+                        MinValue = new DateOnly(2020, 1, 1),
+                        MaxValue = new DateOnly(2025, 12, 31),
+                        FieldType = DateOnlyFieldType.Instance
+                    }
+                }
             };
 
             var field = new Field(fieldDefinition)
@@ -224,12 +211,12 @@ namespace JGUZDV.DynamicForms.Tests
                 {
                     Label = new L10nString { ["en"] = "Test Label" }
                 },
-                Type = GetFieldType("StringFieldType"),
+                Type = StringFieldType.Instance,
                 Description = new L10nString { ["en"] = "Test Description" },
                 IsList = false,
                 SortKey = 1,
                 IsRequired = true,
-                Constraints = new List<Constraint> { new RegexConstraint { Regex = @"^\d+$" } }
+                Constraints = new List<IConstraint> { new RegexConstraint { Regex = @"^\d+$" } }
             };
 
             var field = new Field(fieldDefinition)
@@ -267,12 +254,12 @@ namespace JGUZDV.DynamicForms.Tests
                 {
                     Label = new L10nString { ["en"] = "Test Label" }
                 },
-                Type = GetFieldType("StringFieldType"),
+                Type = StringFieldType.Instance,
                 Description = new L10nString { ["en"] = "Test Description" },
                 IsList = true,
                 SortKey = 1,
                 IsRequired = true,
-                Constraints = new List<Constraint> { new SizeConstraint { MinCount = 1, MaxCount = 3 } }
+                Constraints = new List<IConstraint> { new SizeConstraint { MinCount = 1, MaxCount = 3 } }
             };
 
             var field = new Field(fieldDefinition)
@@ -310,12 +297,12 @@ namespace JGUZDV.DynamicForms.Tests
                 {
                     Label = new L10nString { ["en"] = "Test File Label" }
                 },
-                Type = new FileFieldType(),
+                Type = FileFieldType.Instance,
                 Description = new L10nString { ["en"] = "Test File Description" },
                 IsList = false,
                 SortKey = 1,
                 IsRequired = true,
-                Constraints = new List<Constraint> { new FileSizeConstraint { MaxFileSize = 1024 } }
+                Constraints = new List<IConstraint> { new FileSizeConstraint { MaxFileSize = 1024 } }
             };
 
             var field = new Field(fieldDefinition)
@@ -353,12 +340,12 @@ namespace JGUZDV.DynamicForms.Tests
                 {
                     Label = new L10nString { ["en"] = "Test File Label" }
                 },
-                Type = new FileFieldType(),
+                Type = FileFieldType.Instance,
                 Description = new L10nString { ["en"] = "Test File Description" },
                 IsList = false,
                 SortKey = 1,
                 IsRequired = true,
-                Constraints = new List<Constraint> { new FileSizeConstraint { MaxFileSize = 1024 } }
+                Constraints = new List<IConstraint> { new FileSizeConstraint { MaxFileSize = 1024 } }
             };
 
             var field = new Field(fieldDefinition)
@@ -396,7 +383,7 @@ namespace JGUZDV.DynamicForms.Tests
                 {
                     Label = new L10nString { ["en"] = "Test File Label" }
                 },
-                Type = new FileFieldType(),
+                Type = FileFieldType.Instance,
                 Description = new L10nString { ["en"] = "Test File Description" },
                 IsList = false,
                 SortKey = 1,
@@ -453,12 +440,12 @@ namespace JGUZDV.DynamicForms.Tests
                 {
                     Label = new L10nString { ["en"] = "Test File Label" }
                 },
-                Type = new FileFieldType(),
+                Type = FileFieldType.Instance,
                 Description = new L10nString { ["en"] = "Test File Description" },
                 IsList = false,
                 SortKey = 1,
                 IsRequired = true,
-                Constraints = new List<Constraint> { new FileSizeConstraint { MaxFileSize = 1024 } }
+                Constraints = new List<IConstraint> { new FileSizeConstraint { MaxFileSize = 1024 } }
             };
 
             var fileContent = new MemoryStream(new byte[512]);
@@ -497,12 +484,12 @@ namespace JGUZDV.DynamicForms.Tests
                 {
                     Label = new L10nString { ["en"] = "Test File Label" }
                 },
-                Type = new FileFieldType(),
+                Type = FileFieldType.Instance,
                 Description = new L10nString { ["en"] = "Test File Description" },
                 IsList = false,
                 SortKey = 1,
                 IsRequired = true,
-                Constraints = new List<Constraint> { new FileSizeConstraint { MaxFileSize = 1024 } }
+                Constraints = new List<IConstraint> { new FileSizeConstraint { MaxFileSize = 1024 } }
             };
 
             var fileContent = new MemoryStream(new byte[2048]);
@@ -542,7 +529,7 @@ namespace JGUZDV.DynamicForms.Tests
                 {
                     Label = new L10nString { ["en"] = "Test File Label" }
                 },
-                Type = new FileFieldType(),
+                Type = FileFieldType.Instance,
                 Description = new L10nString { ["en"] = "Test File Description" },
                 IsList = false,
                 SortKey = 1,
@@ -581,7 +568,7 @@ namespace JGUZDV.DynamicForms.Tests
                 {
                     Label = new L10nString { ["en"] = "Test Date Label" }
                 },
-                Type = GetFieldType("DateOnlyFieldType"),
+                Type = DateOnlyFieldType.Instance,
                 Description = new L10nString { ["en"] = "Test Date Description" },
                 IsList = false,
                 SortKey = 1,
@@ -615,7 +602,7 @@ namespace JGUZDV.DynamicForms.Tests
                 {
                     Label = new L10nString { ["en"] = "Test Int Label" }
                 },
-                Type = GetFieldType("IntFieldType"),
+                Type = IntFieldType.Instance,
                 Description = new L10nString { ["en"] = "Test Int Description" },
                 IsList = false,
                 SortKey = 1,
@@ -649,7 +636,7 @@ namespace JGUZDV.DynamicForms.Tests
                 {
                     Label = new L10nString { ["en"] = "Test Bool Label" }
                 },
-                Type = GetFieldType("BoolFieldType"),
+                Type = BoolFieldType.Instance,
                 Description = new L10nString { ["en"] = "Test Bool Description" },
                 IsList = false,
                 SortKey = 1,
@@ -683,7 +670,7 @@ namespace JGUZDV.DynamicForms.Tests
                 {
                     Label = new L10nString { ["en"] = "Test Time Label" }
                 },
-                Type = GetFieldType("TimeFieldType"),
+                Type = TimeOnlyFieldType.Instance,
                 Description = new L10nString { ["en"] = "Test Time Description" },
                 IsList = false,
                 SortKey = 1,

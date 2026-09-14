@@ -2,6 +2,7 @@
 using System.Data;
 using System.Text.Json.Serialization;
 
+using JGUZDV.DynamicForms.Model.FieldTypes;
 using JGUZDV.DynamicForms.Serialization;
 using JGUZDV.L10n;
 
@@ -22,6 +23,10 @@ public class RangeConstraint : IConstraint
     /// <inheritdoc />
     public static L10nString DisplayName => new() { ["de"] = "Intervall", ["en"] = "Range" };
 
+    /// <summary>
+    /// Range constraints can only operate, when they know their field type.
+    /// </summary>
+    public FieldType? FieldType { get; set; }
 
 
     private IComparable? _maxValue;

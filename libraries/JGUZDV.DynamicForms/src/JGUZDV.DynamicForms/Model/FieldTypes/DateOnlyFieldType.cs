@@ -8,7 +8,7 @@ namespace JGUZDV.DynamicForms.Model.FieldTypes;
 /// <summary>
 /// Represents a field type for DateOnly values.
 /// </summary>
-public class DateOnlyFieldType : BaseFieldType
+public class DateOnlyFieldType : FieldType
 {
     private DateOnlyFieldType() : base(
         typeof(DateOnly),

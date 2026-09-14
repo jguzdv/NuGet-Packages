@@ -1,6 +1,7 @@
 ﻿using JGUZDV.DynamicForms.Blazor;
 using JGUZDV.DynamicForms.Blazor.Fields;
 using JGUZDV.DynamicForms.Model;
+using JGUZDV.DynamicForms.Model.Constraints;
 using JGUZDV.DynamicForms.Model.FieldTypes;
 
 using Microsoft.AspNetCore.Components;
@@ -16,12 +17,12 @@ public static class DynamicFormsBuilderExtensions
     /// <summary>
     /// Sets the input component type for the specified field type.
     /// </summary>
-    /// <typeparam name="TFieldType">The type of the field to associate. Must derive from <see cref="BaseFieldType"/>.</typeparam>
+    /// <typeparam name="TFieldType">The type of the field to associate. Must derive from <see cref="FieldType"/>.</typeparam>
     /// <typeparam name="TComponentType">The type of the input component to associate with the field. Must derive from <see cref="ComponentBase"/>.</typeparam>
     /// <param name="builder">The <see cref="DynamicFormsBuilder"/> instance to configure.</param>
     /// <returns></returns>
     public static DynamicFormsBuilder SetInputComponentType<TFieldType, TComponentType>(this DynamicFormsBuilder builder)
-        where TFieldType : BaseFieldType
+        where TFieldType : FieldType
         where TComponentType : ComponentBase
     {
         FieldInputFactory.SetViewType<TFieldType, TComponentType>();
@@ -36,7 +37,7 @@ public static class DynamicFormsBuilderExtensions
     /// <param name="builder">The <see cref="DynamicFormsBuilder"/> instance to configure.</param>
     /// <returns></returns>
     public static DynamicFormsBuilder SetConstraintInputType<TConstraint, TComponent>(this DynamicFormsBuilder builder)
-        where TConstraint : Constraint
+        where TConstraint : IConstraint
         where TComponent : ComponentBase
     {
         ConstraintViewTypeFactory.SetViewType(typeof(TConstraint), typeof(TComponent));

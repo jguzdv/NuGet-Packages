@@ -9,7 +9,7 @@ namespace JGUZDV.DynamicForms.Model;
 /// <summary>
 /// Represents a field type for float values.
 /// </summary>
-public class FloatFieldType : BaseFieldType
+public class FloatFieldType : FieldType
 {
     private FloatFieldType() : base(
         typeof(float),

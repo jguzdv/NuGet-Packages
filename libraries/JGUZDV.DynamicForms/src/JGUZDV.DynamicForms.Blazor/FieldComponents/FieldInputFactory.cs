@@ -22,7 +22,7 @@ public static class FieldInputFactory
     /// <param name="type">The field type to get the component type for.</param>
     /// <returns>The view type associated with the specified field.</returns>
     /// <exception cref="InvalidOperationException">Thrown when the field type is unknown.</exception>
-    public static Type GetViewType(BaseFieldType type)
+    public static Type GetViewType(FieldType type)
     {
         return _viewTypes.GetValueOrDefault(type.GetType())
             ?? typeof(DefaultFieldInput);
@@ -32,7 +32,7 @@ public static class FieldInputFactory
     /// Sets the component type for the specified field type.
     /// </summary>
     public static void SetViewType<TFieldType, TComponentType>()
-        where TFieldType : BaseFieldType
+        where TFieldType : FieldType
         where TComponentType : ComponentBase
     {
         _viewTypes[typeof(TFieldType)] = typeof(TComponentType);
