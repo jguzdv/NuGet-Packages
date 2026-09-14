@@ -1,17 +1,17 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-using JGUZDV.DynamicForms.Model;
+using JGUZDV.DynamicForms.Model.Constraints;
 
 namespace JGUZDV.DynamicForms.Serialization;
 
 /// <summary>
-/// A custom JSON converter for the <see cref="Constraint"/> class.
+/// A custom JSON converter for the <see cref="IConstraint"/> interface.
 /// </summary>
-public class ConstraintConverter : JsonConverter<Constraint>
+public class ConstraintConverter : JsonConverter<IConstraint>
 {
     /// <inheritdoc />
-    public override Constraint? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override IConstraint? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         using (JsonDocument doc = JsonDocument.ParseValue(ref reader))
         {
@@ -20,12 +20,12 @@ public class ConstraintConverter : JsonConverter<Constraint>
                 string typeName = typeElement.GetString()!;
                 Type? constraintType = Type.GetType(typeName);
 
-                if (constraintType == null || !typeof(Constraint).IsAssignableFrom(constraintType))
+                if (constraintType == null || !typeof(IConstraint).IsAssignableFrom(constraintType))
                 {
                     throw new InvalidOperationException("Unable to determine the type of the constraint.");
                 }
 
-                return (Constraint?)JsonSerializer.Deserialize(doc.RootElement.GetProperty("$Value"), constraintType, options);
+                return (IConstraint?)JsonSerializer.Deserialize(doc.RootElement.GetProperty("$Value"), constraintType, options);
             }
         }
 
@@ -33,7 +33,7 @@ public class ConstraintConverter : JsonConverter<Constraint>
     }
 
     /// <inheritdoc />
-    public override void Write(Utf8JsonWriter writer, Constraint value, JsonSerializerOptions options)
+    public override void Write(Utf8JsonWriter writer, IConstraint value, JsonSerializerOptions options)
     {
         writer.WriteStartObject();
 

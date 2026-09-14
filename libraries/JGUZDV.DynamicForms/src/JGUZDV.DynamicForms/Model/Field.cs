@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 using JGUZDV.DynamicForms.Model.FieldTypes;
@@ -57,27 +58,53 @@ public class Field : IValidatableObject, IDisposable, IAsyncDisposable
         get => _value;
         set
         {
-            if (value != null && FieldDefinition.ChoiceOptions.Count == 0) //TODO: Maybe check this in validation not in setter
+            if (value == null)
             {
-                var valueType = value.GetType();
                 if (FieldDefinition.IsList)
                 {
-                    if (!typeof(IList).IsAssignableFrom(valueType)
-                        || !valueType.IsGenericType
-                        || valueType.GetGenericArguments()[0] != ValueType.ClrType)
+                    throw new InvalidOperationException("List fields can not be null");
+                }
+            }
+            else
+            {
+                var valueType = value.GetType();
+
+                if (valueType == FieldDefinition.Type.ClrType)
+                {
+                    _value = (object?)value;
+                    return;
+                }
+
+                if (value is string stringValue)
+                {
+                    _value = FieldDefinition.Type.ConvertToValue(stringValue);
+                    return;
+                }
+
+                if (value is JsonElement jsonElement)
+                {
+                    _value = FieldDefinition.Type.ConvertToValue(jsonElement);
+                    return;
+                }
+
+
+                if (FieldDefinition.ChoiceOptions.Count == 0) //TODO: Maybe check this in validation not in setter
+                {
+
+                    if (FieldDefinition.IsList)
+                    {
+                        if (!typeof(IList).IsAssignableFrom(valueType)
+                            || !valueType.IsGenericType
+                            || valueType.GetGenericArguments()[0] != ValueType.ClrType)
+                        {
+                            throw new InvalidOperationException("Type does not match");
+                        }
+                    }
+                    else if (value.GetType() != ValueType.ClrType)
                     {
                         throw new InvalidOperationException("Type does not match");
                     }
                 }
-                else if (value.GetType() != ValueType.ClrType)
-                {
-                    throw new InvalidOperationException("Type does not match");
-                }
-            }
-
-            if (value == null && FieldDefinition.IsList)
-            {
-                throw new InvalidOperationException("List fields can not be null");
             }
 
             _value = value;
@@ -97,7 +124,7 @@ public class Field : IValidatableObject, IDisposable, IAsyncDisposable
     /// Gets the type of the field.
     /// </summary>
     [JsonIgnore]
-    public FieldType ValueType => FieldDefinition.Type ?? throw new InvalidOperationException("Invalid FieldDefinition");
+    public BaseFieldType ValueType => FieldDefinition.Type ?? throw new InvalidOperationException("Invalid FieldDefinition");
 
     /// <summary>
     /// Adds the <see cref="Value"/> of the field to the content with <see cref="FieldDefinition.Identifier"/> as default name.
