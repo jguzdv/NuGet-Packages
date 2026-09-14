@@ -1,24 +1,39 @@
 ﻿using System.Collections;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
-namespace JGUZDV.DynamicForms.Model;
+
+using JGUZDV.L10n;
+
+namespace JGUZDV.DynamicForms.Model.Constraints;
 
 /// <summary>
 /// Constraint for validating the length of strings.
 /// </summary>
-public class StringLengthConstraint : Constraint
+public class StringLengthConstraint : IConstraint
 {
+    /// <inheritdoc />
+    public static ConstraintId ConstraintId => new(nameof(StringLengthConstraint));
+
+    /// <inheritdoc />
+    public ConstraintId GetConstraintId() => ConstraintId;
+
+    /// <inheritdoc />
+    public static L10nString DisplayName => new() { ["de"] = "Textlänge", ["en"] = "Text length" };
+
+
+
     /// <summary>
     /// The maximum length of the string.
     /// </summary>
     public int MaxLength { get; set; }
+
 
     /// <summary>
     /// Validates the constraint.
     /// </summary>
     /// <param name="validationContext">The validation context.</param>
     /// <returns>A collection of validation results.</returns>
-    public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
         if (MaxLength < 0)
         {
@@ -45,7 +60,7 @@ public class StringLengthConstraint : Constraint
     /// <param name="values">The values to validate.</param>
     /// <param name="context">The validation context.</param>
     /// <returns>A collection of validation results.</returns>
-    public override IEnumerable<ValidationResult> ValidateConstraint(List<object> values, ValidationContext context)
+    public IEnumerable<ValidationResult> Validate(List<object> values, ValidationContext context)
     {
         if (values.Any(x => x as string == null))
         {
