@@ -16,7 +16,7 @@ namespace JGUZDV.DynamicForms.Tests
 {
     public class FieldDefinitionTests
     {
-        private static FieldType GetFieldType(string typeName)
+        private static BaseFieldType GetFieldType(string typeName)
         {
             return typeName switch
             {

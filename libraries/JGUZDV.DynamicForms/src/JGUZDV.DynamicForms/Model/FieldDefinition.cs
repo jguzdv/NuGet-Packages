@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 
+using JGUZDV.DynamicForms.Model.Constraints;
 using JGUZDV.DynamicForms.Model.FieldTypes;
 using JGUZDV.DynamicForms.Resources;
 using JGUZDV.L10n;
@@ -18,6 +19,12 @@ public class FieldDefinition : IValidatableObject
     /// Gets or sets the identifier of the field.
     /// </summary>
     public FieldId Identifier { get; set; } = new(Guid.NewGuid().ToString());
+
+    /// <summary>
+    /// Gets or sets the type of the field.
+    /// </summary>
+    public required BaseFieldType Type { get; set; }
+
 
     /// <summary>
     /// Gets or sets the input definition of the field.
@@ -52,18 +59,12 @@ public class FieldDefinition : IValidatableObject
     /// <summary>
     /// Gets or sets the constraints for the field.
     /// </summary>
-    public List<Constraint> Constraints { get; set; } = new();
+    public List<IConstraint> Constraints { get; set; } = [];
 
     /// <summary>
     /// Gets or sets a value indicating whether the field is required.
     /// </summary>
     public bool IsRequired { get; set; }
-
-    /// <summary>
-    /// Gets or sets the type of the field.
-    /// </summary>
-    public FieldType? Type { get; set; }
-
 
     /// <summary>
     /// Copies the properties from another <see cref="FieldDefinition"/> instance to this instance.

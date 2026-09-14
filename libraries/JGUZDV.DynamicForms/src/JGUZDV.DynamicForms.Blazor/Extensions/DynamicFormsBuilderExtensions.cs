@@ -16,12 +16,12 @@ public static class DynamicFormsBuilderExtensions
     /// <summary>
     /// Sets the input component type for the specified field type.
     /// </summary>
-    /// <typeparam name="TFieldType">The type of the field to associate. Must derive from <see cref="FieldType"/>.</typeparam>
+    /// <typeparam name="TFieldType">The type of the field to associate. Must derive from <see cref="BaseFieldType"/>.</typeparam>
     /// <typeparam name="TComponentType">The type of the input component to associate with the field. Must derive from <see cref="ComponentBase"/>.</typeparam>
     /// <param name="builder">The <see cref="DynamicFormsBuilder"/> instance to configure.</param>
     /// <returns></returns>
     public static DynamicFormsBuilder SetInputComponentType<TFieldType, TComponentType>(this DynamicFormsBuilder builder)
-        where TFieldType : FieldType
+        where TFieldType : BaseFieldType
         where TComponentType : ComponentBase
     {
         FieldInputFactory.SetViewType<TFieldType, TComponentType>();

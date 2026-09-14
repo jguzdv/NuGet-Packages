@@ -28,7 +28,7 @@ public class DynamicFormsBuilder
     /// <param name="type"></param>
     /// <param name="allowedConstraints"></param>
     /// <returns></returns>
-    public DynamicFormsBuilder AddFieldType(FieldType type, List<Type> allowedConstraints)
+    public DynamicFormsBuilder AddFieldType(BaseFieldType type, List<Type> allowedConstraints)
     {
         DynamicFormsConfiguration.AddFieldType(type, allowedConstraints);
         return this;
@@ -41,7 +41,7 @@ public class DynamicFormsBuilder
     /// <typeparam name="TMetadataProvider"></typeparam>
     /// <returns></returns>
     public DynamicFormsBuilder AddMetadata<TFieldType, TMetadataProvider>()
-        where TFieldType : FieldType
+        where TFieldType : BaseFieldType
         where TMetadataProvider : class, IFieldTypeMetadataProvider
     {
         _services.TryAddScoped<TMetadataProvider>();
@@ -60,7 +60,7 @@ public class DynamicFormsBuilder
     /// <typeparam name="TMetadataProvider"></typeparam>
     /// <returns></returns>
     public DynamicFormsBuilder AddValueProvider<TFieldType, TMetadataProvider>()
-       where TFieldType : FieldType
+       where TFieldType : BaseFieldType
        where TMetadataProvider : class, IFieldTypeValueProvider
     {
         _services.TryAddScoped<TMetadataProvider>();
@@ -85,7 +85,7 @@ public class DynamicFormsBuilder
     /// <summary>
     /// Sets the allowed constraint types for a given FieldType. If a new constraint type is added you must also set the name of the constraint via <see cref="SetConstraintName(Type, L10nString)"/>.
     /// </summary>
-    public DynamicFormsBuilder SetConstraintTypes(FieldType fieldType, List<Type> constraintType)
+    public DynamicFormsBuilder SetConstraintTypes(BaseFieldType fieldType, List<Type> constraintType)
     {
         DynamicFormsConfiguration.SetConstraintTypes(fieldType, constraintType);
         return this;

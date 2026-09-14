@@ -84,7 +84,7 @@
 
     private void AddNewConstraint()
     {
-        var constraint = DynamicFormsConfiguration.Create(_newConstraintString!, FieldDefinition.Type!);
+        var constraint = DynamicFormsConfiguration.Create(_newConstraintString!);
         FieldDefinition.Constraints = FieldDefinition.Constraints.Prepend(constraint).ToList();
         FieldDefinitionChanged.InvokeAsync(FieldDefinition);
     }
