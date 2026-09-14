@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 
+using JGUZDV.DynamicForms.Model.Constraints;
 using JGUZDV.DynamicForms.Model.FieldTypes;
 using JGUZDV.L10n;
 
@@ -8,49 +9,39 @@ namespace JGUZDV.DynamicForms.Model;
 /// <summary>
 /// Represents a field type for TimeOnly values.
 /// </summary>
-public record TimeOnlyFieldType : FieldType
+public class TimeOnlyFieldType : BaseFieldType
 {
-    /// <summary>
-    /// Gets the type discriminator for the <see cref="TimeOnlyFieldType"/>.
-    /// </summary>
-    public static FieldTypeId FieldTypeId { get; } = new("TimeOnly");
-
-    /// <inheritdoc/>
-    public override FieldTypeId TypeDiscriminator => FieldTypeId;
-
-    /// <inheritdoc/>
-    public override Type ClrType => typeof(TimeOnly);
-
-    /// <inheritdoc/>
-    public override L10nString DisplayName => new L10nString()
+    private TimeOnlyFieldType() : base(
+        typeof(TimeOnly),
+        new L10nString()
+        {
+            ["de"] = "Uhrzeit",
+            ["en"] = "Time"
+        },
+        [RangeConstraint.ConstraintId])
     {
-        ["de"] = "Uhrzeit",
-        ["en"] = "Time"
-    };
+        HtmlInputType = "time";
+    }
 
-    /// <inheritdoc/>
-    public override string HtmlInputType => "time";
+    /// <summary>
+    /// Gets the singleton instance of the <see cref="TimeOnlyFieldType"/>.
+    /// </summary>
+    public static TimeOnlyFieldType Instance { get; } = new TimeOnlyFieldType();
+
 
     /// <inheritdoc/>
     public override string ConvertFromValue(object value)
     {
-        if (value is TimeOnly timeOnly)
-        {
-            return timeOnly.ToString("O");
-        }
-        throw new InvalidOperationException($"Invalid value type: {value.GetType().Name}. Expected TimeOnly.");
+        return value is TimeOnly timeOnly
+            ? timeOnly.ToString("O")
+            : throw new InvalidOperationException($"Invalid value type: {value.GetType().Name}. Expected TimeOnly.");
     }
 
     /// <inheritdoc/>
     public override object ConvertToValue(string stringValue)
     {
-        if (TimeOnly.TryParse(stringValue, out var dateOnly))
-        {
-            return dateOnly;
-        }
-        else
-        {
-            return JsonSerializer.Deserialize<TimeOnly>(stringValue, DynamicFormsConfiguration.JsonSerializerOptions);
-        }
+        return TimeOnly.TryParse(stringValue, out var timeOnly)
+            ? timeOnly
+            : JsonSerializer.Deserialize<TimeOnly>(stringValue, DynamicFormsConfiguration.JsonSerializerOptions);
     }
 }
