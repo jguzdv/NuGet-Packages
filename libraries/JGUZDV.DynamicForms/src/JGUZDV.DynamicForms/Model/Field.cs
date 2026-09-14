@@ -124,7 +124,7 @@ public class Field : IValidatableObject, IDisposable, IAsyncDisposable
     /// Gets the type of the field.
     /// </summary>
     [JsonIgnore]
-    public BaseFieldType ValueType => FieldDefinition.Type ?? throw new InvalidOperationException("Invalid FieldDefinition");
+    public FieldType ValueType => FieldDefinition.Type ?? throw new InvalidOperationException("Invalid FieldDefinition");
 
     /// <summary>
     /// Adds the <see cref="Value"/> of the field to the content with <see cref="FieldDefinition.Identifier"/> as default name.
@@ -178,7 +178,7 @@ public class Field : IValidatableObject, IDisposable, IAsyncDisposable
             val.Add(Value);
         }
 
-        var errors = FieldDefinition.Constraints.SelectMany(x => x.ValidateConstraint(val, validationContext));
+        var errors = FieldDefinition.Constraints.SelectMany(x => x.Validate(val, validationContext));
         if (FieldDefinition.ChoiceOptions.Any())
         {
             foreach (var v in val)

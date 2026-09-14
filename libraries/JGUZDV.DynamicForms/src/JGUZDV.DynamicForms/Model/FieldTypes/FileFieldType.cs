@@ -9,7 +9,7 @@ namespace JGUZDV.DynamicForms.Model.FieldTypes;
 /// <summary>
 /// Represents a field type for file values.
 /// </summary>
-public class FileFieldType : BaseFieldType
+public class FileFieldType : FieldType
 {
     private FileFieldType() : base(
         typeof(FileInfo),

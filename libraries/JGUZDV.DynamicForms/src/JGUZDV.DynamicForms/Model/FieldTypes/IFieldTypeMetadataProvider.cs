@@ -12,19 +12,19 @@ public interface IFieldTypeMetadataProvider
     /// </summary>
     /// <param name="type"></param>
     /// <returns></returns>
-    L10nString GetMetadataDisplayName(BaseFieldType type);
+    L10nString GetMetadataDisplayName(FieldType type);
 
     /// <summary>
     /// Gets the allowed metadata values for the field type.
     /// </summary>
     /// <param name="type"></param>
     /// <returns></returns>
-    public Task<(bool HandlesType, List<ChoiceOption> AllowedValues)> TryGetValues(BaseFieldType type);
+    public Task<(bool HandlesType, List<ChoiceOption> AllowedValues)> TryGetValues(FieldType type);
 
     /// <summary>
     /// Gets the allowed metadata values for the field type.
     /// </summary>
     /// <param name="type"></param>
     /// <returns></returns>
-    public Task<List<ChoiceOption>> GetValues(BaseFieldType type);
+    public Task<List<ChoiceOption>> GetValues(FieldType type);
 }

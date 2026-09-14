@@ -51,7 +51,7 @@ public class SizeConstraint : IConstraint
     /// <param name="values">The values to validate.</param>
     /// <param name="context">The validation context.</param>
     /// <returns>A collection of validation results.</returns>
-    public IEnumerable<ValidationResult> ValidateConstraint(IList values, ValidationContext context)
+    public IEnumerable<ValidationResult> Validate(IList values, ValidationContext context)
     {
         var fields = new List<string?> { (context.ObjectInstance as FieldDefinition)?.InputDefinition.Name }.Where(x => x != null).ToList();
 
@@ -67,6 +67,6 @@ public class SizeConstraint : IConstraint
     /// <returns>A collection of validation results.</returns>
     public IEnumerable<ValidationResult> Validate(List<object> values, ValidationContext context)
     {
-        return Validate(values, context);
+        return Validate((IList)values, context);
     }
 }

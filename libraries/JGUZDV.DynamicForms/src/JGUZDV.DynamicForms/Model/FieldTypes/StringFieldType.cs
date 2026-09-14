@@ -8,7 +8,7 @@ namespace JGUZDV.DynamicForms.Model.FieldTypes;
 /// <summary>
 /// Represents a field type for string values.
 /// </summary>
-public class StringFieldType : BaseFieldType
+public class StringFieldType : FieldType
 {
     private StringFieldType() : base(
         typeof(string),

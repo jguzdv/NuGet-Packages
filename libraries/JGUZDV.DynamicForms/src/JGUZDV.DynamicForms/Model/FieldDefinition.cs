@@ -23,7 +23,7 @@ public class FieldDefinition : IValidatableObject
     /// <summary>
     /// Gets or sets the type of the field.
     /// </summary>
-    public required BaseFieldType Type { get; set; }
+    public required FieldType Type { get; set; }
 
 
     /// <summary>

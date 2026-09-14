@@ -17,7 +17,7 @@ namespace JGUZDV.DynamicForms
     {
         static DynamicFormsConfiguration()
         {
-            _registeredFieldTypes = new BaseFieldType[] {
+            _registeredFieldTypes = new FieldType[] {
                 BoolFieldType.Instance,
                 DateOnlyFieldType.Instance,
                 FileFieldType.Instance,
@@ -37,14 +37,14 @@ namespace JGUZDV.DynamicForms
             };
         }
 
-        private static readonly Dictionary<FieldTypeId, BaseFieldType> _registeredFieldTypes;
+        private static readonly Dictionary<FieldTypeId, FieldType> _registeredFieldTypes;
         private static readonly Dictionary<ConstraintId, Type> _registeredConstraintTypes;
         
 
         /// <summary>
         /// Gets the list of registered FieldTypes.
         /// </summary>
-        public static IReadOnlyDictionary<FieldTypeId, BaseFieldType> RegisteredFieldTypes => _registeredFieldTypes;
+        public static IReadOnlyDictionary<FieldTypeId, FieldType> RegisteredFieldTypes => _registeredFieldTypes;
 
         /// <summary>
         /// Gets the list of registered ConstraintTypes.
@@ -56,8 +56,16 @@ namespace JGUZDV.DynamicForms
         /// Adds a new FieldType to the registered field types and sets the allowed constraints for it.
         /// </summary>
         /// <param name="type">The FieldType to add.</param>
-        public static void AddFieldType(BaseFieldType type)
+        public static void AddFieldType(FieldType type)
         {
+            foreach(var constraintId in type.AllowedConstraints)
+            {
+                if (!_registeredConstraintTypes.ContainsKey(constraintId))
+                {
+                    throw new InvalidOperationException($"Constraint type {constraintId} is not registered.");
+                }
+            }
+
             _registeredFieldTypes.Add(type.TypeId, type);
         }
 
@@ -95,31 +103,9 @@ namespace JGUZDV.DynamicForms
         /// <param name="fieldType">The FieldType to set constraints for.</param>
         /// <param name="constraintTypes">The list of allowed constraint types.</param>
         /// <exception cref="InvalidOperationException">Thrown if any of the constraint types are not of type Constraint.</exception>
-        public static void SetConstraintTypes(BaseFieldType fieldType, List<ConstraintId> constraintTypes)
+        public static void SetConstraintTypes(FieldType fieldType, List<ConstraintId> constraintTypes)
         {
             fieldType.AllowedConstraints.UnionWith(constraintTypes);
-        }
-
-        /// <summary>
-        /// Gets the list of allowed constraint types for a given FieldDefinition.
-        /// </summary>
-        /// <param name="fieldDefinition">The FieldDefinition to get constraints for.</param>
-        /// <returns>The list of allowed constraint types.</returns>
-        public static List<Type> GetConstraintTypes(FieldDefinition fieldDefinition)
-        {
-            if (fieldDefinition.Type == null)
-            {
-                return new List<Type>();
-            }
-
-            var result = _fieldConstraints[fieldDefinition.Type.TypeId].ToList();
-
-            if (fieldDefinition.IsList)
-            {
-                result.Add(typeof(SizeConstraint));
-            }
-
-            return result;
         }
 
 
@@ -136,21 +122,7 @@ namespace JGUZDV.DynamicForms
                 : throw new InvalidOperationException("Type must be of type IConstraint");
         }
 
-        /// <summary>
-        /// Creates an instance of a constraint by its type name and associates it with a given FieldType.
-        /// </summary>
-        /// <param name="typeName">The name of the constraint type to create.</param>
-        /// <returns>The created constraint instance.</returns>
-        public static IConstraint Create(string typeName)
-        {
-            var constraintType = _allConstraints
-                .First(x => x.Name == typeName);
 
-            // TODO: check fieldType is allowed for constraint
-
-            var constraint = (IConstraint)Activator.CreateInstance(constraintType)!;
-            return constraint;
-        }
 
         /// <summary>
         /// Gets the JSON serializer options for the dynamic forms library.

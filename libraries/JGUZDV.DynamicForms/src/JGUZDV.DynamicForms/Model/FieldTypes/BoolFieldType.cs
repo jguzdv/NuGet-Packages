@@ -5,7 +5,7 @@ namespace JGUZDV.DynamicForms.Model;
 /// <summary>
 /// Represents a field type for boolean values.
 /// </summary>
-public class BoolFieldType : BaseFieldType
+public class BoolFieldType : FieldType
 {
     private BoolFieldType() : base(
         typeof(bool), 

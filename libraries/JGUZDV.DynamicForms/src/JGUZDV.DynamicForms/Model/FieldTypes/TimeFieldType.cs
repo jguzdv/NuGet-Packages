@@ -9,7 +9,7 @@ namespace JGUZDV.DynamicForms.Model;
 /// <summary>
 /// Represents a field type for TimeOnly values.
 /// </summary>
-public class TimeOnlyFieldType : BaseFieldType
+public class TimeOnlyFieldType : FieldType
 {
     private TimeOnlyFieldType() : base(
         typeof(TimeOnly),

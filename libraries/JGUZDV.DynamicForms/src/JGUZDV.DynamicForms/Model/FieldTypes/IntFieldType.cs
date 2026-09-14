@@ -8,7 +8,7 @@ namespace JGUZDV.DynamicForms.Model.FieldTypes;
 /// <summary>
 /// Represents a field type for integer values.
 /// </summary>
-public class IntFieldType : BaseFieldType
+public class IntFieldType : FieldType
 {
     private IntFieldType() : base(
         typeof(int),
