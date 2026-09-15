@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-using JGUZDV.DynamicForms.Model;
+using JGUZDV.DynamicForms.Model.Constraints;
 using JGUZDV.DynamicForms.Model.FieldTypes;
 
 namespace JGUZDV.DynamicForms.Serialization;
@@ -54,7 +54,9 @@ public class RangeConstraintConverter : JsonConverter<RangeConstraint>
     public override void Write(Utf8JsonWriter writer, RangeConstraint value, JsonSerializerOptions options)
     {
         if (value.FieldType == null)
+        {
             throw new InvalidOperationException("FieldType must be set");
+        }
 
         writer.WriteStartObject();
 

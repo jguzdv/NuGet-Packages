@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
+using JGUZDV.DynamicForms.Model.Constraints;
 using JGUZDV.DynamicForms.Serialization;
 using JGUZDV.L10n;
 
@@ -8,30 +9,64 @@ namespace JGUZDV.DynamicForms.Model.FieldTypes;
 
 /// <summary>
 /// Represents the base class for field types.
+/// Field types define the data type and converters for form fields in the dynamic forms system.
+/// These field types are meant to be used as a singleton, so make the ctor private and provide a Instance field.
 /// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="FieldType"/> class with the specified CLR type, display name, and allowed constraints.
+/// </remarks>
+/// <param name="clrType"></param>
+/// <param name="displayName"></param>
+/// <param name="allowedConstraints"></param>
 [JsonConverter(typeof(FieldTypeConverter))]
-public abstract record FieldType
+public abstract class FieldType(
+    Type clrType,
+    L10nString displayName,
+    HashSet<ConstraintId> allowedConstraints)
 {
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="FieldType"/> class with the specified CLR type and display name.
+    /// </summary>
+    /// <param name="clrType"></param>
+    /// <param name="displayName"></param>
+    protected FieldType(Type clrType, L10nString displayName)
+        : this(clrType, displayName, [])
+    { }
+
     /// <summary>
     /// Gets the CLR type of the field.
     /// </summary>
-    public abstract Type ClrType { get; }
+    public Type ClrType { get; } = clrType;
+
+    /// <summary>
+    /// Gets the allowed constraints for the field type.
+    /// </summary>
+    public HashSet<ConstraintId> AllowedConstraints { get; } = allowedConstraints;
+
+    /// <summary>
+    /// Gets the type identifier for the field type.
+    /// This will be used to identify the field type during serialization and deserialization.
+    /// </summary>
+    public virtual FieldTypeId TypeId
+    {
+        get
+        {
+            return new(ClrType.Name);
+        }
+    }
+
 
     /// <summary>
     /// Gets the display name of the field type.
     /// </summary>
-    public abstract L10nString DisplayName { get; }
+    public L10nString DisplayName { get; } = displayName;
 
     /// <summary>
     /// Gets the input type of the field.
     /// </summary>
-    public virtual string HtmlInputType { get; } = "text";
+    public string HtmlInputType { get; protected set; } = "text";
 
-    /// <summary>
-    /// Gets the type discriminator for the field type.
-    /// This will be used to identify the field type during serialization and deserialization.
-    /// </summary>
-    public abstract FieldTypeId TypeDiscriminator { get; }
 
     /// <summary>
     /// Converts the specified value to a string.
@@ -48,14 +83,19 @@ public abstract record FieldType
     /// <summary>
     /// Converts the specified string to an object of the CLR type.
     /// </summary>
-    /// <param name="stringValue">The string to convert.</param>
-    /// <returns>An object of the CLR type.</returns>
     public virtual object ConvertToValue(string stringValue)
     {
         return ClrType.IsPrimitive
             ? Convert.ChangeType(stringValue, ClrType)
-            : JsonSerializer.Deserialize(stringValue, ClrType, DynamicFormsConfiguration.JsonSerializerOptions) ?? throw new InvalidOperationException($"Could not parse json: {stringValue} into target type: {ClrType.Name}");
+            : JsonSerializer.Deserialize(stringValue, ClrType, DynamicFormsConfiguration.JsonSerializerOptions)
+            ?? throw new InvalidOperationException($"Could not parse json: {stringValue} into target type: {ClrType.Name}");
     }
+
+    /// <summary>
+    /// Converts the specified JSON element to an object of the CLR type.
+    /// </summary>
+    public virtual object? ConvertToValue(JsonElement jsonElement)
+        => JsonSerializer.Deserialize(jsonElement, ClrType, DynamicFormsConfiguration.JsonSerializerOptions);
 
     /// <summary>
     /// Converts the field type to a JSON string.
@@ -63,7 +103,7 @@ public abstract record FieldType
     /// <returns>A JSON string representation of the field type.</returns>
     public string ToJson()
     {
-        return System.Text.Json.JsonSerializer.Serialize(this, DynamicFormsConfiguration.JsonSerializerOptions);
+        return JsonSerializer.Serialize(this, DynamicFormsConfiguration.JsonSerializerOptions);
     }
 
     /// <summary>
@@ -73,11 +113,8 @@ public abstract record FieldType
     /// <returns>A field type object.</returns>
     public static FieldType FromJson(string json)
     {
-        var options = new JsonSerializerOptions()
-        {
-            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault
-        };
-        return JsonSerializer.Deserialize<FieldType>(json, options) ?? throw new InvalidOperationException($"Could not parse json: {json}");
+        return JsonSerializer.Deserialize<FieldType>(json, DynamicFormsConfiguration.JsonSerializerOptions) 
+            ?? throw new InvalidOperationException($"Could not parse json: {json}");
     }
 
     /// <summary>

@@ -22,6 +22,6 @@ public class FieldTypeConverter : JsonConverter<FieldType>
     /// <inheritdoc />
     public override void Write(Utf8JsonWriter writer, FieldType value, JsonSerializerOptions options)
     {
-        writer.WriteStringValue(value.TypeDiscriminator.Value);
+        writer.WriteStringValue(value.TypeId.Value);
     }
 }

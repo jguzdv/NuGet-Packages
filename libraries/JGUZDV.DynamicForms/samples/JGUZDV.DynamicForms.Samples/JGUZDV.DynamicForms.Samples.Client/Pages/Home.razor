@@ -17,7 +17,7 @@ Welcome to your new app.
 
 <ModalButton T="FieldDefinition">
     <Button>
-        <div class="btn btn-primary " @onclick="() => context.ShowModal(new FieldDefinition())">
+        <div class="btn btn-primary " @onclick="() => context.ShowModal(new FieldDefinition() { Type = StringFieldType.Instance })">
             new field def
         </div>
     </Button>
@@ -97,7 +97,7 @@ Welcome to your new app.
     {
         _fieldDefinitions.Add(new FieldDefinition()
         {
-            Type = new StringFieldType(),
+            Type = StringFieldType.Instance,
             InputDefinition = new InputDefinition()
             {
                 Id = "0",

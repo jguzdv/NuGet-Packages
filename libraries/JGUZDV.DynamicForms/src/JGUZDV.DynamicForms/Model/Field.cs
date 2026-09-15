@@ -1,16 +1,11 @@
 ﻿using System.Collections;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 using JGUZDV.DynamicForms.Model.FieldTypes;
 
 namespace JGUZDV.DynamicForms.Model;
-
-
-/// <summary>
-/// Represents a collection of fields.
-/// </summary>
-public record FieldCollection(List<Field> Fields);
 
 /// <summary>
 /// Represents a form field and provides validation functionality.
@@ -38,7 +33,7 @@ public class Field : IValidatableObject, IDisposable, IAsyncDisposable
     public Field(FieldDefinition fieldDefinition, object? value)
     {
         FieldDefinition = fieldDefinition;
-        Value = value;
+        SetValue(value);
     }
 
     /// <summary>
@@ -57,9 +52,46 @@ public class Field : IValidatableObject, IDisposable, IAsyncDisposable
         get => _value;
         set
         {
-            if (value != null && FieldDefinition.ChoiceOptions.Count == 0) //TODO: Maybe check this in validation not in setter
+            SetValue(value);
+        }
+    }
+
+    private void SetValue(object? value)
+    {
+        if (value == null)
+        {
+            if (FieldDefinition.IsList)
             {
-                var valueType = value.GetType();
+                throw new DynamicFormsException("List fields can not be null");
+            }
+        }
+        else
+        {
+            var valueType = value.GetType();
+
+            if (valueType == FieldDefinition.Type.ClrType)
+            {
+                _value = (object?)value;
+                return;
+            }
+
+            if (value is string stringValue)
+            {
+                _value = FieldDefinition.Type.ConvertToValue(stringValue);
+                return;
+            }
+
+            if (value is JsonElement jsonElement)
+            {
+                _value = FieldDefinition.Type.ConvertToValue(jsonElement);
+                return;
+            }
+
+            // TODO: this code should be reevaluated, because it is not clear if it is correct to check for choice options here
+            // It seems, the choice options should be checked firstmost and then only values, that are in the choice options should be allowed.
+            if (FieldDefinition.ChoiceOptions.Count == 0) //TODO: Maybe check this in validation not in setter
+            {
+
                 if (FieldDefinition.IsList)
                 {
                     if (!typeof(IList).IsAssignableFrom(valueType)
@@ -69,19 +101,10 @@ public class Field : IValidatableObject, IDisposable, IAsyncDisposable
                         throw new InvalidOperationException("Type does not match");
                     }
                 }
-                else if (value.GetType() != ValueType.ClrType)
-                {
-                    throw new InvalidOperationException("Type does not match");
-                }
             }
-
-            if (value == null && FieldDefinition.IsList)
-            {
-                throw new InvalidOperationException("List fields can not be null");
-            }
-
-            _value = value;
         }
+
+        _value = value;
     }
 
     /// <summary>
@@ -151,7 +174,7 @@ public class Field : IValidatableObject, IDisposable, IAsyncDisposable
             val.Add(Value);
         }
 
-        var errors = FieldDefinition.Constraints.SelectMany(x => x.ValidateConstraint(val, validationContext));
+        var errors = FieldDefinition.Constraints.SelectMany(x => x.Validate(val, validationContext));
         if (FieldDefinition.ChoiceOptions.Any())
         {
             foreach (var v in val)

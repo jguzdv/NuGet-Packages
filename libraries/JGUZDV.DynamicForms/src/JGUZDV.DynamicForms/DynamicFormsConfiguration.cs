@@ -1,6 +1,8 @@
-﻿using System.Text.Json;
+﻿
+using System.Text.Json;
 
 using JGUZDV.DynamicForms.Model;
+using JGUZDV.DynamicForms.Model.Constraints;
 using JGUZDV.DynamicForms.Model.FieldTypes;
 using JGUZDV.L10n;
 
@@ -16,22 +18,56 @@ namespace JGUZDV.DynamicForms
         static DynamicFormsConfiguration()
         {
             _registeredFieldTypes = new FieldType[] {
-                new BoolFieldType(),
-                new DateOnlyFieldType(),
-                new FileFieldType(),
-                new FloatFieldType(),
-                new IntFieldType(),
-                new StringFieldType(),
-                new TimeOnlyFieldType()
-            }.ToDictionary(x => x.TypeDiscriminator);
+                BoolFieldType.Instance,
+                DateOnlyFieldType.Instance,
+                FileFieldType.Instance,
+                FloatFieldType.Instance,
+                IntFieldType.Instance,
+                StringFieldType.Instance,
+                TimeOnlyFieldType.Instance
+            }.ToDictionary(x => x.TypeId);
+
+            _registeredConstraintTypes = new Dictionary<ConstraintId, Type>
+            {
+                { RegexConstraint.ConstraintId, typeof(RegexConstraint) },
+                { StringLengthConstraint.ConstraintId, typeof(StringLengthConstraint) },
+                { RangeConstraint.ConstraintId, typeof(RangeConstraint) },
+                { SizeConstraint.ConstraintId, typeof(SizeConstraint) },
+                { FileSizeConstraint.ConstraintId, typeof(FileSizeConstraint) }
+            };
         }
 
         private static readonly Dictionary<FieldTypeId, FieldType> _registeredFieldTypes;
+        private static readonly Dictionary<ConstraintId, Type> _registeredConstraintTypes;
         
+
         /// <summary>
         /// Gets the list of registered FieldTypes.
         /// </summary>
         public static IReadOnlyDictionary<FieldTypeId, FieldType> RegisteredFieldTypes => _registeredFieldTypes;
+
+        /// <summary>
+        /// Gets the list of registered ConstraintTypes.
+        /// </summary>
+        public static IReadOnlyDictionary<ConstraintId, Type> RegisteredConstraintTypes => _registeredConstraintTypes;
+
+
+        /// <summary>
+        /// Adds a new FieldType to the registered field types and sets the allowed constraints for it.
+        /// </summary>
+        /// <param name="type">The FieldType to add.</param>
+        public static void AddFieldType(FieldType type)
+        {
+            foreach(var constraintId in type.AllowedConstraints)
+            {
+                if (!_registeredConstraintTypes.ContainsKey(constraintId))
+                {
+                    throw new InvalidOperationException($"Constraint type {constraintId} is not registered.");
+                }
+            }
+
+            _registeredFieldTypes.Add(type.TypeId, type);
+        }
 
         /// <summary>
         /// Removes a FieldType from the registered field types.
@@ -41,135 +77,69 @@ namespace JGUZDV.DynamicForms
             _registeredFieldTypes.Remove(fieldTypeId);
         }
 
+
         /// <summary>
-        /// Adds a new FieldType to the registered field types and sets the allowed constraints for it.
+        /// Adds a new ConstraintType to the registered constraint types.
         /// </summary>
-        /// <param name="type">The FieldType to add.</param>
-        /// <param name="allowedConstraints">The list of allowed constraints for the FieldType.</param>
-        public static void AddFieldType(FieldType type, List<Type> allowedConstraints)
+        public static void AddConstraintType<TConstraint>()
+            where TConstraint : IConstraint
         {
-            SetConstraintTypes(type, allowedConstraints);
-            _registeredFieldTypes.Add(type.TypeDiscriminator, type);
+            _registeredConstraintTypes.Add(TConstraint.ConstraintId, typeof(TConstraint));
         }
 
-        private static readonly Dictionary<FieldType, List<Type>> _fieldConstraints = new()
+        /// <summary>
+        /// Removes a ConstraintType from the registered constraint types.
+        /// </summary>
+        public static void RemoveConstraintType<TConstraint>()
+            where TConstraint : IConstraint
         {
-                { new StringFieldType(), [ typeof(RegexConstraint), typeof(StringLengthConstraint), typeof(RangeConstraint) ] },
-                { new DateOnlyFieldType(), [ typeof(RangeConstraint) ] },
-                { new IntFieldType(), [typeof(RangeConstraint)] },
-                { new FileFieldType(), [typeof(FileSizeConstraint)] },
-                { new BoolFieldType(), [ ] },
-                { new TimeOnlyFieldType(), [ typeof(RangeConstraint) ] },
-                { new FloatFieldType(), [typeof(RangeConstraint)] }
-        };
+            _registeredConstraintTypes.Remove(TConstraint.ConstraintId);
+        }
 
-        private static readonly HashSet<Type> _allConstraints = new()
-        {
-            typeof(RegexConstraint),
-            typeof(StringLengthConstraint),
-            typeof(RangeConstraint),
-            typeof(SizeConstraint),
-            typeof(FileSizeConstraint)
-        };
 
         /// <summary>
         /// Sets the allowed constraint types for a given FieldType.
         /// </summary>
         /// <param name="fieldType">The FieldType to set constraints for.</param>
         /// <param name="constraintTypes">The list of allowed constraint types.</param>
-        /// <exception cref="InvalidOperationException">Thrown if any of the constraint types are not of type Constraint.</exception>
-        public static void SetConstraintTypes(FieldType fieldType, List<Type> constraintTypes)
+        public static void SetConstraintTypes(FieldType fieldType, List<ConstraintId> constraintTypes)
         {
-            if (constraintTypes.Any(constraintType => !typeof(Constraint).IsAssignableFrom(constraintType)))
+            foreach (var constraintId in constraintTypes)
             {
-                throw new InvalidOperationException("All constraint types must be of type Constraint");
+                if (!_registeredConstraintTypes.ContainsKey(constraintId))
+                {
+                    throw new InvalidOperationException($"Constraint type {constraintId} is not registered.");
+                }
             }
 
-            _allConstraints.UnionWith(constraintTypes);
-            _fieldConstraints[fieldType] = constraintTypes;
+            fieldType.AllowedConstraints.UnionWith(constraintTypes);
         }
 
-        /// <summary>
-        /// Gets the list of allowed constraint types for a given FieldDefinition.
-        /// </summary>
-        /// <param name="fieldDefinition">The FieldDefinition to get constraints for.</param>
-        /// <returns>The list of allowed constraint types.</returns>
-        public static List<Type> GetConstraintTypes(FieldDefinition fieldDefinition)
-        {
-            if (fieldDefinition.Type == null)
-            {
-                return new List<Type>();
-            }
-
-            var result = _fieldConstraints[fieldDefinition.Type].ToList();
-
-            if (fieldDefinition.IsList)
-            {
-                result.Add(typeof(SizeConstraint));
-            }
-
-            return result;
-        }
-
-
-        private static readonly Dictionary<Type, L10nString> _constraintNames = new()
-            {
-                { typeof(RegexConstraint), new L10nString { ["de"] = "Regex", ["en"] = "Regex" } },
-                { typeof(StringLengthConstraint), new L10nString { ["de"] = "Textlänge", ["en"] = "Text Length" } },
-                { typeof(RangeConstraint), new L10nString { ["de"] = "Intervall", ["en"] = "Range" } },
-                { typeof(SizeConstraint), new L10nString { ["de"] = "Listenlänge", ["en"] = "List Length" } },
-                { typeof(FileSizeConstraint), new L10nString { ["de"] = "Dateigröße", ["en"] = "File Size" } }
-            };
 
         /// <summary>
         /// Gets the localized name of a given constraint type.
         /// </summary>
-        /// <param name="constraintType">The constraint type to get the name for.</param>
-        /// <returns>The localized name of the constraint type.</returns>
-        /// <exception cref="InvalidOperationException">Thrown if the type is not of type Constraint.</exception>
-        public static L10nString GetConstraintName(Type constraintType)
+        public static L10nString GetConstraintName(ConstraintId constraintId)
         {
-            if (!typeof(Constraint).IsAssignableFrom(constraintType))
-            {
-                throw new InvalidOperationException("Type must be of type Constraint");
-            }
-
-            return _constraintNames[constraintType];
+            return _registeredConstraintTypes.TryGetValue(constraintId, out var constraintType)
+                ? (L10nString)constraintType.GetProperty("DisplayName")!.GetValue(null)!
+                : throw new InvalidOperationException($"Constraint type {constraintId} is not registered.");
         }
 
         /// <summary>
-        /// Sets the localized name for a given constraint type.
+        /// Adds a constraint to a given FieldDefinition.
         /// </summary>
-        /// <param name="constraintType">The constraint type to set the name for.</param>
-        /// <param name="name">The localized name to set.</param>
-        /// <exception cref="InvalidOperationException">Thrown if the type is not of type Constraint.</exception>
-        public static void SetConstraintName(Type constraintType, L10nString name)
+        public static void AddConstraintToFieldDefinition(FieldDefinition fieldDefinition, ConstraintId constraintId)
         {
-            if (!typeof(Constraint).IsAssignableFrom(constraintType))
+            if (!_registeredConstraintTypes.TryGetValue(constraintId, out Type? value))
             {
-                throw new InvalidOperationException("Type must be of type Constraint");
+                throw new InvalidOperationException($"Constraint type {constraintId} is not registered.");
             }
 
-            _constraintNames[constraintType] = name;
+            var constraint = (IConstraint)Activator.CreateInstance(value)!;
+            fieldDefinition.Constraints.Add(constraint);
         }
 
-        /// <summary>
-        /// Creates an instance of a constraint by its type name and associates it with a given FieldType.
-        /// </summary>
-        /// <param name="typeName">The name of the constraint type to create.</param>
-        /// <param name="fieldType">The FieldType to associate with the constraint.</param>
-        /// <returns>The created constraint instance.</returns>
-        public static Constraint Create(string typeName, FieldType fieldType)
-        {
-            var constraintType = _allConstraints
-                .First(x => x.Name == typeName);
-
-            // TODO: check fieldType is allowed for constraint
-
-            var constraint = (Constraint)Activator.CreateInstance(constraintType)!;
-            constraint.FieldType = fieldType;
-            return constraint;
-        }
 
         /// <summary>
         /// Gets the JSON serializer options for the dynamic forms library.

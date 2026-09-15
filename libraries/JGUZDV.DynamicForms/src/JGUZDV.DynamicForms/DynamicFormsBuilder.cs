@@ -1,4 +1,5 @@
-﻿using JGUZDV.DynamicForms.Model.FieldTypes;
+﻿using JGUZDV.DynamicForms.Model.Constraints;
+using JGUZDV.DynamicForms.Model.FieldTypes;
 using JGUZDV.L10n;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -23,23 +24,17 @@ public class DynamicFormsBuilder
     }
 
     /// <summary>
-    /// Adds a new FieldType and its allowed constraints to the dynamic forms configuration.
+    /// Adds a new FieldType to the dynamic forms configuration.
     /// </summary>
-    /// <param name="type"></param>
-    /// <param name="allowedConstraints"></param>
-    /// <returns></returns>
-    public DynamicFormsBuilder AddFieldType(FieldType type, List<Type> allowedConstraints)
+    public DynamicFormsBuilder AddFieldType(FieldType type)
     {
-        DynamicFormsConfiguration.AddFieldType(type, allowedConstraints);
+        DynamicFormsConfiguration.AddFieldType(type);
         return this;
     }
 
     /// <summary>
     /// Adds metadata for the specified FieldType using the specified metadata provider.
     /// </summary>
-    /// <typeparam name="TFieldType"></typeparam>
-    /// <typeparam name="TMetadataProvider"></typeparam>
-    /// <returns></returns>
     public DynamicFormsBuilder AddMetadata<TFieldType, TMetadataProvider>()
         where TFieldType : FieldType
         where TMetadataProvider : class, IFieldTypeMetadataProvider
@@ -75,7 +70,6 @@ public class DynamicFormsBuilder
     /// <summary>
     /// Removes a FieldType from the dynamic forms configuration.
     /// </summary>
-    /// <returns></returns>
     public DynamicFormsBuilder RemoveFieldType(FieldTypeId fieldTypeId)
     {
         DynamicFormsConfiguration.RemoveFieldType(fieldTypeId);
@@ -83,20 +77,12 @@ public class DynamicFormsBuilder
     }
 
     /// <summary>
-    /// Sets the allowed constraint types for a given FieldType. If a new constraint type is added you must also set the name of the constraint via <see cref="SetConstraintName(Type, L10nString)"/>.
+    /// Registers a new constraint type in the dynamic forms configuration. This allows the constraint to be used in field definitions.
     /// </summary>
-    public DynamicFormsBuilder SetConstraintTypes(FieldType fieldType, List<Type> constraintType)
+    public DynamicFormsBuilder RegisterConstraintType<TConstraint>()
+        where TConstraint : class, IConstraint
     {
-        DynamicFormsConfiguration.SetConstraintTypes(fieldType, constraintType);
-        return this;
-    }
-
-    /// <summary>
-    /// Sets the name of a constraint type.
-    /// </summary>
-    public DynamicFormsBuilder SetConstraintName(Type constraintType, L10nString name)
-    {
-        DynamicFormsConfiguration.SetConstraintName(constraintType, name);
+        DynamicFormsConfiguration.AddConstraintType<TConstraint>();
         return this;
     }
 }

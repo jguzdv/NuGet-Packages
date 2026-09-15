@@ -109,7 +109,7 @@
 
         _errors = Field.FieldDefinition.Constraints
                 .SelectMany(x =>
-                    x.ValidateConstraint(vals,
+                    x.Validate(vals,
                     new(Field, ServiceProvider, null)))
                 .Select(x => x.ErrorMessage!)
                 .ToList();

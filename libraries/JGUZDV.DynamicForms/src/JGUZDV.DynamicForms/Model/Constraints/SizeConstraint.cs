@@ -1,13 +1,30 @@
 ﻿using System.Collections;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
-namespace JGUZDV.DynamicForms.Model;
+
+using JGUZDV.L10n;
+
+namespace JGUZDV.DynamicForms.Model.Constraints;
 
 /// <summary>
 /// Constraint for validating the size of a collection.
 /// </summary>
-public class SizeConstraint : Constraint
+public class SizeConstraint : IConstraint
 {
+    /// <inheritdoc />
+    public static ConstraintId ConstraintId => new(nameof(SizeConstraint));
+    
+    /// <inheritdoc />
+    public ConstraintId GetConstraintId() => ConstraintId;
+    
+    /// <inheritdoc />
+    public static L10nString DisplayName => new() { ["de"] = "Listenlänge", ["en"] = "List length" };
+
+    /// <inheritdoc />
+    public L10nString GetDisplayName() => DisplayName;
+
+
+
     /// <summary>
     /// The minimum count of the collection.
     /// </summary>
@@ -22,7 +39,7 @@ public class SizeConstraint : Constraint
     /// </summary>
     /// <param name="validationContext">The validation context.</param>
     /// <returns>A collection of validation results.</returns>
-    public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
         if (MinCount > MaxCount)
         {
@@ -36,7 +53,7 @@ public class SizeConstraint : Constraint
     /// <param name="values">The values to validate.</param>
     /// <param name="context">The validation context.</param>
     /// <returns>A collection of validation results.</returns>
-    public IEnumerable<ValidationResult> ValidateConstraint(IList values, ValidationContext context)
+    public IEnumerable<ValidationResult> Validate(IList values, ValidationContext context)
     {
         var fields = new List<string?> { (context.ObjectInstance as FieldDefinition)?.InputDefinition.Name }.Where(x => x != null).ToList();
 
@@ -50,8 +67,8 @@ public class SizeConstraint : Constraint
     /// <param name="values">The values to validate.</param>
     /// <param name="context">The validation context.</param>
     /// <returns>A collection of validation results.</returns>
-    public override IEnumerable<ValidationResult> ValidateConstraint(List<object> values, ValidationContext context)
+    public IEnumerable<ValidationResult> Validate(List<object> values, ValidationContext context)
     {
-        return ValidateConstraint(values, context);
+        return Validate((IList)values, context);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using JGUZDV.DynamicForms.Blazor;
 using JGUZDV.DynamicForms.Blazor.Fields;
 using JGUZDV.DynamicForms.Model;
+using JGUZDV.DynamicForms.Model.Constraints;
 using JGUZDV.DynamicForms.Model.FieldTypes;
 
 using Microsoft.AspNetCore.Components;
@@ -36,7 +37,7 @@ public static class DynamicFormsBuilderExtensions
     /// <param name="builder">The <see cref="DynamicFormsBuilder"/> instance to configure.</param>
     /// <returns></returns>
     public static DynamicFormsBuilder SetConstraintInputType<TConstraint, TComponent>(this DynamicFormsBuilder builder)
-        where TConstraint : Constraint
+        where TConstraint : IConstraint
         where TComponent : ComponentBase
     {
         ConstraintViewTypeFactory.SetViewType(typeof(TConstraint), typeof(TComponent));

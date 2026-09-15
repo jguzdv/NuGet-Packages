@@ -2,15 +2,37 @@
 using System.Data;
 using System.Text.Json.Serialization;
 
+using JGUZDV.DynamicForms.Model.FieldTypes;
 using JGUZDV.DynamicForms.Serialization;
-namespace JGUZDV.DynamicForms.Model;
+using JGUZDV.L10n;
+
+namespace JGUZDV.DynamicForms.Model.Constraints;
 
 /// <summary>
 /// Constraint for validating values within a specified range.
 /// </summary>
 [JsonConverter(typeof(RangeConstraintConverter))]
-public class RangeConstraint : Constraint
+public class RangeConstraint : IConstraint
 {
+    /// <inheritdoc />
+    public static ConstraintId ConstraintId => new(nameof(RangeConstraint));
+
+    /// <inheritdoc />
+    public ConstraintId GetConstraintId() => ConstraintId;
+
+    /// <inheritdoc />
+    public static L10nString DisplayName => new() { ["de"] = "Intervall", ["en"] = "Range" };
+
+    /// <inheritdoc />
+    public L10nString GetDisplayName() => DisplayName;
+
+
+    /// <summary>
+    /// Range constraints can only operate, when they know their field type.
+    /// </summary>
+    public FieldType? FieldType { get; set; }
+
+
     private IComparable? _maxValue;
     private IComparable? _minValue;
 
@@ -44,7 +66,7 @@ public class RangeConstraint : Constraint
     /// <param name="values">The values to validate.</param>
     /// <param name="context">The validation context.</param>
     /// <returns>A collection of validation results.</returns>
-    public override IEnumerable<ValidationResult> ValidateConstraint(List<object> values, ValidationContext context)
+    public IEnumerable<ValidationResult> Validate(List<object> values, ValidationContext context)
     {
         var fields = new List<string?> { (context.ObjectInstance as FieldDefinition)?.InputDefinition.Name }.Where(x => x != null).ToList();
 
@@ -72,7 +94,7 @@ public class RangeConstraint : Constraint
     /// </summary>
     /// <param name="validationContext">The validation context.</param>
     /// <returns>A collection of validation results.</returns>
-    public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
         if (MaxValue != null && MinValue != null)
         {
