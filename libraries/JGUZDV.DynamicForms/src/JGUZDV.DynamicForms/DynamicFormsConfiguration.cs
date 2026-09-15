@@ -102,9 +102,16 @@ namespace JGUZDV.DynamicForms
         /// </summary>
         /// <param name="fieldType">The FieldType to set constraints for.</param>
         /// <param name="constraintTypes">The list of allowed constraint types.</param>
-        /// <exception cref="InvalidOperationException">Thrown if any of the constraint types are not of type Constraint.</exception>
         public static void SetConstraintTypes(FieldType fieldType, List<ConstraintId> constraintTypes)
         {
+            foreach (var constraintId in constraintTypes)
+            {
+                if (!_registeredConstraintTypes.ContainsKey(constraintId))
+                {
+                    throw new InvalidOperationException($"Constraint type {constraintId} is not registered.");
+                }
+            }
+
             fieldType.AllowedConstraints.UnionWith(constraintTypes);
         }
 
@@ -124,12 +131,12 @@ namespace JGUZDV.DynamicForms
         /// </summary>
         public static void AddConstraintToFieldDefinition(FieldDefinition fieldDefinition, ConstraintId constraintId)
         {
-            if (!_registeredConstraintTypes.ContainsKey(constraintId))
+            if (!_registeredConstraintTypes.TryGetValue(constraintId, out Type? value))
             {
                 throw new InvalidOperationException($"Constraint type {constraintId} is not registered.");
             }
 
-            var constraint = (IConstraint)Activator.CreateInstance(_registeredConstraintTypes[constraintId])!;
+            var constraint = (IConstraint)Activator.CreateInstance(value)!;
             fieldDefinition.Constraints.Add(constraint);
         }
 
