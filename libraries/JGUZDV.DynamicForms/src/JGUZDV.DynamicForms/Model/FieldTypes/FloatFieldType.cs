@@ -1,10 +1,9 @@
 ﻿using System.Text.Json.Serialization;
 
 using JGUZDV.DynamicForms.Model.Constraints;
-using JGUZDV.DynamicForms.Model.FieldTypes;
 using JGUZDV.L10n;
 
-namespace JGUZDV.DynamicForms.Model;
+namespace JGUZDV.DynamicForms.Model.FieldTypes;
 
 /// <summary>
 /// Represents a field type for float values.

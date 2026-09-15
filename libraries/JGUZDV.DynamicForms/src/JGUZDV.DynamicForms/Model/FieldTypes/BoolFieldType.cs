@@ -1,6 +1,4 @@
-﻿using JGUZDV.DynamicForms.Model.FieldTypes;
-
-namespace JGUZDV.DynamicForms.Model;
+﻿namespace JGUZDV.DynamicForms.Model.FieldTypes;
 
 /// <summary>
 /// Represents a field type for boolean values.
