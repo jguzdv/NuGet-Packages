@@ -7,12 +7,6 @@ using JGUZDV.DynamicForms.Model.FieldTypes;
 
 namespace JGUZDV.DynamicForms.Model;
 
-
-/// <summary>
-/// Represents a collection of fields.
-/// </summary>
-public record FieldCollection(List<Field> Fields);
-
 /// <summary>
 /// Represents a form field and provides validation functionality.
 /// </summary>
@@ -39,7 +33,7 @@ public class Field : IValidatableObject, IDisposable, IAsyncDisposable
     public Field(FieldDefinition fieldDefinition, object? value)
     {
         FieldDefinition = fieldDefinition;
-        Value = value;
+        SetValue(value);
     }
 
     /// <summary>
@@ -58,57 +52,59 @@ public class Field : IValidatableObject, IDisposable, IAsyncDisposable
         get => _value;
         set
         {
-            if (value == null)
+            SetValue(value);
+        }
+    }
+
+    private void SetValue(object? value)
+    {
+        if (value == null)
+        {
+            if (FieldDefinition.IsList)
             {
+                throw new DynamicFormsException("List fields can not be null");
+            }
+        }
+        else
+        {
+            var valueType = value.GetType();
+
+            if (valueType == FieldDefinition.Type.ClrType)
+            {
+                _value = (object?)value;
+                return;
+            }
+
+            if (value is string stringValue)
+            {
+                _value = FieldDefinition.Type.ConvertToValue(stringValue);
+                return;
+            }
+
+            if (value is JsonElement jsonElement)
+            {
+                _value = FieldDefinition.Type.ConvertToValue(jsonElement);
+                return;
+            }
+
+            // TODO: this code should be reevaluated, because it is not clear if it is correct to check for choice options here
+            // It seems, the choice options should be checked firstmost and then only values, that are in the choice options should be allowed.
+            if (FieldDefinition.ChoiceOptions.Count == 0) //TODO: Maybe check this in validation not in setter
+            {
+
                 if (FieldDefinition.IsList)
                 {
-                    throw new InvalidOperationException("List fields can not be null");
-                }
-            }
-            else
-            {
-                var valueType = value.GetType();
-
-                if (valueType == FieldDefinition.Type.ClrType)
-                {
-                    _value = (object?)value;
-                    return;
-                }
-
-                if (value is string stringValue)
-                {
-                    _value = FieldDefinition.Type.ConvertToValue(stringValue);
-                    return;
-                }
-
-                if (value is JsonElement jsonElement)
-                {
-                    _value = FieldDefinition.Type.ConvertToValue(jsonElement);
-                    return;
-                }
-
-
-                if (FieldDefinition.ChoiceOptions.Count == 0) //TODO: Maybe check this in validation not in setter
-                {
-
-                    if (FieldDefinition.IsList)
-                    {
-                        if (!typeof(IList).IsAssignableFrom(valueType)
-                            || !valueType.IsGenericType
-                            || valueType.GetGenericArguments()[0] != ValueType.ClrType)
-                        {
-                            throw new InvalidOperationException("Type does not match");
-                        }
-                    }
-                    else if (value.GetType() != ValueType.ClrType)
+                    if (!typeof(IList).IsAssignableFrom(valueType)
+                        || !valueType.IsGenericType
+                        || valueType.GetGenericArguments()[0] != ValueType.ClrType)
                     {
                         throw new InvalidOperationException("Type does not match");
                     }
                 }
             }
-
-            _value = value;
         }
+
+        _value = value;
     }
 
     /// <summary>
