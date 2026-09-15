@@ -1,5 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 
+using JGUZDV.DynamicForms.Serialization;
+
 namespace JGUZDV.DynamicForms.Model;
 
 /// <summary>
