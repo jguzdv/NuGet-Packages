@@ -14,7 +14,8 @@ namespace StringLocalizerGenerator
 {
     /// <summary>
     /// Source Generator, der für mit <c>[Localized]</c> markierte Klassen
-    /// eine Extension-Klasse mit stark typisierten Properties für <c>IStringLocalizer&lt;T&gt;</c> generiert.
+    /// eine Extension-Klasse mit stark typisierten Properties für
+    /// <c>IStringLocalizer&lt;T&gt;</c> generiert.
     /// </summary>
     [Generator]
     public class ResxLocalizerGenerator : IIncrementalGenerator
@@ -34,6 +35,22 @@ namespace StringLocalizerGenerator
             "Localization",
             DiagnosticSeverity.Error,
             isEnabledByDefault: true);
+
+        private static readonly DiagnosticDescriptor InvalidKeyWarning = new(
+            "RSX003",
+            "Invalid resource key",
+            "Resource key '{0}' in class '{1}' is not a valid C# identifier and will be skipped",
+            "Localization",
+            DiagnosticSeverity.Warning,
+            isEnabledByDefault: true);
+        private static readonly DiagnosticDescriptor KeyCollisionWarning = new(
+            "RSX005",
+            "Duplicate resource key after sanitizing",
+            "Resource key '{0}' in class '{1}' collides with another key after sanitizing (both map to '{2}') and will be skipped",
+            "Localization",
+            DiagnosticSeverity.Warning,
+            isEnabledByDefault: true);
+
 
         /// <summary>
         /// Registriert die inkrementellen Pipeline-Schritte des Generators.
@@ -57,13 +74,14 @@ namespace StringLocalizerGenerator
             // Kombinieren und verarbeiten
             var combined = localizedClasses.Combine(resxFiles);
 
-            context.RegisterSourceOutput(combined, (spc, pair) =>
+            context.RegisterSourceOutput(combined, static (spc, pair) =>
             {
                 var classes = pair.Left;
                 var allResxFiles = pair.Right;
 
                 foreach (var classInfo in classes)
                 {
+                    spc.CancellationToken.ThrowIfCancellationRequested();
                     if (classInfo is not null)
                     {
                         ProcessLocalizedClass(spc, classInfo, allResxFiles);
@@ -74,17 +92,18 @@ namespace StringLocalizerGenerator
 
         private static bool IsLocalizedClass(SyntaxNode node)
         {
-            // Nur Klassendeklarationen betrachten
             if (node is not ClassDeclarationSyntax classDeclaration)
                 return false;
 
-            // Prüfen ob Attribute vorhanden sind
             foreach (var attributeList in classDeclaration.AttributeLists)
             {
                 foreach (var attribute in attributeList.Attributes)
                 {
-                    var attributeName = attribute.Name.ToString();
-                    if (attributeName == "Localized" || attributeName == "LocalizedAttribute")
+                    var name = attribute.Name.ToString();
+                    if (name == "Localized"
+                        || name == "LocalizedAttribute"
+                        || name.EndsWith(".Localized", StringComparison.Ordinal)
+                        || name.EndsWith(".LocalizedAttribute", StringComparison.Ordinal))
                         return true;
                 }
             }
@@ -95,22 +114,26 @@ namespace StringLocalizerGenerator
         private static ClassInfo? GetClassInfo(GeneratorSyntaxContext context)
         {
             var classDeclaration = (ClassDeclarationSyntax)context.Node;
-
             var symbol = context.SemanticModel.GetDeclaredSymbol(classDeclaration) as INamedTypeSymbol;
-
             if (symbol is null)
+                return null;
+
+            // Semantische Verifikation: Hat die Klasse wirklich [Localized]?
+            var hasLocalized = symbol.GetAttributes().Any(a =>
+                a.AttributeClass?.Name is "LocalizedAttribute" or "Localized");
+
+            if (!hasLocalized)
                 return null;
 
             return new ClassInfo
             {
                 ClassName = symbol.Name,
                 Namespace = symbol.ContainingNamespace.ToDisplayString(),
-                FilePath = classDeclaration.SyntaxTree.FilePath,
                 Location = classDeclaration.GetLocation()
             };
         }
 
-        private void ProcessLocalizedClass(
+        private static void ProcessLocalizedClass(
             SourceProductionContext spc,
             ClassInfo classInfo,
             IEnumerable<AdditionalText> allResxFiles)
@@ -126,7 +149,7 @@ namespace StringLocalizerGenerator
             GenerateExtensions(spc, classInfo, matchingResx);
         }
 
-        private AdditionalText? FindMatchingResxFile(
+        private static AdditionalText? FindMatchingResxFile(
             ClassInfo classInfo,
             IEnumerable<AdditionalText> allResxFiles)
         {
@@ -135,7 +158,7 @@ namespace StringLocalizerGenerator
                     .Equals(classInfo.ClassName, StringComparison.OrdinalIgnoreCase));
         }
 
-        private void ReportMissingResxWarning(
+        private static void ReportMissingResxWarning(
             SourceProductionContext spc,
             ClassInfo classInfo)
         {
@@ -144,8 +167,21 @@ namespace StringLocalizerGenerator
                 classInfo.Location,
                 classInfo.ClassName));
         }
+        private static void ReportKeyCollisionWarning(
+            SourceProductionContext spc,
+            ClassInfo classInfo,
+            string key,
+            string identifier)
+        {
+            spc.ReportDiagnostic(Diagnostic.Create(
+                KeyCollisionWarning,
+                classInfo.Location,
+                key,
+                classInfo.ClassName,
+                identifier));
+        }
 
-        private List<string> ParseResxKeys(AdditionalText resxFile)
+        private static List<string> ParseResxKeys(AdditionalText resxFile)
         {
             var content = resxFile.GetText()?.ToString();
             if (string.IsNullOrEmpty(content))
@@ -159,7 +195,7 @@ namespace StringLocalizerGenerator
                 .ToList();
         }
 
-        private void GenerateExtensions(
+        private static void GenerateExtensions(
             SourceProductionContext spc,
             ClassInfo classInfo,
             AdditionalText resxFile)
@@ -168,39 +204,51 @@ namespace StringLocalizerGenerator
             {
                 var keys = ParseResxKeys(resxFile);
 
-                if (!keys.Any())
+                if (keys.Count == 0)
                 {
-                    GenerateEmptyExtensions(spc, classInfo);
+                    // Keine Resourcen => keine Extension generieren.
+                    // Statt einer leeren Datei eine Diagnose ausgeben, damit der Nutzer es merkt.
+                    ReportMissingResxWarning(spc, classInfo);
                     return;
                 }
 
-                // Properties generieren (mit Validierung)
-                var validKeys = new List<string>();
+                var properties = new List<string>();
+                var usedNames = new HashSet<string>(StringComparer.Ordinal);
+
                 foreach (var key in keys)
                 {
-                    if (SyntaxFacts.IsValidIdentifier(key))
-                    {
-                        validKeys.Add(key);
-                    }
-                    else
+                    spc.CancellationToken.ThrowIfCancellationRequested();
+
+                    var identifier = SanitizeKey(key);
+
+                    if (identifier is null)
                     {
                         ReportInvalidKeyWarning(spc, classInfo, key);
+                        continue;
                     }
+
+                    if (!usedNames.Add(identifier))
+                    {
+                        ReportKeyCollisionWarning(spc, classInfo, key, identifier);
+                        continue;
+                    }
+
+                    properties.Add(
+                        $"\t\t\t/// <summary>Gets the localized string for '{key}'.</summary>\n" +
+                        $"\t\t\tpublic string {identifier} => localizer[\"{key}\"].ToString();");
                 }
 
-                if (!validKeys.Any())
+                if (properties.Count == 0)
                 {
-                    GenerateEmptyExtensions(spc, classInfo);
+                    // Alle Keys waren ungültig oder doppelt.
                     return;
                 }
 
-                var properties = string.Join("\n", validKeys.Select(key =>
-                    $"\t\t\tpublic string {key} => localizer[\"{key}\"].ToString();"
-                ));
+                var propertiesCode = string.Join("\n", properties);
 
                 var sourceCode = $$"""
                 // <auto-generated />
-                #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+                #pragma warning disable CS1591
                 #nullable enable
                 using Microsoft.Extensions.Localization;
 
@@ -210,7 +258,7 @@ namespace StringLocalizerGenerator
                     {
                         extension(IStringLocalizer<{{classInfo.ClassName}}> localizer)
                         {
-                            {{properties}}
+                {{propertiesCode}}
                         }
                     }
                 }
@@ -222,6 +270,10 @@ namespace StringLocalizerGenerator
                     $"{classInfo.ClassName}LocalizerExtensions.g.cs",
                     SourceText.From(sourceCode, Encoding.UTF8));
             }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
             catch (Exception ex)
             {
                 spc.ReportDiagnostic(Diagnostic.Create(
@@ -232,42 +284,48 @@ namespace StringLocalizerGenerator
             }
         }
 
-        private void GenerateEmptyExtensions(
-            SourceProductionContext spc,
-            ClassInfo classInfo)
+        /// <summary>
+        /// Wandelt einen Resx-Key in einen gültigen C#-Identifier um.
+        /// Erlaubte Zeichen: Buchstaben, Ziffern, Unterstrich.
+        /// Alle anderen Zeichen werden durch '_' ersetzt.
+        /// Führende Ziffern werden mit '_' präfixiert.
+        /// </summary>
+        private static string? SanitizeKey(string key)
         {
-            var sourceCode = $$"""
-            // <auto-generated />
-            #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
-            #nullable enable
-            using Microsoft.Extensions.Localization;
+            if (string.IsNullOrEmpty(key))
+                return null;
 
-            namespace {{classInfo.Namespace}}
+            var builder = new StringBuilder(key.Length);
+
+            foreach (var c in key)
             {
-                public static class {{classInfo.ClassName}}LocalizerExtensions
-                {
-                    extension(IStringLocalizer<{{classInfo.ClassName}}> localizer)
-                    {
-                        // No resources found
-                    }
-                }
+                if (char.IsLetterOrDigit(c) || c == '_')
+                    builder.Append(c);
+                else
+                    builder.Append('_');
             }
-            """;
-            sourceCode = NormalizeLineEndings(sourceCode);
-            spc.AddSource(
-                $"{classInfo.ClassName}LocalizerExtensions.g.cs",
-                SourceText.From(sourceCode, Encoding.UTF8));
+
+            // Führende Ziffer? Präfix mit '_'.
+            if (builder.Length > 0 && char.IsDigit(builder[0]))
+                builder.Insert(0, '_');
+
+            var result = builder.ToString();
+
+            // Wenn nach dem Sanitizing immer noch kein gültiger Identifier rauskommt
+            // (z. B. weil das Ergebnis ein Keyword ist), mit '@' escapen.
+            if (!SyntaxFacts.IsValidIdentifier(result))
+            {
+                var escaped = "@" + result;
+                if (SyntaxFacts.IsValidIdentifier(escaped))
+                    return escaped;
+
+                return null;
+            }
+
+            return result;
         }
 
-        private static readonly DiagnosticDescriptor InvalidKeyWarning = new(
-            "RSX003",
-            "Invalid resource key",
-            "Resource key '{0}' in class '{1}' is not a valid C# identifier and will be skipped",
-            "Localization",
-            DiagnosticSeverity.Warning,
-            isEnabledByDefault: true);
-
-        private void ReportInvalidKeyWarning(
+        private static void ReportInvalidKeyWarning(
             SourceProductionContext spc,
             ClassInfo classInfo,
             string key)
@@ -278,6 +336,7 @@ namespace StringLocalizerGenerator
                 key,
                 classInfo.ClassName));
         }
+
         private static string NormalizeLineEndings(string text)
         {
             return text.Replace("\r\n", "\n").Replace("\r", "\n");
@@ -286,9 +345,8 @@ namespace StringLocalizerGenerator
 
     internal class ClassInfo
     {
-        public string ClassName { get; set; } = string.Empty;
-        public string Namespace { get; set; } = string.Empty;
-        public string FilePath { get; set; } = string.Empty;
-        public Location? Location { get; set; }
+        public string ClassName { get; init; } = string.Empty;
+        public string Namespace { get; init; } = string.Empty;
+        public Location? Location { get; init; }
     }
 }
