@@ -1,156 +1,122 @@
-﻿export function registerThemeButtons(): void {
-    if (customElements.get('jgu-theme-button')) return;
+export function registerThemeButtons() {
+    if (customElements.get('jgu-theme-button'))
+        return;
     customElements.define('jgu-theme-button', class extends HTMLElement {
-        connectedCallback(): void {
+        connectedCallback() {
             this.addEventListener('click', this.handleClick);
-
             const currentTheme = localStorage.getItem("theme") ?? "auto";
-
-            this.classList.toggle(
-                "active",
-                this.getAttribute("theme") === currentTheme
-            );
+            this.classList.toggle("active", this.getAttribute("theme") === currentTheme);
         }
-
-        disconnectedCallback(): void {
+        disconnectedCallback() {
             this.removeEventListener('click', this.handleClick);
         }
-
-        handleClick = (): void => {
+        handleClick = () => {
             const theme = this.getAttribute('theme');
-            if (!theme) return;
-
+            if (!theme)
+                return;
             applyTheme(theme);
             localStorage.setItem("theme", theme);
         };
     });
-
     console.debug('web component (jgu-theme-button) registered');
-
     customElements.define('jgu-theme-icon', class extends HTMLElement {
-        observer?: MutationObserver;
-
-        connectedCallback(): void {
+        observer;
+        connectedCallback() {
             this.render();
-
             applyTheme(localStorage.getItem("theme") ?? "auto");
-
             this.observer = new MutationObserver(() => this.render());
             this.observer.observe(document.documentElement, {
                 attributes: true,
                 attributeFilter: ['data-bs-theme']
             });
         }
-
-        disconnectedCallback(): void {
+        disconnectedCallback() {
             this.observer?.disconnect();
         }
-
-        render(): void {
+        render() {
             const theme = localStorage.getItem("theme") ?? "auto";
-            const map: Record<string, string> = {
+            const map = {
                 light: "fa-sun",
                 dark: "fa-moon",
                 auto: "fa-adjust"
             };
-
             this.innerHTML = `<i class="fas ${map[theme] ?? "fa-adjust"}"></i>`;
         }
     });
-
     console.debug('web component (jgu-theme-icon) registered');
 }
-
-export function registerThemeGuard(): void {
+export function registerThemeGuard() {
     const observer = new MutationObserver(() => {
         if (!document.documentElement.hasAttribute("data-bs-theme")) {
             setStoredTheme();
         }
     });
-
     observer.observe(document.documentElement, {
         attributes: true,
         attributeFilter: ["data-bs-theme"]
     });
 }
-
-export function applyTheme(theme: string): void {
+export function applyTheme(theme) {
     const isAuto = theme === 'auto';
-
     const resolved = isAuto
         ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
         : theme;
-
     document.documentElement.setAttribute('data-bs-theme', resolved);
-
     document.querySelectorAll("jgu-theme-button").forEach(btn => {
         btn.classList.toggle("active", btn.getAttribute("theme") === theme);
     });
-
     console.debug('theme is set to: ', theme);
 }
-
-export function setStoredTheme(): void {
+export function setStoredTheme() {
     const stored = localStorage.getItem("theme");
     if (stored == null) {
         return;
     }
     applyTheme(stored);
 }
-
-export function registerWebComponents(): void {
-    if (customElements.get('jgu-dropdown')) return; 
+export function registerWebComponents() {
+    if (customElements.get('jgu-dropdown'))
+        return;
     customElements.define('jgu-dropdown', class extends HTMLElement {
-        connectedCallback(): void {
-                const button = this.querySelector('button');
-                const menu = this.querySelector<HTMLElement>('[popover]');
-                if (!button || !menu) return;
-
-                menu.addEventListener('toggle', (event) => {
-                    const toggleEvent = event as ToggleEvent;
-                    button.setAttribute('aria-expanded', String(toggleEvent.newState === 'open'));
-
-                    if (toggleEvent.newState === 'open') {
-                        menu.querySelector<HTMLElement>('[role="menuitem"]')?.focus();
-                    }
-                });
-
-                menu.addEventListener('click', (event) => {
-                    if ((event.target as Element).closest('[role="menuitem"]')) {
-                        menu.hidePopover();
-                    }
-                });
-            }
+        connectedCallback() {
+            const button = this.querySelector('button');
+            const menu = this.querySelector('[popover]');
+            if (!button || !menu)
+                return;
+            menu.addEventListener('toggle', (event) => {
+                const toggleEvent = event;
+                button.setAttribute('aria-expanded', String(toggleEvent.newState === 'open'));
+                if (toggleEvent.newState === 'open') {
+                    menu.querySelector('[role="menuitem"]')?.focus();
+                }
+            });
+            menu.addEventListener('click', (event) => {
+                if (event.target.closest('[role="menuitem"]')) {
+                    menu.hidePopover();
+                }
+            });
+        }
     });
-
-
     console.debug('web component (jgu-dropdown) registered');
-
     customElements.define('jgu-toggle', class extends HTMLElement {
         constructor() {
             super();
         }
-
-        connectedCallback(): void {
+        connectedCallback() {
             this.addEventListener("click", () => {
                 const targetId = this.getAttribute('target-id');
                 if (!targetId) {
                     console.warn("no target-id provided for <jgu-toggle>");
                     return;
                 }
-
-                const toggleClass =
-                    this.getAttribute('toggle-class') || "toggled";
-
+                const toggleClass = this.getAttribute('toggle-class') || "toggled";
                 document.getElementById(targetId)?.classList.toggle(toggleClass);
             });
         }
     });
-
     console.debug('web component (jgu-toggle) registered');
 }
-
-export function beforeWebStart(options?: unknown): void {
+export function beforeWebStart(options) {
     registerWebComponents();
     registerThemeButtons();
     registerThemeGuard();
