@@ -1,4 +1,4 @@
-﻿namespace JGUZDV.Outbox.EMail
+﻿namespace JGUZDV.Outbox.Email
 {
     /// <summary>
     /// Represents the recipients of an email message, including To, Cc, and Bcc addresses.

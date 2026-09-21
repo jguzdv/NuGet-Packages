@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using System.Text.Json;
 
 namespace JGUZDV.Outbox;
 
@@ -29,6 +28,12 @@ public class OutboxMessage
     public Guid Id { get; set; } = Guid.NewGuid();
 
     /// <summary>
+    /// Gets or sets a value indicating, when the message has been addded to the outbox. 
+    /// This property is set automatically when the message is recorded in the outbox and should not be modified manually.
+    /// </summary>
+    public DateTimeOffset RecordDate { get; set; }
+
+    /// <summary>
     /// Gets or sets the due date for processing or sending the message.
     /// </summary>
     public DateTimeOffset DueDate { get; set; }
@@ -36,7 +41,7 @@ public class OutboxMessage
     /// <summary>
     /// Gets or sets the date and time when the message has been sent. If the message has not been sent yet, this property will be null.
     /// </summary>
-    public DateTimeOffset? HasBeenSent { get; set; }
+    public DateTimeOffset? SentAtDate { get; set; }
 
 
     /// <summary>
@@ -51,6 +56,17 @@ public class OutboxMessage
     /// </summary>
     public required string MessageData { get; set; }
 
+    /// <summary>
+    /// Gets or sets an optional string of tags associated with the message.
+    /// This can be used to find messages again after putting them into the outbox, e.g. to delete them, when it's not relevant anymore.
+    /// </summary>
+    public string? Tags { get; set; }
+
+
+    /// <summary>
+    /// Gets or sets the current state of the message, which can be used to track its processing status.
+    /// </summary>
+    public string? MessageState { get; set; }
 
     /// <summary>
     /// Gets or sets a list of failure information related to the message processing. If there are no failures, this property will be null.
@@ -61,37 +77,4 @@ public class OutboxMessage
     /// Gets the count of failures that have occurred during message processing. This property is read-only and is updated internally when failures are recorded.
     /// </summary>
     public int FailCount { get; internal set; }
-
-
-
-    /// <summary>
-    /// Creates a new instance of the OutboxMessage class with the specified due date, message type, and message data, serialized as JSON.
-    /// </summary>
-    public static OutboxMessage CreateWithJson<TMessageData>(DateTimeOffset dueDate, string messageType, TMessageData messageData)
-    {
-        var jsonMessageData = JsonSerializer.Serialize(messageData);
-        return new OutboxMessage(dueDate, messageType, jsonMessageData);
-    }
-
-    /// <summary>
-    /// Gets the message data deserialized from JSON to the specified type.
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
-    public bool TryGetJsonMessageData<T>(out T messageData)
-    {
-        /// <summary>
-        /// Gets the message data deserialized from JSON to the specified type.
-        /// </summary>
-        try
-        {
-            messageData = JsonSerializer.Deserialize<T>(MessageData)!;
-            return true;
-        }
-        catch
-        {
-            messageData = default!;
-            return false;
-        }
-    }
 }

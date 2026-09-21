@@ -1,9 +1,8 @@
-﻿namespace JGUZDV.Outbox.EMail
+﻿namespace JGUZDV.Outbox.Email
 {
     /// <summary>
     /// Represents an email message that is stored in the outbox for later sending.
     /// </summary>
-    // TODO: We _might_ want to define the EmailMessage as T of the GenericOutboxMessage<T> instead of a separate class.
     public class EmailMessageData
     {
         /// <summary>
