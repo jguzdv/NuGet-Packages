@@ -31,7 +31,7 @@ public class MailkitEmailMessageSender : MailkitMessageSender<EmailMessageData>
         var result = new MimeMessage()
         {
             Subject = messageData.Subject,
-            Body = new TextPart(messageData.IsHtmlBody ? "html" : "plain")
+            Body = new TextPart(messageData.BodyContentType.Split('/').Last())
             {
                 Text = messageData.Body
             },

@@ -52,7 +52,7 @@ public static class OutboxEmailMessageExtensions
             {
                 Subject = subject,
                 Body = body,
-                IsHtmlBody = hasHtmlBody,
+                BodyContentType = hasHtmlBody ? "text/html" : "text/plain",
 
                 EmailRecipients = new()
                 {

@@ -21,8 +21,8 @@
         public required string Body { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the body content is in HTML format.
+        /// Gets or sets the content type of the body content. E.g. , "text/plain" or "text/html".
         /// </summary>
-        public bool IsHtmlBody { get; set; }
+        public string BodyContentType { get; set; } = "text/plain";
     }
 }
