@@ -22,7 +22,7 @@ internal class EFCoreOutboxMessageStorage<TDbContext> : EFCoreOutboxMessageRecor
     }
 
 
-    public async Task<IEnumerable<OutboxMessage>> GetUnsentMessages(DateTimeOffset dueBefore, int batchSize, CancellationToken ct)
+    public async Task<IEnumerable<OutboxMessage>> GetUnsentMessagesAsync(DateTimeOffset dueBefore, int batchSize, CancellationToken ct)
     {
         var messages = await _dbContext.Set<OutboxMessage>()
             .AsNoTracking()
@@ -42,7 +42,7 @@ internal class EFCoreOutboxMessageStorage<TDbContext> : EFCoreOutboxMessageRecor
             .ExecuteUpdateAsync(setters => 
                 setters
                     .SetProperty(m => m.ProcessedDate, _timeProvider.GetUtcNow())
-                    .SetProperty(m => m.IsSent, true)
+                    .SetProperty(m => m.HasBeenProcessed, true)
                 ,
                 ct);
     }
@@ -61,10 +61,49 @@ internal class EFCoreOutboxMessageStorage<TDbContext> : EFCoreOutboxMessageRecor
         if (discard)
         {
             message.ProcessedDate = _timeProvider.GetUtcNow();
-            message.IsSent = false;
+            message.HasBeenProcessed = false;
         }
 
         _dbContext.Update(message);
         await _dbContext.SaveChangesAsync(ct);
+    }
+
+    public async Task<IEnumerable<OutboxMessage>> GetMessagesAsync(MessageQuery query, CancellationToken ct)
+    {
+        var queryable = _dbContext.Set<OutboxMessage>().AsNoTracking().AsQueryable();
+
+        if (query.DueBefore.HasValue)
+        {
+            queryable = queryable.Where(m => m.DueDate <= query.DueBefore.Value);
+        }
+
+        if (query.DueAfter.HasValue)
+        {
+            queryable = queryable.Where(m => m.DueDate >= query.DueAfter.Value);
+        }
+
+        if (!string.IsNullOrEmpty(query.MessageType))
+        {
+            queryable = queryable.Where(m => m.MessageType == query.MessageType);
+        }
+
+        if (!string.IsNullOrEmpty(query.Tags))
+        {
+            queryable = queryable.Where(m => m.Tags == query.Tags);
+        }
+
+        if (!query.IncludeProcessedMessages)
+        {
+            queryable = queryable.Where(m => m.HasBeenProcessed == null);
+        }
+
+        return await queryable.ToListAsync(ct);
+    }
+
+    public async Task RemoveMessageAsync(OutboxMessage message, CancellationToken ct)
+    {
+        await _dbContext.Set<OutboxMessage>()
+            .Where(m => m.Id == message.Id)
+            .ExecuteDeleteAsync(ct);
     }
 }

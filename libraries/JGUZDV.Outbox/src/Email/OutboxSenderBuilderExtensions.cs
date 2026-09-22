@@ -14,12 +14,12 @@ public static class OutboxSenderBuilderExtensions
         /// <summary>
         /// Configures the outbox sender to use Mailkit for sending emails.
         /// </summary>
-        public OutboxSenderBuilder UseDefaultEmailSender(
+        public OutboxSenderBuilder AddDefaultEmailSender(
             Action<MailkitMessageSenderOptions> configureOptions
         )
         {
-            builder.UseMessageSender<MailkitEmailMessageSender, MailkitMessageSenderOptions>(configureOptions);
-            builder.UseMessageFactory<EmailMessageDataFactory, EmailMessageData>();
+            builder.AddMessageSender<MailkitEmailMessageSender, MailkitMessageSenderOptions>(configureOptions);
+            builder.AddMessageFactory<EmailMessageDataFactory, EmailMessageData>();
 
             return builder;
         }

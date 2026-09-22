@@ -45,9 +45,6 @@ public static class OutboxMessageExtensions
         /// <returns>True if the message data was successfully deserialized; otherwise, false.</returns>
         public bool TryGetJsonMessageData<T>(out T messageData)
         {
-            /// <summary>
-            /// Gets the message data deserialized from JSON to the specified type.
-            /// </summary>
             try
             {
                 messageData = JsonSerializer.Deserialize<T>(message.MessageData)!;

@@ -40,14 +40,14 @@ public class OutboxWorker
     /// <summary>
     /// Executes the outbox worker, processing unsent messages and attempting to send them using the appropriate message sender.
     /// </summary>
-    public async Task<OutboxWorkerResult> Execute(CancellationToken ct = default)
+    public async Task<OutboxWorkerResult> ExecuteAsync(CancellationToken ct = default)
     {
         var result = new OutboxWorkerResult();
 
         _logger.LogDebug($"{nameof(OutboxWorker)} started.");
 
         var dueBefore = _timeProvider.GetUtcNow();
-        var unsentMessages = await _messageStorage.GetUnsentMessages(dueBefore, 100, ct);
+        var unsentMessages = await _messageStorage.GetUnsentMessagesAsync(dueBefore, 100, ct);
 
         foreach(var message in unsentMessages)
         {

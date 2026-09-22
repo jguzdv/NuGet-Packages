@@ -40,14 +40,14 @@ public class OutboxMessage
 
     /// <summary>
     /// Gets or sets the date and time when the message has been processed. If the message has not been processed yet, this property will be null.
-    /// Use <see cref="IsSent"/> to check if the message has been sent or discarded.
+    /// Use <see cref="HasBeenProcessed"/> to check if the message has been sent or discarded.
     /// </summary>
     public DateTimeOffset? ProcessedDate { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether the message has been sent or discarded.
     /// </summary>
-    public bool? IsSent { get; set; }
+    public bool? HasBeenProcessed { get; set; }
 
     /// <summary>
     /// Gets or sets the type of the message.

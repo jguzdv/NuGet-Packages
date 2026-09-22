@@ -19,7 +19,7 @@ internal class EFCoreOutboxMessageRecorder<TDbContext> : IOutboxMessageRecorder
         _timeProvider = timeProvider;
     }
 
-    public Task EnqueueMessage(OutboxMessage message)
+    public Task EnqueueMessageAsync(OutboxMessage message, CancellationToken ct)
     {
         message.RecordDate = _timeProvider.GetUtcNow();
         _dbContext.Set<OutboxMessage>().Add(message);

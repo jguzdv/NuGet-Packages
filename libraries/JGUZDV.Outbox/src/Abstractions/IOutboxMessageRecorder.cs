@@ -9,10 +9,11 @@ public interface IOutboxMessageRecorder
     /// <summary>
     /// Puts a message into the outbox for later processing.
     /// </summary>
-    Task EnqueueMessage(OutboxMessage message);
+    Task EnqueueMessageAsync(OutboxMessage message, CancellationToken ct);
 
     /// <summary>
-    /// Saves all changes made in this context to the underlying database asynchronously.
+    /// Saves all changes made in this context to the underlying provider asynchronously.
+    /// This method might do nothing if the implementer does not implement unit-of-work pattern.
     /// </summary>
     Task<int> SaveChangesAsync(CancellationToken ct);
 }

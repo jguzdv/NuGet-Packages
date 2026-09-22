@@ -32,25 +32,34 @@ public class OutboxSenderBuilder
         return this;
     }
 
-    public OutboxSenderBuilder UseMessageSender<TSendingStrategy>() 
+    /// <summary>
+    /// Configures the outbox to use a custom implementation of IOutboxMessageSender for sending messages. This allows for flexibility in how messages are sent, enabling the use of different sending strategies or custom logic for message delivery.
+    /// </summary>
+    public OutboxSenderBuilder AddMessageSender<TSendingStrategy>() 
         where TSendingStrategy : class, IOutboxMessageSender
     {
-        _services.AddScoped<IOutboxMessageSender, TSendingStrategy>();
+        _services.TryAddEnumerable(ServiceDescriptor.Scoped<IOutboxMessageSender, TSendingStrategy>());
         return this;
     }
 
-    public OutboxSenderBuilder UseMessageSender<TSendingStrategy, TOptions>(Action<TOptions> configure)
+    /// <summary>
+    /// Configures the outbox to use a custom implementation of IOutboxMessageSender for sending messages, along with specific options for that sender. This allows for flexibility in how messages are sent, enabling the use of different sending strategies or custom logic for message delivery, while also allowing for configuration of sender-specific settings.
+    /// </summary>
+    public OutboxSenderBuilder AddMessageSender<TSendingStrategy, TOptions>(Action<TOptions> configure)
         where TSendingStrategy : class, IOutboxMessageSender
         where TOptions : class
     {
+        AddMessageSender<TSendingStrategy>();
         _services.AddOptions<TOptions>()
             .Configure(configure);
 
-        _services.AddScoped<IOutboxMessageSender, TSendingStrategy>();
         return this;
     }
 
-    public OutboxSenderBuilder UseMessageFactory<TFactory, TMessage>() where TFactory 
+    /// <summary>
+    /// Configures the outbox to use a custom implementation of IMessageFactory for creating messages of a specific type. This allows for flexibility in how messages are created, enabling the use of different factories or custom logic for message creation.
+    /// </summary>
+    public OutboxSenderBuilder AddMessageFactory<TFactory, TMessage>() where TFactory 
         : class, IMessageFactory<TMessage>
     {
         _services.AddScoped<IMessageFactory<TMessage>, TFactory>();
