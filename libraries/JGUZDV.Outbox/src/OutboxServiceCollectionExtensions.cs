@@ -5,7 +5,7 @@ namespace Microsoft.Extensions.DependencyInjection;
 /// <summary>
 /// Provides extension methods for the IServiceCollection interface to register outbox-related services and configurations in the dependency injection container.
 /// </summary>
-public static class ServiceCollectionExtensions
+public static class OutboxServiceCollectionExtensions
 {
     /// <summary>
     /// Adds the outbox recorder services to the dependency injection container and returns an OutboxRecorderBuilder for further configuration. 

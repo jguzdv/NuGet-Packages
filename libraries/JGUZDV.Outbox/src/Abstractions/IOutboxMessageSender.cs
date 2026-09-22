@@ -17,7 +17,7 @@ public interface IOutboxMessageSender
     Task<bool> ShouldExecute(OutboxMessage message);
 
     /// <summary>
-    /// Sends the specified outbox message. This method is responsible for the actual sending of the message and returns a result indicating the success or failure of the operation, along with any relevant exceptions or state information.
+    /// Sends the specified outbox message. This method is responsible for the actual sending of the message.
     /// </summary>
-    Task<MessageSenderResult> SendMessage(OutboxMessage message);
+    Task SendMessage(OutboxMessage message);
 }

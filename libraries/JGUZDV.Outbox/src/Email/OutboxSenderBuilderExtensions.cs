@@ -1,4 +1,5 @@
 ﻿using JGUZDV.Outbox;
+using JGUZDV.Outbox.Email;
 using JGUZDV.Outbox.Email.Mailkit;
 
 namespace Microsoft.Extensions.DependencyInjection;
@@ -13,11 +14,13 @@ public static class OutboxSenderBuilderExtensions
         /// <summary>
         /// Configures the outbox sender to use Mailkit for sending emails.
         /// </summary>
-        public OutboxSenderBuilder UseMailkitSender(
-            Action<MailkitOutboxSenderOptions> configureOptions
+        public OutboxSenderBuilder UseDefaultEmailSender(
+            Action<MailkitMessageSenderOptions> configureOptions
         )
         {
-            builder.Use<MailkitSendingStrategy, MailkitOutboxSenderOptions>(configureOptions);
+            builder.UseMessageSender<MailkitEmailMessageSender, MailkitMessageSenderOptions>(configureOptions);
+            builder.UseMessageFactory<EmailMessageDataFactory, EmailMessageData>();
+
             return builder;
         }
     }

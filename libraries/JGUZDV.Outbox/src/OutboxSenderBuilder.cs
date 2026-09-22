@@ -30,14 +30,14 @@ public class OutboxSenderBuilder
         return this;
     }
 
-    public OutboxSenderBuilder UseMessageSendingStrategy<TSendingStrategy>() 
+    public OutboxSenderBuilder UseMessageSender<TSendingStrategy>() 
         where TSendingStrategy : class, IOutboxMessageSender
     {
         _services.AddScoped<IOutboxMessageSender, TSendingStrategy>();
         return this;
     }
 
-    public OutboxSenderBuilder UseMessageSendingStrategy<TSendingStrategy, TOptions>(Action<TOptions> configure)
+    public OutboxSenderBuilder UseMessageSender<TSendingStrategy, TOptions>(Action<TOptions> configure)
         where TSendingStrategy : class, IOutboxMessageSender
         where TOptions : class
     {
@@ -48,5 +48,10 @@ public class OutboxSenderBuilder
         return this;
     }
 
-    public OutboxSenderBuilder Use
+    public OutboxSenderBuilder UseMessageFactory<TFactory, TMessage>() where TFactory 
+        : class, IMessageFactory<TMessage>
+    {
+        _services.AddScoped<IMessageFactory<TMessage>, TFactory>();
+        return this;
+    }
 }
