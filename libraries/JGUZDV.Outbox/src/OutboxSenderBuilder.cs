@@ -17,7 +17,9 @@ public class OutboxSenderBuilder
     internal OutboxSenderBuilder(IServiceCollection services)
     {
         _services = services;
+
         _services.TryAddSingleton((_) => TimeProvider.System);
+        _services.TryAddScoped<OutboxWorker>();
     }
 
 

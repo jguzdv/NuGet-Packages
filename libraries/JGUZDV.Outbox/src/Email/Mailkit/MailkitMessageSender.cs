@@ -50,11 +50,11 @@ public abstract class MailkitMessageSender<TMessageData> : IOutboxMessageSender
     /// <summary>
     /// Checks if the type of the message is 'Email'
     /// </summary>
-    public async Task<bool> CanExecute(OutboxMessage message)
+    public async Task<bool> CanExecuteAsync(OutboxMessage message, CancellationToken ct)
     {
         foreach (var factory in _messageFactories)
         {
-            if (await factory.CanCreateMessage(message))
+            if (await factory.CanCreateMessageAsync(message, ct))
             {
                 return true;
             }
@@ -67,17 +67,17 @@ public abstract class MailkitMessageSender<TMessageData> : IOutboxMessageSender
     /// <summary>
     /// Returns true.
     /// </summary>
-    public virtual Task<bool> ShouldExecute(OutboxMessage message)
+    public virtual Task<bool> ShouldExecuteAsync(OutboxMessage message, CancellationToken ct)
         => Task.FromResult(true);
 
 
     /// <inheritdoc />
-    public async Task SendMessage(OutboxMessage message)
+    public async Task SendMessageAsync(OutboxMessage message, CancellationToken ct)
     {
         IMessageFactory<TMessageData>? effectiveFactory = null;
         foreach (var factory in _messageFactories)
         {
-            if (await factory.CanCreateMessage(message))
+            if (await factory.CanCreateMessageAsync(message, ct))
             {
                 effectiveFactory = factory;
                 break;
@@ -90,7 +90,7 @@ public abstract class MailkitMessageSender<TMessageData> : IOutboxMessageSender
             throw new MessageSenderException($"Could not find any mail generator that would create a message for type {message.MessageType}") { IsTransient = true };
         }
 
-        var mailContent = await effectiveFactory.CreateMessage(message);
+        var mailContent = await effectiveFactory.CreateMessageAsync(message, ct);
         var mimeMessage = CreateMimeMessageFromMessageData(mailContent);
 
 

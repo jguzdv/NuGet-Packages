@@ -8,11 +8,11 @@ namespace JGUZDV.Outbox.Email;
 public class EmailMessageDataFactory : IMessageFactory<EmailMessageData>
 {
     /// <inheritdoc />
-    public Task<bool> CanCreateMessage(OutboxMessage message)
+    public Task<bool> CanCreateMessageAsync(OutboxMessage message, CancellationToken ct)
         => Task.FromResult(Constants.MessageType.Equals(message.MessageType));
 
     /// <inheritdoc />
-    public Task<EmailMessageData> CreateMessage(OutboxMessage message)
+    public Task<EmailMessageData> CreateMessageAsync(OutboxMessage message, CancellationToken ct)
     {
         return message.TryGetEmailMessageData(out var emailMessageData) && emailMessageData is not null
             ? Task.FromResult(emailMessageData)
