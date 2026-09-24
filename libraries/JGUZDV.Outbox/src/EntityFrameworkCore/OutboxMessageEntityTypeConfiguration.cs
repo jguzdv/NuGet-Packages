@@ -18,5 +18,7 @@ internal class OutboxMessageEntityTypeConfiguration : IEntityTypeConfiguration<O
         builder.HasIndex(m => m.DueDate).IsDescending();
         builder.HasIndex(m => m.ProcessedDate).IsDescending();
         builder.HasIndex(m => m.Tags);
+
+        builder.ComplexCollection(m => m.Failures, c => c.ToJson());
     }
 }
