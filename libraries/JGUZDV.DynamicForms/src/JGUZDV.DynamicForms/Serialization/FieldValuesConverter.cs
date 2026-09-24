@@ -70,7 +70,6 @@ public class FieldValuesConverter : JsonConverter<FieldValues>
             reader.Read();
             var value = JsonSerializer.Deserialize<JsonElement>(ref reader, options);
 
-            
             result[fieldId] = value;
 
             reader.Read();
@@ -80,6 +79,12 @@ public class FieldValuesConverter : JsonConverter<FieldValues>
             }
 
             reader.Read();
+        }
+
+        reader.Read();
+        if (reader.TokenType != JsonTokenType.EndObject)
+        {
+            throw new JsonException("Expected end of object.");
         }
 
         return new FieldValues(result);
