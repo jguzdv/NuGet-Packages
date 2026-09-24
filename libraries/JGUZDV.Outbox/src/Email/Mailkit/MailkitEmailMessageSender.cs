@@ -1,7 +1,5 @@
 ﻿using JGUZDV.Outbox.Abstractions;
 
-using MailKit.Net.Smtp;
-
 using Microsoft.Extensions.Options;
 
 using MimeKit;
@@ -18,9 +16,8 @@ public class MailkitEmailMessageSender : MailkitMessageSender<EmailMessageData>
     /// </summary>
     public MailkitEmailMessageSender(
         IEnumerable<IMessageFactory<EmailMessageData>> messageFactories, 
-        SmtpClient smtpClient, 
         IOptions<MailkitMessageSenderOptions> options) 
-        : base(messageFactories, smtpClient, options)
+        : base(messageFactories, options)
     { }
 
     /// <inheritdoc />

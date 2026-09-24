@@ -18,7 +18,6 @@ public abstract class MailkitMessageSender<TMessageData> : IOutboxMessageSender
     /// </summary>
     public MailkitMessageSender(
         IEnumerable<IMessageFactory<TMessageData>> messageFactories,
-        SmtpClient smtpClient,
         IOptions<MailkitMessageSenderOptions> options
     )
     {
@@ -28,7 +27,7 @@ public abstract class MailkitMessageSender<TMessageData> : IOutboxMessageSender
         }
 
         _messageFactories = messageFactories;
-        _smtpClient = smtpClient;
+        _smtpClient = new SmtpClient();
 
         Options = options;
     }
