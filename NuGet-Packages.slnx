@@ -167,6 +167,13 @@
     <Project Path="libraries/JGUZDV.OpenIddict.KeyManager/src/JGUZDV.OpenIddict.KeyManager.csproj" />
     <Project Path="libraries/JGUZDV.OpenIddict.KeyManager/test/JGUZDV.OpenIddict.KeyManager.Tests.csproj" />
   </Folder>
+  <Folder Name="/libraries/JGUZDV.Outbox/" />
+  <Folder Name="/libraries/JGUZDV.Outbox/src/">
+    <Project Path="libraries/JGUZDV.Outbox/src/JGUZDV.Outbox.csproj" />
+  </Folder>
+  <Folder Name="/libraries/JGUZDV.Outbox/test/">
+    <Project Path="libraries/JGUZDV.Outbox/test/JGUZDV.Outbox.Tests.csproj" />
+  </Folder>
   <Folder Name="/libraries/JGUZDV.WebApiHost/">
     <Project Path="libraries/JGUZDV.WebApiHost/src/JGUZDV.WebApiHost.csproj" />
     <Project Path="libraries/JGUZDV.WebApiHost/test/JGUZDV.WebApiHost.Tests.csproj" />
