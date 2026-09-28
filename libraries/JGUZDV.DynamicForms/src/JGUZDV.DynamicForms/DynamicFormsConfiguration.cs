@@ -56,7 +56,7 @@ namespace JGUZDV.DynamicForms
         /// Adds a new FieldType to the registered field types and sets the allowed constraints for it.
         /// </summary>
         /// <param name="type">The FieldType to add.</param>
-        public static void AddFieldType(FieldType type)
+        public static bool TryAddFieldType(FieldType type)
         {
             foreach(var constraintId in type.AllowedConstraints)
             {
@@ -66,7 +66,14 @@ namespace JGUZDV.DynamicForms
                 }
             }
 
+
+            if (_registeredFieldTypes.ContainsKey(type.TypeId))
+            {
+                return false;
+            }
+
             _registeredFieldTypes.Add(type.TypeId, type);
+            return true;
         }
 
         /// <summary>
@@ -81,19 +88,27 @@ namespace JGUZDV.DynamicForms
         /// <summary>
         /// Adds a new ConstraintType to the registered constraint types.
         /// </summary>
-        public static void AddConstraintType<TConstraint>()
+        public static bool TryAddConstraintType<TConstraint>()
             where TConstraint : IConstraint
         {
-            _registeredConstraintTypes.Add(TConstraint.ConstraintId, typeof(TConstraint));
+            var constraintId = TConstraint.ConstraintId;
+
+            if (_registeredConstraintTypes.ContainsKey(constraintId))
+            {
+                return false;
+            }
+
+            _registeredConstraintTypes.Add(constraintId, typeof(TConstraint));
+            return true;
         }
 
         /// <summary>
         /// Removes a ConstraintType from the registered constraint types.
         /// </summary>
-        public static void RemoveConstraintType<TConstraint>()
+        public static bool TryRemoveConstraintType<TConstraint>()
             where TConstraint : IConstraint
         {
-            _registeredConstraintTypes.Remove(TConstraint.ConstraintId);
+            return _registeredConstraintTypes.Remove(TConstraint.ConstraintId);
         }
 
 

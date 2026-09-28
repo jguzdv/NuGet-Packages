@@ -28,7 +28,7 @@ public class DynamicFormsBuilder
     /// </summary>
     public DynamicFormsBuilder AddFieldType(FieldType type)
     {
-        DynamicFormsConfiguration.AddFieldType(type);
+        DynamicFormsConfiguration.TryAddFieldType(type);
         return this;
     }
 
@@ -82,7 +82,7 @@ public class DynamicFormsBuilder
     public DynamicFormsBuilder RegisterConstraintType<TConstraint>()
         where TConstraint : class, IConstraint
     {
-        DynamicFormsConfiguration.AddConstraintType<TConstraint>();
+        DynamicFormsConfiguration.TryAddConstraintType<TConstraint>();
         return this;
     }
 }
