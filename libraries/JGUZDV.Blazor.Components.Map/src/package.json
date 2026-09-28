@@ -19,6 +19,6 @@
   },
   "dependencies": {
     "esm": "^3.2.25",
-    "maplibre-gl": "^3.5.2"
+    "maplibre-gl": "^6.4.1"
   }
 }
