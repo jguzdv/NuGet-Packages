@@ -1,5 +1,6 @@
 ﻿@using JGUZDV.DynamicForms.Model
 @using System.ComponentModel.DataAnnotations
+@using JGUZDV.DynamicForms.Model.Constraints
 
 @*Select for new constraints*@
 <select class="form-control" @bind="_newConstraintString">
@@ -10,7 +11,7 @@
     @foreach (var constraintId in FieldDefinition.Type.AllowedConstraints)
     {
         <option value="@constraintId.Value">
-            @DynamicFormsConfiguration.GetConstraintName(constraintId)
+            @ConstraintTypeRegistry.GetName(constraintId)
         </option>
     }
 </select>
@@ -71,6 +72,9 @@
     [Inject]
     public required IServiceProvider ServiceProvider { get; set; }
 
+    [Inject]
+    public required ConstraintTypeRegistry ConstraintTypeRegistry { get; set; }
+
     private string? _newConstraintString;
 
     private List<ValidationResult> _fieldDefinitionValidation = new();
@@ -89,7 +93,7 @@
             return;
         }
 
-        DynamicFormsConfiguration.AddConstraintToFieldDefinition(FieldDefinition, new(_newConstraintString));
+        ConstraintTypeRegistry.AddToFieldDefinition(FieldDefinition, new(_newConstraintString));
         FieldDefinitionChanged.InvokeAsync(FieldDefinition);
     }
 }

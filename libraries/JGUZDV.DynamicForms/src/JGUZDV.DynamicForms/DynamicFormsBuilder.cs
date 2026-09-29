@@ -1,5 +1,8 @@
-﻿using JGUZDV.DynamicForms.Model.Constraints;
+﻿using System.Text.Json;
+
+using JGUZDV.DynamicForms.Model.Constraints;
 using JGUZDV.DynamicForms.Model.FieldTypes;
+using JGUZDV.DynamicForms.Serialization;
 using JGUZDV.L10n;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +16,8 @@ namespace JGUZDV.DynamicForms;
 public class DynamicFormsBuilder
 {
     private readonly IServiceCollection _services;
+    private readonly FieldTypeRegistry _fieldTypeRegistry;
+    private readonly ConstraintTypeRegistry _constraintTypeRegistry;
 
     /// <summary>
     /// 
@@ -21,6 +26,19 @@ public class DynamicFormsBuilder
     public DynamicFormsBuilder(IServiceCollection services)
     {
         _services = services;
+
+        _constraintTypeRegistry = new ConstraintTypeRegistry();
+        _fieldTypeRegistry = new FieldTypeRegistry(_constraintTypeRegistry);
+
+        _services.TryAddSingleton(_constraintTypeRegistry);
+        _services.TryAddSingleton(_fieldTypeRegistry);
+        _services.TryAddSingleton<DynamicFormsJsonConverterFactory>();
+        _services.TryAddSingleton<JsonSerializerOptions>(sp =>
+        {
+            var options = new JsonSerializerOptions();
+            options.Converters.Add(sp.GetRequiredService<DynamicFormsJsonConverterFactory>());
+            return options;
+        });
     }
 
     /// <summary>
@@ -28,7 +46,7 @@ public class DynamicFormsBuilder
     /// </summary>
     public DynamicFormsBuilder AddFieldType(FieldType type)
     {
-        DynamicFormsConfiguration.TryAddFieldType(type);
+        _fieldTypeRegistry.TryAdd(type);
         return this;
     }
 
@@ -72,7 +90,7 @@ public class DynamicFormsBuilder
     /// </summary>
     public DynamicFormsBuilder RemoveFieldType(FieldTypeId fieldTypeId)
     {
-        DynamicFormsConfiguration.RemoveFieldType(fieldTypeId);
+        _fieldTypeRegistry.Remove(fieldTypeId);
         return this;
     }
 
@@ -82,7 +100,7 @@ public class DynamicFormsBuilder
     public DynamicFormsBuilder RegisterConstraintType<TConstraint>()
         where TConstraint : class, IConstraint
     {
-        DynamicFormsConfiguration.TryAddConstraintType<TConstraint>();
+        _constraintTypeRegistry.TryAdd<TConstraint>();
         return this;
     }
 }

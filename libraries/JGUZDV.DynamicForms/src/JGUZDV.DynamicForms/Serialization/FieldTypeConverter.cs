@@ -8,13 +8,20 @@ namespace JGUZDV.DynamicForms.Serialization;
 /// <inheritdoc />
 public class FieldTypeConverter : JsonConverter<FieldType>
 {
+    private readonly FieldTypeRegistry _registry;
+
+    public FieldTypeConverter(FieldTypeRegistry registry)
+    {
+        _registry = registry;
+    }
+
     /// <inheritdoc />
     public override FieldType? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         var typeDiscriminator = reader.GetString() 
             ?? throw new JsonException("Unable to determine the type of the field type.");
 
-        return DynamicFormsConfiguration.RegisteredFieldTypes.TryGetValue(new(typeDiscriminator), out var fieldType)
+        return _registry.RegisteredFieldTypes.TryGetValue(new(typeDiscriminator), out var fieldType)
             ? fieldType
             : throw new JsonException($"Unknown field type discriminator: {typeDiscriminator}");
     }

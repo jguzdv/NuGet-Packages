@@ -32,7 +32,7 @@ public class RangeConstraintConverter : JsonConverter<RangeConstraint>
             {
                 case nameof(RangeConstraint.FieldType):
                     string fieldTypeString = reader.GetString()!;
-                    rangeConstraint.FieldType = FieldType.FromJson(fieldTypeString);
+                    rangeConstraint.FieldType = FieldType.FromJson(fieldTypeString, options);
                     break;
                 case nameof(RangeConstraint.MaxValue):
                     string maxValueString = reader.GetString()!;
@@ -61,7 +61,7 @@ public class RangeConstraintConverter : JsonConverter<RangeConstraint>
         writer.WriteStartObject();
 
         writer.WritePropertyName(nameof(RangeConstraint.FieldType));
-        writer.WriteStringValue(value.FieldType.ToJson());
+        writer.WriteStringValue(value.FieldType.ToJson(options));
 
         if (value.MaxValue != null)
         {

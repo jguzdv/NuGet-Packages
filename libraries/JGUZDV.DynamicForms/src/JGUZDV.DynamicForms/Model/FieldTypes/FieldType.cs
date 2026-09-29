@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using System.Text.Json.Serialization;
 
 using JGUZDV.DynamicForms.Model.Constraints;
 using JGUZDV.DynamicForms.Serialization;
@@ -18,7 +17,6 @@ namespace JGUZDV.DynamicForms.Model.FieldTypes;
 /// <param name="clrType"></param>
 /// <param name="displayName"></param>
 /// <param name="allowedConstraints"></param>
-[JsonConverter(typeof(FieldTypeConverter))]
 public abstract class FieldType(
     Type clrType,
     L10nString displayName,
@@ -77,7 +75,7 @@ public abstract class FieldType(
     {
         return ClrType.IsPrimitive
             ? value?.ToString() ?? ""
-            : JsonSerializer.Serialize(value, DynamicFormsConfiguration.JsonSerializerOptions);
+            : JsonSerializer.Serialize(value);
     }
 
     /// <summary>
@@ -87,7 +85,7 @@ public abstract class FieldType(
     {
         return ClrType.IsPrimitive
             ? Convert.ChangeType(stringValue, ClrType)
-            : JsonSerializer.Deserialize(stringValue, ClrType, DynamicFormsConfiguration.JsonSerializerOptions)
+            : JsonSerializer.Deserialize(stringValue, ClrType)
             ?? throw new InvalidOperationException($"Could not parse json: {stringValue} into target type: {ClrType.Name}");
     }
 
@@ -95,15 +93,15 @@ public abstract class FieldType(
     /// Converts the specified JSON element to an object of the CLR type.
     /// </summary>
     public virtual object? ConvertToValue(JsonElement jsonElement)
-        => JsonSerializer.Deserialize(jsonElement, ClrType, DynamicFormsConfiguration.JsonSerializerOptions);
+        => JsonSerializer.Deserialize(jsonElement, ClrType);
 
     /// <summary>
     /// Converts the field type to a JSON string.
     /// </summary>
     /// <returns>A JSON string representation of the field type.</returns>
-    public string ToJson()
+    public string ToJson(JsonSerializerOptions? options = null)
     {
-        return JsonSerializer.Serialize(this, DynamicFormsConfiguration.JsonSerializerOptions);
+        return JsonSerializer.Serialize(this, options);
     }
 
     /// <summary>
@@ -111,18 +109,18 @@ public abstract class FieldType(
     /// </summary>
     /// <param name="json">The JSON string to parse.</param>
     /// <returns>A field type object.</returns>
-    public static FieldType FromJson(string json)
+    public static FieldType FromJson(string json, JsonSerializerOptions? options = null)
     {
-        return JsonSerializer.Deserialize<FieldType>(json, DynamicFormsConfiguration.JsonSerializerOptions) 
+        return JsonSerializer.Deserialize<FieldType>(json, options)
             ?? throw new InvalidOperationException($"Could not parse json: {json}");
     }
 
     /// <summary>
     /// Adds the field value to the content.
     /// </summary>
-    public virtual void AddToContent(Field field, MultipartFormDataContent content, string name = "")
+    public virtual void AddToContent(Field field, MultipartFormDataContent content, string name = "", JsonSerializerOptions? options = null)
     {
-        var json = JsonSerializer.Serialize(field.Value, DynamicFormsConfiguration.JsonSerializerOptions);
+        var json = JsonSerializer.Serialize(field.Value, options);
 
         name = string.IsNullOrWhiteSpace(name)
             ? $"{DynamicFormsConfiguration.FormFieldPrefix}{field.FieldDefinition.Identifier}"

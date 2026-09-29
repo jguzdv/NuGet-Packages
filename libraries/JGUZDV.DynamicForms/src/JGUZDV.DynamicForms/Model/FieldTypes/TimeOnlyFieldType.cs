@@ -41,6 +41,6 @@ public class TimeOnlyFieldType : FieldType
     {
         return TimeOnly.TryParse(stringValue, out var timeOnly)
             ? timeOnly
-            : JsonSerializer.Deserialize<TimeOnly>(stringValue, DynamicFormsConfiguration.JsonSerializerOptions);
+            : JsonSerializer.Deserialize<TimeOnly>(stringValue);
     }
 }

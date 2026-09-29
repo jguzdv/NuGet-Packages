@@ -10,6 +10,13 @@ namespace JGUZDV.DynamicForms.Serialization;
 /// </summary>
 public class ConstraintConverter : JsonConverter<IConstraint>
 {
+    private readonly ConstraintTypeRegistry _registry;
+
+    public ConstraintConverter(ConstraintTypeRegistry registry)
+    {
+        _registry = registry;
+    }
+
     /// <inheritdoc />
     public override IConstraint? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
@@ -39,7 +46,7 @@ public class ConstraintConverter : JsonConverter<IConstraint>
 
         reader.Read();
         var valueElement = JsonElement.ParseValue(ref reader);
-        if (!DynamicFormsConfiguration.RegisteredConstraintTypes.TryGetValue(constraintId, out var constraintType))
+        if (!_registry.RegisteredConstraintTypes.TryGetValue(constraintId, out var constraintType))
         {
             throw new JsonException($"Unknown constraint type: {constraintId}");
         }

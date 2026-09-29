@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
 using JGUZDV.DynamicForms.Model.Constraints;
 using JGUZDV.DynamicForms.Serialization;
@@ -30,7 +31,7 @@ public class FileFieldType : FieldType
 
     /// <inheritdoc/>
     /// <exception cref="InvalidOperationException"></exception>
-    public override void AddToContent(Field field, MultipartFormDataContent content, string name = "")
+    public override void AddToContent(Field field, MultipartFormDataContent content, string name = "", JsonSerializerOptions? options = null)
     {
         //skip null values
         if (field.Value == null)

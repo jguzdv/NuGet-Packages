@@ -127,8 +127,8 @@ public class Field : IValidatableObject, IDisposable, IAsyncDisposable
     /// </summary>
     /// <param name="content">The content to add the field value to.</param>
     /// <param name="name">The name of the form field. Defaults to <see cref="FieldDefinition.Identifier"/></param>
-    public virtual void AddToContent(MultipartFormDataContent content, string name = "")
-        => ValueType.AddToContent(this, content, name);
+    public virtual void AddToContent(MultipartFormDataContent content, string name = "", JsonSerializerOptions? options = null)
+        => ValueType.AddToContent(this, content, name, options);
 
     /// <summary>
     /// Determines whether the field is valid.

@@ -1,7 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
-
-using JGUZDV.DynamicForms.Serialization;
 using JGUZDV.L10n;
 
 namespace JGUZDV.DynamicForms.Model.Constraints;
@@ -10,7 +7,6 @@ namespace JGUZDV.DynamicForms.Model.Constraints;
 /// <summary>
 /// Base class for constraints.
 /// </summary>
-[JsonConverter(typeof(ConstraintConverter))]
 public interface IConstraint : IValidatableObject
 {
     /// <summary>

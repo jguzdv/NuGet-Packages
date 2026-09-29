@@ -86,11 +86,11 @@ public class FieldDefinition : IValidatableObject
     /// Deep Copy of the field definition.
     /// </summary>
     /// <returns></returns>
-    public FieldDefinition Copy()
+    public FieldDefinition Copy(JsonSerializerOptions? options = null)
     {
         return JsonSerializer.Deserialize<FieldDefinition>(
-            JsonSerializer.Serialize(this, DynamicFormsConfiguration.JsonSerializerOptions),
-            DynamicFormsConfiguration.JsonSerializerOptions)!;
+            JsonSerializer.Serialize(this, options),
+            options)!;
     }
 
     /// <summary>

@@ -42,6 +42,6 @@ public class DateOnlyFieldType : FieldType
     {
         return DateOnly.TryParse(stringValue, out var dateOnly)
             ? dateOnly
-            : JsonSerializer.Deserialize<DateOnly>(stringValue, DynamicFormsConfiguration.JsonSerializerOptions);
+            : JsonSerializer.Deserialize<DateOnly>(stringValue);
     }
 }

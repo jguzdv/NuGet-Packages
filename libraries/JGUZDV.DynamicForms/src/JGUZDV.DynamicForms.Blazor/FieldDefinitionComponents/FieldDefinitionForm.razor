@@ -7,10 +7,13 @@
 @using JGUZDV.DynamicForms.Model
 @using JGUZDV.DynamicForms.Model.FieldTypes
 @using Microsoft.Extensions.DependencyInjection
+@using System.Text.Json
 
 @inject NavigationManager Navigation
 @inject IStringLocalizer<ComponentStrings> SL
 @inject IServiceProvider ServiceProvider
+@inject JsonSerializerOptions JsonSerializerOptions
+@inject FieldTypeRegistry FieldTypeRegistry
 
 <EditForm EditContext="_editContext" OnValidSubmit="HandleValidSubmit">
     <DataAnnotationsValidator />
@@ -35,16 +38,16 @@
     <div class="mb-2">
         <label for="type">@SL["EditFieldDefinition.Type"]</label>
         <select id="type"
-                value="@_fieldDefinition.Type?.ToJson()"
+                value="@_fieldDefinition.Type?.ToJson(JsonSerializerOptions)"
                 @onchange="HandleTypeChanged"
                 class="form-select">
             @if (_fieldDefinition.Type == null)
             {
                 <option value="" selected>@SL["EditFieldDefinition.SelectType"]</option>
             }
-            @foreach (var type in DynamicFormsConfiguration.RegisteredFieldTypes)
+            @foreach (var type in FieldTypeRegistry.RegisteredFieldTypes)
             {
-                <option value="@type.Value.ToJson()">@type.Value.DisplayName</option>
+                <option value="@type.Value.ToJson(JsonSerializerOptions)">@type.Value.DisplayName</option>
             }
         </select>
     </div>
@@ -146,7 +149,7 @@
                 }
             }
 
-            _fieldDefinition = newFieldDefinition!.Copy();
+            _fieldDefinition = newFieldDefinition!.Copy(JsonSerializerOptions);
             _editContext = new EditContext(_fieldDefinition!);
             _editContext.OnValidationRequested += HandleValidationRequested;
             foreach (var section in _sections)
@@ -177,7 +180,7 @@
 
     private async Task HandleTypeChanged(ChangeEventArgs e)
     {
-        _fieldDefinition!.Type = FieldType.FromJson(e.Value!.ToString()!);
+        _fieldDefinition!.Type = FieldType.FromJson(e.Value!.ToString()!, JsonSerializerOptions);
 
 
         var metadataService = ServiceProvider

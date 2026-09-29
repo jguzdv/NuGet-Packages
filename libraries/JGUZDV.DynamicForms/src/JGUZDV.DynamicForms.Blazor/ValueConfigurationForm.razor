@@ -2,6 +2,7 @@
 @using JGUZDV.DynamicForms.Blazor.ChoicOptionComponents
 @using JGUZDV.DynamicForms.Blazor.ConstraintComponents
 @using JGUZDV.DynamicForms.Model
+@using System.Text.Json
 
 <div class="d-flex btn-group pb-3" role="group">
     <button type="button"
@@ -75,9 +76,12 @@ DenyText="No"></ModalConfirmation>
     [Inject]
     public required IStringLocalizer<Resources.ComponentStrings> SL { get; set; }
 
+    [Inject]
+    public required JsonSerializerOptions JsonSerializerOptions { get; set; }
+
     protected override void OnParametersSet()
     {
-        _fieldDefinition = FieldDefinition.Copy();
+        _fieldDefinition = FieldDefinition.Copy(JsonSerializerOptions);
         if (_fieldDefinition.ChoiceOptions.Any())
         {
             _isChoiceOptionMode = true;

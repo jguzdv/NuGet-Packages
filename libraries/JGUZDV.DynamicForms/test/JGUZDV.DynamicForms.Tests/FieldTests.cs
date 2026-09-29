@@ -127,10 +127,7 @@ namespace JGUZDV.DynamicForms.Tests
                 Value = new List<string> { "Test" }
             };
 
-            var options = new JsonSerializerOptions
-            {
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault
-            };
+            var options = TestJsonSerializerOptions.Create();
 
 
             // Act
@@ -140,7 +137,7 @@ namespace JGUZDV.DynamicForms.Tests
             // Assert
             Assert.NotNull(deserializedField);
             Assert.Equal(field.Value, deserializedField.Value);
-            Assert.Equal(field.FieldDefinition.Type!.ToJson(), deserializedField.FieldDefinition.Type!.ToJson());
+            Assert.Equal(field.FieldDefinition.Type!.ToJson(options), deserializedField.FieldDefinition.Type!.ToJson(options));
             Assert.Equal(field.FieldDefinition.InputDefinition.Label["en"], deserializedField.FieldDefinition.InputDefinition.Label["en"]);
             Assert.Equal(field.FieldDefinition.Description["en"], deserializedField.FieldDefinition.Description["en"]);
             Assert.Equal(field.FieldDefinition.IsList, deserializedField.FieldDefinition.IsList);
@@ -179,10 +176,7 @@ namespace JGUZDV.DynamicForms.Tests
                 Value = new DateOnly(2023, 6, 15)
             };
 
-            var options = new JsonSerializerOptions
-            {
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault
-            };
+            var options = TestJsonSerializerOptions.Create();
 
 
             // Act
@@ -192,7 +186,7 @@ namespace JGUZDV.DynamicForms.Tests
             // Assert
             Assert.NotNull(deserializedField);
             Assert.Equal(field.Value, deserializedField.Value);
-            Assert.Equal(field.FieldDefinition.Type!.ToJson(), deserializedField.FieldDefinition.Type!.ToJson());
+            Assert.Equal(field.FieldDefinition.Type!.ToJson(options), deserializedField.FieldDefinition.Type!.ToJson(options));
             Assert.Equal(field.FieldDefinition.InputDefinition.Label["en"], deserializedField.FieldDefinition.InputDefinition.Label["en"]);
             Assert.Equal(field.FieldDefinition.Description["en"], deserializedField.FieldDefinition.Description["en"]);
             Assert.Equal(field.FieldDefinition.IsList, deserializedField.FieldDefinition.IsList);
@@ -396,10 +390,7 @@ namespace JGUZDV.DynamicForms.Tests
                 Value = new FileFieldType.FileInfo { FileName = "file1.txt", FileSize = fileContent.Length, Stream = fileContent }
             };
 
-            var options = new JsonSerializerOptions
-            {
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault
-            };
+            var options = TestJsonSerializerOptions.Create();
 
             // Act
             var json = JsonSerializer.Serialize(field, options);
@@ -422,7 +413,7 @@ namespace JGUZDV.DynamicForms.Tests
             var deserializedContent = deserializedReader.ReadToEnd();
             Assert.Equal(originalContent, deserializedContent);
 
-            Assert.Equal(field.FieldDefinition.Type!.ToJson(), deserializedField.FieldDefinition.Type!.ToJson());
+            Assert.Equal(field.FieldDefinition.Type!.ToJson(options), deserializedField.FieldDefinition.Type!.ToJson(options));
             Assert.Equal(field.FieldDefinition.InputDefinition.Label["en"], deserializedField.FieldDefinition.InputDefinition.Label["en"]);
             Assert.Equal(field.FieldDefinition.Description["en"], deserializedField.FieldDefinition.Description["en"]);
             Assert.Equal(field.FieldDefinition.IsList, deserializedField.FieldDefinition.IsList);
@@ -577,10 +568,7 @@ namespace JGUZDV.DynamicForms.Tests
 
             var field = new Field(fieldDefinition);
 
-            var options = new JsonSerializerOptions
-            {
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault
-            };
+            var options = TestJsonSerializerOptions.Create();
 
 
             // Act
@@ -611,10 +599,7 @@ namespace JGUZDV.DynamicForms.Tests
 
             var field = new Field(fieldDefinition);
 
-            var options = new JsonSerializerOptions
-            {
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault
-            };
+            var options = TestJsonSerializerOptions.Create();
 
 
             // Act
@@ -645,10 +630,7 @@ namespace JGUZDV.DynamicForms.Tests
 
             var field = new Field(fieldDefinition);
 
-            var options = new JsonSerializerOptions
-            {
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault
-            };
+            var options = TestJsonSerializerOptions.Create();
 
 
             // Act
@@ -679,10 +661,7 @@ namespace JGUZDV.DynamicForms.Tests
 
             var field = new Field(fieldDefinition);
 
-            var options = new JsonSerializerOptions
-            {
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault
-            };
+            var options = TestJsonSerializerOptions.Create();
 
 
             // Act
