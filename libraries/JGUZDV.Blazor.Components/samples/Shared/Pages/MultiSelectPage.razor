@@ -1,28 +1,33 @@
 ﻿@page "/multi-select"
 @using JGUZDV.Blazor.Components.Inputs
+@using JGUZDV.Blazor.Components.Modals
 
 <div class="container pt-4">
     <div class="mb-2">
         <label>test</label>
         <input class="form-control" disabled />
     </div>
-    <div class="mb-2">
+
+    <button @onclick="() => showThisMultiSelect = !showThisMultiSelect">Toggle MultiSelect</button>
+    @if (showThisMultiSelect)
+    {
         <MultiSelect Items="_items!"
                      Title="Wähle ein Land aus"
                      UseOverlayMode=true
-        @bind-Value="_selectedCountry"
+                     @bind-Value="_selectedCountry"
                      UseSingleSelectionMode=true ItemKey="(x) => x?.Id"
                      ItemName="x => x?.Name">
-                     <ItemTemplate>
-                         @context?.Name
-                     </ItemTemplate>
+            <ItemTemplate>
+                @context?.Name
+            </ItemTemplate>
         </MultiSelect>
-
+    }
+    <div class="mb-2">
         <MultiSelect Items="_items"
                      Title="Wähle Länder aus"
                      AllOptionLabel="Alle"
                      FilterLabel="Suche"
-        @bind-Values="_selectedCounties"
+                     @bind-Values="_selectedCounties"
                      UseSingleSelectionMode=false ItemKey="(x) => x?.Id"
                      ItemName="x => x?.Name">
             <ItemTemplate>
@@ -40,7 +45,7 @@
     </div>
     <MultiSelect HostClass="mb-2" Items="_items"
                  Title="Wähle Länder aus"
-    @bind-Values="_selectedCounties"
+                 @bind-Values="_selectedCounties"
                  UseSingleSelectionMode=false ItemKey="(x) => x?.Id"
                  ItemName="x => x?.Name">
         <ItemTemplate>
@@ -61,7 +66,7 @@
                  Title="Wähle Länder aus"
                  FilterLabel="Suche"
                  Filter="@(x => x.item.Name.Contains(x.query, StringComparison.OrdinalIgnoreCase))"
-    @bind-Values="_selectedCounties"
+                 @bind-Values="_selectedCounties"
                  UseSingleSelectionMode=false ItemKey="(x) => x?.Id"
                  ItemName="x => x?.Name">
         <ItemTemplate>
@@ -74,9 +79,9 @@
                  ItemsContainerClass="row row-cols-3"
                  Title="Wähle Länder aus"
                  AllOptionLabel="Alle"
-    @bind-Values="_selectedCounties"
+                 @bind-Values="_selectedCounties"
                  UseSingleSelectionMode=false ItemKey="(x) => x?.Id"
-                 ItemName="x => x?.Name">       
+                 ItemName="x => x?.Name">
     </MultiSelect>
     <div class="mb-2 row">
         <label class="col-2 col-form-label">test</label>
@@ -90,9 +95,9 @@
                  FilterLabel="search"
                  Title="Wähle Länder aus"
                  AllOptionLabel="Alle"
-    @bind-Values="_selectedCounties"
+                 @bind-Values="_selectedCounties"
                  UseSingleSelectionMode=false ItemKey="(x) => x?.Id"
-                 ItemName="x => x?.Name">       
+                 ItemName="x => x?.Name">
     </MultiSelect>
 
     <p>
@@ -117,6 +122,7 @@
     </p>
 </div>
 @code {
+    private bool showThisMultiSelect = false;
 
     class Country
     {
@@ -128,10 +134,10 @@
     private List<Country> _selectedCounties = new();
 
     private List<Country> _manyItems = Enumerable.Range(0, 40).Select(x => new Country
-        {
-            Id = x,
-            Name = x.ToString()
-        }).ToList();
+    {
+        Id = x,
+        Name = x.ToString()
+    }).ToList();
 
     private List<Country> _items = new()
     {

@@ -7,10 +7,10 @@
     {
         <option> @SL["EditConstraints.Select.Default"] </option>
     }
-    @foreach (var constraintType in DynamicFormsConfiguration.GetConstraintTypes(FieldDefinition))
+    @foreach (var constraintId in FieldDefinition.Type.AllowedConstraints)
     {
-        <option value="@constraintType.Name">
-            @DynamicFormsConfiguration.GetConstraintName(constraintType)
+        <option value="@constraintId.Value">
+            @DynamicFormsConfiguration.GetConstraintName(constraintId)
         </option>
     }
 </select>
@@ -34,7 +34,7 @@
         {
             <div>
                 <span>
-                    @DynamicFormsConfiguration.GetConstraintName(constraint.GetType())
+                    @constraint.GetDisplayName()
                 </span>
                 <button type="button"
                         @onclick="() => FieldDefinition.Constraints.Remove(constraint)"
@@ -84,8 +84,12 @@
 
     private void AddNewConstraint()
     {
-        var constraint = DynamicFormsConfiguration.Create(_newConstraintString!, FieldDefinition.Type!);
-        FieldDefinition.Constraints = FieldDefinition.Constraints.Prepend(constraint).ToList();
+        if (string.IsNullOrWhiteSpace(_newConstraintString))
+        {
+            return;
+        }
+
+        DynamicFormsConfiguration.AddConstraintToFieldDefinition(FieldDefinition, new(_newConstraintString));
         FieldDefinitionChanged.InvokeAsync(FieldDefinition);
     }
 }

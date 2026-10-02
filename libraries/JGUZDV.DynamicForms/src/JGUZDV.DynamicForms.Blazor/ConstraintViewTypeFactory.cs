@@ -1,5 +1,5 @@
 ﻿using JGUZDV.DynamicForms.Blazor.ConstraintComponents;
-using JGUZDV.DynamicForms.Model;
+using JGUZDV.DynamicForms.Model.Constraints;
 
 namespace JGUZDV.DynamicForms.Blazor
 {
@@ -22,7 +22,7 @@ namespace JGUZDV.DynamicForms.Blazor
         /// <param name="constraint">The constraint to get the view type for.</param>
         /// <returns>The view type associated with the specified constraint.</returns>
         /// <exception cref="InvalidOperationException">Thrown when the constraint type is unknown.</exception>
-        public static Type GetViewType(Constraint constraint)
+        public static Type GetViewType(IConstraint constraint)
         {
             return _viewTypes.GetValueOrDefault(constraint.GetType()) ?? throw new InvalidOperationException("Unknown Constraint");
         }
@@ -34,12 +34,12 @@ namespace JGUZDV.DynamicForms.Blazor
         /// <param name="viewType">The view type to associate with the constraint.</param>
         public static void SetViewType(Type constraint, Type viewType)
         {
-            if(!typeof(Constraint).IsAssignableFrom(constraint))
+            if(!typeof(IConstraint).IsAssignableFrom(constraint))
             {
                 throw new InvalidOperationException("Type must be a Constraint");
             }
 
-            _viewTypes[constraint.GetType()] = viewType;
+            _viewTypes[constraint] = viewType;
         }
     }
 }

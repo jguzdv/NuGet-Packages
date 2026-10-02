@@ -44,7 +44,7 @@ public static class JGUZDVWebAssemblyApplicationBuilderExtensions
     /// </summary>
     public static JGUZDVWebAssemblyApplicationBuilder AddPersistedFeatureManagement(this JGUZDVWebAssemblyApplicationBuilder appBuilder)
     {
-        appBuilder.Services.AddFeatureManagement();
+        appBuilder.Services.AddScopedFeatureManagement();
         appBuilder.Services.AddScoped<IFeatureDefinitionProvider, PersistentStateFeatureDefinitionProvider>();
         return appBuilder;
     }

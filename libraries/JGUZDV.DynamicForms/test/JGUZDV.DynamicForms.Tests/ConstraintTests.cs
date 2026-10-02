@@ -1,6 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
 using JGUZDV.DynamicForms.Model;
+using JGUZDV.DynamicForms.Model.Constraints;
+using JGUZDV.DynamicForms.Model.FieldTypes;
 
 namespace JGUZDV.DynamicForms.Tests
 {
@@ -12,10 +14,10 @@ namespace JGUZDV.DynamicForms.Tests
             // Arrange
             var regexConstraint = new RegexConstraint { Regex = @"^\d+$" };
             var values = new List<object> { "123", "456" };
-            var context = new ValidationContext(new FieldDefinition());
+            var context = new ValidationContext(new FieldDefinition() { Type = StringFieldType.Instance });
 
             // Act
-            var results = regexConstraint.ValidateConstraint(values, context).ToList();
+            var results = regexConstraint.Validate(values, context).ToList();
 
             // Assert
             Assert.Empty(results);
@@ -27,10 +29,10 @@ namespace JGUZDV.DynamicForms.Tests
             // Arrange
             var regexConstraint = new RegexConstraint { Regex = @"^\d+$" };
             var values = new List<object> { "123", "abc" };
-            var context = new ValidationContext(new FieldDefinition());
+            var context = new ValidationContext(new FieldDefinition() { Type = StringFieldType.Instance });
 
             // Act
-            var results = regexConstraint.ValidateConstraint(values, context).ToList();
+            var results = regexConstraint.Validate(values, context).ToList();
 
             // Assert
             Assert.Single(results);
@@ -42,10 +44,10 @@ namespace JGUZDV.DynamicForms.Tests
             // Arrange
             var rangeConstraint = new RangeConstraint { MinValue = 1, MaxValue = 10 };
             var values = new List<object> { 5, 7 };
-            var context = new ValidationContext(new FieldDefinition());
+            var context = new ValidationContext(new FieldDefinition() { Type = StringFieldType.Instance });
 
             // Act
-            var results = rangeConstraint.ValidateConstraint(values, context).ToList();
+            var results = rangeConstraint.Validate(values, context).ToList();
 
             // Assert
             Assert.Empty(results);
@@ -57,10 +59,10 @@ namespace JGUZDV.DynamicForms.Tests
             // Arrange
             var rangeConstraint = new RangeConstraint { MinValue = 1, MaxValue = 10 };
             var values = new List<object> { 0, 11 };
-            var context = new ValidationContext(new FieldDefinition());
+            var context = new ValidationContext(new FieldDefinition() { Type = IntFieldType.Instance });
 
             // Act
-            var results = rangeConstraint.ValidateConstraint(values, context).ToList();
+            var results = rangeConstraint.Validate(values, context).ToList();
 
             // Assert
             Assert.Equal(2, results.Count);
@@ -72,10 +74,10 @@ namespace JGUZDV.DynamicForms.Tests
             // Arrange
             var sizeConstraint = new SizeConstraint { MinCount = 1, MaxCount = 3 };
             var values = new List<object> { "a", "b" };
-            var context = new ValidationContext(new FieldDefinition());
+            var context = new ValidationContext(new FieldDefinition() { Type = StringFieldType.Instance });
 
             // Act
-            var results = sizeConstraint.ValidateConstraint(values, context).ToList();
+            var results = sizeConstraint.Validate(values, context).ToList();
 
             // Assert
             Assert.Empty(results);
@@ -87,10 +89,10 @@ namespace JGUZDV.DynamicForms.Tests
             // Arrange
             var sizeConstraint = new SizeConstraint { MinCount = 1, MaxCount = 3 };
             var values = new List<object> { "a", "b", "c", "d" };
-            var context = new ValidationContext(new FieldDefinition());
+            var context = new ValidationContext(new FieldDefinition() { Type = StringFieldType.Instance });
 
             // Act
-            var results = sizeConstraint.ValidateConstraint(values, context).ToList();
+            var results = sizeConstraint.Validate(values, context).ToList();
 
             // Assert
             Assert.Single(results);
@@ -106,10 +108,10 @@ namespace JGUZDV.DynamicForms.Tests
                 MaxValue = new DateOnly(2025, 12, 31)
             };
             var values = new List<object> { new DateOnly(2023, 6, 15), new DateOnly(2024, 7, 20) };
-            var context = new ValidationContext(new FieldDefinition());
+            var context = new ValidationContext(new FieldDefinition() { Type = DateOnlyFieldType.Instance });
 
             // Act
-            var results = rangeConstraint.ValidateConstraint(values, context).ToList();
+            var results = rangeConstraint.Validate(values, context).ToList();
 
             // Assert
             Assert.Empty(results);
@@ -121,10 +123,10 @@ namespace JGUZDV.DynamicForms.Tests
             // Arrange
             var stringLengthConstraint = new StringLengthConstraint { MaxLength = 5 };
             var values = new List<object> { "abc", "de" };
-            var context = new ValidationContext(new FieldDefinition());
+            var context = new ValidationContext(new FieldDefinition() { Type = StringFieldType.Instance });
 
             // Act
-            var results = stringLengthConstraint.ValidateConstraint(values, context).ToList();
+            var results = stringLengthConstraint.Validate(values, context).ToList();
 
             // Assert
             Assert.Empty(results);
@@ -136,10 +138,10 @@ namespace JGUZDV.DynamicForms.Tests
             // Arrange
             var stringLengthConstraint = new StringLengthConstraint { MaxLength = 5 };
             var values = new List<object> { "abcdef", "ghijkl" };
-            var context = new ValidationContext(new FieldDefinition());
+            var context = new ValidationContext(new FieldDefinition() { Type = StringFieldType.Instance });
 
             // Act
-            var results = stringLengthConstraint.ValidateConstraint(values, context).ToList();
+            var results = stringLengthConstraint.Validate(values, context).ToList();
 
             // Assert
             Assert.Equal(2, results.Count);
@@ -152,13 +154,13 @@ namespace JGUZDV.DynamicForms.Tests
             var fileSizeConstraint = new FileSizeConstraint { MaxFileSize = 1024 };
             var values = new List<object>
             {
-                new FileFieldType.FileType { FileName = "file1.txt", FileSize = 512 },
-                new FileFieldType.FileType { FileName = "file2.txt", FileSize = 1024 }
+                new FileFieldType.FileInfo { FileName = "file1.txt", FileSize = 512 },
+                new FileFieldType.FileInfo { FileName = "file2.txt", FileSize = 1024 }
             };
-            var context = new ValidationContext(new FieldDefinition());
+            var context = new ValidationContext(new FieldDefinition() { Type = FileFieldType.Instance });
 
             // Act
-            var results = fileSizeConstraint.ValidateConstraint(values, context).ToList();
+            var results = fileSizeConstraint.Validate(values, context).ToList();
 
             // Assert
             Assert.Empty(results);
@@ -171,12 +173,12 @@ namespace JGUZDV.DynamicForms.Tests
             var fileSizeConstraint = new FileSizeConstraint { MaxFileSize = 1024 };
             var values = new List<object>
             {
-                new FileFieldType.FileType { FileName = "file1.txt", FileSize = 2048 }
+                new FileFieldType.FileInfo { FileName = "file1.txt", FileSize = 2048 }
             };
-            var context = new ValidationContext(new FieldDefinition());
+            var context = new ValidationContext(new FieldDefinition() { Type = FileFieldType.Instance });
 
             // Act
-            var results = fileSizeConstraint.ValidateConstraint(values, context).ToList();
+            var results = fileSizeConstraint.Validate(values, context).ToList();
 
             // Assert
             Assert.Single(results);

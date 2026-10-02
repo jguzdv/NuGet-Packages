@@ -1,13 +1,30 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Text.RegularExpressions;
-namespace JGUZDV.DynamicForms.Model;
+
+using JGUZDV.L10n;
+
+namespace JGUZDV.DynamicForms.Model.Constraints;
 
 /// <summary>
 /// Constraint for validating values against a regular expression.
 /// </summary>
-public class RegexConstraint : Constraint
+public class RegexConstraint : IConstraint
 {
+    /// <inheritdoc />
+    public static ConstraintId ConstraintId => new(nameof(RegexConstraint));
+
+    /// <inheritdoc />
+    public ConstraintId GetConstraintId() => ConstraintId;
+
+    /// <inheritdoc />
+    public static L10nString DisplayName => new() { ["de"] = "Regulärer Ausdruck", ["en"] = "Regular Expression" };
+
+    /// <inheritdoc />
+    public L10nString GetDisplayName() => DisplayName;
+
+
+
     /// <summary>
     /// The regular expression pattern.
     /// </summary>
@@ -18,7 +35,7 @@ public class RegexConstraint : Constraint
     /// </summary>
     /// <param name="validationContext">The validation context.</param>
     /// <returns>A collection of validation results.</returns>
-    public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
         if (string.IsNullOrEmpty(Regex))
         {
@@ -47,7 +64,7 @@ public class RegexConstraint : Constraint
     /// <param name="values">The values to validate.</param>
     /// <param name="context">The validation context.</param>
     /// <returns>A collection of validation results.</returns>
-    public override IEnumerable<ValidationResult> ValidateConstraint(List<object> values, ValidationContext context)
+    public IEnumerable<ValidationResult> Validate(List<object> values, ValidationContext context)
     {
         if (values.Any(x => x as string == null))
         {

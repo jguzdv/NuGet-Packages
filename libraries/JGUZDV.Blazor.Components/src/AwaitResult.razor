@@ -1,5 +1,4 @@
-﻿@using Microsoft.Extensions.DependencyInjection;
-@using Microsoft.Extensions.Localization;
+﻿@using Microsoft.Extensions.Localization;
 
 @attribute [StreamRendering]
 @typeparam TResult
@@ -36,7 +35,7 @@
     /// By default this will be &lt;ActivityIndicator /&gt;
     /// </summary>
     [Parameter]
-    public RenderFragment? Running { get; set; } =@<ActivityIndicator />;
+    public RenderFragment? Running { get; set; } =@<ActivityIndicator Style="@Await.DefaultIndicatorStyle" />;
 
     /// <summary>
     /// The render fragment that will be shown, when the task failed.

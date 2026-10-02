@@ -1,10 +1,11 @@
-﻿@using JGUZDV.Blazor.Components.Extensions
+﻿@using System.Collections
+@using System.ComponentModel.DataAnnotations
+@using JGUZDV.Blazor.Components
+@using JGUZDV.Blazor.Components.Extensions
 @using JGUZDV.Blazor.Components.Inputs
 @using JGUZDV.DynamicForms.Blazor.Resources
 @using JGUZDV.DynamicForms.Model
-@using JGUZDV.Blazor.Components
-@using System.Collections
-@using System.ComponentModel.DataAnnotations
+@using JGUZDV.DynamicForms.Model.FieldTypes
 @using Microsoft.Extensions.DependencyInjection
 @using Microsoft.Extensions.Logging
 
@@ -69,7 +70,7 @@
                 @if (Field.FieldDefinition.IsList)
                 {
                     <div class="input-group">
-                        <input type="@Field.FieldDefinition.Type!.InputType"
+                        <input type="@Field.FieldDefinition.Type!.HtmlInputType"
                                @bind="_inputValue"
                                @bind:event="oninput"
                                @onkeyup="HandleKeyUp"
@@ -110,14 +111,14 @@
                 }
                 else
                 {
-                    if (Field.FieldDefinition.Type!.InputType == "checkbox")
+                    if (Field.FieldDefinition.Type!.HtmlInputType == "checkbox")
                     {
                         <input class="form-check"
                                value="@_inputValue"
                                @oninput="(y) => { _inputValue = y.Value!.ToString(); OnInputChanged(_inputValue);}"
                                checked=@(_inputValue == "true")
                                @onkeyup="HandleKeyUp"
-                               type="@Field.FieldDefinition.Type!.InputType" name="@InputDefinition.Name" id="@InputDefinition.Id" />
+                               type="@Field.FieldDefinition.Type!.HtmlInputType" name="@InputDefinition.Name" id="@InputDefinition.Id" />
 
                     }
                     else
@@ -126,7 +127,7 @@
                                @bind-value="_inputValue"
                                @bind-value:after="() => OnInputChanged(_inputValue)"
                                @onkeyup="HandleKeyUp"
-                               type="@Field.FieldDefinition.Type!.InputType" name="@InputDefinition.Name" id="@InputDefinition.Id" />
+                               type="@Field.FieldDefinition.Type!.HtmlInputType" name="@InputDefinition.Name" id="@InputDefinition.Id" />
                     }
                 }
             }

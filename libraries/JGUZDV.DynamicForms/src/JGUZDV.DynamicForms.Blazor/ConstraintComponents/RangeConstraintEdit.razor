@@ -1,6 +1,7 @@
-﻿@using JGUZDV.DynamicForms.Blazor.Resources
+﻿@using System.ComponentModel.DataAnnotations
+@using JGUZDV.DynamicForms.Blazor.Resources
 @using JGUZDV.DynamicForms.Model
-@using System.ComponentModel.DataAnnotations
+@using JGUZDV.DynamicForms.Model.Constraints
 
 @if (!string.IsNullOrWhiteSpace(_error))
 {
@@ -13,7 +14,7 @@
     <input id="MinValue"
            class="form-control @(!string.IsNullOrWhiteSpace(_error) ? "border-danger" : "")"
            value="@GetMinValue()"
-           type="@FieldDefinition.Type!.InputType"
+           type="@FieldDefinition.Type!.HtmlInputType"
            @onchange="async (e) => await HandleChange(e, x => _constraint.MinValue = x)" />
 </div>
 
@@ -22,7 +23,7 @@
     <input id="MinValue" name="MinValue"
            class="form-control @(!string.IsNullOrWhiteSpace(_error) ? "border-danger" : "")"
            value="@GetMaxValue()"
-           type="@FieldDefinition.Type.InputType"
+           type="@FieldDefinition.Type.HtmlInputType"
            @onchange="async (e) => await HandleChange(e, x => _constraint.MaxValue = x)" />
 </div>
 
@@ -30,10 +31,10 @@
 @code {
     [Parameter]
     [EditorRequired]
-    public required Constraint Constraint { get; set; }
+    public required IConstraint Constraint { get; set; }
 
     [Parameter]
-    public required EventCallback<Constraint> ConstraintChanged { get; set; }
+    public required EventCallback<IConstraint> ConstraintChanged { get; set; }
 
     [Parameter]
     [EditorRequired]
