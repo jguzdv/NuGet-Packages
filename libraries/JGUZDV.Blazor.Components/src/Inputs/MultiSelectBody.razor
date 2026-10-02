@@ -35,8 +35,7 @@
                 "border-success text-success"
                 : "";
             }
-            <div @onkeypress="e => e.OnEnter(ToggleAll)" @onclick="ToggleAll"
-                 tabindex="0"
+            <div @onclick="ToggleAll" @onclick:stopPropagation="true"
                  class="bg-body button border px-2 py-1 d-flex justify-content-between @selectedClass">
                 <span class="text-truncate" title="@AllOptionLabel">@AllOptionLabel</span>
                 @if (Values.Count == Items.Count)
@@ -63,8 +62,7 @@
 
                 var activeClass = _showKeyboardHighlight && isActive ? "keyboard-active" : "";
             }
-            <div tabindex="0"
-                 @onpointerdown="HideKeyboardHighlight" @onfocus="() => _activeIndex = index" @onkeypress="e => e.OnEnter(() => HandleItemClicked(item))" @onclick="() => HandleItemClicked(item)"
+            <div @onpointerdown="() => SetActiveIndexFromMouse(index)" @onclick="() => HandleItemClicked(item)" @onclick:stopPropagation="true"
                  class="border bg-body button px-2 py-1 d-flex justify-content-between @selectedClass @activeClass">
                 <span class="text-truncate">@ItemTemplate(item)</span>
                 @if (isSelected)
@@ -183,8 +181,8 @@
             await _jsModule.DisposeAsync();
         }
     }
-        
-    
+
+
 
 
     protected override void OnParametersSet()
@@ -255,10 +253,6 @@
         }
     }
 
-    private void HideKeyboardHighlight()
-    {
-        _showKeyboardHighlight = false;
-    }
 
     private async Task HandleKeyDown(KeyboardEventArgs e)
     {
@@ -276,22 +270,22 @@
                 if (!_showKeyboardHighlight)
                 {
                     _showKeyboardHighlight = true;
-                    _activeIndex = 0;
-                    break;
                 }
-                _activeIndex = (_activeIndex + 1) % visibleItems.Count;
-                break;
+                else
+                {
+                    _activeIndex = (_activeIndex + 1) % visibleItems.Count;
+                }
+             break;
 
             case "ArrowLeft":
             case "ArrowUp":
                 if (!_showKeyboardHighlight)
                 {
                     _showKeyboardHighlight = true;
-                    _activeIndex = 0;
-                    break;
                 }
-                _showKeyboardHighlight = true;
+                else{
                 _activeIndex = (_activeIndex - 1 + visibleItems.Count) % visibleItems.Count;
+                }
                 break;
 
             case "Enter":
@@ -303,5 +297,10 @@
                 _showKeyboardHighlight = false;
                 break;
         }
+    }
+    private void SetActiveIndexFromMouse(int index)
+    {
+        _activeIndex = index;
+        _showKeyboardHighlight = true;
     }
 }

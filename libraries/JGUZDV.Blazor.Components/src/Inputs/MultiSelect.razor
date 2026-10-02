@@ -248,6 +248,8 @@
     {
         Values = Values?.Where(x => !ItemKey(x)!.Equals(ItemKey(item))).ToList();
         ValuesChanged.InvokeAsync(Values);
+   
+        ResetKeyboardHighlight();
     }
     private int _keyboardResetVersion;
 
