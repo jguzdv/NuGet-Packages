@@ -5,4 +5,7 @@
 
 Rule ID | Category | Severity | Notes
 --------|----------|----------|-------
+RSX001  | Localization | Error   | Generator error
+RSX002  | Localization | Warning | Missing resource file
+RSX003  | Localization | Warning | Invalid resource key
 RSX005  | Localization | Warning | Duplicate resource key after sanitizing
