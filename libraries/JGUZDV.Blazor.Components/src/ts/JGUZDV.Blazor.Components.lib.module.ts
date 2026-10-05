@@ -99,28 +99,49 @@ export function setStoredTheme(): void {
 }
 
 export function registerWebComponents(): void {
-    if (customElements.get('jgu-dropdown')) return; 
+    if (customElements.get('jgu-dropdown')) return;
+
     customElements.define('jgu-dropdown', class extends HTMLElement {
         connectedCallback(): void {
-                const button = this.querySelector('button');
-                const menu = this.querySelector<HTMLElement>('[popover]');
-                if (!button || !menu) return;
+            this.addEventListener('click', this.clickHandler);
+            this.addEventListener('toggle', this.toggleHandler, true);
+        }
 
-                menu.addEventListener('toggle', (event) => {
-                    const toggleEvent = event as ToggleEvent;
-                    button.setAttribute('aria-expanded', String(toggleEvent.newState === 'open'));
+        disconnectedCallback(): void {
+            this.removeEventListener('click', this.clickHandler);
+            this.removeEventListener('toggle', this.toggleHandler, true);
+        }
 
-                    if (toggleEvent.newState === 'open') {
-                        menu.querySelector<HTMLElement>('[role="menuitem"]')?.focus();
-                    }
-                });
+        clickHandler = (event: Event): void => {
+            const target = event.target;
 
-                menu.addEventListener('click', (event) => {
-                    if ((event.target as Element).closest('[role="menuitem"]')) {
-                        menu.hidePopover();
-                    }
-                });
+            if (!(target instanceof Element)) return;
+            if (!target.closest('[role="menuitem"]')) return;
+
+            const menu = this.querySelector<HTMLElement>('[popover]');
+            menu?.hidePopover();
+        };
+
+        toggleHandler = (event: Event): void => {
+            const target = event.target;
+
+            if (!(target instanceof Element)) return;
+            if (!target.hasAttribute('popover')) return;
+
+            const toggleEvent = event as ToggleEvent;
+            const button = this.querySelector('button');
+
+            if (!button) return;
+
+            button.setAttribute(
+                'aria-expanded',
+                String(toggleEvent.newState === 'open')
+            );
+
+            if (toggleEvent.newState === 'open') {
+                target.querySelector<HTMLElement>('[role="menuitem"]')?.focus();
             }
+        };
     });
 
 

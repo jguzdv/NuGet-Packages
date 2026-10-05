@@ -79,23 +79,37 @@ export function registerWebComponents() {
         return;
     customElements.define('jgu-dropdown', class extends HTMLElement {
         connectedCallback() {
-            const button = this.querySelector('button');
-            const menu = this.querySelector('[popover]');
-            if (!button || !menu)
-                return;
-            menu.addEventListener('toggle', (event) => {
-                const toggleEvent = event;
-                button.setAttribute('aria-expanded', String(toggleEvent.newState === 'open'));
-                if (toggleEvent.newState === 'open') {
-                    menu.querySelector('[role="menuitem"]')?.focus();
-                }
-            });
-            menu.addEventListener('click', (event) => {
-                if (event.target.closest('[role="menuitem"]')) {
-                    menu.hidePopover();
-                }
-            });
+            this.addEventListener('click', this.clickHandler);
+            this.addEventListener('toggle', this.toggleHandler, true);
         }
+        disconnectedCallback() {
+            this.removeEventListener('click', this.clickHandler);
+            this.removeEventListener('toggle', this.toggleHandler, true);
+        }
+        clickHandler = (event) => {
+            const target = event.target;
+            if (!(target instanceof Element))
+                return;
+            if (!target.closest('[role="menuitem"]'))
+                return;
+            const menu = this.querySelector('[popover]');
+            menu?.hidePopover();
+        };
+        toggleHandler = (event) => {
+            const target = event.target;
+            if (!(target instanceof Element))
+                return;
+            if (!target.hasAttribute('popover'))
+                return;
+            const toggleEvent = event;
+            const button = this.querySelector('button');
+            if (!button)
+                return;
+            button.setAttribute('aria-expanded', String(toggleEvent.newState === 'open'));
+            if (toggleEvent.newState === 'open') {
+                target.querySelector('[role="menuitem"]')?.focus();
+            }
+        };
     });
     console.debug('web component (jgu-dropdown) registered');
     customElements.define('jgu-toggle', class extends HTMLElement {
