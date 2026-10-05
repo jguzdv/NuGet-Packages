@@ -1,4 +1,6 @@
 export function registerThemeButtons() {
+    if (customElements.get('jgu-theme-button'))
+        return;
     customElements.define('jgu-theme-button', class extends HTMLElement {
         connectedCallback() {
             this.addEventListener('click', this.handleClick);
@@ -73,25 +75,25 @@ export function setStoredTheme() {
     applyTheme(stored);
 }
 export function registerWebComponents() {
+    if (customElements.get('jgu-dropdown'))
+        return;
     customElements.define('jgu-dropdown', class extends HTMLElement {
         connectedCallback() {
-            requestAnimationFrame(() => {
-                const button = this.querySelector('button');
-                const menu = this.querySelector('[popover]');
-                if (!button || !menu)
-                    return;
-                menu.addEventListener('toggle', (event) => {
-                    const toggleEvent = event;
-                    button.setAttribute('aria-expanded', String(toggleEvent.newState === 'open'));
-                    if (toggleEvent.newState === 'open') {
-                        menu.querySelector('[role="menuitem"]')?.focus();
-                    }
-                });
-                menu.addEventListener('click', (event) => {
-                    if (event.target.closest('[role="menuitem"]')) {
-                        menu.hidePopover();
-                    }
-                });
+            const button = this.querySelector('button');
+            const menu = this.querySelector('[popover]');
+            if (!button || !menu)
+                return;
+            menu.addEventListener('toggle', (event) => {
+                const toggleEvent = event;
+                button.setAttribute('aria-expanded', String(toggleEvent.newState === 'open'));
+                if (toggleEvent.newState === 'open') {
+                    menu.querySelector('[role="menuitem"]')?.focus();
+                }
+            });
+            menu.addEventListener('click', (event) => {
+                if (event.target.closest('[role="menuitem"]')) {
+                    menu.hidePopover();
+                }
             });
         }
     });

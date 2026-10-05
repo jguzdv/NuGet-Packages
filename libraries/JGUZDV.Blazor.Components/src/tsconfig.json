@@ -1,6 +1,7 @@
 {
   "compileOnSave": true,
   "compilerOptions": {
+    "rootDir": "ts",
     "outDir": "wwwroot",
 
     "strict": true,
@@ -8,9 +9,10 @@
     "isolatedModules": true,
     "target": "ES2022",
     "module": "ES2022",
-    "sourceMap": false,
+    "sourceMap": false
   },
   "include": [
     "ts/**/*"
   ]
 }
+

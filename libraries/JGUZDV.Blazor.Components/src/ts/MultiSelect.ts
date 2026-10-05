@@ -16,7 +16,6 @@ export function registerMultiSelectListener(multiSelectComponent: any, htmlEleme
     document.addEventListener('click', globalCloseHandler);
 }
 
-// 1. Webcomponent 2. Popover !
 const globalCloseHandler = (_event: Event): void => {
     let target = _event.target as Node
 

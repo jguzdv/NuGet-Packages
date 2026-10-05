@@ -16,7 +16,7 @@ const globalCloseHandler = (_event) => {
     if (multiSelect?.HtmlElement.contains(target)) {
         return;
     }
-    multiSelect?.Component.invokeMethodAsync("ToggleSelection");
+    multiSelect?.Component.invokeMethodAsync("ToggleSelection", true);
 };
 export function deregisterMultiSelectListener() {
     document.removeEventListener('click', globalCloseHandler);
