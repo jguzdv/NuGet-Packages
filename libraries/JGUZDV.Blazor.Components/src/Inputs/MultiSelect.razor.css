@@ -37,30 +37,34 @@
     cursor: pointer;
 }
 
-.clickable {
-    cursor: pointer;
-}
 
 .mw-0 {
     min-width: 0;
 }
 
 .multi-select {
-    position: relative;
-    anchor-name: --multi-select-anchor;
     anchor-scope: --multi-select-anchor;
+    anchor-name: --multi-select-anchor;
+}
+
+.multi-select-trigger {
+    border: none;  
+    background: none;
+    cursor: pointer;
 }
 
 .multi-select-overlay {
     position: fixed;
     position-anchor: --multi-select-anchor;
+    inset: unset;
     top: anchor(bottom);
     left: anchor(left);
     width: anchor-size(width);
+    box-sizing: border-box;
+    max-width: calc(100vw - 1rem);
+    overflow-x: clip;
     position-try-fallbacks: --multi-select-overlay-above;
-    z-index: 1000;
-    box-shadow: var(--bs-box-shadow);
-    max-height: 20rem;
+    margin: 0;
 }
 
 @position-try --multi-select-overlay-above {
