@@ -1,12 +1,29 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace JGUZDV.DynamicForms.Model;
+using JGUZDV.DynamicForms.Model.FieldTypes;
+using JGUZDV.L10n;
+
+namespace JGUZDV.DynamicForms.Model.Constraints;
 
 /// <summary>
 /// Constraint for validating the size of a file.
 /// </summary>
-public class FileSizeConstraint : Constraint
+public class FileSizeConstraint : IConstraint
 {
+    /// <inheritdoc />
+    public static ConstraintId ConstraintId => new(nameof(FileSizeConstraint));
+
+    /// <inheritdoc />
+    public ConstraintId GetConstraintId() => ConstraintId;
+
+    /// <inheritdoc />
+    public static L10nString DisplayName => new() { ["de"] = "Dateigröße", ["en"] = "File size" };
+
+    /// <inheritdoc />
+    public L10nString GetDisplayName() => DisplayName;
+
+
+
     /// <summary>
     /// The maximum file size in bytes.
     /// </summary>
@@ -17,9 +34,9 @@ public class FileSizeConstraint : Constraint
     /// </summary>
     /// <param name="validationContext">The validation context.</param>
     /// <returns>A collection of validation results.</returns>
-    public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
-        // must be postive
+        // must be positive
         if (MaxFileSize < 0)
         {
             return new[] { new ValidationResult("MaxFileSize must be a positive number.", new[] { nameof(MaxFileSize) }) };
@@ -34,15 +51,15 @@ public class FileSizeConstraint : Constraint
     /// <param name="values">The values to validate.</param>
     /// <param name="context">The validation context.</param>
     /// <returns>A collection of validation results.</returns>
-    public override IEnumerable<ValidationResult> ValidateConstraint(List<object> values, ValidationContext context)
+    public IEnumerable<ValidationResult> Validate(List<object> values, ValidationContext context)
     {
         var results = new List<ValidationResult>();
 
         foreach (var value in values)
         {
-            if (value is FileFieldType.FileType file && file.FileSize > MaxFileSize)
+            if (value is FileFieldType.FileInfo file && file.FileSize > MaxFileSize)
             {
-                results.Add(new ValidationResult($"File size exceeds the maximum allowed size of {MaxFileSize} bytes.", [nameof(FileFieldType.FileType.FileSize)]));
+                results.Add(new ValidationResult($"File size exceeds the maximum allowed size of {MaxFileSize} bytes.", [nameof(FileFieldType.FileInfo.FileSize)]));
             }
         }
 

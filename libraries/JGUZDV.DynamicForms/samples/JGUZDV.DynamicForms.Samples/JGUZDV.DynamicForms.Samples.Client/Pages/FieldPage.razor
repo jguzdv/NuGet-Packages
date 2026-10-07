@@ -3,6 +3,7 @@
 @using System.Text.Json
 @using JGUZDV.DynamicForms.Blazor.FieldComponents
 @using JGUZDV.DynamicForms.Model
+@using JGUZDV.DynamicForms.Model.FieldTypes
 @using JGUZDV.DynamicForms.Samples.Client.Model
 @using JGUZDV.L10n
 
@@ -69,7 +70,7 @@
             _fieldsByDocumentDefinition[0] = [
                 new Field(new FieldDefinition
                 {
-                    Type = new StringFieldType(),
+                    Type = StringFieldType.Instance,
                     InputDefinition = new ()
                     {
                         Label = new L10nString {["de"] = "Strings"},
@@ -85,7 +86,7 @@
                 }),
                 new Field(new FieldDefinition
                 {
-                    Type = new IntFieldType(),
+                    Type = IntFieldType.Instance,
                     InputDefinition = new ()
                     {
                         Label = new L10nString {["de"] = "Numbers"},
@@ -101,7 +102,7 @@
                 }),
                 new Field(new FieldDefinition
                 {
-                    Type = new IntFieldType(),
+                    Type = IntFieldType.Instance,
                     InputDefinition = new ()
                     {
                         Label = new L10nString {["de"] = "Number"},
@@ -118,7 +119,7 @@
                 new Field(new FieldDefinition
                 {
 
-                    Type = new DateOnlyFieldType(),
+                    Type = DateOnlyFieldType.Instance,
                     InputDefinition = new ()
                     {
                         Label = new L10nString {["de"] = "Date"},
@@ -127,7 +128,7 @@
                 }),
                 new Field(new FieldDefinition
                 {
-                    Type = new DateOnlyFieldType(),
+                    Type = DateOnlyFieldType.Instance,
                     InputDefinition = new ()
                     {
                         Label = new L10nString {["de"] = "Dates"},
@@ -137,7 +138,7 @@
                 }),
                 new Field(new FieldDefinition
                 {
-                    Type = new IntFieldType(),
+                    Type = IntFieldType.Instance,
                     InputDefinition = new ()
                     {
                         Label = new L10nString {["de"] = "NumbersInput"},
@@ -147,7 +148,7 @@
                 }),
                 new Field(new FieldDefinition
                 {
-                    Type = new StringFieldType(),
+                    Type = StringFieldType.Instance,
                     InputDefinition = new ()
                     {
                         Label = new L10nString {["de"] = "TextInput"},

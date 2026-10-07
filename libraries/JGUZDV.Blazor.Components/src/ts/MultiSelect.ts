@@ -1,32 +1,17 @@
-﻿
-export class MultiSelect {
-    public Component: any;
-    public HtmlElement: HTMLElement;
+const navigationKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
 
-    constructor(htmlElement: HTMLElement, component: any) {
-        this.HtmlElement = htmlElement;
-        this.Component = component;
-    }
-}
+export function preventArrowKeyScrolling(element: HTMLElement | null): void {
+    console.log('preventArrowKeyScrolling registered', element);
 
-let multiSelect: MultiSelect | null = null;
-export function registerMultiSelectListener(multiSelectComponent: any, htmlElement: HTMLElement): void {
-
-    multiSelect = new MultiSelect(htmlElement, multiSelectComponent);
-    document.addEventListener('click', globalCloseHandler);
-}
-
-const globalCloseHandler = (_event: Event): void => {
-    let target = _event.target as Node
-
-    if (multiSelect?.HtmlElement.contains(target)) {
+    if (!element) {
         return;
     }
 
-    multiSelect?.Component.invokeMethodAsync("ToggleSelection", true);
-};
+    element.addEventListener('keydown', (event: KeyboardEvent): void => {
+        console.log('keydown on items container', event.key);
 
-export function deregisterMultiSelectListener(): void {
-    document.removeEventListener('click', globalCloseHandler);
+        if (navigationKeys.includes(event.key)) {
+            event.preventDefault();
+        }
+    });
 }
-
