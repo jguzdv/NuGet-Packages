@@ -153,6 +153,9 @@ public class JGUZDVHostApplicationBuilder
     public bool HasReverseProxy { get; internal set; }
     #endregion
 
+    #region ASP.NET.Core Builders
+    public AspNetCoreBuilders AspNetCoreBuilders { get; }
+    #endregion
 
     private JGUZDVHostApplicationBuilder(WebApplicationBuilder webAppBuilder)
     {
