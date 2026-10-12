@@ -65,6 +65,8 @@ public static class JGUZDVHostApplicationBuilderExtensions
         var builder = appBuilder.Builder.AddJGUZDVDataProtection(configSection);
         configure?.Invoke(builder);
 
+        appBuilder.AspNetCoreBuilders.DataProtectionBuilder = builder;
+
         return appBuilder;
     }
 
@@ -252,6 +254,8 @@ public static class JGUZDVHostApplicationBuilderExtensions
             }
         }
 
+        appBuilder.AspNetCoreBuilders.HealthChecksBuilder = healthBuilder;
+
         appBuilder.HasHealthChecks = true;
         return appBuilder;
     }
@@ -375,6 +379,8 @@ public static class JGUZDVHostApplicationBuilderExtensions
 
         mvcBuilder.AddJsonOptions(opt => opt.JsonSerializerOptions.SetJGUZDVDefaults());
         configureBuilder?.Invoke(mvcBuilder);
+
+        appBuilder.AspNetCoreBuilders.MvcBuilder = mvcBuilder;
 
         appBuilder.HasMVC = true;
         return appBuilder;
@@ -516,6 +522,8 @@ public static class JGUZDVHostApplicationBuilderExtensions
 
         authenticationBuilderAction?.Invoke(authBuilder);
 
+        appBuilder.AspNetCoreBuilders.AuthenticationBuilder = authBuilder;
+
         appBuilder.Services.AddAuthorization(opt =>
         {
             ApplyDefaultBearerAuthorizationConfig(opt, bearerConfigSection, logger);
@@ -626,6 +634,8 @@ public static class JGUZDVHostApplicationBuilderExtensions
                 }
             })
             .AddCookieDistributedTicketStore();
+
+        appBuilder.AspNetCoreBuilders.AuthenticationBuilder = authBuilder;
 
         appBuilder.Services.AddAuthorization();
 
