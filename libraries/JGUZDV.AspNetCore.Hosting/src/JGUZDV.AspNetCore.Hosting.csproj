@@ -29,7 +29,7 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="[9.0.4, )" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="[9.0.4, )" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="[9.0.4, )" PrivateAssets="All" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="9.0.21" PrivateAssets="All" />
         <PackageReference Include="Microsoft.Extensions.Caching.SqlServer" Version="[9.0.4, )" />
         <PackageReference Include="Microsoft.Extensions.Configuration" Version="[9.0.4, )" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="[9.0.4, )" />
