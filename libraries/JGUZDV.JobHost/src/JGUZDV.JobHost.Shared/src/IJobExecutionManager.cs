@@ -29,5 +29,10 @@ namespace JGUZDV.JobHost.Shared
         /// <returns></returns>
         public Task<List<Job>> GetPendingJobsAsync(CancellationToken ct);
 
+        /// <summary>
+        /// Gets a job by its name
+        /// </summary>
+        /// <returns></returns>
+        public Task<Job?> GetJob(string jobName, CancellationToken ct);
     }
 }

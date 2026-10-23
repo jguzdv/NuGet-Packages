@@ -36,6 +36,16 @@
         public required DateTimeOffset LastExecutedAt { get; set; }
 
         /// <summary>
+        /// The timestamp of the last successful execution
+        /// </summary>
+        public DateTimeOffset? LastSuccessAt { get; set; }
+
+        /// <summary>
+        /// The timestamp of the last failed execution
+        /// </summary>
+        public DateTimeOffset? LastFailAt { get; set; }
+
+        /// <summary>
         /// The result of the last execution
         /// </summary>
         public required string LastResult { get; set; }
