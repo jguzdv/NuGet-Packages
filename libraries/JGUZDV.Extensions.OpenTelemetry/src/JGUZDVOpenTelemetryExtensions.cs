@@ -48,10 +48,10 @@ public static class JGUZDVOpenTelemetryExtensions
                 return builder;
             }
 
-            // 'ConnectionString' is absolutley required for further configuration of OpenTelemetry therefore we throw an exception if the 'OpenTelemetry' section is present without a ConnectionString.
-            // @see also ValidateAndSetDefaults(...)
-            if (string.IsNullOrWhiteSpace(telemetrySettings.GetValue<string>("AzureMonitor:ConnectionString")))
-                throw new ArgumentException("Found 'OpenTelemetry' settings section, but no 'AzureMonitor:ConnectionString' setting is provided.");
+            var azureMonitorConnectionString = telemetrySettings.GetValue<string>("AzureMonitor:ConnectionString");
+            var hasAzureMonitorConnectionString = string.IsNullOrWhiteSpace(azureMonitorConnectionString);
+            if (!hasAzureMonitorConnectionString)
+                logger?.LogError("The JGUZDV OpenTelemetry library is included, but there is no 'AzureMonitor:ConnectionString' setting in the 'OpenTelemetry' section. No telemetry will be sent.");
 
             // defining options since app is not built yet
             var telemetryOptions = telemetrySettings.Get<JGUZDVOpenTelemetryOptions>()
@@ -75,12 +75,20 @@ public static class JGUZDVOpenTelemetryExtensions
 
             telemetryBuilder.WithTracing(tracing =>
             {
-                tracing.AddHttpClientInstrumentation()
-                    .AddAzureMonitorTraceExporter(options =>
+                tracing
+                    .AddAspNetCoreInstrumentation()
+                    .AddHttpClientInstrumentation()
+                    .AddSqlClientInstrumentation();
+
+                if (hasAzureMonitorConnectionString)
+                {
+                    tracing.AddAzureMonitorTraceExporter(options =>
                     {
                         options.ConnectionString = telemetryOptions.AzureMonitor.ConnectionString;
                     });
-                logger?.LogInformation("JGUZDV OpenTelemetry: Added tracing with HttpClient instrumentation.");
+                }
+
+                logger?.LogInformation("JGUZDV OpenTelemetry: Added tracing with AspNetCore, HttpClient and SqlClient instrumentation.");
             });
 
             // adding metrics support if 'UseMetrics' section is specified
@@ -88,12 +96,21 @@ public static class JGUZDVOpenTelemetryExtensions
             {
                 telemetryBuilder.WithMetrics(metrics =>
                 {
-                    metrics.AddHttpClientInstrumentation()
-                        .AddAzureMonitorMetricExporter(options =>
+                    metrics
+                        .AddRuntimeInstrumentation()
+                        .AddAspNetCoreInstrumentation()
+                        .AddHttpClientInstrumentation()
+                        .AddSqlClientInstrumentation();
+
+                    if (hasAzureMonitorConnectionString)
+                    {
+                        metrics.AddAzureMonitorMetricExporter(options =>
                         {
                             options.ConnectionString = telemetryOptions.AzureMonitor.ConnectionString;
-                        })
-                        .AddMeter(telemetryOptions.UseMeter!.MeterName);
+                        });
+                    }
+
+                    metrics.AddMeter(telemetryOptions.UseMeter!.MeterName);
                 });
 
                 logger?.LogInformation("JGUZDV OpenTelemetry: UseMeter active. Initialized a meter with " +
@@ -117,10 +134,14 @@ public static class JGUZDVOpenTelemetryExtensions
             builder.Logging.AddOpenTelemetry(options =>
             {
                 options.SetResourceBuilder(ResourceBuilder.CreateEmpty().AddAttributes(attributes));
-                options.AddAzureMonitorLogExporter(opts =>
+
+                if (hasAzureMonitorConnectionString)
                 {
-                    opts.ConnectionString = telemetryOptions.AzureMonitor.ConnectionString;
-                });
+                    options.AddAzureMonitorLogExporter(opts =>
+                    {
+                        opts.ConnectionString = azureMonitorConnectionString;
+                    });
+                }
 
                 options.IncludeFormattedMessage = true;
                 options.IncludeScopes = true;
@@ -141,9 +162,6 @@ public static class JGUZDVOpenTelemetryExtensions
     /// <exception cref="ArgumentException">If neither appsettings or environment contains any required value.</exception>
     private static void ValidateAndSetDefaults(HostApplicationBuilder builder, JGUZDVOpenTelemetryOptions telemetryOptions)
     {
-        if (string.IsNullOrWhiteSpace(telemetryOptions.AzureMonitor.ConnectionString))
-            throw new ArgumentException("'OpenTelemetry' is configured, but no 'ConnectionString' was found.");
-
         if (string.IsNullOrWhiteSpace(telemetryOptions.ServiceNamespace))
         {
             if (!string.IsNullOrWhiteSpace(builder.Environment.ApplicationName))
