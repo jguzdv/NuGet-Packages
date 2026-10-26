@@ -49,7 +49,7 @@ public static class JGUZDVOpenTelemetryExtensions
             }
 
             var azureMonitorConnectionString = telemetrySettings.GetValue<string>("AzureMonitor:ConnectionString");
-            var hasAzureMonitorConnectionString = string.IsNullOrWhiteSpace(azureMonitorConnectionString);
+            var hasAzureMonitorConnectionString = !string.IsNullOrWhiteSpace(azureMonitorConnectionString);
             if (!hasAzureMonitorConnectionString)
                 logger?.LogError("The JGUZDV OpenTelemetry library is included, but there is no 'AzureMonitor:ConnectionString' setting in the 'OpenTelemetry' section. No telemetry will be sent.");
 
