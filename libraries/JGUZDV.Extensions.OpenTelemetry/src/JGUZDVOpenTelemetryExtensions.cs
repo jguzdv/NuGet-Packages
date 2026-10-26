@@ -113,8 +113,7 @@ public static class JGUZDVOpenTelemetryExtensions
                     metrics.AddMeter(telemetryOptions.UseMeter!.MeterName);
                 });
 
-                logger?.LogInformation("JGUZDV OpenTelemetry: UseMeter active. Initialized a meter with " +
-                    $"name {telemetryOptions.UseMeter!.MeterName}");
+                logger?.LogInformation("JGUZDV OpenTelemetry: UseMeter active. Initialized a meter with name {MeterName}", telemetryOptions.UseMeter!.MeterName);
             }
             else
                 logger?.LogInformation("JGUZDV OpenTelemetry: UseMeter not active. No metrics will be sent.");
