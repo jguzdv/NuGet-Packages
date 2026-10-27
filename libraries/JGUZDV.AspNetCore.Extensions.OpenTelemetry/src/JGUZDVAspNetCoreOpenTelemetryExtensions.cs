@@ -58,23 +58,24 @@ public static class JGUZDVAspNetCoreOpenTelemetryExtensions
 
                 logger.LogInformation("JGUZDV OpenTelemetry: Added tracing with AspNetCore instrumentation.");
 
-                if (otelOptions.IsAzureMonitorConfigured)
-                {
-                    // Configure the connection string.
-                    telemetryBuilder.UseAzureMonitor(options =>
-                    {
-                        options.ConnectionString = otelOptions.AzureMonitor.ConnectionString;
+                // TODO: we need to experiment, if this is a duplicate registration or has other advantages. 
+                //if (otelOptions.IsAzureMonitorConfigured)
+                //{
+                //    // Configure the connection string.
+                //    telemetryBuilder.UseAzureMonitor(options =>
+                //    {
+                //        options.ConnectionString = otelOptions.AzureMonitor.ConnectionString;
 
-                        var samplingRatio = builder.Configuration.GetSection(sectionName).GetValue<float?>("SamplingRatio");
+                //        var samplingRatio = builder.Configuration.GetSection(sectionName).GetValue<float?>("SamplingRatio");
 
-                        if (samplingRatio is >= 0.0f and <= 1.0f)
-                        {
-                            options.SamplingRatio = samplingRatio.Value;
-                            logger.LogInformation("JGUZDV OpenTelemetry: Set SamplingRatio value " +
-                                                   "to {SamplingRatio}.", samplingRatio.Value);
-                        }
-                    });
-                }
+                //        if (samplingRatio is >= 0.0f and <= 1.0f)
+                //        {
+                //            options.SamplingRatio = samplingRatio.Value;
+                //            logger.LogInformation("JGUZDV OpenTelemetry: Set SamplingRatio value " +
+                //                                   "to {SamplingRatio}.", samplingRatio.Value);
+                //        }
+                //    });
+                //}
             }
         );
 
