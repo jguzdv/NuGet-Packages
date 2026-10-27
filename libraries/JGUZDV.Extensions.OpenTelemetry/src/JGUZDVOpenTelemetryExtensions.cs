@@ -71,8 +71,8 @@ public static class JGUZDVOpenTelemetryExtensions
     {
         var optionsBuilder = services.AddOptions<JGUZDVOpenTelemetryOptions>()
                 .BindConfiguration(sectionName)
-                .PostConfigure(c => SetDefaults(environment, c));
-                // TODO .ValidateDataAnnotations();
+                .PostConfigure(c => SetDefaults(environment, c))
+                .ValidateDataAnnotations();
 
         using var provider = services.BuildServiceProvider();
 
