@@ -20,7 +20,6 @@
 
         <PackageReference Include="OpenTelemetry" Version="$(OtelVersion)" />
         <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="$(OtelVersion)" />
-        <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="$(OtelVersion)" />
         <PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="$(OtelVersion)" />
         <PackageReference Include="OpenTelemetry.Instrumentation.Runtime" Version="$(OtelVersion)" />
         <PackageReference Include="OpenTelemetry.Instrumentation.SqlClient" Version="$(OtelVersion)" />
