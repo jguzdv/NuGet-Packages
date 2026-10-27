@@ -58,7 +58,12 @@ public class OpenTelemetryAzureMonitorOptions
     /// <summary>
     /// Mandatory. The connection string of the Azure Monitor resource.
     /// </summary>
-    public string ConnectionString { get; set; } = default!;
+    public string? ConnectionString { get; set; }
+    
+    /// <summary>
+    /// Optional. The sample rate for tracing. A value of 1.0 means all traces are sent.
+    /// </summary>
+    public float SampleRate { get; set; } = 1.0f;
 }
 
 /// <summary>

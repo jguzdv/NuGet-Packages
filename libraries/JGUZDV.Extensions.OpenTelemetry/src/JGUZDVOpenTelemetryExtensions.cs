@@ -129,6 +129,7 @@ public static class JGUZDVOpenTelemetryExtensions
                 tracing.AddAzureMonitorTraceExporter(options =>
                 {
                     options.ConnectionString = otelOptions.AzureMonitor.ConnectionString;
+                    options.SamplingRatio = Math.Clamp(otelOptions.AzureMonitor.SampleRate, 0.0f, 1.0f);
                 });
             }
         });
@@ -150,6 +151,7 @@ public static class JGUZDVOpenTelemetryExtensions
                     metrics.AddAzureMonitorMetricExporter(options =>
                     {
                         options.ConnectionString = otelOptions.AzureMonitor.ConnectionString;
+                        options.SamplingRatio = Math.Clamp(otelOptions.AzureMonitor.SampleRate, 0.0f, 1.0f);
                     });
                 }
 
