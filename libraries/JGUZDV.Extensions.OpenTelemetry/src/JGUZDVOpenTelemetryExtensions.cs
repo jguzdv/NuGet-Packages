@@ -168,11 +168,9 @@ public static class JGUZDVOpenTelemetryExtensions
 
         configureBuilder?.Invoke(otelOptions, telemetryBuilder);
 
-        // Configure OpenTelemetry trace provider to use custom ResourceBuilder wich adds our own
-        // attributes to all signals.
-        services.ConfigureOpenTelemetryTracerProvider((sp, builder) =>
-            builder.ConfigureResource(resourceBuilder =>
-                resourceBuilder.AddAttributes(attributes)));
+        // Apply the custom resource attributes to all signals.
+        telemetryBuilder.ConfigureResource(resourceBuilder =>
+            resourceBuilder.AddAttributes(attributes));
 
         // Adding OpenTelemetry to the applications LoggingBuilder
         loggingBuilder.AddOpenTelemetry(options =>
