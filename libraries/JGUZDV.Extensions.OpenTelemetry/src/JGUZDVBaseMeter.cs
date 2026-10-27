@@ -23,6 +23,7 @@ public abstract class JGUZDVBaseMeter
     /// Use JGUZDVOpenTelemetryOptions to create a default meter instance.
     /// </summary>
     /// <param name="options"></param>
+    [Obsolete("This constructor is deprecated. Use DI to get an instance of Meter injected or create your own via IMeterFactory")]
     protected JGUZDVBaseMeter(IOptions<JGUZDVOpenTelemetryOptions> options)
     {
         _telemetryOptions = options;

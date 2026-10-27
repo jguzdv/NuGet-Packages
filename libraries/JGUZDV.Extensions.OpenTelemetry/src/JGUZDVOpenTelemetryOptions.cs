@@ -22,17 +22,17 @@ public class JGUZDVOpenTelemetryOptions : IValidatableObject
     /// <summary>
     /// Optional. A namespace string representing the running application. Falls back to builder.Environment.ApplicationName.
     /// </summary>
-    public string ServiceNamespace { get; set; } = default!;
+    public string? ServiceNamespace { get; set; }
 
     /// <summary>
     /// Optional, but recommended. A unique name representing the running application. Falls back to builder.Environment.ApplicationName.
     /// </summary>
-    public string? ServiceName { get; set; } = default!;
+    public string? ServiceName { get; set; }
 
     /// <summary>
     /// Optional. Configures a basic env for metrics and creates a basic meter instance.
     /// </summary>
-    public OpenTelemetryUseMeterOptions? UseMeter { get; set; } = default!;
+    public OpenTelemetryUseMeterOptions? UseMeter { get; set; }
 
 
     /// <inheritdoc />
