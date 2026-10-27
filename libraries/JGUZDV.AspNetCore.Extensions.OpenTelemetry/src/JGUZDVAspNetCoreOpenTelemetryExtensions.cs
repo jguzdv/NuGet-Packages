@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
+using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 
 namespace Microsoft.Extensions.DependencyInjection;
@@ -48,6 +49,11 @@ public static class JGUZDVAspNetCoreOpenTelemetryExtensions
                 telemetryBuilder.WithTracing(tracing =>
                 {
                     tracing.AddAspNetCoreInstrumentation();
+                });
+
+                telemetryBuilder.WithMetrics(metrics =>
+                {
+                    metrics.AddAspNetCoreInstrumentation();
                 });
 
                 logger.LogInformation("JGUZDV OpenTelemetry: Added tracing with AspNetCore instrumentation.");

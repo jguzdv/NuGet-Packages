@@ -110,7 +110,7 @@ public static class JGUZDVOpenTelemetryExtensions
         // @see https://learn.microsoft.com/en-us/azure/azure-monitor/app/opentelemetry-configuration?tabs=aspnetcore
         // Note: Attribute service.instance.id (CloudRoleInstance) defaults to host name/device name.
         var attributes = new Dictionary<string, object>() {
-                { "service.namespace", otelOptions.ServiceNamespace },
+                { "service.namespace", otelOptions.ServiceNamespace! },
                 { "service.name", otelOptions.ServiceName! }
             };
 
