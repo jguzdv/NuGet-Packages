@@ -7,7 +7,7 @@
 
 		<PackageId>JGUZDV.L10n</PackageId>
 		<IsPackable>true</IsPackable>
-		<Version>2.2.0</Version>
+		<Version>2.2.1</Version>
 		<Authors>Thomas Ottenhus</Authors>
 		<Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
 		<PackageDescription>Generalized Localization Model for .NET Application using web</PackageDescription>
@@ -16,5 +16,9 @@
 
 	<ItemGroup>
 	  <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="[8.0.0,)" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\JGUZDV.AspNetCore.Components.Localization\src\JGUZDV.AspNetCore.Components.Localization.csproj" />
 	</ItemGroup>
 </Project>

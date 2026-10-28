@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using JGUZDV.AspNetCore.Components.Localization;
+
+using Microsoft.Extensions.DependencyInjection;
 
 namespace JGUZDV.L10n
 {
@@ -7,6 +9,18 @@ namespace JGUZDV.L10n
     /// </summary>
     public static class SupportedCultureServiceCollectionExtensions
     {
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns></returns>
+        public static IServiceCollection AddDefaultSupportedCultures(this IServiceCollection services)
+        {
+            services.AddSingleton<ISupportedCultureService, SupportedCultureService>(x => new SupportedCultureService(x.GetRequiredService<ILanguageService>()));
+            return services;
+        }
+
         /// <summary>
         /// Adds the service and interface to the project and passes on the supported cultures.
         /// </summary>
