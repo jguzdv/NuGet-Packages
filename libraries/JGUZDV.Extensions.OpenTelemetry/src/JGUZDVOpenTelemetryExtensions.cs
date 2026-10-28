@@ -136,25 +136,35 @@ public static class JGUZDVOpenTelemetryExtensions
 
         logger.LogInformation("JGUZDV OpenTelemetry: Added tracing with HttpClient and SqlClient instrumentation.");
 
+        // add default metric instruments
+        telemetryBuilder.WithMetrics(metrics =>
+        {
+            metrics
+                .AddRuntimeInstrumentation()
+                .AddHttpClientInstrumentation()
+                .AddSqlClientInstrumentation();
+        });
+
+        if (otelOptions.IsAzureMonitorConfigured)
+        {
+            telemetryBuilder.WithMetrics(metrics =>
+            {
+                metrics.AddAzureMonitorMetricExporter(options =>
+                {
+                    options.ConnectionString = otelOptions.AzureMonitor.ConnectionString;
+                    options.SamplingRatio = Math.Clamp(otelOptions.AzureMonitor.SampleRate, 0.0f, 1.0f);
+                });
+            });
+
+        }
+        
+        logger.LogInformation("JGUZDV OpenTelemetry: Added metrics with Runtime, HttpClient and SqlClient instrumentation.");
+
         // adding metrics support if 'UseMetrics' section is specified
         if (otelOptions.UseMeter != null)
         {
             telemetryBuilder.WithMetrics(metrics =>
             {
-                metrics
-                    .AddRuntimeInstrumentation()
-                    .AddHttpClientInstrumentation()
-                    .AddSqlClientInstrumentation();
-
-                if (otelOptions.IsAzureMonitorConfigured)
-                {
-                    metrics.AddAzureMonitorMetricExporter(options =>
-                    {
-                        options.ConnectionString = otelOptions.AzureMonitor.ConnectionString;
-                        options.SamplingRatio = Math.Clamp(otelOptions.AzureMonitor.SampleRate, 0.0f, 1.0f);
-                    });
-                }
-
                 metrics.AddMeter(otelOptions.UseMeter!.MeterName);
             });
 
@@ -165,7 +175,7 @@ public static class JGUZDVOpenTelemetryExtensions
         }
         else
         {
-            logger.LogInformation("JGUZDV OpenTelemetry: UseMeter not active. No metrics will be sent.");
+            logger.LogInformation("JGUZDV OpenTelemetry: UseMeter not active.");
         }
 
         configureBuilder?.Invoke(otelOptions, telemetryBuilder);
