@@ -1,27 +1,34 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
 
-    <PackageId>JGUZDV.AspNetCore.Extensions.OpenTelemetry</PackageId>
-    <IsPackable>true</IsPackable>
-    <Version>1.1.7</Version>
-    <Authors>Tobias Beckhoff</Authors>
-    <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
-    <PackageDescription>Opinionated extensions to observe ASP.NET Core applications via Azure Monitor and OpenTelemetry.</PackageDescription>
+        <PackageId>JGUZDV.AspNetCore.Extensions.OpenTelemetry</PackageId>
+        <IsPackable>true</IsPackable>
+        <Version>2.0.0</Version>
+        <Authors>Tobias Beckhoff, Thomas Ottenhus</Authors>
+        <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
+        <PackageDescription>Opinionated extensions to observe ASP.NET Core applications via Azure Monitor and OpenTelemetry.</PackageDescription>
 
-    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+        <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+        <OtelVersion>1.20.1</OtelVersion>
+    </PropertyGroup>
 
-  </PropertyGroup>
+    <ItemGroup>
+        <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Azure.Monitor.OpenTelemetry.AspNetCore" Version="1.6.0" />
+        <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="$(OtelVersion)" />
+        <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="$(OtelVersion)" />
+        <PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="$(OtelVersion)" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Azure.Monitor.OpenTelemetry.AspNetCore" Version="1.6.0" />
-  </ItemGroup>
-  
+    <ItemGroup>
+      <ProjectReference Include="..\..\JGUZDV.Extensions.OpenTelemetry\src\JGUZDV.Extensions.OpenTelemetry.csproj" />
+    </ItemGroup>
+
 </Project>
