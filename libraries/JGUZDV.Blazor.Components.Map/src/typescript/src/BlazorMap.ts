@@ -37,6 +37,7 @@ class BlazorMap {
             map.on('click', this.onMapClick);
             map.on('dblclick', this.onMapClick);
             map.on('contextmenu', this.onMapClick);
+            map.on('mousemove', this.onMapMouseMove);
 
         }
 
@@ -99,6 +100,17 @@ class BlazorMap {
 
         return false;
     }
+
+    private onMapMouseMove = (e: MapMouseEvent) => {
+        let map: GlMap = this.getMap();
+
+        let features = map.queryRenderedFeatures(e.point);
+        let clickable = features.some(feature => feature.properties?.type === "Building" || feature.properties?.type === "BuildingOutline" || feature.properties?.type === "PointOfInterest");
+
+        map.getCanvas().style.cursor = clickable ? 'pointer' : '';
+    }
+
+
 
     public addStyleLayerFromUrl = async (url: string) => {
         await this._isInitialized;
