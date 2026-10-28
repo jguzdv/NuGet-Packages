@@ -13,7 +13,7 @@ using System.Xml.Linq;
 namespace StringLocalizerGenerator
 {
     /// <summary>
-    /// Source Generator, der für mit <c>[Localized]</c> markierte Klassen
+    /// Source Generator, der für mit <c>[LocalizedPropertyGenerator]</c> markierte Klassen
     /// eine Extension-Klasse mit stark typisierten Properties für
     /// <c>IStringLocalizer&lt;T&gt;</c> generiert.
     /// </summary>
@@ -23,7 +23,7 @@ namespace StringLocalizerGenerator
         private static readonly DiagnosticDescriptor MissingResxWarning = new(
             "RSX002",
             "Missing resource file",
-            "Class '{0}' is marked with [Localized] but no '{0}.resx' file was found",
+            "Class '{0}' is marked with [LocalizedPropertyGenerator] but no '{0}.resx' file was found",
             "Localization",
             DiagnosticSeverity.Warning,
             isEnabledByDefault: true);
@@ -63,7 +63,7 @@ namespace StringLocalizerGenerator
                 .Where(f => f.Path.EndsWith(".resx", StringComparison.OrdinalIgnoreCase))
                 .Collect();
 
-            // Markierte Klassen mit [Localized] finden
+            // Markierte Klassen mit [LocalizedPropertyGenerator] finden
             var localizedClasses = context.SyntaxProvider
                 .CreateSyntaxProvider(
                     predicate: static (s, _) => IsLocalizedClass(s),
@@ -118,9 +118,9 @@ namespace StringLocalizerGenerator
             if (symbol is null)
                 return null;
 
-            // Semantische Verifikation: Hat die Klasse wirklich [Localized]?
+            // Semantische Verifikation: Hat die Klasse wirklich [LocalizedPropertyGenerator]?
             var hasLocalized = symbol.GetAttributes().Any(a =>
-                a.AttributeClass?.Name is "LocalizedAttribute" or "Localized");
+                a.AttributeClass?.Name is "LocalizedPropertyGeneratorAttribute" or "LocalizedPropertyGenerator");
 
             if (!hasLocalized)
                 return null;
