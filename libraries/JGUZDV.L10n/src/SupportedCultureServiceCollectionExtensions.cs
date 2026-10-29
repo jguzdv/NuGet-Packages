@@ -11,9 +11,8 @@ namespace JGUZDV.L10n
     {
 
         /// <summary>
-        /// 
+        /// Adds the <see cref="ISupportedCultureService"/> using the default <see cref="ILanguageService"/>.
         /// </summary>
-        /// <param name="services"></param>
         /// <returns></returns>
         public static IServiceCollection AddDefaultSupportedCultures(this IServiceCollection services)
         {
@@ -24,8 +23,6 @@ namespace JGUZDV.L10n
         /// <summary>
         /// Adds the service and interface to the project and passes on the supported cultures.
         /// </summary>
-        /// <param name="services"></param>
-        /// <param name="supportedCultures"></param>
         /// <returns></returns>
         public static IServiceCollection AddSupportedCultures(this IServiceCollection services, IEnumerable<string> supportedCultures)
         {
