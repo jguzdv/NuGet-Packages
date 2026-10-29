@@ -59,6 +59,8 @@ namespace JGUZDV.JobHost.Dashboard.EntityFrameworkCore
                     job = new Entities.Job
                     {
                         LastExecutedAt = DateTimeOffset.MinValue,
+                        LastFailAt = null,
+                        LastSuccessAt = null,
                         NextExecutionAt = item.NextExecutionAt,
                         LastResult = "",
                         Schedule = item.CronSchedule,
@@ -94,6 +96,8 @@ namespace JGUZDV.JobHost.Dashboard.EntityFrameworkCore
                     .SetProperty(x => x.LastExecutedAt, jobReport.FireTimeUtc)
                     .SetProperty(x => x.LastResult, result)
                     .SetProperty(x => x.FailMessage, jobReport.FailMessage)
+                    .SetProperty(x => x.LastSuccessAt, x => jobReport.Failed ? x.LastSuccessAt : jobReport.FireTimeUtc)
+                    .SetProperty(x => x.LastFailAt, x => jobReport.Failed ? jobReport.FireTimeUtc : x.LastFailAt)
             );
         }
 
@@ -111,6 +115,8 @@ namespace JGUZDV.JobHost.Dashboard.EntityFrameworkCore
                     HostId = x.HostId,
                     Id = x.Id,
                     LastExecutedAt = x.LastExecutedAt,
+                    LastFailAt = x.LastFailAt,
+                    LastSuccessAt = x.LastSuccessAt,
                     LastResult = x.LastResult,
                     Name = x.Name,
                     NextExecutionAt = x.NextExecutionAt,
@@ -121,6 +127,32 @@ namespace JGUZDV.JobHost.Dashboard.EntityFrameworkCore
                 .ToListAsync(ct);
 
             return jobs;
+        }
+
+        /// <inheritdoc/>
+        public async Task<Job?> GetJob(string jobName, CancellationToken ct)
+        {
+            await using var dbContext = await _dbContextFactory.CreateDbContextAsync(ct);
+            var host = _jobReportOptions.Value.JobHostName;
+
+            return (await dbContext.Jobs
+                .Where(x => x.Name == jobName && x.Host!.Name == host)
+                .Select(x => new Job
+                {
+                    FailMessage = x.FailMessage,
+                    HostId = x.HostId,
+                    Id = x.Id,
+                    LastExecutedAt = x.LastExecutedAt,
+                    LastFailAt = x.LastFailAt,
+                    LastSuccessAt = x.LastSuccessAt,
+                    LastResult = x.LastResult,
+                    Name = x.Name,
+                    NextExecutionAt = x.NextExecutionAt,
+                    RunTime = x.RunTime,
+                    Schedule = x.Schedule,
+                    ShouldExecuteAt = x.ShouldExecuteAt
+                })
+                .FirstOrDefaultAsync(ct));
         }
     }
 }
