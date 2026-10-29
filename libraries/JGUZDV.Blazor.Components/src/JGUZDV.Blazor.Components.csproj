@@ -25,9 +25,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="5.8.1">
+        <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="7.0.1">
             <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime;native; contentfiles; analyzers</IncludeAssets>
+            <IncludeAssets>runtime; native; contentfiles; analyzers</IncludeAssets>
         </PackageReference>
     </ItemGroup>
 

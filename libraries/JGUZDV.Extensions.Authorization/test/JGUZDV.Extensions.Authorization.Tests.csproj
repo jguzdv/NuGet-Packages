@@ -24,5 +24,4 @@
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="$(Net10Version)" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="$(Net10Version)" />
     </ItemGroup>
-
 </Project>

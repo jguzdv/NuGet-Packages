@@ -9,4 +9,10 @@
     <IsTestProject>true</IsTestProject>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Update="coverlet.collector" Version="10.1.0" />
+    <PackageReference Update="Microsoft.NET.Test.Sdk" Version="18.11.0" />
+    <PackageReference Update="xunit.runner.visualstudio" Version="4.0.1" />
+  </ItemGroup>
+
 </Project>
