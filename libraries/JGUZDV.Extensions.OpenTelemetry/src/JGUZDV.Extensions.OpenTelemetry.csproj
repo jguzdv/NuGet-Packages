@@ -6,7 +6,7 @@
 
     <PackageId>JGUZDV.Extensions.OpenTelemetry</PackageId>
     <IsPackable>true</IsPackable>
-    <Version>1.1.2</Version>
+    <Version>1.2.0</Version>
     <Authors>Agim Shabani</Authors>
     <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
     <PackageDescription>Extensions to observe applications via Azure Monitor and OpenTelemetry.</PackageDescription>

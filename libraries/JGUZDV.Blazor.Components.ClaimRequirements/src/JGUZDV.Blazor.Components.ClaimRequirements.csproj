@@ -7,7 +7,7 @@
 
         <PackageId>JGUZDV.Blazor.Components.ClaimRequirements</PackageId>
         <IsPackable>true</IsPackable>
-        <Version>0.9.1</Version>
+        <Version>0.10.0</Version>
         <Authors>Marcus Lunau, Agim Shabani</Authors>
         <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
         <PackageDescription>Blazor component library for assigning ClaimRequirements - build for Bootstrap 5</PackageDescription>

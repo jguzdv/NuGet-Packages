@@ -7,7 +7,7 @@
 
         <PackageId>JGUZDV.ClientStorage.Blazor</PackageId>
         <IsPackable>true</IsPackable>
-        <Version>1.0.1</Version>
+        <Version>1.1.0</Version>
         <Authors>Aaron Puhl</Authors>
         <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
         <PackageDescription>Blazor extensions for client storage</PackageDescription>

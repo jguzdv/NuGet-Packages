@@ -7,7 +7,7 @@
 
         <PackageId>JGUZDV.AspNetCore.Components.Localization</PackageId>
         <IsPackable>true</IsPackable>
-        <Version>1.0.1</Version>
+        <Version>1.1.0</Version>
         <Authors>Thomas Ottenhus</Authors>
         <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
         <PackageDescription>Provides a common interface for localization options to be displayed in selections.</PackageDescription>

@@ -7,7 +7,7 @@
 
         <PackageId>JGUZDV.JsonMerge</PackageId>
         <IsPackable>true</IsPackable>
-        <Version>1.0.0</Version>
+        <Version>1.1.0</Version>
         <Authors>Thomas Ottenhus</Authors>
         <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
         <PackageDescription>Merges JSON files into a single output file</PackageDescription>

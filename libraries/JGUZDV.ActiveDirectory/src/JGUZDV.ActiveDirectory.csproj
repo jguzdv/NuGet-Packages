@@ -8,7 +8,7 @@
         
         <PackageId>JGUZDV.ActiveDirectory</PackageId>
         <IsPackable>true</IsPackable>
-        <Version>1.4.2</Version>
+        <Version>1.5.0</Version>
         <Authors>Thomas Ottenhus</Authors>
         <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
         <PackageDescription>Read properties or claims from AD.</PackageDescription>

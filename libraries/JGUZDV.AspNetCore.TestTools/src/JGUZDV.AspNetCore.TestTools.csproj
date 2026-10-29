@@ -7,7 +7,7 @@
 
         <PackageId>JGUZDV.AspNetCore.TestTools</PackageId>
         <IsPackable>true</IsPackable>
-        <Version>1.0.0</Version>
+        <Version>1.1.0</Version>
         <Authors>Thomas Ottenhus</Authors>
         <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
         <PackageDescription>A collection of tools, that help with testing ASP.NET Core applications</PackageDescription>
