@@ -1,4 +1,4 @@
-﻿namespace JGUZDV.AspNetCore.Components.Localization;
+﻿namespace JGUZDV.L10n;
 
 /// <summary>
 /// Represents a service that provides language information

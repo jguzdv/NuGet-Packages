@@ -6,6 +6,7 @@ using JGUZDV.AspNetCore.Hosting.Extensions;
 using JGUZDV.AspNetCore.Hosting.FeatureManagement;
 using JGUZDV.AspNetCore.Hosting.ForwardedHeaders;
 using JGUZDV.AspNetCore.Hosting.Localization;
+using JGUZDV.L10n;
 using JGUZDV.WebApiHost.FeatureManagement;
 using JGUZDV.YARP.SimpleReverseProxy;
 using JGUZDV.YARP.SimpleReverseProxy.Configuration;
@@ -462,6 +463,7 @@ public static class JGUZDVHostApplicationBuilderExtensions
         if (appBuilder.HasRequestLocalization)
         {
             appBuilder.Services.AddScoped<ILanguageService, LanguageService>();
+            appBuilder.Services.AddDefaultSupportedCultures();
             LogMessages.FeatureAdded(logger, "LanguageService");
         }
 

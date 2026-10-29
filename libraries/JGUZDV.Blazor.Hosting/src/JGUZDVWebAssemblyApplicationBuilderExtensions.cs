@@ -1,6 +1,6 @@
-﻿using JGUZDV.AspNetCore.Components.Localization;
-using JGUZDV.Blazor.Hosting.FeatureManagement;
+﻿using JGUZDV.Blazor.Hosting.FeatureManagement;
 using JGUZDV.Blazor.Hosting.Localization;
+using JGUZDV.L10n;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.FeatureManagement;
@@ -34,6 +34,7 @@ public static class JGUZDVWebAssemblyApplicationBuilderExtensions
     {
         appBuilder.Services.AddLocalization();
         appBuilder.Services.AddScoped<ILanguageService, PersistentStateLanguageService>();
+        appBuilder.Services.AddDefaultSupportedCultures();
 
         return appBuilder;
     }
