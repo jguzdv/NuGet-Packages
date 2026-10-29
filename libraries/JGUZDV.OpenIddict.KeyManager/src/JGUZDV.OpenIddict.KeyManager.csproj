@@ -21,11 +21,11 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.DataProtection.Abstractions" Version="8.0.4" />
-        <PackageReference Include="Microsoft.Bcl.TimeProvider" Version="[8.0.0,)" />
-        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="[8.0.0,)" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="[8.0.0,)" />
-        <PackageReference Include="Microsoft.Extensions.Options" Version="[8.0.0,)" />
+        <PackageReference Include="Microsoft.AspNetCore.DataProtection.Abstractions" Version="$(Net10Version)" />
+        <PackageReference Include="Microsoft.Bcl.TimeProvider" Version="[$(Net10Version),)" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="[$(Net10Version),)" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="[$(Net10Version),)" />
+        <PackageReference Include="Microsoft.Extensions.Options" Version="[$(Net10Version),)" />
         <PackageReference Include="OpenIddict.Server" Version="5.5.0" />
     </ItemGroup>
 

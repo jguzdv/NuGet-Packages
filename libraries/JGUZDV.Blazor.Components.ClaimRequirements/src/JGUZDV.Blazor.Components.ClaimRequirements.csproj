@@ -22,9 +22,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="[9.0.0,)" />
-        <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="[9.0.0,)" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="[9.0.0,)" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="[$(Net10Version),)" />
+        <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="[$(Net10Version),)" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="[$(Net10Version),)" />
     </ItemGroup>
 
     <ItemGroup>

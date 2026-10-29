@@ -30,7 +30,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="System.DirectoryServices" Version="[8.0.0, )" />
+        <PackageReference Include="System.DirectoryServices" Version="[$(Net10Version), )" />
     </ItemGroup>
 
 </Project>
