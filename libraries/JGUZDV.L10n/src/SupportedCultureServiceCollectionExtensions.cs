@@ -1,6 +1,4 @@
-﻿using JGUZDV.AspNetCore.Components.Localization;
-
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 
 namespace JGUZDV.L10n
 {

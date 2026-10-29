@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 
 using JGUZDV.AspNetCore.Components.Localization;
+using JGUZDV.L10n;
 
 using Microsoft.AspNetCore.Components;
 
