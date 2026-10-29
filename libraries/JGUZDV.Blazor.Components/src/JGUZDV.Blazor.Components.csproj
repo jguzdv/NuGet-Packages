@@ -33,11 +33,11 @@
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
-        <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="[10.0.0,)" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="[10.0.0,)" />
-        <PackageReference Include="Microsoft.Extensions.Http" Version="[10.0.0,)" />
-        <PackageReference Include="Microsoft.Extensions.Localization" Version="[10.0.0,)" />
-        <PackageReference Include="Microsoft.Extensions.Hosting" Version="[10.0.0,)" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="[$(Net10Version),)" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="[$(Net10Version),)" />
+        <PackageReference Include="Microsoft.Extensions.Http" Version="[$(Net10Version),)" />
+        <PackageReference Include="Microsoft.Extensions.Localization" Version="[$(Net10Version),)" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="[$(Net10Version),)" />
     </ItemGroup>
 
     <ItemGroup>

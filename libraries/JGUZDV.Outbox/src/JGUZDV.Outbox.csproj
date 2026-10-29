@@ -17,8 +17,8 @@
 
     <ItemGroup>
         <PackageReference Include="MailKit" Version="[4.18.0,)" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="[10.0.0,)" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="[10.0.0,)" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="[$(Net10Version),)" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="[$(Net10Version),)" />
     </ItemGroup>
 
 </Project>
