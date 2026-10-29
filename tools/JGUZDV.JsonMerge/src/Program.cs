@@ -2,29 +2,28 @@
 
 using JGUZDV.JsonMerge;
 
-var fileOption = new Option<FileInfo[]>(
-    name: "--input",
-    description: "The files to read and merge. The order of the files will be preserved");
+var fileOption = new Option<FileInfo[]>("--input", "-in")
+{
+    Description = "The files to read and merge. The order of the files will be preserved",
+    Required = true
+};
 
-fileOption.IsRequired = true;
-fileOption.AddAlias("-in");
+var outputOption = new Option<FileInfo>("--output", "-out")
+{
+    Description = "The file to write the merged output to",
+    Required = true
+};
 
+var rootCommand = new RootCommand("Merges all input files into a single output file.")
+{
+    Options = { fileOption, outputOption },
+};
 
-var outputOption = new Option<FileInfo>(
-    name: "--output",
-    description: "The file to write the merged output to");
+rootCommand.SetAction(async parseResult =>
+{
+    await JsonFileHandling.RunJsonFileMergeAsync(
+        parseResult.GetRequiredValue(fileOption),
+        parseResult.GetRequiredValue(outputOption));
+});
 
-outputOption.IsRequired = true;
-outputOption.AddAlias("-out");
-
-
-var rootCommand = new RootCommand("Merges all input files into a single output file.");
-rootCommand.AddOption(fileOption);
-rootCommand.AddOption(outputOption);
-
-rootCommand.SetHandler(
-    JsonFileHandling.RunJsonFileMergeAsync,
-    fileOption,
-    outputOption);
-
-return await rootCommand.InvokeAsync(args);
+return await rootCommand.Parse(args).InvokeAsync();

@@ -17,8 +17,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="[10.0.0,)" />
-        <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="[10.0.0,)" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="[$(Net10Version),)" />
+        <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="[$(Net10Version),)" />
     </ItemGroup>
 
     <ItemGroup>

@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <PackageType>Template</PackageType>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
 
     <IncludeContentInPack>true</IncludeContentInPack>
     <IncludeBuildOutput>false</IncludeBuildOutput>
@@ -14,7 +14,7 @@
 
     <IsPackable>true</IsPackable>
     <PackageId>JGUZDV.Templates</PackageId>
-    <Version>1.0.0</Version>
+    <Version>1.1.0</Version>
     <Authors>Thomas Ottenhus</Authors>
     <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
     <PackageDescription>Simple templates for our own projects</PackageDescription>

@@ -14,6 +14,9 @@
         <PackageIcon>NuGet-Package-Icon.png</PackageIcon>
 
         <GenerateDocumentationFile Condition="$(GenerateDocumentationFile) == ''">true</GenerateDocumentationFile>
+
+        <Net10Version>10.0.14</Net10Version>
+        <Net11Version>11.0.0</Net11Version>
 	</PropertyGroup>
 
 	<ItemGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
@@ -26,13 +29,13 @@
 	</ItemGroup>
 
     <ItemGroup Condition="$(IsTestProject) == 'true'">
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
-        <PackageReference Include="xunit" Version="2.6.6" />
-        <PackageReference Include="xunit.runner.visualstudio" Version="2.5.6">
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.11.0" />
+        <PackageReference Include="xunit.v3" Version="4.0.2" />
+        <PackageReference Include="xunit.runner.visualstudio" Version="4.0.1">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="coverlet.collector" Version="6.0.0">
+        <PackageReference Include="coverlet.collector" Version="10.1.0">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
