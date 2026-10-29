@@ -22,7 +22,7 @@
 
     <ItemGroup>
         <FrameworkReference Include="Microsoft.AspNetCore.App" />
-        <PackageReference Include="Duende.AccessTokenManagement.OpenIdConnect" Version="3.2.0" />
+        <PackageReference Include="Duende.AccessTokenManagement.OpenIdConnect" Version="4.3.0" />
         <PackageReference Include="Yarp.ReverseProxy" Version="2.3.0" />
     </ItemGroup>
 
