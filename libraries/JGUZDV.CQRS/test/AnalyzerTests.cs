@@ -13,7 +13,7 @@ namespace JGUZDV.CQRS.Tests
         public async Task ExpectedDiagnosticRegisteredCorrectly()
         {
             var context = new CSharpAnalyzerTest<CQRSAnalyzer, DefaultVerifier>();
-            context.ReferenceAssemblies = ReferenceAssemblies.Net.Net80;
+            context.ReferenceAssemblies = ReferenceAssemblies.Net.Net100;
             context.TestState.AdditionalReferences.Add(MetadataReference.CreateFromFile("JGUZDV.CQRS.dll"));
 
             context.TestCode =
@@ -29,7 +29,6 @@ namespace JGUZDV.CQRS.Tests
             // Diagnostic gets reported twice because of how RegisterSyntaxNodeAction with SyntaxKind.RecordDeclaration works
             // so it needs to be expected twice
             context.ExpectedDiagnostics.Add(new DiagnosticResult(CQRSAnalyzer.Rule).WithLocation(0));
-            context.ExpectedDiagnostics.Add(new DiagnosticResult(CQRSAnalyzer.Rule).WithLocation(0));
 
             await context.RunAsync();
         }
@@ -38,7 +37,7 @@ namespace JGUZDV.CQRS.Tests
         public async Task NoDiagnosticWhenIheritingQueryBase()
         {
             var context = new CSharpAnalyzerTest<CQRSAnalyzer, DefaultVerifier>();
-            context.ReferenceAssemblies = ReferenceAssemblies.Net.Net80;
+            context.ReferenceAssemblies = ReferenceAssemblies.Net.Net100;
             context.TestState.AdditionalReferences.Add(MetadataReference.CreateFromFile("JGUZDV.CQRS.dll"));
 
             context.TestCode =
@@ -55,7 +54,7 @@ namespace JGUZDV.CQRS.Tests
         public async Task InvalidInheritanceofIQuery()
         {
             var context = new CSharpAnalyzerTest<CQRSAnalyzer, DefaultVerifier>();
-            context.ReferenceAssemblies = ReferenceAssemblies.Net.Net80;
+            context.ReferenceAssemblies = ReferenceAssemblies.Net.Net100;
             context.TestState.AdditionalReferences.Add(MetadataReference.CreateFromFile("JGUZDV.CQRS.dll"));
 
             context.TestCode =
@@ -78,7 +77,7 @@ namespace JGUZDV.CQRS.Tests
         public async Task CodeFixProviderFixesQueryCorrectly()
         {
             var context = new CSharpCodeFixTest<CQRSAnalyzer, CQRSAnalyzerCodeFixProvider, DefaultVerifier>();
-            context.ReferenceAssemblies = ReferenceAssemblies.Net.Net80;
+            context.ReferenceAssemblies = ReferenceAssemblies.Net.Net100;
             context.TestState.AdditionalReferences.Add(MetadataReference.CreateFromFile("JGUZDV.CQRS.dll"));
 
             context.TestCode =
@@ -101,7 +100,6 @@ namespace JGUZDV.CQRS.Tests
                 """;
 
             context.ExpectedDiagnostics.Add(new DiagnosticResult(CQRSAnalyzer.Rule).WithLocation(0));
-            context.ExpectedDiagnostics.Add(new DiagnosticResult(CQRSAnalyzer.Rule).WithLocation(0));
 
             await context.RunAsync();
         }
@@ -110,7 +108,7 @@ namespace JGUZDV.CQRS.Tests
         public async Task CodeFixDoesNotTriggerIfNoDiagnosticReported()
         {
             var context = new CSharpCodeFixTest<CQRSAnalyzer, CQRSAnalyzerCodeFixProvider, DefaultVerifier>();
-            context.ReferenceAssemblies = ReferenceAssemblies.Net.Net80;
+            context.ReferenceAssemblies = ReferenceAssemblies.Net.Net100;
             context.TestState.AdditionalReferences.Add(MetadataReference.CreateFromFile("JGUZDV.CQRS.dll"));
 
             context.TestCode =
