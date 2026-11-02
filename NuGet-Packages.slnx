@@ -178,6 +178,7 @@
     <File Path=".editorconfig" />
     <File Path=".gitignore" />
     <File Path="AddLibrary.ps1" />
+    <File Path="global.json" />
     <File Path="LICENSE" />
   </Folder>
   <Folder Name="/templates/">
