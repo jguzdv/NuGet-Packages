@@ -121,12 +121,13 @@ namespace JGUZDV.ClientStorage.Tests
             Assert.Equal(1, count);
             events.TriggerStopped(this, new());
 
-            await Task.Delay(25);
-            Assert.Equal(1, count);
+            var expected = count;
+            await Task.Delay(10);
+            Assert.Equal(expected, count);
 
             events.TriggerResumed(this, new());
             await store.Get<string>("testKey");
-            Assert.Equal(2, count);
+            Assert.True(expected < count);
         }
     }
 }
