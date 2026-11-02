@@ -1,6 +1,4 @@
-﻿using JGUZDV.L10n;
-
-namespace JGUZDV.AspNetCore.Components.Localization;
+﻿namespace JGUZDV.L10n;
 
 /// <summary>
 /// Represents the state of the request localization.

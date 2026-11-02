@@ -17,10 +17,6 @@
     <Project Path="libraries/JGUZDV.AspNetCore.Authentication.Cookies/src/JGUZDV.AspNetCore.Authentication.Cookies.csproj" />
     <Project Path="libraries/JGUZDV.AspNetCore.Authentication.Cookies/test/JGUZDV.AspNetCore.Authentication.Cookies.Tests.csproj" />
   </Folder>
-  <Folder Name="/libraries/JGUZDV.AspNetCore.Components.Localization/">
-    <Project Path="libraries/JGUZDV.AspNetCore.Components.Localization/src/JGUZDV.AspNetCore.Components.Localization.csproj" />
-    <Project Path="libraries/JGUZDV.AspNetCore.Components.Localization/test/JGUZDV.AspNetCore.Components.Localization.Tests.csproj" />
-  </Folder>
   <Folder Name="/libraries/JGUZDV.AspNetCore.DataProtection/">
     <Project Path="libraries/JGUZDV.AspNetCore.DataProtection/src/JGUZDV.AspNetCore.DataProtection.csproj" />
     <Project Path="libraries/JGUZDV.AspNetCore.DataProtection/test/JGUZDV.AspNetCore.DataProtection.Tests.csproj" />

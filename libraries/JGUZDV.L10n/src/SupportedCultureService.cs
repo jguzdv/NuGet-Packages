@@ -1,6 +1,4 @@
-﻿using JGUZDV.AspNetCore.Components.Localization;
-
-namespace JGUZDV.L10n
+﻿namespace JGUZDV.L10n
 {
     /// <summary>
     /// Handles methods and processes regarding the supported cultures.
