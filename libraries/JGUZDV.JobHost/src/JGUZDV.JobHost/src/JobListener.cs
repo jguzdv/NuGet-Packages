@@ -3,11 +3,10 @@
 using Microsoft.Extensions.Logging;
 
 using Quartz;
-using Quartz.Listener;
 
 namespace JGUZDV.JobHost
 {
-    internal class JobListener : JobListenerSupport
+    internal class JobListener : IJobListener
     {
         private readonly IJobExecutionManager _reporter;
         private readonly ILogger<JobListener> _logger;
@@ -18,9 +17,24 @@ namespace JGUZDV.JobHost
             _logger = logger;
         }
 
-        public override string Name => nameof(JobListener);
+        public string Name => nameof(JobListener);
 
-        public override async Task JobWasExecuted(IJobExecutionContext context, JobExecutionException? jobException, CancellationToken cancellationToken = default)
+        public Task JobToBeExecuted(IJobExecutionContext context, CancellationToken cancellationToken = default)
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task JobExecutionVetoed(IJobExecutionContext context, CancellationToken cancellationToken = default)
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task JobProgressChanged(IJobExecutionContext context, Quartz.Extensibility.FireInstanceProgress progress, CancellationToken cancellationToken = default)
+        {
+            return Task.CompletedTask;
+        }
+
+        public async Task JobWasExecuted(IJobExecutionContext context, JobExecutionException? jobException, CancellationToken cancellationToken = default)
         {
             try
             {

@@ -1,18 +1,16 @@
 ﻿using Quartz;
-using Quartz.Impl.Matchers;
-using Quartz.Listener;
 
 namespace JGUZDV.JobHost
 {
     /// <summary>
     /// Quartz job listener. Used to listen for different job execution states and react accordingly.
     /// </summary>
-    public class DevelopmentJobListener : JobListenerSupport
+    public class DevelopmentJobListener : IJobListener
     {
         /// <summary>
         /// Name of the job listener used to distinguish between multiple ones. 
         /// </summary>
-        public override string Name { get; }
+        public string Name { get; }
 
         private readonly Func<IScheduler, List<JobKey>, Task> _jobSelection;
 
@@ -34,11 +32,24 @@ namespace JGUZDV.JobHost
         /// <param name="jobException">Set if there war an Exception during execution.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns></returns>
-        public override async Task JobWasExecuted(IJobExecutionContext context, JobExecutionException? jobException, CancellationToken cancellationToken = default)
+        public Task JobToBeExecuted(IJobExecutionContext context, CancellationToken cancellationToken = default)
         {
-            await base.JobWasExecuted(context, jobException, cancellationToken);
+            return Task.CompletedTask;
+        }
 
-            await context.Scheduler.PauseJob(context.JobDetail.Key);
+        public Task JobExecutionVetoed(IJobExecutionContext context, CancellationToken cancellationToken = default)
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task JobProgressChanged(IJobExecutionContext context, Quartz.Extensibility.FireInstanceProgress progress, CancellationToken cancellationToken = default)
+        {
+            return Task.CompletedTask;
+        }
+
+        public async Task JobWasExecuted(IJobExecutionContext context, JobExecutionException? jobException, CancellationToken cancellationToken = default)
+        {
+            await context.Scheduler.PauseJob(context.JobDetail.Key, cancellationToken);
             var keys = await context.Scheduler.GetJobKeys(GroupMatcher<JobKey>.AnyGroup());
             await _jobSelection.Invoke(context.Scheduler, keys.ToList());
         }

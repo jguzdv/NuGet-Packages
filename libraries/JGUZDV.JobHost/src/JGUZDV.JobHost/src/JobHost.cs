@@ -8,7 +8,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 using Quartz;
-using Quartz.Impl.Matchers;
 
 namespace JGUZDV.JobHost
 {
@@ -149,10 +148,9 @@ namespace JGUZDV.JobHost
                 builder.Services.AddQuartz(q =>
                 {
                     var jobKey = new JobKey(typeof(TJob).Name);
-                    q.AddJob<TJob>(jobKey, cfg =>
-                    {
-                        cfg.DisallowConcurrentExecution();
-                    });
+                    q.AddJob<TJob>(cfg => cfg
+                        .WithIdentity(jobKey)
+                        .DisallowConcurrentExecution());
                     q.AddTrigger(opts => opts
                         .ForJob(jobKey)
                         .WithCronSchedule(cronSchedule));
