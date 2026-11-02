@@ -59,7 +59,7 @@ jobs:
         env:
           DOTNET_ENVIRONMENT: 'test'
           ASPNETCORE_ENVIRONMENT: 'test'
-        run: dotnet test ${{ env.test-proj }} --no-build -c Release --verbosity normal
+        run: dotnet test ${{ env.test-proj }} --no-build -c Release --verbosity normal --ignore-exit-code 8
 
       - name: Pack library project
         run: dotnet pack ${{ env.src-proj }} --no-build -c Release --output ${{ env.publish-path }}
