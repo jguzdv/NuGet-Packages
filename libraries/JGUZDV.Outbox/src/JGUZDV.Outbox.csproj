@@ -7,7 +7,7 @@
 
         <PackageId>JGUZDV.Outbox</PackageId>
         <IsPackable>true</IsPackable>
-        <Version>1.0.0-beta2</Version>
+        <Version>1.1.0-beta2</Version>
         <Authors>Aaron Puhl, Thomas Ottenhus</Authors>
         <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
         <PackageDescription></PackageDescription>
@@ -16,9 +16,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="MailKit" Version="[4.18.0,)" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="[10.0.0,)" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="[10.0.0,)" />
+        <PackageReference Include="MailKit" Version="[4.18.2,)" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="[$(Net10Version),)" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="[$(Net10Version),)" />
     </ItemGroup>
 
 </Project>

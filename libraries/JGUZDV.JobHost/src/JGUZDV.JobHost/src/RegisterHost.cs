@@ -7,7 +7,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 using Quartz;
-using Quartz.Impl.Matchers;
 
 namespace JGUZDV.JobHost
 {
@@ -32,10 +31,10 @@ namespace JGUZDV.JobHost
             _options = options;
         }
 
-        public async Task Execute(IJobExecutionContext context)
+        public async ValueTask Execute(IJobExecutionContext context, CancellationToken cancellationToken)
         {
-            var scheduler = await _schedulerFactory.GetScheduler();
-            await scheduler.PauseJobs(GroupMatcher<JobKey>.GroupEquals(JobKey.DefaultGroup));
+            var scheduler = await _schedulerFactory.GetScheduler(cancellationToken);
+            await scheduler.PauseJobGroups(GroupMatcher<JobKey>.GroupEquals(JobKey.DefaultGroup), cancellationToken);
             var hostName = (string)context.JobDetail.JobDataMap[Constants.JobHostName];
 
             try
@@ -50,12 +49,12 @@ namespace JGUZDV.JobHost
                         Name = x.JobName,
                         NextExecutionAt = new CronExpression(x.CronSchedule).GetNextValidTimeAfter(DateTimeOffset.Now) ?? new() //TODO: TimeProvider
                     }).ToList()
-                }, context.CancellationToken);
+                }, cancellationToken);
 
                 // register quartz jobs
                 foreach (var item in _jobs)
                 {
-                    await item.Execute(hostName, scheduler, context.CancellationToken);
+                    await item.Execute(hostName, scheduler, cancellationToken);
                 }
 
                 // register execute now polling job
@@ -71,7 +70,7 @@ namespace JGUZDV.JobHost
                     .WithCronSchedule(schedule)
                     .Build();
 
-                await scheduler.ScheduleJob(jobDetail, trigger, context.CancellationToken);
+                await scheduler.ScheduleJob(jobDetail, trigger, new ScheduleJobOptions(), cancellationToken);
             }
             catch (Exception e)
             {
@@ -80,7 +79,7 @@ namespace JGUZDV.JobHost
             }
             finally
             {
-                await scheduler.ResumeJobs(GroupMatcher<JobKey>.GroupEquals(JobKey.DefaultGroup));
+                await scheduler.ResumeJobGroups(GroupMatcher<JobKey>.GroupEquals(JobKey.DefaultGroup), cancellationToken);
             }
         }
 
@@ -122,7 +121,7 @@ namespace JGUZDV.JobHost
                     .WithCronSchedule(schedule)
                     .Build();
 
-                await scheduler.ScheduleJob(jobDetail, trigger, cancellationToken);
+                await scheduler.ScheduleJob(jobDetail, trigger, new ScheduleJobOptions(), cancellationToken);
             }
             catch (Exception e)
             {

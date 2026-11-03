@@ -27,16 +27,16 @@ jobs:
       publish-path: publish/JGUZDV.ActiveDirectory.COM
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v7
 
     - name: Setup MSBuild
-      uses: microsoft/setup-msbuild@v2
+      uses: microsoft/setup-msbuild@v3
 
     - name: Pack library project
       run: msbuild ${{ env.src-proj }} /t:Restore,Build,Pack /p:configuration=Release /p:PackageOutputPath="${{ github.workspace }}${{ env.publish-path }}"
 
     - name: Upload nupkg
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: NuGetPackage
         path: '${{ github.workspace }}${{ env.publish-path }}'
@@ -50,11 +50,11 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      dotnet-version: 9.0.x
+      dotnet-version: latest
 
     steps:
     - name: Download nupkg
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v7
       with:
         name: NuGetPackage
         path: package

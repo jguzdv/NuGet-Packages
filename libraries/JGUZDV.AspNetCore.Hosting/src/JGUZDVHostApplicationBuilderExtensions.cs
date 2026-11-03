@@ -1,4 +1,6 @@
-﻿using JGUZDV.AspNetCore.Components.Localization;
+﻿using Duende.AccessTokenManagement.OpenIdConnect;
+
+using JGUZDV.AspNetCore.Components.Localization;
 using JGUZDV.AspNetCore.Hosting.Components;
 using JGUZDV.AspNetCore.Hosting.Extensions;
 using JGUZDV.AspNetCore.Hosting.FeatureManagement;

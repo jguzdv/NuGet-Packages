@@ -15,20 +15,14 @@ namespace JGUZDV.JobHost
             _schedulerFactory = schedulerFactory;
         }
 
-        public async Task Execute(IJobExecutionContext context)
+        public async ValueTask Execute(IJobExecutionContext context, CancellationToken cancellationToken)
         {
-            var scheduler = await _schedulerFactory.GetScheduler(context.CancellationToken);
-            var jobs = await _reporter.GetPendingJobsAsync(context.CancellationToken);
-            var runningKeys = (await scheduler.GetCurrentlyExecutingJobs(context.CancellationToken))
-                .Select(x => x.JobDetail.Key)
-                .ToHashSet();
-
-            jobs = jobs.Where(x => !runningKeys.Contains(new JobKey(x.Name))).ToList();
-
+            var scheduler = await _schedulerFactory.GetScheduler(cancellationToken);
+            var jobs = await _reporter.GetPendingJobsAsync(cancellationToken);
             foreach (var job in jobs)
             {
                 var jobKey = new JobKey(job.Name);
-                await scheduler.TriggerJob(jobKey, context.CancellationToken);
+                await scheduler.TriggerJob(jobKey, new JobDataMap(), cancellationToken);
             }
         }
     }

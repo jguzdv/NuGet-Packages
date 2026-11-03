@@ -1,13 +1,13 @@
-<Project Sdk="Microsoft.NET.Sdk.Razor">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
     <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
 
         <PackageId>JGUZDV.Blazor.Components.ClaimRequirements</PackageId>
         <IsPackable>true</IsPackable>
-        <Version>0.9.1</Version>
+        <Version>0.10.0</Version>
         <Authors>Marcus Lunau, Agim Shabani</Authors>
         <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
         <PackageDescription>Blazor component library for assigning ClaimRequirements - build for Bootstrap 5</PackageDescription>
@@ -22,9 +22,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="[9.0.0,)" />
-        <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="[9.0.0,)" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="[9.0.0,)" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="[$(Net10Version),)" />
+        <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="[$(Net10Version),)" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="[$(Net10Version),)" />
     </ItemGroup>
 
     <ItemGroup>

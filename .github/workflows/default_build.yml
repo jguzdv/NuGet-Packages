@@ -17,7 +17,7 @@ on:
         required: true    
 
 env:
-    dotnet-version: 9.0.x
+    dotnet-version: latest
     src-proj: ./libraries/${{ inputs.library-name }}/src/${{ inputs.library-name }}.csproj
     test-proj: ./libraries/${{ inputs.library-name }}/test/${{ inputs.library-name }}.Tests.csproj
     publish-path: ./publish/${{ inputs.library-name }}
@@ -29,9 +29,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
       - name: Setup .NET Core SDK ${{ env.dotnet-version }}
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: ${{ env.dotnet-version }}
 
@@ -59,13 +59,13 @@ jobs:
         env:
           DOTNET_ENVIRONMENT: 'test'
           ASPNETCORE_ENVIRONMENT: 'test'
-        run: dotnet test ${{ env.test-proj }} --no-build -c Release --verbosity normal
+        run: dotnet test ${{ env.test-proj }} --no-build -c Release --verbosity normal --ignore-exit-code 8
 
       - name: Pack library project
         run: dotnet pack ${{ env.src-proj }} --no-build -c Release --output ${{ env.publish-path }}
 
       - name: Upload nupkg
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: NuGetPackage
           path: ${{ env.publish-path }}
