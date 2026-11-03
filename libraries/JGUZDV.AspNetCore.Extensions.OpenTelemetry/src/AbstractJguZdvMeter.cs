@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.Metrics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics.Metrics;
 
 using Microsoft.Extensions.Options;
 
@@ -12,6 +7,7 @@ namespace JGUZDV.AspNetCore.Extensions.OpenTelemetry
     /// <summary>
     /// Inherit from this instance for JguZdv telemetry to create counts/histograms/gauges.
     /// </summary>
+    [Obsolete("This class is not to be used. Use DI to get an instance of Meter injected or create your own via IMeterFactory", true)]
     public abstract class AbstractJguZdvMeter
     {
         /// <summary>
@@ -32,19 +28,6 @@ namespace JGUZDV.AspNetCore.Extensions.OpenTelemetry
         protected AbstractJguZdvMeter(IOptions<AspNetCoreOpenTelemetryOptions> options)
         {
             _options = options;
-
-            if(_options.Value.UseMeter == null)
-            {
-                throw new ArgumentException("Can only be used if UseMeter is completly configured in appsettings.");
-            }
-
-            if(string.IsNullOrWhiteSpace(_options.Value.UseMeter.MeterName) 
-                    || string.IsNullOrWhiteSpace(_options.Value.UseMeter.MeterVersion))
-            {
-                throw new ArgumentException("MeterName and MeterVersion must be set to reasonable values.");
-            }
-
-            Meter = new Meter(_options.Value.UseMeter!.MeterName, options.Value.UseMeter!.MeterVersion);
         }
     }
 }
