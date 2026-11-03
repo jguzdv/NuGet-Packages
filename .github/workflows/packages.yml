@@ -1,0 +1,136 @@
+name: NuGet packages
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      package:
+        description: Package/project name, group (e.g. JGUZDV.JobHost), or all
+        type: string
+        default: all
+        required: true
+      push-to-nuget:
+        description: Publish to NuGet.org (main only)
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.plan.outputs.matrix }}
+      has-packages: ${{ steps.plan.outputs.has-packages }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Select packages
+        id: plan
+        shell: pwsh
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PACKAGE: ${{ inputs.package }}
+          PUBLISH: ${{ inputs.push-to-nuget }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          .\.github\scripts\packages.Tests.ps1
+          if ($env:PUBLISH -eq 'true' -and ($env:GITHUB_REPOSITORY -ne 'jguzdv/NuGet-Packages' -or $env:GITHUB_REF -ne 'refs/heads/main')) {
+            throw 'Publishing is only allowed from main in jguzdv/NuGet-Packages.'
+          }
+          if ($env:EVENT_NAME -eq 'pull_request') {
+            .\.github\scripts\packages.ps1 -Mode Plan -Base $env:BASE_SHA -Head $env:HEAD_SHA
+          } else {
+            .\.github\scripts\packages.ps1 -Mode Plan -Package $env:PACKAGE
+          }
+
+  build:
+    needs: plan
+    if: needs.plan.outputs.has-packages == 'true'
+    name: Build ${{ matrix.name }}
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: 10.0.x
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - name: Setup MSBuild for COM interop
+        if: runner.os == 'Windows'
+        uses: microsoft/setup-msbuild@v3
+      - name: Build, test and pack
+        shell: pwsh
+        env:
+          PACKAGE: ${{ matrix.selection }}
+          DOTNET_ENVIRONMENT: test
+          ASPNETCORE_ENVIRONMENT: test
+        run: .\.github\scripts\packages.ps1 -Mode Build -Package $env:PACKAGE
+      - uses: actions/upload-artifact@v7
+        with:
+          name: NuGetPackage-${{ matrix.name }}
+          path: publish/**/*.nupkg
+          if-no-files-found: error
+          retention-days: 7
+
+  publish:
+    needs: [plan, build]
+    if: >-
+      github.event_name == 'workflow_dispatch' &&
+      inputs.push-to-nuget &&
+      github.repository == 'jguzdv/NuGet-Packages' &&
+      github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: nuget
+    permissions:
+      contents: read
+      id-token: write
+    concurrency:
+      group: nuget-publish
+      cancel-in-progress: false
+    steps:
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: 10.0.x
+      - uses: actions/download-artifact@v7
+        with:
+          pattern: NuGetPackage-*
+          merge-multiple: true
+          path: package
+      - name: Validate packages and NuGet user
+        shell: pwsh
+        env:
+          NUGET_USER: ${{ secrets.NUGET_USER }}
+        run: |
+          if ([string]::IsNullOrWhiteSpace($env:NUGET_USER)) {
+            throw 'Set the NUGET_USER secret to the nuget.org profile name.'
+          }
+          if (@(Get-ChildItem package -Recurse -Filter *.nupkg).Count -eq 0) {
+            throw 'No NuGet packages were downloaded.'
+          }
+      - name: NuGet login
+        id: login
+        uses: NuGet/login@v1
+        with:
+          user: ${{ secrets.NUGET_USER }}
+      - name: Publish packages
+        shell: pwsh
+        env:
+          NUGET_API_KEY: ${{ steps.login.outputs.NUGET_API_KEY }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          Get-ChildItem package -Recurse -Filter *.nupkg | Sort-Object Name | ForEach-Object {
+            dotnet nuget push $_.FullName --source https://api.nuget.org/v3/index.json --api-key $env:NUGET_API_KEY --skip-duplicate
+            if ($LASTEXITCODE -ne 0) { throw "Publishing $($_.Name) failed with exit code $LASTEXITCODE." }
+          }
