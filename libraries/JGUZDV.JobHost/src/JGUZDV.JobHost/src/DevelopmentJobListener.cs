@@ -32,22 +32,7 @@ namespace JGUZDV.JobHost
         /// <param name="jobException">Set if there war an Exception during execution.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns></returns>
-        public Task JobToBeExecuted(IJobExecutionContext context, CancellationToken cancellationToken = default)
-        {
-            return Task.CompletedTask;
-        }
-
-        public Task JobExecutionVetoed(IJobExecutionContext context, CancellationToken cancellationToken = default)
-        {
-            return Task.CompletedTask;
-        }
-
-        public Task JobProgressChanged(IJobExecutionContext context, Quartz.Extensibility.FireInstanceProgress progress, CancellationToken cancellationToken = default)
-        {
-            return Task.CompletedTask;
-        }
-
-        public async Task JobWasExecuted(IJobExecutionContext context, JobExecutionException? jobException, CancellationToken cancellationToken = default)
+        public async ValueTask JobWasExecuted(IJobExecutionContext context, JobExecutionException? jobException, CancellationToken cancellationToken = default)
         {
             await context.Scheduler.PauseJob(context.JobDetail.Key, cancellationToken);
             var keys = await context.Scheduler.GetJobKeys(GroupMatcher<JobKey>.AnyGroup());
