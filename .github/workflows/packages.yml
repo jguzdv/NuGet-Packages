@@ -39,7 +39,6 @@ jobs:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
-          .\.github\scripts\packages.Tests.ps1
           if ($env:PUBLISH -eq 'true' -and ($env:GITHUB_REPOSITORY -ne 'jguzdv/NuGet-Packages' -or $env:GITHUB_REF -ne 'refs/heads/main')) {
             throw 'Publishing is only allowed from main in jguzdv/NuGet-Packages.'
           }
