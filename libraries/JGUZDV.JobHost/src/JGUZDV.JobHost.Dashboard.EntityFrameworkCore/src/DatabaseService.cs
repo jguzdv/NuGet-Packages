@@ -49,6 +49,8 @@ namespace JGUZDV.JobHost.Dashboard.EntityFrameworkCore
                         HostId = x.HostId,
                         Id = x.Id,
                         LastExecutedAt = x.LastExecutedAt,
+                        LastFailAt = x.LastFailAt,
+                        LastSuccessAt = x.LastSuccessAt,
                         LastResult = x.LastResult,
                         NextExecutionAt = x.NextExecutionAt,
                         Schedule = x.Schedule,

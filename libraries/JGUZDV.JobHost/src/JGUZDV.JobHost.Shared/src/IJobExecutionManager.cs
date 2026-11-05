@@ -1,5 +1,7 @@
 ﻿using JGUZDV.JobHost.Shared.Model;
 
+using Quartz;
+
 namespace JGUZDV.JobHost.Shared
 {
     /// <summary>
@@ -28,6 +30,29 @@ namespace JGUZDV.JobHost.Shared
         /// <param name="ct"></param>
         /// <returns></returns>
         public Task<List<Job>> GetPendingJobsAsync(CancellationToken ct);
+
+        /// <summary>
+        /// Gets a job by its name
+        /// </summary>
+        /// <returns></returns>
+        public Task<Job?> GetJob(string jobName, CancellationToken ct);
+
+
+        /// <summary>
+        /// Gets a job by its name from the job execution context 
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public Task<Job?> GetJob(IJobExecutionContext context) => GetJob(context.JobDetail.Key.Name, context.CancellationToken);
+
+
+        /// <summary>
+        /// Gets a job by its type
+        /// </summary>
+        /// <typeparam name="TJob"></typeparam>
+        /// <param name="ct"></param>
+        /// <returns></returns>
+        public Task<Job?> GetJob<TJob>(CancellationToken ct) where TJob : IJob => GetJob(typeof(TJob).Name, ct);
 
     }
 }
