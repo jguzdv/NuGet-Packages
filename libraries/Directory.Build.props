@@ -14,8 +14,6 @@
         <PackageIcon>NuGet-Package-Icon.png</PackageIcon>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
 
-        <GenerateDocumentationFile Condition="$(GenerateDocumentationFile) == ''">true</GenerateDocumentationFile>
-
         <Net10Version>10.0.14</Net10Version>
         <Net11Version>11.0.0</Net11Version>
 	</PropertyGroup>

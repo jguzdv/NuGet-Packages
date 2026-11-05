@@ -11,7 +11,7 @@ namespace JGUZDV.CQRS.Tests
             var sut = new TestCommandHandler(false);
             var command = new TestCommand(true, true, true, HandlerResult.Success());
 
-            var result = await sut.ExecuteAsync(command, null, default);
+            var result = await sut.ExecuteAsync(command, null, TestContext.Current.CancellationToken);
 
             Assert.True(result.IsSuccess);
 
@@ -29,7 +29,7 @@ namespace JGUZDV.CQRS.Tests
             var sut = new TestCommandHandler(false);
             var command = new TestCommand(false, true, true, HandlerResult.Success());
 
-            var result = await sut.ExecuteAsync(command, null, default);
+            var result = await sut.ExecuteAsync(command, null, TestContext.Current.CancellationToken);
 
             Assert.False(result.IsSuccess);
             Assert.IsType<UnauthorizedResult>(result);
@@ -41,7 +41,7 @@ namespace JGUZDV.CQRS.Tests
             var sut = new TestCommandHandler(true);
             var command = new TestCommand(false, true, true, HandlerResult.Success());
 
-            var result = await sut.ExecuteAsync(command, null, default);
+            var result = await sut.ExecuteAsync(command, null, TestContext.Current.CancellationToken);
 
             Assert.True(result.IsSuccess);
 
@@ -58,7 +58,7 @@ namespace JGUZDV.CQRS.Tests
             var sut = new TestCommandHandler(false);
             var command = new TestCommand(true, false, true, HandlerResult.Success());
 
-            var result = await sut.ExecuteAsync(command, null, default);
+            var result = await sut.ExecuteAsync(command, null, TestContext.Current.CancellationToken);
 
             Assert.False(result.IsSuccess);
             Assert.IsType<ValidationErrorResult>(result);
@@ -70,7 +70,7 @@ namespace JGUZDV.CQRS.Tests
             var sut = new TestCommandHandler(false);
             var command = new TestCommand(true, true, false, HandlerResult.Success());
 
-            var result = await sut.ExecuteAsync(command, null, default);
+            var result = await sut.ExecuteAsync(command, null, TestContext.Current.CancellationToken);
 
             Assert.False(result.IsSuccess);
             Assert.IsType<GenericErrorResult>(result);

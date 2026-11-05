@@ -19,8 +19,8 @@ public class SimpleReverseProxyTest :
     {
         var client = _webFactory.ReverseProxyServer.GetTestClient();
 
-        var helloWorldResponse = await client.GetAsync("/proxy/path/subpath/something");
-        var helloWorld = await helloWorldResponse.Content.ReadAsStringAsync();
+        var helloWorldResponse = await client.GetAsync("/proxy/path/subpath/something", TestContext.Current.CancellationToken);
+        var helloWorld = await helloWorldResponse.Content.ReadAsStringAsync(TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.OK, helloWorldResponse.StatusCode);
         Assert.Equal("Hello World!", helloWorld);
@@ -40,8 +40,8 @@ public class SimpleReverseProxyTest :
         acceptLanguageRequest.Headers.AcceptLanguage.Clear();
         acceptLanguageRequest.Headers.AcceptLanguage.Add(new(culture));
 
-        var acceptLanguageResponse = await client.SendAsync(acceptLanguageRequest);
-        var responseText = await acceptLanguageResponse.Content.ReadAsStringAsync();
+        var acceptLanguageResponse = await client.SendAsync(acceptLanguageRequest, TestContext.Current.CancellationToken);
+        var responseText = await acceptLanguageResponse.Content.ReadAsStringAsync(TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.OK, acceptLanguageResponse.StatusCode);
         Assert.Equal(expectedResponse, responseText);

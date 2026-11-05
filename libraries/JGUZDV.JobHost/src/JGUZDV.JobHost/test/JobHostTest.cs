@@ -12,7 +12,7 @@ namespace JGUZDV.JobHost.Tests
 
     public class JobHostTest : IDisposable
     {
-        private string _connectionString = "Server=(LocalDb)\\MSSQLLocalDB;Database=JobHostDashboard_Test;Trusted_Connection=True;MultipleActiveResultSets=true;Encrypt=False";
+        private readonly string _connectionString = "Server=(LocalDb)\\MSSQLLocalDB;Database=JobHostDashboard_Test;Trusted_Connection=True;MultipleActiveResultSets=true;Encrypt=False";
 
         [Fact]
         public async Task RegisterAndRunJobsTest()
@@ -27,10 +27,10 @@ namespace JGUZDV.JobHost.Tests
             builder.AddHostedJob<TestJob>();
             builder.AddHostedJob<TestJob2>();
             var host = builder.Build();
-            _ = host.RunAsync();
+            _ = host.RunAsync(TestContext.Current.CancellationToken);
 
             await Task.Delay(TimeSpan.FromSeconds(3));
-            await host.StopAsync();
+            await host.StopAsync(TestContext.Current.CancellationToken);
 
             Assert.True(testObject.TestValue);
             Assert.True(testObject.TestValue2);
@@ -49,10 +49,10 @@ namespace JGUZDV.JobHost.Tests
             builder.AddHostedJob<TestJob3>();
 
             var host = builder.Build();
-            _ = host.RunAsync();
+            _ = host.RunAsync(TestContext.Current.CancellationToken);
 
-            await Task.Delay(TimeSpan.FromSeconds(2));
-            await host.StopAsync();
+            await Task.Delay(TimeSpan.FromSeconds(2), TestContext.Current.CancellationToken);
+            await host.StopAsync(TestContext.Current.CancellationToken);
 
             Assert.False(testObject.TestValue3);
         }
@@ -96,15 +96,15 @@ namespace JGUZDV.JobHost.Tests
             builder.AddHostedJob<FailJob>();
 
             var host = builder.Build();
-            _ = host.RunAsync();
-            await Task.Delay(TimeSpan.FromSeconds(2));
+            _ = host.RunAsync(TestContext.Current.CancellationToken);
+            await Task.Delay(TimeSpan.FromSeconds(2), TestContext.Current.CancellationToken);
 
             using (var scope = host.Services.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<JobHostContext>();
 
-                var jobs = await dbContext.Jobs.ToListAsync();
-                var hosts = await dbContext.Hosts.ToListAsync();
+                var jobs = await dbContext.Jobs.ToListAsync(TestContext.Current.CancellationToken);
+                var hosts = await dbContext.Hosts.ToListAsync(TestContext.Current.CancellationToken);
 
                 Assert.Equal(3, jobs.Count);
                 Assert.Single(hosts);
@@ -114,7 +114,7 @@ namespace JGUZDV.JobHost.Tests
                 Assert.Equal(Job.Error, jobs.Where(x => x.Name == nameof(FailJob)).ToList()[0].LastResult);
             }
 
-            await host.StopAsync();
+            await host.StopAsync(TestContext.Current.CancellationToken);
 
             Assert.True(testObject.TestValue);
             Assert.True(testObject.TestValue2);
@@ -143,31 +143,31 @@ namespace JGUZDV.JobHost.Tests
             builder.AddHostedJob<TestJob3>($"{(now.Second + 30) % 60} * * * * ?");
 
             var host = builder.Build();
-            _ = host.RunAsync();
+            _ = host.RunAsync(TestContext.Current.CancellationToken);
 
-            await Task.Delay(TimeSpan.FromMilliseconds(1000));
+            await Task.Delay(TimeSpan.FromMilliseconds(1000), TestContext.Current.CancellationToken);
             using (var scope = host.Services.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<JobHostContext>();
 
-                var job = await dbContext.Jobs.FirstOrDefaultAsync();
+                var job = await dbContext.Jobs.FirstOrDefaultAsync(TestContext.Current.CancellationToken);
                 job.ShouldExecuteAt = now;
-                await dbContext.SaveChangesAsync();
+                await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
             }
 
-            await Task.Delay(TimeSpan.FromMilliseconds(1050));
+            await Task.Delay(TimeSpan.FromMilliseconds(1050), TestContext.Current.CancellationToken);
 
             using (var scope = host.Services.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<JobHostContext>();
 
-                var job = await dbContext.Jobs.FirstOrDefaultAsync();
+                var job = await dbContext.Jobs.FirstOrDefaultAsync(TestContext.Current.CancellationToken);
 
                 Assert.True(job.ShouldExecuteAt <= job.LastExecutedAt);
                 Assert.True(testObject.TestValue3);
             }
 
-            await host.StopAsync();
+            await host.StopAsync(TestContext.Current.CancellationToken);
         }
 
         public void Dispose()

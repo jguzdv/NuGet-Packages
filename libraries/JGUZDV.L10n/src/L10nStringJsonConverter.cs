@@ -3,8 +3,12 @@ using System.Text.Json.Serialization;
 
 namespace JGUZDV.L10n;
 
+/// <summary>
+/// Json converter for <see cref="L10nString"/>.
+/// </summary>
 public class L10nStringJsonConverter : JsonConverter<L10nString>
 {
+    /// <inheritdoc />
     public override L10nString? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.TokenType != JsonTokenType.StartObject)
@@ -32,7 +36,8 @@ public class L10nStringJsonConverter : JsonConverter<L10nString>
 
         return result;
     }
-
+    
+    /// <inheritdoc />
     public override void Write(Utf8JsonWriter writer, L10nString value, JsonSerializerOptions options)
     {
         writer.WriteStartObject();

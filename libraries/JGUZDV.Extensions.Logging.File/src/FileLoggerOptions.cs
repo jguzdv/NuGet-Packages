@@ -61,7 +61,7 @@ public class FileLoggerOptions
     /// <summary>
     /// The discriminator may be included in the log-file name to e.g. distinguish between different machines.
     /// </summary>
-    public string Discriminator { get; set; }
+    public string? Discriminator { get; set; }
 
     /// <summary>
     /// If true, the MachineName will always be added to the Discriminator.

@@ -6,6 +6,7 @@
   </Configurations>
   <Folder Name="/libraries/">
     <File Path="libraries/Directory.Build.props" />
+    <File Path="libraries/Directory.Build.targets" />
     <File Path="libraries/NuGet-Package-Icon.png" />
   </Folder>
   <Folder Name="/libraries/JGUZDV.ActiveDirectory/">

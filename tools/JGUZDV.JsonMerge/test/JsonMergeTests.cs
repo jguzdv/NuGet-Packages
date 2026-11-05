@@ -32,12 +32,12 @@ namespace JGUZDV.JsonMerge.Tests
 
             JsonFileHandling.MergeJsonNodes(json1, json2);
 
-            Assert.Equal("value3", json1["prop1"].GetValue<string>());
-            Assert.Equal("value4", json1["prop2"].GetValue<string>());
-            Assert.Equal("value4", json1["prop4"].GetValue<string>());
-            Assert.Equal("subvalue3", json1["prop3"]["subprop1"].GetValue<string>());
-            Assert.Equal("subvalue2", json1["prop3"]["subprop2"].GetValue<string>());
-            Assert.Equal("subvalue4", json1["prop3"]["subprop3"].GetValue<string>());
+            Assert.Equal("value3", json1["prop1"]?.GetValue<string>());
+            Assert.Equal("value4", json1["prop2"]?.GetValue<string>());
+            Assert.Equal("value4", json1["prop4"]?.GetValue<string>());
+            Assert.Equal("subvalue3", json1["prop3"]?["subprop1"]?.GetValue<string>());
+            Assert.Equal("subvalue2", json1["prop3"]?["subprop2"]?.GetValue<string>());
+            Assert.Equal("subvalue4", json1["prop3"]?["subprop3"]?.GetValue<string>());
         }
 
         [Fact]
@@ -56,8 +56,8 @@ namespace JGUZDV.JsonMerge.Tests
                 }
                 """);
             JsonFileHandling.MergeJsonNodes(json1, json2);
-            Assert.Equal(4, json1["prop1"].AsArray().Count);
-            Assert.Equal(4, json1["prop2"].AsArray().Count);
+            Assert.Equal(4, json1["prop1"]?.AsArray().Count);
+            Assert.Equal(4, json1["prop2"]?.AsArray().Count);
         }
     }
 }

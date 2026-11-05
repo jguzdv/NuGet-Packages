@@ -6,12 +6,15 @@ using System.Text.Json.Serialization;
 
 namespace JGUZDV.L10n;
 
+/// <summary>
+/// Provides an implementation for a localizable string, which can hold multiple values for different cultures.
+/// </summary>
 [JsonConverter(typeof(L10nStringJsonConverter))]
 public class L10nString : IEquatable<L10nString>, IEqualityComparer<L10nString>
 {
     /// <summary>
     /// The default culture name.
-    /// Will be derived from the EntryAssemblys (or ExecutingAssemblys, if null) <see cref="System.Resources.NeutralResourceLanguageAttribute"/> CultureName
+    /// Will be derived from the EntryAssemblys (or ExecutingAssemblys, if null) NeutralResourcesLanguageAttribute CultureName
     /// If not set, it'll use "de" as default.
     /// </summary>
     public static string DefaultCultureName { get; set; } =
@@ -20,12 +23,18 @@ public class L10nString : IEquatable<L10nString>, IEqualityComparer<L10nString>
         ?? "de";
 
     /// <summary>
-    /// If set, the list will be used as preference list during <see cref="ToString"/>.
+    /// If set, the list will be used as preference list during ToString().
     /// </summary>
     public static List<string>? CulturePreferences { get; set; }
 
-
+    /// <summary>
+    /// The values of this instance as a dictionary.
+    /// </summary>
     protected readonly Dictionary<string, string> _values;
+
+    /// <summary>
+    /// Gets the values of this instance as a read-only dictionary.
+    /// </summary>
     public IReadOnlyDictionary<string, string> Values => _values;
 
     /// <summary>
@@ -99,10 +108,8 @@ public class L10nString : IEquatable<L10nString>, IEqualityComparer<L10nString>
         if (_values.Count == 0)
             return null;
 
-        string? result;
-
         // The best match will always be the one with the original requested language
-        if (_values.TryGetValue(cultureName, out result))
+        if (_values.TryGetValue(cultureName, out string? result))
             return result;
 
         // Dropping region suffix, if exists
@@ -132,19 +139,20 @@ public class L10nString : IEquatable<L10nString>, IEqualityComparer<L10nString>
 
     /// <summary>
     /// Converts the L10nString instance to a string by calling <see cref="GetBestAvailableMatch(string)"/>
-    /// with <see cref="CultureInfo.CurrentUICulture.Name"/> as parameter.
+    /// with <see cref="CultureInfo.CurrentUICulture"/> as parameter.
     /// </summary>
     public override string? ToString()
         => GetBestAvailableMatch(CultureInfo.CurrentUICulture.Name);
 
     /// <summary>
     /// Convenience function for contexts where ?. is forbidden;
-    /// Calls <see cref="ToString"/>() internally, when l10n is not null.
+    /// Calls ToString() internally, when l10n is not null.
     /// </summary>
     public static string? ToString(L10nString l10n)
         => l10n?.ToString();
 
 
+    /// <inheritdoc />
     public override int GetHashCode()
     {
         var hashCode = base.GetHashCode();
@@ -153,19 +161,21 @@ public class L10nString : IEquatable<L10nString>, IEqualityComparer<L10nString>
 
         return hashCode;
     }
-
+    
+    /// <inheritdoc />
     public int GetHashCode([DisallowNull] L10nString obj)
     {
         return obj.GetHashCode();
     }
 
-
+    /// <inheritdoc />
     public override bool Equals(object? obj)
     {
         return Equals(obj as L10nString);
     }
 
 
+    /// <inheritdoc />
     public bool Equals(L10nString? other)
     {
         if (other == null)
@@ -186,6 +196,8 @@ public class L10nString : IEquatable<L10nString>, IEqualityComparer<L10nString>
         return true;
     }
 
+    
+    /// <inheritdoc />
     public bool Equals(L10nString? x, L10nString? y)
     {
         if (x == null && y == null)
@@ -199,8 +211,8 @@ public class L10nString : IEquatable<L10nString>, IEqualityComparer<L10nString>
 
 
     /// <summary>
-    /// Explicit cast to string, since we're going to loose some data in that conversion.
-    /// Calls <see cref="ToString"/>() internally, when l10n is not null.
+    /// Explicit cast to string, since we're going to lose some data in that conversion.
+    /// Calls ToString() internally, when l10n is not null.
     /// </summary>
     public static explicit operator string?(L10nString? l10n)
         => l10n?.ToString();

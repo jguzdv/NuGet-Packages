@@ -30,7 +30,7 @@ namespace JGUZDV.CQRS.Tests
             // so it needs to be expected twice
             context.ExpectedDiagnostics.Add(new DiagnosticResult(CQRSAnalyzer.Rule).WithLocation(0));
 
-            await context.RunAsync();
+            await context.RunAsync(TestContext.Current.CancellationToken);
         }
 
         [Fact]
@@ -47,7 +47,7 @@ namespace JGUZDV.CQRS.Tests
                 public record TestQuery() : QueryBase<int>;
                 """;
 
-            await context.RunAsync();
+            await context.RunAsync(TestContext.Current.CancellationToken);
         }
 
         [Fact]
@@ -70,7 +70,7 @@ namespace JGUZDV.CQRS.Tests
                     .WithSpan(3, 29, 3, 40)
                     .WithArguments("TestQuery", "JGUZDV.CQRS.Queries.IQuery<int>.Result"));
 
-            await context.RunAsync();
+            await context.RunAsync(TestContext.Current.CancellationToken);
         }
 
         [Fact]
@@ -101,7 +101,7 @@ namespace JGUZDV.CQRS.Tests
 
             context.ExpectedDiagnostics.Add(new DiagnosticResult(CQRSAnalyzer.Rule).WithLocation(0));
 
-            await context.RunAsync();
+            await context.RunAsync(TestContext.Current.CancellationToken);
         }
 
         [Fact]
@@ -131,7 +131,7 @@ namespace JGUZDV.CQRS.Tests
                 public record TestQuery() : IQuery<int>;
                 """;
 
-            await context.RunAsync();
+            await context.RunAsync(TestContext.Current.CancellationToken);
         }
     }
 }

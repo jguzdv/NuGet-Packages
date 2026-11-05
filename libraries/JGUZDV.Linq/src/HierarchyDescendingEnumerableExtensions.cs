@@ -1,7 +1,18 @@
 ﻿namespace System.Linq;
 
+/// <summary>
+/// Provides extension methods for enumerating the descendants of a node in a hierarchy.
+/// </summary>
 public static class HierarchyDescendingEnumerableExtensions
 {
+    /// <summary>
+    /// Enumerates the descendants of a node in a hierarchy.
+    /// </summary>
+    /// <typeparam name="TSource">The type of the nodes in the hierarchy.</typeparam>
+    /// <param name="startNode">The node to start the enumeration from.</param>
+    /// <param name="childrenSelector">A function to select the children of a node.</param>
+    /// <param name="strategy">The strategy to use when enumerating child elements.</param>
+    /// <returns>An <see cref="IEnumerable{T}"/> containing the descendants of the start node.</returns>
     public static IEnumerable<TSource> Descendants<TSource>(
         this TSource startNode,
         Func<TSource, IEnumerable<TSource>?> childrenSelector,
@@ -9,6 +20,14 @@ public static class HierarchyDescendingEnumerableExtensions
         )
         => Descendants(startNode, childrenSelector, strategy, false);
 
+    /// <summary>
+    /// Enumerates the descendants of a node in a hierarchy.
+    /// </summary>
+    /// <typeparam name="TSource">The type of the nodes in the hierarchy.</typeparam>
+    /// <param name="startNode">The node to start the enumeration from.</param>
+    /// <param name="childrenSelector">A function to select the children of a node.</param>
+    /// <param name="strategy">The strategy to use when enumerating child elements.</param>
+    /// <returns>An <see cref="IEnumerable{T}"/> containing the descendants of the start node and the start node.</returns>
     public static IEnumerable<TSource> DescendantsAndSelf<TSource>(
         this TSource startNode,
         Func<TSource, IEnumerable<TSource>?> childrenSelector,
@@ -16,6 +35,15 @@ public static class HierarchyDescendingEnumerableExtensions
         => Descendants(startNode, childrenSelector, strategy, true);
 
 
+    /// <summary>
+    /// Enumerates the descendants of a node in a hierarchy.
+    /// </summary>
+    /// <typeparam name="TSource">The type of the nodes in the hierarchy.</typeparam>
+    /// <param name="startNode">The node to start the enumeration from.</param>
+    /// <param name="childrenSelector">A function to select the children of a node.</param>
+    /// <param name="strategy">The strategy to use when enumerating child elements.</param>
+    /// <param name="includeStartNode">A boolean value indicating whether to include the start node in the enumeration.</param>
+    /// <returns>An <see cref="IEnumerable{T}"/> containing the descendants of the start node and optionally the start node.</returns>
     public static IEnumerable<TSource> Descendants<TSource>(
         this TSource startNode,
         Func<TSource, IEnumerable<TSource>?> childrenSelector,
