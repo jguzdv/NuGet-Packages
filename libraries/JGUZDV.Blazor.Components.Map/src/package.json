@@ -8,7 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "es-build": "esbuild typescript/src/BlazorMap.ts --outdir=wwwroot/js/BlazorMap --bundle --format=esm",
     "build:Debug": "npm run es-build",
-    "build:Release": "npm run es-build -- --minify --target=chrome58,firefox57,safari11",
+    "build:Release": "npm run es-build -- --minify --target=chrome90,firefox90,safari15",
     "serve": "npm run es-build -- --servedir=wwwroot"
   },
   "author": "",
