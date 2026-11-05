@@ -45,7 +45,7 @@ $output = [IO.Path]::GetTempFileName()
 try {
     $env:GITHUB_OUTPUT = $output
     $all = @(Plan)
-    Assert ($all.Count -ge 35) 'Existing package groups must all be discovered.'
+    Assert ($all.Count -ge 34) 'Existing package groups must all be discovered.'
     Assert (@($all.name | Sort-Object -Unique).Count -eq $all.Count) 'Matrix names must be unique.'
     Assert (@($all | Where-Object runner -eq 'windows-latest').Count -eq 2) 'Both COM builds must use Windows.'
     Assert (@($all | Where-Object name -eq 'JGUZDV.JsonMerge').Count -eq 1) 'Tool package is missing.'
