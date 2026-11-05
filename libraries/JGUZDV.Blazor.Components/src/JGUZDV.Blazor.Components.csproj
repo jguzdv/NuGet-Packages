@@ -55,8 +55,8 @@
     <!-- End of TypeScript fix -->
 
     <ItemGroup>
-        <ProjectReference Include="..\..\JGUZDV.AspNetCore.Components.Localization\src\JGUZDV.AspNetCore.Components.Localization.csproj" />
         <ProjectReference Include="..\..\JGUZDV.Extensions.Json\src\JGUZDV.Extensions.Json.csproj" />
+        <ProjectReference Include="..\..\JGUZDV.L10n\src\JGUZDV.L10n.csproj" />
     </ItemGroup>
 
     <ItemGroup>
