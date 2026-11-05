@@ -25,8 +25,8 @@ namespace JGUZDV.JobHost
         /// <returns></returns>
         public static HostApplicationBuilder CreateJobHostBuilder(string[] args, Action<WindowsServiceLifetimeOptions> configureWindowsService, Action<QuartzHostedServiceOptions> configureQuartz)
         {
-            var builder = Host.CreateApplicationBuilder(args)
-                .AddJGUZDVOpenTelemetry();
+            var builder = Host.CreateApplicationBuilder(args);
+            builder.AddJGUZDVOpenTelemetry();
 
             builder.Services.AddQuartzHostedService(x =>
             {
