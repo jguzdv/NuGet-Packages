@@ -153,6 +153,10 @@ public class JGUZDVHostApplicationBuilder
     public bool HasReverseProxy { get; internal set; }
     #endregion
 
+    /// <summary>
+    /// Provides access to all used builders for the application, like AuthenticationBuilder, AuthorizationBuilder, MvcBuilder, DataProtectionBuilder and HealthChecksBuilder.
+    /// </summary>
+    public AspNetCoreBuilders AspNetCoreBuilders { get; } = new();
 
     private JGUZDVHostApplicationBuilder(WebApplicationBuilder webAppBuilder)
     {

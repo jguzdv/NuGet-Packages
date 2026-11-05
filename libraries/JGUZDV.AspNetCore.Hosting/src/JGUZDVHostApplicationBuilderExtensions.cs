@@ -65,6 +65,8 @@ public static class JGUZDVHostApplicationBuilderExtensions
         var builder = appBuilder.Builder.AddJGUZDVDataProtection(configSection);
         configure?.Invoke(builder);
 
+        appBuilder.AspNetCoreBuilders.DataProtectionBuilder = builder;
+
         return appBuilder;
     }
 
@@ -202,7 +204,8 @@ public static class JGUZDVHostApplicationBuilderExtensions
         string configSection = Constants.ConfigSections.OpenTelemetry)
     {
         // Default OpenTelemetry config, needs the OpenTelemetry config section.
-        appBuilder.Builder.AddJGUZDVOpenTelemetry(logger);
+        var builder = appBuilder.Builder.AddJGUZDVOpenTelemetry(logger);
+        appBuilder.AspNetCoreBuilders.OpenTelemetryBuilder = builder;
 
         appBuilder.HasOpenTelemetry = true;
         return appBuilder;
@@ -252,6 +255,8 @@ public static class JGUZDVHostApplicationBuilderExtensions
             }
         }
 
+        appBuilder.AspNetCoreBuilders.HealthChecksBuilder = healthBuilder;
+
         appBuilder.HasHealthChecks = true;
         return appBuilder;
     }
@@ -289,6 +294,8 @@ public static class JGUZDVHostApplicationBuilderExtensions
 
         configure?.Invoke(builder);
 
+        appBuilder.AspNetCoreBuilders.FeatureManagementBuilder = builder;
+
         appBuilder.HasFeatureManagement = true;
         return appBuilder;
     }
@@ -304,9 +311,11 @@ public static class JGUZDVHostApplicationBuilderExtensions
         Action<IFeatureManagementBuilder>? configure = null
     )
     {
-        appBuilder.Services.AddScopedFeatureManagement();
+        var builder = appBuilder.Services.AddScopedFeatureManagement();
         appBuilder.Services.AddHttpClient<IFeatureDefinitionProvider, RemoteFeatureDefinitionProvider>(configureClient)
             .AddUserAccessTokenHandler();
+
+        appBuilder.AspNetCoreBuilders.FeatureManagementBuilder = builder;
 
         appBuilder.HasFeatureManagement = true;
         return appBuilder;
@@ -375,6 +384,8 @@ public static class JGUZDVHostApplicationBuilderExtensions
 
         mvcBuilder.AddJsonOptions(opt => opt.JsonSerializerOptions.SetJGUZDVDefaults());
         configureBuilder?.Invoke(mvcBuilder);
+
+        appBuilder.AspNetCoreBuilders.MvcBuilder = mvcBuilder;
 
         appBuilder.HasMVC = true;
         return appBuilder;
@@ -516,6 +527,8 @@ public static class JGUZDVHostApplicationBuilderExtensions
 
         authenticationBuilderAction?.Invoke(authBuilder);
 
+        appBuilder.AspNetCoreBuilders.AuthenticationBuilder = authBuilder;
+
         appBuilder.Services.AddAuthorization(opt =>
         {
             ApplyDefaultBearerAuthorizationConfig(opt, bearerConfigSection, logger);
@@ -626,6 +639,8 @@ public static class JGUZDVHostApplicationBuilderExtensions
                 }
             })
             .AddCookieDistributedTicketStore();
+
+        appBuilder.AspNetCoreBuilders.AuthenticationBuilder = authBuilder;
 
         appBuilder.Services.AddAuthorization();
 

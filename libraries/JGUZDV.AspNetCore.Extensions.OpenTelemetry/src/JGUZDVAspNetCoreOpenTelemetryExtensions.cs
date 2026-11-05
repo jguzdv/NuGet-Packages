@@ -1,11 +1,10 @@
-using Azure.Monitor.OpenTelemetry.AspNetCore;
-
 using JGUZDV.Extensions.OpenTelemetry;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
+using OpenTelemetry;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 
@@ -24,7 +23,7 @@ public static class JGUZDVAspNetCoreOpenTelemetryExtensions
     /// ServiceName - A name string representing the running web application.
     /// </summary>
     /// <exception cref="ArgumentException">If config parameters are not valid</exception>
-    public static WebApplicationBuilder AddJGUZDVOpenTelemetry(
+    public static IOpenTelemetryBuilder? AddJGUZDVOpenTelemetry(
         this WebApplicationBuilder builder, 
         ILogger logger, 
         string sectionName = JGUZDVOpenTelemetryExtensions.DefaultOpenTelemetrySectionName)
@@ -33,14 +32,14 @@ public static class JGUZDVAspNetCoreOpenTelemetryExtensions
         if (!builder.Configuration.GetSection(sectionName).Exists())
         {
             logger.LogWarning("The JGUZDV OpenTelemetry library is included, but there are no settings to configure it. No telemetry will be sent.");
-            return builder;
+            return null;
         }
 
         var otelOptions = builder.Services.AddAndGetOpenTelemetryOptions(
             builder.Environment,
             sectionName);
 
-        builder.Services.AddJGUZDVOpenTelemetry(
+        var otelBuilder = builder.Services.AddJGUZDVOpenTelemetry(
             otelOptions,
             builder.Logging,
             logger,
@@ -81,6 +80,6 @@ public static class JGUZDVAspNetCoreOpenTelemetryExtensions
 
         logger.LogInformation("JGUZDV OpenTelemetry: Configuration finished. Please check traces and values in Azure Portal.");
     
-        return builder;
+        return otelBuilder;
     }
 }
