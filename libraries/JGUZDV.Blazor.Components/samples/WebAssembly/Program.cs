@@ -1,7 +1,5 @@
 using System.Security.Claims;
 
-using JGUZDV.AspNetCore.Components.Localization;
-using JGUZDV.Blazor.Components.Samples;
 using JGUZDV.Blazor.Components.Samples.Standalone;
 using JGUZDV.L10n;
 
