@@ -1,5 +1,7 @@
 ﻿using System.Net.Http.Headers;
 
+using Duende.AccessTokenManagement.OpenIdConnect;
+
 using JGUZDV.YARP.SimpleReverseProxy.Configuration;
 
 using Microsoft.AspNetCore.Authentication;
@@ -57,12 +59,13 @@ public static class SimpleReverseProxyExtensions
 
     private static async ValueTask AddBearerHeader(RequestTransformContext ctx)
     {
-        var token = await ctx.HttpContext.GetUserAccessTokenAsync();
+        var tokenResult = await ctx.HttpContext.GetUserAccessTokenAsync();
 
-        if (string.IsNullOrWhiteSpace(token.AccessToken))
+        if (tokenResult?.Succeeded == true && !string.IsNullOrWhiteSpace(tokenResult.Token.AccessToken))
+        {
+            ctx.ProxyRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokenResult.Token.AccessToken);
             return;
-
-        ctx.ProxyRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token.AccessToken);
+        }
     }
 
 

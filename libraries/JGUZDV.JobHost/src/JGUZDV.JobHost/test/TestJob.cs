@@ -11,10 +11,10 @@ namespace JGUZDV.JobHost.Tests
 
         public JobHostWrapper JobHostWrapper { get; set; }
 
-        public Task Execute(IJobExecutionContext context)
+        public ValueTask Execute(IJobExecutionContext context, CancellationToken cancellationToken)
         {
             JobHostWrapper.TestValue = true;
-            return Task.CompletedTask;
+            return ValueTask.CompletedTask;
         }
     }
 
@@ -27,10 +27,10 @@ namespace JGUZDV.JobHost.Tests
 
         public JobHostWrapper JobHostWrapper { get; set; }
 
-        public Task Execute(IJobExecutionContext context)
+        public ValueTask Execute(IJobExecutionContext context, CancellationToken cancellationToken)
         {
             JobHostWrapper.TestValue2 = true;
-            return Task.CompletedTask;
+            return ValueTask.CompletedTask;
         }
     }
 
@@ -43,18 +43,18 @@ namespace JGUZDV.JobHost.Tests
 
         public JobHostWrapper JobHostWrapper { get; set; }
 
-        public Task Execute(IJobExecutionContext context)
+        public ValueTask Execute(IJobExecutionContext context, CancellationToken cancellationToken)
         {
             JobHostWrapper.TestValue3 = true;
-            return Task.CompletedTask;
+            return ValueTask.CompletedTask;
         }
     }
 
     internal class FailJob : IJob
     {
-        public Task Execute(IJobExecutionContext context)
+        public ValueTask Execute(IJobExecutionContext context, CancellationToken cancellationToken)
         {
-            throw new Exception();
+            return ValueTask.FromException(new Exception());
         }
     }
 

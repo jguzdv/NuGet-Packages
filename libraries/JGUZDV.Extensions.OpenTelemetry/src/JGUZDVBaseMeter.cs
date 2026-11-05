@@ -7,6 +7,7 @@ namespace JGUZDV.Extensions.OpenTelemetry;
 /// <summary>
 /// Inherit from this instance for JguZdv telemetry to create counts/histograms/gauges.
 /// </summary>
+[Obsolete("This class is not to be used. Use DI to get an instance of Meter injected or create your own via IMeterFactory", true)]
 public abstract class JGUZDVBaseMeter
 {
     /// <summary>
@@ -23,6 +24,7 @@ public abstract class JGUZDVBaseMeter
     /// Use JGUZDVOpenTelemetryOptions to create a default meter instance.
     /// </summary>
     /// <param name="options"></param>
+    [Obsolete("This constructor is deprecated. Use DI to get an instance of Meter injected or create your own via IMeterFactory", true)]
     protected JGUZDVBaseMeter(IOptions<JGUZDVOpenTelemetryOptions> options)
     {
         _telemetryOptions = options;

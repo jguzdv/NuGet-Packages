@@ -9,17 +9,18 @@ namespace JGUZDV.JobHost.Sample
     /// <summary>
     /// A sample meter container required for reporting of metrics.
     /// </summary>
-    public class SampleMeterContainer : JGUZDVBaseMeter
+    public class SampleMeterContainer
     {
         private readonly Counter<int> _sampleCounter;
+        private readonly Meter _meter;
 
         /// <summary>
         /// Instantiates the container, meter and a sample counter.
         /// </summary>
-        /// <param name="options"></param>
-        public SampleMeterContainer(IOptions<JGUZDVOpenTelemetryOptions> options) :base(options) 
+        public SampleMeterContainer(Meter meter)
         {
-            _sampleCounter = Meter.CreateCounter<int>(
+            _meter = meter;
+            _sampleCounter = meter.CreateCounter<int>(
                 name: "SampleCounter", 
                 description: "A sample counter to transmit metrics");
         }

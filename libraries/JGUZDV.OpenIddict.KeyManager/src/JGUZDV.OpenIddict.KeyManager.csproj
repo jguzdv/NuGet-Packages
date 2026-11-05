@@ -1,14 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
 
 
         <PackageId>JGUZDV.OpenIddict.KeyManager</PackageId>
         <IsPackable>true</IsPackable>
-        <Version>1.0.0-beta2</Version>
+        <Version>1.1.0-beta2</Version>
         <Authors>Thomas Ottenhus</Authors>
         <Company>Zentrum für Datenverarbeitung - JGU Mainz</Company>
         <PackageDescription>Automatic key rollover for OpenIdDict</PackageDescription>
@@ -21,11 +21,11 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.DataProtection.Abstractions" Version="8.0.4" />
-        <PackageReference Include="Microsoft.Bcl.TimeProvider" Version="[8.0.0,)" />
-        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="[8.0.0,)" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="[8.0.0,)" />
-        <PackageReference Include="Microsoft.Extensions.Options" Version="[8.0.0,)" />
+        <PackageReference Include="Microsoft.AspNetCore.DataProtection.Abstractions" Version="$(Net10Version)" />
+        <PackageReference Include="Microsoft.Bcl.TimeProvider" Version="[$(Net10Version),)" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="[$(Net10Version),)" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="[$(Net10Version),)" />
+        <PackageReference Include="Microsoft.Extensions.Options" Version="[$(Net10Version),)" />
         <PackageReference Include="OpenIddict.Server" Version="5.5.0" />
     </ItemGroup>
 

@@ -7,10 +7,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.5" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.5" PrivateAssets="all" />
-        <PackageReference Include="Microsoft.Extensions.Localization" Version="10.0.5" />
-        <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="10.0.5" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="$(Net10Version)" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="$(Net10Version)" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.Extensions.Localization" Version="$(Net10Version)" />
+        <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="$(Net10Version)" />
     </ItemGroup>
 
     <ItemGroup>

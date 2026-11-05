@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 
-using JGUZDV.AspNetCore.Components.Localization;
 using JGUZDV.AspNetCore.Hosting.Components;
+using JGUZDV.L10n;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;

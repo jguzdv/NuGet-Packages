@@ -1,9 +1,11 @@
-﻿using JGUZDV.AspNetCore.Components.Localization;
+﻿using Duende.AccessTokenManagement.OpenIdConnect;
+
 using JGUZDV.AspNetCore.Hosting.Components;
 using JGUZDV.AspNetCore.Hosting.Extensions;
 using JGUZDV.AspNetCore.Hosting.FeatureManagement;
 using JGUZDV.AspNetCore.Hosting.ForwardedHeaders;
 using JGUZDV.AspNetCore.Hosting.Localization;
+using JGUZDV.L10n;
 using JGUZDV.WebApiHost.FeatureManagement;
 using JGUZDV.YARP.SimpleReverseProxy;
 using JGUZDV.YARP.SimpleReverseProxy.Configuration;
@@ -17,7 +19,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Server;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
@@ -460,6 +461,7 @@ public static class JGUZDVHostApplicationBuilderExtensions
         if (appBuilder.HasRequestLocalization)
         {
             appBuilder.Services.AddScoped<ILanguageService, LanguageService>();
+            appBuilder.Services.AddDefaultSupportedCultures();
             LogMessages.FeatureAdded(logger, "LanguageService");
         }
 

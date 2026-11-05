@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Hosting;
 
 using Quartz;
-using Quartz.Impl.Matchers;
 
 namespace JGUZDV.JobHost
 {
@@ -28,11 +27,11 @@ namespace JGUZDV.JobHost
         private async void OnStarted()
         {
             var scheduler = await _schedulerFactory.GetScheduler();
-            await scheduler.PauseJobs(GroupMatcher<JobKey>.AnyGroup());
+            await scheduler.PauseJobGroups(GroupMatcher<JobKey>.AnyGroup(), cancellationToken: default);
 
             scheduler.ListenerManager.AddJobListener(new DevelopmentJobListener("DevelopmentJobListener", JobSelection), GroupMatcher<JobKey>.AnyGroup());
 
-            var keys = scheduler.GetJobKeys(GroupMatcher<JobKey>.AnyGroup()).Result.ToList();
+            var keys = (await scheduler.GetJobKeys(GroupMatcher<JobKey>.AnyGroup())).ToList();
             await JobSelection(scheduler, keys);
         }
 

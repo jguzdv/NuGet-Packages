@@ -22,7 +22,8 @@ namespace JGUZDV.JobHost
         public async Task Execute(string hostName, IScheduler scheduler, CancellationToken cancellationToken)
         {
             var jobDetail = JobBuilder
-                .Create(_jobType)
+                .Create()
+                .OfType(_jobType)
                 .WithIdentity(new JobKey(_jobType.Name))
                 .UsingJobData(Constants.JobHostName, hostName)
                 .DisallowConcurrentExecution()
@@ -33,7 +34,7 @@ namespace JGUZDV.JobHost
                 .WithCronSchedule(_cronSchedule)
                 .Build();
 
-            await scheduler.ScheduleJob(jobDetail, trigger, cancellationToken);
+            await scheduler.ScheduleJob(jobDetail, trigger, new ScheduleJobOptions(), cancellationToken);
         }
     }
 }

@@ -17,10 +17,6 @@
     <Project Path="libraries/JGUZDV.AspNetCore.Authentication.Cookies/src/JGUZDV.AspNetCore.Authentication.Cookies.csproj" />
     <Project Path="libraries/JGUZDV.AspNetCore.Authentication.Cookies/test/JGUZDV.AspNetCore.Authentication.Cookies.Tests.csproj" />
   </Folder>
-  <Folder Name="/libraries/JGUZDV.AspNetCore.Components.Localization/">
-    <Project Path="libraries/JGUZDV.AspNetCore.Components.Localization/src/JGUZDV.AspNetCore.Components.Localization.csproj" />
-    <Project Path="libraries/JGUZDV.AspNetCore.Components.Localization/test/JGUZDV.AspNetCore.Components.Localization.Tests.csproj" />
-  </Folder>
   <Folder Name="/libraries/JGUZDV.AspNetCore.DataProtection/">
     <Project Path="libraries/JGUZDV.AspNetCore.DataProtection/src/JGUZDV.AspNetCore.DataProtection.csproj" />
     <Project Path="libraries/JGUZDV.AspNetCore.DataProtection/test/JGUZDV.AspNetCore.DataProtection.Tests.csproj" />
@@ -72,10 +68,6 @@
   <Folder Name="/libraries/JGUZDV.Blazor.StateManagement/">
     <Project Path="libraries/JGUZDV.Blazor.StateManagement/src/JGUZDV.Blazor.StateManagement.csproj" />
     <Project Path="libraries/JGUZDV.Blazor.StateManagement/test/JGUZDV.Blazor.StateManagement.Tests.csproj" />
-  </Folder>
-  <Folder Name="/libraries/JGUZDV.Blazor.WasmServerHost/">
-    <Project Path="libraries/JGUZDV.Blazor.WasmServerHost/src/JGUZDV.Blazor.WasmServerHost.csproj" />
-    <Project Path="libraries/JGUZDV.Blazor.WasmServerHost/test/JGUZDV.Blazor.WasmServerHost.Tests.csproj" />
   </Folder>
   <Folder Name="/libraries/JGUZDV.ClientStorage.Blazor/">
     <Project Path="libraries/JGUZDV.ClientStorage.Blazor/src/JGUZDV.ClientStorage.Blazor.csproj" />
@@ -174,14 +166,6 @@
   <Folder Name="/libraries/JGUZDV.Outbox/test/">
     <Project Path="libraries/JGUZDV.Outbox/test/JGUZDV.Outbox.Tests.csproj" />
   </Folder>
-  <Folder Name="/libraries/JGUZDV.WebApiHost/">
-    <Project Path="libraries/JGUZDV.WebApiHost/src/JGUZDV.WebApiHost.csproj" />
-    <Project Path="libraries/JGUZDV.WebApiHost/test/JGUZDV.WebApiHost.Tests.csproj" />
-  </Folder>
-  <Folder Name="/libraries/JGUZDV.WebHost/">
-    <Project Path="libraries/JGUZDV.WebHost/src/JGUZDV.WebHost.csproj" />
-    <Project Path="libraries/JGUZDV.WebHost/test/JGUZDV.WebHost.Tests.csproj" />
-  </Folder>
   <Folder Name="/libraries/JGUZDV.YARP.SimpleReverseProxy/">
     <Project Path="libraries/JGUZDV.YARP.SimpleReverseProxy/src/JGUZDV.YARP.SimpleReverseProxy.csproj" />
     <Project Path="libraries/JGUZDV.YARP.SimpleReverseProxy/test/JGUZDV.YARP.SimpleReverseProxy.Tests.csproj" />
@@ -190,6 +174,7 @@
     <File Path=".editorconfig" />
     <File Path=".gitignore" />
     <File Path="AddLibrary.ps1" />
+    <File Path="global.json" />
     <File Path="LICENSE" />
   </Folder>
   <Folder Name="/templates/">

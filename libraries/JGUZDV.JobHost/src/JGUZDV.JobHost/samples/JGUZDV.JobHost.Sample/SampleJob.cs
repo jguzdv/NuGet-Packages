@@ -9,10 +9,10 @@ namespace JGUZDV.JobHost.Sample
        
         }
 
-        public Task Execute(IJobExecutionContext context)
+        public ValueTask Execute(IJobExecutionContext context, CancellationToken cancellationToken)
         {
             Console.WriteLine("Job executed " + DateTime.Now);
-            return Task.CompletedTask;
+            return ValueTask.CompletedTask;
         }
     }
 }
