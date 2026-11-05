@@ -34,30 +34,26 @@ public static class JGUZDVOpenTelemetryExtensions
     /// Metrics:MeterName - Name to use for the meter responsible for sending metrics such as counts/histograms/gauges regarding the application.
     /// Metrics:MeterVersion - Version of meter, change this when you change anything about what metrics you transmit.
     /// </summary>
-    public static HostApplicationBuilder AddJGUZDVOpenTelemetry(this HostApplicationBuilder builder, string sectionName = DefaultOpenTelemetrySectionName)
+    public static IOpenTelemetryBuilder? AddJGUZDVOpenTelemetry(this HostApplicationBuilder builder, string sectionName = DefaultOpenTelemetrySectionName)
     {
         // Create a logger to give some startup information. As OpenTelemetry and Azure Monitor are very 'quite',
         // these are the only information we will get during startup.
-        using (var sp = builder.Services.BuildServiceProvider())
+        using var sp = builder.Services.BuildServiceProvider();
+        using var loggerFactory = sp.GetRequiredService<ILoggerFactory>();
+        var logger = loggerFactory.CreateLogger("JGUZDV.Extensions.OpenTelemetry");
+
+        // Its okay if there is no 'OpenTelemetry' settings node, but we will display a warning because this may not be indended.
+        if (!builder.Configuration.GetSection(sectionName).Exists())
         {
-            using var loggerFactory = sp.GetRequiredService<ILoggerFactory>();
-            var logger = loggerFactory.CreateLogger("JGUZDV.Extensions.OpenTelemetry");
-
-            // Its okay if there is no 'OpenTelemetry' settings node, but we will display a warning because this may not be indended.
-            if (!builder.Configuration.GetSection(sectionName).Exists())
-            {
-                logger.LogWarning("The JGUZDV OpenTelemetry library is included, but there are no settings to configure it. No telemetry will be sent.");
-                return builder;
-            }
-
-            var otelOptions = builder.Services.AddAndGetOpenTelemetryOptions(
-                builder.Environment, 
-                sectionName);
-            
-            AddJGUZDVOpenTelemetry(builder.Services, otelOptions, builder.Logging, logger);
+            logger.LogWarning("The JGUZDV OpenTelemetry library is included, but there are no settings to configure it. No telemetry will be sent.");
+            return null;
         }
 
-        return builder;
+        var otelOptions = builder.Services.AddAndGetOpenTelemetryOptions(
+            builder.Environment,
+            sectionName);
+
+        return AddJGUZDVOpenTelemetry(builder.Services, otelOptions, builder.Logging, logger);
     }
 
     /// <summary>
@@ -94,7 +90,7 @@ public static class JGUZDVOpenTelemetryExtensions
     /// </summary>
     /// <returns>IServiceCollection with fully configured OpenTelemetry if necessary sections are present in appsettings.</returns>
     /// <exception cref="ArgumentException">If config parameters are not valid</exception>
-    public static IServiceCollection AddJGUZDVOpenTelemetry(
+    public static IOpenTelemetryBuilder? AddJGUZDVOpenTelemetry(
         this IServiceCollection services,
         JGUZDVOpenTelemetryOptions otelOptions,
         ILoggingBuilder loggingBuilder,
@@ -204,7 +200,7 @@ public static class JGUZDVOpenTelemetryExtensions
 
         logger.LogInformation("JGUZDV OpenTelemetry: Added OpenTelemetry to applications LoggingBuilder.");
 
-        return services;
+        return telemetryBuilder;
     }
 
     /// <summary>

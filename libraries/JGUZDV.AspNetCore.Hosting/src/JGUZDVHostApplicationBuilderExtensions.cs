@@ -204,7 +204,8 @@ public static class JGUZDVHostApplicationBuilderExtensions
         string configSection = Constants.ConfigSections.OpenTelemetry)
     {
         // Default OpenTelemetry config, needs the OpenTelemetry config section.
-        appBuilder.Builder.AddJGUZDVOpenTelemetry(logger);
+        var builder = appBuilder.Builder.AddJGUZDVOpenTelemetry(logger);
+        appBuilder.AspNetCoreBuilders.OpenTelemetryBuilder = builder;
 
         appBuilder.HasOpenTelemetry = true;
         return appBuilder;
@@ -293,6 +294,8 @@ public static class JGUZDVHostApplicationBuilderExtensions
 
         configure?.Invoke(builder);
 
+        appBuilder.AspNetCoreBuilders.FeatureManagementBuilder = builder;
+
         appBuilder.HasFeatureManagement = true;
         return appBuilder;
     }
@@ -308,9 +311,11 @@ public static class JGUZDVHostApplicationBuilderExtensions
         Action<IFeatureManagementBuilder>? configure = null
     )
     {
-        appBuilder.Services.AddScopedFeatureManagement();
+        var builder = appBuilder.Services.AddScopedFeatureManagement();
         appBuilder.Services.AddHttpClient<IFeatureDefinitionProvider, RemoteFeatureDefinitionProvider>(configureClient)
             .AddUserAccessTokenHandler();
+
+        appBuilder.AspNetCoreBuilders.FeatureManagementBuilder = builder;
 
         appBuilder.HasFeatureManagement = true;
         return appBuilder;
