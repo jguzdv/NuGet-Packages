@@ -64,7 +64,7 @@ namespace JGUZDV.ClientStorage.Tests
             Assert.Equal("testValue", value);
 
 
-            await Task.Delay(1);
+            await Task.Delay(1, TestContext.Current.CancellationToken);
             var entry = await store.GetEntry<string>("testKey");
 
             Assert.True(entry.Context.LoadedHot);
@@ -92,7 +92,7 @@ namespace JGUZDV.ClientStorage.Tests
                 ValueExpiry = TimeSpan.FromMilliseconds(1)
             });
 
-            await Task.Delay(1);
+            await Task.Delay(1, TestContext.Current.CancellationToken);
             isOnline = false;
             var entry = await store.GetEntry<string>("testKey");
 
@@ -122,11 +122,11 @@ namespace JGUZDV.ClientStorage.Tests
             events.TriggerStopped(this, new());
 
             var expected = count;
-            await Task.Delay(10);
+            await Task.Delay(10, TestContext.Current.CancellationToken);
             Assert.Equal(expected, count);
 
             events.TriggerResumed(this, new());
-            await Task.Delay(10);
+            await Task.Delay(10, TestContext.Current.CancellationToken);
             await store.Get<string>("testKey");
             Assert.True(expected < count);
         }

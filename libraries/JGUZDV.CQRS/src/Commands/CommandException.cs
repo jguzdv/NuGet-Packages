@@ -5,6 +5,10 @@
 /// This class enables that.
 /// </summary>
 public class CommandException : Exception {
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CommandException"/> class with the specified <see cref="HandlerResult"/>.
+    /// </summary>
     public CommandException(HandlerResult commandResult)
     {
         ArgumentNullException.ThrowIfNull(commandResult);
@@ -14,5 +18,8 @@ public class CommandException : Exception {
         CommandResult = commandResult;
     }
 
+    /// <summary>
+    /// The <see cref="HandlerResult"/> that can be used to return from the command execution.
+    /// </summary>
     public HandlerResult CommandResult { get; }
 }
