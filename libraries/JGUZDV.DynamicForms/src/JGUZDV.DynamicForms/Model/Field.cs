@@ -58,6 +58,11 @@ public class Field : IValidatableObject, IDisposable, IAsyncDisposable
 
     private void SetValue(object? value)
     {
+        if (FieldDefinition.IsList && value is string json)
+        {
+            value = JsonSerializer.Deserialize<JsonElement[]>(json, DynamicFormsConfiguration.JsonSerializerOptions);
+        }
+
         if (value == null)
         {
             if (FieldDefinition.IsList)
@@ -87,20 +92,30 @@ public class Field : IValidatableObject, IDisposable, IAsyncDisposable
                 return;
             }
 
-            // TODO: this code should be reevaluated, because it is not clear if it is correct to check for choice options here
-            // It seems, the choice options should be checked firstmost and then only values, that are in the choice options should be allowed.
-            if (FieldDefinition.ChoiceOptions.Count == 0) //TODO: Maybe check this in validation not in setter
+            if (FieldDefinition.IsList && value is JsonElement[] jsonElements)
             {
-
-                if (FieldDefinition.IsList)
+                var listType = typeof(List<>).MakeGenericType(FieldDefinition.Type.ClrType);
+                var list = (IList)Activator.CreateInstance(listType)!;
+                foreach (var item in jsonElements)
                 {
-                    if (!typeof(IList).IsAssignableFrom(valueType)
-                        || !valueType.IsGenericType
-                        || valueType.GetGenericArguments()[0] != ValueType.ClrType)
-                    {
-                        throw new InvalidOperationException("Type does not match");
-                    }
+                    list.Add(FieldDefinition.Type.ConvertToValue(item));
                 }
+                _value = list;
+                return;
+            }
+
+            if (FieldDefinition.IsList)
+            {
+                if (!typeof(IList).IsAssignableFrom(valueType)
+                    || !valueType.IsGenericType
+                    || valueType.GetGenericArguments()[0] != ValueType.ClrType)
+                {
+                    throw new InvalidOperationException("Type does not match");
+                }
+            }
+            else
+            {
+                throw new InvalidOperationException("Type does not match");
             }
         }
 

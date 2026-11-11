@@ -15,7 +15,8 @@ public class FieldValuesConverterTests
             [new FieldId("Name")] = "Test",
             [new FieldId("Count")] = 42,
             [new FieldId("Enabled")] = true,
-            [new FieldId("Optional")] = null
+            [new FieldId("Optional")] = null,
+            [new FieldId("List")] = new List<string> { "Item1", "Item2" }
         });
 
         // Act
@@ -23,11 +24,13 @@ public class FieldValuesConverterTests
         var deserializedFieldValues = JsonSerializer.Deserialize<FieldValues>(json);
 
         // Assert
-        Assert.Equal("{\"Values\":[{\"Name\":\"Test\"},{\"Count\":42},{\"Enabled\":true},{\"Optional\":null}]}", json);
+        Assert.Equal("{\"Values\":[{\"Name\":\"Test\"},{\"Count\":42},{\"Enabled\":true},{\"Optional\":null},{\"List\":[\"Item1\",\"Item2\"]}]}", json);
         Assert.NotNull(deserializedFieldValues);
         Assert.Equal("Test", Assert.IsType<JsonElement>(deserializedFieldValues.Values[new FieldId("Name")]).GetString());
         Assert.Equal(42, Assert.IsType<JsonElement>(deserializedFieldValues.Values[new FieldId("Count")]).GetInt32());
         Assert.True(Assert.IsType<JsonElement>(deserializedFieldValues.Values[new FieldId("Enabled")]).GetBoolean());
         Assert.Equal(JsonValueKind.Null, Assert.IsType<JsonElement>(deserializedFieldValues.Values[new FieldId("Optional")]).ValueKind);
+        var list = Assert.IsType<JsonElement[]>(deserializedFieldValues.Values[new FieldId("List")]);
+        Assert.Equal(new[] { "Item1", "Item2" }, list.Select(item => item.GetString()));
     }
 }

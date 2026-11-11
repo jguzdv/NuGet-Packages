@@ -68,7 +68,9 @@ public class FieldValuesConverter : JsonConverter<FieldValues>
             var fieldId = new FieldId(reader.GetString()!);
 
             reader.Read();
-            var value = JsonSerializer.Deserialize<JsonElement>(ref reader, options);
+            object? value = reader.TokenType == JsonTokenType.StartArray
+                ? JsonSerializer.Deserialize<JsonElement[]>(ref reader, options)
+                : JsonSerializer.Deserialize<JsonElement>(ref reader, options);
 
             result[fieldId] = value;
 
