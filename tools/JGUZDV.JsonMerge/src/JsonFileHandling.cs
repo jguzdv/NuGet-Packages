@@ -5,15 +5,15 @@ namespace JGUZDV.JsonMerge
 {
     public class JsonFileHandling
     {
-        private static JsonNodeOptions DefaultNodeOptions = new() { 
+        private static readonly JsonNodeOptions DefaultNodeOptions = new() { 
             PropertyNameCaseInsensitive = true
         };
-        private static JsonDocumentOptions DefaultDocumentOptions = new() { 
+        private static readonly JsonDocumentOptions DefaultDocumentOptions = new() { 
             AllowTrailingCommas = true, 
             CommentHandling = JsonCommentHandling.Skip 
         };
 
-        private static JsonSerializerOptions DefaultWriterOptions = new() {
+        private static readonly JsonSerializerOptions DefaultWriterOptions = new() {
             WriteIndented = true,
             DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.Never
         };
