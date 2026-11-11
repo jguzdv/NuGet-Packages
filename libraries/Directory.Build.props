@@ -16,7 +16,7 @@
 
         <GenerateDocumentationFile Condition="$(GenerateDocumentationFile) == ''">true</GenerateDocumentationFile>
 
-        <Net10Version>10.0.14</Net10Version>
+        <Net10Version>10.0.15</Net10Version>
         <Net11Version>11.0.0</Net11Version>
 	</PropertyGroup>
 
