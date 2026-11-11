@@ -24,6 +24,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -37,6 +38,8 @@ namespace JGUZDV.AspNetCore.Hosting;
 /// </summary>
 public static class JGUZDVHostApplicationBuilderExtensions
 {
+    private const string FileLoggerSectionName = "Logging:File";
+
     /// <summary>
     /// Adds JGUZDVLogging to the WebApplicationBuilder.
     /// </summary>
@@ -45,7 +48,23 @@ public static class JGUZDVHostApplicationBuilderExtensions
         ILogger logger,
         Action<ILoggingBuilder>? configure = null)
     {
-        appBuilder.Builder.UseJGUZDVLogging(logger);
+        var isNotDevelopment = !appBuilder.Environment.IsDevelopment();
+        var hasFileSection = appBuilder.Configuration.GetSection(FileLoggerSectionName).Exists();
+
+        // We'll log a missing log file as an error in production.
+        if (isNotDevelopment && !hasFileSection)
+        {
+            logger?.LogCritical(FileLoggerSectionName + " section is missing in the configuration. " +
+                "JGUZDV Logging requires a file logging section in production.");
+        }
+
+        if (hasFileSection)
+        {
+
+            var logFileFormat = isNotDevelopment ? LoggingFileFormat.Json : LoggingFileFormat.PlainText;
+            appBuilder.Logging.AddJGUZDVLogging(appBuilder.Services, appBuilder.Configuration, logFileFormat);
+        }
+
         return appBuilder;
     }
 
