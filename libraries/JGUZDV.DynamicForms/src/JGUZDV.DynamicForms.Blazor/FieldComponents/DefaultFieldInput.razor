@@ -247,6 +247,17 @@
 
     private void SetValue(object? value)
     {
+        if (Field.FieldDefinition.IsList && value is IEnumerable values && value is not string)
+        {
+            var listType = typeof(List<>).MakeGenericType(Field.ValueType.ClrType);
+            var list = (IList)Activator.CreateInstance(listType)!;
+            foreach (var item in values)
+            {
+                list.Add(item);
+            }
+            value = list;
+        }
+
         Field.Value = value;
 
         FieldChanged.InvokeAsync(Field);

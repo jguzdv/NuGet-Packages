@@ -18,6 +18,116 @@ namespace JGUZDV.DynamicForms.Tests
 {
     public class FieldTests
     {
+        [Theory]
+        [InlineData("[1, 42]", new int[] { 1, 42 })]
+        [InlineData("[]", new int[] { })]
+        public void Field_WithIntList_ShouldConvertJsonArrayString(string json, int[] expected)
+        {
+            // Arrange
+            var field = new Field(new FieldDefinition { Type = IntFieldType.Instance, IsList = true });
+
+            // Act
+            field.Value = json;
+
+            // Assert
+            Assert.Equal(expected, Assert.IsType<List<int>>(field.Value));
+            Assert.Empty(field.Validate(new ValidationContext(field)));
+        }
+
+        [Theory]
+        [InlineData("[\"Item1\", \"Item2\"]", new string[] { "Item1", "Item2" })]
+        [InlineData("[]", new string[] { })]
+        public void Field_WithStringList_ShouldConvertJsonArrayString(string json, string[] expected)
+        {
+            // Arrange
+            var fieldDefinition = new FieldDefinition { Type = StringFieldType.Instance, IsList = true };
+
+            // Act
+            var field = new Field(fieldDefinition, json);
+
+            // Assert
+            Assert.Equal(expected, Assert.IsType<List<string>>(field.Value));
+            Assert.Empty(field.Validate(new ValidationContext(field)));
+        }
+
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        public void Field_WithIntList_ShouldPreserveTypedList(bool hasChoices)
+        {
+            // Arrange
+            var fieldDefinition = new FieldDefinition { Type = IntFieldType.Instance, IsList = true };
+            if (hasChoices)
+            {
+                fieldDefinition.ChoiceOptions.Add(new ChoiceOption { Value = "1" });
+                fieldDefinition.ChoiceOptions.Add(new ChoiceOption { Value = "42" });
+            }
+            var field = new Field(fieldDefinition);
+            var values = new List<int> { 1, 42 };
+
+            // Act
+            field.Value = values;
+
+            // Assert
+            Assert.Same(values, field.Value);
+            Assert.Empty(field.Validate(new ValidationContext(field)));
+        }
+
+        [Theory]
+        [InlineData(false, false)]
+        [InlineData(false, true)]
+        [InlineData(true, false)]
+        [InlineData(true, true)]
+        public void Field_WithIntType_ShouldRejectStringList(bool isList, bool hasChoices)
+        {
+            // Arrange
+            var fieldDefinition = new FieldDefinition { Type = IntFieldType.Instance, IsList = isList };
+            if (hasChoices)
+            {
+                fieldDefinition.ChoiceOptions.Add(new ChoiceOption { Value = "42" });
+            }
+            var field = new Field(fieldDefinition);
+            var originalValue = field.Value;
+            var values = new List<string> { "42" };
+
+            // Act
+            Assert.Throws<InvalidOperationException>(() => field.Value = values);
+
+            // Assert
+            Assert.Same(originalValue, field.Value);
+            Assert.Throws<InvalidOperationException>(() => new Field(fieldDefinition, values));
+        }
+
+        [Theory]
+        [InlineData("42")]
+        [InlineData("[\"not an integer\"]")]
+        public void Field_WithIntList_ShouldRejectInvalidJsonArrayString(string json)
+        {
+            // Arrange
+            var field = new Field(new FieldDefinition { Type = IntFieldType.Instance, IsList = true });
+            var originalValue = field.Value;
+
+            // Act
+            Assert.Throws<JsonException>(() => field.Value = json);
+
+            // Assert
+            Assert.Same(originalValue, field.Value);
+        }
+
+        [Fact]
+        public void Field_WithIntList_ShouldRejectJsonNullString()
+        {
+            // Arrange
+            var field = new Field(new FieldDefinition { Type = IntFieldType.Instance, IsList = true });
+            var originalValue = field.Value;
+
+            // Act
+            Assert.Throws<DynamicFormsException>(() => field.Value = "null");
+
+            // Assert
+            Assert.Same(originalValue, field.Value);
+        }
+
         [Fact]
         public void Field_ShouldValidateCorrectly()
         {
@@ -157,7 +267,7 @@ namespace JGUZDV.DynamicForms.Tests
                 InputDefinition = new InputDefinition
                 {
                     Label = new L10nString { ["en"] = "Test Date Label" }
-                },
+                }, 
                 Type = DateOnlyFieldType.Instance,
                 Description = new L10nString { ["en"] = "Test Date Description" },
                 IsList = false,

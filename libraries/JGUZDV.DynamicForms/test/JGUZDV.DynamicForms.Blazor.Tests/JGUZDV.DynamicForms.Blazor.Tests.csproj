@@ -4,12 +4,18 @@
         <TargetFramework>net10.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
         <IsTestProject>true</IsTestProject>
 
         <GenerateDocumentationFile>false</GenerateDocumentationFile>
     </PropertyGroup>
     <ItemGroup>
         <Using Include="Xunit" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="bunit" Version="2.13.3" />
+        <ProjectReference Include="..\..\src\JGUZDV.DynamicForms.Blazor\JGUZDV.DynamicForms.Blazor.csproj" />
     </ItemGroup>
 
 </Project>
