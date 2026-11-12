@@ -60,7 +60,7 @@ public static class JGUZDVHostApplicationBuilderExtensions
         {
 
             var logFileFormat = isNotDevelopment ? LoggingFileFormat.Json : LoggingFileFormat.PlainText;
-            appBuilder.Logging.AddJGUZDVLogging(appBuilder.Services, appBuilder.Configuration, logFileFormat);
+            appBuilder.Logging.AddJGUZDVLogging(appBuilder.Services, logFileFormat);
         }
 
         return appBuilder;
