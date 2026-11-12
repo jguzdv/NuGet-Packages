@@ -7,7 +7,7 @@ using Microsoft.Extensions.Options;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
-internal class ConfigureFileLoggerOptions : IPostConfigureOptions<FileLoggerOptions>
+internal class ConfigureFileLoggerOptions : IPostConfigureOptions<FileLoggerOptions>, IValidateOptions<FileLoggerOptions>
 {
     private readonly IHostEnvironment _hostEnvironment;
     private readonly IConfiguration _configuration;
@@ -21,6 +21,13 @@ internal class ConfigureFileLoggerOptions : IPostConfigureOptions<FileLoggerOpti
     public void PostConfigure(string? name, FileLoggerOptions options)
     {
         options.PathPlaceholderResolver = ResolvePlaceholders;
+    }
+
+    public ValidateOptionsResult Validate(string? name, FileLoggerOptions options)
+    {
+        return options.Files?.Length > 0
+            ? ValidateOptionsResult.Success
+            : ValidateOptionsResult.Fail("At least one entry is required in Logging:File:Files.");
     }
 
     private string? ResolvePlaceholders(string placeholder, string? inlineFormat, ILogFilePathFormatContext context)
