@@ -29,10 +29,6 @@
     <Project Path="libraries/JGUZDV.AspNetCore.Hosting/src/JGUZDV.AspNetCore.Hosting.csproj" />
     <Project Path="libraries/JGUZDV.AspNetCore.Hosting/test/JGUZDV.AspNetCore.Hosting.Tests.csproj" />
   </Folder>
-  <Folder Name="/libraries/JGUZDV.AspNetCore.Logging/">
-    <Project Path="libraries/JGUZDV.AspNetCore.Logging/src/JGUZDV.AspNetCore.Logging.csproj" />
-    <Project Path="libraries/JGUZDV.AspNetCore.Logging/test/JGUZDV.AspNetCore.Logging.Tests.csproj" />
-  </Folder>
   <Folder Name="/libraries/JGUZDV.AspNetCore.TestTools/" />
   <Folder Name="/libraries/JGUZDV.AspNetCore.TestTools/src/">
     <Project Path="libraries/JGUZDV.AspNetCore.TestTools/src/JGUZDV.AspNetCore.TestTools.csproj" />
@@ -105,10 +101,6 @@
   <Folder Name="/libraries/JGUZDV.Extensions.Json/">
     <Project Path="libraries/JGUZDV.Extensions.Json/src/JGUZDV.Extensions.Json.csproj" />
     <Project Path="libraries/JGUZDV.Extensions.Json/test/JGUZDV.Extensions.Json.Tests.csproj" />
-  </Folder>
-  <Folder Name="/libraries/JGUZDV.Extensions.Logging.File/">
-    <Project Path="libraries/JGUZDV.Extensions.Logging.File/src/JGUZDV.Extensions.Logging.File.csproj" />
-    <Project Path="libraries/JGUZDV.Extensions.Logging.File/test/JGUZDV.Extensions.Logging.File.Tests.csproj" />
   </Folder>
   <Folder Name="/libraries/JGUZDV.Extensions.Logging/">
     <Project Path="libraries/JGUZDV.Extensions.Logging/src/JGUZDV.Extensions.Logging.csproj" />

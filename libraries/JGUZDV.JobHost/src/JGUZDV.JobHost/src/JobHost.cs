@@ -1,4 +1,6 @@
-﻿using JGUZDV.Extensions.OpenTelemetry;
+﻿using System.Reflection.PortableExecutable;
+
+using JGUZDV.Extensions.OpenTelemetry;
 using JGUZDV.JobHost.Shared;
 
 using Microsoft.Extensions.Configuration;
@@ -40,19 +42,16 @@ namespace JGUZDV.JobHost
                 builder.Services.AddHostedService<JobHostDebugService>();
 
             if (!isDevelopmentEnv)
-                builder.Services.AddLogging(loggingBuilder =>
-                {
-                    loggingBuilder.AddJsonFile(options =>
-                    {
-                        if (string.IsNullOrWhiteSpace(options.OutputDirectory))
-                            throw new ArgumentException("No property OutputDirectory found in config section Logging:File. " +
-                                    "JGUZDV Logging needs a directory to store logfiles.");
+            {
+                var hasFileSection = builder.Configuration.GetSection("Logging:File").Exists();
 
-                        options.OutputDirectory = Path.Combine(
-                            options.OutputDirectory,
-                            builder.Environment.ApplicationName);
-                    });
-                });
+                if (hasFileSection)
+                {
+
+                    var logFileFormat = !isDevelopmentEnv ? LoggingFileFormat.Json : LoggingFileFormat.PlainText;
+                    builder.Logging.AddJGUZDVLogging(builder.Services, builder.Configuration, logFileFormat);
+                }
+            }
 
             builder.Services.AddWindowsService(configureWindowsService);
 
