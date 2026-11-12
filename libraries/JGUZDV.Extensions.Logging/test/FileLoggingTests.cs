@@ -50,7 +50,6 @@ public sealed class FileLoggingTests : IDisposable
             builder.Configuration.AddJsonStream(configurationStream);
             builder.Logging.AddJGUZDVLogging(
                 builder.Services,
-                builder.Configuration,
                 LoggingFileFormat.Json);
 
             using (var host = builder.Build())
