@@ -1,7 +1,6 @@
-﻿using Karambolo.Extensions.Logging.File;
+﻿using Karambolo.Extensions.Logging.File.Json;
 
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 
@@ -26,7 +25,7 @@ public static class JGUZDVHostBuilderLoggingExtensions
     {
         if (fileFormat == LoggingFileFormat.Json)
         {
-            loggingBuilder.AddJsonFile();
+            loggingBuilder.AddJsonFile(JsonFileLogFormatOptions.ForJsonLines());
         }
         else
         {
