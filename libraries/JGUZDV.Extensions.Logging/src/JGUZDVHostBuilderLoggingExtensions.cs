@@ -21,7 +21,6 @@ public static class JGUZDVHostBuilderLoggingExtensions
     public static ILoggingBuilder AddJGUZDVLogging(
         this ILoggingBuilder loggingBuilder,
         IServiceCollection services,
-        IConfiguration configuration,
         LoggingFileFormat fileFormat
     )
     {
