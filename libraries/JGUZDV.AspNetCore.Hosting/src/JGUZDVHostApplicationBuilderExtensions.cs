@@ -38,8 +38,6 @@ namespace JGUZDV.AspNetCore.Hosting;
 /// </summary>
 public static class JGUZDVHostApplicationBuilderExtensions
 {
-    private const string FileLoggerSectionName = "Logging:File";
-
     /// <summary>
     /// Adds JGUZDVLogging to the WebApplicationBuilder.
     /// </summary>
@@ -49,12 +47,12 @@ public static class JGUZDVHostApplicationBuilderExtensions
         Action<ILoggingBuilder>? configure = null)
     {
         var isNotDevelopment = !appBuilder.Environment.IsDevelopment();
-        var hasFileSection = appBuilder.Configuration.GetSection(FileLoggerSectionName).Exists();
+        var hasFileSection = appBuilder.Configuration.GetSection(Constants.ConfigSections.FileLogging).Exists();
 
         // We'll log a missing log file as an error in production.
         if (isNotDevelopment && !hasFileSection)
         {
-            logger?.LogCritical(FileLoggerSectionName + " section is missing in the configuration. " +
+            logger?.LogCritical(Constants.ConfigSections.FileLogging + " section is missing in the configuration. " +
                 "JGUZDV Logging requires a file logging section in production.");
         }
 
