@@ -49,7 +49,7 @@ namespace JGUZDV.JobHost
                 {
 
                     var logFileFormat = !isDevelopmentEnv ? LoggingFileFormat.Json : LoggingFileFormat.PlainText;
-                    builder.Logging.AddJGUZDVLogging(builder.Services, builder.Configuration, logFileFormat);
+                    builder.Logging.AddJGUZDVLogging(builder.Services, logFileFormat);
                 }
             }
 
