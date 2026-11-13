@@ -14,7 +14,7 @@ namespace JGUZDV.L10n
         /// <returns></returns>
         public static IServiceCollection AddDefaultSupportedCultures(this IServiceCollection services)
         {
-            services.AddSingleton<ISupportedCultureService, SupportedCultureService>(x => new SupportedCultureService(x.GetRequiredService<ILanguageService>()));
+            services.AddScoped<ISupportedCultureService, SupportedCultureService>(x => new SupportedCultureService(x.GetRequiredService<ILanguageService>()));
             return services;
         }
 
@@ -24,7 +24,7 @@ namespace JGUZDV.L10n
         /// <returns></returns>
         public static IServiceCollection AddSupportedCultures(this IServiceCollection services, IEnumerable<string> supportedCultures)
         {
-            services.AddSingleton<ISupportedCultureService, SupportedCultureService>(x => new SupportedCultureService(supportedCultures.ToList()));
+            services.AddScoped<ISupportedCultureService, SupportedCultureService>(x => new SupportedCultureService(supportedCultures.ToList()));
             return services;
         }
     }
