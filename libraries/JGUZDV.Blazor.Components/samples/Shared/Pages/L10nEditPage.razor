@@ -4,10 +4,12 @@
 @using JGUZDV.L10n;
 
 <div class="p-3">
-<JGUZDV.Blazor.Components.L10n.L10nEditor L10n="_firstTestVaue" L10nChanged="ShowChangedValue"></JGUZDV.Blazor.Components.L10n.L10nEditor>
+    input1:
+    <JGUZDV.Blazor.Components.L10n.L10nEditor L10n="_firstTestVaue" L10nChanged="ShowChangedValue"></JGUZDV.Blazor.Components.L10n.L10nEditor>
 </div>
 
 <div class="p-3">
+    input2:
     <JGUZDV.Blazor.Components.L10n.L10nEditor L10n="_secondRestValue" SupportedCultures="_languages" L10nChanged="ShowChangedValue"></JGUZDV.Blazor.Components.L10n.L10nEditor>
 </div>
 
@@ -24,11 +26,30 @@
     </div>
 }
 
+
+<div>
+    LS
+    current culutre: @LS.GetCurrentCulture()
+    current ui culture: @LS.GetCurrentUICulture()
+    langs: @System.Text.Json.JsonSerializer.Serialize(LS.GetLanguages())
+</div>
+
+<div>
+    SCS
+    cultures: @System.Text.Json.JsonSerializer.Serialize(SCS.GetSupportedCultures())
+</div>
+
 @code {
     private List<string> _languages = new() { "de", "en", "fr" };
     private L10nString _firstTestVaue = new();
     private L10nString _secondRestValue = new();
     private bool _isChanged;
+
+    [Inject]
+    public ILanguageService LS { get; set; }
+
+    [Inject]
+    public ISupportedCultureService SCS { get; set; }
 
     protected override void OnInitialized()
     {

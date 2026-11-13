@@ -31,18 +31,17 @@
     {
         base.OnParametersSet();
 
-        using var scope = ServiceProvider.CreateScope();
         if (SupportedCultures != null)
         {
             _languages = SupportedCultures;
         }
-        else if (scope.ServiceProvider.GetService<ISupportedCultureService>() is var cultureService and not null)
+        else if (ServiceProvider.GetService<ISupportedCultureService>() is var cultureService and not null)
         {
             _languages = cultureService!.GetSupportedCultures();
         }
         else
         {
-            var service = scope.ServiceProvider.GetService<ILanguageService>();
+            var service = ServiceProvider.GetService<ILanguageService>();
             if (service == null)
             {
                 throw new Exception($"Neither the parameter {nameof(SupportedCultures)} nor an {typeof(ILanguageService).FullName} was supplied.");
