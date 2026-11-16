@@ -19,4 +19,9 @@
         <ProjectReference Include="..\src\JGUZDV.Outbox.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="[$(Net10Version),)" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="[$(Net10Version),)" />
+    </ItemGroup>
+
 </Project>

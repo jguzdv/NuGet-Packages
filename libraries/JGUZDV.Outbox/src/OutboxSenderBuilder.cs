@@ -51,6 +51,7 @@ public class OutboxSenderBuilder
     {
         AddMessageSender<TSendingStrategy>();
         _services.AddOptions<TOptions>()
+            .ValidateDataAnnotations()
             .Configure(configure);
 
         return this;
