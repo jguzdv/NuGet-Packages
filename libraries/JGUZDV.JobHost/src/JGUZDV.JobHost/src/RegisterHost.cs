@@ -75,7 +75,6 @@ namespace JGUZDV.JobHost
             catch (Exception e)
             {
                 _logger.LogError(e, $"Error during host initialization and register work");
-               
             }
             finally
             {
@@ -113,6 +112,7 @@ namespace JGUZDV.JobHost
                 .Create<ExecuteNowJob>()
                 .WithIdentity(new JobKey(nameof(ExecuteNowJob)))
                 .UsingJobData(Constants.JobHostName, hostName)
+                .DisallowConcurrentExecution()
                 .Build();
 
                 var schedule = _options.Value.ExecuteNowSchedule;
@@ -126,7 +126,7 @@ namespace JGUZDV.JobHost
             catch (Exception e)
             {
                 _logger.LogError(e, $"Error during host initialization and register work");
-
+                throw;
             }
         }
 

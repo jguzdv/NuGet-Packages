@@ -22,7 +22,7 @@ namespace JGUZDV.JobHost.Shared
         /// </summary>
         /// <param name="jobReport"></param>
         /// <returns></returns>
-        public Task ReportJobExecutionAsync(JobExecutionReport jobReport);
+        public Task ReportJobExecutionAsync(JobExecutionReport jobReport, CancellationToken ct);
 
         /// <summary>
         /// Gets jobs that are due to be executed now regardless of schedule. Gets called periodically based on the configured execute now schedule.

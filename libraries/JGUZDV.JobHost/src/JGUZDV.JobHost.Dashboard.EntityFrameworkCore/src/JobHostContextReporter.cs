@@ -80,9 +80,9 @@ namespace JGUZDV.JobHost.Dashboard.EntityFrameworkCore
         }
 
         /// <inheritdoc/>
-        public async Task ReportJobExecutionAsync(JobExecutionReport jobReport)
+        public async Task ReportJobExecutionAsync(JobExecutionReport jobReport, CancellationToken ct)
         {
-            await using var dbContext = await _dbContextFactory.CreateDbContextAsync();
+            await using var dbContext = await _dbContextFactory.CreateDbContextAsync(ct);
 
             var name = jobReport.Name;
             var host = jobReport.Host;
@@ -91,14 +91,14 @@ namespace JGUZDV.JobHost.Dashboard.EntityFrameworkCore
             await dbContext.Jobs
                 .Where(x => x.Name == name && x.Host!.Name == host)
                 .ExecuteUpdateAsync(entity => entity
-                    .SetProperty(x => x.RunTime, jobReport.RunTime)
-                    .SetProperty(x => x.NextExecutionAt, jobReport.NextFireTimeUtc)
-                    .SetProperty(x => x.LastExecutedAt, jobReport.FireTimeUtc)
-                    .SetProperty(x => x.LastResult, result)
-                    .SetProperty(x => x.FailMessage, jobReport.FailMessage)
-                    .SetProperty(x => x.LastSuccessAt, x => jobReport.Failed ? x.LastSuccessAt : jobReport.FireTimeUtc)
-                    .SetProperty(x => x.LastFailAt, x => jobReport.Failed ? jobReport.FireTimeUtc : x.LastFailAt)
-            );
+                        .SetProperty(x => x.RunTime, jobReport.RunTime)
+                        .SetProperty(x => x.NextExecutionAt, jobReport.NextFireTimeUtc)
+                        .SetProperty(x => x.LastExecutedAt, jobReport.FireTimeUtc)
+                        .SetProperty(x => x.LastResult, result)
+                        .SetProperty(x => x.FailMessage, jobReport.FailMessage)
+                        .SetProperty(x => x.LastSuccessAt, x => jobReport.Failed ? x.LastSuccessAt : jobReport.FireTimeUtc)
+                        .SetProperty(x => x.LastFailAt, x => jobReport.Failed ? jobReport.FireTimeUtc : x.LastFailAt)
+                    , ct);
         }
 
         /// <inheritdoc/>
