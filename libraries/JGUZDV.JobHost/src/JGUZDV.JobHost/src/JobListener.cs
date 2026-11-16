@@ -60,13 +60,13 @@ namespace JGUZDV.JobHost
             return exception.Message;
         }
 
-        ValueTask JobProgressChanged(IJobExecutionContext context, FireInstanceProgress progress, CancellationToken cancellationToken = default(CancellationToken))
+        public ValueTask JobProgressChanged(IJobExecutionContext context, FireInstanceProgress progress, CancellationToken cancellationToken = default(CancellationToken))
         {
             _logger.LogInformation(progress.Message);
             return default(ValueTask);
         }
 
-        ValueTask JobToBeExecuted(IJobExecutionContext context, CancellationToken cancellationToken = default(CancellationToken))
+        public ValueTask JobToBeExecuted(IJobExecutionContext context, CancellationToken cancellationToken = default(CancellationToken))
         {
             _logger.LogInformation($"Job {context.JobDetail.Key} is about to be executed.");
             return default(ValueTask);
