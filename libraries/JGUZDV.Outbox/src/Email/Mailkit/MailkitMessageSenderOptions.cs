@@ -54,7 +54,7 @@ public class MailkitMessageSenderOptions : IValidatableObject
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
-        if (!MailboxAddress.TryParse(FromAddress, out var _))
+        if (string.IsNullOrWhiteSpace(FromAddress) || !MailboxAddress.TryParse(FromAddress, out var _))
         {
             yield return new ValidationResult(
                 $"The '{nameof(FromAddress)}' property must be a valid email address: \"ExampleName\"<example@example.com> or example@example.com",
