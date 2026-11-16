@@ -1,4 +1,6 @@
-﻿using MailKit.Security;
+﻿using System.ComponentModel.DataAnnotations;
+
+using MailKit.Security;
 
 using MimeKit;
 
@@ -7,12 +9,12 @@ namespace JGUZDV.Outbox.Email.Mailkit;
 /// <summary>
 /// Represents the options for configuring the Mailkit message sender.
 /// </summary>
-public class MailkitMessageSenderOptions
+public class MailkitMessageSenderOptions : IValidatableObject
 {
     /// <summary>
     /// Gets or sets the email address that will be used as the sender of the email messages.
     /// </summary>
-    public required MailboxAddress FromAddress { get; set; }
+    public required string FromAddress { get; set; }
 
     /// <summary>
     /// Gets or sets the SMTP host that will be used to send the email messages.
@@ -49,4 +51,15 @@ public class MailkitMessageSenderOptions
     /// Gets or sets the maximum number of send attempts when sending email messages. The default value is 3.
     /// </summary>
     public int MaxSendAttempts { get; set; } = 3;
+
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        if (string.IsNullOrWhiteSpace(FromAddress) || !MailboxAddress.TryParse(FromAddress, out var _))
+        {
+            yield return new ValidationResult(
+                $"The '{nameof(FromAddress)}' property must be a valid email address: \"ExampleName\"<example@example.com> or example@example.com",
+                new[] { nameof(FromAddress) }
+            );
+        }
+    }
 }

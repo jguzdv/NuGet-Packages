@@ -15,16 +15,14 @@ public class MailkitEmailMessageSender : MailkitMessageSender<EmailMessageData>
     /// Initializes a new instance of the <see cref="MailkitEmailMessageSender"/> class.
     /// </summary>
     public MailkitEmailMessageSender(
-        IEnumerable<IMessageFactory<EmailMessageData>> messageFactories, 
-        IOptions<MailkitMessageSenderOptions> options) 
+        IEnumerable<IMessageFactory<EmailMessageData>> messageFactories,
+        IOptions<MailkitMessageSenderOptions> options)
         : base(messageFactories, options)
     { }
 
     /// <inheritdoc />
     protected override MimeMessage CreateMimeMessageFromMessageData(EmailMessageData messageData)
     {
-        var from = Options.Value.FromAddress;
-
         var result = new MimeMessage()
         {
             Subject = messageData.Subject,
@@ -32,6 +30,7 @@ public class MailkitEmailMessageSender : MailkitMessageSender<EmailMessageData>
             {
                 Text = messageData.Body
             },
+            From = { MailboxAddress.Parse(Options.Value.FromAddress) }
         };
 
         foreach (var to in messageData.EmailRecipients.To)
