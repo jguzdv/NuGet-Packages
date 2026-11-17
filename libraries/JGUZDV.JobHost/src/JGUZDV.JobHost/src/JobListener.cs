@@ -3,6 +3,7 @@
 using Microsoft.Extensions.Logging;
 
 using Quartz;
+using Quartz.Extensibility;
 
 namespace JGUZDV.JobHost
 {
@@ -21,6 +22,10 @@ namespace JGUZDV.JobHost
 
         public async ValueTask JobWasExecuted(IJobExecutionContext context, JobExecutionException? jobException, CancellationToken cancellationToken = default)
         {
+            //TODO: make configurable and/or use a background queue for reporting
+            using var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+            cts.CancelAfter(TimeSpan.FromSeconds(10));
+
             try
             {
                 await _reporter.ReportJobExecutionAsync(new()
@@ -32,7 +37,7 @@ namespace JGUZDV.JobHost
                     Name = context.JobInstance.GetType().Name,
                     NextFireTimeUtc = context.NextFireTimeUtc,
                     RunTime = context.JobRunTime
-                });
+                }, cts.Token);
             }
             catch (Exception e)
             {
@@ -53,6 +58,18 @@ namespace JGUZDV.JobHost
             }
 
             return exception.Message;
+        }
+
+        public ValueTask JobProgressChanged(IJobExecutionContext context, FireInstanceProgress progress, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            _logger.LogInformation(progress.Message);
+            return default(ValueTask);
+        }
+
+        public ValueTask JobToBeExecuted(IJobExecutionContext context, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            _logger.LogInformation($"Job {context.JobDetail.Key} is about to be executed.");
+            return default(ValueTask);
         }
     }
 }
