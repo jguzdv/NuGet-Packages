@@ -25,11 +25,13 @@ public static class JGUZDVHostBuilderLoggingExtensions
     {
         if (fileFormat == LoggingFileFormat.Json)
         {
-            loggingBuilder.AddJsonFile(JsonFileLogFormatOptions.ForJsonLines());
+            loggingBuilder.AddJsonFile(JsonFileLogFormatOptions.ForJsonLines(), 
+                o => o.FileAppender = new JGUZDV.Extensions.Logging.PhysicalFileAppender()
+            );
         }
         else
         {
-            loggingBuilder.AddFile();
+            loggingBuilder.AddFile(o => o.FileAppender = new JGUZDV.Extensions.Logging.PhysicalFileAppender());
         }
 
         services.ConfigureOptions<ConfigureFileLoggerOptions>();

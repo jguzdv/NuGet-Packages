@@ -30,7 +30,7 @@ public sealed class FileLoggingTests : IDisposable
             {
               "Logging": {
                 "File": {
-                  "RootPath": "{{EscapeJson(_temporaryDirectory)}}",
+                  "BasePath": "{{EscapeJson(_temporaryDirectory)}}",
                   "LogLevel": {
                     "Default": "Information"
                   },
