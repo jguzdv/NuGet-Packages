@@ -11,6 +11,7 @@ internal class ConfigureFileLoggerOptions : IPostConfigureOptions<FileLoggerOpti
 {
     private readonly IHostEnvironment _hostEnvironment;
     private readonly IConfiguration _configuration;
+    private Dictionary<string, string>? _placeholders;
 
     public ConfigureFileLoggerOptions(IHostEnvironment hostEnvironment, IConfiguration configuration)
     {
@@ -30,15 +31,19 @@ internal class ConfigureFileLoggerOptions : IPostConfigureOptions<FileLoggerOpti
             : ValidateOptionsResult.Fail("At least one entry is required in Logging:File:Files.");
     }
 
+
     private string? ResolvePlaceholders(string placeholder, string? inlineFormat, ILogFilePathFormatContext context)
     {
-        return placeholder.ToLowerInvariant() switch
+        if (_placeholders == null)
         {
-            "applicationname" => _hostEnvironment.ApplicationName,
-            "discriminator" => _configuration.GetValue<string?>("Logging:File:Discriminator") ?? "",
-            "machinename" => Environment.MachineName,
+            _placeholders = new(StringComparer.OrdinalIgnoreCase)
+            {
+                { "ApplicationName", _hostEnvironment.ApplicationName },
+                { "Discriminator", _configuration.GetValue<string?>("Logging:File:Discriminator") ?? "" },
+                { "MachineName", Environment.MachineName }
+            };
+        }
 
-            _ => null
-        };
+        return _placeholders.TryGetValue(placeholder, out var value) ? value : null;
     }
 }
