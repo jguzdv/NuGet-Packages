@@ -47,7 +47,7 @@
     }
 
     @foreach (var pair in visibleItems.Select((item, index) => new { item, index }))
-       {
+    {
         <div class="col">
             @{
                 var item = pair.item;
@@ -158,6 +158,7 @@
     private int _lastKeyboardResetVersion;
     private int _activeIndex;
     private bool _showKeyboardHighlight;
+    private bool _scrollToActiveItem;
     private string? _filter;
     private ElementReference _itemsContainer;
     private IJSObjectReference? _jsModule;
@@ -171,6 +172,16 @@
 
             await _jsModule.InvokeVoidAsync(
                 "preventArrowKeyScrolling",
+                _itemsContainer);
+
+            await _itemsContainer.FocusAsync();
+        }
+        if (_scrollToActiveItem)
+        {
+            _scrollToActiveItem = false;
+
+            await _jsModule!.InvokeVoidAsync(
+                "scrollToActiveItem",
                 _itemsContainer);
         }
     }
@@ -219,7 +230,8 @@
                 await ValueChanged.InvokeAsync(Value);
             }
 
-            else {
+            else
+            {
                 Value = item;
                 await ValueChanged.InvokeAsync(item);
             }
@@ -275,7 +287,8 @@
                 {
                     _activeIndex = (_activeIndex + 1) % visibleItems.Count;
                 }
-             break;
+                _scrollToActiveItem = true;
+                break;
 
             case "ArrowLeft":
             case "ArrowUp":
@@ -283,9 +296,11 @@
                 {
                     _showKeyboardHighlight = true;
                 }
-                else{
-                _activeIndex = (_activeIndex - 1 + visibleItems.Count) % visibleItems.Count;
+                else
+                {
+                    _activeIndex = (_activeIndex - 1 + visibleItems.Count) % visibleItems.Count;
                 }
+                _scrollToActiveItem = true;
                 break;
 
             case "Enter":

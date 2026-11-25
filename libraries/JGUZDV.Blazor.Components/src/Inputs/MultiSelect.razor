@@ -5,13 +5,14 @@
 @using Microsoft.AspNetCore.Components.Web;
 @using JGUZDV.Blazor.Components.Extensions;
 
-<div class="multi-select @(HostClass ?? "px-2 py-1 border")">
-    <button
+<div class="multi-select @(HostClass ?? "px-2 py-1 border")"
+     @onkeydown="HandleKeyDown">
+    <button @ref="_anchor"
             type="button"
             class="multi-select-trigger d-flex justify-content-between w-100 p-0"
-            popovertarget="ms-overlay-@_id"
-            popovertargetaction="toggle"
-            @onclick="ResetKeyboardHighlight">
+            popovertarget="@(UseOverlayMode ? $"ms-overlay-{_id}" : null)"
+            popovertargetaction="@(UseOverlayMode ? "toggle" : null)"
+            @onclick="HandleTriggerClick">
 
         <span class="d-flex flex-nowrap overflow-hidden text-nowrap text-truncate">
             <span class="me-1">@Title </span>
@@ -37,7 +38,9 @@
         </span>
     </button>
 
-     <div id="ms-overlay-@_id" popover class="multi-select-overlay fade-in overflow-auto bg-body border px-2 py-1">
+    @if (UseOverlayMode || _isOpen)
+    {
+        <div id="@(UseOverlayMode ? $"ms-overlay-{_id}" : null)" popover="@(UseOverlayMode ? "auto" : null)" class="@(UseOverlayMode ? "multi-select-overlay fade-in overflow-auto bg-body border px-2 py-1" : null)">
             @if (!UseSingleSelectionMode && Values!.Any())
             {
                 <div class="d-flex gap-2 flex-wrap my-2">
@@ -52,9 +55,11 @@
                 </div>
             }
 
-            <div class="my-2">
+
+            <div class="@(UseOverlayMode ? "my-2" : "fade-in my-2")">
                 @{
 #pragma warning disable 8601 // warning is wrong
+
                 }
                 <MultiSelectBody Items="@Items"
                                  Values="@Values"
@@ -75,18 +80,27 @@
                 </MultiSelectBody>
                 @{
 #pragma warning restore
+
                 }
             </div>
-        <button type="button"
-                class="btn btn-outline-secondary w-100"
-                popovertarget="ms-overlay-@_id"
-                popovertargetaction="hide">
-            @CloseIcon("")
-        </button>
-    </div>
-</div>
 
- @code {
+            <button type="button"
+                    class="btn btn-outline-secondary w-100"
+                    popovertarget="@(UseOverlayMode ? $"ms-overlay-{_id}" : null)"
+                    popovertargetaction="@(UseOverlayMode ? "hide" : null)"
+                    @onclick="async () =>
+                                                {
+                                                    if (!UseOverlayMode)
+                                                        await ToggleSelection();
+                                                }">
+                @CloseIcon("")
+            </button>
+        </div>
+    }
+</div>
+    
+
+@code {
     /// <summary>
     /// The list of items to display in the selection dropdown.
     /// </summary>
@@ -221,8 +235,10 @@
     /// </summary>
     [Parameter]
     public RenderFragment<string?> BadgeIcon { get; set; } = Icons.RemoveCircle;
-
+    private bool _isOpen;
+    private ElementReference _anchor;
     private readonly string _id = Guid.NewGuid().ToString("N");
+    
 
     /// <inheritdoc />
     protected override void OnParametersSet()
@@ -243,6 +259,22 @@
     }
     /// <inheritdoc />
  
+    private async Task HandleTriggerClick()
+    {
+        ResetKeyboardHighlight();
+        if (!UseOverlayMode)
+        {
+            await ToggleSelection();
+        }
+    }
+
+    private async Task ToggleSelection()
+    {
+        _isOpen = !_isOpen;
+
+        if (!_isOpen)
+            await _anchor.FocusAsync();
+    }
 
     private void HandleBadgeClick(T item)
     {
@@ -256,5 +288,12 @@
     private void ResetKeyboardHighlight()
     {
         _keyboardResetVersion++;
+    }
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Escape" && !UseOverlayMode && _isOpen)
+        {
+            await ToggleSelection();
+        }
     }
 }
