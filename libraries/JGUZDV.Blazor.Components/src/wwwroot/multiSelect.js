@@ -11,3 +11,11 @@ export function preventArrowKeyScrolling(element) {
         }
     });
 }
+export function scrollToActiveItem(element) {
+    if (!element)
+        return;
+    const activeItem = element.querySelector(".keyboard-active");
+    activeItem?.scrollIntoView({
+        block: "nearest"
+    });
+}

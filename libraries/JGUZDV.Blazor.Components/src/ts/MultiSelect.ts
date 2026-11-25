@@ -15,3 +15,13 @@ export function preventArrowKeyScrolling(element: HTMLElement | null): void {
         }
     });
 }
+
+export function scrollToActiveItem(element: HTMLElement) {
+    if (!element) return;
+
+    const activeItem = element.querySelector(".keyboard-active");
+
+    activeItem?.scrollIntoView({
+        block: "nearest"
+    })
+}

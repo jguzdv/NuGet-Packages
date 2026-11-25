@@ -48,7 +48,7 @@
 }
 
 .multi-select-trigger {
-    border: none;  
+    border: none;
     background: none;
     cursor: pointer;
 }
@@ -62,6 +62,7 @@
     width: anchor-size(width);
     box-sizing: border-box;
     max-width: calc(100vw - 1rem);
+    max-height: 20rem;
     overflow-x: clip;
     position-try-fallbacks: --multi-select-overlay-above;
     margin: 0;
